@@ -1,0 +1,253 @@
+{% load wagtailcore_tags compress static wagtailuserbar core_tags i18n persona_tags static %}
+{% load wagtailsettings_tags wagtailimages_tags molo_survey_tags poll_votings %}
+{% load google_analytics_tags %}
+{% get_settings %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>UNICEF {% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }}{% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        {% trans "Internet of Good Things (IoGT) is a set of free, mobile-ready web-based resources and applications that bring good to your life by helping you and your community access educational and lifesaving information." as description %}
+        <meta name="description" content="{% if self.social_media_description %}{{ self.social_media_description }}{% elif self.subtitle %}{{ self.subtitle }}{% elif self.search_description %}{{self.search_description}}{% else %}{{ description }}{% endif %}" />
+        <meta name="keywords" content="{% if self.specific.metadata_tags %}{{self.specific.metadata_tags.all|join:','}}{% endif %}" />
+        <meta name="twitter:card" content="summary"/>
+        {% image self.social_media_image height-200 as tmp_photo %}
+        {% if self.image %}
+          {% image self.image height-200 as article_photo %}
+        {% endif %}
+        <meta property="og:title" content= "{% if self.social_media_title %}{{ self.social_media_title }}{% elif self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }}{% endif %}"/>
+        <meta property="og:description" content="{% if self.social_media_description %}{{ self.social_media_description }}{% elif self.subtitle %}{{ self.subtitle }}{% else %}{{ description }}{% endif %}"/>
+        <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+        <meta property="og:image" content="{% if self.social_media_image %}{{ tmp_photo.url }}{% elif article_photo.url %}{{ article_photo.url }}{% else %}{{ request.build_absolute_uri }}static/img/iogt_share_fb.png{% endif %}"/>
+        <meta property="og:image:width" content="200" />
+        <meta property="og:image:height" content="200" />
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ STATIC_URL }}favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" href="{{ STATIC_URL }}favicon/favicon-32x32.png" sizes="32x32">
+        <link rel="icon" type="image/png" href="{{ STATIC_URL }}favicon/favicon-16x16.png" sizes="16x16">
+        <link rel="manifest" href="{{ STATIC_URL }}favicon/manifest.json">
+        <link rel="mask-icon" href="{{ STATIC_URL }}favicon/safari-pinned-tab.svg" color="#5bbad5">
+        <link rel="shortcut icon" href="{{ STATIC_URL }}favicon/favicon.ico">
+        <meta name="msapplication-config" content="{{ STATIC_URL }}favicon/browserconfig.xml">
+        <meta name="theme-color" content="#ffffff">
+        <meta name="google-site-verification" content="4IkZu3E_jAGipGtiFKqjpKESIxS6-oB6aatHcmJM_bY" />
+        {% compress css %}
+         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/{{ ENV }}/style.css">
+        {% endcompress %}
+        {% block extra_css %}{% endblock %}
+        <script type="text/javascript">
+           var CutsTheMustard = 'querySelector' in document && 'localStorage' in window && 'addEventListener' in window;
+           var LargeScreen = ((window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth) >= 240);
+          var operaMiniSingleView = '{% spaceless %}
+          {% compress css %}
+               <link rel="stylesheet" type="text/css" media="handheld" href="{{ STATIC_URL }}css/{{ ENV }}/opera-mini_single-view.css">
+          {% endcompress %}{% endspaceless %}';
+
+          var smartStyles = '{% spaceless %}
+              {% compress css %}
+               <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/{{ ENV }}/state_320.css">
+              {% endcompress %}{% endspaceless %}';
+
+         var latoGoogleFont = '<link href="{{ STATIC_URL }}/google/fonts.css" rel="stylesheet">';
+
+          if(CutsTheMustard === true) {
+            if(LargeScreen) {
+              document.write(smartStyles, latoGoogleFont);
+              }
+          }
+          if(LargeScreen === false) {
+            document.write(operaMiniSingleView);
+         }
+          </script>
+        {% get_current_language as LANGUAGE_CODE %}
+        {% if LANGUAGE_CODE|language_bidi == True %}
+          {% compress css %}
+            <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/{{ ENV }}/style-rtl.css">
+          {% endcompress %}
+        {% endif %}
+
+
+      <!-- End Facebook Pixel Code -->  
+    </head>
+
+    <body class="{% block body_class %}{% endblock %}" {% if LANGUAGE_CODE|language_bidi == True %}dir="rtl"{% endif %}>
+
+      {% if settings.core.SiteSettings.ga_tag_manager %}
+      {% persona_selected as persona_selected_value %}
+
+        <!--Google Tag Manager -->
+        <noscript><iframe src="//www.googletagmanager.com/ns.html?id={{settings.core.SiteSettings.ga_tag_manager}}&client_session_id={{request.session.MOLO_GA_SESSION_FOR_NOSCRIPT}}{% if persona_selected_value%}&persona={{ persona_selected_value }}&event=persona{% endif %}{%if request.META.HTTP_X_IORG_FBS_UIP %}&freebasics_uip={{request.META.HTTP_X_IORG_FBS_UIP}}{%endif%}"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','{{settings.core.SiteSettings.ga_tag_manager}}');</script>
+
+      <!-- End Google Tag Manager -->
+      {% endif %}
+
+      {% if settings.core.SiteSettings.global_ga_tag_manager %}
+        <!--Global Google Tag Manager -->
+        <noscript><iframe src="//www.googletagmanager.com/ns.html?id={{settings.core.SiteSettings.global_ga_tag_manager}}&client_session_id={{request.session.MOLO_GA_SESSION_FOR_NOSCRIPT}}"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','{{settings.core.SiteSettings.global_ga_tag_manager}}');</script>
+        <!-- End Global Google Tag Manager -->
+        {% endif %}
+
+
+      {% if languages|length > 1 %}
+      <div class="languages">
+        <div class="language-bar">
+          <span class="current-language">
+            <span>{% trans "Language" %}:</span>
+            <span>{{ LANGUAGE_CODE|language_name_local }}</span>
+          </span>
+          <input id="language-selection__toggle" class="language-selection__toggle-input" type="checkbox">
+          <label class="select-language" for="language-selection__toggle">
+            {% trans "Change Language" %}
+          </label>
+          <div role="language-bar" class="language-selection">
+            <ul class="language-list">
+            {% for language in languages %}
+              <li class="language-list__item {% if LANGUAGE_CODE == language.locale %} language-list__item--active{% endif %}">
+                <a href="{% url 'locale_set' language.locale %}?next={{ request.path }}?{{ request.GET.urlencode }}">
+                  {{ language.locale|language_name_local }}</a>
+              </li>
+            {% endfor %}
+            </ul>
+          </div>
+         </div>
+      </div>
+      {% endif %}
+
+      <div class="header">
+         <a href="/" class="logo">
+          {% if settings.core.SiteSettings.logo %}
+            {% image settings.core.SiteSettings.logo original %}
+          {% else %}
+            {% block logo %}
+              <img src="{% static 'img/logo.png' %}" alt="{% trans "IoGT" %}" />
+            {% endblock %}
+          {% endif %}
+        </a>
+        <div class="menu-links">
+        {% if not user.is_authenticated %}
+        <a id="join_icon"href="{% url 'molo.profiles:user_register' %}" class="header__nav-item">{% trans "Join" %}</a>
+        {% else %}
+        <a id="profile_icon" href="{% url 'molo.profiles:view_my_profile' %}" class="header__nav-item">{% trans "Profile" %}</a>
+        {% endif %}
+        <a id="menu_icon" href="#section_menu" class="header__nav-item">{% trans "Menu" %}</a>
+        </div>
+      </div>
+
+      {% block content %}{% endblock %}
+
+      {% block section_menu %}
+      <div id="section_menu" class="section-menu">
+        <div class="section-heading">
+          <a href="/">
+            <img src="{% static 'img/iogt_logo_3.png' %}" alt="The Internet of Good Things" width="40%"/>
+          </a>
+        </div>
+        <ul class="menu-list">
+        {% load_sections as sections %}
+        {% for section in sections %}
+          <li class="menu-list__item menu-list__item{{section.get_effective_extra_style_hints}}">
+            <a href="{% pageurl section %}">
+              {{section.title}}
+            </a>
+            <span class="menu-list__description">{{section.description}}</span>
+          </li>
+        {% endfor %}
+        </ul>
+      </div>
+      {% endblock %}
+
+
+      {% block search %}
+        {% if languages %}
+          {% include "search/search_block.html" %}
+        {% endif %}
+      {% endblock %}
+      {% block footer %}
+      <div class="footer">
+        <ul class="menu-list">
+            {% surveys_list_headline %}
+            {% load_polls as polls %}
+            {% for question in polls %}
+            <li class="menu-list__item  menu-list__item--poll">
+                <a href="{% url 'molo.polls:poll_details' question.id %}" class="footer-link">
+                  <div class="footer-link__thumbnail-icon">
+                    <img src="{% static 'img/poll.png' %}" class="menu-list__item--icon"/>
+                  </div>
+                  <span class="footer-link__title">{{ question.title }}</span>
+                </a>
+            </li>
+            {% endfor %}
+          {% if not user.is_authenticated %}
+            <li class="menu-list__item">
+              <a href="{% url 'molo.profiles:user_register' %}" class="footer-link">
+                <div class="footer-link__thumbnail-icon">
+                  <img src="{% static 'img/footer_login_icon.png' %}" class="menu-list__item--icon" />
+                </div>
+                <span class="footer-link__title">{% trans "Login" %}</span>
+              </a>
+            </li>
+          {% else %}
+            <li class="menu-list__item">
+              <a href="{% url 'molo.profiles:view_my_profile' %}" class="footer-link">
+                <div class="footer-link__thumbnail-icon">
+                  <img src="{% static 'img/footer_login_icon.png' %}" class="menu-list__item--icon" />
+                </div>
+                <span class="footer-link__title">{% trans "Profile" %}</span>
+              </a>
+            </li>
+            <li class="menu-list__item">
+              <a href="{% url 'molo.profiles:auth_logout'%}" class="footer-link">
+                <div class="footer-link__thumbnail-icon">
+                  <img src="{% static 'img/footer_logout_icon.png' %}" class="menu-list__item--icon" />
+                </div>
+                <span class="footer-link__title">{% trans "log out" %}</span>
+              </a>
+            </li>
+          {% endif %}
+
+          {% if languages|length > 1 %}
+            <li class="menu-list__item menu-list__item--language-selection">
+              <input id="language-selection__toggle--footer" class="language-selection__toggle-input"  type="checkbox">
+              <label for="language-selection__toggle--footer" class="select-language--footer footer-link">
+                <div class="footer-link__thumbnail-icon">
+                  <img src="{% static 'img/footer_change_language.png' %}" class="menu-list__item--icon" />
+                </div>
+                <span class="footer-link__title">{% trans "Change your language"%}</span>
+              </label>
+              <div class="language-selection language-selection-footer">
+                <ul class="language-list">
+                {% for language in languages %}
+                  <li class="language-list__item {% if LANGUAGE_CODE == language.locale %} language-list__item--active{% endif %}">
+                    <a href="{% url 'locale_set' language.locale %}?next={{ request.path }}?{{ request.GET.urlencode }}">{{ language.locale|language_name_local }}</a>
+                  </li>
+                {% endfor %}
+                </ul>
+              </div>
+            </li>
+          {% endif %}
+          {% footer_page %}
+          
+        </ul>
+      </div>
+
+      <div class="copyright">
+        <p>&copy; The Internet of Good Things</p>
+      </div>
+      {% endblock %}
+      {% block extra_js %}{% endblock %}
+      {% wagtailuserbar %}
+    </body>
+</html>
