@@ -1,0 +1,72 @@
+Metadata-Version: 2.0
+Name: wagtail
+Version: 2.12.2
+Summary: A Django content management system.
+Home-page: https://wagtail.io/
+Author: Wagtail core team + contributors
+Author-email: hello@wagtail.io
+License: BSD
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Framework :: Django
+Classifier: Framework :: Django :: 2.2
+Classifier: Framework :: Django :: 3.0
+Classifier: Framework :: Django :: 3.1
+Classifier: Framework :: Wagtail
+Classifier: Topic :: Internet :: WWW/HTTP :: Site Management
+Requires-Python: >=3.6
+Requires-Dist: Django (>=2.2,<3.2)
+Requires-Dist: django-modelcluster (>=5.1,<6.0)
+Requires-Dist: django-taggit (<2.0,>=1.0)
+Requires-Dist: django-treebeard (<4.5,>=4.2.0)
+Requires-Dist: djangorestframework (<4.0,>=3.11.1)
+Requires-Dist: django-filter (>=2.2,<3.0)
+Requires-Dist: draftjs-exporter (>=2.1.5,<3.0)
+Requires-Dist: Pillow (>=4.0.0,<9.0.0)
+Requires-Dist: beautifulsoup4 (>=4.8,<4.9)
+Requires-Dist: html5lib (<2,>=0.999)
+Requires-Dist: Willow (>=1.4,<1.5)
+Requires-Dist: requests (<3.0,>=2.11.1)
+Requires-Dist: l18n (>=2018.5)
+Requires-Dist: xlsxwriter (>=1.2.8,<2.0)
+Requires-Dist: tablib[xlsx,xls] (>=0.14.0)
+Requires-Dist: anyascii (>=0.1.5)
+Provides-Extra: docs
+Requires-Dist: pyenchant (>=3.1.1,<4); extra == 'docs'
+Requires-Dist: sphinxcontrib-spelling (>=5.4.0,<6); extra == 'docs'
+Requires-Dist: Sphinx (>=1.5.2); extra == 'docs'
+Requires-Dist: sphinx-autobuild (>=0.6.0); extra == 'docs'
+Requires-Dist: sphinx-rtd-theme (>=0.1.9); extra == 'docs'
+Provides-Extra: testing
+Requires-Dist: python-dateutil (>=2.2); extra == 'testing'
+Requires-Dist: pytz (>=2014.7); extra == 'testing'
+Requires-Dist: elasticsearch (>=5.0,<6.0); extra == 'testing'
+Requires-Dist: Jinja2 (>=2.8,<3.0); extra == 'testing'
+Requires-Dist: boto3 (>=1.16,<1.17); extra == 'testing'
+Requires-Dist: freezegun (>=0.3.8); extra == 'testing'
+Requires-Dist: openpyxl (>=2.6.4); extra == 'testing'
+Requires-Dist: Unidecode (>=0.04.14,<2.0); extra == 'testing'
+Requires-Dist: coverage (>=3.7.0); extra == 'testing'
+Requires-Dist: flake8 (>=3.6.0); extra == 'testing'
+Requires-Dist: isort (==5.6.4); extra == 'testing'
+Requires-Dist: flake8-blind-except (==0.1.1); extra == 'testing'
+Requires-Dist: flake8-print (==2.0.2); extra == 'testing'
+Requires-Dist: doc8 (==0.8.1); extra == 'testing'
+Requires-Dist: jinjalint (>=0.5); extra == 'testing'
+Requires-Dist: docutils (==0.15); extra == 'testing'
+Requires-Dist: django-taggit (>=1.3.0,<2.0); extra == 'testing'
+
+Wagtail is an open source content management system built on Django, with a strong community and commercial support. It’s focused on user experience, and offers precise control for designers and developers.
+
+For more details, see https://wagtail.io, https://docs.wagtail.io and https://github.com/wagtail/wagtail/.
+
