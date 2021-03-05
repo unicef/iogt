@@ -18,9 +18,9 @@ git clone https://github.com/unicef/iogt.git
 cd iogt
 ```
 
-Create an [isolated Python environment][1], into which we will install the project's dependencies. This is highly recommended so that the requirements of this project don't interfere with any other Python environments you may have in your system, including the global Python environment.
+Create an [isolated Python environment][1], into which we will install the project's dependencies. This is highly recommended so that the requirements of this project don't interfere with any other Python environments you may have in your system, including the global Python environment. We aso recommend that you create a new environment outside of the project directory. 
 ```
-python3 -m venv venv
+python3 -m venv <path_to_venv_dir>
 source ./venv/bin/activate
 pip install -r requirements.txt
 ```
