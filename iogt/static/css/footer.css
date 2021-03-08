@@ -1,0 +1,126 @@
+/* DESKTOP VIEW */
+.footer {
+  font-family: 'Poppins', sans-serif;
+  flex-shrink: 0;
+  width: 100%;
+  background-color: #f7f9f9;
+  color: #303030;
+  padding: 7% 7% 3% 7%;
+}
+
+.footer nav {
+  display: flex;
+  justify-content: space-between;
+  font-size: 100%;
+  border-bottom: 1px solid #dadada;
+  margin-bottom: 3%;
+}
+
+.footer nav .links {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5%;
+}
+
+.footer nav .links span {
+  font-size: 100%;
+  font-weight: bold;
+  margin-bottom: 50px;
+}
+
+.footer nav .links .column {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer nav .links a {
+  font-size: 75%;
+  margin-right: 25px;
+  margin-bottom: 20px;
+  text-decoration: none;
+  color: #303030;
+}
+
+.footer .copyright {
+  font-size: 12px;
+  color: #979797;
+}
+
+.footer .copyright .logo {
+  display: none;
+}
+
+.footer .copyright .links {
+  margin-bottom: 2%;
+}
+
+.footer .copyright .links a {
+  margin-right: 3%;
+}
+
+/* TABLET VIEW */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+  .footer nav {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer nav > div:nth-child(2) {
+    grid-row: 2;
+    grid-column: 1 / 4;
+    margin-top: -2%;
+  }
+
+  .footer nav > div:nth-child(2) .column:nth-child(2) {
+    position: absolute;
+    margin-left: 43%;
+  }
+}
+
+/* MOBILE VIEW */
+@media only screen and (max-width: 600px) {
+  .footer {
+    display: flex;
+    justify-content: center;
+  }
+  .footer nav {
+    display: none;
+  }
+
+  .footer .copyright {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .footer .copyright .logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 7%;
+  }
+
+  .footer .copyright .logo img {
+    width: 60%;
+  }
+
+  .footer .copyright .links {
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 7%;
+  }
+
+  .footer .copyright span {
+    display: none;
+  }
+}
+
+/* FEATURE PHONE VIEW */
+@media only screen and (max-width: 300px) {
+  .footer .copyright .links {
+    display: none;
+  }
+}
