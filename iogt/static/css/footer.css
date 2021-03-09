@@ -28,6 +28,11 @@
   margin-bottom: 50px;
 }
 
+.footer nav .links .columns {
+    display: flex;
+    flex-direction: row;
+}
+
 .footer nav .links .column {
   display: flex;
   flex-direction: column;
@@ -56,6 +61,7 @@
 
 .footer .copyright .links a {
   margin-right: 3%;
+  color: #20cd84;
 }
 
 /* TABLET VIEW */

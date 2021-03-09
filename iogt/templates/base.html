@@ -1,4 +1,4 @@
-{% load static %}
+{% load static wagtailuserbar %}
 <!DOCTYPE html>
 <html class="no-js" lang="en">
     <head>
@@ -17,6 +17,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         {# Global stylesheets #}
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" type="text/css" href="{% static 'css/iogt.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}">
@@ -27,81 +28,21 @@
     </head>
 
     <body class="{% block body_class %}{% endblock %}">
+        {% wagtailuserbar %}
 
-        <header class="header">
-            <div class="header-top">
-                <div class="header-middle">
-                    <a class="logo-small" href='/'>
-                        <img src="{% static "/images/iogt-logo-two-lines.png" %}" />
-                    </a>
-                    <div class="signin-language">
-                        <a class="signin" href="/signin">Sign in</a>
-                        <div class="language-dropdown">
-                            <span>English<i class="material-icons"></i></span>
-                            <div class="language-dropdown-content">
-                                <a class="language-name" href="/">ESPAÑOL</a>
-                            </div>
-                        </div>
+        <div id="app">
+            <div id="content-wrap">
+                {% include "header.html" %}
 
-                    </div>
+                {% block content %}{% endblock %}
 
-                    <div class="search-menu">
-                        <a>
-                            <icon class="material-icons">search</icon>
-                        </a>
-                        <a>
-                            <icon class="material-icons">menu</icon>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="tabletDesktopSignin">
-                    <a class="logo-full" href="/">
-                        <img src={% static "/images/iogt-logo-two-lines.png" %}>
-                    </a>
-                    <form id="search-bar" role="search" class="search-bar">
-                        <input placeholder="Enter your search here..." type="text">
-                        <button type="submit">
-                            <i class="material-icons">search</i>
-                        </button>
-                    </form>
-                    <a class="signin">Sign in</a>
-                </div>
-
+                {% include "footer.html" %}
             </div>
-            <div class="nav-bar">
-
-            </div>
-        </header>
-
-        {% block content %}{% endblock %}
+        </div>
 
         {# Global javascript #}
         <script type="text/javascript" src="{% static 'js/iogt.js' %}"></script>
+        {% block extra_js %}{% endblock %}
 
-        {% block extra_js %}
-            {# Override this in templates to add extra javascript #}
-        {% endblock %}
-
-        <footer class="footer">
-            <nav>
-                <div class="links"></div>
-                <div class="links"></div>
-                <div class="links"></div>
-            </nav>
-            <div class="copyright">
-                <div class="logo">
-                    <img src="{% static "images/iogt-logo.svg" %}">
-                </div>
-                <div class="links">
-                    <a class="">Terms of Use</a>
-                    <a class="">Privacy Policy</a>
-                    <a class="">About Us</a>
-                </div>
-                <div>
-                    <span> © The Internet of Good Things. All Rights Reserved.</span>
-                </div>
-            </div>
-        </footer>
     </body>
 </html>

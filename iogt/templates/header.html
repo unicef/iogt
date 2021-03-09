@@ -1,0 +1,119 @@
+{% load static %}
+<header class="header">
+    <div class="header-top">
+        <div class="header-middle">
+            <a class="logo-small" href='/'>
+                <img src="{% static "/images/iogt-logo-two-lines.png" %}" />
+            </a>
+            <div class="signin-language">
+                <a class="signin" href="/signin">Sign in</a>
+                <div class="language-dropdown">
+                    <span>English<i class="material-icons">expand_more</i></span>
+                    <div class="language-dropdown-content">
+                        <a class="language-name" href="/">ESPAÑOL</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="search-menu">
+                <a>
+                    <icon class="material-icons">search</icon>
+                </a>
+                <a>
+                    <icon class="material-icons">menu</icon>
+                </a>
+            </div>
+        </div>
+
+        <div class="tabletDesktopSignin">
+            <a class="logo-full" href="/">
+                <img src={% static "/images/iogt-logo-two-lines.png" %}>
+            </a>
+            <form id="search-bar" role="search" class="search-bar">
+                <input placeholder="Enter your search here..." type="text">
+                <button type="submit">
+                    <i class="material-icons">search</i>
+                </button>
+            </form>
+            <a class="signin">Sign in</a>
+        </div>
+
+    </div>
+    <nav class="nav">
+        <div class="categories-dropdown">
+            <div class="btn-group">
+                <button class="categories-btn">All Categories</button>
+                <button class="categories-btn-arrow">
+                    <i class="material-icons icon">arrow_drop_down</i>
+                </button>
+            </div>
+            <div class="categories-dropdown-content">
+                <dl>
+                    <span>
+                        <a class="dl-title" href='/'>
+                            <dt>Topic title
+                                <i class="material-icons">arrow_drop_up</i>
+                            </dt>
+                        </a>
+                        <a class="dl-item" href='/'>
+                            <dd>Topic item</dd>
+                        </a>
+                    </span>
+                </dl>
+            </div>
+        </div>
+
+        <div class="articles">
+            <a href="/section/all-articles">
+                <img src="{% static "images/nav-icons/globe-green.png" %}" />
+                <img src="{% static "images/nav-icons/globe-white.png" %}" class="imgSwap" />
+                All articles
+            </a>
+        </div>
+        <div class="parents">
+            <a href="/section/parents-and-caregivers">
+                <img src="{% static "images/nav-icons/parent-green.png" %}" />
+                <img src="{% static "images/nav-icons/parent-white.png" %}" class="imgSwap" />
+                Parents & caregivers
+            </a>
+        </div>
+        <div class="girls">
+            <a href="/section/girls">
+                <img src="{% static "images/nav-icons/girl-green.png" %}" />
+                <img src="{% static "images/nav-icons/girl-white.png" %}" class="imgSwap" />
+                Girls
+            </a>
+        </div>
+        <div class="youth">
+            <a href="/section/youth">
+                <img src="{% static "images/nav-icons/boy-green.png" %}" />
+                <img src="{% static "images/nav-icons/boy-white.png" %}" class="imgSwap" />
+                Youth
+            </a>
+        </div>
+        <div class="health-providers">
+            <a href="/section/health-providers">
+                <img src="{% static "images/nav-icons/healthcare-green.png" %}" />
+                <img src="{% static "images/nav-icons/healthcare-white.png" %}" class="imgSwap" />
+                Health providers
+            </a>
+        </div>
+        <div class="see-more">
+            <a href="/7">
+                <i class="material-icons">more_vert</i>
+                See more
+            </a>
+        </div>
+
+        <div class="language" href="">
+            <div class="language-dropdown">
+                <span>Language:</span>
+                <a>English<i class='material-icons'></i></a>
+                <div class="language-dropdown-content">
+                    <a class="language-name" href='/'>ESPAÑOL</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
