@@ -1,5 +1,4 @@
 {% load static wagtailuserbar %}
-
 <!DOCTYPE html>
 <html class="no-js" lang="en">
     <head>
@@ -18,7 +17,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         {# Global stylesheets #}
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" type="text/css" href="{% static 'css/iogt.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}">
 
         {% block extra_css %}
             {# Override this in templates to add extra stylesheets #}
@@ -28,13 +30,19 @@
     <body class="{% block body_class %}{% endblock %}">
         {% wagtailuserbar %}
 
-        {% block content %}{% endblock %}
+        <div id="app">
+            <div id="content-wrap">
+                {% include "header.html" %}
+
+                {% block content %}{% endblock %}
+
+                {% include "footer.html" %}
+            </div>
+        </div>
 
         {# Global javascript #}
         <script type="text/javascript" src="{% static 'js/iogt.js' %}"></script>
+        {% block extra_js %}{% endblock %}
 
-        {% block extra_js %}
-            {# Override this in templates to add extra javascript #}
-        {% endblock %}
     </body>
 </html>
