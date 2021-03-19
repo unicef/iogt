@@ -4,6 +4,7 @@ from wagtail.core import blocks
 from wagtail.core.models import Page
 from wagtail.core.fields import StreamField
 from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel
+from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.models import register_snippet
 
@@ -15,6 +16,12 @@ class Section(Page):
     pass
 
 class Article(Page):
+    lead_image = models.ForeignKey(
+        'wagtailimages.Image',
+        on_delete=models.CASCADE,
+        related_name='+',
+        null=True
+    )
     body = StreamField([
         ('heading', blocks.CharBlock(form_classname="full title")),
         ('paragraph', blocks.RichTextBlock()),
@@ -25,6 +32,7 @@ class Article(Page):
     ])
 
     content_panels = Page.content_panels + [
+        ImageChooserPanel('lead_image'),
         StreamFieldPanel('body')
     ]
 

@@ -1,7 +1,157 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/article.css' %}">
+{% endblock extra_css %}
 
 {% block content %}
-<h1>{{ page.title }}</h1>
-{% include_block page.body %}
+<div class="single-article">
+    {% image page.lead_image height-115 class="main-image-phone" %}
+    <section class="article-content">
+        <div class="tag-section">
+            <a class="tag"
+               href="/section/CORONAVIRUS (COVID-19)">CORONAVIRUS (COVID-19)</a>
+            <a class="tag-meta"
+               href="/section/CORONAVIRUS (COVID-19)/COVID-19 PARENTING">&nbsp;|&nbsp;COVID-19 PARENTING</a>
+            <img src="{% static 'images/nav-icons/forward-green.png' %}">
+        </div>
+        <h1>{{ page.title }}</h1>
+        <p class="date-and-author">
+            <span>on {{ page.first_published_at }}</span>
+            <span>on August 19, 2016 </span>
+            <span class="author">/ by {{ page.owner }}</span>
+            <span class="author">/ by Robyn Collinge</span>
+        </p>
+
+        {% image page.lead_image height-280 class="main-image-tablet-desktop" %}
+        <hr class="horizontal-line-desktop" style="border: 1px solid rgb(191, 0, 18);">
+
+        <div class="content-grid">
+            <div class="content-grid-left">
+                <div class="main-text">
+                    {% include_block page.body %}
+                </div>
+
+                <div class="share-save-section">
+                    <button class="share">
+                        <img src="../../assets/icons/nav-icons/forward-green.png">
+                        <span>Share this Article</span>
+                    </button>
+                    <button class="save">
+                        <i class="material-icons">bookmark_border</i>
+                        <span>Save  this Article</span>
+                    </button>
+                </div>
+
+                <form class="survey-section">
+                    <p class="survey-question">What else do you want to know about Coronavirus?</p>
+                    <p class="survey-option">
+                        <input type="checkbox" id="0" name="option0" value="">
+                        <label for="option0">When it arrives in my country</label>
+                    </p>
+                    <p class="survey-option">
+                        <input type="checkbox" id="1" name="option1" value="">
+                        <label for="option1">What to do if I get the virus</label>
+                    </p>
+                    <p class="survey-option">
+                        <input type="checkbox" id="2" name="option2" value="">
+                        <label for="option2">What my government is doing to address Coronavirus</label>
+                    </p>
+                    <p class="survey-option">
+                        <input type="checkbox" id="3" name="option3" value="">
+                        <label for="option3">When to wear a mask</label>
+                    </p>
+                    <input type="submit">
+                </form>
+
+                <div class="comments-section">
+                    <div class="comments-input-section">
+                        <label for="comments-input-form">Leave a Comment Below: </label>
+                        <form action="/action_page.php" class="comments-input-form">
+                            <textarea class="comments-input" name="comment" form="comments-input-form" placeholder="Start typing here..."></textarea>
+                            <input type="submit" value="Send">
+                        </form>
+                    </div>
+                    <div class="comments-listing">
+                        <p>Comments (Most Popular)</p>
+                        <div>
+                            <div class="comment-single">
+                                <p class="comment-single-header">
+                                    <a href="/profile/user2020" class="">user2020</a> says:
+                                </p>
+                                <p class="comment-single-text">I love this article, but why should we look for people who are working to stop the spread? Do we have to tell them to stay at home?</p>
+                                <p class="reply-prompt">
+                                    <a href="/reply" class="">Click Here to Reply</a>
+                                </p>
+                            </div>
+                            <div class="comment-reply">
+                                <p class="comment-reply-header">
+                                    <a href="/profile/iogtlover" class="">iogtlover</a> says:
+                                </p>
+                                <p class="comment-reply-text">@user2020 I think he means to show your children examples of heroes.</p>
+                                <p class="reply-prompt">
+                                    <a href="/reply" class="">Click Here to Reply</a>
+                                </p>
+                            </div>
+                            <div class="comment-reply">
+                                <p class="comment-reply-header">
+                                    <a href="/profile/user2020" class="">user2020</a> says:
+                                </p>
+                                <p class="comment-reply-text">@iogtlover thank you!!</p>
+                                <p class="reply-prompt">
+                                    <a href="/reply" class="">Click Here to Reply</a>
+                                </p>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="comment-single">
+                                <p class="comment-single-header">
+                                    <a href="/profile/iogtlover" class="">iogtlover</a> says:
+                                </p>
+                                <p class="comment-single-text">Please post more about COVID-19. Looking forward to reading more articles here.</p>
+                                <p class="reply-prompt">
+                                    <a href="/reply" class="">Click Here to Reply</a>
+                                </p>
+                            </div>
+                            <div class="comment-reply">
+                                <p class="comment-reply-header">
+                                    <a href="/profile/undefined" class=""></a> says:</p>
+                                <p class="comment-reply-text"></p>
+                                <p class="reply-prompt">
+                                    <a href="/reply" class="">Click Here to Reply</a>
+                                </p>
+                            </div>
+                        </div>
+                        <button class="load-more-button">Load More </button>
+                    </div>
+                </div>
+            </div>
+            <div class="content-grid-right">
+                <div class="article-info-desktop-card">
+                    <p>
+                        <span class="pheader">Date Published:</span> August 19, 2016</p>
+                    <p>
+                        <span class="pheader">Author:</span> Robyn Collinge</p>
+                    <p>
+                        <span class="pheader">Category:</span> CORONAVIRUS (COVID-19) COVID-19 PARENTING</p>
+                </div>
+                <div class="share-save-section">
+                    <button class="share">
+                        <img src="{% static 'images/nav-icons/forward-green.png'%}">
+                        <span>Share this Article</span>
+                    </button>
+                    <button class="save">
+                        <i class="material-icons">bookmark_border</i>
+                        <span>Save this Article</span>
+                    </button>
+                </div>
+                <div class="related-articles-section">
+                    <h1>Related Articles</h1>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
 {% endblock content %}
