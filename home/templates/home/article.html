@@ -7,21 +7,30 @@
 
 {% block content %}
 <div class="single-article">
+    <ul class="breadcrumb">
+        {% for crumb in breadcrumbs %}
+        <li>
+            <a href="{% pageurl crumb %}">{{ crumb.title }}</a>
+        </li>
+        {% endfor %}
+        <li>{{ page.title }}</li>
+    </ul>
     {% image page.lead_image height-115 class="main-image-phone" %}
     <section class="article-content">
-        <div class="tag-section">
-            <a class="tag"
-               href="/section/CORONAVIRUS (COVID-19)">CORONAVIRUS (COVID-19)</a>
-            <a class="tag-meta"
-               href="/section/CORONAVIRUS (COVID-19)/COVID-19 PARENTING">&nbsp;|&nbsp;COVID-19 PARENTING</a>
+        <ul class="tag-section">
+            {% for section in sections %}
+            <li>
+                <a class="tag" href="{% pageurl section %}">{{ section.title }}</a>
+            </li>
+            {% endfor %}
+
             <img src="{% static 'images/nav-icons/forward-green.png' %}">
-        </div>
+        </ul>
+
         <h1>{{ page.title }}</h1>
         <p class="date-and-author">
-            <span>on {{ page.first_published_at }}</span>
-            <span>on August 19, 2016 </span>
-            <span class="author">/ by {{ page.owner }}</span>
-            <span class="author">/ by Robyn Collinge</span>
+            <span>on {{ page.first_published_at|date }}</span>
+            <span class="author">/ by {{ page.owner.get_full_name }}</span>
         </p>
 
         {% image page.lead_image height-280 class="main-image-tablet-desktop" %}
@@ -35,7 +44,7 @@
 
                 <div class="share-save-section">
                     <button class="share">
-                        <img src="../../assets/icons/nav-icons/forward-green.png">
+                        <img src="{% static 'images/nav-icons/forward-green.png' %}">
                         <span>Share this Article</span>
                     </button>
                     <button class="save">
@@ -130,9 +139,11 @@
             <div class="content-grid-right">
                 <div class="article-info-desktop-card">
                     <p>
-                        <span class="pheader">Date Published:</span> August 19, 2016</p>
+                        <span class="pheader">Date Published:
+                        </span>{{ page.first_published_at|date }}</p>
                     <p>
-                        <span class="pheader">Author:</span> Robyn Collinge</p>
+                        <span class="pheader">Author:
+                        </span>{{ page.owner.get_full_name }}</p>
                     <p>
                         <span class="pheader">Category:</span> CORONAVIRUS (COVID-19) COVID-19 PARENTING</p>
                 </div>

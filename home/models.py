@@ -18,9 +18,8 @@ class Section(Page):
 class Article(Page):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
-        on_delete=models.CASCADE,
-        related_name='+',
-        null=True
+        on_delete=models.PROTECT,
+        related_name='+'
     )
     body = StreamField([
         ('heading', blocks.CharBlock(form_classname="full title")),
@@ -35,6 +34,12 @@ class Article(Page):
         ImageChooserPanel('lead_image'),
         StreamFieldPanel('body')
     ]
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        context['breadcrumbs'] = [crumb for crumb in self.get_ancestors() if not crumb.is_root()]
+        context['sections'] = self.get_ancestors().type(Section)
+        return context
 
 @register_snippet
 class Footer(models.Model):

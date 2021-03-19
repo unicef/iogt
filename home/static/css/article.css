@@ -20,32 +20,30 @@ body{
   font-family: 'Open Sans';
 }
 
-.single-article .breadcrumb {
+ul.breadcrumb {
   width: 100%;
-  height: 30px;
-  left: 0px;
   padding: 3px 5px 3px 9px;
-  padding-top: auto;
   background: #030303;
-}
-
-.single-article .breadcrumb a {
-  width: 226px;
-  height: 24px;
-}
-
-.single-article .breadcrumb,
-.single-article .breadcrumb a {
   font-family: Poppins;
-  color: #ffffff;
-  text-decoration-line: underline;
-  text-decoration-skip-ink: none;
   font-style: normal;
   font-weight: 600;
   font-size: 8px;
   line-height: 12px;
   color: #ffffff;
-  mix-blend-mode: normal;
+}
+
+ul.breadcrumb li {
+  display: inline;
+}
+
+ul.breadcrumb li+li:before {
+    content: " > ";
+    color: #20CD84;
+}
+
+ul.breadcrumb a {
+  text-decoration-line: underline;
+  color: inherit;
 }
 
 .article-content {
@@ -389,7 +387,7 @@ body{
     color: #000000;
   }
 
-  .article-content .tag-section {
+  ul.tag-section {
     display: flex;
     justify-content: space-between;
     font-family: 'Open Sans';
@@ -397,14 +395,16 @@ body{
     padding: 15px 19px;
     line-height: 19px;
     letter-spacing: -0.336px;
+    list-style: none
   }
 
-  .article-content .tag-section .tag {
+  ul.tag-section li {
+      display: inline;
     text-decoration: none;
   }
 
 
-  .article-content .tag-section img {
+  ul.tag-section img {
     width: 18.86px;
     height: 16px;
   }
@@ -781,30 +781,33 @@ with similar viewport measurments ***************************
     color: #000000;
   }
 
-  .article-content .tag-section {
+  ul.tag-section {
     font-family: 'Open Sans';
     font-size: 14px;
-    padding-right: 20px;
     margin: 20px 0;
-    letter-spacing: -0.34px;
-    line-break: 19.07px;
-    height: 23px;
+    list-style: none;
+    padding: 0;
   }
 
-  article-content .tag-section a {
+  ul.tag-section a {
     display: inline-block;
-    text-decoration: none;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    color: inherit;
   }
 
-  .article-content .tag-section img {
+  ul.tag-section img {
     width: 18.86px;
     height: 16px;
   }
 
-  .article-content .tag-section .tag,
-  .article-content .tag-section .tag-meta {
+  ul.tag-section li {
+      display: inline;
       color: rgb(191, 0, 18);
-      border-bottom: 1px solid rgb(191, 0, 18);
+  }
+
+  ul.tag-section li+li:before {
+      content: " | ";
   }
 
   .article-content .date-and-author {
@@ -1190,30 +1193,34 @@ DESKTOP CSS SETTTINGS. At this point, able to reuse some of the sections and inc
     padding-bottom: 28px;
   }
 
-  .article-content .tag-section {
+  ul.tag-section {
     font-family: 'Open Sans';
     font-size: 20px;
-    padding-right: 20px;
+    padding: 0;
     margin: 30px 0 40px 0;
-    letter-spacing: -0.34px;
-    line-break: 19.07px;
     line-height: 30px;
+    list-style: none;
   }
 
-  .article-content .tag-section a {
+  ul.tag-section a {
     display: inline-block;
-    text-decoration: none;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    color: inherit;
   }
 
-  .article-content .tag-section img {
+  ul.tag-section img {
     width: 18.86px;
     height: 16px;
   }
 
-  .article-content .tag-section .tag,
-  .article-content .tag-section .tag-meta {
+  ul.tag-section li {
+      display: inline;
       color: rgb(191, 0, 18);
-      border-bottom: 1px solid rgb(191, 0, 18);
+  }
+
+  ul.tag-section li+li:before {
+      content: " | "
   }
 
   .article-content .date-and-author {
