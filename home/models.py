@@ -30,21 +30,21 @@ class Article(Page):
 
 @register_snippet
 class Footer(models.Model):
-    title = models.CharField(max_length=255, blank=True)
+    title = models.CharField(max_length=255)
     logos = StreamField([
-        ('image', ImageChooserBlock())
-    ], null=True)
+        ('image', ImageChooserBlock(required=False))
+    ], blank=True)
     navigation = StreamField([
         ('link_group', blocks.StructBlock([
             ('title', blocks.CharBlock()),
             ('links', blocks.StreamBlock([
                 ('page', blocks.PageChooserBlock())
             ]))
-        ]))
-    ], null=True)
+        ], required=False))
+    ], blank=True)
     essential = StreamField([
         ('page', blocks.PageChooserBlock()),
-    ], null=True)
+    ])
 
     panels = [
         FieldPanel('title'),
