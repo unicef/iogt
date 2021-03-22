@@ -13,7 +13,11 @@ class HomePage(Page):
     pass
 
 class Section(Page):
-    pass
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        context['articles'] = self.get_children().type(Article)
+        return context
 
 class Article(Page):
     lead_image = models.ForeignKey(

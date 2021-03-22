@@ -1,13 +1,31 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/section.css' %}">
+{% endblock extra_css %}
 
 {% block content %}
-<h1>{{ page.title }}</h1>
-<div class="sections">
-    <ul>
-        {% for section in page.get_children %}
-        <li><a href="{% pageurl section %}">{{ section.title }}</a></li>
+<div class="home">
+    <div class="mobileArticles">
+
+        {% for article in articles %}
+        <div class="mobileHomeArticleContainer">
+            <div class="mobileTagContainer">
+                <h1 class="mobileTag">{{ page.title }}</h1>
+                <div class="share">
+                    <img src="{% static 'images/nav-icons/forward-green.png'%}">
+                </div>
+            </div>
+            <a href="{% pageurl article %}">
+                <div>
+                    {% image article.specific.lead_image height-130 %}
+                </div>
+                <h1 class="mobileHeader">{{ article.title }}</h1>
+            </a>
+        </div>
         {% endfor %}
-    </ul>
+
+    </div>
 </div>
 {% endblock content %}
