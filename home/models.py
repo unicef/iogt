@@ -4,6 +4,7 @@ from wagtail.core import blocks
 from wagtail.core.models import Page
 from wagtail.core.fields import StreamField
 from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel
+from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.models import register_snippet
 
@@ -12,9 +13,18 @@ class HomePage(Page):
     pass
 
 class Section(Page):
-    pass
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        context['articles'] = self.get_children().type(Article)
+        return context
 
 class Article(Page):
+    lead_image = models.ForeignKey(
+        'wagtailimages.Image',
+        on_delete=models.PROTECT,
+        related_name='+'
+    )
     body = StreamField([
         ('heading', blocks.CharBlock(form_classname="full title")),
         ('paragraph', blocks.RichTextBlock()),
@@ -25,8 +35,15 @@ class Article(Page):
     ])
 
     content_panels = Page.content_panels + [
+        ImageChooserPanel('lead_image'),
         StreamFieldPanel('body')
     ]
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        context['breadcrumbs'] = [crumb for crumb in self.get_ancestors() if not crumb.is_root()]
+        context['sections'] = self.get_ancestors().type(Section)
+        return context
 
 @register_snippet
 class Footer(models.Model):

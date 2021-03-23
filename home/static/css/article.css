@@ -1,0 +1,1568 @@
+/*  For Feature Phones */
+body{
+  background-color: #ffffff;
+}
+
+.mobile-banner,
+.date-and-author,
+.tag-section,
+.main-image-tablet-desktop,
+.horizontal-line-desktop,
+.article-info-desktop-card,
+.share-save-section,
+.content-grid-right .share-save-section, .load-more-button {
+  display: none;
+  visibility: collapse;
+}
+
+.single-article {
+  min-width: 200;
+  font-family: 'Open Sans';
+}
+
+ul.breadcrumb {
+  width: 100%;
+  padding: 3px 5px 3px 9px;
+  background: #030303;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 8px;
+  line-height: 12px;
+  color: #ffffff;
+}
+
+ul.breadcrumb li {
+  display: inline;
+}
+
+ul.breadcrumb li+li:before {
+    content: " > ";
+    color: #20CD84;
+}
+
+ul.breadcrumb a {
+  text-decoration-line: underline;
+  color: inherit;
+}
+
+.article-content {
+  min-width: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 12px;
+  font-family: 'Open Sans';
+  font-style: 400;
+  font-size: 12px;
+  line-height: 13px;
+  /* or 108% */
+  letter-spacing: -0.384px;
+  color: #303030;
+}
+
+.article-content .main-image-phone {
+  width: 92%; /* 220px/240px*/
+  height: 115px;
+  margin: 6px 10px 6px 10px;
+}
+
+.article-content h1 {
+  margin: 0 12px 0 12px;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 40px;
+  color: #000000;
+}
+
+.article-content .main-text {
+  padding: 0 12px 12px 12px;
+}
+
+.article-content .main-text b {
+  font-weight: 700;
+}
+
+/***** Feature phone - Comments Section ****/
+.comments-section {
+  min-width: 200px;
+  margin: 12px;
+}
+
+.comments-input-section label {
+  margin-bottom: 12px;
+}
+
+.comments-input-form {
+  width: 100%;
+  margin-top: 12px;
+  background-color: #f3f3f3;
+  overflow: hidden; /*allows button to show up*/
+}
+
+/* send button */
+.comments-input-form input {
+  position: relative;
+  float: right;
+  margin: 0px 8px 8px 0px;
+  padding: 4px 30px 4px 30px;
+  border: 0;
+  border-radius: 2px;
+  background-color: #ffffff;
+  font-size: 10px;
+}
+
+/* feature - text area */
+.comments-input {
+  resize: none;
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  background-color: #f3f3f3;
+  color: #303030;
+  font-family: 'Open Sans';
+  font-size: 10px;
+}
+
+.comments-input::placeholder {
+  color: #979797;
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-size: 9px;
+}
+
+.comments-listing {
+  font-size: 10px;
+  margin: 4px 0 12px 0;
+}
+
+.comment-single {
+  border-radius: 50px 50px 50px 0px;
+  padding: 8px 10px 4px 13px;
+  /* margin-right: 23px; */
+  margin: 8px 23px 8px 0;
+  line-height: 14px;
+  background: #f3f3f3;
+}
+
+.comment-single .comment-single-header {
+  /* padding-top: 8px; */
+  margin: 0 0 0 10px;
+  padding-bottom: 0;
+}
+
+.comment-single .comment-single-text {
+  margin-top: 0px;
+  color: #303030;
+}
+
+.comment-reply {
+  background: #f3f3f3;
+  margin: 8px 10px 8px 36px;
+  border-radius: 50px 50px 0px 50px;
+  padding: 8px 10px 4px 13px;
+  line-height: 14px;
+}
+
+.comment-reply .comment-reply-header {
+  text-align: right;
+  margin: 0 32px 0 0;
+  padding-bottom: 0;
+}
+
+.comment-reply .comment-reply-text {
+  margin-top: 0px;
+  color: #303030;
+}
+
+.comments-listing a {
+  font-weight: 700;
+  color: black;
+}
+
+.reply-prompt {
+  text-align: center;
+}
+
+.reply-prompt a {
+  color: #6b6b6b;
+}
+
+    /* Feature- Related Articles */
+    .related-articles-section {
+
+    }
+
+    .related-articles-section div a {
+      display: flex;
+      flex-direction: row;
+      align-items: normal;
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    .related-articles-section > div {
+      border-bottom: 1px solid #F3F3F3;
+    }
+
+    .related-articles-section h1{
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 40px;
+
+    }
+
+    .related-articles-section h2{
+      margin-top: 0;
+      margin-bottom: 0;
+      padding: 0 8px 20px 8px;
+      font-family: 'Poppins';
+      font-style: normal;
+      font-weight: 600;
+      font-size: 10px;
+      line-height: 12px;
+
+    }
+
+    .related-articles-section a{
+      text-decoration: none;
+      color: black;
+    }
+
+
+    .related-article-img {
+      padding-right: 4px;
+      height: 100%;
+      width: 25%;
+    }
+
+    .related-articles-feature-tag{
+      font-size: 6px;
+    }
+
+
+    /* Feature - Survey Section */
+    .survey-section{
+      padding: 12px;
+    }
+
+    .survey-question{
+      margin: 0;
+      font-weight: 800;
+      font-size: 15px;
+      line-height: 22px;
+      color: #20CD84;
+      mix-blend-mode: normal;
+      font-family: 'Poppins';
+    }
+
+    .survey-option{
+      font-family: 'Open Sans';
+      font-style: normal;
+      font-weight: bold;
+      font-size: 12px;
+      line-height: 14px;
+      letter-spacing: -0.384px;
+      color: #303030;
+      display: flex;
+      align-items: center;
+    }
+
+    .survey-option input[type=checkbox] {
+      background: #EAEAEA;
+      border-radius: 5px;
+
+    }
+
+    .survey-option label {
+      padding-left: 10px;
+    }
+
+    .survey-section input[type=submit] {
+      width: 100%;
+      height: 27px;
+      border: 0;
+      background: #20CD84;
+      color: #ffffff;
+      font-family: Poppins;
+      font-style: normal;
+      font-weight: 800;
+      font-size: 10px;
+      line-height: 15px;
+      text-align: center;
+      color: #FFFFFF;
+    }
+/*****************************************************************
+/*********************** FOR MOBILE DEVICES ********************
+          (min-width: 321px) and (max-width: 767px)
+   Should also adjust for devices with similar screen viewport
+/*The mobile navbar is different from the desktop/ laptop. It uses icons along with link names. The link names are different as well*/
+/* Alternate min value: 360
+*****************************************************************/
+@media only screen and (min-width: 321px) and (max-width: 767px) {
+  .single-article {
+    max-width: 767px;
+    background-color: #fafafa;
+  }
+
+  .breadcrumb,
+  .tag_meta,
+  .main-image-tablet-desktop,
+  .horizontal-line-desktop,
+  .article-info-desktop-card,
+  .related-articles-feature-tag {
+    display: none;
+    visibility: collapse;
+  }
+
+  .mobile-banner,
+  .date-and-author,
+  .tag-section,
+  .share-save-section {
+    visibility: visible;
+    display: inline-block;
+  }
+
+  .mobile-banner {
+    visibility: visible;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 39px;
+    max-height: 39px;
+    top: 110px;
+    background: #20cd84;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 13px;
+    line-height: 19px;
+    text-align: center;
+    color: #ffffff;
+    mix-blend-mode: normal;
+  }
+
+  .mobile-banner > span {
+    margin: auto;
+    width: 100%;
+  }
+
+  .mobile-banner a {
+    text-decoration: none;
+    color: #ffffff;
+    height: 100%;
+  }
+
+  .article-content {
+    max-width: 767px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 87%; /* 329px/375px*/
+    margin-top: 15px;
+    padding-bottom: 12px;
+    font-family: 'Open Sans';
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    /* or 108% */
+    letter-spacing: -0.38px;
+    background-color: #ffffff;
+    color: #303030;
+  }
+
+  .article-content .main-image-phone {
+    width: 100%; /* 339px/375px*/
+    height: 177px;
+    margin: 0 0 6px 0;
+  }
+
+  .article-content h1 {
+    margin: 0 8px 0 19px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 35px;
+    line-height: 40px;
+    color: #000000;
+  }
+
+  ul.tag-section {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Open Sans';
+    font-size: 14px;
+    padding: 15px 19px;
+    line-height: 19px;
+    letter-spacing: -0.336px;
+    list-style: none
+  }
+
+  ul.tag-section li {
+      display: inline;
+    text-decoration: none;
+  }
+
+
+  ul.tag-section img {
+    width: 18.86px;
+    height: 16px;
+  }
+
+  .article-content .date-and-author {
+    font-family: 'Open Sans';
+    color: #6b6b6b;
+    font-size: 16px;
+    padding-left: 19px;
+    padding-right: 19px;
+    line-height: 18px;
+    letter-spacing: -0.384px;
+    margin-bottom: 34px;
+  }
+
+  .article-content .author {
+    font-style: italic;
+  }
+
+  .article-content .main-text {
+    padding: 0 19px 19px 19px;
+  }
+
+  .article-content .main-text b {
+    font-weight: 700;
+  }
+
+  .share-save-section {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-family: 'Open Sans';
+    padding: 19px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    line-height: 18px;
+    text-align: center;
+    color: #303030;
+  }
+
+  .share-save-section button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 0;
+    border-radius: 4px;
+    padding: 10px 9px 11px 9px;
+    background-color: #f3f3f3;
+    font-family: 'Open Sans';
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  .share-save-section button:hover{
+    background-color: #F7F9F9;
+  }
+
+  .share-save-section button i {
+    font-size: 17px;
+    color: #20cd84;
+  }
+
+  .share-save-section button img {
+    height: 17px;
+  }
+
+  .share-save-section .share {
+    margin-right: 5px;
+  }
+
+  .share-save-section .save {
+    margin-left: 5px;
+  }
+
+  .share-save-section button span {
+    margin-left: 2px;
+  }
+
+  /***** Mobile phone - Comments Section ****/
+  .comments-section {
+    min-width: 200px;
+    margin: 22px;
+    font-size: 13px;
+    color: #000000;
+  }
+
+  .comments-input-section label {
+    margin-bottom: 12px;
+  }
+
+  .comments-input-form {
+    width: 100%;
+    margin-top: 12px;
+    background-color: #f3f3f3;
+    overflow: hidden; /*allows send button to show up*/
+  }
+
+  /* send button */
+  .comments-input-form input {
+    position: relative;
+    float: right;
+    margin: 0px 8px 8px 0px;
+    padding: 4px 41px 4px 41px;
+    border: 0;
+    border-radius: 4px;
+    background-color: #ffffff;
+    font-size: 13px;
+  }
+
+  /* feature - text area */
+  .comments-input {
+    resize: none;
+    width: 100%;
+    height: 112px;
+    padding: 8px 10px;
+    border: 0;
+    background-color: #f3f3f3;
+    color: #303030;
+    font-family: 'Open Sans';
+    font-size: 12px;
+  }
+
+  .comments-input::placeholder {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-size: 13px;
+    color: #979797;
+  }
+
+  .comments-listing {
+    font-size: 13px;
+    margin: 4px 0 12px 0;
+  }
+
+  .comment-single, .comment-reply {
+    font-size: 10px;
+  }
+
+  .comment-single {
+    border-radius: 50px 50px 50px 0px;
+    padding: 8px 18px 4px 21px;
+    margin: 8px 0px 8px 0;
+    line-height: 14px;
+    background: #f3f3f3;
+  }
+
+  .comment-single .comment-single-header {
+    /* padding-top: 8px; */
+    margin: 0 0 0 21px;
+    padding-bottom: 0;
+  }
+
+  .comment-single .comment-single-text {
+    margin-top: 10px;
+    color: #303030;
+  }
+
+  .comment-reply {
+    background: #f3f3f3;
+    margin: 10px 10px 10px 43px;
+    border-radius: 50px 50px 0px 50px;
+    padding: 8px 10px 4px 13px;
+    line-height: 14px;
+  }
+
+  .comment-reply .comment-reply-header {
+    text-align: right;
+    margin: 0 32px 0 0;
+    padding-bottom: 0;
+  }
+
+  .comment-reply .comment-reply-text {
+    margin-top: 10px;
+    margin-right: 21px;
+    text-align: right;
+    color: #303030;
+  }
+
+  .comments-listing a {
+    font-weight: 700;
+    color: black;
+  }
+
+  .reply-prompt {
+    text-align: right;
+    margin-right: 32px;
+    font-size: 8px;
+  }
+
+  .reply-prompt a {
+    color: #6b6b6b;
+  }
+
+  .load-more-button {
+    margin-left:30%;
+
+    border-radius: 4px;
+    margin-top: 10px;
+    padding: 6px 30px 7px 31px;
+    float: center;
+    border: 0;
+    font-size: 12px;
+    color: #303030;
+  }
+
+    /* Mobile- Related Articles */
+    .related-articles-section {
+        margin-right: 20px;
+        margin-left: 20px;
+    }
+
+    .related-articles-section div a {
+      display: flex;
+      flex-direction: column;
+      align-items: normal;
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    .related-articles-section > div {
+      border-bottom: 1px solid #F3F3F3;
+    }
+
+    .related-articles-section h1{
+      margin: 0;
+      padding-bottom: 9px;
+      font-size: 35px;
+      font-weight: 700;
+      line-height: 40px;
+      border-bottom: 1px solid #6B6B6B;
+    }
+
+    .related-articles-section h2{
+      align-self:auto;
+      margin:0;
+      padding: 0 0 20px 0px;
+      font-family: 'Poppins';
+      font-style: normal;
+      font-weight: 700;
+      font-size: 25px;
+      line-height: 40px;
+
+    }
+
+    .related-articles-section a{
+      text-decoration: none;
+      color: black;
+    }
+
+
+    .related-article-img {
+      padding-right: 4px;
+      padding-top: 15px;
+      width: 100%; /* 339px/375px*/
+      max-height: 177px;
+    }
+
+    /* Mobile - Survey Section */
+    .survey-section{
+      padding: 20px;
+    }
+
+    .survey-question{
+      margin: 0;
+      font-family: 'Poppins';
+      font-style: normal;
+      font-weight: 800;
+      font-size: 20px;
+      line-height: 30px;
+      text-align: center;
+      color: #20CD84;
+      mix-blend-mode: normal;
+    }
+
+    .survey-option{
+      font-size: 16px;
+      line-height: 22px;
+      letter-spacing: -0.384px;
+      display: flex;
+      align-items: center;
+    }
+
+    .survey-option input[type=checkbox] {
+      background: #EAEAEA;
+      border-radius: 5px;
+      margin-left: 10px;
+    }
+
+    .survey-option label {
+      padding-left: 25px;
+    }
+
+    .survey-section input[type=submit] {
+      border-radius: 4px;
+      width: 100%;
+      height: 49.53px;
+
+      font-size: 13px;
+      line-height: 19px;
+
+      border: 0;
+      background: #20CD84;
+      color: #ffffff;
+
+      text-align: center;
+    }
+
+
+}
+
+/***********************************************************
+****++++++** CSS FOR TABLETS  and other devices ************
+with similar viewport measurments ***************************
+      (min-width: 768px) and (max-width: 1024px)
+*************************************************************/
+
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+  .single-article {
+    max-width: 1024px;
+    background-color: #ffffff;
+  }
+
+  .breadcrumb,
+  .mobile-banner,
+  .article-content .tag-section img,
+  .main-image-phone,
+  .horizontal-line-desktop,
+  .article-info-desktop-card,
+  .related-articles-feature-tag {
+    display: none;
+    visibility: collapse;
+  }
+
+  .date-and-author,
+  .tag-section,
+  .tag_meta,
+  .main-image-tablet-desktop,
+  .share-save-section, .load-more-button {
+    visibility: visible;
+    display: inline-block;
+  }
+
+  .article-content {
+    max-width: 1024px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 84%; /* 648px/768px*/
+    padding-bottom: 12px;
+    font-family: 'Open Sans';
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    /* or 108% */
+    letter-spacing: -0.38px;
+    background-color: #ffffff;
+    color: #303030;
+  }
+
+  .article-content .main-image-tablet-desktop {
+    width: 100%; /* 339px/375px*/
+    height: 280px;
+    margin: 0 0 6px 0;
+  }
+
+  .article-content h1 {
+    margin: 0 0 0 0;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 38px;
+    line-height: 40px;
+    color: #000000;
+  }
+
+  ul.tag-section {
+    font-family: 'Open Sans';
+    font-size: 14px;
+    margin: 20px 0;
+    list-style: none;
+    padding: 0;
+  }
+
+  ul.tag-section a {
+    display: inline-block;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    color: inherit;
+  }
+
+  ul.tag-section img {
+    width: 18.86px;
+    height: 16px;
+  }
+
+  ul.tag-section li {
+      display: inline;
+      color: rgb(191, 0, 18);
+  }
+
+  ul.tag-section li+li:before {
+      content: " | ";
+  }
+
+  .article-content .date-and-author {
+    font-family: 'Open Sans';
+    color: #6b6b6b;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: -0.384px;
+    margin-bottom: 34px;
+  }
+
+  .article-content .author {
+    font-style: italic;
+  }
+
+  .article-content .main-text {
+    padding: 31px 0 0 0px;
+  }
+
+  .article-content .main-text b {
+    font-weight: 700;
+  }
+
+  .share-save-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Open Sans';
+    padding: 19px 0;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    line-height: 18px;
+    text-align: center;
+    color: #303030;
+  }
+
+  .share-save-section button {
+    width: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+    border-radius: 4px;
+    padding: 10px 9px 11px 9px;
+    background-color: #f2f2f2;
+    font-family: 'Open Sans';
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 17.7px;
+
+  }
+
+  .share-save-section button:hover{
+    background-color: #F7F9F9;
+  }
+
+  .share-save-section button i {
+    font-size: 20px;
+    color: #20cd84;
+  }
+
+  .share-save-section button img {
+    height: 17px;
+  }
+
+  .share-save-section .share {
+    margin-right: 5px;
+  }
+
+  .share-save-section .save {
+    margin-left: 5px;
+  }
+
+  .share-save-section button span {
+    margin-left: 20px;
+  }
+
+  /****************** tablet phone - COMMENTS SECTION *******************/
+  .comments-section {
+    width: 100%;
+    margin: 0;
+  }
+
+  .comments-input-section label {
+    margin-bottom: 12px;
+  }
+
+  .comments-input-form {
+    width: 100%;
+    margin-top: 12px;
+    background-color: #f3f3f3;
+    overflow: hidden; /*allows send button to show up*/
+  }
+
+  /* send button */
+  .comments-input-form input {
+    position: relative;
+    float: right;
+    margin: 0px 8px 8px 0px;
+    padding: 4px 30px 4px 30px;
+    border: 0;
+    border-radius: 4px;
+    background-color: #ffffff;
+    font-size: 13px;
+  }
+
+  /* tablet - comments text area */
+  .comments-input {
+    resize: none;
+    width: 100%;
+    height: 112px;
+    padding: 8px 10px;
+    border: 0;
+    background-color: #f3f3f3;
+    color: #303030;
+    font-family: 'Open Sans';
+    font-size: 12px;
+  }
+
+  .comments-input::placeholder {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-size: 13px;
+    color: #979797;
+  }
+
+  /* tablet - comments listing */
+  .comments-listing {
+    font-size: 13px;
+    margin: 4px 0 12px 0;
+  }
+
+  .comment-single, .comment-reply {
+    font-size: 10px;
+  }
+
+  .comment-single {
+    border-radius: 50px 50px 50px 0px;
+    padding: 8px 46px 4px 46px;
+    margin: 8px 0px 8px 0;
+    line-height: 14px;
+    background: #f3f3f3;
+  }
+
+  .comment-single .comment-single-header {
+    /* padding-top: 8px; */
+    margin: 0 0 0 21px;
+    padding-top: 14px;
+    padding-bottom: 4px;
+  }
+
+  .comment-single .comment-single-text {
+    margin-top: 10px;
+  }
+
+  .comment-reply {
+    background: #f3f3f3;
+    margin: 10px 0px 10px 43px;
+    border-radius: 50px 50px 0px 50px;
+    padding: 8px 46px 4px 46px;
+    line-height: 14px;
+  }
+
+  .comment-reply .comment-reply-header {
+    text-align: right;
+    margin: 0 30px 0 0;
+    padding-bottom: 0;
+  }
+
+  .comment-reply .comment-reply-text {
+    text-align: left;
+    padding: 10px 0 10px 0;
+  }
+
+  .comments-listing a {
+    font-weight: 700;
+    color: black;
+  }
+
+  .reply-prompt {
+    text-align: right;
+    margin-right: 0;
+    font-size: 8px;
+  }
+
+  .reply-prompt a {
+    color: #6b6b6b;
+  }
+
+  .load-more-button {
+    margin-left: 45%;
+    margin-right: auto;
+    border-radius: 4px;
+    margin-top: 10px;
+    padding: 6px 30px 7px 31px;
+    float: center;
+    border: 0;
+    font-size: 12px;
+    color: #303030;
+  }
+
+    /* Tablet- Related Articles */
+    .related-articles-section {
+      margin-right: 0px;
+      margin-left: 0px;
+   }
+
+  .related-articles-section > div {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .related-articles-section div a {
+    display: flex;
+    flex-direction: column;
+    align-items: normal;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .related-articles-section > div > div {
+    border-bottom: 1px solid #F3F3F3;
+    width: 50%;
+  }
+
+  .related-articles-section h1{
+    position: relative;
+    margin: 0;
+    padding-bottom: 9px;
+    font-size: 35px;
+    font-weight: 700;
+    line-height: 40px;
+    border-bottom: 1px solid #6B6B6B;
+  }
+
+  .related-articles-section h2{
+    align-self:auto;
+    margin:0;
+    padding: 0 0 20px 0px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 40px;
+
+  }
+
+  .related-articles-section a{
+    text-decoration: none;
+    color: black;
+  }
+
+
+  .related-article-img {
+    padding-right: 4px;
+    padding-top: 15px;
+    height: 100%;
+    width: 100%;
+  }
+
+
+    /* tablet - Survey Section */
+    .survey-section{
+      padding: 12px;
+    }
+
+    .survey-question{
+      margin: 0;
+      font-weight: 800;
+      font-size: 16px;
+      line-height: 22px;
+      color: #20CD84;
+      mix-blend-mode: normal;
+      font-family: 'Poppins';
+    }
+
+    .survey-option{
+      font-family: 'Open Sans';
+      font-style: normal;
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 14px;
+      letter-spacing: -0.384px;
+      color: #303030;
+      display: flex;
+      align-items: center;
+    }
+
+    .survey-option input[type=checkbox] {
+      background: #EAEAEA;
+      border-radius: 5px;
+
+    }
+
+    .survey-option label {
+      padding-left: 10px;
+    }
+
+    .survey-section input[type=submit] {
+      width: 50%;
+      height: 27px;
+      border: 0;
+      background: #20CD84;
+      color: #ffffff;
+      font-family: 'Poppins';
+      font-style: normal;
+      font-weight: 800;
+      font-size: 13px;
+      line-height: 17.7px;
+      text-align: center;
+      color: #FFFFFF;
+
+
+      border-radius: 4px;
+    }
+
+}
+
+/***********************************************************
+DESKTOP CSS SETTTINGS. At this point, able to reuse some of the sections and incorporate the differnet parts through CSS Grid ***********************************************************/
+
+@media only screen and (min-width: 1025px) and (max-width: 2000px) {
+  .single-article {
+    max-width: 2000px;
+    margin-left: 135px;
+    margin-right: 135px;
+    background-color: #ffffff;
+  }
+
+  .breadcrumb,
+  .mobile-banner,
+  .article-content .tag-section img,
+  .main-image-phone,
+  .date-and-author,
+  .single-article .share-save-section,
+  .related-articles-feature-tag {
+    display: none;
+    visibility: collapse;
+  }
+
+  .tag-section,
+  .tag_meta,
+  .main-image-tablet-desktop,
+  .article-info-desktop-card,
+  .share-save-section,
+  .content-grid-right .share-save-section, .load-more-button{
+    visibility: visible;
+    display: inline-block;
+  }
+
+  .horizontal-line-desktop {
+    visibility: visible;
+    display: block;
+  }
+
+  .article-content {
+    min-width: 100%;
+    /* width: 81%; */
+    /* 1169px/1445px*/
+    padding-bottom: 97px;
+    font-family: 'Open Sans';
+    /* or 108% */
+    letter-spacing: -0.38px;
+    background-color: #ffffff;
+    color: #303030;
+  }
+
+  .article-content .main-image-tablet-desktop {
+    width: 100%; /* 339px/375px*/
+    height: 280px;
+    margin: 0 0 6px 0;
+
+  }
+
+  .article-content h1 {
+    margin: 0 0 0 0;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 48px;
+    color: #000000;
+    padding-bottom: 28px;
+  }
+
+  ul.tag-section {
+    font-family: 'Open Sans';
+    font-size: 20px;
+    padding: 0;
+    margin: 30px 0 40px 0;
+    line-height: 30px;
+    list-style: none;
+  }
+
+  ul.tag-section a {
+    display: inline-block;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    color: inherit;
+  }
+
+  ul.tag-section img {
+    width: 18.86px;
+    height: 16px;
+  }
+
+  ul.tag-section li {
+      display: inline;
+      color: rgb(191, 0, 18);
+  }
+
+  ul.tag-section li+li:before {
+      content: " | "
+  }
+
+  .article-content .date-and-author {
+    font-family: 'Open Sans';
+    color: #6b6b6b;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: -0.384px;
+    margin-bottom: 34px;
+  }
+
+  .article-content .author {
+    font-style: italic;
+  }
+
+  .horizontal-line-desktop {
+    margin: 50px 0;
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: 0.652fr 0.055fr 0.292fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+  }
+
+  .content-grid-left {
+    grid-area: 1 / 1 / 2 / 2;
+  }
+  .content-grid-right {
+    grid-area: 1 / 3 / 2 / 4;
+  }
+
+  .article-content .main-text {
+    padding: 0 0 22px 0;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    letter-spacing: -0.384px;
+  }
+
+  .article-content .main-text b {
+    font-weight: 700;
+  }
+
+  .article-info-desktop-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 10px 31px;
+    background-color: #fafafa;
+    line-height: 18px;
+  }
+
+  .article-info-desktop-card .pheader {
+    font-weight: 700;
+  }
+
+  .content-grid-right .share-save-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Open Sans';
+    padding: 19px 0;
+    font-size: 13px;
+    line-height: 18px;
+    text-align: center;
+    color: #303030;
+  }
+
+  .content-grid-right .share-save-section button {
+    width: 100%;
+    margin-top: 13px;
+    margin-bottom: 13px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+    border-radius: 4px;
+    padding: 10px 9px 11px 9px;
+    background-color: #f2f2f2;
+    font-family: 'Open Sans';
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 17.7px;
+    color: #303030;
+  }
+
+  .share-save-section button:hover{
+    background-color: #F7F9F9;
+  }
+
+  .content-grid-right .share-save-section button i {
+    font-size: 23px;
+    color: #20cd84;
+  }
+
+  .content-grid-right .share-save-section button img {
+    height: 20px;
+    width: 20px;
+  }
+
+  .content-grid-right .share-save-section .share {
+    margin-right: 0px;
+  }
+
+  .content-grid-right .share-save-section .save {
+    margin-left: 0px;
+  }
+
+  .content-grid-right .share-save-section button span {
+    margin-left: 20px;
+  }
+
+  /****************** desktop - COMMENTS SECTION *******************/
+  .comments-section {
+    width: 100%;
+    margin: 10px 0 10px 0;
+    font-size: 13px;
+    color: #000000;
+  }
+
+  .comments-input-section label {
+    margin-bottom: 12px;
+  }
+
+  .comments-input-form {
+    width: 100%;
+    margin-top: 12px;
+    background-color: #f3f3f3;
+    overflow: hidden; /*allows send button to show up*/
+  }
+
+  /* send button */
+  .comments-input-form input {
+    position: relative;
+    float: right;
+    margin: 10px 26px 10px 0px;
+    padding: 4px 85px 4px 85px;
+    border: 0;
+    border-radius: 4px;
+    background-color: #ffffff;
+    font-size: 13px;
+  }
+
+  /* desktop - text area */
+  .comments-input {
+    resize: none;
+    width: 100%;
+    height: 112px;
+    padding: 8px 10px;
+    border: 0;
+    background-color: #f3f3f3;
+    color: #303030;
+    font-family: 'Open Sans';
+    font-size: 13px;
+  }
+
+  .comments-input::placeholder {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-size: 13px;
+    color: #979797;
+  }
+
+    /* desktop - comments listing */
+    .comments-listing {
+      font-size: 13px;
+      margin: 4px 0 12px 0;
+      color: #000000;
+      line-height: 18px;
+    }
+
+    .comment-single, .comment-reply {
+      font-size: 10px;
+    }
+
+    .comment-single {
+      border-radius: 50px 50px 50px 0px;
+      padding: 0px 54px 4px 54px;
+      margin: 8px 0px 8px 0;
+      line-height: 14px;
+      background: #f3f3f3;
+    }
+
+    .comment-single .comment-single-header {
+      /* padding-top: 8px; */
+      margin: 0 0 0 0px;
+      padding-top: 14px;
+      padding-bottom: 4px;
+    }
+
+    .comment-single .comment-single-text {
+      margin-top: 10px;
+    }
+
+    .comment-reply {
+      background: #f3f3f3;
+      margin: 10px 0px 10px 111px;
+      border-radius: 50px 50px 0px 50px;
+      padding: 14px 54px 4px 54px;
+      line-height: 14px;
+    }
+
+    .comment-reply .comment-reply-header {
+      text-align: right;
+      margin: 0 0px 0 0;
+      padding-bottom: 0;
+    }
+
+    .comment-reply .comment-reply-text {
+      text-align: left;
+      margin-top: 10px;
+
+      /* padding: 10px 46px 10px 46px; */
+    }
+
+    .comments-listing a {
+      font-weight: 700;
+      color: black;
+    }
+
+    .reply-prompt {
+      text-align: right;
+      margin-right: 0;
+      font-size: 8px;
+    }
+
+    .reply-prompt a {
+      color: #6b6b6b;
+    }
+
+    .load-more-button {
+      margin-left: 45%;
+      margin-right: auto;
+      border-radius: 4px;
+      margin-top: 10px;
+      padding: 6px 30px 7px 31px;
+      float: center;
+      border: 0;
+      font-size: 12px;
+      color: #303030;
+    }
+
+
+    /* Desktop - Related Articles */
+    .related-articles-section > div > div{
+      border-bottom: 1px solid #6B6B6B;
+    }
+
+    .related-articles-section h1{
+      text-align: center;
+      font-size: 35px;
+      border-bottom: 1px solid #6B6B6B;
+      padding-bottom: 20px;
+    }
+
+    .related-articles-section h2{
+      margin-top: 0;
+      margin-bottom: 0;
+      padding: 0 20px 20px 20px;
+      line-height: 40px;
+      font-family: 'Poppins';
+      font-size: 25px;
+    }
+
+    .related-articles-section div a {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .related-articles-section a{
+      text-decoration: none;
+      color: black;
+    }
+
+    .related-articles-section > div {
+      border-bottom: 0;
+    }
+
+    .related-article-img {
+      padding: 20px;
+      width: 100%;
+    }
+
+    /* desktop - Survey Section */
+    .survey-section{
+      padding: 12px;
+    }
+
+    .survey-question{
+      margin: 0;
+      font-weight: 800;
+      font-size: 20px;
+      line-height: 22px;
+      color: #20CD84;
+      mix-blend-mode: normal;
+      font-family: 'Poppins';
+    }
+
+    .survey-option{
+      font-family: 'Open Sans';
+      font-style: normal;
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 14px;
+      letter-spacing: -0.384px;
+      color: #303030;
+      display: flex;
+      align-items: center;
+    }
+
+    .survey-option input[type=checkbox] {
+      background: #EAEAEA;
+      border-radius: 5px;
+
+    }
+
+    .survey-option label {
+      padding-left: 10px;
+    }
+
+    .survey-section input[type=submit] {
+      width: 50%;
+      height: 27px;
+      border: 0;
+      background: #20CD84;
+      color: #ffffff;
+      font-family: 'Poppins';
+      font-style: normal;
+      font-weight: 800;
+      font-size: 13px;
+      line-height: 17.7px;
+      text-align: center;
+      color: #FFFFFF;
+
+
+      border-radius: 4px;
+    }
+
+}
