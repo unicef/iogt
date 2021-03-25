@@ -10,7 +10,13 @@ from wagtail.snippets.models import register_snippet
 
 
 class HomePage(Page):
-    pass
+
+    template = 'home/section.html'
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        context['articles'] = self.get_descendants().type(Article)
+        return context
 
 class Section(Page):
 
@@ -44,6 +50,12 @@ class Article(Page):
         context['breadcrumbs'] = [crumb for crumb in self.get_ancestors() if not crumb.is_root()]
         context['sections'] = self.get_ancestors().type(Section)
         return context
+
+    def description(self):
+        for block in self.body:
+            if block.block_type == 'paragraph':
+                return block
+        return ''
 
 @register_snippet
 class Footer(models.Model):

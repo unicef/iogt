@@ -6,7 +6,7 @@
 <h1>{{ page.title }}</h1>
 <div class="sections">
     <ul>
-        {% for section in page.get_children %}
+        {% for article in articles %}
         <li><a href="{% pageurl section %}">{{ section.title }}</a></li>
         {% endfor %}
     </ul>
