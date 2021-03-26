@@ -20,6 +20,32 @@ class HomePage(Page):
 
 class Section(Page):
 
+    icon = models.ForeignKey(
+        'wagtailimages.Image',
+        on_delete=models.PROTECT,
+        related_name='+',
+        blank=True,
+        null=True,
+    )
+    icon_active = models.ForeignKey(
+        'wagtailimages.Image',
+        on_delete=models.PROTECT,
+        related_name='+',
+        blank=True,
+        null=True,
+    )
+    color = models.CharField(
+        max_length=6,
+        blank=True,
+        null=True,
+    )
+
+    content_panels = Page.content_panels + [
+        ImageChooserPanel('icon'),
+        ImageChooserPanel('icon_active'),
+        FieldPanel('color'),
+    ]
+
     def get_context(self, request):
         context = super().get_context(request)
         context['articles'] = self.get_children().type(Article)
@@ -29,7 +55,9 @@ class Article(Page):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
-        related_name='+'
+        related_name='+',
+        blank=True,
+        null=True
     )
     body = StreamField([
         ('heading', blocks.CharBlock(form_classname="full title")),

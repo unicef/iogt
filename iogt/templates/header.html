@@ -1,10 +1,47 @@
-{% load static %}
+{% load static menu_tags %}
 <header class="header">
     <div class="header-top">
+        <div class="header-top-language-strip">
+            <div class="current-language">Language: <span>English</span>
+            </div>
+            <div class="change-language">
+                <input type="checkbox" class="collapse" id="handel1">
+                <label for="handel1">Change Language <i class="material-icons">keyboard_arrow_down</i>
+                </label>
+                <div class="content">
+                    <div class="language-list-menu-content">
+                        <ul>
+                            <li id="English">
+                                <a class="">English</a>
+                            </li>
+                            <li id="العربيّة">
+                                <a class="">العربيّة</a>
+                            </li>
+                            <li id="FRANÇAIS">
+                                <a class="">FRANÇAIS</a>
+                            </li>
+                            <li id="ESPAÑOL">
+                                <a class="">ESPAÑOL</a>
+                            </li>
+                            <li id="PORTUGUÊS">
+                                <a class="">PORTUGUÊS</a>
+                            </li>
+                            <li id="РУССКИЙ">
+                                <a class="">РУССКИЙ</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="header-middle">
             <a class="logo-small" href='/'>
                 <img src="{% static "/images/iogt-logo-two-lines.png" %}" />
             </a>
+            <div class="join-menu">
+                <a>Join</a>
+                <a>Menu</a>
+            </div>
             <div class="signin-language">
                 <a class="signin" href="/signin">Sign in</a>
                 <div class="language-dropdown">
@@ -64,44 +101,8 @@
             </div>
         </div>
 
-        <div class="articles">
-            <a href="/section/all-articles">
-                <img src="{% static "images/nav-icons/globe-green.png" %}" />
-                <img src="{% static "images/nav-icons/globe-white.png" %}" class="imgSwap" />
-                All articles
-            </a>
-        </div>
-        <div class="parents">
-            <a href="/section/parents-and-caregivers">
-                <img src="{% static "images/nav-icons/parent-green.png" %}" />
-                <img src="{% static "images/nav-icons/parent-white.png" %}" class="imgSwap" />
-                Parents & caregivers
-            </a>
-            {% include "./submenus/parents_submenu.html" %}
-        </div>
-        <div class="girls">
-            <a href="/section/girls">
-                <img src="{% static "images/nav-icons/girl-green.png" %}" />
-                <img src="{% static "images/nav-icons/girl-white.png" %}" class="imgSwap" />
-                Girls
-            </a>
-        </div>
-        <div class="youth">
-            <a href="/section/youth">
-                <img src="{% static "images/nav-icons/boy-green.png" %}" />
-                <img src="{% static "images/nav-icons/boy-white.png" %}" class="imgSwap" />
-                Youth
-            </a>
-            {% include "./submenus/youth_submenu.html" %}
-        </div>
-        <div class="health-providers">
-            <a href="/section/health-providers">
-                <img src="{% static "images/nav-icons/healthcare-green.png" %}" />
-                <img src="{% static "images/nav-icons/healthcare-white.png" %}" class="imgSwap" />
-                Health providers
-            </a>
-            {% include "./submenus/health_submenu.html" %}
-        </div>
+        {% main_menu max_levels=3 %}
+
         <div class="see-more">
             <a href="/7">
                 <i class="material-icons">more_vert</i>

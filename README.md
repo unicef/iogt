@@ -42,6 +42,17 @@ Finally, start the server.
 
 Once running, navigate to http://localhost:8000 in your browser.
 
+## Setting up test data
+
+It is possible to automatically populate the database with example data for a basic test site.
+```
+./manage.py create_test_site
+```
+
+Optionally, create the main menu automatically as well.
+```
+./manage.py autopopulate_main_menus
+```
 
 [1]: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment
 [2]: https://www.unicef.org/innovation/IoGT

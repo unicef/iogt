@@ -1,1 +1,2 @@
 wagtail==2.11.*
+wagtailmenus~=3.0
