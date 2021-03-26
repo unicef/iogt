@@ -254,7 +254,8 @@
 .girls,
 .youth,
 .health-providers,
-.see-more {
+.see-more,
+.nav-section {
   height: 100%;
   width: 100%;
   text-align: center;
@@ -266,7 +267,6 @@
   height: 100%;
   padding: 3px;
   top: 10px;
-  text-align: center;
   text-decoration: none;
   color: #20cd84;
 }
@@ -278,6 +278,7 @@
   margin-left: auto;
   margin-right: auto;
   height: 15px;
+  width: 15px;
 }
 
 .nav div a > i {
@@ -338,11 +339,13 @@
 }
 
 
+.nav-section .subtopic-dropdown-content li,
 .parents .subtopic-dropdown-content li {
-  background-color: #7a432a;
+    background-color: var(--active-color);
 }
+.nav-section .subtopic-dropdown-content:hover li,
 .parents .subtopic-dropdown-content:hover li {
-  background-color: #7a432a;
+    background-color: var(--active-color);
 }
 
 .health-providers .subtopic-dropdown-content li {
@@ -441,19 +444,22 @@
   transition: 1s;
 }
 
+.nav .nav-section > a,
 .nav .parents > a {
-  color: #7a432a;
+  color: var(--active-color);
 }
+.nav-section:hover .subtopic-dropdown-content,
 .parents:hover .subtopic-dropdown-content,
 .subtopic-dropdown-content:hover {
   display: block;
   z-index: 300;
-  background-color: #7a432a;
+  background-color: var(--active-color);
 }
 
 /* Allows 1st level to be remain highlighted  when on subtopics*/
+.nav-section:hover > a:hover,
 .parents:hover > a:hover {
-  background-color: #7a432a;
+    background-color: var(--active-color);
 }
 
 .subtopic-dropdown-content:hover > li:hover > a:hover {
@@ -913,9 +919,11 @@ with similar viewport measurments ***************************
   }
   .header > .nav > div > a > img {
     height: 28px;
+    width: 28px;
   }
   .header > .nav > div > a:hover > img {
     height: 28px;
+    width: 28px;
   }
 
   .header .nav > div {
@@ -1127,7 +1135,6 @@ with similar viewport measurments ***************************
   /* Tablet: Header - Language Drop Down */
   /* Feature: Header - Language Drop Down */
   .nav .language-dropdown {
-    text-align: left;
     position: relative;
     display: inline-block;
     font-size: 12px;
@@ -1390,9 +1397,11 @@ DESKTOP CSS SETTTINGS. At this point, able to reuse some of the sections and inc
 
   .header > .nav > div > a > img {
     height: 30px;
+    width: 30px;
   }
   .header > .nav > div > a:hover > img {
     height: 30px;
+    width: 30px;
   }
 
   .nav div a > i {
@@ -1407,8 +1416,6 @@ DESKTOP CSS SETTTINGS. At this point, able to reuse some of the sections and inc
     color: #20cd84;
     line-height: 100%;
   }
-
-  
 
   .nav > div > a:hover
   {
@@ -1595,6 +1602,7 @@ DESKTOP CSS SETTTINGS. At this point, able to reuse some of the sections and inc
     font-size: 12px;
     font-weight: 600px;
     color: #303030;
+    width: unset;
   }
 
   .nav .language-dropdown a > i::before {

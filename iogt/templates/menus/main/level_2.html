@@ -1,0 +1,13 @@
+{% load menu_tags %}
+<ul class="subtopic-dropdown-content">
+    {% for item in menu_items %}
+    <li>
+        <a href="{{ item.href }}">
+            <span>{{ item.text }}</span>
+        </a>
+        {% if item.has_children_in_menu %}
+            {% sub_menu item template="menus/main/level_3.html" %}
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
