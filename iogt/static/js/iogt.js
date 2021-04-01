@@ -24,7 +24,18 @@ function interceptClickEvent(event, element) {
                         document.head.appendChild(newLinks[i]);
                     }
                 }
-                document.getElementById("content").innerHTML = newContentElem.innerHTML;
+                document.getElementById("new-content").innerHTML = newContentElem.innerHTML;
+                document.getElementById("new-content").classList.remove("hide");
+                document.getElementById("new-content").classList.add("slide-in");
+                setTimeout(function () {
+                    document.getElementById("content").innerHTML = newContentElem.innerHTML;
+                    document.getElementById("new-content").classList.add("fade-out");
+                    document.getElementById("new-content").classList.remove("slide-in");
+                }, 310);
+                setTimeout(function () {
+                    document.getElementById("new-content").classList.add("hide");
+                    document.getElementById("new-content").innerHTML = "";
+                }, 620);
             });
         }
     }

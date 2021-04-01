@@ -26,7 +26,18 @@ function interceptClickEvent(event: MouseEvent, element: HTMLAnchorElement) {
                         document.head.appendChild(newLinks[i]);
                     }
                 }
-                document.getElementById("content").innerHTML = newContentElem.innerHTML;
+                document.getElementById("new-content").innerHTML = newContentElem.innerHTML;
+                document.getElementById("new-content").classList.remove("hide");
+                document.getElementById("new-content").classList.add("slide-in");
+                setTimeout(() => {
+                    document.getElementById("content").innerHTML = newContentElem.innerHTML;
+                    document.getElementById("new-content").classList.add("fade-out");
+                    document.getElementById("new-content").classList.remove("slide-in");
+                }, 310);
+                setTimeout(() => {
+                    document.getElementById("new-content").classList.add("hide");
+                    document.getElementById("new-content").innerHTML = "";
+                }, 620);
             });
         }
     }
