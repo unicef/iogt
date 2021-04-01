@@ -13,6 +13,19 @@ function interceptClickEvent(event: MouseEvent, element: HTMLAnchorElement) {
                     window.history.pushState({"html": resText,"pageTitle": title },"", element.pathname);
                 }
                 const newContentElem = nextPageElem.getElementsByClassName("content")[0];
+
+                // Load CSS Link Tags
+                const existingLinkMap = {};
+                const existingLinks = document.getElementsByTagName("link");
+                for (var i = 0; i < existingLinks.length; i++) {
+                    existingLinkMap[existingLinks[i].href] = existingLinks[i];
+                }
+                const newLinks = nextPageElem.getElementsByTagName("link");
+                for (var i = 0; i < newLinks.length; i++) {
+                    if (!existingLinkMap[newLinks[i].href]) {
+                        document.head.appendChild(newLinks[i]);
+                    }
+                }
                 document.getElementById("content").innerHTML = newContentElem.innerHTML;
             });
         }

@@ -4,29 +4,27 @@ function interceptClickEvent(event, element) {
             console.log(element, " is an IOGT link element");
             event.preventDefault();
             fetchPageHTML(element.href, function (resText) {
-                const nextPageElem = document.createElement("html");
+                var nextPageElem = document.createElement("html");
                 nextPageElem.innerHTML = resText;
-                const title = nextPageElem.getElementsByTagName("title")[0].innerText.trim();
+                var title = nextPageElem.getElementsByTagName("title")[0].innerText.trim();
                 document.title = title;
                 if (window.history.pushState) {
                     window.history.pushState({ "html": resText, "pageTitle": title }, "", element.pathname);
                 }
                 var newContentElem = nextPageElem.getElementsByClassName("content")[0];
-                document.getElementById("content").innerHTML = newContentElem.innerHTML;
-
-                // Add CSS files that are not already in head
-                const existingLinkTags = document.getElementsByTagName("link");
-                const cssMap = {};
-                for (var i = 0; i < existingLinkTags.length; i++) {
-                    cssMap[existingLinkTags[i].href] = true;
+                // Load CSS Link Tags
+                var existingLinkMap = {};
+                var existingLinks = document.getElementsByTagName("link");
+                for (var i = 0; i < existingLinks.length; i++) {
+                    existingLinkMap[existingLinks[i].href] = existingLinks[i];
                 }
-                const newLinkTags = nextPageElem.getElementsByTagName("link");
-                for (var i = 0; i < newLinkTags.length; i++) {
-                    const newTag = newLinkTags[i];
-                    if (!cssMap[newTag.href]) {
-                        document.head.appendChild(newTag);
+                var newLinks = nextPageElem.getElementsByTagName("link");
+                for (var i = 0; i < newLinks.length; i++) {
+                    if (!existingLinkMap[newLinks[i].href]) {
+                        document.head.appendChild(newLinks[i]);
                     }
                 }
+                document.getElementById("content").innerHTML = newContentElem.innerHTML;
             });
         }
     }
