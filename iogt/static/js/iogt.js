@@ -7,51 +7,55 @@ function interceptClickEvent(event, element) {
                 var nextPageElem = document.createElement("html");
                 nextPageElem.innerHTML = resText;
                 var title = nextPageElem.getElementsByTagName("title")[0].innerText.trim();
-                document.title = title;
                 if (window.history.pushState) {
                     window.history.pushState({ "html": resText, "pageTitle": title }, "", element.pathname);
                 }
-                var newContentElem = nextPageElem.getElementsByClassName("content")[0];
-                // Load CSS Link Tags
-                var existingLinkMap = {};
-                var existingLinks = document.getElementsByTagName("link");
-                for (var i = 0; i < existingLinks.length; i++) {
-                    existingLinkMap[existingLinks[i].href] = existingLinks[i];
-                }
-                var newLinks = nextPageElem.getElementsByTagName("link");
-                for (var i = 0; i < newLinks.length; i++) {
-                    if (!existingLinkMap[newLinks[i].href]) {
-                        document.head.appendChild(newLinks[i]);
-                    }
-                }
-                document.getElementById("new-content").innerHTML = newContentElem.innerHTML;
-                document.getElementById("new-content").classList.remove("hide");
-                document.getElementById("new-content").classList.add("slide-in");
-                setTimeout(function () {
-                    document.getElementById("content").innerHTML = newContentElem.innerHTML;
-                    document.getElementById("new-content").classList.add("fade-out");
-                    document.getElementById("new-content").classList.remove("slide-in");
-                }, 310);
-                setTimeout(function () {
-                    document.getElementById("new-content").classList.add("hide");
-                    document.getElementById("new-content").innerHTML = "";
-                }, 620);
+                transitionToPage(nextPageElem);
             });
         }
     }
 }
 if (window.history.replaceState) {
-    var html = document.getElementById("content").innerHTML;
+    var html = document.documentElement.innerHTML;
     var title = document.getElementsByTagName("title")[0].innerText.trim();
     window.history.replaceState({ "html": html, "pageTitle": title }, title);
 }
 // Ensure navigation through pages that were loaded by XHR still works
 window.onpopstate = function (e) {
     if (e.state) {
-        document.getElementById("content").innerHTML = e.state.html;
+        var nextPageElem = document.createElement("html");
+        nextPageElem.innerHTML = e.state.html;
+        transitionToPage(nextPageElem);
         document.title = e.state.pageTitle;
     }
 };
+function transitionToPage(nextPageElem) {
+    var newContentElem = nextPageElem.getElementsByClassName("content")[0];
+    // Load CSS Link Tags
+    var existingLinkMap = {};
+    var existingLinks = document.getElementsByTagName("link");
+    for (var i = 0; i < existingLinks.length; i++) {
+        existingLinkMap[existingLinks[i].href] = existingLinks[i];
+    }
+    var newLinks = nextPageElem.getElementsByTagName("link");
+    for (var i = 0; i < newLinks.length; i++) {
+        if (!existingLinkMap[newLinks[i].href]) {
+            document.head.appendChild(newLinks[i]);
+        }
+    }
+    document.getElementById("new-content").innerHTML = newContentElem.innerHTML;
+    document.getElementById("new-content").classList.remove("hide");
+    document.getElementById("new-content").classList.add("slide-in");
+    setTimeout(function () {
+        document.getElementById("content").innerHTML = newContentElem.innerHTML;
+        document.getElementById("new-content").classList.add("fade-out");
+        document.getElementById("new-content").classList.remove("slide-in");
+    }, 310);
+    setTimeout(function () {
+        document.getElementById("new-content").classList.add("hide");
+        document.getElementById("new-content").innerHTML = "";
+    }, 620);
+}
 function isIOGTLink(element) {
     if (element.hostname) {
         var iogtHostnames = ["127.0.0.1", "localhost", "goodinternet.org"];
