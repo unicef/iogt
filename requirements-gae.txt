@@ -1,0 +1,6 @@
+-r requirements.txt
+
+django-storages
+google-cloud-storage
+google-cloud-secret-manager
+gunicorn

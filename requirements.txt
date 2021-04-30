@@ -1,2 +1,3 @@
+psycopg2==2.8.*
 wagtail==2.11.*
 wagtailmenus~=3.0
