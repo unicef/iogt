@@ -1,5 +1,6 @@
 django-storages
 google-cloud-storage
+google-cloud-secret-manager
 gunicorn
 psycopg2==2.8.*
 wagtail==2.11.*

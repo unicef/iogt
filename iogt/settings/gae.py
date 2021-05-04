@@ -1,8 +1,17 @@
 from .base import *
+from google.cloud import secretmanager
+
+
+def fetch_secret(client, name):
+    return client.access_secret_version(
+        name=f'projects/702831353322/secrets/{name}/versions/latest'
+    ).payload.data.decode('UTF-8')
+
+secrets_client = secretmanager.SecretManagerServiceClient()
 
 DEBUG = True
 ALLOWED_HOSTS = ['*']
-SECRET_KEY = 'jjfayj6d=90@@@(rop$98ryt36vuyf3!chtneyoku3_f)*z^h_'
+SECRET_KEY = fetch_secret(secrets_client, 'secret_key')
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
@@ -16,7 +25,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'iogt-mvp',
         'USER': 'iogt',
-        'PASSWORD': 'rZf?3dH!P&Mb&ra!@x^eE',
+        'PASSWORD': fetch_secret(secrets_client, 'db_password'),
         'HOST': '/cloudsql/iogt-311717:europe-west4:iogt-mvp',
     }
 }
