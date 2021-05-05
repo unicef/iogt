@@ -33,9 +33,11 @@
         <div id="app">
             <div id="content-wrap">
                 {% include "header.html" %}
-
-                {% block content %}{% endblock %}
-
+                <div id="content" class="content">
+                    {% block content %}{% endblock %}
+                </div>
+                <div id="new-content" class="hide"></div>
+                {% dump_context %}
                 {% footer %}
             </div>
         </div>

@@ -40,4 +40,62 @@ body {
 
 #content-wrap {
     flex: 1 0 auto;
+    position: relative;
+}
+
+#content {
+    position: absolute;
+    z-index: 10;
+}
+
+#new-content {
+    display: flex;
+    position: absolute;
+    z-index: 20;
+    width: 100vw;
+    flex-grow: 1;
+    pointer-events: none;
+}
+
+.fade-out {
+    animation: fade-out-anim;
+    animation-iteration-count: 1;
+    animation-duration: 300ms;
+}
+
+.fade-in {
+    animation: fade-out-anim;
+    animation-direction: reverse;
+    animation-iteration-count: 1;
+    animation-duration: 300ms;
+}
+
+.hide {
+    opacity: 0;
+    display: none;
+}
+
+.slide-in {
+    animation: slide-in-anim;
+    animation-iteration-count: 1;
+    animation-duration: 300ms;
+}
+
+
+@keyframes slide-in-anim {
+    0% {
+        left: 100vw;
+    }
+    100% {
+        left: 0vw;
+    }
+}
+
+@keyframes fade-out-anim {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }
