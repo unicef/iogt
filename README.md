@@ -42,6 +42,28 @@ Finally, start the server.
 
 Once running, navigate to http://localhost:8000 in your browser.
 
+
+## Running ElasticSearch (Optional)
+
+1. Set up an elastic search cluster
+2. Update local.py to use Elasticsearch as the backend. More details [here](https://docs.wagtail.io/en/stable/topics/search/backends.html#elasticsearch-backend)
+   
+   ```
+   WAGTAILSEARCH_BACKENDS = {
+    'default': {
+        'BACKEND': 'wagtail.search.backends.elasticsearch7',
+        'URLS': ['http://localhost:9200'],
+        'INDEX': 'iogt',
+        'TIMEOUT': 5,
+        'OPTIONS': {},
+        'INDEX_SETTINGS': {},
+        'AUTO_UPDATE': False,
+        }
+   }
+   ```
+
+3. Run `./manage.py update_index` to update the ElasticSearch Index
+
 ## Setting up test data
 
 It is possible to automatically populate the database with example data for a basic test site.
