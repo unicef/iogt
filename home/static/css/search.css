@@ -1,0 +1,15 @@
+.search-container {
+    margin-left: 5%;
+}
+
+.page-controls-container {
+    margin: 5%
+}
+
+.page-next {
+    float: right;
+}
+
+.page-previous {
+    float: left;
+}
