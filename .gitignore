@@ -110,3 +110,6 @@ GitHub.sublime-settings
 
 #Mac
 .DS_Store
+
+# Data dir for postgres with docker-compose
+initdb.d/

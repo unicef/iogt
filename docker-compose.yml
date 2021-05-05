@@ -24,6 +24,16 @@ services:
       - "9200:9200"
     networks:
       - elastic
+  db:
+    image: postgres:alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: iogt
+    volumes:
+      - /var/lib/postgresql/data
+      - ./initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
 
 volumes:
   es-data01:
