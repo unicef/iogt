@@ -43,7 +43,7 @@
                 <a>Menu</a>
             </div>
             <div class="signin-language">
-                <a class="signin" href="/signin">Sign in</a>
+                <a class="signin" href="{% url 'accounts:login' %}">Sign in</a>
                 <div class="language-dropdown">
                     <span>English<i class="material-icons">expand_more</i></span>
                     <div class="language-dropdown-content">
@@ -73,7 +73,7 @@
                     <i class="material-icons">search</i>
                 </button>
             </form>
-            <a class="signin">Sign in</a>
+            <a class="signin" href="{% url 'accounts:login' %}">Sign in</a>
         </div>
 
     </div>

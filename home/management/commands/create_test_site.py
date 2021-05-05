@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 from django.core.management.base import BaseCommand
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from wagtail.core.rich_text import RichText
 import home.models as models
 
@@ -34,7 +34,7 @@ class Command(BaseCommand):
         self.clear()
         self.stdout.write('Existing site structure cleared')
 
-        owner = User.objects.first()
+        owner = get_user_model().objects.first()
         home = models.HomePage.objects.first()
         if home:
             self.stdout.write(f"Home page found, title={home.title}")

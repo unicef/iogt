@@ -1,2 +1,6 @@
 wagtail==2.11.*
 wagtailmenus~=3.0
+
+# Testing
+factory-boy==3.2.0
+wagtail-factories==2.0.1
