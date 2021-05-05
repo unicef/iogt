@@ -1,3 +1,4 @@
 psycopg2==2.8.*
 wagtail==2.11.*
 wagtailmenus~=3.0
+wagtail-localize~=0.9.5
