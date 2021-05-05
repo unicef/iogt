@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'home',
     'search',
     'iogt_users',
+    'iogt_content_migration',
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'wagtailmedia',
     'wagtail_localize',
     'wagtail_localize.locales',
+    'wagtailmarkdown',
 
     'modelcluster',
     'taggit',
