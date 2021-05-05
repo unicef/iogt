@@ -22,8 +22,8 @@ class UserRegistrationForm(forms.ModelForm):
 
 
     def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
-        self.page = kwargs.pop('page', None)
+        self.user = kwargs.pop("user", None)
+        self.page = kwargs.pop("page", None)
 
         super().__init__(*args, **kwargs)
         self.fields["password"].help_text = mark_safe(password_validators_help_text_html())
@@ -35,7 +35,6 @@ class UserRegistrationForm(forms.ModelForm):
 
         for key in DEFAULT_USER_FIELDS:
             self.cleaned_data.pop(key, None)
-
 
         # Add additional info
         user.additional_data = json.dumps(self.cleaned_data)
@@ -58,7 +57,7 @@ class UserRegistrationForm(forms.ModelForm):
 
 class RegistrationFormBuilder(FormBuilder):
     def get_form_class(self):
-        return type(str('WagtailForm'), (UserRegistrationForm,), self.formfields)
+        return type(str("WagtailForm"), (UserRegistrationForm,), self.formfields)
 
 
 class UserUpdateForm(forms.ModelForm):
@@ -66,13 +65,12 @@ class UserUpdateForm(forms.ModelForm):
     password2 = forms.CharField(widget=forms.PasswordInput, strip=False, required=False)
 
     error_messages = {
-        'duplicate_username': "A user with that username already exists.",
-        'password_mismatch': "The two password fields didn't match.",
+        "duplicate_username": "A user with that username already exists.",
+        "password_mismatch": "The two password fields didn't match.",
     }
 
-
     class Meta:
-        fields = ('username', 'password1', 'password2')
+        fields = ("username", "password1", "password2")
         model = get_user_model()
 
     def _clean_username(self):
@@ -88,8 +86,8 @@ class UserUpdateForm(forms.ModelForm):
             users = users.exclude(pk=self.instance.pk)
         if users.filter(**{username_field: username}).exists():
             self.add_error(get_user_model().USERNAME_FIELD, forms.ValidationError(
-                self.error_messages['duplicate_username'],
-                code='duplicate_username',
+                self.error_messages["duplicate_username"],
+                code="duplicate_username",
             ))
         return username
 
@@ -125,12 +123,12 @@ class UserUpdateForm(forms.ModelForm):
         try:
             self.validate_password()
         except forms.ValidationError as e:
-            self.add_error('confirm_password', e)
+            self.add_error("confirm_password", e)
 
     def save(self, commit=True):
         user = super().save(commit=False)
 
-        # Only set the password if thy entered
+        # Only set the password if they entered
         password = self.cleaned_data["password1"]
         if password:
             user.set_password(password)

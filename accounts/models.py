@@ -29,22 +29,23 @@ class User(AbstractUser):
     additional_data = models.JSONField(blank=True, null=True)
 
     def get_additional_data(self):
+        """
+        This in used to display extra data in Wagtail admin User section
+        """
         return json.loads(self.additional_data)
 
 
 
 class UserRegistrationPage(AbstractForm):
-
-
     thank_you_text = StreamField([
-        ('paragraph', RichTextBlock(required=True))
+        ("paragraph", RichTextBlock(required=True))
     ])
 
 
     # Only allow one User Registration page to be created
     max_count = 1
 
-    parent_page_types = ['home.HomePage']
+    parent_page_types = ["home.HomePage"]
 
     from .forms import RegistrationFormBuilder  # noqa prevent circular imports
     form_builder = RegistrationFormBuilder
@@ -65,7 +66,7 @@ class UserRegistrationPage(AbstractForm):
         InlinePanel("form_fields", label="Form Fields")
     ]
     content_panels = Page.content_panels + [
-        StreamFieldPanel('thank_you_text'),
+        StreamFieldPanel("thank_you_text"),
     ]
 
     edit_handler = TabbedInterface(
