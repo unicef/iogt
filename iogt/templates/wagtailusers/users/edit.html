@@ -1,0 +1,17 @@
+{% extends "wagtailusers/users/edit.html" %}
+
+{% block fields %}
+  {{ block.super }}
+
+  {% for key, value in form.instance.get_additional_data.items %}
+    <li>
+      <div class="field char_field">
+        <label for="id_is_active">{{ key }}:</label>
+        <div class="field-content">
+          <span>{{ value }}</span>
+        </div>
+      </div>
+    </li>
+  {% endfor %}
+{% endblock fields %}
+

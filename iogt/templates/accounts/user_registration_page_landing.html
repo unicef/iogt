@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+  <div>
+    {% for block in page.thank_you_text %}
+        {% include_block block %}
+    {% endfor %}
+  </div>
+{% endblock content %}
+

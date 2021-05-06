@@ -41,3 +41,49 @@ body {
 #content-wrap {
     flex: 1 0 auto;
 }
+
+form input:not([type='checkbox']):not([type='radio']):not([type='submit']), form textarea, form select, form button {
+     appearance: none;
+     width: 100%;
+     margin: 0.75rem 0 0;
+     padding: 0.75rem;
+     border: 0.125rem solid #c0c0c0;
+     border-radius: 0;
+     background: #fff;
+     font-size: inherit;
+     font-family: inherit;
+     line-height: 1.25rem;
+     -webkit-font-smoothing: antialiased;
+}
+ form textarea {
+     max-height: 12.5rem;
+     resize: none !important;
+}
+ form fieldset {
+     margin-bottom: 1.5rem;
+     padding: 0;
+     border: none;
+}
+ form fieldset legend {
+     margin-bottom: 1.5rem;
+     font-size: 1.5rem;
+}
+ form .field {
+     margin: 1.25rem 0;
+}
+ form .field-label {
+     font-weight: 600;
+}
+ form .help-inline, form .help-block {
+     display: block;
+     vertical-align: top;
+     padding: 0.75rem;
+     background: green;
+     color: #fff;
+     font-size: 0.875rem;
+}
+ form .errorlist {
+     margin-bottom: 1.5rem;
+     color: green;
+     font-weight: bold;
+}

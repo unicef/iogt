@@ -34,6 +34,15 @@
             <div id="content-wrap">
                 {% include "header.html" %}
 
+                {% if messages %}
+                  {% for message in messages %}
+                    <div>
+                      <div>{{ message }}</div>
+                    </div>
+                  {% endfor %}
+                {% endif %}
+
+
                 {% block content %}{% endblock %}
 
                 {% footer %}
