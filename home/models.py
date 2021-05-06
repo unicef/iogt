@@ -167,6 +167,19 @@ class FlagComment(models.Model):
     )
     flagged_at = models.DateTimeField(_('flag date time'), default=None)
 
+    date_widget = widgets.AdminDateInput(
+        attrs = {
+            'placeholder': 'dd-mm-yyyy'
+        }
+    )
+
+    panels = [
+        FieldPanel('flagger'),
+        SnippetChooserPanel('comment'),
+        FieldPanel('flag'),
+        FieldPanel('flagged_at', widget=date_widget),
+    ]
+
     class Meta:
         unique_together = [('flagger', 'comment', 'flag')]
         verbose_name = _('comment flag')
