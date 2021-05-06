@@ -197,6 +197,9 @@ class Comment(index.Indexed, Orderable):
     def __str__(self):
         return self.comment
 
+    def is_parent(self):
+        return self.parent
+
 @register_snippet
 class FlagComment(index.Indexed, models.Model):
     flagger = models.ForeignKey(

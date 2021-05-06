@@ -86,11 +86,12 @@
                     <div class="comments-listing">
                         <p>Comments (Most Popular)</p>
                         <div>
+                            {% for comment in self.comment.all %}
                             <div class="comment-single">
                                 <p class="comment-single-header">
-                                    <a href="/profile/user2020" class="">user2020</a> says:
+                                    <a href="/profile/user2020" class="">{{ comment.author }}</a> says:
                                 </p>
-                                <p class="comment-single-text">I love this article, but why should we look for people who are working to stop the spread? Do we have to tell them to stay at home?</p>
+                                <p class="comment-single-text">{{ comment.comment }}</p>
                                 <p class="reply-prompt">
                                     <a href="/reply" class="">Click Here to Reply</a>
                                 </p>
@@ -113,25 +114,7 @@
                                     <a href="/reply" class="">Click Here to Reply</a>
                                 </p>
                             </div>
-                        </div>
-                        <div>
-                            <div class="comment-single">
-                                <p class="comment-single-header">
-                                    <a href="/profile/iogtlover" class="">iogtlover</a> says:
-                                </p>
-                                <p class="comment-single-text">Please post more about COVID-19. Looking forward to reading more articles here.</p>
-                                <p class="reply-prompt">
-                                    <a href="/reply" class="">Click Here to Reply</a>
-                                </p>
-                            </div>
-                            <div class="comment-reply">
-                                <p class="comment-reply-header">
-                                    <a href="/profile/undefined" class=""></a> says:</p>
-                                <p class="comment-reply-text"></p>
-                                <p class="reply-prompt">
-                                    <a href="/reply" class="">Click Here to Reply</a>
-                                </p>
-                            </div>
+                            {% endfor %}
                         </div>
                         <button class="load-more-button">Load More </button>
                     </div>
