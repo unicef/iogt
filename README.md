@@ -82,12 +82,32 @@ want to replicate the production environment
 
 Here are the steps:
 
+
 ```
 git clone https://github.com/unicef/iogt.git
 cd iogt
-make up
 ```
 
+Update the `WAGTAIL_BACKEND` setting in `iogt/settings/local.py` file 
+```
+WAGTAILSEARCH_BACKENDS = {
+    'default': {
+        'BACKEND': 'wagtail.search.backends.elasticsearch7',
+        'URLS': ['http://elasticsearch:9200'],
+        'INDEX': 'iogt',
+        'TIMEOUT': 5,
+        'OPTIONS': {},
+        'INDEX_SETTINGS': {},
+        'AUTO_UPDATE': False,
+        }
+}
+```
+
+Run the following commands:
+```
+make up
+```
+You're all set now. See the `Makefile` for other commands related to docker-compose
 
 [1]: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment
 [2]: https://www.unicef.org/innovation/IoGT
