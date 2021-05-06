@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
     'modelcluster',
     'taggit',
+    'wagtailimportexport', # more details can be found there: https://pypi.org/project/wagtail-import-export-tool/
 
     'django.contrib.admin',
     'django.contrib.auth',

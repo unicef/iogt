@@ -1,4 +1,7 @@
 psycopg2==2.8.*
 wagtail==2.11.*
 wagtailmenus~=3.0
+
 elasticsearch>=7.0.0,<8.0.0
+
+wagtail-import-export-tool==0.9.5
