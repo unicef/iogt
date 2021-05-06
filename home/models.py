@@ -21,6 +21,7 @@ from wagtail.snippets.models import register_snippet
 from modelcluster.fields import ParentalKey
 from wagtail.admin import widgets
 from wagtail.search import index
+from django.utils import timezone
 
 
 
@@ -186,6 +187,11 @@ class Comment(index.Indexed, Orderable):
     search_fields = [
         index.SearchField('comment', partial_match=True),
     ]
+
+    def save(self, *args, **kwargs):
+        if self.submitted_at is None:
+            self.submitted_at = timezone.now()
+        super().save(*args, **kwargs)
 
 
     def __str__(self):

@@ -77,8 +77,9 @@
                 <div class="comments-section">
                     <div class="comments-input-section">
                         <label for="comments-input-form">Leave a Comment Below: </label>
-                        <form action="/action_page.php" class="comments-input-form">
-                            <textarea class="comments-input" name="comment" form="comments-input-form" placeholder="Start typing here..."></textarea>
+                        <form action="{% url 'page_comment' pk=self.id %}" class="comments-input-form" method="POST">
+                            {% csrf_token %}
+                            <textarea class="comments-input" name="comment" placeholder="Start typing here..."></textarea>
                             <input type="submit" value="Send">
                         </form>
                     </div>
