@@ -1,0 +1,9 @@
+FROM python:3.8.1-slim-buster
+
+ENV PYTHONUNBUFFERED 1
+
+WORKDIR ./
+
+RUN pip install --upgrade pip
+ADD ./requirements.txt /app/
+RUN pip install -r /app/requirements.txt

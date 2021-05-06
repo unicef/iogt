@@ -21,7 +21,7 @@ def search(request):
         search_results = Article.objects.none()
 
     # Pagination
-    paginator = Paginator(search_results, 10)
+    paginator = Paginator(search_results, 9)
     try:
         search_results = paginator.page(page)
     except PageNotAnInteger:

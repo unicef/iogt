@@ -76,6 +76,19 @@ Optionally, create the main menu automatically as well.
 ./manage.py autopopulate_main_menus
 ```
 
+## Setup with Docker Compose
+You can choose to set up the project locally using Docker Compose. This setup is recommended if you 
+want to replicate the production environment
+
+Here are the steps:
+
+```
+git clone https://github.com/unicef/iogt.git
+cd iogt
+make up
+```
+
+
 [1]: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment
 [2]: https://www.unicef.org/innovation/IoGT
 [3]: https://github.com/unicef/iogt/blob/develop/LICENSE
