@@ -32,7 +32,8 @@ class User(AbstractUser):
         """
         This in used to display extra data in Wagtail admin User section
         """
-        return json.loads(self.additional_data)
+        if self.additional_data:
+            return json.loads(self.additional_data)
 
 
 
@@ -87,6 +88,9 @@ class UserRegistrationPage(AbstractForm):
         """
         form.save(commit=False)
 
+    def save(self, clean=True, user=None, log_action=False, **kwargs):
+        self.slug = "registration"
+        return super().save(clean=clean, user=user, log_action=log_action, **kwargs)
 
 
 class FormField(AbstractFormField):

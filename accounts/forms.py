@@ -3,6 +3,7 @@ import json
 from django import forms
 from django.contrib.auth import get_user_model, password_validation
 from django.contrib.auth.password_validation import password_validators_help_text_html
+from django.core.serializers.json import DjangoJSONEncoder
 from django.utils.html import mark_safe
 
 from wagtail.contrib.forms.forms import FormBuilder
@@ -36,8 +37,15 @@ class UserRegistrationForm(forms.ModelForm):
         for key in DEFAULT_USER_FIELDS:
             self.cleaned_data.pop(key, None)
 
+        # Create additional data dictionary with the correct label
+        additional_data = {}
+        for key, value in self.cleaned_data.items():
+            additional_data.update({
+                self.fields[key].label: value
+            })
+
         # Add additional info
-        user.additional_data = json.dumps(self.cleaned_data)
+        user.additional_data = json.dumps(additional_data, cls=DjangoJSONEncoder)
 
         user.save()
 
@@ -134,5 +142,3 @@ class UserUpdateForm(forms.ModelForm):
             user.set_password(password)
 
         user.save()
-
-        return user
