@@ -135,7 +135,7 @@ class Comment(index.Indexed, Orderable):
         related_name="comments",
         on_delete=models.SET_NULL
     )
-    page = ParentalKey('Article', related_name='comment')
+    page = ParentalKey('wagtailcore.Page', related_name='comment')
     author_website = models.URLField(_("author's Website"), blank=True)
     comment = models.TextField(_('comment'), max_length=3000)
 
@@ -179,6 +179,7 @@ class Comment(index.Indexed, Orderable):
         FieldPanel('is_approved'),
         FieldPanel('is_removed'),
         FieldPanel('ip_address'),
+        SnippetChooserPanel('parent'),
 
     ]
 
