@@ -130,7 +130,8 @@ class Comment(Orderable):
     )
 
     panels = [
-        SnippetChooserPanel('author'),
+        # SnippetChooserPanel('author'),
+        FieldPanel('author'),
         PageChooserPanel('page'),
         FieldPanel('author_website'),
         FieldPanel('comment'),
