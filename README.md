@@ -119,7 +119,7 @@ docker-compose run django python app/manage.py create_test_site
 
 Optionally, create the main menu automatically as well.
 ```
-./manage.py autopopulate_main_menus
+docker-compose run django python app/manage.py autopopulate_main_menus
 ```
 
 [1]: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment
