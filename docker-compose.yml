@@ -1,4 +1,4 @@
-version: '3'
+version: '3.5'
 
 services:
   django:
@@ -6,11 +6,13 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.dev
-    command: bash -c "cd app/ && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "cd app/ && python manage.py runserver 0.0.0.0:8000 --settings=iogt.settings.docker_compose_dev"
     volumes:
       - ./:/app/
     ports:
       - "8000:8000"
+    depends_on:
+      - elasticsearch
     networks:
       - elastic
   elasticsearch:

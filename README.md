@@ -76,38 +76,51 @@ Optionally, create the main menu automatically as well.
 ./manage.py autopopulate_main_menus
 ```
 
+
 ## Setup with Docker Compose
 You can choose to set up the project locally using Docker Compose. This setup is recommended if you 
 want to replicate the production environment
 
-Here are the steps:
+###Steps
 
+Clone the repository
 
 ```
 git clone https://github.com/unicef/iogt.git
+```
+Run setup command. This will set up the database and also update the ElasticSearch Index.
+```
 cd iogt
+make setup
 ```
 
-Update the `WAGTAIL_BACKEND` setting in `iogt/settings/local.py` file 
+Create a super user account for administration purposes.
 ```
-WAGTAILSEARCH_BACKENDS = {
-    'default': {
-        'BACKEND': 'wagtail.search.backends.elasticsearch7',
-        'URLS': ['http://elasticsearch:9200'],
-        'INDEX': 'iogt',
-        'TIMEOUT': 5,
-        'OPTIONS': {},
-        'INDEX_SETTINGS': {},
-        'AUTO_UPDATE': False,
-        }
-}
+docker-compose run django python app/manage.py createsuperuser
 ```
 
-Run the following commands:
+Run the compose file
 ```
 make up
 ```
 You're all set now. See the `Makefile` for other commands related to docker-compose
+
+## Updating ElasticSearch index
+```
+make update_elasticsearch_index
+```
+
+## Setting up test data
+
+It is possible to automatically populate the database with example data for a basic test site.
+```
+docker-compose run django python app/manage.py create_test_site
+```
+
+Optionally, create the main menu automatically as well.
+```
+./manage.py autopopulate_main_menus
+```
 
 [1]: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment
 [2]: https://www.unicef.org/innovation/IoGT
