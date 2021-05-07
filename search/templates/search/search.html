@@ -14,9 +14,9 @@
 {% block content %}
     <div class="search-container">
         <h2>
-            Searching results for:
+            Searching results for: "{{ search_query }}"
         </h2>
-        "{{ search_query }}"
+
     </div>
 
     {% if search_results %}
@@ -34,6 +34,8 @@
         {% endif %}
         </div>
     {% elif search_query %}
+        <div style="margin-left: 5%">
         No results found
+        </div>
     {% endif %}
 {% endblock %}
