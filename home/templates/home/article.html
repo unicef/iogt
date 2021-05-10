@@ -87,33 +87,28 @@
                         <p>Comments (Most Popular)</p>
                         <div>
                             {% for comment in self.comment.all %}
-                            <div class="comment-single">
-                                <p class="comment-single-header">
-                                    <a href="/profile/user2020" class="">{{ comment.author }}</a> says:
-                                </p>
-                                <p class="comment-single-text">{{ comment.comment }}</p>
-                                <p class="reply-prompt">
-                                    <a href="/reply" class="">Click Here to Reply</a>
-                                </p>
-                            </div>
-                            <div class="comment-reply">
-                                <p class="comment-reply-header">
-                                    <a href="/profile/iogtlover" class="">iogtlover</a> says:
-                                </p>
-                                <p class="comment-reply-text">@user2020 I think he means to show your children examples of heroes.</p>
-                                <p class="reply-prompt">
-                                    <a href="/reply" class="">Click Here to Reply</a>
-                                </p>
-                            </div>
-                            <div class="comment-reply">
-                                <p class="comment-reply-header">
-                                    <a href="/profile/user2020" class="">user2020</a> says:
-                                </p>
-                                <p class="comment-reply-text">@iogtlover thank you!!</p>
-                                <p class="reply-prompt">
-                                    <a href="/reply" class="">Click Here to Reply</a>
-                                </p>
-                            </div>
+                                {% if not comment.parent %}
+                                <div class="comment-single">
+                                    <p class="comment-single-header">
+                                        <a href="/profile/user2020" class="">{{ comment.author }}</a> says:
+                                    </p>
+                                    <p class="comment-single-text">{{ comment.comment }}</p>
+                                    <p class="reply-prompt">
+                                        <a href="/reply" class="">Click Here to Reply</a>
+                                    </p>
+                                </div>
+                                    {% for replay in comment.replies.all %}
+                                    <div class="comment-reply">
+                                        <p class="comment-reply-header">
+                                            <a href="/profile/iogtlover" class="">iogtlover</a> says:
+                                        </p>
+                                        <p class="comment-reply-text">{{ replay.comment }}</p>
+                                        <p class="reply-prompt">
+                                            <a href="/reply" class="">Click Here to Reply</a>
+                                        </p>
+                                    </div>
+                                    {% endfor %}
+                                {% endif %}
                             {% endfor %}
                         </div>
                         <button class="load-more-button">Load More </button>
