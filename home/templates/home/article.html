@@ -97,7 +97,8 @@
                                         <form action="{% url 'like' pk=comment.pk %}" method="POST" class="like-form">
                                             {% csrf_token %}
                                             <button class="">
-                                                like <span class="like-count">{{ comment.like }}</span>
+                                                {% if request.user.id in comment.liked_users %} Dislike {% else %} Like {% endif %}
+                                                <span class="like-count">{{ comment.like }}</span>
                                             </button>
                                         </form>
                                         <form class="like-form">

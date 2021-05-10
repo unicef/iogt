@@ -209,6 +209,12 @@ class Comment(index.Indexed, Orderable):
     def get_replies(self):
         return self.replies.filter(is_approved=True, is_removed=False)
 
+    def liked_users(self):
+        user_pk = []
+        for user in self.likes.all():
+            user_pk.append(user.user.id)
+        return user_pk
+
 
 class Like(models.Model):
     value = models.IntegerField(default=0)
