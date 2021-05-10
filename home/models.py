@@ -166,6 +166,7 @@ class Comment(index.Indexed, Orderable):
         on_delete=models.CASCADE,
         related_name='replies'
     )
+    like = models.IntegerField(_('like'), default=0)
 
     date_widget = widgets.AdminDateInput(
         attrs = {
@@ -184,6 +185,7 @@ class Comment(index.Indexed, Orderable):
         FieldPanel('is_removed'),
         FieldPanel('ip_address'),
         SnippetChooserPanel('parent'),
+        FieldPanel('like')
 
     ]
 
