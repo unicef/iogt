@@ -268,6 +268,11 @@ class FlagComment(index.Indexed, models.Model):
         index.SearchField('comment', partial_match=True),
     ]
 
+    def save(self, *args, **kwargs):
+        if self.flagged_at is None:
+            self.flagged_at = timezone.now()
+        super().save(*args, **kwargs)
+
     class Meta:
         unique_together = [('flagger', 'comment', 'flag')]
         verbose_name = _('comment flag')
