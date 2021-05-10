@@ -94,8 +94,12 @@ ul.breadcrumb a {
   margin-bottom: 12px;
 }
 
-.comment-reply .comments-input-form {
+.reply-form {
   display: none;
+}
+
+.reply-form:target {
+  display: block;
 }
 
 .comments-input-form {

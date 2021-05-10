@@ -94,7 +94,7 @@
                                     </p>
                                     <p class="comment-single-text">{{ comment.comment }}</p>
                                     <p class="reply-prompt">
-                                        <a href="#" class="">Click Here to Reply</a>
+                                        <a href="#{{ comment.id }}" class="">Click Here to Reply</a>
                                     </p>
                                 </div>
                                     {% for replay in comment.replies.all %}
@@ -104,15 +104,15 @@
                                         </p>
                                         <p class="comment-reply-text">{{ replay.comment }}</p>
                                         <p class="reply-prompt">
-                                            <a class="">Click Here to Reply</a>
+                                            <a href="#{{ comment.id }}" class="">Click Here to Reply</a>
                                         </p>
-                                        <form action="{% url 'page_comment' pk=self.id %}" class="comments-input-form" method="POST">
-                                            {% csrf_token %}
-                                            <textarea class="comments-input" name="comment" placeholder="Start typing here..."></textarea>
-                                            <input type="submit" value="Reply">
-                                        </form>
                                     </div>
                                     {% endfor %}
+                                    <form id="{{ comment.id }}" action="{% url 'page_comment' pk=self.id %}" class="comments-input-form reply-form" method="POST">
+                                        {% csrf_token %}
+                                        <textarea class="comments-input" name="comment" placeholder="Start typing here..."></textarea>
+                                        <input type="submit" value="Reply">
+                                    </form>
                                 {% endif %}
                             {% endfor %}
                         </div>
