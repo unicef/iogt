@@ -210,7 +210,7 @@ class Comment(index.Indexed, Orderable):
         return self.replies.filter(is_approved=True, is_removed=False)
 
 
-class like(models.Model):
+class Like(models.Model):
     value = models.IntegerField(default=0)
     user  = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="likes", on_delete=models.CASCADE)
     comment = models.ForeignKey(
@@ -220,6 +220,9 @@ class like(models.Model):
         related_name="likes",
     )
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'comment')
 
 @register_snippet
 class FlagComment(index.Indexed, models.Model):

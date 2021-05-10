@@ -1,7 +1,7 @@
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 
-from home.models import Article, Comment
+from home.models import Article, Comment, Like
 from django.http import HttpResponseRedirect
 
 @login_required
@@ -37,3 +37,13 @@ def reply_comment(request, pk):
             parent=Comment.objects.get(pk=pk)
         )
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+@login_required
+def like(request, pk):
+    if request.method == 'POST':
+        Like.objects.create(
+            user=request.user,
+            value=1,
+            comment=Comment.objects.get(pk=pk)
+        )
