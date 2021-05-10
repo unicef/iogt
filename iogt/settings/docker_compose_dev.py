@@ -8,6 +8,7 @@ WAGTAILSEARCH_BACKENDS = {
         'TIMEOUT': 5,
         'OPTIONS': {},
         'INDEX_SETTINGS': {},
-        'AUTO_UPDATE': False,
+        'AUTO_UPDATE': True,
+        'ATOMIC_REBUILD': True
         }
 }

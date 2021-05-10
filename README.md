@@ -57,7 +57,8 @@ Once running, navigate to http://localhost:8000 in your browser.
         'TIMEOUT': 5,
         'OPTIONS': {},
         'INDEX_SETTINGS': {},
-        'AUTO_UPDATE': False,
+        'AUTO_UPDATE': True,
+        'ATOMIC_REBUILD': True
         }
    }
    ```
@@ -104,11 +105,6 @@ Run the compose file
 make up
 ```
 You're all set now. See the `Makefile` for other commands related to docker-compose
-
-## Updating ElasticSearch index
-```
-make update_elasticsearch_index
-```
 
 ## Setting up test data
 
