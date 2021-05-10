@@ -102,6 +102,18 @@ ul.breadcrumb a {
   display: block;
 }
 
+.text-right {
+  text-align: right;
+}
+
+.like-form {
+  display: inline-block;
+}
+
+.like-count {
+  color: rgb(191, 0, 18);
+}
+
 .comments-input-form {
   width: 100%;
   margin-top: 12px;

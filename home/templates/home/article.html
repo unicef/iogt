@@ -93,6 +93,16 @@
                                         <a href="#" class="">{{ comment.author }}</a> says:
                                     </p>
                                     <p class="comment-single-text">{{ comment.comment }}</p>
+                                    <div class="text-right">
+                                        <form class="like-form">
+                                            <button class="">
+                                                like <span class="like-count">0</span>
+                                            </button>
+                                        </form>
+                                        <form class="like-form">
+                                            <button class="">Flag</button>
+                                        </form>
+                                   </div>
                                     <p class="reply-prompt">
                                         <a href="#{{ comment.id }}" class="">Click Here to Reply</a>
                                     </p>
