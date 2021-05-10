@@ -100,7 +100,7 @@
                                     {% for replay in comment.get_replies %}
                                     <div class="comment-reply">
                                         <p class="comment-reply-header">
-                                            <a href="#" class="">iogtlover</a> says:
+                                            <a href="#" class="">{{ replay.author }}</a> says:
                                         </p>
                                         <p class="comment-reply-text">{{ replay.comment }}</p>
                                         <p class="reply-prompt">

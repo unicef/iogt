@@ -2,6 +2,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 
 from home.models import Article, Comment
+from django.http import HttpResponseRedirect
 
 @login_required
 def page_comment(request, pk):
@@ -17,7 +18,7 @@ def page_comment(request, pk):
             author=request.user,
             ip_address=ipaddress
         )
-    return redirect('/')
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
 @login_required
@@ -35,4 +36,4 @@ def reply_comment(request, pk):
             ip_address=ipaddress,
             parent=Comment.objects.get(pk=pk)
         )
-    return redirect('/')
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
