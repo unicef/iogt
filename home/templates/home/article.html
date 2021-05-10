@@ -90,22 +90,27 @@
                                 {% if not comment.parent %}
                                 <div class="comment-single">
                                     <p class="comment-single-header">
-                                        <a href="/profile/user2020" class="">{{ comment.author }}</a> says:
+                                        <a href="#" class="">{{ comment.author }}</a> says:
                                     </p>
                                     <p class="comment-single-text">{{ comment.comment }}</p>
                                     <p class="reply-prompt">
-                                        <a href="/reply" class="">Click Here to Reply</a>
+                                        <a href="#" class="">Click Here to Reply</a>
                                     </p>
                                 </div>
                                     {% for replay in comment.replies.all %}
                                     <div class="comment-reply">
                                         <p class="comment-reply-header">
-                                            <a href="/profile/iogtlover" class="">iogtlover</a> says:
+                                            <a href="#" class="">iogtlover</a> says:
                                         </p>
                                         <p class="comment-reply-text">{{ replay.comment }}</p>
                                         <p class="reply-prompt">
-                                            <a href="/reply" class="">Click Here to Reply</a>
+                                            <a class="">Click Here to Reply</a>
                                         </p>
+                                        <form action="{% url 'page_comment' pk=self.id %}" class="comments-input-form" method="POST">
+                                            {% csrf_token %}
+                                            <textarea class="comments-input" name="comment" placeholder="Start typing here..."></textarea>
+                                            <input type="submit" value="Reply">
+                                        </form>
                                     </div>
                                     {% endfor %}
                                 {% endif %}
