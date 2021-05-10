@@ -42,8 +42,17 @@ def reply_comment(request, pk):
 @login_required
 def like(request, pk):
     if request.method == 'POST':
-        Like.objects.create(
-            user=request.user,
-            value=1,
-            comment=Comment.objects.get(pk=pk)
-        )
+        comment = Comment.objects.get(pk=pk)
+        if not Like.objects.filter(user_id=request.user.id, comment_id=pk).exists():
+            Like.objects.create(
+                user=request.user,
+                value=1,
+                comment=Comment.objects.get(pk=pk)
+            )
+            comment.like = comment.like + 1
+            comment.save()
+        else:
+            Like.objects.filter(user_id=request.user.id, comment_id=pk).delete()
+            comment.like = comment.like - 1
+            comment.save()
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])

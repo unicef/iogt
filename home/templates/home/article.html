@@ -94,7 +94,8 @@
                                     </p>
                                     <p class="comment-single-text">{{ comment.comment }}</p>
                                     <div class="text-right">
-                                        <form class="like-form">
+                                        <form action="{% url 'like' pk=comment.pk %}" method="POST" class="like-form">
+                                            {% csrf_token %}
                                             <button class="">
                                                 like <span class="like-count">{{ comment.like }}</span>
                                             </button>

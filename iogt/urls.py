@@ -19,7 +19,8 @@ urlpatterns = [
     path('search/', search_views.search, name='search'),
 
     path('page-comment/<int:pk>/', home_views.page_comment, name='page_comment'),
-    path('reply-comment/<int:pk>/', home_views.reply_comment, name="reply_comment")
+    path('reply-comment/<int:pk>/', home_views.reply_comment, name="reply_comment"),
+    path('like/<int:pk>/', home_views.like, name="like"),
 ]
 
 
