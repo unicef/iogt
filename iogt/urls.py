@@ -18,7 +18,8 @@ urlpatterns = [
 
     path('search/', search_views.search, name='search'),
 
-    path('page_comment/<int:pk>/', home_views.page_comment, name='page_comment'),
+    path('page-comment/<int:pk>/', home_views.page_comment, name='page_comment'),
+    path('reply-comment/<int:pk>/', home_views.reply_comment, name="reply_comment")
 ]
 
 

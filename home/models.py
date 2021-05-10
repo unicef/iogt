@@ -125,6 +125,9 @@ class Article(Page):
             if block.block_type == 'paragraph':
                 return block
         return ''
+    
+    def get_comments(self):
+        return self.comment.filter(is_approved=True, is_removed=False)
 
 
 @register_snippet
@@ -199,6 +202,9 @@ class Comment(index.Indexed, Orderable):
 
     def is_parent(self):
         return self.parent
+
+    def get_replies(self):
+        return self.replies.filter(is_approved=True, is_removed=False)
 
 @register_snippet
 class FlagComment(index.Indexed, models.Model):

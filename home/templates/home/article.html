@@ -86,7 +86,7 @@
                     <div class="comments-listing">
                         <p>Comments (Most Popular)</p>
                         <div>
-                            {% for comment in self.comment.all %}
+                            {% for comment in self.get_comments %}
                                 {% if not comment.parent %}
                                 <div class="comment-single">
                                     <p class="comment-single-header">
@@ -97,7 +97,7 @@
                                         <a href="#{{ comment.id }}" class="">Click Here to Reply</a>
                                     </p>
                                 </div>
-                                    {% for replay in comment.replies.all %}
+                                    {% for replay in comment.get_replies %}
                                     <div class="comment-reply">
                                         <p class="comment-reply-header">
                                             <a href="#" class="">iogtlover</a> says:
@@ -108,7 +108,7 @@
                                         </p>
                                     </div>
                                     {% endfor %}
-                                    <form id="{{ comment.id }}" action="{% url 'page_comment' pk=self.id %}" class="comments-input-form reply-form" method="POST">
+                                    <form id="{{ comment.id }}" action="{% url 'reply_comment' pk=comment.id %}" class="comments-input-form reply-form" method="POST">
                                         {% csrf_token %}
                                         <textarea class="comments-input" name="comment" placeholder="Start typing here..."></textarea>
                                         <input type="submit" value="Reply">
