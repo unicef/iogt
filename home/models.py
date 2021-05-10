@@ -22,6 +22,7 @@ from modelcluster.fields import ParentalKey
 from wagtail.admin import widgets
 from wagtail.search import index
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 
 
@@ -207,6 +208,18 @@ class Comment(index.Indexed, Orderable):
 
     def get_replies(self):
         return self.replies.filter(is_approved=True, is_removed=False)
+
+
+class like(models.Model):
+    value = models.IntegerField(default=0)
+    user  = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="likes", on_delete=models.CASCADE)
+    comment = models.ForeignKey(
+        Comment,
+        verbose_name=_('comment'),
+        on_delete=models.CASCADE,
+        related_name="likes",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
 
 @register_snippet
 class FlagComment(index.Indexed, models.Model):
