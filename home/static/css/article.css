@@ -165,6 +165,10 @@ ul.breadcrumb a {
   line-height: 14px;
 }
 
+.comment-reply a {
+  cursor: pointer;
+}
+
 .comment-reply .comment-reply-header {
   text-align: right;
   margin: 0 32px 0 0;
