@@ -92,6 +92,7 @@
             </form>
             {% if request.user.is_authenticated %}
               <a class="signin" href="{% url 'accounts:logout' %}">Log out</a>
+              <a class="signin" href="{% url 'accounts:profile' %}">Profile</a>
             {% else %}
               <a class="signin" href="{% url 'accounts:login' %}">Sign in</a>
             {% endif %}
