@@ -9,3 +9,8 @@ def footer(context):
         'footer': Footer.objects.first(),
         'request': context['request'],
     }
+
+
+@register.inclusion_tag('home/tags/articles_list.html')
+def render_articles_list(articles):
+    return {'articles': articles}
