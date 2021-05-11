@@ -84,6 +84,7 @@ class Article(Page):
         ('numbered_list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
         ('page', blocks.PageChooserBlock()),
     ])
+    is_commentable = models.BooleanField(default=True)
 
     def _get_child_block_values(self, block_type):
         searchable_content = []
@@ -104,6 +105,7 @@ class Article(Page):
     content_panels = Page.content_panels + [
         ImageChooserPanel('lead_image'),
         StreamFieldPanel('body'),
+        FieldPanel('is_commentable'),
         InlinePanel('comment', label="Comments"),
     ]
 
