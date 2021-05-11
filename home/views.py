@@ -1,8 +1,9 @@
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 
-from home.models import Article, Comment, Like
+from home.models import Article, Comment, FlagComment, Like
 from django.http import HttpResponseRedirect
+from django.db import IntegrityError
 
 @login_required
 def page_comment(request, pk):
@@ -55,4 +56,18 @@ def like(request, pk):
             Like.objects.filter(user_id=request.user.id, comment_id=pk).delete()
             comment.like = comment.like - 1
             comment.save()
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+@login_required
+def flag_comment(request, pk):
+    if request.method == 'POST':
+        try:
+            FlagComment.objects.create(
+                flagger=request.user,
+                flag="Flagged as in appropriate",
+                comment=Comment.objects.get(pk=pk)
+            )
+        except IntegrityError:
+            pass
     return HttpResponseRedirect(request.META['HTTP_REFERER'])

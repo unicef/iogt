@@ -101,8 +101,11 @@
                                                 <span class="like-count">{{ comment.like }}</span>
                                             </button>
                                         </form>
-                                        <form class="like-form">
-                                            <button class="">Flag</button>
+                                        <form action="{% url 'flag' pk=comment.pk %}" method="POST"  class="like-form">
+                                            {% csrf_token %}
+                                            <button class="">
+                                                {% if request.user.id in comment.flagger %} Flagged {% else %} Flag {% endif %}
+                                            </button>
                                         </form>
                                    </div>
                                     <p class="reply-prompt">

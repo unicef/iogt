@@ -214,6 +214,12 @@ class Comment(index.Indexed, Orderable):
         for user in self.likes.all():
             user_pk.append(user.user.id)
         return user_pk
+    
+    def flagger(self):
+        flagger_pk = []
+        for user in self.comment_flags.all():
+            flagger_pk.append(user.id)
+        return flagger_pk
 
 
 class Like(models.Model):

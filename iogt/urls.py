@@ -21,6 +21,7 @@ urlpatterns = [
     path('page-comment/<int:pk>/', home_views.page_comment, name='page_comment'),
     path('reply-comment/<int:pk>/', home_views.reply_comment, name="reply_comment"),
     path('like/<int:pk>/', home_views.like, name="like"),
+    path('flag/<int:pk>/', home_views.flag_comment, name="flag")
 ]
 
 
