@@ -1,0 +1,34 @@
+version: '3.5'
+
+services:
+  django:
+    build:
+      context: ./
+      dockerfile: Dockerfile.dev
+    command: bash -c "cd app/ && python manage.py runserver 0.0.0.0:8000 --settings=iogt.settings.docker_compose_dev"
+    volumes:
+      - ./:/app/
+    ports:
+      - "8000:8000"
+    depends_on:
+      - elasticsearch
+    networks:
+      - elastic
+  elasticsearch:
+    image: 'docker.elastic.co/elasticsearch/elasticsearch:7.12.1'
+    container_name: 'iogt-es01'
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - es-data01:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - elastic
+
+volumes:
+  es-data01:
+
+networks:
+  elastic:
+    driver: bridge

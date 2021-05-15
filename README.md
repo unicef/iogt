@@ -42,6 +42,29 @@ Finally, start the server.
 
 Once running, navigate to http://localhost:8000 in your browser.
 
+
+## Running ElasticSearch (Optional)
+
+1. Set up an elastic search cluster
+2. Update local.py to use Elasticsearch as the backend. More details [here](https://docs.wagtail.io/en/stable/topics/search/backends.html#elasticsearch-backend)
+   
+   ```
+   WAGTAILSEARCH_BACKENDS = {
+    'default': {
+        'BACKEND': 'wagtail.search.backends.elasticsearch7',
+        'URLS': ['http://localhost:9200'],
+        'INDEX': 'iogt',
+        'TIMEOUT': 5,
+        'OPTIONS': {},
+        'INDEX_SETTINGS': {},
+        'AUTO_UPDATE': True,
+        'ATOMIC_REBUILD': True
+        }
+   }
+   ```
+
+3. Run `./manage.py update_index` to update the ElasticSearch Index
+
 ## Setting up test data
 
 It is possible to automatically populate the database with example data for a basic test site.
@@ -52,6 +75,47 @@ It is possible to automatically populate the database with example data for a ba
 Optionally, create the main menu automatically as well.
 ```
 ./manage.py autopopulate_main_menus
+```
+
+
+## Setup with Docker Compose
+You can choose to set up the project locally using Docker Compose. This setup is recommended if you 
+want to replicate the production environment
+
+###Steps
+
+Clone the repository
+
+```
+git clone https://github.com/unicef/iogt.git
+```
+Run setup command. This will set up the database and also update the ElasticSearch Index.
+```
+cd iogt
+make setup
+```
+
+Create a super user account for administration purposes.
+```
+docker-compose run django python app/manage.py createsuperuser
+```
+
+Run the compose file
+```
+make up
+```
+You're all set now. See the `Makefile` for other commands related to docker-compose
+
+## Setting up test data
+
+It is possible to automatically populate the database with example data for a basic test site.
+```
+docker-compose run django python app/manage.py create_test_site
+```
+
+Optionally, create the main menu automatically as well.
+```
+docker-compose run django python app/manage.py autopopulate_main_menus
 ```
 
 [1]: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment

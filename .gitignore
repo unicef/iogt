@@ -5,24 +5,16 @@
 __pycache__
 db.sqlite3
 media
-static/
+/static
+
+# Local Settings #
+iogt/settings/local.py
 
 # Backup files # 
 *.bak 
 
 # If you are using PyCharm # 
-.idea/**/workspace.xml 
-.idea/**/tasks.xml 
-.idea/dictionaries 
-.idea/**/dataSources/ 
-.idea/**/dataSources.ids 
-.idea/**/dataSources.xml 
-.idea/**/dataSources.local.xml 
-.idea/**/sqlDataSources.xml 
-.idea/**/dynamic.xml 
-.idea/**/uiDesigner.xml 
-.idea/**/gradle.xml 
-.idea/**/libraries 
+.idea/*
 *.iws /out/ 
 
 # Python # 
@@ -115,3 +107,6 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+
+#Mac
+.DS_Store
