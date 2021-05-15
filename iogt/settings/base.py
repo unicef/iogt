@@ -43,6 +43,9 @@ INSTALLED_APPS = [
 
     'modelcluster',
     'taggit',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -50,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites'
 ]
 
 MIDDLEWARE = [
@@ -98,6 +102,12 @@ DATABASES = {
     }
 }
 
+
+# Authentication
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -163,3 +173,6 @@ WAGTAIL_SITE_NAME = "iogt"
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 BASE_URL = 'http://example.com'
+
+# SITE ID
+SITE_ID = 1
