@@ -177,3 +177,6 @@ BASE_URL = 'http://example.com'
 
 # SITE ID
 SITE_ID = 1
+
+# Miscellaneous
+LOGIN_REDIRECT_URL = "/"

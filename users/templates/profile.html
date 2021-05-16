@@ -1,0 +1,45 @@
+{% extends 'account/base.html' %}
+{% load i18n static %}
+
+{% block extra_css %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/user-profile.css' %}">
+{% endblock %}
+
+{% block allauth_content %}
+    <h1>{% trans "My Profile" %}</h1>
+    <table class="user-profile-table">
+    <tr>
+        <td class="key-column">
+            {% trans 'First Name' %}
+        </td>
+        <td>
+            {{ user.first_name }}
+        </td>
+    </tr>
+    <tr>
+        <td class="key-column">
+            {% trans 'Last Name' %}
+        </td>
+        <td>
+            {{ user.last_name }}
+        </td>
+    </tr>
+    <tr>
+        <td class="key-column">
+            {% trans 'Email' %}
+        </td>
+        <td>
+            {{ user.email }}
+        </td>
+    </tr>
+    <tr>
+        <td class="key-column">
+            {% trans 'Password' %}
+        </td>
+        <td>
+            <a href="{% url 'account_change_password' %}">Change Password</a>
+        </td>
+    </tr>
+    </table>
+{% endblock %}

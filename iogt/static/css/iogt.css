@@ -41,3 +41,12 @@ body {
 #content-wrap {
     flex: 1 0 auto;
 }
+
+.messages li {
+    display: block;
+    text-align: center;
+    max-width: 400px;
+    background-color: #20cd84;
+    margin: 5px auto;
+    padding: 5px;
+}
