@@ -2,3 +2,7 @@
     min-width: 100px;
     font-weight: bold;
 }
+
+.inline-heading {
+    display:inline-block;
+}

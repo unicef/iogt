@@ -7,7 +7,9 @@
 {% endblock %}
 
 {% block allauth_content %}
-    <h1>{% trans "My Profile" %}</h1>
+    <h1 class="inline-heading">{% trans "My Profile" %}</h1>
+    <a class="material-icons" style="margin-left: 10px" href="{% url 'user_profile_edit' %}">edit</a>
+</i>
     <table class="user-profile-table">
     <tr>
         <td class="key-column">
