@@ -1,4 +1,3 @@
-from allauth.account.views import LoginView as AllauthLoginView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -14,6 +13,7 @@ class UserDetailView(TemplateView):
         return {'user': self.request.user}
 
 
+@method_decorator(login_required, name='dispatch')
 class UserDetailEditView(UpdateView):
     model = User
     fields = ('first_name', 'last_name', 'email')
@@ -24,4 +24,3 @@ class UserDetailEditView(UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
-
