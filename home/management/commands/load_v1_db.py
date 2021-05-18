@@ -50,8 +50,11 @@ class Command(BaseCommand):
         self.stdout.write('Connected to v1 DB')
 
     def __del__(self):
-        self.v1_conn.close()
-        self.stdout.write('Closed connection to v1 DB')
+        try:
+            self.v1_conn.close()
+            self.stdout.write('Closed connection to v1 DB')
+        except AttributeError:
+            pass
 
     def create_connection_string(self, options):
         host = options.get('host', '0.0.0.0')
