@@ -1,5 +1,8 @@
+from pathlib import Path
 from django.core.management.base import BaseCommand
 from wagtail.core.models import Page, Site
+from django.core.files.images import ImageFile
+from wagtail.images.models import Image
 import home.models as models
 import psycopg2
 import psycopg2.extras
@@ -28,13 +31,20 @@ class Command(BaseCommand):
             default='',
             help='IoGT V1 database password'
         )
+        parser.add_argument(
+            '--media-dir',
+            required=True,
+            help='Path to IoGT v1 media directory'
+        )
 
     def handle(self, *args, **options):
+        self.db_connect(options)
+        self.media_dir = options.get('media_dir')
+
         self.clear()
         self.stdout.write('Existing site structure cleared')
 
         root = Page.get_first_root_node()
-        self.db_connect(options)
         self.migrate(root)
 
     def clear(self):
@@ -42,6 +52,7 @@ class Command(BaseCommand):
         models.Section.objects.all().delete()
         models.HomePage.objects.all().delete()
         Site.objects.all().delete()
+        Image.objects.all().delete()
 
     def db_connect(self, options):
         connection_string = self.create_connection_string(options)
@@ -70,6 +81,7 @@ class Command(BaseCommand):
         return cur
 
     def migrate(self, root):
+        self.migrate_images()
         home = self.create_home_page(root)
         self.migrate_sections(home)
         self.migrate_articles(home)
@@ -111,6 +123,51 @@ class Command(BaseCommand):
             raise Exception('Could not find site in v1 DB')
         return home
 
+    def migrate_images(self):
+        cur = self.db_query('select * from wagtailimages_image')
+        content_type = self.find_content_type_id('wagtailimages', 'image')
+        self.image_map = {}
+        for row in cur:
+            image_file = self.open_image_file(row['file'])
+            if image_file:
+                image = Image.objects.create(
+                    title=row['title'],
+                    file=ImageFile(image_file, name=row['file'].split('/')[-1]),
+                    focal_point_x=row['focal_point_x'],
+                    focal_point_y=row['focal_point_y'],
+                    focal_point_width=row['focal_point_width'],
+                    focal_point_height=row['focal_point_height'],
+                    # uploaded_by_user='',
+                )
+                image.get_file_size()
+                image.get_file_hash()
+                tags = self.find_tags(content_type, row['id'])
+                if tags:
+                    image.tags.add(*tags)
+                self.image_map.update({ row['id']: image })
+        cur.close()
+        self.stdout.write('Images migrated')
+
+    def find_content_type_id(self, app_label, model):
+        cur = self.db_query(f"select id from django_content_type where app_label = '{app_label}' and model = '{model}'")
+        content_type = cur.fetchone()
+        cur.close()
+        return content_type.get('id')
+
+    def open_image_file(self, file):
+        file_path = Path(self.media_dir) / file
+        try:
+            return open(file_path, 'rb')
+        except:
+            self.stdout.write(f"Image file not found: {file_path}")
+
+    def find_tags(self, content_type, object_id):
+        tags_query = 'select t.name from taggit_tag t join taggit_taggeditem ti on t.id = ti.tag_id where ti.content_type_id = {} and ti.object_id = {}'
+        cur = self.db_query(tags_query.format(content_type, object_id))
+        tags = [tag['name'] for tag in cur]
+        cur.close()
+        return tags
+
     def migrate_sections(self, home):
         cur = self.db_query('select * from core_sectionpage csp join wagtailcore_page wcp on csp.page_ptr_id  = wcp.id order by wcp.path')
         for row in cur:
@@ -148,6 +205,7 @@ class Command(BaseCommand):
 
     def create_article(self, home, row):
         article = models.Article(
+            lead_image=self.image_map.get(row['image_id']),
             title=row['title'],
             draft_title=row['draft_title'],
             slug=row['slug'],
