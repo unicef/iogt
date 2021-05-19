@@ -20,6 +20,7 @@ form p input {
 
 form p input[type=checkbox] {
     width: auto;
+    float: left;
 }
 
 form p label[for=id_remember] {
@@ -34,4 +35,8 @@ form p label[for=id_remember] {
     border-width: 0px;
     padding: 5px 15px;
     display: block;
+}
+
+label[for="id_has_accepted_terms_and_conditions"] {
+    display: inline-block;
 }
