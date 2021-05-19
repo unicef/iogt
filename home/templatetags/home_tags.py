@@ -1,16 +1,17 @@
 from django import template
-from home.models import Footer
+import home.models as model
 
 register = template.Library()
 
 @register.inclusion_tag('home/tags/footer.html', takes_context=True)
 def footer(context):
     return {
-        'footer': Footer.objects.first(),
+        'footer': model.Footer.objects.first(),
         'request': context['request'],
     }
 
 
 @register.inclusion_tag('home/tags/articles_list.html')
 def render_articles_list(articles):
-    return {'articles': articles}
+    live_articles = articles.filter(live=True)
+    return {'articles': live_articles}
