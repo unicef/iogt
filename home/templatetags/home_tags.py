@@ -1,12 +1,12 @@
 from django import template
-import home.models as model
+from home.models import Footer
 
 register = template.Library()
 
 @register.inclusion_tag('home/tags/footer.html', takes_context=True)
 def footer(context):
     return {
-        'footer': model.Footer.objects.first(),
+        'footer': Footer.objects.first(),
         'request': context['request'],
     }
 
