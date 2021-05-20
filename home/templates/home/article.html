@@ -77,62 +77,65 @@
                 <div class="comments-section">
                     <div class="comments-input-section">
                         <label for="comments-input-form">Leave a Comment Below: </label>
-
-                        {% if user.is_authenticated and user.is_active or request.is_preview %}
-                            {% if form %}
-                                <div>{{ page.intro|richtext }}</div>
-                                <form action="{% pageurl page %}" method="POST">
-                                    {% csrf_token %}
-                                    {{ form.as_p }}
-                                    <input type="submit">
-                                </form>
-                            {% else %}
-                                <div>You can fill in the from only one time.</div>
-                            {% endif %}
-                        {% else %}
-                            <div>To fill in the form, you must to log in.</div>
-                        {% endif %}
+                        <form action="/action_page.php" class="comments-input-form">
+                            <textarea class="comments-input" name="comment" form="comments-input-form" placeholder="Start typing here..."></textarea>
+                            <input type="submit" value="Send">
+                        </form>
                     </div>
-
                     <div class="comments-listing">
                         <p>Comments (Most Popular)</p>
                         <div>
-                        {% for question, answers in results.items %}
-
                             <div class="comment-single">
                                 <p class="comment-single-header">
                                     <a href="/profile/user2020" class="">user2020</a> says:
                                 </p>
-                                <h3>{{ question }}</h3>
-                                <p class="reply-prompt"></p>
-                                <div>{{ page.intro|richtext }}</div>
-                                <form action="{% pageurl page %}" method="POST">
-                                    {% csrf_token %}
-                                    {{ form.as_p }}
+                                <p class="comment-single-text">I love this article, but why should we look for people who are working to stop the spread? Do we have to tell them to stay at home?</p>
+                                <p class="reply-prompt">
                                     <a href="/reply" class="">Click Here to Reply</a>
-                                </form>
+                                </p>
                             </div>
-
-                            {% for answer, count in answers.items %}
-                                <div class="comment-reply">
-                                    {% for answer, count in answers.items %}
-                                        <div>{{ answer }}: {{ count }}</div>
-                                        <div>{{ page.intro|richtext }}</div>
-                                        <form action="{% pageurl page %}" method="POST">
-                                            {% csrf_token %}
-                                            {{ form.as_p }}
-                                            <a href="/reply" class="">Click Here to Reply</a>
-                                        </form>
-                                    {% endfor %}
-                                </div>
-                            {% endfor %}
-                        {% endfor %}
+                            <div class="comment-reply">
+                                <p class="comment-reply-header">
+                                    <a href="/profile/iogtlover" class="">iogtlover</a> says:
+                                </p>
+                                <p class="comment-reply-text">@user2020 I think he means to show your children examples of heroes.</p>
+                                <p class="reply-prompt">
+                                    <a href="/reply" class="">Click Here to Reply</a>
+                                </p>
+                            </div>
+                            <div class="comment-reply">
+                                <p class="comment-reply-header">
+                                    <a href="/profile/user2020" class="">user2020</a> says:
+                                </p>
+                                <p class="comment-reply-text">@iogtlover thank you!!</p>
+                                <p class="reply-prompt">
+                                    <a href="/reply" class="">Click Here to Reply</a>
+                                </p>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="comment-single">
+                                <p class="comment-single-header">
+                                    <a href="/profile/iogtlover" class="">iogtlover</a> says:
+                                </p>
+                                <p class="comment-single-text">Please post more about COVID-19. Looking forward to reading more articles here.</p>
+                                <p class="reply-prompt">
+                                    <a href="/reply" class="">Click Here to Reply</a>
+                                </p>
+                            </div>
+                            <div class="comment-reply">
+                                <p class="comment-reply-header">
+                                    <a href="/profile/undefined" class=""></a> says:</p>
+                                <p class="comment-reply-text"></p>
+                                <p class="reply-prompt">
+                                    <a href="/reply" class="">Click Here to Reply</a>
+                                </p>
+                            </div>
                         </div>
                         <button class="load-more-button">Load More </button>
                     </div>
                 </div>
             </div>
-
             <div class="content-grid-right">
                 <div class="article-info-desktop-card">
                     <p>
