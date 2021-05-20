@@ -1,22 +1,15 @@
-import json
 from django.db import models
 from django.utils.encoding import force_str
 
 from wagtail.core import blocks
 from wagtail.core.models import Page
-from wagtail.core.fields import StreamField, RichTextField
-from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel
+from wagtail.core.fields import StreamField
+from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel
 from wagtail.core.rich_text import get_text_for_indexing
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
-from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField, AbstractFormSubmission
-from modelcluster.fields import ParentalKey
-
-from django.conf import settings
-from django.core.serializers.json import DjangoJSONEncoder
-from django.shortcuts import render
 
 
 class HomePage(Page):
@@ -147,81 +140,3 @@ class Footer(models.Model):
 
     def __str__(self):
         return self.title
-
-
-class FormField(AbstractFormField):
-    page = ParentalKey('FormPage', on_delete=models.CASCADE, related_name='form_fields')
-
-
-class FormPage(AbstractEmailForm):
-    intro = RichTextField(blank=True)
-    thank_you_text = RichTextField(blank=True)
-
-    content_panels = AbstractEmailForm.content_panels + [
-        FieldPanel('intro', classname="full"),
-        InlinePanel('form_fields', label="Form fields"),
-        FieldPanel('thank_you_text', classname="full"),
-        MultiFieldPanel([
-            FieldRowPanel([
-                FieldPanel('from_address', classname="col6"),
-                FieldPanel('to_address', classname="col6"),
-            ]),
-            FieldPanel('subject'),
-        ], "Email"),
-    ]
-
-    def serve(self, request, *args, **kwargs):
-        if self.get_submission_class().objects.filter(page=self, user__pk=request.user.pk).exists():
-            return render(
-                request,
-                self.template,
-                self.get_context(request)
-            )
-
-        return super().serve(request, *args, **kwargs)
-
-    def get_submission_class(self):
-        return CustomFormSubmission
-
-    def process_form_submission(self, form):
-        self.get_submission_class().objects.create(
-            form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder),
-            page=self, user=form.user
-        )
-
-    def get_context(self, request, *args, **kwargs):
-        context = super().get_context(request, *args, **kwargs)
-
-        results = dict()
-        data_fields = [
-            (field.clean_name, field.label)
-            for field in self.get_form_fields()
-        ]
-
-        submissions = self.get_submission_class().objects.filter(page=self)
-        for submission in submissions:
-            data = submission.get_data()
-
-            for name, label in data_fields:
-                answer = data.get(name)
-                if answer is None:
-                    continue
-
-                if type(answer) is list:
-                    answer = u', '.join(answer)
-
-                question_stats = results.get(label, {})
-                question_stats[answer] = question_stats.get(answer, 0) + 1
-                results[label] = question_stats
-
-        context.update({
-            'results': results,
-        })
-        return context
-
-
-class CustomFormSubmission(AbstractFormSubmission):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
-    class Meta:
-        unique_together = ('page', 'user')
