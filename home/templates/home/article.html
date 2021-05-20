@@ -107,47 +107,27 @@
                                 </p>
                             </div>
                             <div class="comment-reply">
-                                <p class="comment-reply-header">
-                                    <a href="/profile/iogtlover" class="">iogtlover</a> says:
-                                </p>
-                                <p class="comment-reply-text">@user2020 I think he means to show your children examples of heroes.</p>
-                                <p class="reply-prompt">
+                                <h2>Results</h2>
+                                {% for question, answers in results.items %}
+                                    <h3>{{ question }}</h3>
+                                    {% for answer, count in answers.items %}
+                                        <div>{{ answer }}: {{ count }}</div>
+                                    {% endfor %}
+                                {% endfor %}
+
+                                <div>{{ page.intro|richtext }}</div>
+                                <form action="{% pageurl page %}" method="POST">
+                                    {% csrf_token %}
+                                    {{ form.as_p }}
                                     <a href="/reply" class="">Click Here to Reply</a>
-                                </p>
-                            </div>
-                            <div class="comment-reply">
-                                <p class="comment-reply-header">
-                                    <a href="/profile/user2020" class="">user2020</a> says:
-                                </p>
-                                <p class="comment-reply-text">@iogtlover thank you!!</p>
-                                <p class="reply-prompt">
-                                    <a href="/reply" class="">Click Here to Reply</a>
-                                </p>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="comment-single">
-                                <p class="comment-single-header">
-                                    <a href="/profile/iogtlover" class="">iogtlover</a> says:
-                                </p>
-                                <p class="comment-single-text">Please post more about COVID-19. Looking forward to reading more articles here.</p>
-                                <p class="reply-prompt">
-                                    <a href="/reply" class="">Click Here to Reply</a>
-                                </p>
-                            </div>
-                            <div class="comment-reply">
-                                <p class="comment-reply-header">
-                                    <a href="/profile/undefined" class=""></a> says:</p>
-                                <p class="comment-reply-text"></p>
-                                <p class="reply-prompt">
-                                    <a href="/reply" class="">Click Here to Reply</a>
-                                </p>
+                                </form>
                             </div>
                         </div>
                         <button class="load-more-button">Load More </button>
                     </div>
                 </div>
             </div>
+
             <div class="content-grid-right">
                 <div class="article-info-desktop-card">
                     <p>
