@@ -11,7 +11,7 @@ from django.shortcuts import render
 
 
 class FormField(AbstractFormField):
-    page = ParentalKey('FormPage', on_delete=models.CASCADE, related_name='form_fields')
+    page = ParentalKey('PollPage', on_delete=models.CASCADE, related_name='form_fields')
 
 
 class PollPage(AbstractEmailForm):
