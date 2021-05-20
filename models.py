@@ -1,4 +1,6 @@
 from django.db import models
+
+from django.db import models
 from wagtail.snippets.models import register_snippet
 
 from modelcluster.fields import ParentalKey
@@ -13,19 +15,23 @@ from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
 
 
 class FormField(AbstractFormField):
-    page = ParentalKey('PollPage', default=1, on_delete=models.CASCADE, related_name='form_fields'
-        )
+    page = ParentalKey(
+    	'SurveyPage', 
+    	default=1, 
+    	on_delete=models.CASCADE, 
+    	related_name='form_fields'
+    )
 
 
-class PollPage(AbstractEmailForm):
+class SurveyPage(AbstractEmailForm):
 
-    template = "poll/poll_page.html"
+    template = "surveys/survey_page.html"
     
-    intro = RichTextField(blank=True)
+    survey_question = RichTextField(blank=True)
     thank_you_text = RichTextField(blank=True)
 
     content_panels = AbstractEmailForm.content_panels + [
-        FieldPanel('intro', classname="full"),
+        FieldPanel('survey_question', classname="full"),
         InlinePanel('form_fields', label="Form fields"),
         FieldPanel('thank_you_text', classname="full"),
         MultiFieldPanel([
@@ -65,4 +71,7 @@ class PollPage(AbstractEmailForm):
             'results': results,
         })
         return context
+
+
+
 
