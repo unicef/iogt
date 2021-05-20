@@ -97,24 +97,14 @@
                     <div class="comments-listing">
                         <p>Comments (Most Popular)</p>
                         <div>
+                        {% for question, answers in results.items %}
+
                             <div class="comment-single">
                                 <p class="comment-single-header">
                                     <a href="/profile/user2020" class="">user2020</a> says:
                                 </p>
-                                <p class="comment-single-text">I love this article, but why should we look for people who are working to stop the spread? Do we have to tell them to stay at home?</p>
-                                <p class="reply-prompt">
-                                    <a href="/reply" class="">Click Here to Reply</a>
-                                </p>
-                            </div>
-                            <div class="comment-reply">
-                                <h2>Results</h2>
-                                {% for question, answers in results.items %}
-                                    <h3>{{ question }}</h3>
-                                    {% for answer, count in answers.items %}
-                                        <div>{{ answer }}: {{ count }}</div>
-                                    {% endfor %}
-                                {% endfor %}
-
+                                <h3>{{ question }}</h3>
+                                <p class="reply-prompt"></p>
                                 <div>{{ page.intro|richtext }}</div>
                                 <form action="{% pageurl page %}" method="POST">
                                     {% csrf_token %}
@@ -122,6 +112,21 @@
                                     <a href="/reply" class="">Click Here to Reply</a>
                                 </form>
                             </div>
+
+                            {% for answer, count in answers.items %}
+                                <div class="comment-reply">
+                                    {% for answer, count in answers.items %}
+                                        <div>{{ answer }}: {{ count }}</div>
+                                        <div>{{ page.intro|richtext }}</div>
+                                        <form action="{% pageurl page %}" method="POST">
+                                            {% csrf_token %}
+                                            {{ form.as_p }}
+                                            <a href="/reply" class="">Click Here to Reply</a>
+                                        </form>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
                         </div>
                         <button class="load-more-button">Load More </button>
                     </div>
