@@ -16,8 +16,6 @@ class FormField(AbstractFormField):
 
 class PollPage(AbstractEmailForm):
 
-    template = "home/poll.html"
-
     intro = RichTextField(blank=True)
     thank_you_text = RichTextField(blank=True)
 
