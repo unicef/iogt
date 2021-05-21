@@ -107,7 +107,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend'
 ]
 
-AUTH_USER_MODEL = 'iogt_users.IogtUser'
+AUTH_USER_MODEL = 'iogt_users.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -180,7 +180,7 @@ ACCOUNT_FORMS = {
 # Wagtail settings
 
 WAGTAIL_SITE_NAME = "iogt"
-ACCOUNT_ADAPTER = 'iogt_users.adapters.IogtAccountAdapter'
+ACCOUNT_ADAPTER = 'iogt_users.adapters.AccountAdapter'
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash

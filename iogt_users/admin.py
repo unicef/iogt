@@ -2,18 +2,18 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import IogtUser
+from .models import User
 
 
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
-    model = IogtUser
+    model = User
     list_display = ('username', 'display_name', 'is_staff', 'is_active',)
     list_filter = ('username', 'display_name', 'is_staff', 'is_active',)
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        ('Permissions', {'fields': ('is_staff', 'is_active')}),
+        ('Permissions', {'fields': ('is_staff', 'is_active', 'groups')}),
     )
     add_fieldsets = (
         (None, {
@@ -25,4 +25,4 @@ class CustomUserAdmin(UserAdmin):
     ordering = ('username',)
 
 
-admin.site.register(IogtUser, CustomUserAdmin)
+admin.site.register(User, CustomUserAdmin)

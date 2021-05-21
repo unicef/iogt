@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.forms import TextInput
 
-from iogt_users.models import IogtUser
+from iogt_users.models import User
 
 
 class AccountSignupForm(SignupForm):
@@ -36,11 +36,11 @@ class AccountSignupForm(SignupForm):
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
-        model = IogtUser
+        model = User
         fields = ('username',)
 
 
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
-        model = IogtUser
-        fields = ('username',)
+        model = User
+        fields = ('username', 'groups', 'user_permissions')
