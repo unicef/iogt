@@ -109,3 +109,11 @@ class CustomPollSubmission(AbstractFormSubmission):
 
     class Meta:
         unique_together = ('page', 'user')
+
+    def get_data(self):
+        form_data = super().get_data()
+        form_data.update({
+            'Admin Name': self.user.username,
+        })
+
+        return form_data
