@@ -1,5 +1,7 @@
 import json
 from django import forms
+from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from wagtail.core.fields import RichTextField
 from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel
@@ -55,14 +57,21 @@ class PollPage(AbstractEmailForm):
     form_builder = CustomFormBuilder
 
     def serve(self, request, *args, **kwargs):
-        if self.get_submission_class().objects.filter(page=self, user__pk=request.user.pk).exists():
-            return render(
-                request,
-                self.template,
-                self.get_context(request)
-            )
-
-        return super().serve(request, *args, **kwargs)
+        try:
+            if self.get_submission_class().objects.filter(page=self, user__pk=request.user.pk).exists():
+                try:
+                    PollPage.objects.get(Q(page_ptr_id=self.id), Q(Q(require_login=False), Q(multiple_responses=False)))
+                    return render(
+                        request,
+                        self.template,
+                        self.get_context(request)
+                    )
+                except ObjectDoesNotExist:
+                    return super().serve(request, *args, **kwargs)
+            else:
+                return super().serve(request, *args, **kwargs)
+        except ObjectDoesNotExist:
+            return super().serve(request, *args, **kwargs)
 
     def get_submission_class(self):
         return CustomPollSubmission
@@ -106,9 +115,6 @@ class PollPage(AbstractEmailForm):
 
 class CustomPollSubmission(AbstractFormSubmission):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
-    class Meta:
-        unique_together = ('page', 'user')
 
     def get_data(self):
         form_data = super().get_data()
