@@ -1,5 +1,6 @@
 from django import template
 from home.models import Footer
+from home.views import render_live_articles
 
 register = template.Library()
 
@@ -13,5 +14,4 @@ def footer(context):
 
 @register.inclusion_tag('home/tags/articles_list.html')
 def render_articles_list(articles):
-    live_articles = articles.filter(live=True)
-    return {'articles': live_articles}
+    return {'articles': render_live_articles(articles)}
