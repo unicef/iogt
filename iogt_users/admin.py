@@ -14,7 +14,7 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         ('Permissions', {'fields': ('is_staff', 'is_active', 'groups', 'user_permissions')}),
-        ('Other', {'fields': ('has_accepted_terms_and_conditions',
+        ('Other', {'fields': ('terms_accepted',
                               'has_filled_registration_survey')}),
     )
     add_fieldsets = (

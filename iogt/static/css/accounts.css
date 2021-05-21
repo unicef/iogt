@@ -37,6 +37,6 @@ form p label[for=id_remember] {
     display: block;
 }
 
-label[for="id_has_accepted_terms_and_conditions"] {
+label[for="id_terms_accepted"] {
     display: inline-block;
 }

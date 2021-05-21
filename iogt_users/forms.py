@@ -12,7 +12,7 @@ from .utils import get_wagtail_admin_user_standard_fields
 
 class AccountSignupForm(SignupForm):
     display_name = forms.CharField(label='Display Name', required=False, max_length=150)
-    has_accepted_terms_and_conditions = forms.BooleanField(label='I accept the terms & conditions')
+    terms_accepted = forms.BooleanField(label='I accept the terms & conditions')
 
     field_order = [
         "username",
@@ -20,7 +20,7 @@ class AccountSignupForm(SignupForm):
         "password2",
         "display_name",
         "email",
-        "has_accepted_terms_and_conditions"
+        "terms_accepted"
     ]
 
     def __init__(self, *args, **kwargs):
@@ -54,7 +54,7 @@ class WagtailAdminUserCreateForm(WagtailUserCreationForm):
     first_name = None
     last_name = None
     display_name = forms.CharField(label='Display Name', required=False, max_length=150)
-    has_accepted_terms_and_conditions = forms.BooleanField(label='I accept the terms & conditions')
+    terms_accepted = forms.BooleanField(label='I accept the terms & conditions')
 
     class Meta(WagtailUserCreationForm.Meta):
         fields = set([User.USERNAME_FIELD]) | get_wagtail_admin_user_standard_fields() | custom_fields
@@ -65,7 +65,7 @@ class WagtailAdminUserEditForm(WagtailUserEditForm):
     first_name = None
     last_name = None
     display_name = forms.CharField(label='Display Name', required=False, max_length=150)
-    has_accepted_terms_and_conditions = forms.BooleanField(label='I accept the terms & conditions')
+    terms_accepted = forms.BooleanField(label='I accept the terms & conditions')
 
     class Meta(WagtailUserEditForm.Meta):
         fields = set([User.USERNAME_FIELD, "is_active"]) | get_wagtail_admin_user_standard_fields() | custom_fields

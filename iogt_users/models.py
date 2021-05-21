@@ -9,7 +9,7 @@ class User(AbstractUser):
     first_name = None
     last_name = None
     display_name = models.CharField(max_length=150, blank=True, null=True)
-    has_accepted_terms_and_conditions = models.BooleanField(default=False)
+    terms_accepted = models.BooleanField(default=False)
 
     has_filled_registration_survey = models.BooleanField(default=False)
 
