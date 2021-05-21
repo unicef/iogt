@@ -1,8 +1,11 @@
 import json
 from django import forms
-from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
+
+from rest_framework.exceptions import PermissionDenied
+from rest_framework import status
+
 from wagtail.core.fields import RichTextField
 from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel
 from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField, AbstractFormSubmission, \
@@ -25,6 +28,24 @@ class FormField(AbstractFormField):
         max_length=16,
         choices=CHOICES
     )
+
+
+class CustomException(PermissionDenied):
+    status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+    detail = {
+        "result": False,
+        "errorCode": 0,
+        "errorMsg": "Internal Server Error"
+    }
+
+    def __init__(self, code, message, status_code=None):
+        self.detail = {
+            "result": False,
+            "errorCode": code,
+            "errorMsg": message
+        }
+        if status_code is not None:
+            self.status_code = status_code
 
 
 class CustomFormBuilder(FormBuilder):
@@ -56,11 +77,31 @@ class PollPage(AbstractEmailForm):
 
     form_builder = CustomFormBuilder
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.error_messages = None
+
     def serve(self, request, *args, **kwargs):
         try:
-            if self.get_submission_class().objects.filter(page=self, user__pk=request.user.pk).exists():
+            if PollPage.objects.get(page_ptr_id=self.id).require_login:
                 try:
-                    PollPage.objects.get(Q(page_ptr_id=self.id), Q(Q(require_login=False), Q(multiple_responses=False)))
+                    if self.get_submission_class().objects.filter(page=self, user__pk=request.user.pk).exists():
+                        try:
+                            PollPage.objects.get(page_ptr_id=self.id, multiple_responses=False)
+                            return render(
+                                request,
+                                self.template,
+                                self.get_context(request)
+                            )
+                        except ObjectDoesNotExist:
+                            return super().serve(request, *args, **kwargs)
+                    else:
+                        return super().serve(request, *args, **kwargs)
+                except ObjectDoesNotExist:
+                    return super().serve(request, *args, **kwargs)
+            else:
+                try:
+                    PollPage.objects.get(page_ptr_id=self.id, multiple_responses=False)
                     return render(
                         request,
                         self.template,
@@ -68,10 +109,8 @@ class PollPage(AbstractEmailForm):
                     )
                 except ObjectDoesNotExist:
                     return super().serve(request, *args, **kwargs)
-            else:
-                return super().serve(request, *args, **kwargs)
         except ObjectDoesNotExist:
-            return super().serve(request, *args, **kwargs)
+            raise CustomException(code=11, message=self.error_messages['invalid_cube'])
 
     def get_submission_class(self):
         return CustomPollSubmission
