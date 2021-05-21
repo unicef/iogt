@@ -74,7 +74,7 @@
                 </button>
             </form>
             {% if request.user.is_anonymous %}
-                <a class="signin" href="{% url 'account_login' %}">Sign in</a>
+                <a class="signin" href="{% url 'account_signup' %}">Sign Up</a>
             {% else %}
                 <a class="signin" href="{% url 'user_profile' %}">Profile</a>
                 <a class="signin" href="{% url 'account_logout' %}">Sign out</a>

@@ -13,6 +13,9 @@ class User(AbstractUser):
 
     has_filled_registration_survey = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ('id',)
+
 
 class Profile(models.Model):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
