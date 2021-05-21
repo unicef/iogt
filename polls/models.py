@@ -18,10 +18,14 @@ class PollPage(AbstractEmailForm):
 
     intro = RichTextField(blank=True)
     thank_you_text = RichTextField(blank=True)
+    require_login = models.BooleanField(default=True)
+    multiple_responses = models.BooleanField(default=True)
 
     content_panels = AbstractEmailForm.content_panels + [
+        FieldPanel('require_login'),
+        FieldPanel('multiple_responses'),
         FieldPanel('intro', classname="full"),
-        InlinePanel('form_fields', label="Form fields"),
+        InlinePanel('form_fields', label="Poll fields"),
         FieldPanel('thank_you_text', classname="full"),
         MultiFieldPanel([
             FieldRowPanel([
