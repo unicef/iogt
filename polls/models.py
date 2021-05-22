@@ -97,30 +97,42 @@ class PollPage(AbstractEmailForm):
                 try:
                     if self.get_submission_class().objects.filter(page=self, user__pk=request.user.pk).exists():
                         try:
-                            PollPage.objects.get(page_ptr_id=self.id, multiple_responses=False)
-                            return render(
-                                request,
-                                self.template,
-                                self.get_context(request)
-                            )
+                            if PollPage.objects.get(page_ptr_id=self.id, multiple_responses=False):
+                                return render(
+                                    request,
+                                    self.template,
+                                    self.get_context(request)
+                                )
+                            else:
+                                return super().serve(request, *args, **kwargs)
                         except ObjectDoesNotExist:
                             return super().serve(request, *args, **kwargs)
                     else:
-                        return super().serve(request, *args, **kwargs)
+                        return render(
+                            request,
+                            self.template,
+                            self.get_context(request)
+                        )
                 except ObjectDoesNotExist:
-                    return super().serve(request, *args, **kwargs)
-            else:
-                try:
-                    PollPage.objects.get(page_ptr_id=self.id, multiple_responses=False)
                     return render(
                         request,
                         self.template,
                         self.get_context(request)
                     )
+            else:
+                try:
+                    if PollPage.objects.get(page_ptr_id=self.id, multiple_responses=False):
+                        return render(
+                            request,
+                            self.template,
+                            self.get_context(request)
+                        )
+                    else:
+                        return super().serve(request, *args, **kwargs)
                 except ObjectDoesNotExist:
                     return super().serve(request, *args, **kwargs)
         except ObjectDoesNotExist:
-            raise CustomException(code=11, message=self.error_messages['invalid_cube'])
+            raise CustomException(code=11, message=self.error_messages['invalid_page'])
 
     def get_submission_class(self):
         return CustomPollSubmission
@@ -163,7 +175,7 @@ class PollPage(AbstractEmailForm):
 
 
 class CustomPollSubmission(AbstractFormSubmission):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
 
     def get_data(self):
         form_data = super().get_data()
