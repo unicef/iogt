@@ -54,16 +54,26 @@ class CustomFormBuilder(FormBuilder):
 
 
 class PollPage(AbstractEmailForm):
+    template = "polls/poll_page.html"
+    landing_page_template = "polls/poll_page_landing.html"
 
     intro = RichTextField(blank=True)
     thank_you_text = RichTextField(blank=True)
     require_login = models.BooleanField(default=True)
     multiple_responses = models.BooleanField(default=True)
+    lead_image = models.ForeignKey(
+        'wagtailimages.Image',
+        on_delete=models.PROTECT,
+        related_name='+',
+        blank=True,
+        null=True
+    )
 
     content_panels = AbstractEmailForm.content_panels + [
         FieldPanel('require_login'),
         FieldPanel('multiple_responses'),
         FieldPanel('intro', classname="full"),
+        FieldPanel('lead_image'),
         InlinePanel('form_fields', label="Poll fields"),
         FieldPanel('thank_you_text', classname="full"),
         MultiFieldPanel([
