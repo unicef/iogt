@@ -1,8 +1,14 @@
 {% extends 'base.html' %}
 
+{% load static wagtailcore_tags wagtailimages_tags %}
+
 {% load wagtailcore_tags %}
 
 {% block content %}
+
+    <div>
+        {% image page.specific.lead_image height-200 %}
+    </div>
 
     <h1>{{ page.title }}</h1>
     <p>
