@@ -109,11 +109,7 @@ class PollPage(AbstractEmailForm):
                         except ObjectDoesNotExist:
                             return super().serve(request, *args, **kwargs)
                     else:
-                        return render(
-                            request,
-                            self.template,
-                            self.get_context(request)
-                        )
+                        return super().serve(request, *args, **kwargs)
                 except ObjectDoesNotExist:
                     return render(
                         request,
