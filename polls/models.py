@@ -1,5 +1,6 @@
 import json
 from django import forms
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
@@ -138,10 +139,15 @@ class PollPage(AbstractEmailForm):
         return CustomPollSubmission
 
     def process_form_submission(self, form):
-        self.get_submission_class().objects.create(
-            form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder),
-            page=self, user=form.user
-        )
+        if form.user.is_authenticated:
+            self.get_submission_class().objects.create(
+                form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder),
+                page=self, user=form.user
+            )
+        else:
+            self.get_submission_class().objects.create(
+                form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder), page=self
+            )
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
@@ -175,12 +181,4 @@ class PollPage(AbstractEmailForm):
 
 
 class CustomPollSubmission(AbstractFormSubmission):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
-
-    def get_data(self):
-        form_data = super().get_data()
-        form_data.update({
-            'Admin Name': self.user.username,
-        })
-
-        return form_data
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True)
