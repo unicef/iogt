@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/accounts.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="accounts-content-wrapper">
+        {% block allauth_content %}
+        {% endblock %}
+    </div>
+{% endblock %}

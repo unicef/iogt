@@ -16,7 +16,6 @@ import os
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -27,6 +26,7 @@ INSTALLED_APPS = [
     'home',
     'search',
     'polls',
+    'iogt_users',
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -44,6 +44,9 @@ INSTALLED_APPS = [
 
     'modelcluster',
     'taggit',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -51,6 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites'
 ]
 
 MIDDLEWARE = [
@@ -88,7 +92,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'iogt.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -99,6 +102,13 @@ DATABASES = {
     }
 }
 
+# Authentication
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+]
+
+AUTH_USER_MODEL = 'iogt_users.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -109,15 +119,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+        'OPTIONS': {
+            'min_length': 4
+        }
+    }
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -131,7 +137,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -156,11 +161,40 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+# Allauth settings (https://django-allauth.readthedocs.io/en/latest/configuration.html)
+# ACCOUNT_SIGNUP_FORM_CLASS = 'iogt_users.forms.AccountSignUpAdditionalFieldsForm'
+
+# Control the forms that django-allauth uses
+ACCOUNT_FORMS = {
+    "login": "allauth.account.forms.LoginForm",
+    "add_email": "allauth.account.forms.AddEmailForm",
+    "change_password": "allauth.account.forms.ChangePasswordForm",
+    "set_password": "allauth.account.forms.SetPasswordForm",
+    "reset_password": "allauth.account.forms.ResetPasswordForm",
+    "reset_password_from_key": "allauth.account.forms.ResetPasswordKeyForm",
+    "disconnect": "allauth.socialaccount.forms.DisconnectForm",
+    # Use our custom signup form
+    "signup": "iogt_users.forms.AccountSignupForm",
+}
+# ACCOUNT_SIGNUP_FORM_CLASS = 'iogt_users.extra_forms.AccountSignUpAdditionalFieldsForm'
 
 # Wagtail settings
 
 WAGTAIL_SITE_NAME = "iogt"
+ACCOUNT_ADAPTER = 'iogt_users.adapters.AccountAdapter'
+
+WAGTAIL_USER_EDIT_FORM = 'iogt_users.forms.WagtailAdminUserEditForm'
+WAGTAIL_USER_CREATION_FORM = 'iogt_users.forms.WagtailAdminUserCreateForm'
+WAGTAIL_USER_CUSTOM_FIELDS = ['display_name', 'terms_accepted']
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 BASE_URL = 'http://example.com'
+
+# SITE ID
+SITE_ID = 1
+
+# Miscellaneous
+LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = 'account_login'
+WAGTAIL_FRONTEND_LOGIN_URL = LOGIN_URL

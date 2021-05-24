@@ -1,0 +1,42 @@
+.accounts-content-wrapper {
+    display: block;
+    max-width: 400px;
+    margin: 0 auto 40px;
+    min-height: 300px;
+}
+
+form p label {
+    display:block;
+    padding-bottom: 10px;
+}
+
+form p input {
+    width: 100%;
+}
+
+form p input {
+    width: 100%;
+}
+
+form p input[type=checkbox] {
+    width: auto;
+    float: left;
+}
+
+form p label[for=id_remember] {
+    display: inline
+}
+
+.accounts-form-btn {
+    float:right;
+    font-size: 18px;
+    background-color: #20cd84;
+    color: white;
+    border-width: 0px;
+    padding: 5px 15px;
+    display: block;
+}
+
+label[for="id_terms_accepted"] {
+    display: inline-block;
+}

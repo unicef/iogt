@@ -10,7 +10,7 @@ setup:
 	make update_elasticsearch_index
 # SSH into the django container
 ssh:
-	docker exec -it iogt-dg01 /bin/bash
+	docker-compose run django /bin/bash
 up:
 	docker-compose up
 update_elasticsearch_index:
