@@ -1,8 +1,12 @@
 from datetime import datetime, timezone
+
+from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
-from django.contrib.auth.models import User
 from wagtail.core.rich_text import RichText
 import home.models as models
+
+User = get_user_model()
+
 
 class Command(BaseCommand):
 
@@ -13,7 +17,8 @@ class Command(BaseCommand):
     def create(self, owner, home):
         article = models.Article(
             title='Do you know the person adding you?',
-            body=[('paragraph', RichText('Someone sent me a friend request - but I don’t know this person, what should I do?'))],
+            body=[('paragraph',
+                   RichText('Someone sent me a friend request - but I don’t know this person, what should I do?'))],
             owner=owner,
             first_published_at=datetime.now(timezone.utc)
         )

@@ -1,0 +1,10 @@
+{% extends 'account/base.html' %}
+{% load i18n static %}
+
+{% block allauth_content %}
+    <h1>Edit Profile</h1>
+    <form method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <input class="accounts-form-btn" type="submit" value="Update">
+    </form>
+{% endblock %}
