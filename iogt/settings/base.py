@@ -195,3 +195,5 @@ SITE_ID = 1
 
 # Miscellaneous
 LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = 'account_login'
+WAGTAIL_FRONTEND_LOGIN_URL = LOGIN_URL
