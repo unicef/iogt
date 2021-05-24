@@ -1,0 +1,33 @@
+{% extends "messaging/base.html" %}
+
+{% block body_class %}{{ block.super }} messaging-thread{% endblock %}
+
+{% block content %}
+<div class="messaging-thread-detail-container">
+    <h2 class="with-actions">
+        {{ thread.subject }}
+        <a class="button" href="{% url "messaging:thread_delete" thread.pk %}">Delete Thread</a>
+    </h2>
+
+    <section class="thread-messages">
+        {% for message in thread.messages.all %}
+            <div class="thread-message">
+                <div class="message-byline">
+                    <div class="message-from">{{ message.sender.username }}</div>
+                    <div class="message-sent">{{ message.sent_at }}</div>
+                </div>
+                <div class="message-content">{{ message.content|urlize|linebreaks }}</div>
+            </div>
+        {% endfor %}
+    </section>
+
+    <form class="comment-form" action="{% url "messaging:thread_detail" thread.pk %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <div class="form-actions">
+            <a href="{% url "messaging:inbox" %}" class="cancel">Cancel</a>
+            <button>Send</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

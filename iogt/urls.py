@@ -20,6 +20,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls'), name='allauth-urls'),
     path('comments/', include('django_comments_xtd.urls')),
     path("external-link/", TransitionPageView.as_view(), name="external-link")
+    path('messaging/', include('messaging.urls'), name='messaging-urls'),
 ]
 
 if settings.DEBUG:

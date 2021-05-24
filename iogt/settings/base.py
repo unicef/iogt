@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'iogt_users',
     'comments',
     'iogt_content_migration',
+    'messaging',
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
