@@ -1578,17 +1578,17 @@ DESKTOP CSS SETTTINGS. At this point, able to reuse some of the sections and inc
       margin: 0 5px;
     }
 
-    .related-articles-section ul li {
+    .recommended-articles-section ul li {
       display: block;
       margin-bottom: 20px;
     }
-    .related-articles-section ul li .related-article-item {
+    .recommended-articles-section ul li .recommended-article-item {
         font-size: 14px;
         display: inline-block;
         width: 50%
     }
 
-    .related-sections-section h1{
+    .recommended-sections-section h1, .recommended-articles-section h1{
         text-align: center;
         font-size: 35px;
         border-bottom: 1px solid #6B6B6B;
@@ -1596,11 +1596,11 @@ DESKTOP CSS SETTTINGS. At this point, able to reuse some of the sections and inc
 
     }
 
-    .related-sections-section {
+    .recommended-sections-section {
       margin-top: 40px
     }
 
-    .related-sections-list li{
+    .recommended-sections-list li{
       display: block;
       font-size: 22px;
       margin-top: 25px;

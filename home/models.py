@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.encoding import force_str
+from django.utils.translation import gettext_lazy as _
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey
 from taggit.models import TaggedItemBase
@@ -62,8 +63,8 @@ class ArticleTag(TaggedItemBase):
     content_object = ParentalKey('Article', related_name='tagged_items', on_delete=models.CASCADE)
 
 
-class RelatedArticle(Orderable):
-    source = ParentalKey('Article', related_name='related_articles', on_delete=models.CASCADE, blank=True)
+class ArticleRecommendation(Orderable):
+    source = ParentalKey('Article', related_name='recommended_articles', on_delete=models.CASCADE, blank=True)
     article = models.ForeignKey('Article', on_delete=models.CASCADE)
 
     panels = [
@@ -71,8 +72,8 @@ class RelatedArticle(Orderable):
     ]
 
 
-class RelatedSection(Orderable):
-    source = ParentalKey('Article', related_name='related_sections', on_delete=models.CASCADE)
+class SectionRecommendation(Orderable):
+    source = ParentalKey('Article', related_name='recommended_sections', on_delete=models.CASCADE)
     section = models.ForeignKey('Section', on_delete=models.CASCADE)
 
     panels = [
@@ -118,11 +119,15 @@ class Article(Page):
     content_panels = Page.content_panels + [
         ImageChooserPanel('lead_image'),
         StreamFieldPanel('body'),
-        MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
         MultiFieldPanel([
-            InlinePanel('related_articles', label="Related Articles"),
-            InlinePanel('related_sections', label="Related Sections")],
-            heading='Related Content')
+            InlinePanel('recommended_articles', label=_("Recommended Articles")),
+            InlinePanel('recommended_sections', label=_("Recommended Sections"))
+        ],
+            heading='Recommended Content')
+    ]
+
+    promote_panels = Page.promote_panels + [
+        MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
     ]
 
     search_fields = [
