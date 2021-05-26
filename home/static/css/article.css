@@ -1565,4 +1565,17 @@ DESKTOP CSS SETTTINGS. At this point, able to reuse some of the sections and inc
       border-radius: 4px;
     }
 
+    .tags h3 {
+      display: inline-block;
+    }
+    .tags .tagit-label {
+      border-radius: 2px;
+      background-color: #007d7e;
+      padding: .2em .5em;
+      color: #fff;
+      line-height: 2em;
+      white-space: nowrap;
+      margin: 0 5px;
+    }
+
 }

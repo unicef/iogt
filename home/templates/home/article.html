@@ -27,6 +27,20 @@
             <img src="{% static 'images/nav-icons/forward-green.png' %}">
         </ul>
 
+{#    <span class="tagit-label tag">django</span>#}
+
+        <div class="tags">
+            {# Check if there are tags #}
+            {% if page.tags.count %}
+                <h3>Tags:</h3>
+                {% for tag in page.tags.all %}
+                    {# Loop through all the existing tags #}
+                    <span class="tagit-label tag">{{ tag.slug }}</span>
+{#                    <a href="{{ self.get_parent.url }}?tag={{ tag.slug }}">{{ tag }}</a><br />#}
+                {% endfor %}
+            {% endif %}
+        </div>
+
         <h1>{{ page.title }}</h1>
         <p class="date-and-author">
             <span>on {{ page.first_published_at|date }}</span>

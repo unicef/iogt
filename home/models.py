@@ -1,10 +1,13 @@
 from django.db import models
 from django.utils.encoding import force_str
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from modelcluster.fields import ParentalKey
+from taggit.models import TaggedItemBase
 
 from wagtail.core import blocks
 from wagtail.core.models import Page
 from wagtail.core.fields import StreamField
-from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel
+from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, MultiFieldPanel
 from wagtail.core.rich_text import get_text_for_indexing
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.blocks import ImageChooserBlock
@@ -54,6 +57,11 @@ class Section(Page):
         return context
 
 
+class ArticleTag(TaggedItemBase):
+    """The through model between Article and Tag"""
+    content_object = ParentalKey('Article', related_name='tagged_items', on_delete=models.CASCADE)
+
+
 class Article(Page):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
@@ -62,6 +70,8 @@ class Article(Page):
         blank=True,
         null=True
     )
+
+    tags = ClusterTaggableManager(through=ArticleTag)
     body = StreamField([
         ('heading', blocks.CharBlock(form_classname="full title")),
         ('paragraph', blocks.RichTextBlock()),
@@ -89,7 +99,14 @@ class Article(Page):
 
     content_panels = Page.content_panels + [
         ImageChooserPanel('lead_image'),
-        StreamFieldPanel('body')
+        StreamFieldPanel('body'),
+        MultiFieldPanel(
+            [
+                FieldPanel("tags"),
+            ],
+            heading='Metadata'
+        )
+
     ]
 
     search_fields = [
