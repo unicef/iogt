@@ -181,6 +181,19 @@
                         </ul>
                     {% endif %}
                 </div>
+                <div class="related-sections-section">
+                    {% if page.related_sections.count %}
+                    <h1>Related Sections</h1>
+                        <ul class="related-sections-list">
+                        {% for related_section_model in page.related_sections.all %}
+                            <li>
+                            <a class="related-section-item" href="{% pageurl related_section_model.section %}">{{ related_section_model.section.title }}</a>
+                            {% image related_article_model.article.lead_image fill-100x50 %}
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </section>

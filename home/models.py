@@ -63,11 +63,20 @@ class ArticleTag(TaggedItemBase):
 
 
 class RelatedArticle(Orderable):
-    source = ParentalKey('Article', related_name='related_articles', on_delete=models.CASCADE)
+    source = ParentalKey('Article', related_name='related_articles', on_delete=models.CASCADE, blank=True)
     article = models.ForeignKey('Article', on_delete=models.CASCADE)
 
     panels = [
         PageChooserPanel('article')
+    ]
+
+
+class RelatedSection(Orderable):
+    source = ParentalKey('Article', related_name='related_sections', on_delete=models.CASCADE)
+    section = models.ForeignKey('Section', on_delete=models.CASCADE)
+
+    panels = [
+        PageChooserPanel('section')
     ]
 
 
@@ -80,7 +89,7 @@ class Article(Page):
         null=True
     )
 
-    tags = ClusterTaggableManager(through=ArticleTag)
+    tags = ClusterTaggableManager(through=ArticleTag, blank=True)
     body = StreamField([
         ('heading', blocks.CharBlock(form_classname="full title")),
         ('paragraph', blocks.RichTextBlock()),
@@ -110,8 +119,10 @@ class Article(Page):
         ImageChooserPanel('lead_image'),
         StreamFieldPanel('body'),
         MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
-        InlinePanel('related_articles', label="Related Articles"),
-
+        MultiFieldPanel([
+            InlinePanel('related_articles', label="Related Articles"),
+            InlinePanel('related_sections', label="Related Sections")],
+            heading='Related Content')
     ]
 
     search_fields = [

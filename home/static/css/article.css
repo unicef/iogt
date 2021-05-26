@@ -1586,7 +1586,25 @@ DESKTOP CSS SETTTINGS. At this point, able to reuse some of the sections and inc
         font-size: 14px;
         display: inline-block;
         width: 50%
-      }
+    }
+
+    .related-sections-section h1{
+        text-align: center;
+        font-size: 35px;
+        border-bottom: 1px solid #6B6B6B;
+        padding-bottom: 20px;
+
+    }
+
+    .related-sections-section {
+      margin-top: 40px
+    }
+
+    .related-sections-list li{
+      display: block;
+      font-size: 22px;
+      margin-top: 25px;
+    }
 
 
 }
