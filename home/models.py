@@ -5,9 +5,9 @@ from modelcluster.fields import ParentalKey
 from taggit.models import TaggedItemBase
 
 from wagtail.core import blocks
-from wagtail.core.models import Page
+from wagtail.core.models import Page, Orderable
 from wagtail.core.fields import StreamField
-from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, MultiFieldPanel
+from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, MultiFieldPanel, PageChooserPanel, InlinePanel
 from wagtail.core.rich_text import get_text_for_indexing
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.blocks import ImageChooserBlock
@@ -62,6 +62,15 @@ class ArticleTag(TaggedItemBase):
     content_object = ParentalKey('Article', related_name='tagged_items', on_delete=models.CASCADE)
 
 
+class RelatedArticle(Orderable):
+    source = ParentalKey('Article', related_name='related_articles', on_delete=models.CASCADE)
+    article = models.ForeignKey('Article', on_delete=models.CASCADE)
+
+    panels = [
+        PageChooserPanel('article')
+    ]
+
+
 class Article(Page):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
@@ -100,12 +109,8 @@ class Article(Page):
     content_panels = Page.content_panels + [
         ImageChooserPanel('lead_image'),
         StreamFieldPanel('body'),
-        MultiFieldPanel(
-            [
-                FieldPanel("tags"),
-            ],
-            heading='Metadata'
-        )
+        MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
+        InlinePanel('related_articles', label="Related Articles"),
 
     ]
 
