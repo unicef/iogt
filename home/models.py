@@ -11,6 +11,8 @@ from wagtail.images.blocks import ImageChooserBlock
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 
+from .blocks import MediaBlock
+
 
 class HomePage(Page):
     template = 'home/section.html'
@@ -69,6 +71,7 @@ class Article(Page):
         ('list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
         ('numbered_list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
         ('page', blocks.PageChooserBlock()),
+        ('media', MediaBlock(icon='media')),
     ])
 
     def _get_child_block_values(self, block_type):
