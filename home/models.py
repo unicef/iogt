@@ -1,10 +1,12 @@
 from django.db import models
 from django.utils.encoding import force_str
+from django.utils.translation import gettext_lazy as _
+from modelcluster.fields import ParentalKey
 
 from wagtail.core import blocks
-from wagtail.core.models import Page
+from wagtail.core.models import Page, Orderable
 from wagtail.core.fields import StreamField
-from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel
+from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, MultiFieldPanel, PageChooserPanel, InlinePanel
 from wagtail.core.rich_text import get_text_for_indexing
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.blocks import ImageChooserBlock
@@ -18,10 +20,42 @@ from .blocks import MediaBlock
 class HomePage(Page):
     template = 'home/section.html'
 
+    content_panels = Page.content_panels + [
+        MultiFieldPanel([
+            InlinePanel('home_page_banners', label=_("Home Page Banner")),
+        ], heading=_('Home Page Banners')),
+        MultiFieldPanel([
+            InlinePanel('featured_content', label=_("Featured Content")),
+        ], heading=_('Featured Content')),
+    ]
+
     def get_context(self, request):
         context = super().get_context(request)
-        context['articles'] = self.get_descendants().type(Article)
+        context['banners'] = [
+            home_page_banner.banner_page for home_page_banner in self.home_page_banners.filter(banner_page__live=True)
+        ]
+        context['featured_content'] = [
+            featured_content.content for featured_content in self.featured_content.filter(content__live=True)
+        ]
         return context
+
+
+class FeaturedContent(Orderable):
+    source = ParentalKey(Page, related_name='featured_content', on_delete=models.CASCADE, blank=True)
+    content = models.ForeignKey(Page, on_delete=models.CASCADE)
+
+    panels = [
+        PageChooserPanel('content'),
+    ]
+
+
+class HomePageBanner(Orderable):
+    source = ParentalKey(Page, related_name='home_page_banners', on_delete=models.CASCADE, blank=True)
+    banner_page = models.ForeignKey('home.BannerPage', on_delete=models.CASCADE)
+
+    panels = [
+        PageChooserPanel('banner_page'),
+    ]
 
 
 class Section(Page):
@@ -44,6 +78,7 @@ class Section(Page):
         blank=True,
         null=True,
     )
+    show_in_menus_default = True
 
     content_panels = Page.content_panels + [
         ImageChooserPanel('icon'),
@@ -75,6 +110,7 @@ class Article(Page):
         ('page', blocks.PageChooserBlock()),
         ('media', MediaBlock(icon='media')),
     ])
+    show_in_menus_default = True
 
     def _get_child_block_values(self, block_type):
         searchable_content = []
@@ -116,6 +152,35 @@ class Article(Page):
             if block.block_type == 'paragraph':
                 return block
         return ''
+
+
+class BannerIndexPage(Page):
+    parent_page_types = ['home.HomePage']
+    subpage_types = ['home.BannerPage']
+
+
+class BannerPage(Page):
+    parent_page_types = ['home.BannerIndexPage']
+    subpage_types = []
+
+    banner_image = models.ForeignKey(
+        'wagtailimages.Image',
+        related_name='+',
+        on_delete=models.PROTECT,
+        help_text=_('Image to display as the banner')
+    )
+    banner_link_page = models.ForeignKey(
+        Page, null=True, blank=True, related_name='banners', on_delete=models.PROTECT,
+        help_text=_('Optional page to which the banner will link to'))
+    external_link = models.URLField(
+        null=True, blank=True,
+        help_text=_('Optional external link which a banner will link to e.g., https://www.google.com'))
+
+    content_panels = Page.content_panels + [
+        ImageChooserPanel('banner_image'),
+        PageChooserPanel('banner_link_page'),
+        FieldPanel('external_link'),
+    ]
 
 
 @register_snippet
