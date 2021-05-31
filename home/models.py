@@ -87,6 +87,9 @@ class Article(Page):
         paragraph_values = self._get_child_block_values('paragraph')
         return '\n'.join(paragraph_values)
 
+    def get_absolute_url(self):
+        return self.get_url()
+
     content_panels = Page.content_panels + [
         ImageChooserPanel('lead_image'),
         StreamFieldPanel('body')

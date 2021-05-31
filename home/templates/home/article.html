@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags %}
+{% load static wagtailcore_tags wagtailimages_tags comments %}
 
 {% block extra_css %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/article.css' %}">
@@ -163,6 +163,31 @@
                 </div>
             </div>
         </div>
+    <div>
+        {% get_comment_count for page as comment_count %}
+        <div class="py-4 text-center">
+          <a href="#">Back to the post list</a>
+          &nbsp;&sdot;&nbsp;
+          {{ comment_count }} comment{{ comment_count|pluralize }}
+          ha{{ comment_count|pluralize:"s,ve" }} been posted.
+        </div>
+
+        {% if comment_count %}
+            <hr/>
+            <div class="comments">
+              {% render_comment_list for page %}
+            </div>
+        {% endif %}
+
+{#        {% if page.allow_comments %}#}
+            <div class="card card-block mb-5">
+              <div class="card-body">
+                <h4 class="card-title text-center pb-3">Post your comment</h4>
+                  {% render_comment_form for page %}
+              </div>
+            </div>
+{#        {% endif %}#}
+    </div>
     </section>
 </div>
 {% endblock content %}
