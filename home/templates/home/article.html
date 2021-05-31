@@ -1,8 +1,11 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags comments %}
+{% load static wagtailcore_tags wagtailimages_tags comments comments_xtd %}
 
 {% block extra_css %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/article.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/article.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/comments.css' %}">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
 {% endblock extra_css %}
 
 {% block content %}
@@ -163,7 +166,24 @@
                 </div>
             </div>
         </div>
-    <div>
+    <div class="comments-block">
+    <h1>Comments</h1>
+{#        {% if page.allow_comments %}#}
+            {% if user.is_authenticated %}
+                <div class="card card-block mb-5">
+                    <div class="card-body">
+                        <h4 class="card-title text-center pb-3">Post your comment</h4>
+                        {% render_comment_form for page %}
+                    </div>
+                </div>
+            {% else %}
+                <p class="text-center">
+                    Only registered users can post comments. Please,
+                    <a href="{% url 'account_login' %}?next={{ page.get_absolute_url }}">login</a>.
+                </p>
+            {% endif %}
+{#        {% endif %}#}
+        <br>
         {% get_comment_count for page as comment_count %}
         <div class="py-4 text-center">
           <a href="#">Back to the post list</a>
@@ -175,18 +195,11 @@
         {% if comment_count %}
             <hr/>
             <div class="comments">
-              {% render_comment_list for page %}
+              {% render_xtdcomment_tree for page allow_flagging allow_feedback show_feedback %}
             </div>
         {% endif %}
+        <button class="load-more-button">Load More</button>
 
-{#        {% if page.allow_comments %}#}
-            <div class="card card-block mb-5">
-              <div class="card-body">
-                <h4 class="card-title text-center pb-3">Post your comment</h4>
-                  {% render_comment_form for page %}
-              </div>
-            </div>
-{#        {% endif %}#}
     </div>
     </section>
 </div>
