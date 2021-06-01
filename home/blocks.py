@@ -7,8 +7,14 @@ class SocialMediaLinkBlock(blocks.StructBlock):
     link = blocks.URLBlock()
     image = ImageChooserBlock()
 
+    class Meta:
+        icon = 'site'
+
 
 class SocialMediaShareButtonBlock(blocks.StructBlock):
     platform = blocks.CharBlock(max_length=255)
     is_active = blocks.BooleanBlock(required=False)
     image = ImageChooserBlock(required=False)
+
+    class Meta:
+        icon = 'site'
