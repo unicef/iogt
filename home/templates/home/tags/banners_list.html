@@ -7,14 +7,13 @@
                 <div class="image">
                   {% if banner.banner_link_page %}
                     <a href="{% pageurl banner.banner_link_page %}">
-                        {% image banner.banner_image fill-336x186 class="mainImage" %}
-                    </a>
                   {% elif banner.external_link %}
                     <a href="{{ banner.external_link }}">
+                  {% else %}
+                    <a href="#"></a>
+                  {% endif %}
                         {% image banner.banner_image fill-336x186 class="mainImage" %}
                     </a>
-                  {% else %}
-                  {% endif %}
                 </div>
             </div>
         </div>
