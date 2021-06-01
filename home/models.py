@@ -63,6 +63,7 @@ class Section(Page):
         blank=True,
         null=True,
     )
+    show_in_menus_default = True
 
     content_panels = Page.content_panels + [
         ImageChooserPanel('icon'),
@@ -92,6 +93,7 @@ class Article(Page):
         ('numbered_list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
         ('page', blocks.PageChooserBlock()),
     ])
+    show_in_menus_default = True
 
     def _get_child_block_values(self, block_type):
         searchable_content = []
