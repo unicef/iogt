@@ -19,3 +19,8 @@ def render_articles_list(articles):
 @register.inclusion_tag('home/tags/articles_list.html')
 def render_featured_content_list(featured_content):
     return {'articles': featured_content}
+
+
+@register.inclusion_tag('home/tags/banners_list.html')
+def render_banners_list(banners):
+    return {'banners': banners}

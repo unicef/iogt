@@ -21,12 +21,16 @@ class HomePage(Page):
         MultiFieldPanel([
             InlinePanel('featured_content', label=_("Featured Content")),
         ], heading='Featured Content'),
+        MultiFieldPanel([
+            InlinePanel('banners', label=_("Banners")),
+        ], heading='Banners'),
     ]
 
     def get_context(self, request):
         context = super().get_context(request)
         context['articles'] = self.get_descendants().type(Article)
         context['featured_content'] = [featured_content.content for featured_content in self.featured_content.all()]
+        context['banners'] = self.banners.all()
         return context
 
 
@@ -129,6 +133,27 @@ class Article(Page):
             if block.block_type == 'paragraph':
                 return block
         return ''
+
+
+class Banner(Orderable):
+    title = models.CharField(max_length=255)
+    source = ParentalKey(Page, related_name='banners', on_delete=models.CASCADE, blank=True)
+    banner_image = models.ForeignKey(
+        'wagtailimages.Image',
+        on_delete=models.PROTECT,
+        related_name='+',
+        blank=True,
+        null=True
+    )
+    banner_link_page = models.ForeignKey(Page, null=True, blank=True, on_delete=models.SET_NULL)
+    external_link = models.URLField(null=True, blank=True)
+
+    panels = [
+        FieldPanel('title'),
+        ImageChooserPanel('banner_image'),
+        PageChooserPanel('banner_link_page'),
+        FieldPanel('external_link'),
+    ]
 
 
 @register_snippet

@@ -3,11 +3,12 @@
 
 {% block extra_css %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/section.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/banner.css' %}">
 {% endblock extra_css %}
 
 {% block content %}
     <div class="home">
-        {% render_articles_list articles %}
+        {% render_banners_list banners %}
         {% render_featured_content_list featured_content %}
     </div>
 {% endblock content %}
