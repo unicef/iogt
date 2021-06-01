@@ -20,11 +20,11 @@ class HomePage(Page):
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
-            InlinePanel('featured_content', label=_("Featured Content")),
-        ], heading='Featured Content'),
-        MultiFieldPanel([
             InlinePanel('page_banners', label=_("Banners")),
         ], heading='Banners'),
+        MultiFieldPanel([
+            InlinePanel('featured_content', label=_("Featured Content")),
+        ], heading='Featured Content'),
     ]
 
     def get_context(self, request):
