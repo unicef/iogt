@@ -21,10 +21,10 @@ class HomePage(Page):
     content_panels = Page.content_panels + [
         MultiFieldPanel([
             InlinePanel('page_banners', label=_("Banners")),
-        ], heading='Banners'),
+        ], heading=_('Banners')),
         MultiFieldPanel([
             InlinePanel('featured_content', label=_("Featured Content")),
-        ], heading='Featured Content'),
+        ], heading=_('Featured Content')),
     ]
 
     def get_context(self, request):
@@ -145,11 +145,14 @@ class Banner(models.Model):
         'wagtailimages.Image',
         on_delete=models.PROTECT,
         related_name='+',
-        blank=True,
-        null=True
+        help_text=_('Image to display as the banner')
     )
-    banner_link_page = models.ForeignKey(Page, null=True, blank=True, on_delete=models.SET_NULL)
-    external_link = models.URLField(null=True, blank=True)
+    banner_link_page = models.ForeignKey(
+        Page, null=True, blank=True, on_delete=models.SET_NULL,
+        help_text=_('Optional page to which the banner will link to'))
+    external_link = models.URLField(
+        null=True, blank=True,
+        help_text=_('Optional external link which a banner will link to e.g., https://www.google.com'))
 
     panels = [
         FieldPanel('title'),
