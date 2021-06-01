@@ -7,6 +7,7 @@ from wagtail.core import blocks
 from wagtail.core.models import Page, Orderable
 from wagtail.core.fields import StreamField
 from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, MultiFieldPanel, PageChooserPanel, InlinePanel
+from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.core.rich_text import get_text_for_indexing
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.blocks import ImageChooserBlock
@@ -22,7 +23,7 @@ class HomePage(Page):
             InlinePanel('featured_content', label=_("Featured Content")),
         ], heading='Featured Content'),
         MultiFieldPanel([
-            InlinePanel('banners', label=_("Banners")),
+            InlinePanel('page_banners', label=_("Banners")),
         ], heading='Banners'),
     ]
 
@@ -30,7 +31,7 @@ class HomePage(Page):
         context = super().get_context(request)
         context['articles'] = self.get_descendants().type(Article)
         context['featured_content'] = [featured_content.content for featured_content in self.featured_content.all()]
-        context['banners'] = self.banners.all()
+        context['banners'] = [page_banner.banner for page_banner in self.page_banners.all()]
         return context
 
 
@@ -137,9 +138,9 @@ class Article(Page):
         return ''
 
 
-class Banner(Orderable):
+@register_snippet
+class Banner(models.Model):
     title = models.CharField(max_length=255)
-    source = ParentalKey(Page, related_name='banners', on_delete=models.CASCADE, blank=True)
     banner_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
@@ -155,6 +156,18 @@ class Banner(Orderable):
         ImageChooserPanel('banner_image'),
         PageChooserPanel('banner_link_page'),
         FieldPanel('external_link'),
+    ]
+
+    def __str__(self):
+        return self.title
+
+
+class PageBanner(Orderable):
+    source = ParentalKey(Page, related_name='page_banners', on_delete=models.CASCADE, null=True, blank=True)
+    banner = models.ForeignKey(Banner, on_delete=models.CASCADE)
+
+    panels = [
+        SnippetChooserPanel('banner'),
     ]
 
 
