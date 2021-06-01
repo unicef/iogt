@@ -292,6 +292,16 @@ class SiteSettings(BaseSetting):
                     heading="Social Media Content Sharing Buttons", ),
             ],
             heading="Social Media Content Sharing Buttons", ),
-        FieldPanel('media_file_size_threshold'),
-        FieldPanel('allow_anonymous_comment'),
+        MultiFieldPanel(
+            [
+                FieldPanel('media_file_size_threshold'),
+            ],
+            heading="Media File Size Threshold",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('allow_anonymous_comment'),
+            ],
+            heading="Allow Anonymous Comment",
+        ),
     ]
