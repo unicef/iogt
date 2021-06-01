@@ -1,0 +1,35 @@
+{% extends "wagtail_comments_xtd/layout.html" %}
+{% load wagtail_comments_xtd_tags %}
+{% load wagtailadmin_tags %}
+{% load i18n %}
+
+{% block layout %}
+
+	{% comments_breadcrumb %}
+
+	<table class="listing full-width">
+		<col width="50px" />
+		<col />
+		<col width="12%" />
+		<col width="12%" />
+		<col width="10%" />
+		<thead>
+			<tr class="index">
+				<td class="title" colspan="6">
+					<h2>
+						{{ page.title }}
+						{% include "wagtailadmin/pages/listing/_locked_indicator.html" with page=parent_page %}
+					</h2>
+					<ul class="actions">
+						<li><a href="{% url 'wagtailadmin_pages:edit' page.pk %}" class="button button-secondary button-small">{% trans "Edit" %}</a></li>
+						<li><a href="{{ page.url }}" class="button button-secondary button-small" target="blank">{% trans "View live" %}</a></li>
+					</ul>
+				</td>
+			</tr>
+
+			{% include "wagtail_comments_xtd/comments/_table_headers_explore.html" %}
+		</thead>
+		{% include "wagtail_comments_xtd/comments/_list_explore.html" with comments=comments %}
+	</table>
+
+{% endblock layout %}

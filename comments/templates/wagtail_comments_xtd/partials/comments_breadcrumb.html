@@ -1,0 +1,12 @@
+{% load i18n %}
+
+<header class="merged no-border nice-padding no-v-padding">
+	<h1 class="visuallyhidden">Explorer</h1>
+	<ul class="breadcrumb">
+		<li class="home"><a href="{% url 'wagtail_comments_xtd_pages' %}" class="navigate-pages icon icon-fa-comments-o text-replace">{% trans 'Comments' %}</a></li>
+		<li><a href="{% url 'wagtail_comments_xtd_comments' page.pk %}" class="navigate-pages">{{ page.title }}</a></li>
+		{% if comment.level %}
+			<li><a href="{% url 'wagtail_comments_xtd_comment_thread' page.pk comment.parent_id %}">{{ comment.comment }}</a></li>
+		{% endif %}
+	</ul>
+</header>

@@ -1,0 +1,42 @@
+{% load i18n %}
+
+{% if pages %}
+	<table class="listing full-width">
+		<thead>
+			{% include "wagtail_comments_xtd/pages/_table_headers_explore.html" %}
+		</thead>
+		<tbody>
+			{% for page in pages %}
+				<tr class="">
+					<td class="ord" style="width:10px"></td>
+					<td class="title" valign="top" data-listing-page-title>
+						<h2>
+							<a href="{% url 'wagtail_comments_xtd_comments' page.pk %}" title="{% trans 'Explore this page' %}">{{ page.model.title }}</a>
+						</h2>
+						<ul class="actions">
+							<li><a href="{% url 'wagtailadmin_pages:edit' page.pk %}" class="button button-secondary button-small">{% trans "Edit" %}</a></li>
+							<li><a href="{{ page.model.url }}" class="button button-secondary button-small" target="blank">{% trans "View live" %}</a></li>
+						</ul>
+					</td>
+					<td class="updated" valign="top">
+						{{ page.model.latest_revision_created_at|date:"d M Y H:i" }}
+					</td>
+					<td>
+						{% if page.model.live %}
+							<a href="{{ page.url }}" target="_blank" class="status-tag primary">{{ page.model.status_string }}</a>
+						{% else %}
+							<span class="status-tag">{{ page.model.status_string }}</span>
+						{% endif %}
+					</td>
+					<td class="children">
+			            <a href="{% url 'wagtail_comments_xtd_comments' page.pk %}" class="icon text-replace icon-arrow-right" title="{% blocktrans with title=page.get_admin_display_title %}Explore this page{% endblocktrans %}">{% trans "Explore" %}</a>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% else %}
+    <div class="nice-padding">
+		<h3>{% trans "No page has been commented yet" %}</h3>
+	</div>
+{% endif %}

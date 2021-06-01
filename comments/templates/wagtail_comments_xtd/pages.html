@@ -1,0 +1,11 @@
+{% extends "wagtail_comments_xtd/layout.html" %}
+{% load i18n %}
+
+{% block layout %}
+
+	{% trans "Comments" as title_trans %}
+	{% include "wagtailadmin/shared/header.html" with title=title_trans icon="fa-comments-o" merged=True %}
+
+	{% include "wagtail_comments_xtd/pages/_list.html" with pages=pages %}
+
+{% endblock layout %}

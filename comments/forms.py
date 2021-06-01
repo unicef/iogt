@@ -6,7 +6,7 @@ class CommentForm(BaseCommentForm):
 
     def __init__(self, *args, **kwargs):
         super(CommentForm, self).__init__(*args, **kwargs)
-        self.fields['email'].initial = 'noreply@iogt.com'
+        self.fields['email'].initial = 'noreply@example.com'
         self.fields['email'].widget = forms.HiddenInput()
 
         self.fields['followup'].initial = False
