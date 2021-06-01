@@ -53,7 +53,7 @@
                         {% include "includes/django_comments_xtd/comment_content.html" with content=item.comment.comment %}
                     </div>
                     {% if allow_feedback %}
-                        {% include "includes/django_comments_xtd/user_feedback.html" %}
+                        {% include "django_comments_xtd/user_feedback.html" %}
                     {% endif %}
                     {% if item.comment.allow_thread and not item.comment.is_removed %}
                         {% if allow_feedback %}&nbsp;&nbsp;<span class="text-muted">&bull;</span>&nbsp;&nbsp;{% endif %}

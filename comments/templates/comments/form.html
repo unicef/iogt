@@ -1,0 +1,98 @@
+{% load i18n %}
+{% load comments %}
+
+<form method="POST" action="{% comment_form_target %}" onsubmit="post.disabled = true; return true;">
+    {% csrf_token %}
+    <fieldset>
+        <input type="hidden" name="next" value="{% url 'comments-xtd-sent' %}" />
+
+        <div class="alert alert-danger" data-comment-element="errors" hidden>
+        </div>
+
+        {% for field in form %}
+        {% if field.is_hidden %}<div>{{ field }}</div>{% endif %}
+        {% endfor %}
+
+        <div style="display:none">{{ form.honeypot }}</div>
+
+        <div class="row form-group {% if 'comment' in form.errors %}has-danger{% endif %}">
+            <div class="offset-md-1 col-md-10">
+                {{ form.comment }}
+                {% for error in form.comment.errors %}
+                    <div class="alert-danger">{{ error }}</div>
+                {% endfor %}
+
+            </div>
+        </div>
+
+        {% if not request.user.is_authenticated or not request.user.get_full_name %}
+        <div class="row form-group {% if 'name' in form.errors %}has-danger{% endif %}">
+            <label for="id_name" class="col-form-label col-md-3 text-right">
+                {{ form.name.label }}
+            </label>
+            <div class="col-md-7">
+                {{ form.name }}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if not request.user.is_authenticated or not request.user.email %}
+        <div class="row form-group {% if 'email' in form.errors %}has-danger{% endif %}">
+            <label for="id_email" class="col-form-label col-md-3 text-right">
+{#                {{ form.email.label }}#}
+            </label>
+            <div class="col-md-7">
+                {{ form.email }}
+                {% for error in email.errors %}
+                <div class="alert alert-danger">
+                    {{ error|escape }}
+                </div>
+            {% endfor %}
+{#                <span class="form-text small">{{ form.email.help_text }}</span>#}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if not request.user.is_authenticated %}
+        <div class="row form-group {% if 'url' in form.errors %}has-error{% endif %}">
+            <label for="id_url" class="col-form-label col-md-3 text-right">
+                {{ form.url.label }}
+            </label>
+            <div class="col-md-7">
+                {{ form.url }}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="row form-group">
+            <div class="offset-md-3 col-md-7">
+                <div class="custom-control custom-checkbox">
+                    {{ form.followup }}
+{#                    <label for="id_followup{% if cid %}_{{ cid }}{% endif %}" class="custom-control-label">&nbsp;{{ form.followup.label }}</label>#}
+                </div>
+            </div>
+        </div>
+{#        {% if form.errors %}#}
+{#        {% for field in form %}#}
+{#            {% for error in field.errors %}#}
+{#                <div class="alert alert-danger">#}
+{#                    {{ error|escape }}#}
+{#                </div>#}
+{#            {% endfor %}#}
+{#        {% endfor %}#}
+{#        {% for error in form.non_field_errors %}#}
+{#            <div class="alert alert-danger">#}
+{#                {{ error|escape }}#}
+{#            </div>#}
+{#        {% endfor %}#}
+{#    {% endif %}#}
+    </fieldset>
+
+
+    <div class="row form-group">
+        <div class="offset-md-3 col-md-7">
+            <input type="submit" name="post" value="{% trans 'Send' %}" class="btn btn-primary" />
+{#            <input type="submit" name="preview" value="{% trans 'preview' %}" class="btn btn-secondary" />#}
+        </div>
+    </div>
+</form>

@@ -11,6 +11,8 @@ from wagtail.images.blocks import ImageChooserBlock
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 
+from comments.models import AllowCommentsModelMixin
+
 
 class HomePage(Page):
     template = 'home/section.html'
@@ -54,7 +56,7 @@ class Section(Page):
         return context
 
 
-class Article(Page):
+class Article(Page, AllowCommentsModelMixin):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
@@ -93,6 +95,10 @@ class Article(Page):
     content_panels = Page.content_panels + [
         ImageChooserPanel('lead_image'),
         StreamFieldPanel('body')
+    ]
+
+    settings_panels = Page.settings_panels + [
+        FieldPanel('allow_comments')
     ]
 
     search_fields = [

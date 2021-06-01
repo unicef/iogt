@@ -9,6 +9,7 @@
 
 .fas {
     color: gray;
+    margin-left: 5px;
 }
 
 .fa-flag {
@@ -40,4 +41,10 @@
     width: 50%;
     margin: auto;
 
+}
+
+.alert-danger {
+    background-color: #e89a9a;
+    padding: 0 5px;
+    border-radius: 3px;
 }

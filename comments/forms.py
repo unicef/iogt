@@ -11,5 +11,3 @@ class CommentForm(BaseCommentForm):
 
         self.fields['followup'].initial = False
         self.fields['followup'].widget = forms.HiddenInput()
-        # followup
-

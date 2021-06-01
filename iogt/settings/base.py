@@ -228,3 +228,5 @@ COMMENTS_XTD_APP_MODEL_OPTIONS = {
     }
 }
 
+from .profanity_settings import *
+

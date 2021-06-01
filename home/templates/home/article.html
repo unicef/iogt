@@ -168,7 +168,7 @@
         </div>
     <div class="comments-block">
     <h1>Comments</h1>
-{#        {% if page.allow_comments %}#}
+        {% if page.allow_comments %}
             {% if user.is_authenticated %}
                 <div class="card card-block mb-5">
                     <div class="card-body">
@@ -182,11 +182,15 @@
                     <a href="{% url 'account_login' %}?next={{ page.get_absolute_url }}">login</a>.
                 </p>
             {% endif %}
-{#        {% endif %}#}
+            {% else %}
+                <p class="text-center">
+                    New comments have been disabled for this page.
+                </p>
+        {% endif %}
         <br>
         {% get_comment_count for page as comment_count %}
         <div class="py-4 text-center">
-          <a href="#">Back to the post list</a>
+          <a href="#">See All Comments</a>
           &nbsp;&sdot;&nbsp;
           {{ comment_count }} comment{{ comment_count|pluralize }}
           ha{{ comment_count|pluralize:"s,ve" }} been posted.
@@ -197,8 +201,8 @@
             <div class="comments">
               {% render_xtdcomment_tree for page allow_flagging allow_feedback show_feedback %}
             </div>
-        {% endif %}
         <button class="load-more-button">Load More</button>
+        {% endif %}
 
     </div>
     </section>
