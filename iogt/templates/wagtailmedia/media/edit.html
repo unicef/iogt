@@ -1,0 +1,16 @@
+{% extends "wagtailmedia/media/edit.html" %}
+{% load static %}
+
+
+{% block extra_js %}
+  <script type="text/javascript" src="{% static 'js/iogt.js' %}"></script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $('input[type=submit]').click(function (e) {
+        var fileInput = $('#id_file')[0];
+
+        return validateFileUpload(fileInput);
+      });
+    });
+  </script>
+{% endblock %}

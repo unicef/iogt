@@ -110,3 +110,5 @@ GitHub.sublime-settings
 
 #Mac
 .DS_Store
+
+!iogt/templates/wagtailmedia/media/
