@@ -159,7 +159,7 @@ class SiteSettings(BaseSetting):
         default=False,
         help_text='When selecting this option, untranslated pages'
                   ' will not be visible to the front end user'
-                  ' when they viewing a child language of the site')
+                  ' when viewing a child language of the site')
     fb_analytics_app_id = models.CharField(
         verbose_name=_('Facebook Analytics App ID'),
         max_length=25,
