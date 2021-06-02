@@ -230,7 +230,7 @@ class SiteSettings(BaseSetting):
         ('social_media_content_sharing_button', SocialMediaShareButtonBlock()),
     ], null=True, blank=True)
     media_file_size_threshold = models.IntegerField(
-        default=9437184, help_text='Show warning if uploaded media file size is greater than this.')
+        default=9, help_text='Show warning if uploaded media file size is greater than this in MB.')
     allow_anonymous_comment = models.BooleanField(default=False)
 
     panels = [
