@@ -1,21 +1,21 @@
 {% load static wagtailcore_tags wagtailimages_tags %}
 
-    <div class="desktopBanners">
-        {% for banner in banners %}
-        <div class="bannerContainer">
-            <div class="desktopBannerContainer">
-                <div class="image">
-                  {% if banner.banner_link_page %}
-                    <a href="{% pageurl banner.banner_link_page %}">
-                  {% elif banner.external_link %}
-                    <a href="{{ banner.external_link }}">
-                  {% else %}
-                    <a href="#"></a>
-                  {% endif %}
-                        {% image banner.banner_image fill-336x186 class="mainImage" %}
-                    </a>
-                </div>
+<div class="desktopBanners">
+    {% for banner in banners %}
+    <div class="bannerContainer">
+        <div class="desktopBannerContainer">
+            <div class="image">
+              {% if banner.specific.banner_link_page %}
+                <a href="{% pageurl banner.specific.banner_link_page %}">
+              {% elif banner.specific.external_link %}
+                <a href="{{ banner.specific.external_link }}" target="_blank">
+              {% else %}
+                <a href="#"></a>
+              {% endif %}
+                    {% image banner.specific.banner_image fill-336x186 class="mainImage" %}
+                </a>
             </div>
         </div>
-        {% endfor %}
     </div>
+    {% endfor %}
+</div>

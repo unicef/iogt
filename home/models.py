@@ -7,21 +7,16 @@ from wagtail.core import blocks
 from wagtail.core.models import Page, Orderable
 from wagtail.core.fields import StreamField
 from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, MultiFieldPanel, PageChooserPanel, InlinePanel
-from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.core.rich_text import get_text_for_indexing
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.search import index
-from wagtail.snippets.models import register_snippet
 
 
 class HomePage(Page):
     template = 'home/section.html'
 
     content_panels = Page.content_panels + [
-        MultiFieldPanel([
-            InlinePanel('page_banners', label=_("Banners")),
-        ], heading=_('Banners')),
         MultiFieldPanel([
             InlinePanel('featured_content', label=_("Featured Content")),
         ], heading=_('Featured Content')),
@@ -30,8 +25,8 @@ class HomePage(Page):
     def get_context(self, request):
         context = super().get_context(request)
         context['articles'] = self.get_descendants().type(Article)
+        context['banners'] = self.get_children().type(Banner)
         context['featured_content'] = [featured_content.content for featured_content in self.featured_content.all()]
-        context['banners'] = [page_banner.banner for page_banner in self.page_banners.all()]
         return context
 
 
@@ -138,9 +133,7 @@ class Article(Page):
         return ''
 
 
-@register_snippet
-class Banner(models.Model):
-    title = models.CharField(max_length=255)
+class Banner(Page):
     banner_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
@@ -148,35 +141,20 @@ class Banner(models.Model):
         help_text=_('Image to display as the banner')
     )
     banner_link_page = models.ForeignKey(
-        Page, null=True, blank=True, on_delete=models.SET_NULL,
+        Page, null=True, blank=True, related_name='banners', on_delete=models.PROTECT,
         help_text=_('Optional page to which the banner will link to'))
     external_link = models.URLField(
         null=True, blank=True,
         help_text=_('Optional external link which a banner will link to e.g., https://www.google.com'))
 
-    panels = [
-        FieldPanel('title'),
+    content_panels = Page.content_panels + [
         ImageChooserPanel('banner_image'),
         PageChooserPanel('banner_link_page'),
         FieldPanel('external_link'),
     ]
 
-    def __str__(self):
-        return self.title
 
-
-class PageBanner(Orderable):
-    source = ParentalKey(Page, related_name='page_banners', on_delete=models.CASCADE, null=True, blank=True)
-    banner = models.ForeignKey(Banner, on_delete=models.CASCADE)
-
-    panels = [
-        SnippetChooserPanel('banner'),
-    ]
-
-
-@register_snippet
-class Footer(models.Model):
-    title = models.CharField(max_length=255)
+class Footer(Page):
     logos = StreamField([
         ('image', ImageChooserBlock(required=False))
     ], blank=True)
@@ -192,12 +170,8 @@ class Footer(models.Model):
         ('page', blocks.PageChooserBlock()),
     ])
 
-    panels = [
-        FieldPanel('title'),
+    content_panels = Page.content_panels + [
         StreamFieldPanel('logos'),
         StreamFieldPanel('navigation'),
         StreamFieldPanel('essential'),
     ]
-
-    def __str__(self):
-        return self.title
