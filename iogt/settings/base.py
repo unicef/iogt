@@ -41,9 +41,10 @@ INSTALLED_APPS = [
     'wagtail.core',
     'wagtail.contrib.modeladmin',
     'wagtailmenus',
+    'wagtailmedia',
+
     'django_comments_xtd',
     'django_comments',
-
     'modelcluster',
     'taggit',
     'allauth',
