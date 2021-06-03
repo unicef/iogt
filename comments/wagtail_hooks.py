@@ -4,6 +4,7 @@ from wagtail.contrib.modeladmin.options import ModelAdminGroup, ModelAdmin, mode
 
 from .button_helpers import XtdCommentAdminButtonHelper
 from .filters import FlaggedFilter
+from .models import CannedResponse
 from .urls import urlpatterns as urls
 from wagtail.core import hooks
 from django.conf.urls import include, url
@@ -20,11 +21,12 @@ class XtdCommentAdmin(ModelAdmin):
     model = XtdComment
     menu_label = 'All Comments'
     menu_icon = 'edit'
-    list_display = ('comment', 'user', 'is_removed', 'is_public', 'num_flags', 'num_replies', 'status')
+    list_display = ('comment', 'user', 'status', 'num_flags', 'num_replies', 'submit_date')
     list_filter = (FlaggedFilter, 'is_removed', 'is_public', 'submit_date',)
     search_fields = ('comment',)
-    list_export = ('comment', 'user', 'is_removed', 'is_public', 'num_flags')
+    list_export = ('comment', 'user', 'is_removed', 'is_public', 'num_flags', 'num_replies', 'status', 'submit_date')
     button_helper_class = XtdCommentAdminButtonHelper
+    menu_order = 601
 
     def status(self, obj):
         if not obj.is_public:
@@ -45,11 +47,20 @@ class XtdCommentAdmin(ModelAdmin):
         return obj.flags.count()
 
 
+class CannedResponseAdmin(ModelAdmin):
+    model = CannedResponse
+    menu_label = 'Canned Responses'
+    menu_icon = 'placeholder'
+    list_display = ('text',)
+    search_fields = ('text',)
+    menu_order = 602
+
+
 class CommentsGroup(ModelAdminGroup):
     menu_label = 'Comments'
     menu_icon = 'openquote'
     menu_order = 600
-    items = (XtdCommentAdmin,)
+    items = (XtdCommentAdmin, CannedResponseAdmin)
 
 
 modeladmin_register(CommentsGroup)

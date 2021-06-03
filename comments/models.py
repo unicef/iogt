@@ -10,3 +10,10 @@ class AllowCommentsModelMixin(models.Model):
 
     class Meta:
         abstract = True
+
+
+class CannedResponse(models.Model):
+    text = models.TextField(null=True)
+
+    def __str__(self):
+        return self.text

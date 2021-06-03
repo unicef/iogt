@@ -11,3 +11,10 @@ class CommentForm(BaseCommentForm):
 
         self.fields['followup'].initial = False
         self.fields['followup'].widget = forms.HiddenInput()
+
+
+class AdminCommentForm(CommentForm):
+
+    def __init__(self, *args, **kwargs):
+        super(AdminCommentForm, self).__init__(*args, **kwargs)
+        self.is_admin = True

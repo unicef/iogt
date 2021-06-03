@@ -53,9 +53,20 @@ class XtdCommentAdminButtonHelper(ButtonHelper):
                 'title': f'Clear flags for {self.verbose_name}'
             }
 
+    def get_reply_button(self, comment):
+        return {
+            'url': reverse('comment_reply_view', kwargs={
+                'comment_pk': comment.pk
+            }),
+            'label': 'Reply',
+            'classname': 'button button-small button-secondary',
+            'title': f'Add Reply for {self.verbose_name}'
+        }
+
     def get_buttons_for_obj(self, obj, *args, **kwargs):
         buttons = super().get_buttons_for_obj(obj, *args, **kwargs)
         buttons.append(self.hide_show_toggle_button(comment=obj))
         buttons.append(self.publish_unpublish_toggle_button(comment=obj))
         buttons.append(self.clear_flags_button(comment=obj))
+        buttons.append(self.get_reply_button(comment=obj))
         return buttons

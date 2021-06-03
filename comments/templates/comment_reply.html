@@ -1,0 +1,54 @@
+{% extends "wagtailadmin/generic/index.html" %}
+{% load i18n wagtailadmin_tags %}
+
+{% block content %}
+    <header role="banner">
+        <div class="row nice-padding">
+            <div class="left">
+                <div class="col header-title">
+                    <h1>{% icon name='openquote' class_name="header-title-icon" %}
+                        Add reply for Page <span>{{ comment.content_object }}</span></h1>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="row nice-padding">
+        <h2>Comment </h2>{{ comment.comment }}
+        <h4>User</h4>{{ comment.user.username }}
+    </div>
+    <hr/>
+    <div class="row nice-padding">
+        <div class="col-lg-12">
+            <h3 class="text-center">{% trans "Canned Responses" %}</h3>
+            <select name="cannedResponses" id="cannedResponses">
+                    <option value="">----</option>
+                {% for response in canned_responses %}
+                    <option value="{{ response.text }}">{{ response.text }}</option>
+                {% endfor %}
+
+            </select>
+        </div>
+
+    </div>
+    <div class="row nice-padding">
+
+        <div class="row my-4">
+            <div class="col-lg-12">
+                <h3 class="text-center">{% trans "Reply" %}</h3>
+                {% include 'comments/form.html' %}
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#cannedResponses').change(function (e) {
+                const commentValue = $('#id_comment').val()
+                $('#id_comment').val(commentValue + ' ' + e.target.value)
+
+            })
+        })
+    </script>
+{% endblock %}
+
