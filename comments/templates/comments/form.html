@@ -73,27 +73,13 @@
                 </div>
             </div>
         </div>
-        {#        {% if form.errors %}#}
-        {#        {% for field in form %}#}
-        {#            {% for error in field.errors %}#}
-        {#                <div class="alert alert-danger">#}
-        {#                    {{ error|escape }}#}
-        {#                </div>#}
-        {#            {% endfor %}#}
-        {#        {% endfor %}#}
-        {#        {% for error in form.non_field_errors %}#}
-        {#            <div class="alert alert-danger">#}
-        {#                {{ error|escape }}#}
-        {#            </div>#}
-        {#        {% endfor %}#}
-        {#    {% endif %}#}
+
     </fieldset>
 
 
     <div class="row form-group">
         <div class="offset-md-3 col-md-7">
-            <input type="submit" name="post" value="{% trans 'Send' %}" class="btn btn-primary"/>
-            {#            <input type="submit" name="preview" value="{% trans 'preview' %}" class="btn btn-secondary" />#}
+            <input type="submit" name="post" value="{% trans 'Send' %}" class="btn btn-primary button"/>
         </div>
     </div>
 </form>
