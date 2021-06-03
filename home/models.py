@@ -18,6 +18,9 @@ class HomePage(Page):
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
+            InlinePanel('home_page_banners', label=_("Home Page Banner")),
+        ], heading=_('Home Page Banners')),
+        MultiFieldPanel([
             InlinePanel('featured_content', label=_("Featured Content")),
         ], heading=_('Featured Content')),
     ]
@@ -25,17 +28,26 @@ class HomePage(Page):
     def get_context(self, request):
         context = super().get_context(request)
         context['articles'] = self.get_descendants().type(Article)
-        context['banners'] = self.get_children().type(Banner)
+        context['banners'] = [home_page_banner.banner_page for home_page_banner in self.home_page_banners.all()]
         context['featured_content'] = [featured_content.content for featured_content in self.featured_content.all()]
         return context
 
 
 class FeaturedContent(Orderable):
-    source = ParentalKey('HomePage', related_name='featured_content', on_delete=models.CASCADE, blank=True)
+    source = ParentalKey(Page, related_name='featured_content', on_delete=models.CASCADE, blank=True)
     content = models.ForeignKey(Page, on_delete=models.CASCADE)
 
     panels = [
         PageChooserPanel('content'),
+    ]
+
+
+class HomePageBanner(Orderable):
+    source = ParentalKey(Page, related_name='home_page_banners', on_delete=models.CASCADE, blank=True)
+    banner_page = models.ForeignKey('home.BannerPage', on_delete=models.CASCADE)
+
+    panels = [
+        PageChooserPanel('banner_page'),
     ]
 
 
@@ -133,11 +145,19 @@ class Article(Page):
         return ''
 
 
-class Banner(Page):
+class BannerIndexPage(Page):
+    parent_page_types = ['home.HomePage']
+    subpage_types = ['home.BannerPage']
+
+
+class BannerPage(Page):
+    parent_page_types = ['home.BannerIndexPage']
+    subpage_types = []
+
     banner_image = models.ForeignKey(
         'wagtailimages.Image',
-        on_delete=models.PROTECT,
         related_name='+',
+        on_delete=models.PROTECT,
         help_text=_('Image to display as the banner')
     )
     banner_link_page = models.ForeignKey(
@@ -154,7 +174,15 @@ class Banner(Page):
     ]
 
 
-class Footer(Page):
+class FooterIndexPage(Page):
+    parent_page_types = ['home.HomePage']
+    subpage_types = ['home.FooterPage']
+
+
+class FooterPage(Page):
+    parent_page_types = ['home.FooterIndexPage']
+    subpage_types = []
+
     logos = StreamField([
         ('image', ImageChooserBlock(required=False))
     ], blank=True)
