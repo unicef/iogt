@@ -31,8 +31,8 @@ def update(request, comment_pk, action):
         for comment in comments:
             comment.is_removed = False
     elif action == 'clear_flags':
-        for comment in comments:
-            comment.flags.all().delete()
+        comment = XtdComment.objects.get(pk=comment_pk)
+        comment.flags.all().delete()
     XtdComment.objects.bulk_update(comments, ['is_public', 'is_removed'])
 
     messages.success(request, _("The comment has been updated successfully!"))

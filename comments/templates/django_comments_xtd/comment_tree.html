@@ -5,7 +5,6 @@
 {% for item in comments reversed %}
     <div class="media">
         <a name="c{{ item.comment.id }}"></a>
-        {#  <div class="mr-3">{{ item.comment.user_email|xtd_comment_gravatar }}</div>#}
         <div class="comment-body">
             <div class="comment pb-3">
                 <h6 class="mb-1 small d-flex">
@@ -17,15 +16,13 @@
                         {% if item.comment.url %}</a>{% endif %}
                         {% if item.comment.user and item.comment.user|has_permission:"django_comments.can_moderate" %}
                             &nbsp;<span class="badge badge-secondary">{% trans "moderator" %}</span>{% endif %}&nbsp;&nbsp;
-{#                        <a#}
-{#                                class="permalink" title="{% trans 'comment permalink' %}"#}
-{#                                href="{% get_comment_permalink item.comment %}">¶</a></div>#}
-                    <span>
+                        <span>
           {% if not item.comment.is_removed %}
               {% if perms.comments.can_moderate %}
                   {% if item.flagged_count %}
                       <span class="badge badge-danger"
                             title="{% blocktrans count counter=item.flagged_count %}A user has flagged this comment as inappropriate.
+
                                 {% plural %}{{ counter }} users have flagged this comment as inappropriate.{% endblocktrans %}">{{ item.flagged_count }}</span>
                   {% endif %}
               {% endif %}
@@ -44,6 +41,7 @@
               {% endif %}
           {% endif %}
         </span>
+                    </div>
                 </h6>
                 {% if item.comment.is_removed %}
                     <p class="text-muted{% if not allow_feedback and not item.comment.allow_thread %} pb-3{% endif %}">
@@ -62,9 +60,9 @@
                 {% endif %}
             </div>
             <div class="comment-replies">
-            {% if not item.comment.is_removed and item.children %}
-                {% render_xtdcomment_tree with comments=item.children %}
-            {% endif %}
+                {% if not item.comment.is_removed and item.children %}
+                    {% render_xtdcomment_tree with comments=item.children %}
+                {% endif %}
             </div>
         </div>
     </div>
