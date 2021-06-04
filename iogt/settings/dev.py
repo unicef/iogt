@@ -4,23 +4,12 @@ from .base import *
 DEBUG = True
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "jjfayj6d=90@@@(rop$98ryt36vuyf3!chtneyoku3_f)*z^h_"
+SECRET_KEY = 'jjfayj6d=90@@@(rop$98ryt36vuyf3!chtneyoku3_f)*z^h_'
 
 # SECURITY WARNING: define the correct hosts in production!
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['*'] 
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-
-# --- DEBUG TOOLBAR ---
-if DEBUG:
-    INSTALLED_APPS += ("debug_toolbar",)
-    MIDDLEWARE += ("debug_toolbar.middleware.DebugToolbarMiddleware",)
-
-    INTERNAL_IPS = ("172.18.0.1", "127.0.0.1", "localhost")
-    DEBUG_TOOLBAR_CONFIG = {
-        "INTERCEPT_REDIRECTS": False,
-        "SHOW_TOOLBAR_CALLBACK": lambda *x: True,
-    }
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 try:
