@@ -11,6 +11,8 @@ All notable changes to this project will be documented in this file (from 2021-0
 ### Added
 
 - django debug toolbar
+- django-environ
+- transition page for external links
 
 ### Removed
 

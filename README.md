@@ -25,6 +25,8 @@ source <path_to_venv_dir>/bin/activate
 pip install -r requirements.txt
 ```
 
+In root folder create `.env` file based on structure from `.env.example`
+
 Create the database. By default, an SQLite database will be created.
 ```
 ./manage.py migrate

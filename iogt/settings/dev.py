@@ -11,16 +11,19 @@ ALLOWED_HOSTS = ["*"]
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-# --- DEBUG TOOLBAR ---
 if DEBUG:
     INSTALLED_APPS += ("debug_toolbar",)
     MIDDLEWARE += ("debug_toolbar.middleware.DebugToolbarMiddleware",)
-
-    INTERNAL_IPS = ("172.18.0.1", "127.0.0.1", "localhost")
+    INTERNAL_IPS = (
+        "172.18.0.1",
+        "127.0.0.1",
+        "localhost",
+    )
     DEBUG_TOOLBAR_CONFIG = {
         "INTERCEPT_REDIRECTS": False,
         "SHOW_TOOLBAR_CALLBACK": lambda *x: True,
     }
+    [INTERNAL_DOMAIN.append(ip) for ip in INTERNAL_IPS]
 
 
 try:

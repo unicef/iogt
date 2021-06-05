@@ -14,6 +14,8 @@ services:
       - elasticsearch
     networks:
       - elastic
+    env_file: .env
+
   elasticsearch:
     image: 'docker.elastic.co/elasticsearch/elasticsearch:7.12.1'
     environment:
