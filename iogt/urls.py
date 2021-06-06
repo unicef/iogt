@@ -10,15 +10,16 @@ from wagtail.documents import urls as wagtaildocs_urls
 from iogt.views import ExternalLink
 
 urlpatterns = [
-    path("django-admin/", admin.site.urls),
-    path("admin/", include(wagtailadmin_urls)),
-    path("documents/", include(wagtaildocs_urls)),
-    path("search/", search_views.search, name="search"),
-    path("users/", include(users_urls), name="users_urls"),
-    path("accounts/", include("allauth.urls"), name="allauth-urls"),
-    path("external-link/", ExternalLink.as_view(), name="external_link"),
-]
+    path('django-admin/', admin.site.urls),
 
+    path('admin/', include(wagtailadmin_urls)),
+    path('documents/', include(wagtaildocs_urls)),
+
+    path('search/', search_views.search, name='search'),
+    path('users/', include(users_urls), name='users_urls'),
+    path('accounts/', include('allauth.urls'), name='allauth-urls'),
+    path("external-link/", ExternalLink.as_view(), name="external-link")
+]
 
 if settings.DEBUG:
     from django.conf.urls.static import static
@@ -33,6 +34,7 @@ urlpatterns = urlpatterns + [
     # Wagtail's page serving mechanism. This should be the last pattern in
     # the list:
     path("", include(wagtail_urls)),
+
     # Alternatively, if you want Wagtail pages to be served from a subpath
     # of your site, rather than the site root:
     #    path("pages/", include(wagtail_urls)),
