@@ -13,11 +13,10 @@ class ExternalLinkHandler(LinkHandler, ABC):
 
     @classmethod
     def expand_db_attributes(cls, attrs):
-        external_link_page = reverse("external_link")
+        external_link_page = reverse("external-link")
         next_page = escape(attrs["href"])
         next_page_hostname = urlparse(next_page).hostname
 
-        print(INTERNAL_DOMAIN)
         if next_page_hostname not in INTERNAL_DOMAIN:
             return f'<a href="{external_link_page}?next={next_page}">'
         return f'<a href="{next_page}">'
