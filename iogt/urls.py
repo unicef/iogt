@@ -18,7 +18,6 @@ urlpatterns = [
     path('accounts/', include('allauth.urls'), name='allauth-urls'),
 ]
 
-
 if settings.DEBUG:
     import debug_toolbar
     from django.conf.urls.static import static
