@@ -5,5 +5,4 @@ wagtailmenus~=3.0
 elasticsearch>=7.0.0,<8.0.0
 django-allauth~=0.44
 wagtail-localize~=0.9.5
-django-debug-toolbar==3.2.1
 django-environ==0.4.5
