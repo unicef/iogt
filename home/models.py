@@ -9,6 +9,7 @@ from wagtail.core.rich_text import get_text_for_indexing
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.search import index
+from wagtailmarkdown.blocks import MarkdownBlock
 
 from .blocks import MediaBlock
 
@@ -66,6 +67,7 @@ class Article(Page):
     body = StreamField([
         ('heading', blocks.CharBlock(form_classname="full title")),
         ('paragraph', blocks.RichTextBlock()),
+        ('markdown', MarkdownBlock(icon='code')),
         ('image', ImageChooserBlock()),
         ('list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
         ('numbered_list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
