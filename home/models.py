@@ -28,9 +28,12 @@ class HomePage(Page):
 
     def get_context(self, request):
         context = super().get_context(request)
-        context['articles'] = self.get_descendants().type(Article)
-        context['banners'] = [home_page_banner.banner_page for home_page_banner in self.home_page_banners.all()]
-        context['featured_content'] = [featured_content.content for featured_content in self.featured_content.all()]
+        context['banners'] = [
+            home_page_banner.banner_page for home_page_banner in self.home_page_banners.filter(banner_page__live=True)
+        ]
+        context['featured_content'] = [
+            featured_content.content for featured_content in self.featured_content.filter(content__live=True)
+        ]
         return context
 
 
