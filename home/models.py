@@ -12,10 +12,9 @@ from wagtail.images.blocks import ImageChooserBlock
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 from wagtail.contrib.settings.models import BaseSetting, register_setting
+from wagtailmarkdown.blocks import MarkdownBlock
 
-from .blocks import SocialMediaLinkBlock, SocialMediaShareButtonBlock
-
-from .blocks import MediaBlock
+from .blocks import MediaBlock, SocialMediaLinkBlock, SocialMediaShareButtonBlock
 
 
 class HomePage(Page):
@@ -71,6 +70,7 @@ class Article(Page):
     body = StreamField([
         ('heading', blocks.CharBlock(form_classname="full title")),
         ('paragraph', blocks.RichTextBlock()),
+        ('markdown', MarkdownBlock(icon='code')),
         ('image', ImageChooserBlock()),
         ('list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
         ('numbered_list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
