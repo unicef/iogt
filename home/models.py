@@ -9,7 +9,6 @@ from wagtail.core.rich_text import get_text_for_indexing
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.search import index
-from wagtail.snippets.models import register_snippet
 
 from .blocks import MediaBlock
 
@@ -124,3 +123,4 @@ class FooterIndexPage(Page):
 class FooterPage(Article):
     parent_page_types = ['home.FooterIndexPage']
     subpage_types = []
+    template = 'home/article.html'

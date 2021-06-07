@@ -7,7 +7,7 @@ register = template.Library()
 @register.inclusion_tag('home/tags/footer.html', takes_context=True)
 def footer(context):
     return {
-        'footer': FooterPage.objects.first(),
+        'footer_pages': FooterPage.objects.live(),
         'request': context['request'],
     }
 
