@@ -1,18 +1,15 @@
 from django.conf import settings
 from django.contrib import admin
-from django.urls import include, path, re_path
+from django.urls import include, path
 from iogt_users import urls as users_urls
 from search import views as search_views
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
-from home.views import override_wagtailadmin_explore_default_ordering
-
-
 urlpatterns = [
     path('django-admin/', admin.site.urls),
-    re_path(r'^admin/pages/(\d+)/$', override_wagtailadmin_explore_default_ordering),
+
     path('admin/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),
 
