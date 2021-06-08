@@ -9,10 +9,10 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-from django.utils.translation import gettext_lazy as _
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+
+from django.utils.translation import gettext_lazy as _
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'search',
     'iogt_users',
     'comments',
+    'iogt_content_migration',
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     'wagtailmedia',
     'wagtail_localize',
     'wagtail_localize.locales',
+    'wagtailmarkdown',
 
     'django_comments_xtd',
     'django_comments',

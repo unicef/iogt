@@ -1,4 +1,6 @@
+elasticsearch>=7.0.0,<8.0.0
 psycopg2==2.8.*
+wagtail-markdown==0.6
 wagtail==2.11.*
 wagtailmedia==0.7.0
 wagtailmenus~=3.0
@@ -6,3 +8,4 @@ elasticsearch>=7.0.0,<8.0.0
 django-allauth~=0.44
 django-comments-xtd==2.9.*
 wagtail-localize~=0.9.5
+django-debug-toolbar==3.2.1
