@@ -48,3 +48,12 @@
     padding: 0 5px;
     border-radius: 3px;
 }
+
+.like-form {
+    display: inline-block;
+}
+
+.like-form button {
+    border-width: 0;
+
+}

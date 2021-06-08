@@ -4,14 +4,14 @@ from django.utils.encoding import force_str
 from wagtail.core import blocks
 from wagtail.core.models import Page
 from wagtail.core.fields import StreamField
-from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel
+from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, TabbedInterface, ObjectList
 from wagtail.core.rich_text import get_text_for_indexing
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 
-from comments.models import AllowCommentsModelMixin
+from comments.models import CommentableMixin
 from .blocks import MediaBlock
 
 
@@ -57,7 +57,7 @@ class Section(Page):
         return context
 
 
-class Article(Page, AllowCommentsModelMixin):
+class Article(Page, CommentableMixin):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
@@ -91,16 +91,9 @@ class Article(Page, AllowCommentsModelMixin):
         paragraph_values = self._get_child_block_values('paragraph')
         return '\n'.join(paragraph_values)
 
-    def get_absolute_url(self):
-        return self.get_url()
-
     content_panels = Page.content_panels + [
         ImageChooserPanel('lead_image'),
         StreamFieldPanel('body')
-    ]
-
-    settings_panels = Page.settings_panels + [
-        FieldPanel('allow_comments')
     ]
 
     search_fields = [
@@ -110,6 +103,13 @@ class Article(Page, AllowCommentsModelMixin):
 
         index.FilterField('live')
     ]
+
+    edit_handler = TabbedInterface([
+        ObjectList(content_panels, heading='Content'),
+        ObjectList(Page.promote_panels, heading='Promote'),
+        ObjectList(Page.settings_panels, heading='Settings'),
+        ObjectList(CommentableMixin.comments_panels, heading='Comments')
+    ])
 
     def get_context(self, request):
         context = super().get_context(request)

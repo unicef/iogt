@@ -23,6 +23,8 @@ class XtdCommentAdmin(ModelAdmin):
     menu_icon = 'edit'
     list_display = ('comment', 'user', 'status', 'num_flags', 'num_replies', 'submit_date')
     list_filter = (FlaggedFilter, 'is_removed', 'is_public', 'submit_date',)
+    form_fields_exclude = ('thread_id', 'parent_id', 'level', 'order', 'followup', 'nested_count',
+                           'content_type', 'object_id', 'user_email', 'user_url')
     search_fields = ('comment',)
     list_export = ('comment', 'user', 'is_removed', 'is_public', 'num_flags', 'num_replies', 'status', 'submit_date')
     button_helper_class = XtdCommentAdminButtonHelper
