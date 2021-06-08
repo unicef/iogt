@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
+
+from iogt.views import ExternalLink
 from iogt_users import urls as users_urls
 from search import views as search_views
 from wagtail.admin import urls as wagtailadmin_urls
@@ -16,6 +18,7 @@ urlpatterns = [
     path('search/', search_views.search, name='search'),
     path('users/', include(users_urls), name='users_urls'),
     path('accounts/', include('allauth.urls'), name='allauth-urls'),
+    path("external-link/", ExternalLink.as_view(), name="external-link")
 ]
 
 if settings.DEBUG:
