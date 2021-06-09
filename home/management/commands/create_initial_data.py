@@ -1,7 +1,9 @@
 from datetime import datetime, timezone
 
 from django.contrib.auth import get_user_model
+from django.core import management
 from django.core.management.base import BaseCommand
+from django_comments_xtd.models import XtdComment
 from wagtail.core.rich_text import RichText
 import home.models as models
 
@@ -46,3 +48,5 @@ class Command(BaseCommand):
             self.create(owner, home)
         else:
             self.stdout.write('No home page found. Quitting.')
+
+        management.call_command('create_default_site')
