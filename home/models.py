@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
+from iogt.views import create_final_external_link
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (FieldPanel, InlinePanel,
                                          MultiFieldPanel, PageChooserPanel,
@@ -182,6 +183,14 @@ class BannerPage(Page):
         PageChooserPanel('banner_link_page'),
         FieldPanel('external_link'),
     ]
+
+    def final_external_link(self):
+        if self.banner_link_page:
+            return self.banner_link_page.url
+        if self.external_link:
+            return create_final_external_link(self.external_link)
+        else:
+            return "#"
 
 
 @register_snippet

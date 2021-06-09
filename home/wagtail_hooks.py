@@ -11,8 +11,8 @@ class ExternalLinkHandler(LinkHandler, ABC):
 
     @classmethod
     def expand_db_attributes(cls, attrs):
-        external_link_page = reverse("external-link")
         next_page = escape(attrs["href"])
+        external_link_page = reverse("external-link")
         return f'<a href="{external_link_page}?next={next_page}">'
 
 
