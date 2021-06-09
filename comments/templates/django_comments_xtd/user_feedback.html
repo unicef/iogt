@@ -9,7 +9,7 @@
         <form action="{% url 'comments-xtd-like' item.comment.pk %}" method="post" class="like-form">
         {% csrf_token %}
         <input type="hidden" name="next" value="{% url 'comments-xtd-sent' %}"/>
-        <button type="submit"><i class="fa fa-thumbs-up"></i></button>
+        <button type="submit">Like</button>
     </form>
 
 
