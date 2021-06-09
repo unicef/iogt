@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'home',
     'search',
     'iogt_users',
+    'questionnaires',
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
