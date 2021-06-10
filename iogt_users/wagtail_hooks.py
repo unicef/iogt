@@ -1,13 +1,15 @@
 from django.contrib.auth import get_user_model
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register, ModelAdminGroup
 
+from iogt_users.filters import GroupsFilter
+
 
 class UsersExportAdmin(ModelAdmin):
     model = get_user_model()
     menu_label = 'Users Data'
     menu_icon = 'user'
     list_display = ('username', 'date_joined', 'is_staff', 'is_active')
-    list_filter = ('date_joined', 'is_staff', 'is_active')
+    list_filter = (GroupsFilter, 'date_joined', 'is_staff', 'is_active')
     form_fields_exclude = ('password', 'last_login', 'is_superuser', 'groups', 'user_permissions')
     search_fields = ('username',)
     list_export = ('username', 'display_name', 'email', 'is_staff', 'is_active', 'date_joined',
