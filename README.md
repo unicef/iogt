@@ -69,7 +69,7 @@ Once running, navigate to http://localhost:8000 in your browser.
 
 It is possible to automatically populate the database with example data for a basic test site.
 ```
-./manage.py create_test_site
+./manage.py create_initial_data
 ```
 
 Optionally, create the main menu automatically as well.
@@ -110,7 +110,7 @@ You're all set now. See the `Makefile` for other commands related to docker-comp
 
 It is possible to automatically populate the database with example data for a basic test site.
 ```
-docker-compose run django python app/manage.py create_test_site
+docker-compose run django python app/manage.py create_initial_data
 ```
 
 Optionally, create the main menu automatically as well.

@@ -18,6 +18,7 @@ urlpatterns = [
     path('search/', search_views.search, name='search'),
     path('users/', include(users_urls), name='users_urls'),
     path('accounts/', include('allauth.urls'), name='allauth-urls'),
+    path('comments/', include('django_comments_xtd.urls')),
     path("external-link/", TransitionPageView.as_view(), name="external-link")
 ]
 

@@ -1,11 +1,13 @@
+from comments.models import CommentableMixin
 from django.db import models
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 from iogt.views import create_final_external_link
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (FieldPanel, InlinePanel,
-                                         MultiFieldPanel, PageChooserPanel,
-                                         StreamFieldPanel)
+                                         MultiFieldPanel, ObjectList,
+                                         PageChooserPanel, StreamFieldPanel,
+                                         TabbedInterface)
 from wagtail.core import blocks
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Orderable, Page
@@ -94,7 +96,7 @@ class Section(Page):
         return context
 
 
-class Article(Page):
+class Article(Page, CommentableMixin):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
@@ -142,6 +144,13 @@ class Article(Page):
 
         index.FilterField('live')
     ]
+
+    edit_handler = TabbedInterface([
+        ObjectList(content_panels, heading='Content'),
+        ObjectList(Page.promote_panels, heading='Promote'),
+        ObjectList(Page.settings_panels, heading='Settings'),
+        ObjectList(CommentableMixin.comments_panels, heading='Comments')
+    ])
 
     def get_context(self, request):
         context = super().get_context(request)
