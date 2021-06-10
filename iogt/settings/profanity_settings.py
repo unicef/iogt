@@ -1,0 +1,2 @@
+COMMENTS_ALLOW_PROFANITIES = False
+PROFANITIES_LIST = ('crap', 'hell')
