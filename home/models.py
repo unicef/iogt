@@ -193,6 +193,7 @@ class BannerPage(Page):
         FieldPanel('external_link'),
     ]
 
+    @property
     def final_external_link(self):
         if self.banner_link_page:
             return self.banner_link_page.url
