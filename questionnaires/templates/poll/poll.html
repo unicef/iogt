@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ page.title }}</h1>
+    <p>{{ page.description }}</p>
+    <hr>
+    {% if form.choice.errors %}
+        <p>
+            <strong>{{form.choice.errors|join:", " }}</strong>
+        </p>
+    {% endif %}
+
+    <form action="poll-results.html" method="post">
+        {% csrf_token %}
+            {% for choice in choices %}
+                <p>
+                    {% if page.allow_multiple_choice %}
+      					<input type="checkbox" name="choice" id="choice{{ forloop.counter }}" value="" />
+      				{% else %}
+      					<input type="radio" name="choice" id="choice{{ forloop.counter }}" value="" />
+      				{% endif %}
+                        <label for="choice{{ forloop.counter }}">{{ choice }}</label>
+                </p>
+            {% endfor %}
+        <input type="submit" value="Submit">
+    </form>
+
+{% endblock content %}
+
+
