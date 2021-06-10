@@ -1,0 +1,29 @@
+{% load i18n %}
+<table class="listing">
+    <thead>
+        <tr>
+            <th class="name">
+                {% trans "Name" %}
+            </th>
+            <th class="users">
+                {% trans "Users" %}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for group in groups %}
+            <tr>
+                <td class="title">
+                    <div class="title-wrapper">
+                        <a href="{% url 'wagtailusers_groups:edit' group.id %}">{{ group.name }}</a>
+                    </div>
+                </td>
+                <td class="title">
+                        <div class="title-wrapper">
+                            {{ group.user_set.count }}
+                        </div>
+                    </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
