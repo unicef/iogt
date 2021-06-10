@@ -42,7 +42,9 @@
                     </div>
                 {% endblock %}
             </div>
-            {{ paginator.count }} Users
+        {% with total=paginator.count %}
+            {{ total }} User{{ total|pluralize }}
+        {% endwith %}
         </header>
     {% endblock %}
 
