@@ -22,6 +22,14 @@ class Command(BaseCommand):
         models.Article.objects.all().delete()
         models.Section.objects.all().delete()
 
+    def create_image(self):
+        image_url = 'https://via.placeholder.com/729x576.png?text=Youth'
+        http_res = requests.get(image_url)
+        title = 'youth_banner.jpg'
+        image_file = ImageFile(BytesIO(http_res.content), name=title)
+
+        return Image.objects.create(title=title, file=image_file)
+
     def create(self, owner, home):
         article = models.Article(
             title='Do you know the person adding you?',
@@ -48,11 +56,7 @@ class Command(BaseCommand):
         banner_index_page = models.BannerIndexPage(title='Banners')
         home.add_child(instance=banner_index_page)
 
-        image_url = 'https://via.placeholder.com/729x576.png?text=Youth'
-        http_res = requests.get(image_url)
-        title = 'youth_banner.jpg'
-        image_file = ImageFile(BytesIO(http_res.content), name=title)
-        image = Image.objects.create(title=title, file=image_file)
+        image = self.create_image()
 
         banner_page = models.BannerPage(title='Youth', banner_image=image, banner_link_page=youth)
         banner_index_page.add_child(instance=banner_page)
