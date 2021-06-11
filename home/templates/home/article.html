@@ -75,6 +75,23 @@
                         </p>
                         <input type="submit">
                     </form>
+                {% if page.get_prev_sibling or page.get_next_sibling %}
+                    <hr>
+                    <div class="siblings-container">
+                        {% if page.get_prev_sibling %}
+                            <div class="prev-sibling">
+                                    <h2><a href="{% pageurl page.get_prev_sibling %}">Previous</a></h2>
+                                    {{ page.get_prev_sibling.title | truncatechars:15 }}
+                            </div>
+                        {% endif %}
+                        {% if page.get_next_sibling %}
+                            <div class="next-sibling">
+                                    <h2><a href="{% pageurl page.get_next_sibling %}">Next</a></h2>
+                                    {{ page.get_next_sibling.title | truncatechars:15 }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
                 </div>
                 <div class="content-grid-right">
                     <div class="article-info-desktop-card">
