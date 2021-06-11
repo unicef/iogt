@@ -3,6 +3,7 @@ from io import BytesIO
 
 import requests
 from django.contrib.auth import get_user_model
+from django.core import management
 from django.core.files.images import ImageFile
 from django.core.management.base import BaseCommand
 from wagtail.core.rich_text import RichText
@@ -69,3 +70,5 @@ class Command(BaseCommand):
             self.create(owner, home)
         else:
             self.stdout.write('No home page found. Quitting.')
+
+        management.call_command('create_default_site')
