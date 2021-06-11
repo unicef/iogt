@@ -6,8 +6,8 @@ from modelcluster.fields import ParentalKey
 from wagtail.core import blocks
 from wagtail.core.models import Page, Orderable
 from wagtail.core.fields import StreamField
-from wagtail.admin.edit_handlers import (
-    StreamFieldPanel, FieldPanel, FieldRowPanel, MultiFieldPanel, PageChooserPanel, InlinePanel,)
+from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, FieldRowPanel, TabbedInterface, ObjectList, \
+    MultiFieldPanel, PageChooserPanel, InlinePanel
 from wagtail.core.rich_text import get_text_for_indexing
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.blocks import ImageChooserBlock
@@ -17,6 +17,7 @@ from wagtail.contrib.settings.models import BaseSetting, register_setting
 from wagtailmarkdown.blocks import MarkdownBlock
 
 from .blocks import MediaBlock, SocialMediaLinkBlock, SocialMediaShareButtonBlock
+from comments.models import CommentableMixin
 
 
 class HomePage(Page):
@@ -94,7 +95,7 @@ class Section(Page):
         return context
 
 
-class Article(Page):
+class Article(Page, CommentableMixin):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
@@ -142,6 +143,13 @@ class Article(Page):
 
         index.FilterField('live')
     ]
+
+    edit_handler = TabbedInterface([
+        ObjectList(content_panels, heading='Content'),
+        ObjectList(Page.promote_panels, heading='Promote'),
+        ObjectList(Page.settings_panels, heading='Settings'),
+        ObjectList(CommentableMixin.comments_panels, heading='Comments')
+    ])
 
     def get_context(self, request):
         context = super().get_context(request)
