@@ -1,18 +1,20 @@
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
+from django.urls import reverse
+from wagtail.contrib.modeladmin.options import ModelAdmin
 
 from .models import Poll
 
 
-class PollPageAdmin(ModelAdmin):
-
+class PollAdmin(ModelAdmin):
     model = Poll
     menu_label = "Polls"
-    menu_icon = "placeholder"
-    menu_order = 200
+    menu_icon = "doc-full"
     add_to_settings_menu = False
+    list_display = ("entries", "live")
     exclude_from_explorer = False
-    list_display = ("title",)
-    search_fields = ("title",)
 
+    def entries(self, obj, *args, **kwargs):
+        url = reverse("question-results-admin", args=(obj.id,))
+        return f'<a href="{url}">{obj}</a>'
 
-modeladmin_register(PollPageAdmin)
+    entries.allow_tags = True
+    entries.short_description = "Title"
