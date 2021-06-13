@@ -1,13 +1,13 @@
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
-
-from iogt.views import TransitionPageView
 from iogt_users import urls as users_urls
 from search import views as search_views
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
+
+from iogt.views import TransitionPageView
 
 urlpatterns = [
     path("django-admin/", admin.site.urls),
