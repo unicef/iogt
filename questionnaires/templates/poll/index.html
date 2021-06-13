@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+    <h1>{% trans "Last polls" %}</h1>
+    <div>
+        <ul>
+            {% for poll in latest_poll_list %}
+                <li>
+                    <a href="{{ poll.url }}">
+                        {{ poll }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock content %}
