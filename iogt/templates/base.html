@@ -41,8 +41,14 @@
             </div>
         </div>
 
-        {# Global javascript #}
-        <script type="text/javascript" src="{% static 'js/iogt.js' %}"></script>
+         {# Global javascript #}    
+
+        <script>
+        function cache() {
+           if ('serviceWorker' in navigator) {
+           navigator.serviceWorker.register('{% url "sw.js" %}', { scope: '/' })
+       }}  
+       </script>
         {% block extra_js %}{% endblock %}
 
     </body>
