@@ -7,3 +7,4 @@ DATABASES["default"]["TEST"] = {
         'NAME': os.path.join(BASE_DIR, 'db.test.sqlite3'),
     }
 }
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
