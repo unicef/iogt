@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load wagtailimages_tags %}
+
+{% block content %}
+    <h1>Question: {{ poll }}</h1>
+    <h2>Votes total: {{ total_votes }}</h2>
+    <hr>
+    {{ poll.thank_you_text }}
+    <hr>
+    <a href="{{ poll.thank_you_link }}">{{ poll.thank_you_link_text }}</a>
+    <hr>
+
+    {% if poll.show_results %}
+        <h3>All answers:</h3>
+        {% for answer in answers %}
+            <p>{{ answer.title }} |
+                {% if poll.result_as_percentage %}
+                    {{ answer.percentage }} %
+                {% else %}
+                    {{ answer.votes }} vote{{ answer.votes|pluralize }}
+                  {% endif %}
+            </p>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

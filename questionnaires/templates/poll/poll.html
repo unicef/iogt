@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+    <h1>{{ page.title }}</h1>
+    {{ form.non_field_errors }}
+    <div>
+        <p>{{ page.description }}</p>
+        <hr>
+        <form action="{% if page.allow_anonymous_submissions %}{% url "vote" page.id %}{% else %}{% url "auth_vote" page.id %}{% endif %}" method="post">
+            {% csrf_token %}
+            <div>
+                {% for choice in choices %}
+                    {% if choice.errors %}
+                        <p>
+                            <strong>{{ choice.errors|join:", " }}</strong>
+                        </p>
+                    {% endif %}
+                    <div>
+                        <input type="{% if page.allow_multiple_choice %}checkbox{% else %}radio{% endif %}" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
+                        <label for="choice{{ forloop.counter }}">{{ choice }}</label>
+                    </div>
+                {% endfor %}
+            </div>
+            <div>
+                <input type="submit" value="{% trans "Save" %}"/>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
