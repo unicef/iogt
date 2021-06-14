@@ -24,10 +24,10 @@ class Command(BaseCommand):
         Image.objects.all().delete()
 
     def create_image(self):
-        image_url = 'https://via.placeholder.com/729x576.png?text=Youth'
-        http_res = requests.get(image_url)
+        response = requests.get('https://via.placeholder.com/729x576.png?text=Youth')
+
         title = 'youth_banner.jpg'
-        image_file = ImageFile(BytesIO(http_res.content), name=title)
+        image_file = ImageFile(BytesIO(response.content), name=title)
 
         return Image.objects.create(title=title, file=image_file)
 
