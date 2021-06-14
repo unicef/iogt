@@ -21,6 +21,7 @@ class Command(BaseCommand):
         models.BannerIndexPage.objects.all().delete()
         models.Article.objects.all().delete()
         models.Section.objects.all().delete()
+        Image.objects.all().delete()
 
     def create_image(self):
         image_url = 'https://via.placeholder.com/729x576.png?text=Youth'
