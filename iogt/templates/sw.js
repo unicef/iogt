@@ -1,5 +1,14 @@
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.1.5/workbox-sw.js');
 
+// Below we are using a custom dimension to track online vs. offline interactions. So make
+// sure to create a custom dimension on GA
+
+workbox.googleAnalytics.initialize({
+  parameterOverrides: {
+    cd1: 'offline',
+  },
+});
+
 // The below implementation will basically convert "{{ test_url }}" which is test/ into http://localhost:8000/test
 // The relative paths such as test/ of the pages inside the app will be provided by the backend devs, 
 // so this will be done programmatically
