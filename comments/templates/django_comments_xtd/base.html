@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/comments.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="comment-container">
+        {% block comment_content %}
+        {% endblock %}
+    </div>
+{% endblock %}

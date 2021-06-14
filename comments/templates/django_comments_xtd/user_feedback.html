@@ -1,0 +1,17 @@
+{% if allow_feedback %}
+    <span class="small">
+    {% if show_feedback and item.likedit_users %}
+        <a class="badge badge-primary text-white cfb-counter" data-toggle="tooltip"
+           title="{{ item.likedit_users|join:'<br/>' }}">
+        {{ item.likedit_users|length }}</a>
+    {% endif %}
+
+        <form action="{% url 'comments-xtd-like' item.comment.pk %}" method="post" class="like-form">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{% url 'comments-xtd-sent' %}"/>
+        <button type="submit">Like</button>
+    </form>
+
+
+</span>
+{% endif %}
