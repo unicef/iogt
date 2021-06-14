@@ -2,8 +2,8 @@ FROM python:3.8.1-buster
 
 ENV PYTHONUNBUFFERED 1
 
-WORKDIR ./
+WORKDIR /app
 
 RUN pip install --upgrade pip
-ADD ./requirements.txt /app/
-RUN pip install -r /app/requirements.txt
+ADD ./requirements.txt ./requirements.dev.txt ./
+RUN pip install -r requirements.dev.txt
