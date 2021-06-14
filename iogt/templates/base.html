@@ -15,6 +15,9 @@
         </title>
         <meta name="description" content="" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#493174">
+        <link rel="manifest" href="{% static 'manifest/manifest.webmanifest' %}">
+        <link rel="apple-touch-icon" href="{% static 'icons/unicef-logo.png' %}">
 
         {# Global stylesheets #}
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -43,8 +46,6 @@
 
          {# Global javascript #}    
 
-        <!-- Add Global site tag (gtag.js) - Google Analytics -->
-
         <script>
         function cache() {
            if ('serviceWorker' in navigator) {
@@ -52,6 +53,5 @@
        }}  
        </script>
         {% block extra_js %}{% endblock %}
-
     </body>
 </html>
