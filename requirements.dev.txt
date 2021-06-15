@@ -2,4 +2,4 @@
 pytest
 pytest-django
 Faker
-factory-boy
+beautifulsoup4
