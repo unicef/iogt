@@ -7,7 +7,7 @@ from wagtail.core.models import Page
 from wagtail.core.rich_text import RichText
 
 
-class TransitionArticleForExternalLinksTests(TestCase):
+class TransitionPageForExtIntLinksInRichTextTests(TestCase):
     external_link_pattern = "/external-link/?next="
 
     def setUp(self) -> None:
