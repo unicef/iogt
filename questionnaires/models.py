@@ -16,14 +16,13 @@ from wagtail.admin.edit_handlers import (
     FieldPanel,
     MultiFieldPanel,
     PageChooserPanel,
-    StreamFieldPanel, InlinePanel,
+    StreamFieldPanel,
+    InlinePanel,
 )
 from wagtail.core import blocks
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 from wagtail.images.blocks import ImageChooserBlock
-
-# from questionnaires.forms import SurveysFormBuilder
 
 
 class QuestionnairePage(Page):
@@ -87,8 +86,18 @@ class QuestionnairePage(Page):
         default=False,
         help_text=_("Check this to demand clicking start before showing questionnaire options")
     )
-    start_button_text = models.CharField(max_length=40, null=True, default="Start", help_text=_("Start button text"))
-    submit_button_text = models.CharField(max_length=40, null=True, default="Submit", help_text=_("Submit button text"))
+    start_button_text = models.CharField(
+        max_length=40,
+        null=True,
+        default="Start",
+        help_text=_("Start button text")
+    )
+    submit_button_text = models.CharField(
+        max_length=40,
+        null=True,
+        default="Submit",
+        help_text=_("Submit button text")
+    )
 
     @property
     def thank_you_link(self):
@@ -119,7 +128,8 @@ class Poll(QuestionnairePage):
     subpage_types = ["questionnaires.Choice"]
 
     show_results = models.BooleanField(
-        default=True, help_text=_("This option allows the users to see the results.")
+        default=True,
+        help_text=_("This option allows the users to see the results.")
     )
     result_as_percentage = models.BooleanField(
         default=True,
