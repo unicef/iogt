@@ -53,8 +53,6 @@ class VoteFormView(FormView):
     template_name = "poll/poll.html"
     form_class = VoteForm
 
-    # TODO: vote after login doesn't work
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         poll_id = self.kwargs.get("poll_id")

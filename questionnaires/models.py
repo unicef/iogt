@@ -76,7 +76,7 @@ class QuestionnairePage(Page):
             "Check this to allow users who are NOT logged in to complete surveys."
         ),
     )
-    # TODO create validation if set to false
+
     allow_multiple_submissions = models.BooleanField(
         default=True,
         help_text=_("Check this to allow multiple form submissions for users")
