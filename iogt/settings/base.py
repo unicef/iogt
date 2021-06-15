@@ -75,6 +75,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
 
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+    'iogt_users.middlewares.RegistrationSurveyRedirectMiddleware'
 ]
 
 ROOT_URLCONF = 'iogt.urls'
