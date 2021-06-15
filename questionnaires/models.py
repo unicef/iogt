@@ -1,19 +1,29 @@
+import json
+
+from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from modelcluster.fields import ParentalKey
+from wagtail.contrib.forms.edit_handlers import FormSubmissionsPanel
+from wagtail.contrib.forms.models import AbstractForm, AbstractFormField, AbstractFormSubmission
+
 from home.blocks import MediaBlock
 from home.models import HomePage
+from iogt.settings import base
 from iogt.views import create_final_external_link
 from iogt_users.models import User
 from wagtail.admin.edit_handlers import (
     FieldPanel,
     MultiFieldPanel,
     PageChooserPanel,
-    StreamFieldPanel,
+    StreamFieldPanel, InlinePanel,
 )
 from wagtail.core import blocks
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 from wagtail.images.blocks import ImageChooserBlock
+
+# from questionnaires.forms import SurveysFormBuilder
 
 
 class QuestionnairePage(Page):
@@ -57,16 +67,28 @@ class QuestionnairePage(Page):
         Page,
         null=True,
         blank=True,
-        related_name="question",
+        related_name="%(app_label)s_%(class)s_related",
         on_delete=models.PROTECT,
         help_text=_("Optional page to which user after questions can go"),
     )
     allow_anonymous_submissions = models.BooleanField(
-        default=False,
+        default=True,
         help_text=_(
             "Check this to allow users who are NOT logged in to complete surveys."
         ),
     )
+    # TODO create validation if set to false
+    allow_multiple_submissions = models.BooleanField(
+        default=True,
+        help_text=_("Check this to allow multiple form submissions for users")
+    )
+
+    start_button_required = models.BooleanField(
+        default=False,
+        help_text=_("Check this to demand clicking start before showing questionnaire options")
+    )
+    start_button_text = models.CharField(max_length=40, null=True, default="Start", help_text=_("Start button text"))
+    submit_button_text = models.CharField(max_length=40, null=True, default="Submit", help_text=_("Submit button text"))
 
     @property
     def thank_you_link(self):
@@ -124,6 +146,10 @@ class Poll(QuestionnairePage):
                 FieldPanel("randomise_options"),
                 FieldPanel("result_as_percentage"),
                 FieldPanel("allow_multiple_choice"),
+                FieldPanel("allow_multiple_submissions"),
+                FieldPanel("start_button_required"),
+                FieldPanel("start_button_text"),
+                FieldPanel("submit_button_text"),
             ],
             heading=_(
                 "General settings for poll",
@@ -163,9 +189,6 @@ class Poll(QuestionnairePage):
         context["choices"] = self.choices
         return context
 
-    def __str__(self):
-        return self.title
-
     class Meta:
         verbose_name = "Poll"
         verbose_name_plural = "Polls"
@@ -203,3 +226,70 @@ class ChoiceVote(models.Model):
     @property
     def answer(self):
         return ",".join([c.title for c in self.choice.all()])
+
+
+class SurveyFormField(AbstractFormField):
+    page = ParentalKey('Survey', on_delete=models.CASCADE, related_name='form_fields')
+
+
+class Survey(QuestionnairePage, AbstractForm):
+    parent_page_types = ["home.HomePage", "home.Section", "home.Article"]
+    template = "survey/survey.html"
+
+    FormSubmissionsPanel(),
+
+    content_panels = Page.content_panels + [
+        MultiFieldPanel(
+            [
+                FieldPanel("allow_anonymous_submissions"),
+                FieldPanel("allow_multiple_submissions"),
+                FieldPanel("start_button_required"),
+                FieldPanel("start_button_text"),
+                FieldPanel("submit_button_text"),
+            ],
+            heading=_(
+                "General settings for survey",
+            ),
+        ),
+        MultiFieldPanel(
+            [
+                StreamFieldPanel("description"),
+            ],
+            heading=_(
+                "Description at survey page",
+            ),
+        ),
+        MultiFieldPanel(
+            [
+                StreamFieldPanel("thank_you_text"),
+            ],
+            heading="Description at thank you page",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel("thank_you_link_text"),
+                PageChooserPanel("thank_you_internal_link"),
+                FieldPanel("thank_you_external_link"),
+            ],
+            heading="Link at  thank you page",
+        ),
+        InlinePanel('form_fields', label="Form fields"),
+    ]
+
+    def get_submission_class(self):
+        return SurveySubmission
+
+    def process_form_submission(self, form):
+        self.get_submission_class().objects.create(
+            form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder),
+            page=self, user=form.user
+        )
+
+    class Meta:
+        verbose_name = "survey"
+        verbose_name_plural = "surveys"
+
+
+class SurveySubmission(AbstractFormSubmission):
+    user = models.ForeignKey(base.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
+

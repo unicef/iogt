@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load wagtailimages_tags %}
+
+{% block content %}
+    <hr>
+    {{ survey.thank_you_text }}
+    <hr>
+    <a href="{{ survey.thank_you_link }}">{{ survey.thank_you_link_text }}</a>
+    <hr>
+{% endblock %}
