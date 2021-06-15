@@ -97,7 +97,7 @@ make setup
 
 Create a super user account for administration purposes.
 ```
-docker-compose run django python app/manage.py createsuperuser
+docker-compose run django python manage.py createsuperuser
 ```
 
 Run the compose file
@@ -110,12 +110,12 @@ You're all set now. See the `Makefile` for other commands related to docker-comp
 
 It is possible to automatically populate the database with example data for a basic test site.
 ```
-docker-compose run django python app/manage.py create_initial_data
+docker-compose run django python manage.py create_initial_data
 ```
 
 Optionally, create the main menu automatically as well.
 ```
-docker-compose run django python app/manage.py autopopulate_main_menus
+docker-compose run django python manage.py autopopulate_main_menus
 ```
 
 [1]: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment
