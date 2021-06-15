@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Message, UserThread
+from .models import Message, UserThread, ChatbotChannel, Thread
 
 
 class UserThreadAdmin(admin.ModelAdmin):
@@ -17,3 +17,5 @@ class MessageAdmin(admin.ModelAdmin):
 
 admin.site.register(Message, MessageAdmin)
 admin.site.register(UserThread, UserThreadAdmin)
+admin.site.register(ChatbotChannel)
+admin.site.register(Thread)

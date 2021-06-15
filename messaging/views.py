@@ -1,8 +1,13 @@
+import json
+import uuid
+from urllib import request, parse
+
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -11,7 +16,7 @@ from django.views.generic import (
 )
 
 from .forms import MessageReplyForm, NewMessageForm, NewMessageFormMultiple
-from .models import Thread
+from .models import Thread, Message
 
 try:
     from account.decorators import login_required
@@ -131,3 +136,45 @@ class ThreadDeleteView(DeleteView):
         success_url = self.get_success_url()
         self.object.userthread_set.filter(user=request.user).update(deleted=True)
         return HttpResponseRedirect(success_url)
+
+
+# @csrf_exempt is a temp fix to make things work,
+# see https://stackoverflow.com/questions/17716624/django-csrf-cookie-not-set
+# TODO: Implement a secure(?) solution.
+@csrf_exempt
+def rapidpro_interface(request):
+    if not request.method == 'POST':
+        # TODO: What exactly to do in this case.
+        return HttpResponse("Bad request.")
+    # TODO: Check other header info, such as auth token, content type.
+
+    fields = json.loads(request.body.decode("utf-8"))
+    msg_id = fields.get('id')
+    content = fields.get('text')
+    thread_uuid = fields.get('to')
+    bot_identifier = fields.get('from')  # currently unused
+    channel_uuid = fields.get('channel')
+    quick_replies = fields.get('quick_replies')
+
+    # TODO: Decide how to treat each of these potential errors:
+    # - Invalid thread UUID
+    # - channel UUID mismatch
+    thread = Thread.objects.get(uuid=uuid.UUID(thread_uuid))
+    assert uuid.UUID(channel_uuid) == thread.chatbot.channel_uuid()
+    
+    # TODO(geoo89): Look for messages with the same rapid_pro_message_id.
+    # They are single messages in RapidPro that got split up and we need
+    # to stitch them back together.
+    # msg_parts = Message.objects.filter(thread=thread, rapid_pro_message_id=msg_id)
+    # TODO(geoo89): Extract attachments from messages.
+
+    Message.new_reply(
+            thread, None, content,
+            sent_from_bot=True,
+            rapid_pro_message_id=msg_id,
+            quick_replies=json.dumps(quick_replies))
+
+    # When defining a channel in RapidPro, we can specify a string
+    # that the response should contain for RapidPro to consider the
+    # message as successfully delivered.
+    return HttpResponse("All Good.")

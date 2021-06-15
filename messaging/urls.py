@@ -16,4 +16,6 @@ urlpatterns = [
         name="thread_detail"),
     url(r"^thread/(?P<pk>\d+)/delete/$", views.ThreadDeleteView.as_view(),
         name="thread_delete"),
+    url(r"^rapidpro_interface/$", views.rapidpro_interface,
+        name="rapidpro_interface"),
 ]
