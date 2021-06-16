@@ -1,9 +1,9 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views.generic import UpdateView, TemplateView
+from django.views.generic import TemplateView, UpdateView
 
 from iogt_users.utils import has_completed_registration_survey
 
@@ -22,8 +22,8 @@ class UserDetailView(TemplateView):
                   name='dispatch')
 @method_decorator(login_required, name='dispatch')
 class UserDetailEditView(UpdateView):
-    model = User
-    fields = ('first_name', 'last_name', 'email')
+    model = get_user_model()
+    fields = ('display_name', 'email')
     template_name = 'profile_edit.html'
 
     def get_success_url(self):
