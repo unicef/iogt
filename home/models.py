@@ -185,7 +185,7 @@ class Article(Page, CommentableMixin):
 
     edit_handler = TabbedInterface([
         ObjectList(content_panels, heading='Content'),
-        ObjectList(Page.promote_panels, heading='Promote'),
+        ObjectList(promote_panels, heading='Promote'),
         ObjectList(Page.settings_panels, heading='Settings'),
         ObjectList(CommentableMixin.comments_panels, heading='Comments')
     ])
