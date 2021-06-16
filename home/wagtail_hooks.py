@@ -5,6 +5,7 @@ from wagtail.core import hooks
 from wagtail.core.rich_text import LinkHandler
 from wagtail.core.models import PageViewRestriction
 from django.core.exceptions import PermissionDenied
+from home.models import FooterIndexPage
 
 
 class ExternalLinkHandler(LinkHandler, ABC):
@@ -30,3 +31,10 @@ def check_group(page, request, serve_args, serve_kwargs):
                     current_user_groups = request.user.groups.all()
                     if not any(group in current_user_groups for group in restriction.groups.all()):
                         raise PermissionDenied
+
+@hooks.register('construct_explorer_page_queryset')
+def sort_footer_page_listing_by_path(parent_page, pages, request):
+    if isinstance(parent_page, FooterIndexPage):
+        pages = pages.order_by('path')
+
+    return pages
