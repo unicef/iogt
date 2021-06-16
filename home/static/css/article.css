@@ -189,6 +189,26 @@ ul.breadcrumb a {
   color: #6b6b6b;
 }
 
+.siblings-container {
+  display: block;
+  padding: 30px 0;
+}
+
+.siblings-container .prev-sibling {
+  border: 1px solid lightgrey;
+  float: left;
+  border-radius: 3px;
+  padding: 5px;
+
+}
+
+.siblings-container .next-sibling {
+  border: 1px solid lightgrey;
+  float: right;
+  border-radius: 3px;
+  padding: 5px;
+}
+
     /* Feature- Related Articles */
     .related-articles-section {
 
@@ -1399,7 +1419,7 @@ DESKTOP CSS SETTTINGS. At this point, able to reuse some of the sections and inc
     }
 
     .comment-single, .comment-reply {
-      font-size: 10px;
+      font-size: 14px;
     }
 
     .comment-single {
