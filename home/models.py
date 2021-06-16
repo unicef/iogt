@@ -1,3 +1,6 @@
+from wagtail.contrib.settings.models import BaseSetting
+from wagtail.contrib.settings.registry import register_setting
+
 from comments.models import CommentableMixin
 from django.db import models
 from django.utils.encoding import force_str
@@ -230,3 +233,19 @@ class Footer(models.Model):
 
     def __str__(self):
         return self.title
+
+
+@register_setting
+class CacheSettings(BaseSetting):
+    cache = models.BooleanField(
+        default=False,
+        verbose_name="Cache settings",
+        help_text=_("Decide if the site cache should be switch on / off")
+    )
+
+    panels = [
+        FieldPanel("cache"),
+    ]
+
+    class Meta:
+        verbose_name = "Cache settings"
