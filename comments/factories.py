@@ -10,8 +10,8 @@ from iogt_users.factories import UserFactory
 
 
 class CommentFactory(DjangoModelFactory):
-    content_type = ContentType.objects.get_for_model(Article)
-    site = Site.objects.get_current()
+    content_type = factory.LazyAttribute(lambda o: ContentType.objects.get_for_model(Article))
+    site = factory.LazyAttribute(lambda o: Site.objects.get_current())
     comment = factory.Sequence(lambda n: 'Comment{0}'.format(n))
     user = factory.SubFactory(UserFactory)
 
