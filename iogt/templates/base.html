@@ -17,6 +17,9 @@ CACHE valuse for Kish: <strong>{{ settings.home.CacheSettings.cache }}</strong>
         </title>
         <meta name="description" content="" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#493174">
+        <link rel="manifest" href="{% static 'manifest/manifest.webmanifest' %}">
+        <link rel="apple-touch-icon" href="{% static 'icons/unicef-logo.png' %}">
 
         {# Global stylesheets #}
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -43,9 +46,14 @@ CACHE valuse for Kish: <strong>{{ settings.home.CacheSettings.cache }}</strong>
             </div>
         </div>
 
-        {# Global javascript #}
-        <script type="text/javascript" src="{% static 'js/iogt.js' %}"></script>
-        {% block extra_js %}{% endblock %}
+         {# Global javascript #}    
 
+        <script>
+        function cache() {
+           if ('serviceWorker' in navigator) {
+           navigator.serviceWorker.register('{% url "sw.js" %}', { scope: '/' })
+       }}  
+       </script>
+        {% block extra_js %}{% endblock %}
     </body>
 </html>
