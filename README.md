@@ -43,7 +43,7 @@ Finally, start the server.
 Once running, navigate to http://localhost:8000 in your browser.
 
 
-## Running ElasticSearch (Optional)
+### Running ElasticSearch (Optional)
 
 1. Set up an elastic search cluster
 2. Update local.py to use Elasticsearch as the backend. More details [here](https://docs.wagtail.io/en/stable/topics/search/backends.html#elasticsearch-backend)
@@ -65,7 +65,7 @@ Once running, navigate to http://localhost:8000 in your browser.
 
 3. Run `./manage.py update_index` to update the ElasticSearch Index
 
-## Setting up test data
+### Setting up test data
 
 It is possible to automatically populate the database with example data for a basic test site.
 ```
@@ -77,6 +77,11 @@ Optionally, create the main menu automatically as well.
 ./manage.py autopopulate_main_menus
 ```
 
+
+### Running Tests
+```
+./manage.py test --settings=iogt.settings.test
+```
 
 ## Setup with Docker Compose
 You can choose to set up the project locally using Docker Compose. This setup is recommended if you 
@@ -97,7 +102,7 @@ make setup
 
 Create a super user account for administration purposes.
 ```
-docker-compose run django python app/manage.py createsuperuser
+docker-compose run django python manage.py createsuperuser
 ```
 
 Run the compose file
@@ -110,12 +115,18 @@ You're all set now. See the `Makefile` for other commands related to docker-comp
 
 It is possible to automatically populate the database with example data for a basic test site.
 ```
-docker-compose run django python app/manage.py create_initial_data
+docker-compose run django python manage.py create_initial_data
 ```
 
 Optionally, create the main menu automatically as well.
 ```
-docker-compose run django python app/manage.py autopopulate_main_menus
+docker-compose run django python manage.py autopopulate_main_menus
+```
+
+## Running Tests
+Run the following command:
+```
+make test
 ```
 
 [1]: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment

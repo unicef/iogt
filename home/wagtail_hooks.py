@@ -1,32 +1,45 @@
-from wagtail.core import hooks
-from wagtail.core.models import Site
+from abc import ABC
+
+from django.core.exceptions import PermissionDenied
+from django.urls import reverse
+from django.utils.html import escape
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
+from wagtail.core import hooks
+from wagtail.core.models import PageViewRestriction, Site
+from wagtail.core.rich_text import LinkHandler
+
+from home.models import FooterIndexPage
 
 from .models import SiteSettings
 
 
-class SiteSettingsAdmin(ModelAdmin):
-    model = SiteSettings
+class ExternalLinkHandler(LinkHandler, ABC):
+    identifier = "external"
 
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        site = Site.find_for_request(request)
-        qs = qs.filter(site=site)
-        return qs
-
-
-modeladmin_register(SiteSettingsAdmin)
+    @classmethod
+    def expand_db_attributes(cls, attrs):
+        next_page = escape(attrs["href"])
+        external_link_page = reverse("external-link")
+        return f'<a href="{external_link_page}?next={next_page}">'
 
 
-@hooks.register('construct_main_menu')
-def hide_site_settings_in_main_item(request, menu_items):
-    if request.user.is_superuser:
-        menu_items[:] = [item for item in menu_items if item.name != 'site-settings']
+@hooks.register("register_rich_text_features")
+def register_external_link(features):
+    features.register_link_type(ExternalLinkHandler)
 
+@hooks.register('before_serve_page', order=-1)
+def check_group(page, request, serve_args, serve_kwargs):
+    if request.user.is_authenticated:
+        for restriction in page.get_view_restrictions():
+            if not restriction.accept_request(request):
+                if restriction.restriction_type == PageViewRestriction.GROUPS:
+                    current_user_groups = request.user.groups.all()
+                    if not any(group in current_user_groups for group in restriction.groups.all()):
+                        raise PermissionDenied
 
-@hooks.register('construct_settings_menu')
-def hide_site_settings_in_settings_menu(request, menu_items):
-    if request.user.is_superuser:
-        return
+@hooks.register('construct_explorer_page_queryset')
+def sort_footer_page_listing_by_path(parent_page, pages, request):
+    if isinstance(parent_page, FooterIndexPage):
+        pages = pages.order_by('path')
 
-    menu_items[:] = [item for item in menu_items if item.name != 'site-settings']
+    return pages

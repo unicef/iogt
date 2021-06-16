@@ -4,7 +4,7 @@ build:
 down:
 	docker-compose down
 migrate:
-	docker-compose run django python app/manage.py migrate
+	docker-compose run django python manage.py migrate
 setup:
 	make migrate
 	make update_elasticsearch_index
@@ -14,4 +14,6 @@ ssh:
 up:
 	docker-compose up
 update_elasticsearch_index:
-	docker-compose run django python app/manage.py update_index
+	docker-compose run django python manage.py update_index
+test:
+	docker-compose run django bash -c "python manage.py test --settings=iogt.settings.test"

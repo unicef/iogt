@@ -1,0 +1,18 @@
+{% extends "messaging/base.html" %}
+
+{% block body_class %}{{ block.super }} messaging-create{% endblock %}
+
+{% block content %}
+<div class="messaging-create-container">
+    <h2>New Message</h2>
+
+    <form class="comment-form" action="{% url "messaging:message_create" %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <div class="form-actions">
+            <a href="{% url "messaging:inbox" %}" class="cancel">Cancel</a>
+            <button>Send</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
