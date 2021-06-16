@@ -7,6 +7,8 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
+from iogt.views import TransitionPageView
+
 urlpatterns = [
     path('django-admin/', admin.site.urls),
 
@@ -17,6 +19,8 @@ urlpatterns = [
     path('users/', include(users_urls), name='users_urls'),
     path('accounts/', include('allauth.urls'), name='allauth-urls'),
     path('comments/', include('django_comments_xtd.urls')),
+    path("external-link/", TransitionPageView.as_view(), name="external-link"),
+    path('messaging/', include('messaging.urls'), name='messaging-urls'),
 ]
 
 if settings.DEBUG:

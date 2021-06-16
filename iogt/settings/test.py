@@ -1,8 +1,16 @@
 from .base import *
 
+SECRET_KEY = "nAHoNtaAFSBrVJhLbNfzbwMc751QFvby"
+DATABASES["default"]["TEST"] = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.test.sqlite3"),
+    }
+}
+
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+
 DEBUG = True
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'jjfayj6d=90@@@(rop$98ryt36vuyf3!chtneyoku3_f)*z^h_'
 
 ALLOWED_HOSTS = ['*']
 
