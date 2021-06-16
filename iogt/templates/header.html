@@ -73,7 +73,10 @@
                     <i class="material-icons">search</i>
                 </button>
             </form>
-            <button class="signin" type = "button" onclick="cache()">Download website</button>
+            {% if settings.home.CacheSettings.cache %}
+                 <button class="signin" type = "button" onclick="cache()">Download website</button>
+            {% endif %}
+           
             {% if request.user.is_anonymous %}
                 <a class="signin" href="{% url 'account_signup' %}">Sign Up</a>
             {% else %}

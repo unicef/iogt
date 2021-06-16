@@ -1,8 +1,6 @@
 {% load static wagtailuserbar home_tags %}
 <!DOCTYPE html>
 <html class="no-js" lang="en">
-CACHE valuse for Kish: <strong>{{ settings.home.CacheSettings.cache }}</strong>
-
     <head>
         <meta charset="utf-8" />
         <title>
@@ -45,15 +43,24 @@ CACHE valuse for Kish: <strong>{{ settings.home.CacheSettings.cache }}</strong>
                 {% footer %}
             </div>
         </div>
+        <p> {{settings.home.CacheSettings.cache}}</p>
 
-         {# Global javascript #}    
+         {# Global javascript #}  
 
-        <script>
-        function cache() {
-           if ('serviceWorker' in navigator) {
-           navigator.serviceWorker.register('{% url "sw.js" %}', { scope: '/' })
-       }}  
-       </script>
+        {% if settings.home.CacheSettings.cache %}
+             <script>
+                function cache() {
+                   if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.register('{% url "sw.js" %}', { scope: '/' })
+                }}  
+            </script>
+        {% else %}
+            <script>
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.register('{% url "sw.js" %}', { scope: '/' })
+                }
+            </script>
+        {% endif %}
         {% block extra_js %}{% endblock %}
     </body>
 </html>
