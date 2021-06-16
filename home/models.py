@@ -10,7 +10,7 @@ from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (FieldPanel, InlinePanel,
                                          MultiFieldPanel, ObjectList,
                                          PageChooserPanel, StreamFieldPanel,
-                                         TabbedInterface)
+                                         TabbedInterface, FieldRowPanel)
 from wagtail.core import blocks
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Orderable, Page
@@ -219,13 +219,18 @@ class FooterPage(Article):
 @register_setting
 class CacheSettings(BaseSetting):
     cache = models.BooleanField(
-        default=False,
-        verbose_name="Cache settings",
-        help_text=_("Decide if the site cache should be switch on / off")
+        default=True,
+        verbose_name=_("Enable caching?"),
+        help_text=_("provide users with the ability to cache the website content"),
     )
 
     panels = [
-        FieldPanel("cache"),
+        MultiFieldPanel(
+            [
+                FieldPanel('cache'),
+            ],
+            heading="Cache settings",
+        )
     ]
 
     class Meta:
