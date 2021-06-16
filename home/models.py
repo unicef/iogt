@@ -18,7 +18,6 @@ from wagtail.core.rich_text import get_text_for_indexing
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
-from wagtail.snippets.models import register_snippet
 from wagtailmarkdown.blocks import MarkdownBlock
 
 from .blocks import MediaBlock
@@ -206,33 +205,15 @@ class BannerPage(Page):
             return "#"
 
 
-@register_snippet
-class Footer(models.Model):
-    title = models.CharField(max_length=255)
-    logos = StreamField([
-        ('image', ImageChooserBlock(required=False))
-    ], blank=True)
-    navigation = StreamField([
-        ('link_group', blocks.StructBlock([
-            ('title', blocks.CharBlock()),
-            ('links', blocks.StreamBlock([
-                ('page', blocks.PageChooserBlock())
-            ]))
-        ], required=False))
-    ], blank=True)
-    essential = StreamField([
-        ('page', blocks.PageChooserBlock()),
-    ])
+class FooterIndexPage(Page):
+    parent_page_types = ['home.HomePage']
+    subpage_types = ['home.FooterPage']
 
-    panels = [
-        FieldPanel('title'),
-        StreamFieldPanel('logos'),
-        StreamFieldPanel('navigation'),
-        StreamFieldPanel('essential'),
-    ]
 
-    def __str__(self):
-        return self.title
+class FooterPage(Article):
+    parent_page_types = ['home.FooterIndexPage']
+    subpage_types = []
+    template = 'home/article.html'
 
 
 @register_setting
