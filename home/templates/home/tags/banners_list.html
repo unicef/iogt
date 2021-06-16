@@ -1,0 +1,14 @@
+{% load static wagtailcore_tags wagtailimages_tags %}
+<div class="desktopBanners">
+    {% for banner in banners %}
+    <div class="bannerContainer">
+        <div class="desktopBannerContainer">
+            <div class="image">
+                <a href="{{ banner.specific.final_external_link }}">
+                    {% image banner.specific.banner_image fill-336x186 class="mainImage" %}
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>

@@ -110,3 +110,8 @@ GitHub.sublime-settings
 
 #Mac
 .DS_Store
+
+# Data dir for postgres with docker-compose
+legacy-initdb.d/
+
+!iogt/templates/wagtailmedia/media/
