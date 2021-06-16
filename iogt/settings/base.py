@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+from django.utils.translation import gettext_lazy as _
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
@@ -27,7 +29,9 @@ INSTALLED_APPS = [
     'home',
     'search',
     'iogt_users',
+    'comments',
     'iogt_content_migration',
+    'messaging',
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -47,6 +51,8 @@ INSTALLED_APPS = [
     'wagtail_localize.locales',
     'wagtailmarkdown',
 
+    'django_comments_xtd',
+    'django_comments',
     'modelcluster',
     'taggit',
     'allauth',
@@ -199,10 +205,37 @@ BASE_URL = 'http://iogt.site'
 # SITE ID
 SITE_ID = 1
 
+# Comments
+COMMENTS_APP = 'django_comments_xtd'
+COMMENTS_XTD_MAX_THREAD_LEVEL = 1
+
 # Miscellaneous
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = 'account_login'
 WAGTAIL_FRONTEND_LOGIN_URL = LOGIN_URL
+
+#  To help obfuscating comments before they are sent for confirmation.
+COMMENTS_XTD_SALT = (b"Timendi causa est nescire. "
+                     b"Aequam memento rebus in arduis servare mentem.")
+
+# Source mail address used for notifications.
+COMMENTS_XTD_FROM_EMAIL = "noreply@example.com"
+
+# Contact mail address to show in messages.
+COMMENTS_XTD_CONTACT_EMAIL = "helpdesk@example.com"
+
+COMMENTS_XTD_CONFIRM_EMAIL = False
+
+COMMENTS_XTD_FORM_CLASS = 'comments.forms.CommentForm'
+
+COMMENTS_XTD_APP_MODEL_OPTIONS = {
+    'default': {
+        'allow_flagging': True,
+        'allow_feedback': True,
+        'show_feedback': True,
+        'who_can_post': 'users'
+    }
+}
 
 WAGTAIL_I18N_ENABLED = True
 
@@ -210,3 +243,5 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('en', _('English')),
     ('fr', _('French')),
 ]
+
+from .profanity_settings import *

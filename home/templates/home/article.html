@@ -1,168 +1,166 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags %}
+{% load static wagtailcore_tags wagtailimages_tags comments comments_xtd %}
 
 {% block extra_css %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/article.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/article.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/comments.css' %}">
+
 {% endblock extra_css %}
 
 {% block content %}
-<div class="single-article">
-    <ul class="breadcrumb">
-        {% for crumb in breadcrumbs %}
-        <li>
-            <a href="{% pageurl crumb %}">{{ crumb.title }}</a>
-        </li>
-        {% endfor %}
-        <li>{{ page.title }}</li>
-    </ul>
-    {% image page.lead_image height-115 class="main-image-phone" %}
-    <section class="article-content">
-        <ul class="tag-section">
-            {% for section in sections %}
-            <li>
-                <a class="tag" href="{% pageurl section %}">{{ section.title }}</a>
-            </li>
+    <div class="single-article">
+        <ul class="breadcrumb">
+            {% for crumb in breadcrumbs %}
+                <li>
+                    <a href="{% pageurl crumb %}">{{ crumb.title }}</a>
+                </li>
             {% endfor %}
-
-            <img src="{% static 'images/nav-icons/forward-green.png' %}">
+            <li>{{ page.title }}</li>
         </ul>
+        {% image page.lead_image height-115 class="main-image-phone" %}
+        <section class="article-content">
+            <ul class="tag-section">
+                {% for section in sections %}
+                    <li>
+                        <a class="tag" href="{% pageurl section %}">{{ section.title }}</a>
+                    </li>
+                {% endfor %}
 
-        <h1>{{ page.title }}</h1>
-        <p class="date-and-author">
-            <span>on {{ page.first_published_at|date }}</span>
-            <span class="author">/ by {{ page.owner.get_full_name }}</span>
-        </p>
+                <img src="{% static 'images/nav-icons/forward-green.png' %}">
+            </ul>
 
-        {% image page.lead_image height-280 class="main-image-tablet-desktop" %}
-        <hr class="horizontal-line-desktop" style="border: 1px solid rgb(191, 0, 18);">
+            <h1>{{ page.title }}</h1>
+            <p class="date-and-author">
+                <span>on {{ page.first_published_at|date }}</span>
+                <span class="author">/ by {{ page.owner.get_full_name }}</span>
+            </p>
 
-        <div class="content-grid">
-            <div class="content-grid-left">
-                <div class="main-text">
-                    {% include_block page.body %}
-                </div>
+            {% image page.lead_image height-280 class="main-image-tablet-desktop" %}
+            <hr class="horizontal-line-desktop" style="border: 1px solid rgb(191, 0, 18);">
 
-                <div class="share-save-section">
-                    <button class="share">
-                        <img src="{% static 'images/nav-icons/forward-green.png' %}">
-                        <span>Share this Article</span>
-                    </button>
-                    <button class="save">
-                        <i class="material-icons">bookmark_border</i>
-                        <span>Save  this Article</span>
-                    </button>
-                </div>
-
-                <form class="survey-section">
-                    <p class="survey-question">What else do you want to know about Coronavirus?</p>
-                    <p class="survey-option">
-                        <input type="checkbox" id="0" name="option0" value="">
-                        <label for="option0">When it arrives in my country</label>
-                    </p>
-                    <p class="survey-option">
-                        <input type="checkbox" id="1" name="option1" value="">
-                        <label for="option1">What to do if I get the virus</label>
-                    </p>
-                    <p class="survey-option">
-                        <input type="checkbox" id="2" name="option2" value="">
-                        <label for="option2">What my government is doing to address Coronavirus</label>
-                    </p>
-                    <p class="survey-option">
-                        <input type="checkbox" id="3" name="option3" value="">
-                        <label for="option3">When to wear a mask</label>
-                    </p>
-                    <input type="submit">
-                </form>
-
-                <div class="comments-section">
-                    <div class="comments-input-section">
-                        <label for="comments-input-form">Leave a Comment Below: </label>
-                        <form action="/action_page.php" class="comments-input-form">
-                            <textarea class="comments-input" name="comment" form="comments-input-form" placeholder="Start typing here..."></textarea>
-                            <input type="submit" value="Send">
-                        </form>
+            <div class="content-grid">
+                <div class="content-grid-left">
+                    <div class="main-text">
+                        {% include_block page.body %}
                     </div>
-                    <div class="comments-listing">
-                        <p>Comments (Most Popular)</p>
-                        <div>
-                            <div class="comment-single">
-                                <p class="comment-single-header">
-                                    <a href="/profile/user2020" class="">user2020</a> says:
-                                </p>
-                                <p class="comment-single-text">I love this article, but why should we look for people who are working to stop the spread? Do we have to tell them to stay at home?</p>
-                                <p class="reply-prompt">
-                                    <a href="/reply" class="">Click Here to Reply</a>
-                                </p>
-                            </div>
-                            <div class="comment-reply">
-                                <p class="comment-reply-header">
-                                    <a href="/profile/iogtlover" class="">iogtlover</a> says:
-                                </p>
-                                <p class="comment-reply-text">@user2020 I think he means to show your children examples of heroes.</p>
-                                <p class="reply-prompt">
-                                    <a href="/reply" class="">Click Here to Reply</a>
-                                </p>
-                            </div>
-                            <div class="comment-reply">
-                                <p class="comment-reply-header">
-                                    <a href="/profile/user2020" class="">user2020</a> says:
-                                </p>
-                                <p class="comment-reply-text">@iogtlover thank you!!</p>
-                                <p class="reply-prompt">
-                                    <a href="/reply" class="">Click Here to Reply</a>
-                                </p>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="comment-single">
-                                <p class="comment-single-header">
-                                    <a href="/profile/iogtlover" class="">iogtlover</a> says:
-                                </p>
-                                <p class="comment-single-text">Please post more about COVID-19. Looking forward to reading more articles here.</p>
-                                <p class="reply-prompt">
-                                    <a href="/reply" class="">Click Here to Reply</a>
-                                </p>
-                            </div>
-                            <div class="comment-reply">
-                                <p class="comment-reply-header">
-                                    <a href="/profile/undefined" class=""></a> says:</p>
-                                <p class="comment-reply-text"></p>
-                                <p class="reply-prompt">
-                                    <a href="/reply" class="">Click Here to Reply</a>
-                                </p>
-                            </div>
-                        </div>
-                        <button class="load-more-button">Load More </button>
+
+                    <div class="share-save-section">
+                        <button class="share">
+                            <img src="{% static 'images/nav-icons/forward-green.png' %}">
+                            <span>Share this Article</span>
+                        </button>
+                        <button class="save">
+                            <i class="material-icons">bookmark_border</i>
+                            <span>Save  this Article</span>
+                        </button>
                     </div>
+
+                    <form class="survey-section">
+                        <p class="survey-question">What else do you want to know about Coronavirus?</p>
+                        <p class="survey-option">
+                            <input type="checkbox" id="0" name="option0" value="">
+                            <label for="option0">When it arrives in my country</label>
+                        </p>
+                        <p class="survey-option">
+                            <input type="checkbox" id="1" name="option1" value="">
+                            <label for="option1">What to do if I get the virus</label>
+                        </p>
+                        <p class="survey-option">
+                            <input type="checkbox" id="2" name="option2" value="">
+                            <label for="option2">What my government is doing to address Coronavirus</label>
+                        </p>
+                        <p class="survey-option">
+                            <input type="checkbox" id="3" name="option3" value="">
+                            <label for="option3">When to wear a mask</label>
+                        </p>
+                        <input type="submit">
+                    </form>
+                {% if page.get_prev_sibling or page.get_next_sibling %}
+                    <hr>
+                    <div class="siblings-container">
+                        {% if page.get_prev_sibling %}
+                            <div class="prev-sibling">
+                                    <h2><a href="{% pageurl page.get_prev_sibling %}">Previous</a></h2>
+                                    {{ page.get_prev_sibling.title | truncatechars:15 }}
+                            </div>
+                        {% endif %}
+                        {% if page.get_next_sibling %}
+                            <div class="next-sibling">
+                                    <h2><a href="{% pageurl page.get_next_sibling %}">Next</a></h2>
+                                    {{ page.get_next_sibling.title | truncatechars:15 }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
                 </div>
-            </div>
-            <div class="content-grid-right">
-                <div class="article-info-desktop-card">
-                    <p>
+                <div class="content-grid-right">
+                    <div class="article-info-desktop-card">
+                        <p>
                         <span class="pheader">Date Published:
                         </span>{{ page.first_published_at|date }}</p>
-                    <p>
+                        <p>
                         <span class="pheader">Author:
                         </span>{{ page.owner.get_full_name }}</p>
-                    <p>
-                        <span class="pheader">Category:</span> CORONAVIRUS (COVID-19) COVID-19 PARENTING</p>
-                </div>
-                <div class="share-save-section">
-                    <button class="share">
-                        <img src="{% static 'images/nav-icons/forward-green.png'%}">
-                        <span>Share this Article</span>
-                    </button>
-                    <button class="save">
-                        <i class="material-icons">bookmark_border</i>
-                        <span>Save this Article</span>
-                    </button>
-                </div>
-                <div class="related-articles-section">
-                    <h1>Related Articles</h1>
-                    <div></div>
+                        <p>
+                            <span class="pheader">Category:</span> CORONAVIRUS (COVID-19) COVID-19 PARENTING</p>
+                    </div>
+                    <div class="share-save-section">
+                        <button class="share">
+                            <img src="{% static 'images/nav-icons/forward-green.png' %}">
+                            <span>Share this Article</span>
+                        </button>
+                        <button class="save">
+                            <i class="material-icons">bookmark_border</i>
+                            <span>Save this Article</span>
+                        </button>
+                    </div>
+                    <div class="related-articles-section">
+                        <h1>Related Articles</h1>
+                        <div></div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-</div>
+            <div class="comments-block">
+                {% get_comment_count for page as comment_count %}
+                {% if page.allow_comments or comment_count %}
+                    <h1>Comments</h1>
+                    {% if page.allow_comments %}
+                        {% if user.is_authenticated %}
+                            <div class="card card-block mb-5">
+                                <div class="card-body">
+                                    <h4 class="card-title text-center pb-3">Post your comment</h4>
+                                    {% render_comment_form for page %}
+                                </div>
+                            </div>
+                        {% else %}
+                            <p class="text-center">
+                                Only registered users can post comments. Please,
+                                <a href="{% url 'account_login' %}?next={{ page.get_absolute_url }}">login</a>.
+                            </p>
+                        {% endif %}
+                    {% else %}
+                        <p class="text-center">
+                            New comments have been disabled for this page.
+                        </p>
+                    {% endif %}
+                    <br>
+                    <div class="py-4 text-center">
+                        <a href="#">See All Comments</a>
+                        &nbsp;&sdot;&nbsp;
+                        {{ comment_count }} comment{{ comment_count|pluralize }}
+                        ha{{ comment_count|pluralize:"s,ve" }} been posted.
+                    </div>
+
+                    {% if comment_count %}
+                        <hr/>
+                        <div class="comments">
+                            {% render_xtdcomment_tree for page allow_flagging allow_feedback show_feedback %}
+                        </div>
+                        <button class="load-more-button">Load More</button>
+                    {% endif %}
+
+                    </div>
+                {% endif %}
+        </section>
+    </div>
 {% endblock content %}

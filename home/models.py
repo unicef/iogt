@@ -1,15 +1,19 @@
+from comments.models import CommentableMixin
 from django.db import models
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
+from iogt.views import create_final_external_link
 from modelcluster.fields import ParentalKey
-
+from wagtail.admin.edit_handlers import (FieldPanel, InlinePanel,
+                                         MultiFieldPanel, ObjectList,
+                                         PageChooserPanel, StreamFieldPanel,
+                                         TabbedInterface)
 from wagtail.core import blocks
-from wagtail.core.models import Page, Orderable
 from wagtail.core.fields import StreamField
-from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, MultiFieldPanel, PageChooserPanel, InlinePanel
+from wagtail.core.models import Orderable, Page
 from wagtail.core.rich_text import get_text_for_indexing
-from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.blocks import ImageChooserBlock
+from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 from wagtailmarkdown.blocks import MarkdownBlock
 
@@ -91,7 +95,7 @@ class Section(Page):
         return context
 
 
-class Article(Page):
+class Article(Page, CommentableMixin):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
@@ -140,6 +144,13 @@ class Article(Page):
         index.FilterField('live')
     ]
 
+    edit_handler = TabbedInterface([
+        ObjectList(content_panels, heading='Content'),
+        ObjectList(Page.promote_panels, heading='Promote'),
+        ObjectList(Page.settings_panels, heading='Settings'),
+        ObjectList(CommentableMixin.comments_panels, heading='Comments')
+    ])
+
     def get_context(self, request):
         context = super().get_context(request)
         context['breadcrumbs'] = [crumb for crumb in self.get_ancestors() if not crumb.is_root()]
@@ -180,6 +191,15 @@ class BannerPage(Page):
         PageChooserPanel('banner_link_page'),
         FieldPanel('external_link'),
     ]
+
+    @property
+    def final_external_link(self):
+        if self.banner_link_page:
+            return self.banner_link_page.url
+        if self.external_link:
+            return create_final_external_link(self.external_link)
+        else:
+            return "#"
 
 
 class FooterIndexPage(Page):
