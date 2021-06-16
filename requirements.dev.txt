@@ -3,3 +3,4 @@ pytest
 pytest-django
 Faker
 beautifulsoup4
+django-test-plus>=1.4.0
