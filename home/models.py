@@ -97,8 +97,8 @@ class Section(Page):
         context['featured_content'] = [
             featured_content.content for featured_content in self.featured_content.filter(content__live=True)
         ]
-        context['sub_sections'] = self.get_children().type(Section)
-        context['articles'] = self.get_children().type(Article)
+        context['sub_sections'] = self.get_children().live().type(Section)
+        context['articles'] = self.get_children().live().type(Article)
         return context
 
 
