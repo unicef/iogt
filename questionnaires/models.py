@@ -1,26 +1,20 @@
 import json
 
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
-from modelcluster.fields import ParentalKey
-from wagtail.contrib.forms.edit_handlers import FormSubmissionsPanel
-from wagtail.contrib.forms.models import AbstractForm, AbstractFormField, AbstractFormSubmission
-
 from home.blocks import MediaBlock
 from home.models import HomePage
 from iogt.settings import base
-from iogt.views import create_final_external_link
 from iogt_users.models import User
-from wagtail.admin.edit_handlers import (
-    FieldPanel,
-    MultiFieldPanel,
-    PageChooserPanel,
-    StreamFieldPanel,
-    InlinePanel,
-)
+from modelcluster.fields import ParentalKey
+from wagtail.admin.edit_handlers import (FieldPanel, InlinePanel,
+                                         MultiFieldPanel, StreamFieldPanel)
+from wagtail.contrib.forms.edit_handlers import FormSubmissionsPanel
+from wagtail.contrib.forms.models import (AbstractForm, AbstractFormField,
+                                          AbstractFormSubmission)
 from wagtail.core import blocks
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
@@ -49,29 +43,6 @@ class QuestionnairePage(Page):
         null=True,
         blank=True,
     )
-    thank_you_link_text = models.CharField(
-        max_length=40,
-        blank=True,
-        null=True,
-        default="Check more",
-        help_text=_("Text to be linked"),
-    )
-    thank_you_external_link = models.URLField(
-        null=True,
-        blank=True,
-        help_text=_(
-            "Optional external link to which user after questions can go "
-            "e.g., https://www.google.com"
-        ),
-    )
-    thank_you_internal_link = models.ForeignKey(
-        Page,
-        null=True,
-        blank=True,
-        related_name="%(app_label)s_%(class)s_related",
-        on_delete=models.PROTECT,
-        help_text=_("Optional page to which user after questions can go"),
-    )
     allow_anonymous_submissions = models.BooleanField(
         default=True,
         help_text=_(
@@ -81,34 +52,11 @@ class QuestionnairePage(Page):
 
     allow_multiple_submissions = models.BooleanField(
         default=True,
-        help_text=_("Check this to allow multiple form submissions for users")
-    )
-
-    start_button_required = models.BooleanField(
-        default=False,
-        help_text=_("Check this to demand clicking start before showing questionnaire options")
-    )
-    start_button_text = models.CharField(
-        max_length=40,
-        null=True,
-        default="Start",
-        help_text=_("Start button text")
+        help_text=_("Check this to allow multiple form submissions for users"),
     )
     submit_button_text = models.CharField(
-        max_length=40,
-        null=True,
-        default="Submit",
-        help_text=_("Submit button text")
+        max_length=40, null=True, default="Submit", help_text=_("Submit button text")
     )
-
-    @property
-    def thank_you_link(self):
-        if self.thank_you_internal_link:
-            return self.thank_you_internal_link.url
-        if self.thank_you_external_link:
-            return create_final_external_link(self.thank_you_external_link)
-        else:
-            return "#"
 
     def __str__(self):
         return self.title
@@ -130,8 +78,7 @@ class Poll(QuestionnairePage):
     subpage_types = ["questionnaires.Choice"]
 
     show_results = models.BooleanField(
-        default=True,
-        help_text=_("This option allows the users to see the results.")
+        default=True, help_text=_("This option allows the users to see the results.")
     )
     result_as_percentage = models.BooleanField(
         default=True,
@@ -159,8 +106,6 @@ class Poll(QuestionnairePage):
                 FieldPanel("result_as_percentage"),
                 FieldPanel("allow_multiple_choice"),
                 FieldPanel("allow_multiple_submissions"),
-                FieldPanel("start_button_required"),
-                FieldPanel("start_button_text"),
                 FieldPanel("submit_button_text"),
             ],
             heading=_(
@@ -180,14 +125,6 @@ class Poll(QuestionnairePage):
                 StreamFieldPanel("thank_you_text"),
             ],
             heading="Description at thank you page",
-        ),
-        MultiFieldPanel(
-            [
-                FieldPanel("thank_you_link_text"),
-                PageChooserPanel("thank_you_internal_link"),
-                FieldPanel("thank_you_external_link"),
-            ],
-            heading="Link at  thank you page",
         ),
     ]
 
@@ -241,7 +178,7 @@ class ChoiceVote(models.Model):
 
 
 class SurveyFormField(AbstractFormField):
-    page = ParentalKey('Survey', on_delete=models.CASCADE, related_name='form_fields')
+    page = ParentalKey("Survey", on_delete=models.CASCADE, related_name="form_fields")
 
 
 class Survey(QuestionnairePage, AbstractForm):
@@ -249,9 +186,9 @@ class Survey(QuestionnairePage, AbstractForm):
     template = "survey/survey.html"
     multi_step = models.BooleanField(
         default=False,
-        verbose_name='Multi-step',
-        help_text='Whether to display the survey questions to the user one at'
-                  ' a time, instead of all at once.'
+        verbose_name="Multi-step",
+        help_text="Whether to display the survey questions to the user one at"
+        " a time, instead of all at once.",
     )
 
     content_panels = Page.content_panels + [
@@ -260,8 +197,6 @@ class Survey(QuestionnairePage, AbstractForm):
             [
                 FieldPanel("allow_anonymous_submissions"),
                 FieldPanel("allow_multiple_submissions"),
-                FieldPanel("start_button_required"),
-                FieldPanel("start_button_text"),
                 FieldPanel("submit_button_text"),
                 FieldPanel("multi_step"),
             ],
@@ -283,15 +218,7 @@ class Survey(QuestionnairePage, AbstractForm):
             ],
             heading="Description at thank you page",
         ),
-        MultiFieldPanel(
-            [
-                FieldPanel("thank_you_link_text"),
-                PageChooserPanel("thank_you_internal_link"),
-                FieldPanel("thank_you_external_link"),
-            ],
-            heading="Link at  thank you page",
-        ),
-        InlinePanel('form_fields', label="Form fields"),
+        InlinePanel("form_fields", label="Form fields"),
     ]
 
     def get_submission_class(self):
@@ -300,25 +227,27 @@ class Survey(QuestionnairePage, AbstractForm):
     def process_form_submission(self, form):
         self.get_submission_class().objects.create(
             form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder),
-            page=self, user=form.user
+            page=self,
+            user=form.user,
         )
 
     def serve(self, request, *args, **kwargs):
-        if not self.allow_multiple_submissions and self.get_submission_class().objects.filter(page=self, user__pk=request.user.pk).exists():
-            return render(
-                request,
-                self.template,
-                self.get_context(request)
-            )
+        if (
+            not self.allow_multiple_submissions
+            and self.get_submission_class()
+            .objects.filter(page=self, user__pk=request.user.pk)
+            .exists()
+        ):
+            return render(request, self.template, self.get_context(request))
         if self.multi_step:
             return self.serve_questions_separately(request)
 
         return super().serve(request, *args, **kwargs)
 
     def serve_questions_separately(self, request, *args, **kwargs):
-        session_key_data = 'form_data-%s' % self.pk
+        session_key_data = "form_data-%s" % self.pk
         is_last_step = False
-        step_number = request.GET.get('p', 1)
+        step_number = request.GET.get("p", 1)
 
         paginator = Paginator(self.get_form_fields(), per_page=1)
         try:
@@ -329,11 +258,13 @@ class Survey(QuestionnairePage, AbstractForm):
             step = paginator.page(paginator.num_pages)
             is_last_step = True
 
-        if request.method == 'POST':
+        if request.method == "POST":
             # The first step will be submitted with step_number == 2,
             # so we need to get a form from previous step
             # Edge case - submission of the last step
-            prev_step = step if is_last_step else paginator.page(step.previous_page_number())
+            prev_step = (
+                step if is_last_step else paginator.page(step.previous_page_number())
+            )
 
             # Create a form only for submitted step
             prev_form_class = self.get_form_class_for_step(prev_step)
@@ -351,8 +282,7 @@ class Survey(QuestionnairePage, AbstractForm):
                 else:
                     # If there is no next step, create form for all fields
                     form = self.get_form(
-                        request.session[session_key_data],
-                        page=self, user=request.user
+                        request.session[session_key_data], page=self, user=request.user
                     )
 
                     if form.is_valid():
@@ -362,7 +292,9 @@ class Survey(QuestionnairePage, AbstractForm):
                         form_submission = self.process_form_submission(form)
                         del request.session[session_key_data]
                         # render the landing page
-                        return self.render_landing_page(request, form_submission, *args, **kwargs)
+                        return self.render_landing_page(
+                            request, form_submission, *args, **kwargs
+                        )
             else:
                 # If data for step is invalid
                 # we will need to display form again with errors,
@@ -375,13 +307,9 @@ class Survey(QuestionnairePage, AbstractForm):
             form = form_class(page=self, user=request.user)
 
         context = self.get_context(request)
-        context['form'] = form
-        context['fields_step'] = step
-        return render(
-            request,
-            self.template,
-            context
-        )
+        context["form"] = form
+        context["fields_step"] = step
+        return render(request, self.template, context)
 
     class Meta:
         verbose_name = "survey"
@@ -389,12 +317,15 @@ class Survey(QuestionnairePage, AbstractForm):
 
 
 class SurveySubmission(AbstractFormSubmission):
-    user = models.ForeignKey(base.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey(
+        base.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True
+    )
 
     def get_data(self):
         form_data = super().get_data()
-        form_data.update({
-            'user': self.user if self.user else None,
-        })
+        form_data.update(
+            {
+                "user": self.user if self.user else None,
+            }
+        )
         return form_data
-
