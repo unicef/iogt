@@ -65,16 +65,9 @@ class QuestionnairePage(Page):
         abstract = True
 
 
-class PollIndexPage(Page):
-    parent_page_types = ["home.HomePage", "home.Section", "home.Article"]
-    subpage_types = ["questionnaires.Poll"]
-
-
 class Poll(QuestionnairePage):
     template = "poll/poll.html"
-    parent_page_types = [
-        "questionnaires.PollIndexPage",
-    ]
+    parent_page_types = ["home.HomePage", "home.Section", "home.Article"]
     subpage_types = ["questionnaires.Choice"]
 
     show_results = models.BooleanField(
