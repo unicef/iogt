@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     'iogt_content_migration',
     'messaging',
 
+    'wagtail_localize',
+    'wagtail_localize.locales',
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.embeds',
@@ -47,8 +49,6 @@ INSTALLED_APPS = [
     'wagtail.contrib.modeladmin',
     'wagtailmenus',
     'wagtailmedia',
-    'wagtail_localize',
-    'wagtail_localize.locales',
     'wagtailmarkdown',
 
     'django_comments_xtd',
@@ -76,6 +76,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    "django.middleware.locale.LocaleMiddleware",
 
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
