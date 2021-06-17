@@ -1,7 +1,9 @@
 import json
 
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
+from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from modelcluster.fields import ParentalKey
 from wagtail.contrib.forms.edit_handlers import FormSubmissionsPanel
@@ -245,10 +247,15 @@ class SurveyFormField(AbstractFormField):
 class Survey(QuestionnairePage, AbstractForm):
     parent_page_types = ["home.HomePage", "home.Section", "home.Article"]
     template = "survey/survey.html"
-
-    FormSubmissionsPanel(),
+    multi_step = models.BooleanField(
+        default=False,
+        verbose_name='Multi-step',
+        help_text='Whether to display the survey questions to the user one at'
+                  ' a time, instead of all at once.'
+    )
 
     content_panels = Page.content_panels + [
+        FormSubmissionsPanel(),
         MultiFieldPanel(
             [
                 FieldPanel("allow_anonymous_submissions"),
@@ -256,6 +263,7 @@ class Survey(QuestionnairePage, AbstractForm):
                 FieldPanel("start_button_required"),
                 FieldPanel("start_button_text"),
                 FieldPanel("submit_button_text"),
+                FieldPanel("multi_step"),
             ],
             heading=_(
                 "General settings for survey",
@@ -295,6 +303,86 @@ class Survey(QuestionnairePage, AbstractForm):
             page=self, user=form.user
         )
 
+    def serve(self, request, *args, **kwargs):
+        if not self.allow_multiple_submissions and self.get_submission_class().objects.filter(page=self, user__pk=request.user.pk).exists():
+            return render(
+                request,
+                self.template,
+                self.get_context(request)
+            )
+        if self.multi_step:
+            return self.serve_questions_separately(request)
+
+        return super().serve(request, *args, **kwargs)
+
+    def serve_questions_separately(self, request, *args, **kwargs):
+        session_key_data = 'form_data-%s' % self.pk
+        is_last_step = False
+        step_number = request.GET.get('p', 1)
+
+        paginator = Paginator(self.get_form_fields(), per_page=1)
+        try:
+            step = paginator.page(step_number)
+        except PageNotAnInteger:
+            step = paginator.page(1)
+        except EmptyPage:
+            step = paginator.page(paginator.num_pages)
+            is_last_step = True
+
+        if request.method == 'POST':
+            # The first step will be submitted with step_number == 2,
+            # so we need to get a form from previous step
+            # Edge case - submission of the last step
+            prev_step = step if is_last_step else paginator.page(step.previous_page_number())
+
+            # Create a form only for submitted step
+            prev_form_class = self.get_form_class_for_step(prev_step)
+            prev_form = prev_form_class(request.POST, page=self, user=request.user)
+            if prev_form.is_valid():
+                # If data for step is valid, update the session
+                form_data = request.session.get(session_key_data, {})
+                form_data.update(prev_form.cleaned_data)
+                request.session[session_key_data] = form_data
+
+                if prev_step.has_next():
+                    # Create a new form for a following step, if the following step is present
+                    form_class = self.get_form_class_for_step(step)
+                    form = form_class(page=self, user=request.user)
+                else:
+                    # If there is no next step, create form for all fields
+                    form = self.get_form(
+                        request.session[session_key_data],
+                        page=self, user=request.user
+                    )
+
+                    if form.is_valid():
+                        # Perform validation again for whole form.
+                        # After successful validation, save data into DB,
+                        # and remove from the session.
+                        form_submission = self.process_form_submission(form)
+                        del request.session[session_key_data]
+                        # render the landing page
+                        return self.render_landing_page(request, form_submission, *args, **kwargs)
+            else:
+                # If data for step is invalid
+                # we will need to display form again with errors,
+                # so restore previous state.
+                form = prev_form
+                step = prev_step
+        else:
+            # Create empty form for non-POST requests
+            form_class = self.get_form_class_for_step(step)
+            form = form_class(page=self, user=request.user)
+
+        context = self.get_context(request)
+        context['form'] = form
+        context['fields_step'] = step
+        return render(
+            request,
+            self.template,
+            context
+        )
+
     class Meta:
         verbose_name = "survey"
         verbose_name_plural = "surveys"
@@ -302,4 +390,11 @@ class Survey(QuestionnairePage, AbstractForm):
 
 class SurveySubmission(AbstractFormSubmission):
     user = models.ForeignKey(base.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
+
+    def get_data(self):
+        form_data = super().get_data()
+        form_data.update({
+            'user': self.user if self.user else None,
+        })
+        return form_data
 
