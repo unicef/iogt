@@ -14,6 +14,7 @@ urlpatterns = [
     path('django-admin/', admin.site.urls),
     path('admin/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),
+    path('search/', search_views.search, name='search'),
     path('users/', include(users_urls), name='users_urls'),
     path('accounts/', include('allauth.urls'), name='allauth-urls'),
     path('comments/', include('django_comments_xtd.urls')),
@@ -35,5 +36,4 @@ if settings.DEBUG:
 
 urlpatterns = urlpatterns + i18n_patterns(
     path("", include(wagtail_urls)),
-    path("search/", search_views.search, name="search"),
 )
