@@ -6,7 +6,6 @@ importScripts('../static/third_party/workbox/workbox-v6.1.5/workbox-sw.js');
 
 const appShell = [
   "{{ test_url }}",
-  ""
 ].map((partialUrl) => `${location.protocol}//${location.host}${partialUrl}`);
 
 workbox.precaching.precacheAndRoute(appShell.map(url => ({
