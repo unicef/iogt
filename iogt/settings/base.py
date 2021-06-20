@@ -9,8 +9,6 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-from django.utils.translation import gettext_lazy as _
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
@@ -243,5 +241,8 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('en', _('English')),
     ('fr', _('French')),
 ]
+
+# Search results
+SEARCH_RESULTS_PER_PAGE = 9
 
 from .profanity_settings import *
