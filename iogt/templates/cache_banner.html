@@ -3,8 +3,8 @@
     <p>This appears to be your first visit here. Our website is also available as a downloadable app. Would you like to download it?</p>
     <form action="" method="post">
         {% csrf_token %}
-        <button type="submit" onclick="cache()">Yes</button>
-        <button type="submit">No</button>
+        <input type="submit" value="{% trans 'Yes' %}" onclick="cache()"/>
+        <input type="submit" value="{% trans 'No' %}" />
         <input id="first_time_user" name="first_time_user" type="hidden" value="False">
     </form>
 </div>
