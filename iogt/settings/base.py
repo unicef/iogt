@@ -96,6 +96,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'wagtailmenus.context_processors.wagtailmenus',
+                "home.processors.show_welcome_banner",
             ],
         },
     },
