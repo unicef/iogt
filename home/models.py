@@ -5,7 +5,7 @@ from comments.models import CommentableMixin
 from django.db import models
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
-from iogt.views import create_final_external_link
+from iogt.views import create_final_external_link, check_user_session
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (FieldPanel, InlinePanel,
                                          MultiFieldPanel, ObjectList,
@@ -36,6 +36,7 @@ class HomePage(Page):
     ]
 
     def get_context(self, request):
+        check_user_session(request)
         context = super().get_context(request)
         context['banners'] = [
             home_page_banner.banner_page for home_page_banner in self.home_page_banners.filter(banner_page__live=True)
@@ -93,6 +94,7 @@ class Section(Page):
     ]
 
     def get_context(self, request):
+        check_user_session(request)
         context = super().get_context(request)
         context['articles'] = self.get_children().type(Article)
         return context
@@ -155,6 +157,7 @@ class Article(Page, CommentableMixin):
     ])
 
     def get_context(self, request):
+        check_user_session(request)
         context = super().get_context(request)
         context['breadcrumbs'] = [crumb for crumb in self.get_ancestors() if not crumb.is_root()]
         context['sections'] = self.get_ancestors().type(Section)
