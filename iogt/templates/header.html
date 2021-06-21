@@ -1,5 +1,8 @@
 {% load static menu_tags %}
 <header class="header">
+    {% if settings.home.CacheSettings.cache %}
+                 <button class="signin" type="button" onclick="displayBanner()">Banner</button>
+    {% endif %}
     <div class="header-top">
         <div class="header-top-language-strip">
             <div class="current-language">Language: <span>English</span>
@@ -72,20 +75,18 @@
                 <button type="submit">
                     <i class="material-icons">search</i>
                 </button>
-            </form>
-            {% if settings.home.CacheSettings.cache %}
-                 <button class="signin" type = "button" onclick="cache()">Download website</button>
-            {% endif %}
-           
+            </form>      
             {% if request.user.is_anonymous %}
                 <a class="signin" href="{% url 'account_signup' %}">Sign Up</a>
             {% else %}
                 <a class="signin" href="{% url 'user_profile' %}">Profile</a>
                 <a class="signin" href="{% url 'account_logout' %}">Sign out</a>
             {% endif %}
+            
         </div>
 
     </div>
+   
     <nav class="nav">
         <div class="categories-dropdown">
             <div class="btn-group">
@@ -128,5 +129,6 @@
                 </div>
             </div>
         </div>
+          <button class="signin" type="button" onclick="cache()">Download website</button>
     </nav>
 </header>

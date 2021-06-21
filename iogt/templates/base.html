@@ -45,21 +45,13 @@
         </div>
 
          {# Global javascript #}  
-
-        {% if settings.home.CacheSettings.cache %}
-             <script>
-                function cache() {
-                   if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.register('{% url "sw.js" %}', { scope: '/' })
-                }}  
-            </script>
-        {% else %}
-            <script>
+        <script src="{% static 'js/home.js' %}"></script>
+        <script>
+            function cache() {
                 if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.register('{% url "sw.js" %}', { scope: '/' })
-                }
-            </script>
-        {% endif %}
+                navigator.serviceWorker.register('{% url "sw.js" %}', { scope: '/' })
+            }}  
+        </script>
         {% block extra_js %}{% endblock %}
     </body>
 </html>
