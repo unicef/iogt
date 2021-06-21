@@ -46,10 +46,10 @@
          {# Global javascript #}  
         <script src="{% static 'js/home.js' %}"></script>
         <script>
-            function cache() {
+            async function cache() {
                 if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('{% url "sw.js" %}', { scope: '/' })
-            }}  
+                navigator.serviceWorker.register('{% url "sw.js" %}', { scope: '/' })}
+            }  
         </script>
         {% block extra_js %}{% endblock %}
     </body>
