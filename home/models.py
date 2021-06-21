@@ -223,8 +223,8 @@ class FooterPage(Article):
 class CacheSettings(BaseSetting):
     cache = models.BooleanField(
         default=True,
-        verbose_name=_("Enable caching?"),
-        help_text=_("provide users with the ability to cache the website content"),
+        verbose_name=_("Prompt users to download?"),
+        help_text=_("check to prompt first time users to download the website as an app"),
     )
 
     panels = [
