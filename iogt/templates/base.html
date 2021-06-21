@@ -35,7 +35,7 @@
 
         <div id="app">
             <div id="content-wrap">
-                {% if first_time_user %}{% include "cache_banner.html" %}{% endif %}
+                {% if settings.home.CacheSettings.cache and first_time_user %}{% include "cache_banner.html" %}{% endif %}
                 {% include "header.html" %}
                 {% include "messages.html" %}
                 {% block content %}{% endblock %}
