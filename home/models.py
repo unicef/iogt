@@ -1,21 +1,26 @@
+from comments.models import CommentableMixin
 from django.db import models
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
-from modelcluster.fields import ParentalKey
 
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from taggit.models import TaggedItemBase
+from iogt.views import create_final_external_link
+from modelcluster.fields import ParentalKey
+from wagtail.admin.edit_handlers import (FieldPanel, InlinePanel,
+                                         MultiFieldPanel, ObjectList,
+                                         PageChooserPanel, StreamFieldPanel,
+                                         TabbedInterface)
 from wagtail.core import blocks
-from wagtail.core.models import Page, Orderable
 from wagtail.core.fields import StreamField
-from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, TabbedInterface, ObjectList, \
-    MultiFieldPanel, PageChooserPanel, InlinePanel
+from wagtail.core.models import Orderable, Page
+
 from wagtail.core.rich_text import get_text_for_indexing
-from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.blocks import ImageChooserBlock
+from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
-from wagtail.snippets.models import register_snippet
 from wagtailmarkdown.blocks import MarkdownBlock
 
-from comments.models import CommentableMixin
 from .blocks import MediaBlock
 
 
@@ -94,6 +99,29 @@ class Section(Page):
         return context
 
 
+class ArticleTag(TaggedItemBase):
+    """The through model between Article and Tag"""
+    content_object = ParentalKey('Article', related_name='tagged_items', on_delete=models.CASCADE)
+
+
+class ArticleRecommendation(Orderable):
+    source = ParentalKey('Article', related_name='recommended_articles', on_delete=models.CASCADE, blank=True)
+    article = models.ForeignKey('Article', on_delete=models.CASCADE)
+
+    panels = [
+        PageChooserPanel('article')
+    ]
+
+
+class SectionRecommendation(Orderable):
+    source = ParentalKey('Article', related_name='recommended_sections', on_delete=models.CASCADE)
+    section = models.ForeignKey('Section', on_delete=models.CASCADE)
+
+    panels = [
+        PageChooserPanel('section')
+    ]
+
+
 class Article(Page, CommentableMixin):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
@@ -102,6 +130,8 @@ class Article(Page, CommentableMixin):
         blank=True,
         null=True
     )
+
+    tags = ClusterTaggableManager(through=ArticleTag, blank=True)
     body = StreamField([
         ('heading', blocks.CharBlock(form_classname="full title")),
         ('paragraph', blocks.RichTextBlock()),
@@ -132,7 +162,16 @@ class Article(Page, CommentableMixin):
 
     content_panels = Page.content_panels + [
         ImageChooserPanel('lead_image'),
-        StreamFieldPanel('body')
+        StreamFieldPanel('body'),
+        MultiFieldPanel([
+            InlinePanel('recommended_articles', label=_("Recommended Articles")),
+            InlinePanel('recommended_sections', label=_("Recommended Sections"))
+        ],
+            heading='Recommended Content')
+    ]
+
+    promote_panels = Page.promote_panels + [
+        MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
     ]
 
     search_fields = [
@@ -145,7 +184,7 @@ class Article(Page, CommentableMixin):
 
     edit_handler = TabbedInterface([
         ObjectList(content_panels, heading='Content'),
-        ObjectList(Page.promote_panels, heading='Promote'),
+        ObjectList(promote_panels, heading='Promote'),
         ObjectList(Page.settings_panels, heading='Settings'),
         ObjectList(CommentableMixin.comments_panels, heading='Comments')
     ])
@@ -191,31 +230,22 @@ class BannerPage(Page):
         FieldPanel('external_link'),
     ]
 
+    @property
+    def final_external_link(self):
+        if self.banner_link_page:
+            return self.banner_link_page.url
+        if self.external_link:
+            return create_final_external_link(self.external_link)
+        else:
+            return "#"
 
-@register_snippet
-class Footer(models.Model):
-    title = models.CharField(max_length=255)
-    logos = StreamField([
-        ('image', ImageChooserBlock(required=False))
-    ], blank=True)
-    navigation = StreamField([
-        ('link_group', blocks.StructBlock([
-            ('title', blocks.CharBlock()),
-            ('links', blocks.StreamBlock([
-                ('page', blocks.PageChooserBlock())
-            ]))
-        ], required=False))
-    ], blank=True)
-    essential = StreamField([
-        ('page', blocks.PageChooserBlock()),
-    ])
 
-    panels = [
-        FieldPanel('title'),
-        StreamFieldPanel('logos'),
-        StreamFieldPanel('navigation'),
-        StreamFieldPanel('essential'),
-    ]
+class FooterIndexPage(Page):
+    parent_page_types = ['home.HomePage']
+    subpage_types = ['home.FooterPage']
 
-    def __str__(self):
-        return self.title
+
+class FooterPage(Article):
+    parent_page_types = ['home.FooterIndexPage']
+    subpage_types = []
+    template = 'home/article.html'
