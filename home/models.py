@@ -113,7 +113,7 @@ class Article(Page, CommentableMixin):
         ('numbered_list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
         ('page', blocks.PageChooserBlock()),
         ('media', MediaBlock(icon='media')),
-        ('chat_bot', ChatBotButtonBlock(icon='code')),
+        ('chat_bot', ChatBotButtonBlock()),
     ])
     show_in_menus_default = True
 

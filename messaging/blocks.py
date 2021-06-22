@@ -10,6 +10,11 @@ class ChatBotChannelChooserBlock(blocks.ChooserBlock):
 
 
 class ChatBotButtonBlock(blocks.StructBlock):
+    subject = blocks.CharBlock()
     button_text = blocks.CharBlock()
     trigger_string = blocks.CharBlock()
     channel = ChatBotChannelChooserBlock()
+
+    class Meta:
+        icon = 'code'
+        template = 'messaging/blocks/chat_with_bot.html'
