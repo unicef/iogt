@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -15,6 +16,8 @@ from .forms import MessageReplyForm, NewMessageForm, NewMessageFormMultiple
 from .models import Thread
 from .serializers import RapidProMessageSerializer
 from django.contrib.auth.decorators import login_required
+
+User = get_user_model()
 
 
 @method_decorator(login_required, name='dispatch')
@@ -112,11 +115,15 @@ class ThreadDeleteView(DeleteView):
     template_name = "messaging/thread_confirm_delete.html"
 
     def delete(self, request, *args, **kwargs):
-        self.get_object().filter(user=request.user).user_threads.update(deleted=True)
+        self.get_object().user_threads.filter(user=request.user).update(is_active=False)
         return HttpResponseRedirect(self.get_success_url())
 
 
+
+
+
 class RapidProWebhook(APIView):
+
     # TODO: Add basic authentication in authentication_classes
     def post(self, request):
         serializer = RapidProMessageSerializer(data=request.data)
@@ -134,6 +141,6 @@ class RapidProWebhook(APIView):
         # TODO: Extract attachments from messages.
 
         chat_manager = ChatManager(thread)
-        chat_manager.create_reply(text=content)
+        chat_manager.create_reply(sender=User.get_rapidpro_bot_user(), text=content)
 
         return Response(status=200)

@@ -4,8 +4,8 @@ from .models import Message, UserThread, ChatbotChannel, Thread
 
 
 class UserThreadAdmin(admin.ModelAdmin):
-    list_display = ["thread", "user", "unread", "deleted"]
-    list_filter = ["unread", "deleted"]
+    list_display = ["thread", "user", "is_read", "is_active"]
+    list_filter = ["is_read", "is_active"]
     raw_id_fields = ["user"]
 
 

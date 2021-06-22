@@ -64,6 +64,9 @@ class Command(BaseCommand):
 
         models.HomePageBanner.objects.create(source=home, banner_page=banner_page)
 
+        # Create RapidPro Bot User
+        management.call_command('sync_rapidpro_bot_user')
+
     def handle(self, *args, **options):
         self.clear()
         self.stdout.write('Existing site structure cleared')

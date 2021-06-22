@@ -16,11 +16,6 @@ class ChatbotChannel(models.Model):
     display_name = models.CharField(max_length=80)
     request_url = models.URLField(max_length=200)
 
-    def channel_uuid(self):
-        # TODO: Validate the format of the URL in the entry form.
-        # Otherwise this method may throw an exception.
-        return uuid.UUID(re.search('^https?://.+/c/ex/([0-9a-fA-F\-]*)/receive$', self.request_url).group(1))
-
     def __str__(self):
         return f"{self.display_name}: {self.identifier}, {self.request_url}"
 
@@ -28,11 +23,10 @@ class ChatbotChannel(models.Model):
 class Thread(models.Model):
     subject = models.CharField(max_length=150)
     users = models.ManyToManyField(get_user_model(), through="UserThread")
-    chatbot = models.ForeignKey(ChatbotChannel, on_delete=models.PROTECT)
-    uuid = models.UUIDField(default=uuid.uuid4)
+    chatbot = models.ForeignKey('ChatbotChannel', on_delete=models.PROTECT)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
 
-    # TODO: Update this when message is sent or received
-    last_message_at = models.DateTimeField(default=None)
+    last_message_at = models.DateTimeField(null=True, editable=False, default=None)
 
     objects = models.Manager()
     thread_objects = ThreadQuerySet.as_manager()
@@ -48,7 +42,6 @@ class Thread(models.Model):
             self.user_threads.update(is_read=False)
 
     def __str__(self):
-        # TODO: Ehmad
         return f"{self.subject}: {self.chatbot.display_name} {', '.join([str(user) for user in self.users.all()])}"
 
     def get_absolute_url(self):
@@ -65,15 +58,7 @@ class UserThread(models.Model):
 
 class Message(models.Model):
     thread = models.ForeignKey('Thread', related_name="messages", on_delete=models.CASCADE)
-
-    # TODO: Find a way to remove sent_from_bot
-    sender = models.ForeignKey(get_user_model(), null=True, related_name="sent_messages",
-                               on_delete=models.CASCADE)
-    # If sent_from_bot is True, the sender is ignored and instead the chatbot
-    # that's in the thread is considered as the sender.
-    # TODO: Is there an automatic way on entry creation/modification
-    # to validate that sender must not be null if sent_from_bot is False?
-    sent_from_bot = models.BooleanField(default=False)
+    sender = models.ForeignKey(get_user_model(), null=True, related_name="sent_messages", on_delete=models.CASCADE)
     sent_at = models.DateTimeField(auto_now_add=True)
 
     content = models.TextField()
@@ -81,8 +66,8 @@ class Message(models.Model):
     rapid_pro_message_id = models.IntegerField(null=True)
     # Attachments and quick replies are encoded as a json string
 
-    quick_replies = models.JSONField(default=[])
-    attachments = models.JSONField(default=[])
+    quick_replies = models.JSONField(default=dict)
+    attachments = models.JSONField(default=dict)
 
     class Meta:
         ordering = ("sent_at",)

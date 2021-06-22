@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from .models import Message, Thread, UserThread
 from messaging.rapidpro_client import RapidProClient
 
@@ -6,16 +8,17 @@ class ChatManager:
     def __init__(self, thread=None):
         self.thread = thread
 
-    def create_rapidpro_reply(self, text, sender=None):
+    def create_rapidpro_reply(self, text, sender):
         if not self.thread:
             raise Exception('No thread found.')
         client = RapidProClient(self.thread)
         client.send_reply(text)
         Message.objects.create(thread=self.thread, sender=sender, content=text)
+        self.thread.last_message_at = timezone.now()
+        self.thread.save(update_fields=['last_message_at'])
 
-    def create_reply(self, text, sender=None):
+    def create_reply(self, text, sender):
         self.create_rapidpro_reply(sender, text)
-        # TODO: Check if not Bot User
         self.thread.mark_unread(sender)
 
     @classmethod

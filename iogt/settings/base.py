@@ -244,4 +244,11 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('fr', _('French')),
 ]
 
+# ========= Rapid Pro =================
+RAPIDPRO_BOT_USER_ID = os.getenv('RAPIDPRO_BOT_USER_ID')
+RAPIDPRO_BOT_USER_USERNAME = os.getenv('RAPIDPRO_BOT_USER_USERNAME')
+RAPIDPRO_BOT_USER_PASSWORD = os.getenv('RAPIDPRO_BOT_USER_PASSWORD')
+
+
+
 from .profanity_settings import *
