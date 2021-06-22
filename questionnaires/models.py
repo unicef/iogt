@@ -397,7 +397,6 @@ class Poll(QuestionnairePage, AbstractForm):
             total_submissions = len(submissions)
             for key in results:
                 for k,v in results[key].items():
-                    print(k, v)
                     results[key][k] = round(v/total_submissions, 4) * 100
 
         context.update({
