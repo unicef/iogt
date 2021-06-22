@@ -10,7 +10,8 @@ class RapidProClient:
         self.chatbot_url = thread.chatbot.request_url
 
     def send_reply(self, text):
-        return requests.get(url=self.chatbot_url, params={
+        response = requests.get(url=self.chatbot_url, params={
             'from': self.thread.uuid,
             'text': text,
-        })
+        }, verify=False)
+        return response

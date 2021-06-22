@@ -14,6 +14,10 @@ class User(AbstractUser):
 
     has_filled_registration_survey = models.BooleanField(default=False)
 
+    @property
+    def is_rapidpro_bot_user(self):
+        return self.pk == settings.RAPIDPRO_BOT_USER_ID
+
     @classmethod
     def get_rapidpro_bot_user(cls):
         return cls.objects.get(pk=settings.RAPIDPRO_BOT_USER_ID)

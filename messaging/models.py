@@ -8,7 +8,6 @@ from django.db import models
 from django.urls import reverse
 
 from .querysets import ThreadQuerySet
-from .signals import message_sent
 
 
 class ChatbotChannel(models.Model):

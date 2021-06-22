@@ -6,15 +6,15 @@ class ThreadQuerySet(QuerySet):
         return self.filter(user_threads__user=user)
 
     def inbox(self):
-        return self.filter(user_threads__is_active=False)
+        return self.filter(user_threads__is_active=True)
 
     def deleted(self):
-        return self.filter(user_threads__is_active=True)
+        return self.filter(user_threads__is_active=False)
 
     def unread(self):
         return self.filter(
-            user_threads__is_active=False,
-            user_threads__is_read=True
+            user_threads__is_active=True,
+            user_threads__is_read=False
         )
 
     def order_by_latest(self):

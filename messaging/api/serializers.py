@@ -3,9 +3,9 @@ from rest_framework import serializers
 
 class RapidProMessageSerializer(serializers.Serializer):
     id = serializers.CharField()
-    content = serializers.CharField()
+    text = serializers.CharField()
     to = serializers.UUIDField()
-    from_ = serializers.UUIDField(required=False)
+    from_ = serializers.CharField(required=False)
     channel = serializers.UUIDField()
     quick_replies = serializers.JSONField()
 
