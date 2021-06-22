@@ -2,12 +2,20 @@ from comments.models import CommentableMixin
 from django.db import models
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
+
+from iogt.settings.base import WAGTAIL_CONTENT_LANGUAGES
 from iogt.views import create_final_external_link
 from modelcluster.fields import ParentalKey
-from wagtail.admin.edit_handlers import (FieldPanel, InlinePanel,
-                                         MultiFieldPanel, ObjectList,
-                                         PageChooserPanel, StreamFieldPanel,
-                                         TabbedInterface)
+from wagtail.admin.edit_handlers import (
+    FieldPanel,
+    InlinePanel,
+    MultiFieldPanel,
+    ObjectList,
+    PageChooserPanel,
+    StreamFieldPanel,
+    TabbedInterface
+)
+from wagtail.contrib.settings.models import BaseSetting
 from wagtail.core import blocks
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Orderable, Page
@@ -211,3 +219,110 @@ class FooterPage(Article):
     parent_page_types = ['home.FooterIndexPage']
     subpage_types = []
     template = 'home/article.html'
+
+
+class ManifestSettings(models.Model):
+    name = models.CharField(
+        max_length=255,
+        verbose_name=_("Name"),
+        help_text=_("Provide name"),
+    )
+    short_name = models.CharField(
+        max_length=255,
+        verbose_name=_("Short name"),
+        help_text=_("Provide short name"),
+    )
+    scope = models.URLField(
+        verbose_name=_("Scope"),
+        help_text=_("Provide scope"),
+    )
+    background_color = models.CharField(
+        max_length=10,
+        verbose_name=_("Background color"),
+        help_text=_("Provide background color (example: #FFF)"),
+    )
+    theme_color = models.CharField(
+        max_length=10,
+        verbose_name=_("Theme color"),
+        help_text=_("Provide theme color(example: #493174)"),
+    )
+    description = models.CharField(
+        max_length=500,
+        verbose_name=_("Description"),
+        help_text=_("Provide description"),
+    )
+    language = models.CharField(
+        max_length=2,
+        choices=WAGTAIL_CONTENT_LANGUAGES,
+        default="en",
+        verbose_name=_("Language"),
+        help_text=_("Choose language"),
+    )
+    icon_96_96 = models.ForeignKey(
+        "wagtailimages.Image",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='+',
+        verbose_name=_("Icon 96x96"),
+        help_text=_("Add PNG icon 96x96 px"),
+    )
+    icon_512_512 = models.ForeignKey(
+        "wagtailimages.Image",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='+',
+        verbose_name=_("Icon 512x512"),
+        help_text=_("Add PNG icon 512x512 px"),
+    )
+    icon_196_196 = models.ForeignKey(
+        "wagtailimages.Image",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='+',
+        verbose_name=_("Icon 196x196 (maskable)"),
+        help_text=_("Add PNG icon 196x196 px (maskable image can be created using https://maskable.app/)"),
+    )
+
+    panels = [
+        MultiFieldPanel(
+            [
+                FieldPanel("language"),
+            ],
+            heading="Language",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel("name"),
+                FieldPanel("short_name"),
+                FieldPanel("description"),
+                FieldPanel("scope"),
+            ],
+            heading="Info",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel("theme_color"),
+                FieldPanel("background_color"),
+            ],
+            heading="Colors",
+        ),
+        MultiFieldPanel(
+            [
+                ImageChooserPanel("icon_96_96"),
+                ImageChooserPanel("icon_512_512"),
+                ImageChooserPanel("icon_196_196"),
+            ],
+            heading="Icons",
+        ),
+    ]
+
+    def __str__(self):
+        return f"Manifest for {self.name} - {self.language}"
+
+    class Meta:
+        unique_together = ("language", "scope",)
+        verbose_name = "Manifest settings"
+        verbose_name_plural = "Manifests settings"
