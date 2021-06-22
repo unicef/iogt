@@ -22,7 +22,7 @@ urlpatterns = [
     path('comments/', include('django_comments_xtd.urls')),
     path("external-link/", TransitionPageView.as_view(), name="external-link"),
     path('messaging/', include('messaging.urls'), name='messaging-urls'),
-    path("manifest.json", get_manifest, name="manifest"),
+    path("manifest.webmanifest", get_manifest, name="manifest"),
 ]
 
 if settings.DEBUG:
