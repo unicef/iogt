@@ -9,7 +9,7 @@ from iogt_users.factories import UserFactory
 
 class PostRegistrationRedirectTests(TestCase):
     def setUp(self) -> None:
-        self.user = UserFactory()
+        self.user = UserFactory(has_filled_registration_survey=False)
         self.admin_user = UserFactory()
 
         self.home_page = HomePage.objects.first()
