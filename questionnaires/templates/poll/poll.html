@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load wagtailcore_tags %}
 {% load i18n %}
 
 {% block content %}
@@ -7,20 +8,10 @@
     <div>
         <p>{{ page.description }}</p>
         <hr>
-        <form action="{% if page.allow_anonymous_submissions %}{% url "vote" page.id %}{% else %}{% url "auth_vote" page.id %}{% endif %}" method="post">
+        <form action="{% pageurl page %}" method="POST">
             {% csrf_token %}
             <div>
-                {% for choice in choices %}
-                    {% if choice.errors %}
-                        <p>
-                            <strong>{{ choice.errors|join:", " }}</strong>
-                        </p>
-                    {% endif %}
-                    <div>
-                        <input type="{% if page.allow_multiple_choice %}checkbox{% else %}radio{% endif %}" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
-                        <label for="choice{{ forloop.counter }}">{{ choice }}</label>
-                    </div>
-                {% endfor %}
+                {{ form.as_p }}
             </div>
             <div>
                 <input type="submit" value="{% trans page.submit_button_text %}"/>

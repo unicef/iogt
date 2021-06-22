@@ -1,5 +1,7 @@
 import json
 
+from django.utils.functional import cached_property
+
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
@@ -65,113 +67,31 @@ class QuestionnairePage(Page):
         abstract = True
 
 
-class Poll(QuestionnairePage):
-    template = "poll/poll.html"
-    parent_page_types = ["home.HomePage", "home.Section", "home.Article"]
-    subpage_types = ["questionnaires.Choice"]
-
-    show_results = models.BooleanField(
-        default=True, help_text=_("This option allows the users to see the results.")
+class SurveyFormField(AbstractFormField):
+    page = ParentalKey("Survey", on_delete=models.CASCADE, related_name="survey_form_fields")
+    required = models.BooleanField(verbose_name=_('required'), default=False)
+    admin_label = models.CharField(
+        verbose_name=_('admin_label'),
+        max_length=256,
+        help_text=_('Column header used during CSV export of survey '
+                    'responses.'),
     )
-    result_as_percentage = models.BooleanField(
-        default=True,
-        help_text=_(
-            "If not checked, the results will be shown as a total instead of a percentage."
-        ),
-    )
-    allow_multiple_choice = models.BooleanField(
-        default=False, help_text=_("Allows the user to choose more than one option.")
-    )
-    randomise_options = models.BooleanField(
+    page_break = models.BooleanField(
         default=False,
         help_text=_(
-            "Randomising the options allows the options to be shown in a different "
-            "order each time the page is displayed."
-        ),
+            'Inserts a page break which puts the next question onto a new page'
+        )
     )
-
-    content_panels = Page.content_panels + [
-        MultiFieldPanel(
-            [
-                FieldPanel("allow_anonymous_submissions"),
-                FieldPanel("show_results"),
-                FieldPanel("randomise_options"),
-                FieldPanel("result_as_percentage"),
-                FieldPanel("allow_multiple_choice"),
-                FieldPanel("allow_multiple_submissions"),
-                FieldPanel("submit_button_text"),
-            ],
-            heading=_(
-                "General settings for poll",
-            ),
-        ),
-        MultiFieldPanel(
-            [
-                StreamFieldPanel("description"),
-            ],
-            heading=_(
-                "Description at poll page",
-            ),
-        ),
-        MultiFieldPanel(
-            [
-                StreamFieldPanel("thank_you_text"),
-            ],
-            heading="Description at thank you page",
-        ),
+    panels = [
+        FieldPanel('label'),
+        FieldPanel('help_text'),
+        FieldPanel('required'),
+        FieldPanel('field_type', classname="formbuilder-type"),
+        FieldPanel('choices', classname="formbuilder-choices"),
+        FieldPanel('default_value', classname="formbuilder-default"),
+        FieldPanel('admin_label'),
+        FieldPanel('page_break'),
     ]
-
-    def choices(self):
-        if self.randomise_options:
-            return Choice.objects.live().child_of(self).order_by("?")
-        return Choice.objects.live().child_of(self)
-
-    def get_context(self, request, *args, **kwargs):
-        context = super().get_context(request, *args, **kwargs)
-        context["choices"] = self.choices
-        return context
-
-    class Meta:
-        verbose_name = "Poll"
-        verbose_name_plural = "Polls"
-
-
-class Choice(Page):
-    parent_page_types = ["questionnaires.Poll"]
-    subpage_types = []
-
-    votes = models.IntegerField(default=0)
-    choice_votes = models.ManyToManyField(
-        "ChoiceVote", related_name="choices", blank=True
-    )
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        verbose_name = "Choice"
-        verbose_name_plural = "Choices"
-
-
-class ChoiceVote(models.Model):
-    user = models.ForeignKey(
-        User,
-        related_name="choice_votes",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-    )
-    choice = models.ManyToManyField(Choice, blank=True)
-    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, null=True)
-    submission_date = models.DateField(null=True, blank=True, auto_now_add=True)
-
-    @property
-    def answer(self):
-        return ",".join([c.title for c in self.choice.all()])
-
-
-class SurveyFormField(AbstractFormField):
-    page = ParentalKey("Survey", on_delete=models.CASCADE, related_name="form_fields")
 
 
 class Survey(QuestionnairePage, AbstractForm):
@@ -211,11 +131,21 @@ class Survey(QuestionnairePage, AbstractForm):
             ],
             heading="Description at thank you page",
         ),
-        InlinePanel("form_fields", label="Form fields"),
+        InlinePanel("survey_form_fields", label="Form fields"),
     ]
 
+    @cached_property
+    def has_page_breaks(self):
+        return any(
+            field.page_break
+            for field in self.get_form_fields()
+        )
+
+    def get_form_fields(self):
+        return self.survey_form_fields.all()
+
     def get_submission_class(self):
-        return SurveySubmission
+        return UserSubmission
 
     def process_form_submission(self, form):
         self.get_submission_class().objects.create(
@@ -304,12 +234,23 @@ class Survey(QuestionnairePage, AbstractForm):
         context["fields_step"] = step
         return render(request, self.template, context)
 
+    def get_data_fields(self):
+        data_fields = [
+            ('user', _('User')),
+            ('submit_time', _('Submission Date')),
+        ]
+        data_fields += [
+            (field.clean_name, field.admin_label)
+            for field in self.get_form_fields()
+        ]
+        return data_fields
+
     class Meta:
         verbose_name = "survey"
         verbose_name_plural = "surveys"
 
 
-class SurveySubmission(AbstractFormSubmission):
+class UserSubmission(AbstractFormSubmission):
     user = models.ForeignKey(
         base.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True
     )
@@ -322,3 +263,155 @@ class SurveySubmission(AbstractFormSubmission):
             }
         )
         return form_data
+
+
+class PollFormField(AbstractFormField):
+    page = ParentalKey("Poll", on_delete=models.CASCADE, related_name="poll_form_fields")
+    CHOICES = (
+        ('checkbox', _('Checkbox')),
+        ('checkboxes', _('Checkboxes')),
+        ('multiselect', _('Multiple select')),
+        ('radio', _('Radio buttons')),
+    )
+    field_type = models.CharField(
+        verbose_name='field type',
+        max_length=16,
+        choices=CHOICES
+    )
+
+
+class Poll(QuestionnairePage, AbstractForm):
+    template = "poll/poll.html"
+    parent_page_types = ["home.HomePage", "home.Section", "home.Article"]
+
+    show_results = models.BooleanField(
+        default=True, help_text=_("This option allows the users to see the results.")
+    )
+    result_as_percentage = models.BooleanField(
+        default=True,
+        help_text=_(
+            "If not checked, the results will be shown as a total instead of a percentage."
+        ),
+    )
+
+    # TODO allow randomising option ?
+    # randomise_options = models.BooleanField(
+    #     default=False,
+    #     help_text=_(
+    #         "Randomising the options allows the options to be shown in a different "
+    #         "order each time the page is displayed."
+    #     ),
+    # )
+
+    content_panels = Page.content_panels + [
+        FormSubmissionsPanel(),
+        MultiFieldPanel(
+            [
+                FieldPanel("allow_anonymous_submissions"),
+                FieldPanel("show_results"),
+                FieldPanel("result_as_percentage"),
+                FieldPanel("allow_multiple_submissions"),
+                FieldPanel("submit_button_text"),
+            ],
+            heading=_(
+                "General settings for poll",
+            ),
+        ),
+        MultiFieldPanel(
+            [
+                StreamFieldPanel("description"),
+            ],
+            heading=_(
+                "Description at poll page",
+            ),
+        ),
+        MultiFieldPanel(
+            [
+                StreamFieldPanel("thank_you_text"),
+            ],
+            heading="Description at thank you page",
+        ),
+        InlinePanel("poll_form_fields", label="Poll Form fields", min_num=1, max_num=1),
+    ]
+
+    class Meta:
+        verbose_name = "Poll"
+        verbose_name_plural = "Polls"
+
+    def get_form_fields(self):
+        return self.poll_form_fields.all()
+
+    def get_submission_class(self):
+        return UserSubmission
+
+    def process_form_submission(self, form):
+        self.get_submission_class().objects.create(
+            form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder),
+            page=self,
+            user=form.user,
+        )
+
+    def serve(self, request, *args, **kwargs):
+        if (
+            not self.allow_multiple_submissions
+            and self.get_submission_class()
+            .objects.filter(page=self, user__pk=request.user.pk)
+            .exists()
+        ):
+            return render(request, self.template, self.get_context(request))
+
+        return super().serve(request, *args, **kwargs)
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        results = dict()
+        # Get information about form fields
+        data_fields = [
+            (field.clean_name, field.label)
+            for field in self.get_form_fields()
+        ]
+
+        submissions = self.get_submission_class().objects.filter(page=self)
+        for submission in submissions:
+            data = submission.get_data()
+
+            # Count results for each question
+            for name, label in data_fields:
+                answer = data.get(name)
+                if answer is None:
+                    # Something wrong with data.
+                    # Probably you have changed questions
+                    # and now we are receiving answers for old questions.
+                    # Just skip them.
+                    continue
+
+                if type(answer) is list:
+                    # Answer is a list if the field type is 'Checkboxes'
+                    answer = u', '.join(answer)
+
+                question_stats = results.get(label, {})
+                question_stats[answer] = question_stats.get(answer, 0) + 1
+                results[label] = question_stats
+
+        if self.result_as_percentage:
+            total_submissions = len(submissions)
+            for key in results:
+                for k,v in results[key].items():
+                    print(k, v)
+                    results[key][k] = round(v/total_submissions, 4) * 100
+
+        context.update({
+            'results': results,
+        })
+        return context
+
+    def get_data_fields(self):
+        data_fields = [
+            ('user', _('User')),
+            ('submit_time', _('Submission Date')),
+        ]
+        data_fields += [
+            (field.clean_name, field.label)
+            for field in self.get_form_fields()
+        ]
+        return data_fields
