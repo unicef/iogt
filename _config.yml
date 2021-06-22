@@ -1,0 +1,20 @@
+url: "https://unicef.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "/iogt" # the subpath of your site, e.g. /blog
+title: "IoGT" # the name of your site, e.g. ACME Corp.
+
+tagline: "Live Better Today"
+description: >-
+  UNICEF Internet of Good Things website
+
+author: "UNICEF IoGT"
+
+sass:
+  sass_dir: _sass
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+
+exclude:
+  - .idea/
