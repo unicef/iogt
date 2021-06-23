@@ -5,11 +5,13 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/section.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/banner.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/featured_content.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/sub_sections.css' %}">
 {% endblock extra_css %}
 
 {% block content %}
     <div class="home">
-        {% render_banners_list banners %}
         {% render_featured_content_list featured_content %}
+        {% render_sub_sections_list sub_sections %}
+        {% render_articles_list articles %}
     </div>
 {% endblock content %}

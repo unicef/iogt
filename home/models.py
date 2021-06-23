@@ -28,7 +28,7 @@ from .blocks import (MediaBlock, SocialMediaLinkBlock,
 
 
 class HomePage(Page):
-    template = 'home/section.html'
+    template = 'home/home_page.html'
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
@@ -94,11 +94,18 @@ class Section(Page):
         ImageChooserPanel('icon'),
         ImageChooserPanel('icon_active'),
         FieldPanel('color'),
+        MultiFieldPanel([
+            InlinePanel('featured_content', max_num=1, label=_("Featured Content")),
+        ], heading=_('Featured Content')),
     ]
 
     def get_context(self, request):
         context = super().get_context(request)
-        context['articles'] = self.get_children().type(Article)
+        context['featured_content'] = [
+            featured_content.content for featured_content in self.featured_content.filter(content__live=True)
+        ]
+        context['sub_sections'] = self.get_children().live().type(Section)
+        context['articles'] = self.get_children().live().type(Article)
         return context
 
 
