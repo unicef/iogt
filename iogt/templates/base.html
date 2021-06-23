@@ -43,7 +43,7 @@
             </div>
         </div>
 
-        {# Global javascript #}  
+        {# Global javascript #} 
         <script>
         const successMsg = "Your app is now ready to install. If you are using a iOS device, you can install it by clicking 'Share', scrolling down and tapping 'Add to Home Screen. If using Android choose 'Add to home screen' and you should be all set!"
         const failMsg = 'Something went wrong. Can you try refreshing the page, and clicking the download website button?'
@@ -60,6 +60,11 @@
             }
         }
         </script> 
+        <noscript>
+            <style type="text/css">
+                #hideOnNonJSDevice { display:none; }
+            </style>
+        </noscript>
         {% block extra_js %}{% endblock %}
     </body>
 </html>
