@@ -1,10 +1,12 @@
 from abc import ABC
+
+from django.core.exceptions import PermissionDenied
 from django.urls import reverse
 from django.utils.html import escape
 from wagtail.core import hooks
-from wagtail.core.rich_text import LinkHandler
 from wagtail.core.models import PageViewRestriction
-from django.core.exceptions import PermissionDenied
+from wagtail.core.rich_text import LinkHandler
+
 from home.models import FooterIndexPage
 
 
