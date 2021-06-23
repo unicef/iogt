@@ -5,14 +5,13 @@ from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import (
-    CreateView,
     DeleteView,
     TemplateView,
     UpdateView,
 )
 
 from .chat import ChatManager
-from .forms import MessageReplyForm, NewMessageForm, NewMessageFormMultiple
+from .forms import MessageReplyForm, NewMessageForm
 from .models import Thread
 
 from django.contrib.auth.decorators import login_required
@@ -106,9 +105,8 @@ class ThreadDeleteView(DeleteView):
     Delete a thread.
     """
     model = Thread
-    success_url = reverse_lazy("messaging:inbox")
     template_name = "messaging/thread_confirm_delete.html"
 
     def delete(self, request, *args, **kwargs):
         self.get_object().user_threads.filter(user=request.user).update(is_active=False)
-        return HttpResponseRedirect(self.get_success_url())
+        return HttpResponseRedirect(reverse("messaging:inbox"))
