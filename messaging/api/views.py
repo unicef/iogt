@@ -2,19 +2,21 @@ from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 
 from .serializers import RapidProMessageSerializer
 from ..chat import ChatManager
 from ..models import Thread
+from iogt_users.authentication import IogtBasicAuthentication
 
 User = get_user_model()
 
 
 class RapidProWebhook(APIView):
+    authentication_classes = [IogtBasicAuthentication]
+    permission_classes = [IsAuthenticated]
 
-    # TODO: Add basic authentication in authentication_classes
     def post(self, request):
-        print(request.data)
         serializer = RapidProMessageSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
