@@ -79,6 +79,7 @@ MIDDLEWARE = [
     "django.middleware.locale.LocaleMiddleware",
 
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+    'iogt_users.middlewares.RegistrationSurveyRedirectMiddleware'
 ]
 
 ROOT_URLCONF = 'iogt.urls'
