@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 
@@ -14,17 +13,38 @@ class ChatManager:
             raise Exception('No thread found.')
         self.thread = thread
 
-    def _record_message_in_database(self, sender, text):
-        Message.objects.create(thread=self.thread, sender=sender, content=text)
+    def _record_message_in_database(self, sender, rapidpro_message_id, text, quick_replies):
+        if rapidpro_message_id:
+            message, created = Message.objects.get_or_create(rapidpro_message_id=rapidpro_message_id, defaults={
+                'sender': sender,
+                'content': text,
+                'quick_replies': quick_replies,
+                'thread': self.thread,
+            })
+            if not created:
+                # If the message already exists, we concatenate the newly received
+                # messages with the existing message. An assumption here is that
+                # messages will always be received in the correct order. This should
+                # be confirmed with RapidPro
+                message.content = f'{message.content} {text}'
+                message.save(update_fields=['content'])
+        else:
+            Message.objects.create(
+                rapidpro_message_id=rapidpro_message_id, sender=sender, content=text, thread=self.thread,
+                quick_replies=quick_replies)
+
         self.thread.last_message_at = timezone.now()
         self.thread.save(update_fields=['last_message_at'])
 
-    def record_reply(self, text, sender, mark_unread=True):
+    def record_reply(self, text, sender, rapidpro_message_id=None, quick_replies=None, mark_unread=True):
+        if quick_replies is None:
+            quick_replies = []
         if not sender.is_rapidpro_bot_user:
             client = RapidProClient(self.thread)
             client.send_reply(text)
 
-        self._record_message_in_database(sender=sender, text=text)
+        self._record_message_in_database(
+            sender=sender, rapidpro_message_id=rapidpro_message_id, text=text, quick_replies=quick_replies)
 
         if mark_unread:
             self.thread.mark_unread(sender)
@@ -34,7 +54,7 @@ class ChatManager:
         thread = Thread.objects.create(subject=subject, chatbot=chatbot)
 
         chat_manager = cls(thread)
-        chat_manager.create_rapidpro_reply(sender=sender, text=text)
+        chat_manager.record_reply(sender=sender, text=text)
 
         user_threads = []
         for user in recipients + [sender]:

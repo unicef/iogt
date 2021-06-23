@@ -62,11 +62,11 @@ class Message(models.Model):
 
     content = models.TextField()
     # If sent from RapidPro, the ID the message has in RapidPro.
-    rapid_pro_message_id = models.IntegerField(null=True)
+    rapidpro_message_id = models.IntegerField(null=True)
     # Attachments and quick replies are encoded as a json string
 
-    quick_replies = models.JSONField(default=dict)
-    attachments = models.JSONField(default=dict)
+    quick_replies = models.JSONField(default=list)
+    attachments = models.JSONField(default=list)
 
     class Meta:
         ordering = ("sent_at",)

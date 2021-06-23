@@ -1,13 +1,13 @@
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy, reverse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import (
     DeleteView,
     TemplateView,
-    UpdateView,
+    DetailView,
 )
 
 from .chat import ChatManager
@@ -43,34 +43,34 @@ class InboxView(TemplateView):
 
 
 @method_decorator(login_required, name='dispatch')
-class ThreadView(UpdateView):
-    """
-    View a single Thread or POST a reply.
-    """
+class ThreadView(View):
     model = Thread
-    queryset = Thread.thread_objects
-    form_class = MessageReplyForm
-    context_object_name = "thread"
-    template_name = "messaging/thread_detail.html"
-    success_url = reverse_lazy("messaging:inbox")
+    context_object_name = 'thread'
 
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.of_user(self.request.user).distinct()
-        return qs
+    def get_context(self, thread, form=None):
+        return {
+            'thread': thread,
+            'form': form or MessageReplyForm(initial={
+                'thread': thread,
+                'user': self.request.user,
+            })}
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs.update({
-            "user": self.request.user,
-            "thread": self.object
-        })
-        return kwargs
+    def get(self, request, pk):
+        thread = get_object_or_404(Thread, pk=pk)
+        return render(request, 'messaging/thread_detail.html', context=self.get_context(thread))
 
-    def get(self, request, *args, **kwargs):
-        response = super().get(request, *args, **kwargs)
-        self.object.user_threads.filter(user=request.user).update(is_read=True)
-        return response
+    def post(self, request, pk):
+        thread = get_object_or_404(Thread, pk=pk)
+        form = MessageReplyForm(data=request.POST)
+        if form.is_valid():
+            content = form.cleaned_data['content']
+
+            chat_manager = ChatManager(thread)
+            chat_manager.record_reply(text=content, sender=request.user, mark_unread=False)
+
+            return redirect(reverse('messaging:thread_view', kwargs={'pk': thread.pk}))
+        else:
+            return render(request, 'messaging/thread_detail.html', context=self.get_context(thread, form))
 
 
 @method_decorator(login_required, name='dispatch')
@@ -78,7 +78,6 @@ class MessageCreateView(View):
     """
     Create a new thread message.
     """
-    template_name = "messaging/message_create.html"
 
     def get(self, request):
         return render(request, 'messaging/message_create.html', context={

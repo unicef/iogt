@@ -3,8 +3,9 @@ from django.contrib.auth import get_user_model
 
 from .chat import ChatManager
 from .hooks import hookset
-from .models import Message, ChatbotChannel
+from .models import Message, ChatbotChannel, Thread
 
+User = get_user_model()
 
 class UserModelChoiceField(forms.ModelChoiceField):
 
@@ -69,17 +70,9 @@ class NewMessageFormMultiple(forms.ModelForm):
         fields = ["to_user", "chatbot", "subject", "content"]
 
 
-class MessageReplyForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        self.thread = kwargs.pop("thread")
-        self.user = kwargs.pop("user")
-        super().__init__(*args, **kwargs)
+class MessageReplyForm(forms.Form):
+    content = forms.CharField(widget=forms.Textarea)
+    thread = forms.ModelChoiceField(queryset=Thread.objects.all(), widget=forms.HiddenInput)
+    user = forms.ModelChoiceField(queryset=User.objects.all(), widget=forms.HiddenInput)
 
-    def save(self, commit=True):
-        return Message.new_reply_to_rapidpro(
-            self.thread, self.user, self.cleaned_data["content"]
-        )
 
-    class Meta:
-        model = Message
-        fields = ["content"]
