@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
 from modelcluster.fields import ParentalKey
-from wagtail.admin.edit_handlers import (FieldPanel, FieldRowPanel,
+from wagtail.admin.edit_handlers import (FieldPanel,
                                          InlinePanel, MultiFieldPanel,
                                          ObjectList, PageChooserPanel,
                                          StreamFieldPanel, TabbedInterface)
