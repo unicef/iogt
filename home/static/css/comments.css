@@ -35,12 +35,12 @@
 .comments-block {
     display: block;
     width: 60%;
+    margin-top: 50px;
 }
 
 .comment-container {
     width: 50%;
     margin: auto;
-
 }
 
 .alert-danger {
