@@ -3,11 +3,9 @@ from allauth.account.forms import SignupForm, PasswordField
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.forms import TextInput
-from wagtail.users.forms import UserEditForm as WagtailUserEditForm, UserCreationForm as WagtailUserCreationForm, \
-    custom_fields, standard_fields
+from wagtail.users.forms import UserEditForm as WagtailUserEditForm, UserCreationForm as WagtailUserCreationForm
 
 from .models import User
-from .utils import get_wagtail_admin_user_standard_fields
 
 
 class AccountSignupForm(SignupForm):
@@ -53,15 +51,10 @@ class WagtailAdminUserCreateForm(WagtailUserCreationForm):
     last_name = forms.CharField(required=False, label='Last Name')
     terms_accepted = forms.BooleanField(label='I accept the terms & conditions')
 
-    class Meta(WagtailUserCreationForm.Meta):
-        fields = set([User.USERNAME_FIELD]) | get_wagtail_admin_user_standard_fields() | custom_fields
-
 
 class WagtailAdminUserEditForm(WagtailUserEditForm):
     email = forms.EmailField(required=False, label='Email')
     first_name = forms.CharField(required=False, label='First Name')
     last_name = forms.CharField(required=False, label='Last Name')
-    terms_accepted = forms.BooleanField(label='I accept the terms & conditions')
 
-    class Meta(WagtailUserEditForm.Meta):
-        fields = set([User.USERNAME_FIELD, "is_active"]) | get_wagtail_admin_user_standard_fields() | custom_fields
+    terms_accepted = forms.BooleanField(label='I accept the terms & conditions')
