@@ -1,5 +1,6 @@
 import wagtail_factories
 from django.test import Client, TestCase
+from django.http import HttpRequest
 from django.urls import reverse
 from rest_framework import status
 from wagtail.core.models import PageViewRestriction
@@ -7,8 +8,10 @@ from wagtail.core.models import PageViewRestriction
 from home.factories import (ArticleFactory, BannerIndexPageFactory,
                             BannerPageFactory, FeaturedContentFactory,
                             HomePageBannerFactory, SectionFactory)
+from iogt_users.factories import GroupFactory
 from home.models import HomePage
-from iogt_users.factories import GroupFactory, UserFactory
+from iogt_users.factories import UserFactory
+from home.wagtail_hooks import limit_page_chooser
 
 
 class PageViewGroupPermissionTests(TestCase):
@@ -47,14 +50,13 @@ class HomePageViewTests(TestCase):
     def setUp(self):
         self.user = UserFactory()
         self.client.force_login(user=self.user)
-
         self.home_page = HomePage.objects.first()
 
     def test_home_page(self):
-        response = self.client.get('')
+        response = self.client.get('/en/')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTemplateUsed(response, 'home/section.html')
+        self.assertTemplateUsed(response, 'home/home_page.html')
 
     def test_home_page_featured_content(self):
         section = SectionFactory.build(owner=self.user)
@@ -64,10 +66,10 @@ class HomePageViewTests(TestCase):
         FeaturedContentFactory(source=self.home_page, content=section)
         FeaturedContentFactory(source=self.home_page, content=article)
 
-        response = self.client.get('')
+        response = self.client.get('/en/')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTemplateUsed(response, 'home/section.html')
+        self.assertTemplateUsed(response, 'home/home_page.html')
         self.assertEqual(len(response.context['featured_content']), 2)
 
     def test_home_page_return_live_featured_content_only(self):
@@ -78,10 +80,10 @@ class HomePageViewTests(TestCase):
         FeaturedContentFactory(source=self.home_page, content=section)
         FeaturedContentFactory(source=self.home_page, content=article)
 
-        response = self.client.get('')
+        response = self.client.get('/en/')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTemplateUsed(response, 'home/section.html')
+        self.assertTemplateUsed(response, 'home/home_page.html')
         self.assertEqual(len(response.context['featured_content']), 0)
 
     def test_home_page_banners(self):
@@ -96,10 +98,10 @@ class HomePageViewTests(TestCase):
         HomePageBannerFactory(source=self.home_page, banner_page=banner_page01)
         HomePageBannerFactory(source=self.home_page, banner_page=banner_page02)
 
-        response = self.client.get('')
+        response = self.client.get('/en/')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTemplateUsed(response, 'home/section.html')
+        self.assertTemplateUsed(response, 'home/home_page.html')
         self.assertEqual(len(response.context['banners']), 2)
 
     def test_home_page_return_live_banners_only(self):
@@ -114,8 +116,60 @@ class HomePageViewTests(TestCase):
         HomePageBannerFactory(source=self.home_page, banner_page=banner_page01)
         HomePageBannerFactory(source=self.home_page, banner_page=banner_page02)
 
-        response = self.client.get('')
+        response = self.client.get('/en/')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTemplateUsed(response, 'home/section.html')
+        self.assertTemplateUsed(response, 'home/home_page.html')
         self.assertEqual(len(response.context['banners']), 0)
+
+
+class LimitPageChooserHookTests(TestCase):
+    def setUp(self):
+        self.user = UserFactory()
+        self.home_page = HomePage.objects.first()
+        self.article01 = ArticleFactory.build(owner=self.user)
+        self.section01 = SectionFactory.build(owner=self.user)
+        self.home_page.add_child(instance=self.article01)
+        self.home_page.add_child(instance=self.section01)
+        self.section02 = SectionFactory.build(owner=self.user)
+        self.article02 = ArticleFactory.build(owner=self.user)
+        self.section01.add_child(instance=self.section02)
+        self.section01.add_child(instance=self.article02)
+
+    def test_start_from_section_when_current_page_is_section(self):
+        request = HttpRequest()
+        request.path = '/admin/choose-page/'
+        request.META['HTTP_REFERER'] = f'https://example.com/admin/pages/{self.section01.id}/edit/'
+        pages = self.home_page.get_children()
+
+        pages = limit_page_chooser(pages, request)
+
+        self.assertEqual([i for i in pages.values_list('id', flat=True)], [self.section02.id, self.article02.id])
+
+    def test_start_from_section_when_parent_page_is_section(self):
+        request = HttpRequest()
+        request.path = f'/admin/choose-page/{self.section01.id}/'
+        pages = self.home_page.get_children()
+
+        pages = limit_page_chooser(pages, request)
+
+        self.assertEqual([i for i in pages.values_list('id', flat=True)], [self.section02.id, self.article02.id])
+
+    def test_do_not_change_queryset_when_current_page_is_not_a_section(self):
+        request = HttpRequest()
+        request.path = '/admin/choose-page/'
+        request.META['HTTP_REFERER'] = f'https://example.com/admin/pages/{self.home_page.id}/edit/'
+        pages_before = self.home_page.get_children()
+
+        pages_after = limit_page_chooser(pages_before, request)
+
+        self.assertEqual(pages_after, pages_before)
+
+    def test_do_not_change_queryset_when_parent_page_is_not_a_section(self):
+        request = HttpRequest()
+        request.path = f'/admin/choose-page/{self.home_page.id}/'
+        pages_before = self.home_page.get_children()
+
+        pages_after = limit_page_chooser(pages_before, request)
+
+        self.assertEqual(pages_after, pages_before)

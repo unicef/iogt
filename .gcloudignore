@@ -19,4 +19,10 @@ __pycache__/
 /setup.cfg
 
 db.sqlite3
-media/
+media*/
+initdb.d/
+legacy-initdb.d/
+requirements.dev.txt
+pytest.ini
+Makefile
+docker-compose*
