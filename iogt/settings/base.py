@@ -250,7 +250,11 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('fr', _('French')),
 ]
 
-WAGTAILTRANSFER_SOURCES = {}
+WAGTAILTRANSFER_SOURCES = {    
+    'iogt_global': {
+        'BASE_URL': 'http://iogt.org',
+        'SECRET_KEY': 'fake_secret_key_2',
+    },}
 
 WAGTAILTRANSFER_SECRET_KEY = 'fake_secret_key'
 
