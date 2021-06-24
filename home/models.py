@@ -12,7 +12,7 @@ from wagtail.admin.edit_handlers import (FieldPanel,
 from wagtail.contrib.settings.models import BaseSetting, register_setting
 from wagtail.core import blocks
 from wagtail.core.fields import StreamField
-from wagtail.core.models import Orderable, Page
+from wagtail.core.models import Orderable, Page, Site
 
 from wagtail.core.rich_text import get_text_for_indexing
 from wagtail.images.blocks import ImageChooserBlock
@@ -338,6 +338,7 @@ class SiteSettings(BaseSetting):
         default=9437184,
         help_text='Show warning if uploaded media file size is greater than this in bytes. Default is 9 MB')
     allow_anonymous_comment = models.BooleanField(default=False)
+    registration_survey = models.ForeignKey('questionnaires.Survey', null=True, blank=True, on_delete=models.SET_NULL)
 
     panels = [
         ImageChooserPanel('logo'),
@@ -397,7 +398,18 @@ class SiteSettings(BaseSetting):
             ],
             heading="Allow Anonymous Comment",
         ),
+        MultiFieldPanel(
+            [
+                PageChooserPanel('registration_survey'),
+            ],
+            heading="Registration Settings",
+        ),
     ]
+
+    @classmethod
+    def get_for_default_site(cls):
+        default_site = Site.objects.filter(is_default_site=True).first()
+        return cls.for_site(default_site)
 
     def __str__(self):
         return self.site.site_name

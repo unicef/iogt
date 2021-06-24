@@ -1,5 +1,6 @@
 import json
 
+from django.contrib.sites.models import Site
 from django.utils.functional import cached_property
 
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
@@ -8,7 +9,7 @@ from django.db import models
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from home.blocks import MediaBlock
-from home.models import HomePage
+from home.models import HomePage, SiteSettings
 from iogt.settings import base
 from iogt_users.models import User
 from modelcluster.fields import ParentalKey
@@ -148,11 +149,17 @@ class Survey(QuestionnairePage, AbstractForm):
         return UserSubmission
 
     def process_form_submission(self, form):
+        user = form.user
         self.get_submission_class().objects.create(
             form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder),
             page=self,
-            user=form.user,
+            user=user,
         )
+
+        site_settings = SiteSettings.get_for_default_site()
+        if site_settings.registration_survey.pk == self.pk:
+            user.has_filled_registration_survey = True
+            user.save(update_fields=['has_filled_registration_survey'])
 
     def serve(self, request, *args, **kwargs):
         if (
