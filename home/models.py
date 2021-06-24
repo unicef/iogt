@@ -68,15 +68,20 @@ class HomePageBanner(Orderable):
     ]
 
 
+class TaggedItem(TaggedItemBase):
+    """The through model between Page (Article/Section) and Tag"""
+    content_object = ParentalKey(Page, related_name='tagged_items', on_delete=models.CASCADE)
+
+
 class Section(Page):
-    icon = models.ForeignKey(
+    lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
         related_name='+',
         blank=True,
-        null=True,
+        null=True
     )
-    icon_active = models.ForeignKey(
+    icon = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
         related_name='+',
@@ -88,11 +93,16 @@ class Section(Page):
         blank=True,
         null=True,
     )
+    tags = ClusterTaggableManager(through=TaggedItem, blank=True)
     show_in_menus_default = True
 
+    promote_panels = Page.promote_panels + [
+        MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
+    ]
+
     content_panels = Page.content_panels + [
+        ImageChooserPanel('lead_image'),
         ImageChooserPanel('icon'),
-        ImageChooserPanel('icon_active'),
         FieldPanel('color'),
         MultiFieldPanel([
             InlinePanel('featured_content', max_num=1, label=_("Featured Content")),
@@ -107,11 +117,6 @@ class Section(Page):
         context['sub_sections'] = self.get_children().live().type(Section)
         context['articles'] = self.get_children().live().type(Article)
         return context
-
-
-class ArticleTag(TaggedItemBase):
-    """The through model between Article and Tag"""
-    content_object = ParentalKey('Article', related_name='tagged_items', on_delete=models.CASCADE)
 
 
 class ArticleRecommendation(Orderable):
@@ -141,7 +146,7 @@ class Article(Page, CommentableMixin):
         null=True
     )
 
-    tags = ClusterTaggableManager(through=ArticleTag, blank=True)
+    tags = ClusterTaggableManager(through=TaggedItem, blank=True)
     body = StreamField([
         ('heading', blocks.CharBlock(form_classname="full title")),
         ('paragraph', blocks.RichTextBlock()),
