@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'iogt_users',
     'comments',
     'iogt_content_migration',
+    'questionnaires',
     'messaging',
 
     'wagtail_localize',
