@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'wagtailmenus',
     'wagtailmedia',
     'wagtailmarkdown',
+    'wagtail_transfer',
 
     'django_comments_xtd',
     'django_comments',
@@ -245,5 +246,9 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('en', _('English')),
     ('fr', _('French')),
 ]
+
+WAGTAILTRANSFER_SOURCES = {}
+
+WAGTAILTRANSFER_SECRET_KEY = 'fake_secret_key'
 
 from .profanity_settings import *
