@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'wagtailmenus',
     'wagtailmedia',
     'wagtailmarkdown',
+    'wagtail_transfer',
     'wagtail.contrib.settings',
 
     'django_comments_xtd',
@@ -248,5 +249,13 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('en', _('English')),
     ('fr', _('French')),
 ]
+
+WAGTAILTRANSFER_SOURCES = {    
+    'iogt_global': {
+        'BASE_URL': 'http://iogt.org',
+        'SECRET_KEY': 'fake_secret_key_2',
+    },}
+
+WAGTAILTRANSFER_SECRET_KEY = 'fake_secret_key'
 
 from .profanity_settings import *

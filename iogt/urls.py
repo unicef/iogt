@@ -7,6 +7,7 @@ from search import views as search_views
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
+from wagtail_transfer import urls as wagtailtransfer_urls
 
 from iogt.views import TransitionPageView
 
@@ -20,6 +21,7 @@ urlpatterns = [
     path('comments/', include('django_comments_xtd.urls')),
     path("external-link/", TransitionPageView.as_view(), name="external-link"),
     path('messaging/', include('messaging.urls'), name='messaging-urls'),
+    path('wagtail-transfer/', include(wagtailtransfer_urls)),
     path("external-link/", TransitionPageView.as_view(), name="external-link"),
 ]
 
