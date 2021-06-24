@@ -200,7 +200,7 @@ ACCOUNT_ADAPTER = 'iogt_users.adapters.AccountAdapter'
 
 WAGTAIL_USER_EDIT_FORM = 'iogt_users.forms.WagtailAdminUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'iogt_users.forms.WagtailAdminUserCreateForm'
-WAGTAIL_USER_CUSTOM_FIELDS = ['display_name', 'terms_accepted']
+WAGTAIL_USER_CUSTOM_FIELDS = ['terms_accepted']
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
