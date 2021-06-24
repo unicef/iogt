@@ -26,6 +26,10 @@ class Thread(models.Model):
     objects = models.Manager()
     thread_objects = ThreadQuerySet.as_manager()
 
+    @property
+    def latest_message(self):
+        return self.messages.order_by('-sent_at').first()
+
     def mark_unread(self, sender=None):
         """
         Mark all related UserThread(s) unread

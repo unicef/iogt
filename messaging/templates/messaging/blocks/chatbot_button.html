@@ -1,6 +1,6 @@
 {% load wagtailimages_tags %}
 
-<div class="chat-with-bot">
+<div class="chatbot-button-container">
   <form action="{% url 'messaging:message_create' %}" method="post">
     {% csrf_token %}
     <input type="hidden" name="subject" value="{{ value.subject }}"/>

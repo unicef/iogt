@@ -33,7 +33,7 @@ class InboxView(TemplateView):
 
         context.update({
             "folder": folder,
-            "threads": threads,
+            "threads": threads.prefetch_related('messages'),
             "unread_threads": Thread.thread_objects.of_user(self.request.user).unread().order_by_latest(),
         })
         return context

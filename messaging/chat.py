@@ -14,6 +14,7 @@ class ChatManager:
         self.thread = thread
 
     def _record_message_in_database(self, sender, rapidpro_message_id, text, quick_replies):
+        # Messages sent from User to RapidPro server don't have rapidpro_message_id
         if rapidpro_message_id:
             message, created = Message.objects.get_or_create(rapidpro_message_id=rapidpro_message_id, defaults={
                 'sender': sender,
@@ -49,11 +50,11 @@ class ChatManager:
         if mark_unread:
             self.thread.mark_unread(sender)
 
-    @classmethod
-    def initiate_thread(cls, sender, recipients, chatbot, subject, text):
+    @staticmethod
+    def initiate_thread(sender, recipients, chatbot, subject, text):
         thread = Thread.objects.create(subject=subject, chatbot=chatbot)
 
-        chat_manager = cls(thread)
+        chat_manager = ChatManager(thread)
         chat_manager.record_reply(sender=sender, text=text)
 
         user_threads = []

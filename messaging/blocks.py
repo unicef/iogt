@@ -17,4 +17,4 @@ class ChatBotButtonBlock(blocks.StructBlock):
 
     class Meta:
         icon = 'code'
-        template = 'messaging/blocks/chat_with_bot.html'
+        template = 'messaging/blocks/chatbot_button.html'

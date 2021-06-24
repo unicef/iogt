@@ -10,5 +10,5 @@ class RapidProClient:
         response = requests.get(url=self.thread.chatbot.request_url, params={
             'from': self.thread.uuid,
             'text': text,
-        })
+        }, timeout=10)
         return response
