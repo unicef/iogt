@@ -21,7 +21,7 @@
                     {% endif %}
                     <div class="message-sent">{{ message.sent_at }}</div>
                 </div>
-                <div class="message-content">{{ message.content|urlize|linebreaks }}</div>
+                <div class="message-content">{{ message.text|urlize|linebreaks }}</div>
                 {% for quick_reply in message.quick_replies %}
                     {% render_quick_reply_form thread user quick_reply %}
                 {% endfor %}

@@ -1,11 +1,11 @@
 from django import forms
 from django.contrib.auth import get_user_model
 
-from .chat import ChatManager
 from .hooks import hookset
 from .models import Message, ChatbotChannel, Thread
 
 User = get_user_model()
+
 
 class UserModelChoiceField(forms.ModelChoiceField):
 
@@ -34,14 +34,7 @@ class ChatbotChannelModelMultipleChoiceField(forms.ModelMultipleChoiceField):
 class NewMessageForm(forms.Form):
     subject = forms.CharField()
     chatbot = ChatbotChannelModelChoiceField(queryset=ChatbotChannel.objects.all())
-    content = forms.CharField(widget=forms.Textarea)
-
-    def save(self, commit=True):
-        data = self.cleaned_data
-
-    class Meta:
-        model = Message
-        fields = ["chatbot", "subject", "content"]
+    text = forms.CharField(widget=forms.Textarea)
 
 
 class NewMessageFormMultiple(forms.ModelForm):
@@ -71,8 +64,6 @@ class NewMessageFormMultiple(forms.ModelForm):
 
 
 class MessageReplyForm(forms.Form):
-    content = forms.CharField(widget=forms.Textarea)
+    text = forms.CharField(widget=forms.Textarea)
     thread = forms.ModelChoiceField(queryset=Thread.objects.all(), widget=forms.HiddenInput)
     user = forms.ModelChoiceField(queryset=User.objects.all(), widget=forms.HiddenInput)
-
-

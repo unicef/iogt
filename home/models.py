@@ -20,7 +20,6 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 from wagtailmarkdown.blocks import MarkdownBlock
 
-
 from messaging.blocks import ChatBotButtonBlock
 from comments.models import CommentableMixin
 from iogt.views import create_final_external_link

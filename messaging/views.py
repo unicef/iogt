@@ -1,14 +1,11 @@
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.generic import (
-    DeleteView,
-    TemplateView,
-    DetailView,
-)
+from django.views.generic import (DeleteView, TemplateView,)
 
 from .chat import ChatManager
 from .forms import MessageReplyForm, NewMessageForm
@@ -44,6 +41,9 @@ class InboxView(TemplateView):
 
 @method_decorator(login_required, name='dispatch')
 class ThreadView(View):
+    """
+    List thread messages and reply view.
+    """
     model = Thread
     context_object_name = 'thread'
 
@@ -57,20 +57,20 @@ class ThreadView(View):
 
     def get(self, request, pk):
         thread = get_object_or_404(Thread, pk=pk)
-        return render(request, 'messaging/thread_detail.html', context=self.get_context(thread))
+        return render(request, 'messaging/thread.html', context=self.get_context(thread))
 
     def post(self, request, pk):
         thread = get_object_or_404(Thread, pk=pk)
         form = MessageReplyForm(data=request.POST)
         if form.is_valid():
-            content = form.cleaned_data['content']
+            text = form.cleaned_data['text']
 
             chat_manager = ChatManager(thread)
-            chat_manager.record_reply(text=content, sender=request.user, mark_unread=False)
+            chat_manager.record_reply(text=text, sender=request.user, mark_unread=False)
 
             return redirect(reverse('messaging:thread_view', kwargs={'pk': thread.pk}))
         else:
-            return render(request, 'messaging/thread_detail.html', context=self.get_context(thread, form))
+            return render(request, 'messaging/thread.html', context=self.get_context(thread, form))
 
 
 @method_decorator(login_required, name='dispatch')
@@ -78,24 +78,18 @@ class MessageCreateView(View):
     """
     Create a new thread message.
     """
-
-    def get(self, request):
-        return render(request, 'messaging/message_create.html', context={
-            'form': NewMessageForm(),
-        })
-
     def post(self, request):
         form = NewMessageForm(data=request.POST)
         if form.is_valid():
             user = request.user
             data = form.cleaned_data
             ChatManager.initiate_thread(
-                sender=user, recipients=[], chatbot=data['chatbot'], subject=data['subject'], text=data['content'])
+                sender=user, recipients=[], chatbot=data['chatbot'], subject=data['subject'], text=data['text'])
 
             return redirect('messaging:inbox')
-        return render(request, 'messaging/message_create.html', context={
-            'form': form,
-        })
+
+        messages.add_message(request, messages.ERROR, 'Can\'t connect with bot.')
+        return redirect(request.META.get('HTTP_REFERER'))
 
 
 @method_decorator(login_required, name='dispatch')

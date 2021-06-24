@@ -1,7 +1,4 @@
-from urllib import request, parse
-import json
 import uuid
-import re
 
 from django.contrib.auth import get_user_model
 from django.db import models
@@ -11,21 +8,20 @@ from .querysets import ThreadQuerySet
 
 
 class ChatbotChannel(models.Model):
-    identifier = models.CharField(max_length=30)
     display_name = models.CharField(max_length=80)
     request_url = models.URLField(max_length=200)
 
     def __str__(self):
-        return f"{self.display_name}: {self.identifier}, {self.request_url}"
+        return f"{self.display_name}, {self.request_url}"
 
 
 class Thread(models.Model):
+    last_message_at = models.DateTimeField(null=True, editable=False, default=None)
     subject = models.CharField(max_length=150)
-    users = models.ManyToManyField(get_user_model(), through="UserThread")
-    chatbot = models.ForeignKey('ChatbotChannel', on_delete=models.PROTECT)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
 
-    last_message_at = models.DateTimeField(null=True, editable=False, default=None)
+    chatbot = models.ForeignKey('ChatbotChannel', on_delete=models.PROTECT)
+    users = models.ManyToManyField(get_user_model(), through="UserThread")
 
     objects = models.Manager()
     thread_objects = ThreadQuerySet.as_manager()
@@ -44,29 +40,27 @@ class Thread(models.Model):
         return f"{self.subject}: {self.chatbot.display_name} {', '.join([str(user) for user in self.users.all()])}"
 
     def get_absolute_url(self):
-        return reverse("messaging:thread_detail", args=[self.pk])
+        return reverse("messaging:thread_view", args=[self.pk])
 
 
 class UserThread(models.Model):
+    is_active = models.BooleanField(default=True)
+    is_read = models.BooleanField(default=False)
+
     thread = models.ForeignKey('Thread', related_name='user_threads', on_delete=models.CASCADE)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
 
-    is_read = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-
 
 class Message(models.Model):
-    thread = models.ForeignKey('Thread', related_name="messages", on_delete=models.CASCADE)
-    sender = models.ForeignKey(get_user_model(), null=True, related_name="sent_messages", on_delete=models.CASCADE)
-    sent_at = models.DateTimeField(auto_now_add=True)
-
-    content = models.TextField()
+    # Quick replies are encoded as a json string
+    quick_replies = models.JSONField(default=list)
     # If sent from RapidPro, the ID the message has in RapidPro.
     rapidpro_message_id = models.IntegerField(null=True)
-    # Attachments and quick replies are encoded as a json string
+    sent_at = models.DateTimeField(auto_now_add=True)
+    text = models.TextField()
 
-    quick_replies = models.JSONField(default=list)
-    attachments = models.JSONField(default=list)
+    thread = models.ForeignKey('Thread', related_name="messages", on_delete=models.CASCADE)
+    sender = models.ForeignKey(get_user_model(), null=True, related_name="sent_messages", on_delete=models.CASCADE)
 
     class Meta:
         ordering = ("sent_at",)

@@ -7,18 +7,17 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import RapidProMessageSerializer
 from ..chat import ChatManager
 from ..models import Thread
-from iogt_users.authentication import IogtBasicAuthentication
+from iogt_users.authentication import RapidProBasicAuthentication
 
 User = get_user_model()
 
 
 class RapidProWebhook(APIView):
-    authentication_classes = [IogtBasicAuthentication]
+    authentication_classes = [RapidProBasicAuthentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = RapidProMessageSerializer(data=request.data)
-        print(request.data)
         serializer.is_valid(raise_exception=True)
 
         rapidpro_message_id = serializer.validated_data['id']
