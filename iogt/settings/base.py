@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     'iogt_content_migration',
     'messaging',
 
+    'wagtail_localize',
+    'wagtail_localize.locales',
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.embeds',
@@ -47,9 +49,8 @@ INSTALLED_APPS = [
     'wagtail.contrib.modeladmin',
     'wagtailmenus',
     'wagtailmedia',
-    'wagtail_localize',
-    'wagtail_localize.locales',
     'wagtailmarkdown',
+    'wagtail.contrib.settings',
 
     'django_comments_xtd',
     'django_comments',
@@ -77,8 +78,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    "django.middleware.locale.LocaleMiddleware",
 
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+    'iogt_users.middlewares.RegistrationSurveyRedirectMiddleware'
 ]
 
 ROOT_URLCONF = 'iogt.urls'
@@ -97,6 +100,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'wagtailmenus.context_processors.wagtailmenus',
+                'wagtail.contrib.settings.context_processors.settings',
             ],
         },
     },
