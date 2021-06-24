@@ -17,7 +17,7 @@ class ChatManager:
         if rapidpro_message_id:
             message, created = Message.objects.get_or_create(rapidpro_message_id=rapidpro_message_id, defaults={
                 'sender': sender,
-                'content': text,
+                'text': text,
                 'quick_replies': quick_replies,
                 'thread': self.thread,
             })
@@ -26,11 +26,11 @@ class ChatManager:
                 # messages with the existing message. An assumption here is that
                 # messages will always be received in the correct order. This should
                 # be confirmed with RapidPro
-                message.content = f'{message.content} {text}'
-                message.save(update_fields=['content'])
+                message.text = f'{message.text} {text}'
+                message.save(update_fields=['text'])
         else:
             Message.objects.create(
-                rapidpro_message_id=rapidpro_message_id, sender=sender, content=text, thread=self.thread,
+                rapidpro_message_id=rapidpro_message_id, sender=sender, text=text, thread=self.thread,
                 quick_replies=quick_replies)
 
         self.thread.last_message_at = timezone.now()
