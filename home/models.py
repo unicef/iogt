@@ -1,16 +1,15 @@
-from comments.models import CommentableMixin
 from django.db import models
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
-from iogt.views import create_final_external_link
 from modelcluster.fields import ParentalKey
-from wagtail.admin.edit_handlers import (FieldPanel, InlinePanel,
-                                         MultiFieldPanel, ObjectList,
-                                         PageChooserPanel, StreamFieldPanel,
-                                         TabbedInterface)
+from wagtail.admin.edit_handlers import (FieldPanel,
+                                         InlinePanel, MultiFieldPanel,
+                                         ObjectList, PageChooserPanel,
+                                         StreamFieldPanel, TabbedInterface)
+from wagtail.contrib.settings.models import BaseSetting, register_setting
 from wagtail.core import blocks
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Orderable, Page
@@ -21,11 +20,15 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 from wagtailmarkdown.blocks import MarkdownBlock
 
-from .blocks import MediaBlock
+from comments.models import CommentableMixin
+from iogt.views import create_final_external_link
+
+from .blocks import (MediaBlock, SocialMediaLinkBlock,
+                     SocialMediaShareButtonBlock)
 
 
 class HomePage(Page):
-    template = 'home/section.html'
+    template = 'home/home_page.html'
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
@@ -65,15 +68,20 @@ class HomePageBanner(Orderable):
     ]
 
 
+class TaggedItem(TaggedItemBase):
+    """The through model between Page (Article/Section) and Tag"""
+    content_object = ParentalKey(Page, related_name='tagged_items', on_delete=models.CASCADE)
+
+
 class Section(Page):
-    icon = models.ForeignKey(
+    lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
         related_name='+',
         blank=True,
-        null=True,
+        null=True
     )
-    icon_active = models.ForeignKey(
+    icon = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
         related_name='+',
@@ -85,23 +93,30 @@ class Section(Page):
         blank=True,
         null=True,
     )
+    tags = ClusterTaggableManager(through=TaggedItem, blank=True)
     show_in_menus_default = True
 
+    promote_panels = Page.promote_panels + [
+        MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
+    ]
+
     content_panels = Page.content_panels + [
+        ImageChooserPanel('lead_image'),
         ImageChooserPanel('icon'),
-        ImageChooserPanel('icon_active'),
         FieldPanel('color'),
+        MultiFieldPanel([
+            InlinePanel('featured_content', max_num=1, label=_("Featured Content")),
+        ], heading=_('Featured Content')),
     ]
 
     def get_context(self, request):
         context = super().get_context(request)
-        context['articles'] = self.get_children().type(Article)
+        context['featured_content'] = [
+            featured_content.content for featured_content in self.featured_content.filter(content__live=True)
+        ]
+        context['sub_sections'] = self.get_children().live().type(Section)
+        context['articles'] = self.get_children().live().type(Article)
         return context
-
-
-class ArticleTag(TaggedItemBase):
-    """The through model between Article and Tag"""
-    content_object = ParentalKey('Article', related_name='tagged_items', on_delete=models.CASCADE)
 
 
 class ArticleRecommendation(Orderable):
@@ -131,7 +146,7 @@ class Article(Page, CommentableMixin):
         null=True
     )
 
-    tags = ClusterTaggableManager(through=ArticleTag, blank=True)
+    tags = ClusterTaggableManager(through=TaggedItem, blank=True)
     body = StreamField([
         ('heading', blocks.CharBlock(form_classname="full title")),
         ('paragraph', blocks.RichTextBlock()),
@@ -244,8 +259,149 @@ class FooterIndexPage(Page):
     parent_page_types = ['home.HomePage']
     subpage_types = ['home.FooterPage']
 
+    def __str__(self):
+        return self.title
+
 
 class FooterPage(Article):
     parent_page_types = ['home.FooterIndexPage']
     subpage_types = []
     template = 'home/article.html'
+
+
+@register_setting
+class SiteSettings(BaseSetting):
+    logo = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    show_only_translated_pages = models.BooleanField(
+        default=False,
+        help_text='When selecting this option, untranslated pages'
+                  ' will not be visible to the front end user'
+                  ' when viewing a child language of the site')
+    # TODO: GA, FB analytics should be global.
+    fb_analytics_app_id = models.CharField(
+        verbose_name=_('Facebook Analytics App ID'),
+        max_length=25,
+        null=True,
+        blank=True,
+        help_text=_(
+            "The tracking ID to be used to view Facebook Analytics")
+    )
+    local_ga_tag_manager = models.CharField(
+        verbose_name=_('Local GA Tag Manager'),
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text=_(
+            "Local GA Tag Manager tracking code (e.g GTM-XXX) to be used to "
+            "view analytics on this site only")
+    )
+    global_ga_tag_manager = models.CharField(
+        verbose_name=_('Global GA Tag Manager'),
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text=_(
+            "Global GA Tag Manager tracking code (e.g GTM-XXX) to be used"
+            " to view analytics on more than one site globally")
+    )
+    local_ga_tracking_code = models.CharField(
+        verbose_name=_('Local GA Tracking Code'),
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text=_(
+            "Local GA tracking code to be used to "
+            "view analytics on this site only")
+    )
+    global_ga_tracking_code = models.CharField(
+        verbose_name=_('Global GA Tracking Code'),
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text=_(
+            "Global GA tracking code to be used"
+            " to view analytics on more than one site globally")
+    )
+    social_media_link = StreamField([
+        ('social_media_link', SocialMediaLinkBlock()),
+    ], null=True, blank=True)
+    social_media_content_sharing_button = StreamField([
+        ('social_media_content_sharing_button', SocialMediaShareButtonBlock()),
+    ], null=True, blank=True)
+    media_file_size_threshold = models.IntegerField(
+        default=9437184,
+        help_text='Show warning if uploaded media file size is greater than this in bytes. Default is 9 MB')
+    allow_anonymous_comment = models.BooleanField(default=False)
+
+    panels = [
+        ImageChooserPanel('logo'),
+        MultiFieldPanel(
+            [
+                FieldPanel('show_only_translated_pages'),
+            ],
+            heading="Multi Language",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('fb_analytics_app_id'),
+            ],
+            heading="Facebook Analytics Settings",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('local_ga_tag_manager'),
+                FieldPanel('global_ga_tag_manager'),
+            ],
+            heading="GA Tag Manager Settings",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('local_ga_tracking_code'),
+                FieldPanel('global_ga_tracking_code'),
+            ],
+            heading="GA Tracking Code Settings",
+        ),
+        MultiFieldPanel(
+            [
+                MultiFieldPanel(
+                    [
+                        StreamFieldPanel('social_media_link'),
+                    ],
+                    heading="Social Media Footer Page", ),
+            ],
+            heading="Social Media Page Links", ),
+        MultiFieldPanel(
+            [
+                MultiFieldPanel(
+                    [
+                        StreamFieldPanel('social_media_content_sharing_button'),
+                    ],
+                    heading="Social Media Content Sharing Buttons", ),
+            ],
+            heading="Social Media Content Sharing Buttons", ),
+        MultiFieldPanel(
+            [
+                FieldPanel('media_file_size_threshold'),
+            ],
+            heading="Media File Size Threshold",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('allow_anonymous_comment'),
+            ],
+            heading="Allow Anonymous Comment",
+        ),
+    ]
+
+    def __str__(self):
+        return self.site.site_name
+
+    class Meta:
+        verbose_name = 'Site Settings'
+        verbose_name_plural = 'Site Settings'

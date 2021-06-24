@@ -6,7 +6,8 @@ from factory.django import DjangoModelFactory
 
 
 class UserFactory(DjangoModelFactory):
-    display_name = 'John Doe'
+    first_name = 'John'
+    last_name = 'Doe'
     username = factory.Sequence(lambda n: f'user{n}@example.com')
     password = factory.LazyFunction(lambda: make_password('test@123'))
     has_filled_registration_survey = True
