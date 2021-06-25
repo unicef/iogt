@@ -1,14 +1,12 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags home_tags %}
+{% load static wagtailcore_tags wagtailimages_tags home_tags sass_tags %}
 
 {% block extra_css %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/section.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/banner.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/featured_content.css' %}">
+ <link rel="stylesheet" type="text/css" href="{% sass_src 'css/sectionStyles.scss' %}">
 {% endblock extra_css %}
 
 {% block content %}
-    <div class="home">
+    <div >
         {% comment %} {% render_banners_list banners %}
         {% render_featured_content_list featured_content %} {% endcomment %}
         <a href=''>Back to parents and caregivers</a>
@@ -16,8 +14,8 @@
             <h1>Nutrition and breastfeeding</h1>
             <p>Early Life Tips Quick Survey</p>
         </div>
-        <div >
-        <a href='' class=''>Feeding your baby</a>
+        <div class='section-links'>
+        <a href=''>Feeding your baby</a>
         <a href=''>Breast feeding</a>
         <a href=''>What works and what's worst</a>
         </div>
