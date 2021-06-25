@@ -17,6 +17,11 @@ class Command(BaseCommand):
             help='IoGT V1 database host'
         )
         parser.add_argument(
+            '--port',
+            default='5432',
+            help='IoGT V1 database port'
+        )
+        parser.add_argument(
             '--name',
             default='postgres',
             help='IoGT V1 database name'

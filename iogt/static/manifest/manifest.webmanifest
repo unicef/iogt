@@ -2,7 +2,7 @@
     "name": "IOGT",
     "short_name": "iogt",
     "start_url": "/",
-    "scope": ".",
+    "scope": "http://localhost:8000/",
     "display": "standalone",
     "background_color": "#FFF",
     "theme_color": "#493174",

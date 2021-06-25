@@ -23,9 +23,9 @@ MEDIA_URL = 'https://storage.googleapis.com/iogt-311717.appspot.com/media/'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'iogt-mvp',
+        'NAME': 'iogt',
         'USER': 'iogt',
         'PASSWORD': fetch_secret(secrets_client, 'db_password'),
-        'HOST': '/cloudsql/iogt-311717:europe-west4:iogt-mvp',
+        'HOST': '/cloudsql/iogt-311717:europe-west2:iogt-demo',
     }
 }

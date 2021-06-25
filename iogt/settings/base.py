@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+from django.utils.translation import gettext_lazy as _
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
@@ -29,7 +31,11 @@ INSTALLED_APPS = [
     'iogt_users',
     'comments',
     'iogt_content_migration',
+    'questionnaires',
+    'messaging',
 
+    'wagtail_localize',
+    'wagtail_localize.locales',
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.embeds',
@@ -44,9 +50,9 @@ INSTALLED_APPS = [
     'wagtail.contrib.modeladmin',
     'wagtailmenus',
     'wagtailmedia',
-    'wagtail_localize',
-    'wagtail_localize.locales',
     'wagtailmarkdown',
+    'wagtail_transfer',
+    'wagtail.contrib.settings',
 
     'django_comments_xtd',
     'django_comments',
@@ -73,8 +79,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    "django.middleware.locale.LocaleMiddleware",
 
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+    'iogt_users.middlewares.RegistrationSurveyRedirectMiddleware'
 ]
 
 ROOT_URLCONF = 'iogt.urls'
@@ -93,6 +101,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'wagtailmenus.context_processors.wagtailmenus',
+                'wagtail.contrib.settings.context_processors.settings',
             ],
         },
     },
@@ -193,7 +202,7 @@ ACCOUNT_ADAPTER = 'iogt_users.adapters.AccountAdapter'
 
 WAGTAIL_USER_EDIT_FORM = 'iogt_users.forms.WagtailAdminUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'iogt_users.forms.WagtailAdminUserCreateForm'
-WAGTAIL_USER_CUSTOM_FIELDS = ['display_name', 'terms_accepted']
+WAGTAIL_USER_CUSTOM_FIELDS = ['first_name', 'last_name', 'email', 'terms_accepted']
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
@@ -240,5 +249,13 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('en', _('English')),
     ('fr', _('French')),
 ]
+
+WAGTAILTRANSFER_SOURCES = {    
+    'iogt_global': {
+        'BASE_URL': 'http://iogt.org',
+        'SECRET_KEY': 'fake_secret_key_2',
+    },}
+
+WAGTAILTRANSFER_SECRET_KEY = 'fake_secret_key'
 
 from .profanity_settings import *

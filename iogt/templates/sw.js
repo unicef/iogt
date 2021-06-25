@@ -1,4 +1,4 @@
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.1.5/workbox-sw.js');
+importScripts('../static/third_party/workbox/workbox-v6.1.5/workbox-sw.js');
 
 // Below we are using a custom dimension to track online vs. offline interactions. So make
 // sure to create a custom dimension on GA
@@ -14,11 +14,10 @@ workbox.googleAnalytics.initialize({
 // so this will be done programmatically
 
 const appShell = [
-  "{{ test_url }}"
+  "{{ test_url }}",
 ].map((partialUrl) => `${location.protocol}//${location.host}${partialUrl}`);
 
 workbox.precaching.precacheAndRoute(appShell.map(url => ({
   url,
   revision: null,
 })));
-

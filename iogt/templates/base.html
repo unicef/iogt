@@ -1,4 +1,6 @@
-{% load static wagtailuserbar home_tags %}
+{% load static wagtailuserbar home_tags wagtailsettings_tags %}
+{% get_settings %}
+
 <!DOCTYPE html>
 <html class="no-js" lang="en">
     <head>
@@ -40,7 +42,7 @@
 
                 {% block content %}{% endblock %}
 
-                {% footer %}
+                {% comment %} {% footer %} {% endcomment %}
             </div>
         </div>
 

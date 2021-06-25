@@ -1,12 +1,13 @@
 from django import template
-from home.models import Footer
+from home.models import FooterPage
 
 register = template.Library()
+
 
 @register.inclusion_tag('home/tags/footer.html', takes_context=True)
 def footer(context):
     return {
-        'footer': Footer.objects.first(),
+        'footer_pages': FooterPage.objects.live(),
         'request': context['request'],
     }
 
@@ -24,3 +25,8 @@ def render_featured_content_list(featured_content):
 @register.inclusion_tag('home/tags/banners_list.html')
 def render_banners_list(banners):
     return {'banners': banners}
+
+
+@register.inclusion_tag('home/tags/sub_sections.html')
+def render_sub_sections_list(sub_sections):
+    return {'sub_sections': sub_sections}

@@ -1,15 +1,36 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags home_tags %}
+{% load static wagtailcore_tags wagtailimages_tags home_tags questionnaires_tags %}
 
 {% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/article.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/section.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/banner.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/featured_content.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/sub_sections.css' %}">
 {% endblock extra_css %}
 
 {% block content %}
     <div class="home">
-        {% render_banners_list banners %}
+        <div class="single-article">
+            <section class="article-content">
+                <ul class="tag-section">
+                    <div class="tags">
+                        {% if page.tags.count %}
+                            <h3>Tags:</h3>
+                            {% for tag in page.tags.all %}
+                                <span class="tagit-label tag">{{ tag.slug }}</span>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <img src="{% static 'images/nav-icons/forward-green.png' %}">
+                </ul>
+               {% image page.lead_image height-280 class="main-image-tablet-desktop" %}
+            </section>
+        </div>
         {% render_featured_content_list featured_content %}
+        {% render_sub_sections_list sub_sections %}
+        {% render_articles_list articles %}
+        {% render_surveys_list surveys %}
+        {% render_polls_list polls %}
     </div>
 {% endblock content %}
