@@ -1,0 +1,69 @@
+@media only screen and (min-device-width: 1025px) and (-webkit-min-device-pixel-ratio: 1) {
+  /* DESKTOP ARTICLES VIEW COMPONENT */
+  .desktopSubSections {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin: 5%;
+  }
+}
+
+/* DESKTOP ARTICLE COMPONENT */
+@media only screen and (min-device-width: 1025px) and (-webkit-min-device-pixel-ratio: 1) {
+  .subSectionsContainer {
+    height: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .desktopSubSectionsContainer{
+    margin: 10px;
+    height: 100%;
+  }
+
+  .desktopSubSectionsContainer .image {
+    width: 100%;
+    position:relative;
+    display: inline-block;
+  }
+
+  .desktopSubSectionsContainer .mainImage {
+    width: 100%;
+    height: 100%;
+  }
+
+  .desktopSubSectionsContainer .share {
+    background-color:white;
+    border-radius: 200px;
+    padding: 12px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 15%;
+    left: 83%;
+  }
+
+  .desktopSubSectionsContainer .content {
+    font-family: 'Open Sans', sans-serif;
+  }
+
+  .desktopSubSectionsContainer .content .title{
+    color:#303030;
+    font-family: 'Poppins', sans-serif;
+    font-size:25px;
+    font-weight:700;
+    line-height:30px;
+    display:flex;
+    align-items: center;
+    height:80px;
+  }
+
+  .desktopSubSectionsContainer .content .byline{
+    color:#6B6B6B;
+  }
+
+  .desktopSubSectionsContainer .title a{
+    text-decoration: none;
+    color: black;
+  }
+}

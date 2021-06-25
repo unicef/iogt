@@ -3,28 +3,24 @@ from allauth.account.forms import SignupForm, PasswordField
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.forms import TextInput
-from wagtail.users.forms import UserEditForm as WagtailUserEditForm, UserCreationForm as WagtailUserCreationForm, \
-    custom_fields, standard_fields
+from wagtail.users.forms import UserEditForm as WagtailUserEditForm, UserCreationForm as WagtailUserCreationForm
 
 from .models import User
-from .utils import get_wagtail_admin_user_standard_fields
 
 
 class AccountSignupForm(SignupForm):
-    display_name = forms.CharField(label='Display Name', required=False, max_length=150)
     terms_accepted = forms.BooleanField(label='I accept the terms & conditions')
 
     field_order = [
         "username",
         "password1",
         "password2",
-        "display_name",
-        "email",
-        "terms_accepted"
+        "terms_accepted",
     ]
 
     def __init__(self, *args, **kwargs):
         super(AccountSignupForm, self).__init__(*args, **kwargs)
+        self.fields.pop('email')
         self.fields["password1"] = PasswordField(
             label="4-digit PIN", autocomplete="new-password", max_length=4, widget=TextInput(attrs={'type': 'number'})
         )
@@ -51,21 +47,14 @@ class CustomUserChangeForm(UserChangeForm):
 
 class WagtailAdminUserCreateForm(WagtailUserCreationForm):
     email = forms.EmailField(required=False, label='Email')
-    first_name = None
-    last_name = None
-    display_name = forms.CharField(label='Display Name', required=False, max_length=150)
+    first_name = forms.CharField(required=False, label='First Name')
+    last_name = forms.CharField(required=False, label='Last Name')
     terms_accepted = forms.BooleanField(label='I accept the terms & conditions')
-
-    class Meta(WagtailUserCreationForm.Meta):
-        fields = set([User.USERNAME_FIELD]) | get_wagtail_admin_user_standard_fields() | custom_fields
 
 
 class WagtailAdminUserEditForm(WagtailUserEditForm):
     email = forms.EmailField(required=False, label='Email')
-    first_name = None
-    last_name = None
-    display_name = forms.CharField(label='Display Name', required=False, max_length=150)
-    terms_accepted = forms.BooleanField(label='I accept the terms & conditions')
+    first_name = forms.CharField(required=False, label='First Name')
+    last_name = forms.CharField(required=False, label='Last Name')
 
-    class Meta(WagtailUserEditForm.Meta):
-        fields = set([User.USERNAME_FIELD, "is_active"]) | get_wagtail_admin_user_standard_fields() | custom_fields
+    terms_accepted = forms.BooleanField(label='I accept the terms & conditions')
