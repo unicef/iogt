@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import status
+from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
@@ -25,11 +26,7 @@ class RapidProWebhook(APIView):
         text = serializer.validated_data['text']
         quick_replies = serializer.validated_data['quick_replies']
 
-        thread = Thread.objects.get(uuid=thread_uuid)
-        # TODO: Decide how to treat each of these potential errors:
-        # - Invalid thread UUID
-        # - channel UUID mismatch
-        # TODO: Extract attachments from messages.
+        thread = get_object_or_404(Thread, uuid=thread_uuid)
 
         chat_manager = ChatManager(thread)
         chat_manager.record_reply(

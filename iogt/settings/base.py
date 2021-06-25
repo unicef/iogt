@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'iogt_users',
     'comments',
     'iogt_content_migration',
+    'questionnaires',
     'messaging',
 
     'wagtail_localize',
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
     'wagtailmenus',
     'wagtailmedia',
     'wagtailmarkdown',
+    'wagtail_transfer',
     'wagtail.contrib.settings',
 
     'django_comments_xtd',
@@ -201,7 +203,7 @@ ACCOUNT_ADAPTER = 'iogt_users.adapters.AccountAdapter'
 
 WAGTAIL_USER_EDIT_FORM = 'iogt_users.forms.WagtailAdminUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'iogt_users.forms.WagtailAdminUserCreateForm'
-WAGTAIL_USER_CUSTOM_FIELDS = ['display_name', 'terms_accepted']
+WAGTAIL_USER_CUSTOM_FIELDS = ['first_name', 'last_name', 'email', 'terms_accepted']
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
@@ -254,6 +256,12 @@ RAPIDPRO_BOT_USER_ID = os.getenv('RAPIDPRO_BOT_USER_ID')
 RAPIDPRO_BOT_USER_USERNAME = os.getenv('RAPIDPRO_BOT_USER_USERNAME')
 RAPIDPRO_BOT_USER_PASSWORD = os.getenv('RAPIDPRO_BOT_USER_PASSWORD')
 
+WAGTAILTRANSFER_SOURCES = {
+    'iogt_global': {
+        'BASE_URL': 'http://iogt.org',
+        'SECRET_KEY': 'fake_secret_key_2',
+    }, }
 
+WAGTAILTRANSFER_SECRET_KEY = 'fake_secret_key'
 
 from .profanity_settings import *
