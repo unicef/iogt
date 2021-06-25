@@ -1,5 +1,6 @@
 .section-links {
-   a{
+   a {
       display: block;
+      @include theme;
    }
 }

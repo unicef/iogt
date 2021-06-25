@@ -1,0 +1,174 @@
+
+@mixin theme($theme: DarkGray) {
+  background: $theme;
+  box-shadow: 0 0 1px rgba($theme, .25);
+  color: #fff;
+}
+
+
+@mixin flex($properties) {
+    @if $properties == 'flex' {
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+    } @else if $properties == 'inline-flex' {
+        display: -ms-inline-flexbox;
+        display: -webkit-inline-flex;
+        display: inline-flex;
+    }
+}
+
+@mixin flex_direction($properties) {
+    -webkit-flex-direction: $properties;
+    -ms-flex-direction: $properties;
+    flex-direction: $properties;
+}
+
+@mixin flex_wrap($properties) {
+    @if $properties == 'nowrap' {
+        -webkit-flex-wrap: nowrap;
+        -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap;
+    } @else if $properties == 'wrap' {
+        -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    } @else if $properties == 'wrap-reverse' {
+        -webkit-flex-wrap: wrap-reverse;
+        -ms-flex-wrap: wrap-reverse;
+        flex-wrap: wrap-reverse;
+    }
+}
+
+@mixin flex_justify($properties) {
+    @if $properties == 'flex-start' {
+        -webkit-justify-content: flex-start;
+        -ms-flex-pack: start;
+        justify-content: flex-start;
+    } @else if $properties == 'flex-end' {
+        -webkit-justify-content: flex-end;
+        -ms-flex-pack: end;
+        justify-content: flex-end;
+    } @else if $properties == 'center' {
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+    } @else if $properties == 'space-between' {
+        -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+    } @else if $properties == 'space-around' {
+        -webkit-justify-content: space-around;
+        -ms-flex-pack: distribute;
+        justify-content: space-around;
+    }
+}
+
+@mixin flex_align_content($properties) {
+    @if $properties == 'flex-start' {
+        -webkit-align-content: flex-start;
+        -ms-flex-line-pack: start;
+        align-content: flex-start;
+    } @else if $properties == 'flex-end' {
+        -webkit-align-content: flex-end;
+        -ms-flex-line-pack: end;
+        align-content: flex-end;
+    } @else if $properties == 'center' {
+        -webkit-align-content: center;
+        -ms-flex-line-pack: center;
+        align-content: center;
+    } @else if $properties == 'space-between' {
+        -webkit-align-content: space-between;
+        -ms-flex-line-pack: justify;
+        align-content: space-between;
+    } @else if $properties == 'space-around' {
+        -webkit-align-content: space-around;
+        -ms-flex-line-pack: distribute;
+        align-content: space-around;
+    } @else if $properties == 'stretch' {
+        -webkit-align-content: stretch;
+        -ms-flex-line-pack: stretch;
+        align-content: stretch;
+    }
+}
+
+@mixin flex_align_items($properties) {
+    @if $properties == 'flex-start' {
+        -webkit-align-items: flex-start;
+        -ms-flex-align: start;
+        align-items: flex-start;
+    } @else if $properties == 'flex-end' {
+        -webkit-align-items: flex-end;
+        -ms-flex-align: end;
+        align-items: flex-end;
+    } @else if $properties == 'center' {
+        -webkit-align-items: center;
+        -ms-flex-align: center;
+        align-items: center;
+    } @else if $properties == 'baseline' {
+        -webkit-align-items: baseline;
+        -ms-flex-align: baseline;
+        align-items: baseline;
+    } @else if $properties == 'stretch' {
+        -webkit-align-items: stretch;
+        -ms-flex-align: stretch;
+        align-items: stretch;
+    }
+}
+
+@mixin flex_align_self($properties) {
+    @if $properties == 'auto' {
+        -webkit-align-self: auto;
+        -ms-flex-item-align: auto;
+        align-self: auto;
+    } @else if $properties == 'flex-start' {
+        -webkit-align-self: flex-start;
+        -ms-flex-item-align: start;
+        align-self: flex-start;
+    } @else if $properties == 'flex-end' {
+        -webkit-align-self: flex-end;
+        -ms-flex-item-align: end;
+        align-self: flex-end;
+    } @else if $properties == 'center' {
+        -webkit-align-self: center;
+        -ms-flex-item-align: center;
+        align-self: center;
+    } @else if $properties == 'baseline' {
+        -webkit-align-self: baseline;
+        -ms-flex-item-align: baseline;
+        align-self: baseline;
+    } @else if $properties == 'stretch' {
+        -webkit-align-self: stretch;
+        -ms-flex-item-align: stretch;
+        align-self: stretch;
+    }
+}
+
+@mixin flex_order($properties) {
+    -webkit-order: $properties;
+    -ms-flex-order: $properties;
+    order: $properties;
+}
+
+@mixin flex_grow($properties) {
+    -webkit-flex-grow: $properties;
+    -ms-flex-positive: $properties;
+    flex-grow: $properties;
+}
+
+@mixin flex_shrink($properties) {
+    -webkit-flex-shrink: $properties;
+    -ms-flex-negative: $properties;
+    flex-shrink: $properties;
+}
+
+@mixin flex_basis($properties) {
+    -webkit-flex-basis: $properties;
+    flex-basis: $properties;
+}
+
+@mixin flex_center() {
+    @include flex(flex);
+    @include flex_align_items(center);
+    @include flex_justify(center);
+}
