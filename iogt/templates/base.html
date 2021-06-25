@@ -35,11 +35,11 @@
 
         <div id="app">
             <div id="content-wrap">
-                {% if settings.home.CacheSettings.cache and first_time_user %}{% include "cache_banner.html" %}{% endif %}
+                {% comment %} {% if settings.home.CacheSettings.cache and first_time_user %}{% include "cache_banner.html" %}{% endif %}
                 {% include "header.html" %}
-                {% include "messages.html" %}
+                {% include "messages.html" %} {% endcomment %}
                 {% block content %}{% endblock %}
-                {% footer %}
+                {% comment %} {% footer %} {% endcomment %}
             </div>
         </div>
 

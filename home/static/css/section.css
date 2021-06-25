@@ -425,6 +425,7 @@
     text-decoration-color: #20cd84;
   }
 
+ 
   .featureLinksContainer .noUnderline {
     text-decoration: none;
   }
@@ -453,10 +454,21 @@
     border-bottom: 1px solid #dadada;
     height: 30px;
   }
+
+  .pages {
+    color: #20cd84;
+  }
+
 }
 
 /** FEATURE PHONE ARTICLE COMPONENT **/
 @media only screen and (max-width: 300px) {
+
+  .pages {
+    display: none;
+    background-color: pink;
+   }
+
   .tabletArticleContainer {
     display: none;
   }
@@ -508,3 +520,7 @@
     object-fit: cover;
   }
 }
+
+
+/* Temporary CSS */
+

@@ -9,7 +9,17 @@
 
 {% block content %}
     <div class="home">
-        {% render_banners_list banners %}
-        {% render_featured_content_list featured_content %}
+        {% comment %} {% render_banners_list banners %}
+        {% render_featured_content_list featured_content %} {% endcomment %}
+        <a href=''>Back to parents and caregivers</a>
+        <div>
+            <h1>Nutrition and breastfeeding</h1>
+            <p>Early Life Tips Quick Survey</p>
+        </div>
+        <div >
+        <a href='' class=''>Feeding your baby</a>
+        <a href=''>Breast feeding</a>
+        <a href=''>What works and what's worst</a>
+        </div>
     </div>
 {% endblock content %}
