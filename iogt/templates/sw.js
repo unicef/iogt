@@ -10,7 +10,7 @@ workbox.googleAnalytics.initialize({
 });
 
 // The below implementation will basically convert "{{ test_url }}" which is test/ into http://localhost:8000/test
-// The relative paths such as test/ of the pages inside the app will be provided by the backend devs, 
+// The relative paths such as test/ of the pages inside the app will be provided by the backend devs,
 // so this will be done programmatically
 
 const appShell = [

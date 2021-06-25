@@ -37,23 +37,36 @@
 
         <div id="app">
             <div id="content-wrap">
+                {% if settings.home.CacheSettings.cache and first_time_user %}{% include "cache_banner.html" %}{% endif %}
                 {% include "header.html" %}
                 {% include "messages.html" %}
-
                 {% block content %}{% endblock %}
-
                 {% comment %} {% footer %} {% endcomment %}
             </div>
         </div>
 
-         {# Global javascript #}    
-
+        {# Global javascript #} 
         <script>
-        function cache() {
-           if ('serviceWorker' in navigator) {
-           navigator.serviceWorker.register('{% url "sw.js" %}', { scope: '/' })
-       }}  
-       </script>
+        const successMsg = "Your app is now ready to install. If you are using a iOS device, you can install it by clicking 'Share', scrolling down and tapping 'Add to Home Screen. If using Android choose 'Add to home screen' and you should be all set!"
+        const failMsg = 'Something went wrong. Can you try refreshing the page, and clicking the download website button?'
+
+        async function cache() {
+            if ('serviceWorker' in navigator && confirm("Install this website as an app on your device?") === true) {
+                try {
+                    await navigator.serviceWorker.register('{% url "sw.js" %}', { scope: '/' })
+                    alert(successMsg)
+                }
+                catch {
+                    alert(failMsg)
+                }
+            }
+        }
+        </script> 
+        <noscript>
+            <style type="text/css">
+                #hideOnNonJSDevice { display:none; }
+            </style>
+        </noscript>
         {% block extra_js %}{% endblock %}
     </body>
 </html>

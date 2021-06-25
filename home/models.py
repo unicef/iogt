@@ -5,11 +5,12 @@ from django.utils.translation import gettext_lazy as _
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
 from modelcluster.fields import ParentalKey
-from wagtail.admin.edit_handlers import (FieldPanel,
-                                         InlinePanel, MultiFieldPanel,
-                                         ObjectList, PageChooserPanel,
-                                         StreamFieldPanel, TabbedInterface)
-from wagtail.contrib.settings.models import BaseSetting, register_setting
+from wagtail.admin.edit_handlers import (
+    FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, PageChooserPanel,
+    StreamFieldPanel, TabbedInterface, FieldRowPanel
+)
+from wagtail.contrib.settings.models import BaseSetting
+from wagtail.contrib.settings.registry import register_setting
 from wagtail.core import blocks
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Orderable, Page, Site
@@ -21,7 +22,7 @@ from wagtail.search import index
 from wagtailmarkdown.blocks import MarkdownBlock
 
 from comments.models import CommentableMixin
-from iogt.views import create_final_external_link
+from iogt.views import create_final_external_link, check_user_session
 from questionnaires.models import Survey, Poll
 
 from .blocks import (MediaBlock, SocialMediaLinkBlock,
@@ -41,6 +42,7 @@ class HomePage(Page):
     ]
 
     def get_context(self, request):
+        check_user_session(request)
         context = super().get_context(request)
         context['banners'] = [
             home_page_banner.banner_page for home_page_banner in self.home_page_banners.filter(banner_page__live=True)
@@ -111,6 +113,7 @@ class Section(Page):
     ]
 
     def get_context(self, request):
+        check_user_session(request)
         context = super().get_context(request)
         context['featured_content'] = [
             featured_content.content for featured_content in self.featured_content.filter(content__live=True)
@@ -208,6 +211,7 @@ class Article(Page, CommentableMixin):
     ])
 
     def get_context(self, request):
+        check_user_session(request)
         context = super().get_context(request)
         context['breadcrumbs'] = [crumb for crumb in self.get_ancestors() if not crumb.is_root()]
         context['sections'] = self.get_ancestors().type(Section)
@@ -420,3 +424,22 @@ class SiteSettings(BaseSetting):
     class Meta:
         verbose_name = 'Site Settings'
         verbose_name_plural = 'Site Settings'
+
+class CacheSettings(BaseSetting):
+    cache = models.BooleanField(
+        default=True,
+        verbose_name=_("Prompt users to download?"),
+        help_text=_("check to prompt first time users to download the website as an app"),
+    )
+
+    panels = [
+        MultiFieldPanel(
+            [
+                FieldPanel('cache'),
+            ],
+            heading="Cache settings",
+        )
+    ]
+
+    class Meta:
+        verbose_name = "Cache settings"

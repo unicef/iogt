@@ -73,7 +73,6 @@
                     <i class="material-icons">search</i>
                 </button>
             </form>
-            <button class="signin" type = "button" onclick="cache()">Download website</button>
             {% if request.user.is_anonymous %}
                 <a class="signin" href="{% url 'account_signup' %}">Sign Up</a>
             {% else %}
@@ -83,6 +82,7 @@
         </div>
 
     </div>
+
     <nav class="nav">
         <div class="categories-dropdown">
             <div class="btn-group">
@@ -125,5 +125,6 @@
                 </div>
             </div>
         </div>
+        <button class="signin" type="button" onclick="cache()" id="hideOnNonJSDevice" >Download website</button>
     </nav>
 </header>
