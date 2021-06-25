@@ -9,7 +9,6 @@ from django.db import models
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from home.blocks import MediaBlock
-from home.models import HomePage, SiteSettings
 from iogt.settings import base
 from iogt_users.models import User
 from modelcluster.fields import ParentalKey
@@ -149,6 +148,7 @@ class Survey(QuestionnairePage, AbstractForm):
         return UserSubmission
 
     def process_form_submission(self, form):
+        from home.models import SiteSettings
         user = form.user
         self.get_submission_class().objects.create(
             form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder),

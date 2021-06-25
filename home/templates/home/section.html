@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags home_tags %}
+{% load static wagtailcore_tags wagtailimages_tags home_tags questionnaires_tags %}
 
 {% block extra_css %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/article.css' %}">
@@ -30,5 +30,7 @@
         {% render_featured_content_list featured_content %}
         {% render_sub_sections_list sub_sections %}
         {% render_articles_list articles %}
+        {% render_surveys_list surveys %}
+        {% render_polls_list polls %}
     </div>
 {% endblock content %}

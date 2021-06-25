@@ -22,6 +22,7 @@ from wagtailmarkdown.blocks import MarkdownBlock
 
 from comments.models import CommentableMixin
 from iogt.views import create_final_external_link
+from questionnaires.models import Survey, Poll
 
 from .blocks import (MediaBlock, SocialMediaLinkBlock,
                      SocialMediaShareButtonBlock)
@@ -116,6 +117,8 @@ class Section(Page):
         ]
         context['sub_sections'] = self.get_children().live().type(Section)
         context['articles'] = self.get_children().live().type(Article)
+        context['surveys'] = self.get_children().live().type(Survey)
+        context['polls'] = self.get_children().live().type(Poll)
         return context
 
 
