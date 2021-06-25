@@ -1,12 +1,12 @@
 from django.contrib.auth import get_user_model
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register, ModelAdminGroup
+from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 
 from iogt_users.filters import GroupsFilter
 
 
 class UsersExportAdmin(ModelAdmin):
     model = get_user_model()
-    menu_label = 'Users Data'
+    menu_label = 'Export/Import Users'
     menu_icon = 'user'
     list_display = ('username', 'date_joined', 'is_staff', 'is_active')
     list_filter = (GroupsFilter, 'date_joined', 'is_staff', 'is_active')
@@ -19,11 +19,4 @@ class UsersExportAdmin(ModelAdmin):
     menu_order = 1001
 
 
-class ExportGroup(ModelAdminGroup):
-    menu_label = 'Export'
-    menu_icon = 'download'
-    menu_order = 1000
-    items = (UsersExportAdmin,)
-
-
-modeladmin_register(ExportGroup)
+modeladmin_register(UsersExportAdmin)

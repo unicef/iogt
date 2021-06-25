@@ -25,11 +25,10 @@
                 </div>
                 {% block header_extra %}
                     <div class="right">
-                        {% if user_can_create %}
-                            <div class="actionbutton" style="display:inline-block">
-                                {% include 'modeladmin/includes/button.html' with button=view.button_helper.add_button %}
+                         <div class="dropdown dropdown-button match-width col">
+                                <a disabled="true" class="button button--icon">{% icon name="group" wrapped=1 %}{% trans 'Upload Users' %}</a>
+
                             </div>
-                        {% endif %}
                         {% if view.list_export %}
                             <div class="dropdown dropdown-button match-width col">
                                 <a href="?export=xlsx&{{ request.GET.urlencode }}" class="button bicolor button--icon">{% icon name="download" wrapped=1 %}{% trans 'Download XLSX' %}</a>

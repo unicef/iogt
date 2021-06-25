@@ -131,15 +131,6 @@ class ArticleRecommendation(Orderable):
     ]
 
 
-class SectionRecommendation(Orderable):
-    source = ParentalKey('Article', related_name='recommended_sections', on_delete=models.CASCADE)
-    section = models.ForeignKey('Section', on_delete=models.CASCADE)
-
-    panels = [
-        PageChooserPanel('section')
-    ]
-
-
 class Article(Page, CommentableMixin):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
@@ -183,7 +174,6 @@ class Article(Page, CommentableMixin):
         StreamFieldPanel('body'),
         MultiFieldPanel([
             InlinePanel('recommended_articles', label=_("Recommended Articles")),
-            InlinePanel('recommended_sections', label=_("Recommended Sections"))
         ],
             heading='Recommended Content')
     ]
