@@ -27,7 +27,7 @@ class ChatManager:
                 # messages with the existing message. An assumption here is that
                 # messages will always be received in the correct order. This should
                 # be confirmed with RapidPro
-                message.text = f'{message.text} {text}'
+                message.text = f'{message.text}{text}'
                 message.save(update_fields=['text'])
         else:
             Message.objects.create(
