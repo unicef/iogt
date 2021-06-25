@@ -1,0 +1,7 @@
+{% load static wagtailcore_tags wagtailimages_tags questionnaires_tags %}
+
+<div class="surveys-container">
+    {% for survey in surveys %}
+        <a href="{% pageurl survey %}">{{ survey.title }}</a>
+    {% endfor %}
+</div>

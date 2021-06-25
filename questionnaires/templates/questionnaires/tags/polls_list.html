@@ -1,0 +1,7 @@
+{% load static wagtailcore_tags wagtailimages_tags questionnaires_tags %}
+
+<div class="polls-container">
+    {% for poll in polls %}
+        <a href="{% pageurl poll %}">{{ poll.title }}</a>
+    {% endfor %}
+</div>

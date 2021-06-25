@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags home_tags %}
+{% load static wagtailcore_tags wagtailimages_tags home_tags questionnaires_tags %}
 
 {% block extra_css %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/article.css' %}">
@@ -7,6 +7,8 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/banner.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/featured_content.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/sub_sections.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/polls.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/surveys.css' %}">
 {% endblock extra_css %}
 
 {% block content %}
@@ -30,5 +32,7 @@
         {% render_featured_content_list featured_content %}
         {% render_sub_sections_list sub_sections %}
         {% render_articles_list articles %}
+        {% render_surveys_list surveys %}
+        {% render_polls_list polls %}
     </div>
 {% endblock content %}
