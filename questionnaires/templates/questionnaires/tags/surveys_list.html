@@ -1,7 +1,29 @@
-{% load static wagtailcore_tags wagtailimages_tags questionnaires_tags %}
+{% load static wagtailcore_tags wagtailimages_tags %}
 
-<div class="surveys-container">
+<div class="desktopSubSections">
     {% for survey in surveys %}
-        <a href="{% pageurl survey %}">{{ survey.title }}</a>
+    <div class="subSectionsContainer">
+        <div class="desktopSubSectionsContainer" style="border-bottom: medium solid rgb(191, 0, 18);">
+            <div class="image">
+                <a href="{% pageurl survey %}">
+                    {% image survey.specific.lead_image fill-336x186 class="mainImage" %}
+                </a>
+            </div>
+            <div class="content">
+                <div style="color: rgb(191, 0, 18);" class="tag">
+                    <div class="byline">
+                        {{ survey.first_published_at|date }} /
+                        <span class="author">by {{ survey.owner.get_full_name }}</span>
+                    </div>
+                </div>
+                <div class="title">
+                    <a href="{% pageurl survey %}">
+                        <span>{{ survey.title }}</span>
+                    </a>
+                </div>
+                <p class="desc">{{ survey.specific.description|striptags|truncatewords:21 }}</p>
+            </div>
+        </div>
+    </div>
     {% endfor %}
 </div>
