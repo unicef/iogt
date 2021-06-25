@@ -24,7 +24,7 @@ urlpatterns = [
         pwa_views.ServiceWorkerView.as_view(),
         name=pwa_views.ServiceWorkerView.name,
     ),
-    path("test/", include("home.urls"), name="test")
+    path("test/", include("home.urls"), name="test"),
     path("external-link/", TransitionPageView.as_view(), name="external-link"),
     path('messaging/', include('messaging.urls'), name='messaging-urls'),
     path('wagtail-transfer/', include(wagtailtransfer_urls)),
