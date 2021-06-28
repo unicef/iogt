@@ -9,8 +9,6 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-from django.utils.translation import gettext_lazy as _
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
@@ -100,8 +98,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                "wagtail.contrib.settings.context_processors.settings",
                 'wagtailmenus.context_processors.wagtailmenus',
                 'wagtail.contrib.settings.context_processors.settings',
+                "home.processors.show_welcome_banner",
             ],
         },
     },
