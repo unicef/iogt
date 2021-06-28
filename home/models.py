@@ -75,6 +75,9 @@ class TaggedItem(TaggedItemBase):
     """The through model between Page (Article/Section) and Tag"""
     content_object = ParentalKey(Page, related_name='tagged_items', on_delete=models.CASCADE)
 
+class SectionIndexPage(Page):
+    parent_page_types = ['home.HomePage']
+    subpage_types = ['home.Section']
 
 class Section(Page):
     lead_image = models.ForeignKey(
