@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'wagtailmenus',
     'wagtailmedia',
     'wagtailmarkdown',
-    # 'wagtail_transfer',
+    'wagtail_transfer',
     'wagtail.contrib.settings',
 
     'django_comments_xtd',
