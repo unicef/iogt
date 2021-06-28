@@ -3,9 +3,9 @@
     <div class="footer__nav-bar nav-bar">
         <div class="nav-bar__wrap">
             <div class="nav-bar__item nav-bar-item active">
-                <a href="#">
+                <a href="/">
                     <span class="nav-bar-item__icon">
-                        <img src="{% static "images/icons/home.png" %}"
+                        <img src="{% static "/icons/home.png" %}"
                              alt="Home">
                     </span>
                     <span class="nav-bar-item__title">Home</span>
@@ -14,16 +14,16 @@
             <div class="nav-bar__item nav-bar-item">
                 <a href="#">
                     <span class="nav-bar-item__icon">
-                        <img src="{% static "images/icons/burger.png" %}"
+                        <img src="{% static "/icons/burger.png" %}"
                              alt="Category">
                     </span>
                     <span class="nav-bar-item__title">Category</span>
                 </a>
             </div>
             <div class="nav-bar__item nav-bar-item">
-                <a href="#">
+                <a href="{% url "user_profile" %}">
                     <span class="nav-bar-item__icon">
-                        <img src="{% static "images/icons/profile.png" %}"
+                        <img src="{% static "/icons/profile.png" %}"
                              alt="Profile">
                     </span>
                     <span class="nav-bar-item__title">Profile</span>
@@ -32,7 +32,7 @@
             <div class="nav-bar__item nav-bar-item">
                 <a href="#">
                     <span class="nav-bar-item__icon">
-                        <img src="{% static "images/icons/chat.png" %}"
+                        <img src="{% static "/icons/chat.png" %}"
                              alt="Chat">
                     </span>
                     <span class="nav-bar-item__title">Chat</span>
@@ -51,28 +51,28 @@
             <div class="footer__column">
                 <a href="#" class="icon-btn icon-btn--red footer__link">
                     <span class="icon-btn__icon">
-                        <img src="{% static "images/icons/heart.png" %}"
+                        <img src="{% static "/icons/heart.png" %}"
                              alt="Heart icon">
                     </span>
                     <span class="icon-btn__title">Covid-19</span>
                 </a>
                 <a href="#" class="icon-btn icon-btn--blue footer__link">
                     <span class="icon-btn__icon">
-                        <img src="{% static "images/icons/youth.png" %}"
+                        <img src="{% static "/icons/youth.png" %}"
                              alt="Youth icon">
                     </span>
                     <span class="icon-btn__title">Youth</span>
                 </a>
                 <a href="#" class="icon-btn icon-btn--violet footer__link">
                     <span class="icon-btn__icon">
-                        <img src="{% static "images/icons/peace.png" %}"
+                        <img src="{% static "/icons/peace.png" %}"
                              alt="Parents & Caregivers icon">
                     </span>
                     <span class="icon-btn__title">Parents & Caregivers</span>
                 </a>
                 <a href="#" class="icon-btn icon-btn--green footer__link">
                     <span class="icon-btn__icon">
-                        <img src="{% static "images/icons/case.png" %}"
+                        <img src="{% static "/icons/case.png" %}"
                              alt="Frontline Workers & Educators">
                     </span>
                     <span class="icon-btn__title">Frontline Workers & Educators</span>
@@ -80,30 +80,31 @@
             </div>
             <hr>
             <div class="footer__column">
-                <a href="#" class="icon-btn footer__link">
+                <a href="{% url 'account_login' %}"
+                   class="icon-btn footer__link">
                     <span class="icon-btn__icon">
-                        <img src="{% static "images/icons/arrow-icon.png" %}"
+                        <img src="{% static "/icons/arrow-icon.png" %}"
                              alt="Heart icon">
                     </span>
                     <span class="icon-btn__title">Log in</span>
                 </a>
                 <a href="#" class="icon-btn footer__link">
                     <span class="icon-btn__icon">
-                        <img src="{% static "images/icons/finger-up.png" %}"
+                        <img src="{% static "/icons/finger-up.png" %}"
                              alt="Heart icon">
                     </span>
                     <span class="icon-btn__title">Are you a fan of IoGT?</span>
                 </a>
                 <a href="#" class="icon-btn footer__link">
                     <span class="icon-btn__icon">
-                        <img src="{% static "images/icons/loudSpeaker.png" %}"
+                        <img src="{% static "/icons/loudSpeaker.png" %}"
                              alt="Heart icon">
                     </span>
                     <span class="icon-btn__title">About Internet of Good Things</span>
                 </a>
                 <a href="#" class="icon-btn footer__link">
                     <span class="icon-btn__icon">
-                        <img src="{% static "images/icons/wifi-aerial.png" %}"
+                        <img src="{% static "/icons/wifi-aerial.png" %}"
                              alt="Heart icon">
                     </span>
                     <span class="icon-btn__title">Use IoGT FREE of data charges</span>

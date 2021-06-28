@@ -14,16 +14,15 @@
     <form class="login" method="POST" action="{% url 'account_login' %}">
         {% csrf_token %}
         <div class="profile-form__inputs">
-            <label class="cust-input profile-form__input">
-                <input name="username" placeholder="Username" pattern="\S+.*"
-                       type="tel">
-                {# <span class="cust-input__error">Invalid Username</span>#}
-            </label>
-            <label class="cust-input profile-form__input">
-                <input type="password" name="password" placeholder="Pin"
-                       pattern="\S+.*">
-                {#                <span class="cust-input__error">Invalid Pin</span>#}
-            </label>
+            {% for field in form %}
+                {% if field.name != "remember" %}
+                    <label class="cust-input profile-form__input">
+                        {{ field }}
+                        {% if field.errors %}
+                            <span class="cust-input__error">{% trans field.errors %}</span> {% endif %}
+                    </label>
+                {% endif %}
+            {% endfor %}
         </div>
         <div class="profile-form__btns">
             <button type="submit"

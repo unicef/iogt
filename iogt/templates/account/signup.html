@@ -10,43 +10,42 @@
           action="{% url 'account_signup' %}">
         {% csrf_token %}
         <div class="profile-form__inputs">
-            <label class="cust-input profile-form__input">
-                <input name="username"
-                       placeholder="Create Username"
-                       type="text"
-                       pattern="\S+.*">
-                {#                <span class="cust-input__error">Invalid Username</span>#}
-            </label>
-            <label class="cust-input profile-form__input">
-                <input name="password"
-                       placeholder="Create 4 digit pin"
-                       type="password"
-                       pattern="\S+.*">
-                {#                              <span class="cust-input__error">Invalid Pin</span>#}
-            </label>
-            <label class="cust-input profile-form__input">
-                <input name="date_of_birth"
-                       placeholder="DD/MM/YYYY"
-                       type="date"
-                       pattern="\S+.*">
-                {#                    <span class="cust-input__error">Invalid Pin</span>#}
-            </label>
-            <select class="cust-select profile-form__input" name="gender">
-                <option disabled>Tell us your gender</option>
-                <option>Male</option>
-                <option>Female</option>
-            </select>
+            {% for field in form %}
+                {% if field.name != "gender" %}
+                    {% if field.name != "email" %}
+                        <label class="cust-input profile-form__input">
+                            {{ field }}
+                            {% if field.errors %}
+                                <span class="cust-input__error">{% trans field.help_text %}</span> {% endif %}
+                        </label>
+                    {% endif %}
+                {% else %}
+                    {{ field }}
+                    {% if field.errors %}
+                        <span class="cust-input__error">{% trans field.help_text %}</span>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
         </div>
+        {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}"
+                   value="{{ redirect_field_value }}"/>
+        {% endif %}
         <div class="profile-form__btns">
             <button type="submit"
-                    class="cust-btn cust-btn--dark profile-form__btn"><span>Create your account</span>
+                    class="cust-btn cust-btn--dark profile-form__btn">
+                <span>{% trans "Create your account" %}</span>
             </button>
-            <a href="{% url 'account_login' %}"
+            <a href="{{ login_url }}"
                class="cust-btn profile-form__btn"><span>Log in</span></a>
         </div>
-        <p class="text profile-form__desc">A quia quas et atque eos vero
-            temporibus quis ullam. Recusandae recusandae omnis aspernatur
-            quisquam at dolorem aspernatur quod non.</p>
+        <div class="text profile-form__desc">
+            <p>
+                A quia quas et atque eos vero temporibus quis ullam.
+                Recusandae recusandae omnis aspernatur quisquam at dolorem
+                aspernatur quod non.
+            </p>
+        </div>
     </form>
 
 {% endblock %}

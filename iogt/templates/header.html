@@ -7,10 +7,10 @@
             </a>
         </div>
         <div class="header__right">
-            <div class="select header__select js-select">
+            <div class="select header__select js-select hideOnNonJSDevice">
                 <div class="select__selected"><p>English</p>
                     <div class="select__selected-icon"><img
-                            src="{% static "/images/icons/arrow-down.svg" %}"
+                            src="{% static "/icons/arrow-down.svg" %}"
                             alt="Arrow down">
                     </div>
                 </div>
@@ -27,9 +27,21 @@
                     <div class="select__option"><p>Gumuz</p></div>
                 </div>
             </div>
+            <div class="showOnNonJSDevice">
+                <select  class="select header__select">
+                    <option class="select__option" value="English" selected>English</option>
+                    <option class="select__option" value="French">French</option>
+                    <option class="select__option" value="Bangi Me">Bangi Me</option>
+                    <option class="select__option" value="Bayot">Bayot</option>
+                    <option class="select__option" value="Dompo">Dompo</option>
+                    <option class="select__option" value="Ega">Ega</option>
+                    <option class="select__option" value="Gomba">Gomba</option>
+                    <option class="select__option" value="Gumuz">Gumuz</option>
+                </select>
+            </div>
             <form class="search">
                 <a class="search__btn js-search-btn" href="/search.html">
-                    <img src="{% static "/images/icons/search.svg" %}"
+                    <img src="{% static "/icons/search.svg" %}"
                          alt="Search">
                 </a>
             </form>

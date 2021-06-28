@@ -80,6 +80,10 @@ class AccountSignupForm(SignupForm):
         if hasattr(self, "field_order"):
             set_form_field_order(self, self.field_order)
 
+    def save(self, request):
+        user = super(AccountSignupForm, self).save(request)
+        return user
+
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta:

@@ -12,7 +12,8 @@
     -webkit-align-items: center;
     align-items: center;
     display: -webkit-flex;
-    display: flex
+    display: flex;
+    width: 100%;
 }
 
 .header__container {
@@ -95,7 +96,7 @@
 }
 
 .select__option--selected p:after {
-    background-image: url("/static/images/icons/checked.svg");
+    background-image: url("/static/icons/checked.svg");
     background-position: 50%;
     background-repeat: no-repeat;
     background-size: contain;
