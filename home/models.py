@@ -5,14 +5,15 @@ from django.utils.translation import gettext_lazy as _
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
 from modelcluster.fields import ParentalKey
-from wagtail.admin.edit_handlers import (FieldPanel,
-                                         InlinePanel, MultiFieldPanel,
-                                         ObjectList, PageChooserPanel,
-                                         StreamFieldPanel, TabbedInterface)
-from wagtail.contrib.settings.models import BaseSetting, register_setting
+from wagtail.admin.edit_handlers import (
+    FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, PageChooserPanel,
+    StreamFieldPanel, TabbedInterface, FieldRowPanel
+)
+from wagtail.contrib.settings.models import BaseSetting
+from wagtail.contrib.settings.registry import register_setting
 from wagtail.core import blocks
 from wagtail.core.fields import StreamField
-from wagtail.core.models import Orderable, Page
+from wagtail.core.models import Orderable, Page, Site
 
 from wagtail.core.rich_text import get_text_for_indexing
 from wagtail.images.blocks import ImageChooserBlock
@@ -21,7 +22,8 @@ from wagtail.search import index
 from wagtailmarkdown.blocks import MarkdownBlock
 
 from comments.models import CommentableMixin
-from iogt.views import create_final_external_link
+from iogt.views import create_final_external_link, check_user_session
+from questionnaires.models import Survey, Poll
 
 from .blocks import (MediaBlock, SocialMediaLinkBlock,
                      SocialMediaShareButtonBlock)
@@ -40,6 +42,7 @@ class HomePage(Page):
     ]
 
     def get_context(self, request):
+        check_user_session(request)
         context = super().get_context(request)
         context['banners'] = [
             home_page_banner.banner_page for home_page_banner in self.home_page_banners.filter(banner_page__live=True)
@@ -68,15 +71,20 @@ class HomePageBanner(Orderable):
     ]
 
 
+class TaggedItem(TaggedItemBase):
+    """The through model between Page (Article/Section) and Tag"""
+    content_object = ParentalKey(Page, related_name='tagged_items', on_delete=models.CASCADE)
+
+
 class Section(Page):
-    icon = models.ForeignKey(
+    lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
         related_name='+',
         blank=True,
-        null=True,
+        null=True
     )
-    icon_active = models.ForeignKey(
+    icon = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
         related_name='+',
@@ -88,11 +96,16 @@ class Section(Page):
         blank=True,
         null=True,
     )
+    tags = ClusterTaggableManager(through=TaggedItem, blank=True)
     show_in_menus_default = True
 
+    promote_panels = Page.promote_panels + [
+        MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
+    ]
+
     content_panels = Page.content_panels + [
+        ImageChooserPanel('lead_image'),
         ImageChooserPanel('icon'),
-        ImageChooserPanel('icon_active'),
         FieldPanel('color'),
         MultiFieldPanel([
             InlinePanel('featured_content', max_num=1, label=_("Featured Content")),
@@ -100,18 +113,16 @@ class Section(Page):
     ]
 
     def get_context(self, request):
+        check_user_session(request)
         context = super().get_context(request)
         context['featured_content'] = [
             featured_content.content for featured_content in self.featured_content.filter(content__live=True)
         ]
         context['sub_sections'] = self.get_children().live().type(Section)
         context['articles'] = self.get_children().live().type(Article)
+        context['surveys'] = self.get_children().live().type(Survey)
+        context['polls'] = self.get_children().live().type(Poll)
         return context
-
-
-class ArticleTag(TaggedItemBase):
-    """The through model between Article and Tag"""
-    content_object = ParentalKey('Article', related_name='tagged_items', on_delete=models.CASCADE)
 
 
 class ArticleRecommendation(Orderable):
@@ -141,7 +152,7 @@ class Article(Page, CommentableMixin):
         null=True
     )
 
-    tags = ClusterTaggableManager(through=ArticleTag, blank=True)
+    tags = ClusterTaggableManager(through=TaggedItem, blank=True)
     body = StreamField([
         ('heading', blocks.CharBlock(form_classname="full title")),
         ('paragraph', blocks.RichTextBlock()),
@@ -200,6 +211,7 @@ class Article(Page, CommentableMixin):
     ])
 
     def get_context(self, request):
+        check_user_session(request)
         context = super().get_context(request)
         context['breadcrumbs'] = [crumb for crumb in self.get_ancestors() if not crumb.is_root()]
         context['sections'] = self.get_ancestors().type(Section)
@@ -333,6 +345,7 @@ class SiteSettings(BaseSetting):
         default=9437184,
         help_text='Show warning if uploaded media file size is greater than this in bytes. Default is 9 MB')
     allow_anonymous_comment = models.BooleanField(default=False)
+    registration_survey = models.ForeignKey('questionnaires.Survey', null=True, blank=True, on_delete=models.SET_NULL)
 
     panels = [
         ImageChooserPanel('logo'),
@@ -392,7 +405,18 @@ class SiteSettings(BaseSetting):
             ],
             heading="Allow Anonymous Comment",
         ),
+        MultiFieldPanel(
+            [
+                PageChooserPanel('registration_survey'),
+            ],
+            heading="Registration Settings",
+        ),
     ]
+
+    @classmethod
+    def get_for_default_site(cls):
+        default_site = Site.objects.filter(is_default_site=True).first()
+        return cls.for_site(default_site)
 
     def __str__(self):
         return self.site.site_name
@@ -400,3 +424,22 @@ class SiteSettings(BaseSetting):
     class Meta:
         verbose_name = 'Site Settings'
         verbose_name_plural = 'Site Settings'
+
+class CacheSettings(BaseSetting):
+    cache = models.BooleanField(
+        default=True,
+        verbose_name=_("Prompt users to download?"),
+        help_text=_("check to prompt first time users to download the website as an app"),
+    )
+
+    panels = [
+        MultiFieldPanel(
+            [
+                FieldPanel('cache'),
+            ],
+            heading="Cache settings",
+        )
+    ]
+
+    class Meta:
+        verbose_name = "Cache settings"

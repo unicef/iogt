@@ -12,7 +12,7 @@ class UsersExportAdmin(ModelAdmin):
     list_filter = (GroupsFilter, 'date_joined', 'is_staff', 'is_active')
     form_fields_exclude = ('password', 'last_login', 'is_superuser', 'groups', 'user_permissions')
     search_fields = ('username',)
-    list_export = ('username', 'display_name', 'email', 'is_staff', 'is_active', 'date_joined',
+    list_export = ('username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active', 'date_joined',
                    'terms_accepted', 'has_filled_registration_survey')
     add_to_settings_menu = True
     list_per_page = 20
