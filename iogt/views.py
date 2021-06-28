@@ -1,3 +1,4 @@
+from django.contrib.admin.utils import flatten
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from django.views.generic import TemplateView
@@ -32,11 +33,11 @@ class SitemapAPIView(APIView):
         protocol = request.scheme
         site = get_current_site(request)
 
-        sitemap = {
-            'home_page': [f'{protocol}://{site}{p.url_path}' for p in HomePage.objects.live()],
-            'sections': [f'{protocol}://{site}{p.url_path}' for p in Section.objects.live()],
-            'articles': [f'{protocol}://{site}{p.url_path}' for p in Article.objects.live()],
-            'footers': [f'{protocol}://{site}{p.url_path}' for p in FooterPage.objects.live()],
-        }
+        home_page_urls = [f'{protocol}://{site}{p.url}' for p in HomePage.objects.live()],
+        section_urls = [f'{protocol}://{site}{p.url}' for p in Section.objects.live()],
+        article_urls = [f'{protocol}://{site}{p.url}' for p in Article.objects.live()],
+        footer_urls = [f'{protocol}://{site}{p.url}' for p in FooterPage.objects.live()],
+
+        sitemap = flatten(home_page_urls + section_urls + article_urls + footer_urls)
 
         return Response(sitemap)
