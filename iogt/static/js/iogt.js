@@ -13,26 +13,43 @@ function validateFileUpload(fileInput, file_size_threshold) {
 	return true;
 }
 
-!function () {
-	var e = document.querySelectorAll(".js-select"),
-		t = document.querySelector(".js-search-btn"),
-		c = document.querySelector(".js-search-close"),
-		s = document.querySelector(".js-dark-overlay"),
-		n = document.querySelector(".js-search-result");
-	e.forEach((function (e) {
-		var t = e.querySelectorAll(".select__option");
-		e.addEventListener("click", (function () {
-			this.classList.toggle("active");
-		})), t.forEach((function (c) {
-			c.addEventListener("click", (function () {
-				e.querySelector(".select__selected p").innerText = this.innerText, t.forEach((function (e) {
-					e.classList.remove("select__option--selected");
-				})), this.classList.add("select__option--selected");
-			}));
-		}));
-	})), t.addEventListener("click", (function (e) {
-		e.preventDefault(), this.parentElement.classList.add("active"), s.classList.add("active"), n.classList.add("active");
-	})), c.addEventListener("click", (function (e) {
-		e.preventDefault(), this.parentElement.classList.remove("active"), s.classList.remove("active"), n.classList.remove("active");
-	}));
-}();
+/** DOM Variables **/
+const $selects = document.querySelectorAll('.js-select');
+const $searchBtn = document.querySelector('.js-search-btn');
+const $searchClose = document.querySelector('.js-search-close');
+const $overlay = document.querySelector('.js-dark-overlay');
+const $searchResult = document.querySelector('.js-search-result');
+
+$selects.forEach(function ($select) {
+	const $selectOptions = $select.querySelectorAll('.select__option');
+
+	$select.addEventListener('click', function () {
+		this.classList.toggle('active');
+	});
+
+	$selectOptions.forEach(function ($option) {
+		$option.addEventListener('click', function () {
+			$select.querySelector('.select__selected p').innerText = this.innerText;
+			$selectOptions.forEach(function ($selectOption) {
+				$selectOption.classList.remove('select__option--selected');
+			});
+			this.classList.add('select__option--selected');
+		});
+	});
+});
+
+$searchBtn.addEventListener('click', function (e) {
+	e.preventDefault();
+	this.parentElement.classList.add('active');
+	$overlay.classList.add('active');
+	$searchResult.classList.add('active');
+});
+
+$searchClose.addEventListener('click', function (e) {
+	e.preventDefault();
+	this.parentElement.classList.remove('active');
+	$overlay.classList.remove('active');
+	$searchResult.classList.remove('active');
+});
+
+

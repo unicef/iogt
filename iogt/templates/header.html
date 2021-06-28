@@ -28,10 +28,14 @@
                 </div>
             </div>
             <div class="showOnNonJSDevice">
-                <select  class="select header__select">
-                    <option class="select__option" value="English" selected>English</option>
-                    <option class="select__option" value="French">French</option>
-                    <option class="select__option" value="Bangi Me">Bangi Me</option>
+                <select class="select header__select">
+                    <option class="select__option" value="English" selected>
+                        English
+                    </option>
+                    <option class="select__option" value="French">French
+                    </option>
+                    <option class="select__option" value="Bangi Me">Bangi Me
+                    </option>
                     <option class="select__option" value="Bayot">Bayot</option>
                     <option class="select__option" value="Dompo">Dompo</option>
                     <option class="select__option" value="Ega">Ega</option>
@@ -39,11 +43,16 @@
                     <option class="select__option" value="Gumuz">Gumuz</option>
                 </select>
             </div>
-            <form class="search">
-                <a class="search__btn js-search-btn" href="/search.html">
+            <form class="search" action="{% url "search" %}">
+                <a class="search__btn js-search-btn hideOnNonJSDevice"
+                   href="{% url "search" %}">
                     <img src="{% static "/icons/search.svg" %}"
                          alt="Search">
                 </a>
+                <button class="search__btn showOnNonJSDevice" type="submit">
+                    <img src="{% static "/icons/search.svg" %}"
+                         alt="Search">
+                </button>
             </form>
         </div>
     </div>

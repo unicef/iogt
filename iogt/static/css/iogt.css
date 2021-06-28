@@ -30,6 +30,11 @@ body {
     color: #444;
 }
 
+.container {
+    width: 100%;
+    padding: 0 12px;
+}
+
 .showOnNonJSDevice {
     display: none;
 }
@@ -41,6 +46,28 @@ img {
 
 .header, .footer, .main, .nav {
     display: block;
+}
+
+
+.title {
+    color: #303030;
+    font-family: Poppins, sans-serif;
+    font-size: 16px
+}
+
+.h2, .title {
+    font-weight: 800;
+    line-height: 20px
+}
+
+.h2 {
+    font-size: 13px
+}
+
+.text {
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 16px
 }
 
 @media only screen and (max-width: 600px) {
@@ -71,6 +98,135 @@ input:focus, input:focus-visible {
     outline: none;
 }
 
+.cust-input {
+    display: block
+}
+
+.cust-input input {
+    background-color: #f7f7f9;
+    border: 1px solid #efefef;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 14px;
+    padding: 8px 12px;
+    width: 100%
+}
+
+.cust-input input:focus {
+    background-color: transparent;
+    border-color: #303030
+}
+
+.cust-input__error {
+    color: #fb3d24;
+    display: none;
+    font-size: 8px;
+    font-weight: 500;
+    line-height: 14px;
+    text-align: right
+}
+
+.cust-input.error input {
+    border-color: #fb3d24
+}
+
+.cust-check, .cust-input.error .cust-input__error {
+    display: block
+}
+
+.cust-check input {
+    display: none
+}
+
+.cust-check__title {
+    -webkit-align-items: center;
+    align-items: center;
+    background-color: #f7f7f9;
+    border: 1px solid #efefef;
+    border-radius: 8px;
+    display: -webkit-flex;
+    display: flex;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .01em;
+    line-height: 14px;
+    padding: 8px 12px;
+    transition: .45s
+}
+
+input:checked + .cust-check__title {
+    background-color: #dadae3
+}
+
+.cust-btn {
+    background: none;
+    border: 1px solid #303030;
+    border-radius: 100px;
+    cursor: pointer;
+    display: block;
+    padding: 8px 12px;
+    text-decoration: none;
+    transition: .3s;
+    width: 100%
+}
+
+.cust-btn span {
+    color: #303030;
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 14px;
+    text-align: center
+}
+
+.cust-btn:hover {
+    background-color: #303030
+}
+
+.cust-btn:hover span {
+    color: #fff
+}
+
+.cust-btn--secondary {
+    border: none;
+    border-radius: 8px
+}
+
+.cust-btn--dark {
+    background-color: #303030
+}
+
+.cust-btn--dark span {
+    color: #fff
+}
+
+.cust-btn--dark:hover {
+    background-color: #4a4a4a
+}
+
+.cust-btn--white {
+    background-color: #fff;
+    color: #303030
+}
+
+.cust-select {
+    background-color: #f7f7f9;
+    border: 1px solid #efefef;
+    border-radius: 8px;
+    display: block;
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 14px;
+    padding: 8px 12px;
+    width: 100%
+}
+
+.cust-select option {
+    font-size: 14px;
+    line-height: 14px;
+    width: 100%
+}
 
 .icon-btn {
     -webkit-align-items: center;
@@ -143,3 +299,5 @@ input:focus, input:focus-visible {
 .icon-btn--green .icon-btn__title {
     color: #1a9090
 }
+
+

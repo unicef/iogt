@@ -1,4 +1,6 @@
 {% load static %}
+{% load menu_tags %}
+
 <footer class="footer">
     <div class="footer__nav-bar nav-bar">
         <div class="nav-bar__wrap">
@@ -32,7 +34,7 @@
             <div class="nav-bar__item nav-bar-item">
                 <a href="#">
                     <span class="nav-bar-item__icon">
-                        <img src="{% static "/icons/chat.png" %}"
+                        <img src="{% static "icons/chat.png" %}"
                              alt="Chat">
                     </span>
                     <span class="nav-bar-item__title">Chat</span>
@@ -41,7 +43,7 @@
         </div>
     </div>
     <div class="container">
-        <form class="footer__search" action="/">
+        <form class="footer__search" action="{% url "search" %}">
             <label
                     class="cust-input profile-form__input">
                 <input name="search" placeholder="Search here" pattern="\S+.*">
