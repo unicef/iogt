@@ -6,7 +6,6 @@
    color: #FFFFFF;
    width: 240px;
    height: 169px;
-   top: 0px;
    display:flex;
    flex-direction: column;
    justify-content: space-around;
@@ -135,18 +134,17 @@
 .suggested-articles {
    display: flex;
    flex-direction: column;
-   justify-content: center;
    align-items: center;
-   border-top: 1px solid #EFEFEF;
- 
+   padding-top: 32px;
+   padding-bottom: 24px;
 }
 
 .suggested-article {
    width: 216px;
    display: flex;
    padding: 12px 0;
-   border-bottom: 1px solid #EFEFEF;
-
+   border-top: 0.5px solid #EFEFEF;
+   border-bottom: 0.5px solid #EFEFEF;
    a {
       text-decoration: none;
       position: static;
@@ -173,18 +171,111 @@
 
    img {
       position: static;
-width: 68px;
-height: 68px;
-left: 148px;
-top: 0px;
-
-background: url(.jpg);
-
-/* Inside Auto Layout */
-
-flex: none;
-order: 1;
-flex-grow: 0;
-margin: 0px 6px;
+      width: 68px;
+      height: 68px;
+      left: 148px;
+      top: 0px;
+      flex: none;
+      order: 1;
+      flex-grow: 0;
+      margin: 0px 6px;
    }
+}
+
+.quiz-holder{  
+   border-top: 0.5px solid #EFEFEF;
+}
+
+.quiz {
+   margin:10px 0;
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   padding: 8px 12px;
+   width: 216px;
+   height: 38px;
+   left: 12px;
+   background: #E8F8FD;
+   border-radius: 8px;
+
+&__details {
+   p {
+      position: static;
+      width: 181px;
+      height: 16px;
+      left: 0px;
+      top: 12px;
+      font-family: Poppins;
+      font-style: normal;
+      font-size: 10px;
+      line-height: 16px;
+      letter-spacing: 0.01em;
+      color: #1DAEEC;
+      margin:0
+   }
+
+   &--bold {
+      font-weight: bold;
+   }
+}
+
+&__image {
+   height: 8px;
+   width: 7px;
+   left: 200px;
+   top: 13px;
+   border-radius: 0px;
+}
+}
+
+.questionnaire {
+   width: 232px;
+   height: 186px;
+   left: 0px;
+   top: 0px;
+   background: #EE3851;
+   border-radius: 8px;
+   margin: 24px 0;
+
+&__title {
+   width: 139px;
+   height: 40px;
+   padding-left: 14px;
+   top: 18px;
+   font-family: Poppins;
+   font-style: normal;
+   font-weight: bold;
+   font-size: 16px;
+   line-height: 20px;
+   color: #FFFFFF;
+}
+
+&__CTA {
+   width: 200px;
+   height: 64px;
+   padding-left: 16px;
+   top: 62px;
+   font-family: Poppins;
+   font-style: normal;
+   font-weight: 500;
+   font-size: 10px;
+   line-height: 16px;color: #FFFFFF;
+}
+
+
+.button__white {
+   text-decoration: none;
+   padding: 8px 16px;
+   border-radius: 28px;
+   margin-left: 16px;
+   font-family: Poppins;
+   font-style: normal;
+   font-weight: 600;
+   font-size: 10px;
+   line-height: 14px;
+   border: none;
+   background-color: #FFFFFF;
+   color:black
+}
+
 }
