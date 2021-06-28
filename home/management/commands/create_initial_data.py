@@ -21,6 +21,7 @@ class Command(BaseCommand):
         models.BannerIndexPage.objects.all().delete()
         models.Article.objects.all().delete()
         models.Section.objects.all().delete()
+        models.SectionIndexPage.objects.all().delete()
         Image.objects.all().delete()
 
     def create_image(self):
@@ -48,7 +49,10 @@ class Command(BaseCommand):
             show_in_menus=True,
             color='1CABE2'
         )
-        home.add_child(instance=youth)
+        section_index_page = models.SectionIndexPage(title='Sections')
+        
+        home.add_child(instance=section_index_page)
+        section_index_page.add_child(instance=youth)
         youth.add_child(instance=internet_safety)
         internet_safety.add_child(instance=article)
 

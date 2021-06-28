@@ -115,3 +115,4 @@ GitHub.sublime-settings
 legacy-initdb.d/
 
 !iogt/templates/wagtailmedia/media/
+.vscode/
