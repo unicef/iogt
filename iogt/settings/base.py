@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
@@ -216,6 +215,12 @@ COMMENTS_XTD_MAX_THREAD_LEVEL = 1
 # Miscellaneous
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = 'account_login'
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
+ACCOUNT_USER_MODEL_EMAIL_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+DATE_INPUT_FORMATS = '%d/%m/%Y'
 WAGTAIL_FRONTEND_LOGIN_URL = LOGIN_URL
 
 #  To help obfuscating comments before they are sent for confirmation.
@@ -245,7 +250,9 @@ WAGTAIL_I18N_ENABLED = True
 
 WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('en', _('English')),
-    ('fr', _('French')),
+    ('fr', _('Français')),
+    ('ar', _('العربيّة')),
+    ('es', _('Español')),
+    ('pt', _('Português')),
+    ('ru', _('Русский')),
 ]
-
-from .profanity_settings import *

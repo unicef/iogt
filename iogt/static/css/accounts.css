@@ -1,42 +1,211 @@
-.accounts-content-wrapper {
-    display: block;
-    max-width: 400px;
-    margin: 0 auto 40px;
-    min-height: 300px;
+/* Mobile First */
+/* Desctop First */
+.square {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    background: #ADD8E6;
+    color: #fff;
+    width: 650px;
+    height: 650px;
+    font-size: 28px;
+    border: 5px solid #2265a2;
 }
 
-form p label {
-    display:block;
-    padding-bottom: 10px;
+@media only screen and (max-width: 1339.98px) {
+    .square {
+        background: red;
+        width: 33.583vw;
+        height: 33.583vw;
+        font-size: 2.09vw;
+    }
 }
 
-form p input {
+@media only screen and (max-width: 991.98px) {
+    .square {
+        background: red;
+        width: 45.364vw;
+        height: 45.364vw;
+        font-size: 2.823vw;
+        border: 1.008vw solid #000;
+    }
+}
+
+@media only screen and (max-width: 575.98px) {
+    .square {
+        background: red;
+        width: 43.404vw;
+        height: 43.404vw;
+        font-size: 3.125vw;
+    }
+}
+
+.title {
+    font-family: "Poppins", sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 20px;
+    color: #303030;
+}
+
+.text {
+    font-weight: 500;
+    font-size: 10px;
+    line-height: 16px;
+}
+
+.container {
     width: 100%;
+    padding: 0 12px;
 }
 
-form p input {
-    width: 100%;
+.header {
+    display: flex;
+    align-items: center;
+    height: 48px;
 }
 
-form p input[type=checkbox] {
-    width: auto;
-    float: left;
-}
-
-form p label[for=id_remember] {
-    display: inline
-}
-
-.accounts-form-btn {
-    float:right;
-    font-size: 18px;
-    background-color: #20cd84;
-    color: white;
-    border-width: 0px;
-    padding: 5px 15px;
+.cust-input {
     display: block;
 }
 
-label[for="id_terms_accepted"] {
+.cust-input input {
+    border: 1px solid #EFEFEF;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 10px;
+    line-height: 14px;
+    padding: 8px 12px;
+    width: 100%;
+    background-color: #F7F7F9;
+}
+
+.cust-input input:focus {
+    background-color: transparent;
+    border-color: #303030;
+}
+
+.cust-input__error {
+    display: none;
+    text-align: right;
+    font-weight: 500;
+    font-size: 8px;
+    line-height: 14px;
+    color: #FB3D24;
+}
+
+.cust-input.error input {
+    border-color: #FB3D24;
+}
+
+.cust-input.error .cust-input__error {
+    display: block;
+}
+
+.cust-btn {
+    border-radius: 100px;
+    border: 1px solid #303030;
+    padding: 8px 12px;
+    display: block;
+    width: 100%;
+    background: none;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.cust-btn span {
+    font-weight: 600;
+    display: block;
+    text-align: center;
+    font-size: 10px;
+    line-height: 14px;
+    color: #303030;
+}
+
+.cust-btn:hover {
+    background-color: #303030;
+}
+
+.cust-btn:hover span {
+    color: #fff;
+}
+
+.cust-btn--dark {
+    background-color: #303030;
+}
+
+.cust-btn--dark span {
+    color: #fff;
+}
+
+.cust-btn--dark:hover {
+    background-color: #4a4a4a;
+}
+
+.cust-select {
+    display: block;
+    border: 1px solid #EFEFEF;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 10px;
+    line-height: 14px;
+    padding: 8px 12px 8px 12px;
+    width: 100%;
+    background-color: #F7F7F9;
+}
+
+.cust-select option {
+    font-size: 14px;
+    width: 100%;
+    line-height: 14px;
+}
+
+.profile__title {
     display: inline-block;
+    width: 100%;
+    line-height: 32px;
+    margin-bottom: 20px;
+}
+
+.profile__title:after {
+    clear: both;
+}
+
+.profile__icon {
+    width: 32px;
+    height: 32px;
+    display: inline-block;
+    vertical-align: middle;
+    float: right;
+    background-color: #0070E2;
+    color: #fff;
+    text-align: center;
+    line-height: 32px;
+    border-radius: 50%;
+}
+
+.profile-form__input {
+    margin-bottom: 12px;
+}
+
+.profile-form__input:last-child {
+    margin-bottom: 0;
+}
+
+.profile-form__btns {
+    margin: 20px 0;
+}
+
+.profile-form__btn {
+    margin-bottom: 8px;
+}
+
+.profile-form__btn:last-child {
+    margin-bottom: 0;
+}
+
+.profile-form__desc {
+    color: #9A9A9A;
 }
