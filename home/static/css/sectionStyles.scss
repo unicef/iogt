@@ -1,6 +1,8 @@
+@import '../../../styles/mixins';
+
 .section-links {
    a {
       display: block;
-      @include theme;
+      background-color: $base-color;
    }
 }

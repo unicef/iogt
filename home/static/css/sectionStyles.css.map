@@ -1,0 +1,10 @@
+{
+    "version": 3,
+    "mappings": "AAEA,AACG,cADW,CACX,CAAC,CAAC;EACC,OAAO,EAAE,KAAK;EACd,gBAAgB,ECCT,IAAI;CDAb",
+    "sources": [
+        "sectionStyles.scss",
+        "../../../styles/_mixins.scss"
+    ],
+    "names": [],
+    "file": "sectionStyles.css"
+}
