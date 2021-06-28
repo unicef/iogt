@@ -72,12 +72,12 @@ class HomePageBanner(Orderable):
 
 
 class SectionTaggedItem(TaggedItemBase):
-    """The through model between Page (Article/Section) and Tag"""
+    """The through model between Section and Tag"""
     content_object = ParentalKey('Section', related_name='tagged_items', on_delete=models.CASCADE)
 
 
 class ArticleTaggedItem(TaggedItemBase):
-    """The through model between Page (Article/Section) and Tag"""
+    """The through model between Article and Tag"""
     content_object = ParentalKey('Article', related_name='tagged_items', on_delete=models.CASCADE)
 
 

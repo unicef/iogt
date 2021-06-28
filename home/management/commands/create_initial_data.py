@@ -72,9 +72,9 @@ class Command(BaseCommand):
         home.add_child(instance=footer_index_page)
 
         footer = models.FooterPage(
-            title='Do you know the person adding you?',
+            title='Footer1?',
             body=[('paragraph',
-                   RichText('Someone sent me a friend request - but I don’t know this person, what should I do?'))],
+                   RichText('Footer1 paragraph1'))],
             owner=owner,
             first_published_at=datetime.now(timezone.utc)
         )
