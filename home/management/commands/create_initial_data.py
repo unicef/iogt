@@ -68,6 +68,18 @@ class Command(BaseCommand):
 
         models.HomePageBanner.objects.create(source=home, banner_page=banner_page)
 
+        footer_index_page = models.FooterIndexPage(title='Footers')
+        home.add_child(instance=footer_index_page)
+
+        footer = models.FooterPage(
+            title='Do you know the person adding you?',
+            body=[('paragraph',
+                   RichText('Someone sent me a friend request - but I don’t know this person, what should I do?'))],
+            owner=owner,
+            first_published_at=datetime.now(timezone.utc)
+        )
+        footer_index_page.add_child(instance=footer)
+
     def handle(self, *args, **options):
         self.clear()
         self.stdout.write('Existing site structure cleared')
