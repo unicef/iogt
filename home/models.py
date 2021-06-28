@@ -27,6 +27,8 @@ from questionnaires.models import Survey, Poll
 
 from .blocks import (MediaBlock, SocialMediaLinkBlock,
                      SocialMediaShareButtonBlock)
+from .forms import SectionPageForm
+from .utils.progress_manager import ProgressManager
 
 
 class HomePage(Page):
@@ -97,6 +99,8 @@ class Section(Page):
         null=True,
     )
     tags = ClusterTaggableManager(through=TaggedItem, blank=True)
+    show_progress_bar = models.BooleanField(default=False)
+
     show_in_menus_default = True
 
     promote_panels = Page.promote_panels + [
@@ -112,6 +116,26 @@ class Section(Page):
         ], heading=_('Featured Content')),
     ]
 
+    settings_panels = Page.settings_panels + [
+        FieldPanel('show_progress_bar')
+    ]
+
+    base_form_class = SectionPageForm
+
+    def get_descendant_articles(self):
+        return Article.objects.descendant_of(self).type(Article)
+
+    def get_progress_bar_enabled_ancestor(self):
+        return Section.objects.ancestor_of(self, inclusive=True).type(Section).filter(show_progress_bar=True).first()
+
+    def get_user_progress_dict(self, request):
+        progress_manager = ProgressManager()
+        read_article_count, total_article_count = progress_manager.get_progress(request, self)
+        return {
+            'read': read_article_count,
+            'total': total_article_count
+        }
+
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
@@ -122,6 +146,9 @@ class Section(Page):
         context['articles'] = self.get_children().live().type(Article)
         context['surveys'] = self.get_children().live().type(Survey)
         context['polls'] = self.get_children().live().type(Poll)
+
+        context['user_progress'] = self.get_user_progress_dict(request)
+
         return context
 
 
@@ -210,12 +237,35 @@ class Article(Page, CommentableMixin):
         ObjectList(CommentableMixin.comments_panels, heading='Comments')
     ])
 
+    def _get_progress_enabled_section(self):
+        """
+        Returning .first() will bypass any discrepancies in settings show_progress_bar=True
+        for sections
+        :return:
+        """
+        return Section.objects.ancestor_of(self).type(Section).filter(show_progress_bar=True).first()
+
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
         context['breadcrumbs'] = [crumb for crumb in self.get_ancestors() if not crumb.is_root()]
         context['sections'] = self.get_ancestors().type(Section)
+
+        progress_enabled_section = self._get_progress_enabled_section()
+
+        context['user_progress'] = None
+        if progress_enabled_section:
+            context.update({
+                'user_progress': progress_enabled_section.get_user_progress_dict(request)
+            })
+
         return context
+
+    def serve(self, request):
+        response = super().serve(request)
+        progress_manager = ProgressManager()
+        progress_manager.record_article_read(request, self)
+        return response
 
     def description(self):
         for block in self.body:
@@ -424,6 +474,7 @@ class SiteSettings(BaseSetting):
     class Meta:
         verbose_name = 'Site Settings'
         verbose_name_plural = 'Site Settings'
+
 
 class CacheSettings(BaseSetting):
     cache = models.BooleanField(
