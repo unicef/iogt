@@ -84,6 +84,9 @@ MIDDLEWARE = [
     'external_links.middleware.RewriteExternalLinksMiddleware',
 ]
 
+# Prevent Wagtail's built in menu from showing in Admin > Settings
+WAGTAILMENUS_MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN = False
+
 ROOT_URLCONF = 'iogt.urls'
 
 TEMPLATES = [
