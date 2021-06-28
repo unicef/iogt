@@ -73,9 +73,19 @@ class HomePageBanner(Orderable):
     ]
 
 
-class TaggedItem(TaggedItemBase):
-    """The through model between Page (Article/Section) and Tag"""
-    content_object = ParentalKey(Page, related_name='tagged_items', on_delete=models.CASCADE)
+class SectionTaggedItem(TaggedItemBase):
+    """The through model between Section and Tag"""
+    content_object = ParentalKey('Section', related_name='tagged_items', on_delete=models.CASCADE)
+
+
+class ArticleTaggedItem(TaggedItemBase):
+    """The through model between Article and Tag"""
+    content_object = ParentalKey('Article', related_name='tagged_items', on_delete=models.CASCADE)
+
+
+class SectionIndexPage(Page):
+    parent_page_types = ['home.HomePage']
+    subpage_types = ['home.Section']
 
 
 class Section(Page):
@@ -98,7 +108,8 @@ class Section(Page):
         blank=True,
         null=True,
     )
-    tags = ClusterTaggableManager(through=TaggedItem, blank=True)
+
+    tags = ClusterTaggableManager(through='SectionTaggedItem', blank=True)
     show_progress_bar = models.BooleanField(default=False)
 
     show_in_menus_default = True
@@ -179,7 +190,7 @@ class Article(Page, CommentableMixin):
         null=True
     )
 
-    tags = ClusterTaggableManager(through=TaggedItem, blank=True)
+    tags = ClusterTaggableManager(through='ArticleTaggedItem', blank=True)
     body = StreamField([
         ('heading', blocks.CharBlock(form_classname="full title")),
         ('paragraph', blocks.RichTextBlock()),
