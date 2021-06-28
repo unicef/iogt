@@ -1,24 +1,31 @@
 class ProgressManager:
 
-    def record_article_read(self, request, article):
-        if request.user.is_anonymous:
-            read_articles = request.session.get('read_articles', [])
+    def __init__(self, request):
+        self.request = request
+
+    def record_article_read(self, article):
+        user = self.request.user
+        if user.is_anonymous:
+            read_articles = self.request.session.get('read_articles', [])
             if read_articles:
                 if article.pk not in read_articles:
                     # https://code.djangoproject.com/wiki/NewbieMistakes#Appendingtoalistinsessiondoesntwork
-                    read_articles = request.session['read_articles']
+                    read_articles = self.request.session['read_articles']
                     read_articles.append(article.pk)
-                    request.session['read_articles'] = read_articles
+                    self.request.session['read_articles'] = read_articles
             else:
-                request.session['read_articles'] = [article.pk]
+                self.request.session['read_articles'] = [article.pk]
         else:
-            raise NotImplementedError
+            if not user.viewed_articles.filter(id=article.id).exists():
+                user.viewed_articles.add(article)
 
-    def get_progress(self, request, section):
-        if request.user.is_anonymous:
-            read_article_ids = set(request.session.get('read_articles', []))
+
+    def get_progress(self, section):
+        user = self.request.user
+        if self.request.user.is_anonymous:
+            read_article_ids = set(self.request.session.get('read_articles', []))
         else:
-            raise NotImplementedError
+            read_article_ids = set(user.viewed_articles.values_list('pk', flat=True))
 
         progress_enabled_ancestor = section.get_progress_bar_enabled_ancestor()
         if progress_enabled_ancestor:

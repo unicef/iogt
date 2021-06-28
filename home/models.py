@@ -129,8 +129,8 @@ class Section(Page):
         return Section.objects.ancestor_of(self, inclusive=True).type(Section).filter(show_progress_bar=True).first()
 
     def get_user_progress_dict(self, request):
-        progress_manager = ProgressManager()
-        read_article_count, total_article_count = progress_manager.get_progress(request, self)
+        progress_manager = ProgressManager(request)
+        read_article_count, total_article_count = progress_manager.get_progress(self)
         return {
             'read': read_article_count,
             'total': total_article_count
@@ -253,7 +253,6 @@ class Article(Page, CommentableMixin):
 
         progress_enabled_section = self._get_progress_enabled_section()
 
-        context['user_progress'] = None
         if progress_enabled_section:
             context.update({
                 'user_progress': progress_enabled_section.get_user_progress_dict(request)
@@ -263,8 +262,8 @@ class Article(Page, CommentableMixin):
 
     def serve(self, request):
         response = super().serve(request)
-        progress_manager = ProgressManager()
-        progress_manager.record_article_read(request, self)
+        progress_manager = ProgressManager(request)
+        progress_manager.record_article_read(self)
         return response
 
     def description(self):

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags comments comments_xtd %}
+{% load static wagtailcore_tags wagtailimages_tags home_tags comments comments_xtd %}
 
 {% block extra_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/article.css' %}">
@@ -8,6 +8,9 @@
 {% endblock extra_css %}
 
 {% block content %}
+    {% if user_progress %}
+        {% render_user_progress user_progress %}
+    {% endif %}
     <div class="single-article">
         <ul class="breadcrumb">
             {% for crumb in breadcrumbs %}

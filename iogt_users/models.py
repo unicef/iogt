@@ -13,6 +13,8 @@ class User(AbstractUser):
 
     has_filled_registration_survey = models.BooleanField(default=False)
 
+    viewed_articles = models.ManyToManyField(to='home.Article')
+
     class Meta:
         ordering = ('id',)
 
