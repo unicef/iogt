@@ -6,18 +6,40 @@
 {% endblock extra_css %}
 
 {% block content %}
-    <div >
-        {% comment %} {% render_banners_list banners %}
-        {% render_featured_content_list featured_content %} {% endcomment %}
-        <a href=''>Back to parents and caregivers</a>
-        <div>
-            <h1>Nutrition and breastfeeding</h1>
-            <p>Early Life Tips Quick Survey</p>
+    <section class='section-page-details'>
+        <a href='' class='section-page-details__back'>
+          <img class='section-page-details__back--image1' src="{% static 'images/white-stroke.png' %}">
+           Back
+        </a>
+        <h1 class='section-page-details__title'>Covid-19</h1>
+        <a href='' class='section-page-details__survey'> 
+          <img class='section-page-details__survey--image1' src="{% static 'images/path490.png' %}">
+          Early Life tips quick survey
+          <img class='section-page-details__survey--image2' src="{% static 'images/Stroke 3.png' %}">
+        </a>
+    </section>
+    <section class='section-page-sections'>
+        <a href='' class='section-page-sections__section'>Feeding your baby <img class='section-page-details__survey--image2' src="{% static 'images/Stroke 3.png' %}" alt=''></a>
+        <a href='' class='section-page-sections__section'>Breast feeding <img class='section-page-details__survey--image2' src="{% static 'images/Stroke 3.png' %}" alt=''></a>
+        <a href='' class='section-page-sections__section' alt=''>What works and what's worst <img class='section-page-details__survey--image2' src="{% static 'images/Stroke 3.png' %}"></a>
+    </section> 
+    <div class='footer'>Menu Bar</div>
+    <section class='suggested-articles'>
+        <div class='suggested-article'>
+            <a href=''>What precautions can you take against the coronavirus</a>
+            <img src='https://images.pexels.com/photos/4541395/pexels-photo-4541395.jpeg?cs=srgb&dl=pexels-piyapong-sayduang-4541395.jpg&fm=jpg' alt=''>
         </div>
-        <div class='section-links'>
-        <a href=''>Feeding your baby</a>
-        <a href=''>Breast feeding</a>
-        <a href=''>What works and what's worst</a>
+         <div class='suggested-article'>
+            <a href=''>What precautions can you take against the coronavirus</a>
+            <img src='https://images.pexels.com/photos/4541395/pexels-photo-4541395.jpeg?cs=srgb&dl=pexels-piyapong-sayduang-4541395.jpg&fm=jpg' alt=''>
         </div>
-    </div>
+         <div class='suggested-article'>
+            <a href=''>What precautions can you take against the coronavirus</a>
+            <img src='https://images.pexels.com/photos/4541395/pexels-photo-4541395.jpeg?cs=srgb&dl=pexels-piyapong-sayduang-4541395.jpg&fm=jpg' alt=''>
+        </div>
+      
+    </section>
 {% endblock content %}
+
+
+

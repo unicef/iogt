@@ -1,5 +1,233 @@
-.section-links a {
+.section-page-details {
   display: block;
-  background-color: pink;
+  background-image: url("https://11tcma2eyqgmz6zyt1x6na8n-wpengine.netdna-ssl.com/wp-content/uploads/2020/03/ShipStation-COVID-Blog-Asset-Feature-1-860x354.png");
+  color: #FFFFFF;
+  width: 240px;
+  height: 169px;
+  top: 0px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.section-page-details__back {
+  color: white;
+  text-decoration: none;
+  width: 67px;
+  height: 24px;
+  margin-left: 12px;
+  top: 56px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 30px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-family: Poppins;
+  font-size: 8px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 12px;
+  letter-spacing: 0.1em;
+}
+
+.section-page-details__back--image1 {
+  height: 12px;
+  width: 8px;
+  left: 18px;
+  top: 6px;
+  margin-right: 10px;
+  border-radius: 0px;
+}
+
+.section-page-details__title {
+  margin: 0;
+  margin-left: 12px;
+  width: 74px;
+  height: 20px;
+  top: 89px;
+  font-family: Poppins;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 20px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.section-page-details__survey {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  text-decoration: none;
+  color: black;
+  padding: 8px 12px;
+  margin: 0% 5%;
+  top: 72.78%;
+  bottom: 7.1%;
+  background: #FFFFFF;
+  border-radius: 8px;
+  font-family: Poppins;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 16px;
+  letter-spacing: 0.01em;
+  text-align: left;
+}
+
+.section-page-details__survey--image1 {
+  height: 15.969493865966797px;
+  width: 16px;
+  left: 0px;
+  top: 16.9847412109375px;
+  border-radius: 0px;
+}
+
+.section-page-details__survey--image2 {
+  height: 8px;
+  width: 7px;
+  left: 200px;
+  top: 13px;
+  border-radius: 0px;
+}
+
+.section-page-sections__section {
+  text-decoration: none;
+  color: black;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding: 8px 12px;
+  left: 0%;
+  right: 0%;
+  top: 14.94%;
+  bottom: 82.68%;
+  border-bottom: 1px solid #EFEFEF;
+  font-family: Poppins;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 16px;
+  letter-spacing: 0.01em;
+  text-align: left;
+}
+
+.footer {
+  background-color: #0094F4;
+  height: 40px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  color: white;
+}
+
+.suggested-articles {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-top: 1px solid #EFEFEF;
+}
+
+.suggested-article {
+  width: 216px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 12px 0;
+  border-bottom: 1px solid #EFEFEF;
+}
+
+.suggested-article a {
+  text-decoration: none;
+  position: static;
+  width: 142px;
+  height: 48px;
+  left: 0px;
+  top: 0px;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 10px;
+  line-height: 16px;
+  letter-spacing: 0.01em;
+  color: #303030;
+  -webkit-box-flex: 0;
+      -ms-flex: none;
+          flex: none;
+  -webkit-box-ordinal-group: 1;
+      -ms-flex-order: 0;
+          order: 0;
+  -ms-flex-item-align: stretch;
+      -ms-grid-row-align: stretch;
+      align-self: stretch;
+  -ms-flex-positive: 0;
+      flex-grow: 0;
+  margin: 8px 0px;
+}
+
+.suggested-article img {
+  position: static;
+  width: 68px;
+  height: 68px;
+  left: 148px;
+  top: 0px;
+  background: url(.jpg);
+  /* Inside Auto Layout */
+  -webkit-box-flex: 0;
+      -ms-flex: none;
+          flex: none;
+  -webkit-box-ordinal-group: 2;
+      -ms-flex-order: 1;
+          order: 1;
+  -ms-flex-positive: 0;
+      flex-grow: 0;
+  margin: 0px 6px;
 }
 /*# sourceMappingURL=sectionStyles.css.map */
