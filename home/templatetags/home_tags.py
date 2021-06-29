@@ -25,3 +25,8 @@ def render_polls_list(polls):
 @register.inclusion_tag('home/tags/questionnaire.html')
 def render_questionnaire_list(questionnaire):
     return {'questionnaire': questionnaire}
+
+
+@register.inclusion_tag('home/tags/section_progress.html')
+def render_user_progress(user_progress):
+    return user_progress
