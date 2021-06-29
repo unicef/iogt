@@ -1,20 +1,15 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags home_tags sass_tags %}
+{% load static wagtailcore_tags wagtailimages_tags home_tags questionnaires_tags sass_tags%}
 
 {% block extra_css %}
-
+<link rel="stylesheet" type="text/css" href="{% static 'css/article.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/section.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/banner.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/featured_content.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/sub_sections.css' %}">
 {% endblock extra_css %}
 
 {% block content %}
-
-<div class="container">
-  <img src="img_snow_wide.jpg" alt="Snow" style="width:100%;">
-  <div class="bottom-left">Bottom Left</div>
-  <div class="top-left">Top Left</div>
-  <div class="top-right">Top Right</div>
-  <div class="bottom-right">Bottom Right</div>
-  <div class="centered">Centered</div>
-</div>
     <section class='section-page-details'>
         <a href='' class='section-page-details__back'>
           <img class='section-page-details__back--image1' src="{% static 'images/white-stroke.png' %}">
@@ -61,17 +56,11 @@
             <a href='' class='button__white'>Start here</a>
         </section>
     </section>
-{% load static wagtailcore_tags wagtailimages_tags home_tags questionnaires_tags %}
 
-{% block extra_css %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/article.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/section.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/banner.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/featured_content.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/sub_sections.css' %}">
-{% endblock extra_css %}
 
-{% block content %}
+{% endblock content %}
+
+{% comment %} {% block content %}
     <div class="home">
         <div class="single-article">
             <section class="article-content">
@@ -95,7 +84,7 @@
         {% render_surveys_list surveys %}
         {% render_polls_list polls %}
     </div>
-{% endblock content %}
+{% endblock content %} {% endcomment %}
 
 
 
