@@ -1,19 +1,19 @@
-from comments.models import CommentableMixin
 from django.db import models
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
-from iogt.views import create_final_external_link
 from modelcluster.fields import ParentalKey
-from wagtail.admin.edit_handlers import (FieldPanel, InlinePanel,
-                                         MultiFieldPanel, ObjectList,
-                                         PageChooserPanel, StreamFieldPanel,
-                                         TabbedInterface)
+from wagtail.admin.edit_handlers import (
+    FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, PageChooserPanel,
+    StreamFieldPanel, TabbedInterface, FieldRowPanel
+)
+from wagtail.contrib.settings.models import BaseSetting
+from wagtail.contrib.settings.registry import register_setting
 from wagtail.core import blocks
 from wagtail.core.fields import StreamField
-from wagtail.core.models import Orderable, Page
+from wagtail.core.models import Orderable, Page, Site
 
 from wagtail.core.rich_text import get_text_for_indexing
 from wagtail.images.blocks import ImageChooserBlock
@@ -21,11 +21,16 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 from wagtailmarkdown.blocks import MarkdownBlock
 
-from .blocks import MediaBlock
+from comments.models import CommentableMixin
+from iogt.views import create_final_external_link, check_user_session
+from questionnaires.models import Survey, Poll
+
+from .blocks import (MediaBlock, SocialMediaLinkBlock,
+                     SocialMediaShareButtonBlock)
 
 
 class HomePage(Page):
-    template = 'home/section.html'
+    template = 'home/home_page.html'
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
@@ -37,6 +42,7 @@ class HomePage(Page):
     ]
 
     def get_context(self, request):
+        check_user_session(request)
         context = super().get_context(request)
         context['banners'] = [
             home_page_banner.banner_page for home_page_banner in self.home_page_banners.filter(banner_page__live=True)
@@ -65,15 +71,30 @@ class HomePageBanner(Orderable):
     ]
 
 
+class SectionTaggedItem(TaggedItemBase):
+    """The through model between Section and Tag"""
+    content_object = ParentalKey('Section', related_name='tagged_items', on_delete=models.CASCADE)
+
+
+class ArticleTaggedItem(TaggedItemBase):
+    """The through model between Article and Tag"""
+    content_object = ParentalKey('Article', related_name='tagged_items', on_delete=models.CASCADE)
+
+
+class SectionIndexPage(Page):
+    parent_page_types = ['home.HomePage']
+    subpage_types = ['home.Section']
+
+
 class Section(Page):
-    icon = models.ForeignKey(
+    lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
         related_name='+',
         blank=True,
-        null=True,
+        null=True
     )
-    icon_active = models.ForeignKey(
+    icon = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
         related_name='+',
@@ -85,23 +106,33 @@ class Section(Page):
         blank=True,
         null=True,
     )
+    tags = ClusterTaggableManager(through='SectionTaggedItem', blank=True)
     show_in_menus_default = True
 
+    promote_panels = Page.promote_panels + [
+        MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
+    ]
+
     content_panels = Page.content_panels + [
+        ImageChooserPanel('lead_image'),
         ImageChooserPanel('icon'),
-        ImageChooserPanel('icon_active'),
         FieldPanel('color'),
+        MultiFieldPanel([
+            InlinePanel('featured_content', max_num=1, label=_("Featured Content")),
+        ], heading=_('Featured Content')),
     ]
 
     def get_context(self, request):
+        check_user_session(request)
         context = super().get_context(request)
-        context['articles'] = self.get_children().type(Article)
+        context['featured_content'] = [
+            featured_content.content for featured_content in self.featured_content.filter(content__live=True)
+        ]
+        context['sub_sections'] = self.get_children().live().type(Section)
+        context['articles'] = self.get_children().live().type(Article)
+        context['surveys'] = self.get_children().live().type(Survey)
+        context['polls'] = self.get_children().live().type(Poll)
         return context
-
-
-class ArticleTag(TaggedItemBase):
-    """The through model between Article and Tag"""
-    content_object = ParentalKey('Article', related_name='tagged_items', on_delete=models.CASCADE)
 
 
 class ArticleRecommendation(Orderable):
@@ -131,7 +162,7 @@ class Article(Page, CommentableMixin):
         null=True
     )
 
-    tags = ClusterTaggableManager(through=ArticleTag, blank=True)
+    tags = ClusterTaggableManager(through='ArticleTaggedItem', blank=True)
     body = StreamField([
         ('heading', blocks.CharBlock(form_classname="full title")),
         ('paragraph', blocks.RichTextBlock()),
@@ -190,6 +221,7 @@ class Article(Page, CommentableMixin):
     ])
 
     def get_context(self, request):
+        check_user_session(request)
         context = super().get_context(request)
         context['breadcrumbs'] = [crumb for crumb in self.get_ancestors() if not crumb.is_root()]
         context['sections'] = self.get_ancestors().type(Section)
@@ -244,8 +276,180 @@ class FooterIndexPage(Page):
     parent_page_types = ['home.HomePage']
     subpage_types = ['home.FooterPage']
 
+    def __str__(self):
+        return self.title
+
 
 class FooterPage(Article):
     parent_page_types = ['home.FooterIndexPage']
     subpage_types = []
     template = 'home/article.html'
+
+
+@register_setting
+class SiteSettings(BaseSetting):
+    logo = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    show_only_translated_pages = models.BooleanField(
+        default=False,
+        help_text='When selecting this option, untranslated pages'
+                  ' will not be visible to the front end user'
+                  ' when viewing a child language of the site')
+    # TODO: GA, FB analytics should be global.
+    fb_analytics_app_id = models.CharField(
+        verbose_name=_('Facebook Analytics App ID'),
+        max_length=25,
+        null=True,
+        blank=True,
+        help_text=_(
+            "The tracking ID to be used to view Facebook Analytics")
+    )
+    local_ga_tag_manager = models.CharField(
+        verbose_name=_('Local GA Tag Manager'),
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text=_(
+            "Local GA Tag Manager tracking code (e.g GTM-XXX) to be used to "
+            "view analytics on this site only")
+    )
+    global_ga_tag_manager = models.CharField(
+        verbose_name=_('Global GA Tag Manager'),
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text=_(
+            "Global GA Tag Manager tracking code (e.g GTM-XXX) to be used"
+            " to view analytics on more than one site globally")
+    )
+    local_ga_tracking_code = models.CharField(
+        verbose_name=_('Local GA Tracking Code'),
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text=_(
+            "Local GA tracking code to be used to "
+            "view analytics on this site only")
+    )
+    global_ga_tracking_code = models.CharField(
+        verbose_name=_('Global GA Tracking Code'),
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text=_(
+            "Global GA tracking code to be used"
+            " to view analytics on more than one site globally")
+    )
+    social_media_link = StreamField([
+        ('social_media_link', SocialMediaLinkBlock()),
+    ], null=True, blank=True)
+    social_media_content_sharing_button = StreamField([
+        ('social_media_content_sharing_button', SocialMediaShareButtonBlock()),
+    ], null=True, blank=True)
+    media_file_size_threshold = models.IntegerField(
+        default=9437184,
+        help_text='Show warning if uploaded media file size is greater than this in bytes. Default is 9 MB')
+    allow_anonymous_comment = models.BooleanField(default=False)
+    registration_survey = models.ForeignKey('questionnaires.Survey', null=True, blank=True, on_delete=models.SET_NULL)
+
+    panels = [
+        ImageChooserPanel('logo'),
+        MultiFieldPanel(
+            [
+                FieldPanel('show_only_translated_pages'),
+            ],
+            heading="Multi Language",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('fb_analytics_app_id'),
+            ],
+            heading="Facebook Analytics Settings",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('local_ga_tag_manager'),
+                FieldPanel('global_ga_tag_manager'),
+            ],
+            heading="GA Tag Manager Settings",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('local_ga_tracking_code'),
+                FieldPanel('global_ga_tracking_code'),
+            ],
+            heading="GA Tracking Code Settings",
+        ),
+        MultiFieldPanel(
+            [
+                MultiFieldPanel(
+                    [
+                        StreamFieldPanel('social_media_link'),
+                    ],
+                    heading="Social Media Footer Page", ),
+            ],
+            heading="Social Media Page Links", ),
+        MultiFieldPanel(
+            [
+                MultiFieldPanel(
+                    [
+                        StreamFieldPanel('social_media_content_sharing_button'),
+                    ],
+                    heading="Social Media Content Sharing Buttons", ),
+            ],
+            heading="Social Media Content Sharing Buttons", ),
+        MultiFieldPanel(
+            [
+                FieldPanel('media_file_size_threshold'),
+            ],
+            heading="Media File Size Threshold",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('allow_anonymous_comment'),
+            ],
+            heading="Allow Anonymous Comment",
+        ),
+        MultiFieldPanel(
+            [
+                PageChooserPanel('registration_survey'),
+            ],
+            heading="Registration Settings",
+        ),
+    ]
+
+    @classmethod
+    def get_for_default_site(cls):
+        default_site = Site.objects.filter(is_default_site=True).first()
+        return cls.for_site(default_site)
+
+    def __str__(self):
+        return self.site.site_name
+
+    class Meta:
+        verbose_name = 'Site Settings'
+        verbose_name_plural = 'Site Settings'
+
+class CacheSettings(BaseSetting):
+    cache = models.BooleanField(
+        default=True,
+        verbose_name=_("Prompt users to download?"),
+        help_text=_("check to prompt first time users to download the website as an app"),
+    )
+
+    panels = [
+        MultiFieldPanel(
+            [
+                FieldPanel('cache'),
+            ],
+            heading="Cache settings",
+        )
+    ]
+
+    class Meta:
+        verbose_name = "Cache settings"

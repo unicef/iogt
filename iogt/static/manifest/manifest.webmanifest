@@ -1,0 +1,28 @@
+{
+    "name": "IOGT",
+    "short_name": "iogt",
+    "start_url": "/",
+    "scope": "http://localhost:8000/",
+    "display": "standalone",
+    "background_color": "#FFF",
+    "theme_color": "#493174",
+    "description": "",
+    "dir": "ltr",
+    "lang": "en-US",
+    "orientation": "portrait-primary",
+    "icons": [{
+        "src": "../icons/unicef-logo.png",
+        "type": "image/png",
+        "sizes": "96x96"
+    }, {
+        "src": "../icons/unicef-logo.png",
+        "type": "image/png",
+        "sizes": "512x512"
+    },
+    {
+        "src": "../icons/maskable_icon.png",
+        "sizes": "196x196",
+        "type": "image/png",
+        "purpose": "any maskable"
+      }]
+}

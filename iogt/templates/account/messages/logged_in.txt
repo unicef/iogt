@@ -1,0 +1,3 @@
+{% load account %}
+{% load i18n %}
+{% user_display user as name %}

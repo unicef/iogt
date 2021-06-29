@@ -9,8 +9,6 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-from django.utils.translation import gettext_lazy as _
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
@@ -51,6 +49,8 @@ INSTALLED_APPS = [
     'wagtailmenus',
     'wagtailmedia',
     'wagtailmarkdown',
+    'wagtail_transfer',
+    'wagtail.contrib.settings',
 
     'django_comments_xtd',
     'django_comments',
@@ -80,7 +80,12 @@ MIDDLEWARE = [
     "django.middleware.locale.LocaleMiddleware",
 
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+    'iogt_users.middlewares.RegistrationSurveyRedirectMiddleware',
+    'external_links.middleware.RewriteExternalLinksMiddleware',
 ]
+
+# Prevent Wagtail's built in menu from showing in Admin > Settings
+WAGTAILMENUS_MAIN_MENUS_EDITABLE_IN_WAGTAILADMIN = False
 
 ROOT_URLCONF = 'iogt.urls'
 
@@ -97,7 +102,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                "wagtail.contrib.settings.context_processors.settings",
                 'wagtailmenus.context_processors.wagtailmenus',
+                'wagtail.contrib.settings.context_processors.settings',
+                "home.processors.show_welcome_banner",
             ],
         },
     },
@@ -198,7 +206,7 @@ ACCOUNT_ADAPTER = 'iogt_users.adapters.AccountAdapter'
 
 WAGTAIL_USER_EDIT_FORM = 'iogt_users.forms.WagtailAdminUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'iogt_users.forms.WagtailAdminUserCreateForm'
-WAGTAIL_USER_CUSTOM_FIELDS = ['display_name', 'terms_accepted']
+WAGTAIL_USER_CUSTOM_FIELDS = ['first_name', 'last_name', 'email', 'terms_accepted']
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
@@ -245,5 +253,13 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('en', _('English')),
     ('fr', _('French')),
 ]
+
+WAGTAILTRANSFER_SOURCES = {    
+    'iogt_global': {
+        'BASE_URL': 'http://iogt.org',
+        'SECRET_KEY': 'fake_secret_key_2',
+    },}
+
+WAGTAILTRANSFER_SECRET_KEY = 'fake_secret_key'
 
 from .profanity_settings import *
