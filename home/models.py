@@ -10,7 +10,7 @@ from taggit.models import TaggedItemBase
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (
     FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, PageChooserPanel,
-    StreamFieldPanel, TabbedInterface, FieldRowPanel
+    StreamFieldPanel, TabbedInterface
 )
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
@@ -23,13 +23,15 @@ from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 from wagtailmarkdown.blocks import MarkdownBlock
+from wagtailmenus.models import AbstractFlatMenuItem
 
 from comments.models import CommentableMixin
 from iogt.views import create_final_external_link, check_user_session
 from questionnaires.models import Survey, Poll
 
 from .blocks import (MediaBlock, SocialMediaLinkBlock,
-                     SocialMediaShareButtonBlock)
+                     SocialMediaShareButtonBlock, EmbeddedQuestionnaireChooserBlock,
+                     PageButtonBlock)
 from .forms import SectionPageForm
 from .utils.progress_manager import ProgressManager
 
@@ -219,7 +221,9 @@ class Article(Page, CommentableMixin):
         ('image', ImageChooserBlock()),
         ('list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
         ('numbered_list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
-        ('page', blocks.PageChooserBlock()),
+        ('page_button', PageButtonBlock()),
+        ('embedded_poll', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')),
+        ('embedded_survey', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')),
         ('media', MediaBlock(icon='media')),
     ])
     show_in_menus_default = True
@@ -525,3 +529,21 @@ class CacheSettings(BaseSetting):
 
     class Meta:
         verbose_name = "Cache settings"
+
+
+class IogtFlatMenuItem(AbstractFlatMenuItem):
+    menu = ParentalKey(
+        'wagtailmenus.FlatMenu',
+        on_delete=models.CASCADE,
+        related_name="iogt_flat_menu_items",
+    )
+    icon = models.ForeignKey(
+        'wagtailimages.Image',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+    )
+
+    panels = AbstractFlatMenuItem.panels + [
+        ImageChooserPanel('icon'),
+    ]

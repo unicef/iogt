@@ -22,6 +22,8 @@ from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 from wagtail.images.blocks import ImageChooserBlock
 
+from questionnaires.blocks import SkipLogicField
+
 
 class QuestionnairePage(Page):
     template = None
@@ -76,6 +78,7 @@ class SurveyFormField(AbstractFormField):
         help_text=_('Column header used during CSV export of survey '
                     'responses.'),
     )
+    skip_logic = SkipLogicField()
     page_break = models.BooleanField(
         default=False,
         help_text=_(
@@ -87,7 +90,7 @@ class SurveyFormField(AbstractFormField):
         FieldPanel('help_text'),
         FieldPanel('required'),
         FieldPanel('field_type', classname="formbuilder-type"),
-        FieldPanel('choices', classname="formbuilder-choices"),
+        StreamFieldPanel('skip_logic'),
         FieldPanel('default_value', classname="formbuilder-default"),
         FieldPanel('admin_label'),
         FieldPanel('page_break'),
@@ -157,7 +160,7 @@ class Survey(QuestionnairePage, AbstractForm):
         )
 
         site_settings = SiteSettings.get_for_default_site()
-        if site_settings.registration_survey.pk == self.pk:
+        if site_settings.registration_survey and site_settings.registration_survey.pk == self.pk:
             user.has_filled_registration_survey = True
             user.save(update_fields=['has_filled_registration_survey'])
 
@@ -173,6 +176,11 @@ class Survey(QuestionnairePage, AbstractForm):
             return self.serve_questions_separately(request)
 
         return super().serve(request, *args, **kwargs)
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context.update({'back_url': request.GET.get('back_url')})
+        return context
 
     def serve_questions_separately(self, request, *args, **kwargs):
         session_key_data = "form_data-%s" % self.pk
@@ -372,6 +380,7 @@ class Poll(QuestionnairePage, AbstractForm):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         results = dict()
+
         # Get information about form fields
         data_fields = [
             (field.clean_name, field.label)
@@ -408,6 +417,7 @@ class Poll(QuestionnairePage, AbstractForm):
 
         context.update({
             'results': results,
+            'back_url': request.GET.get('back_url'),
         })
         return context
 
