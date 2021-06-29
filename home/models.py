@@ -17,8 +17,6 @@ from wagtail.core.rich_text import get_text_for_indexing
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
-from wagtail_color_panel.edit_handlers import NativeColorPanel
-from wagtail_color_panel.fields import ColorField
 from wagtailmarkdown.blocks import MarkdownBlock
 from wagtailmenus.models import AbstractFlatMenuItem, BooleanField
 

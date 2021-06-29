@@ -7,11 +7,10 @@
 
 {% block content %}
     <script>
-		console.log("{{ banners }}");
+		console.log("{{ page.show_polls }}");
     </script>
     <div class="home">
         {% render_banners_list banners %}
-        {#        {% render_featured_content_list featured_content %}#}
         {% include "nav_bar.html" %}
         <div class="container container--main">
             <div class="articles-list">
@@ -88,47 +87,12 @@
                     </div>
                 </a></div>
             </div>
-            <div class="polls-widget">
-                <div class="container">
-                    <div class="polls-widget__wrap"><h2
-                            class="title polls-widget__title">Polls</h2>
-                        <div class="polls-widget__desc text"><p>Are you aged 12
-                            to 25?
-                            What effect would you say Internet of Good Things
-                            (IoGT) can
-                            have on young people your age?</p></div>
-                        <form class="polls-widget__form"><h4
-                                class="polls-widget__form-title">Answers</h4>
-                            <label
-                                    class="cust-check polls-widget__item"><input
-                                    type="radio" name="poll_rank"
-                                    value="Mostly positive">
-                                <span class="cust-check__title">Mostly positive</span></label>
-                            <label class="cust-check polls-widget__item"><input
-                                    type="radio" name="poll_rank"
-                                    value="Mostly positive"> <span
-                                    class="cust-check__title">Mostly positive</span></label>
-                            <label class="cust-check polls-widget__item"><input
-                                    type="radio" name="poll_rank"
-                                    value="Mostly positive"> <span
-                                    class="cust-check__title">Mostly positive</span></label>
-                            <button type="submit"
-                                    class="cust-btn cust-btn--dark polls-widget__submit">
-                                <span>Log in to vote</span></button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="auth-banner">
-                <div class="container">
-                    <div class="auth-banner__wrap"><h2
-                            class="auth-banner__title title">
-                        How can you prevent coronavirus?</h2>
-                        <a href="{{ login_url }}"
-                           class="cust-btn cust-btn--white auth-banner__btn"><span>Log in / Create account</span></a>
-                    </div>
-                </div>
-            </div>
+            {% if page.show_polls %}
+                {% render_polls_list polls %}
+            {% endif %}
+            {% if page.show_questionnaire %}
+                {% render_questionnaire_list questionnaire %}
+            {% endif %}
             <div class="survey-widget">
                 <div class="container">
                     <div class="survey-widget__wrap"><h2

@@ -4,7 +4,7 @@
         {% image banner.specific.banner_background_image width-400 as background %}
         {% image banner.specific.banner_image width-400 as top_image %}
         <div class="banner"
-             style="{% if background.url %}background-image: url('{{ background.url }}');{% endif %}{% if banner.specific.banner_background_color %}background-color: {{ banner.specific.banner_background_color }};{% endif %}">
+             style="{% if background.url %}background-image: url('{{ background.url }}');{% endif %}">
             <div class="container">
                 <div class="banner__wrap">
                     {% if top_image.url %}
