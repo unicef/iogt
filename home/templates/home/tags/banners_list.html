@@ -1,14 +1,18 @@
 {% load static wagtailcore_tags wagtailimages_tags %}
-<div class="desktopBanners">
+<div class="container container--main">
     {% for banner in banners %}
-    <div class="bannerContainer">
-        <div class="desktopBannerContainer">
-            <div class="image">
-                <a href="{{ banner.specific.final_external_link }}">
-                    {% image banner.specific.banner_image fill-336x186 class="mainImage" %}
-                </a>
+        <div class="banner">
+            <div class="container">
+                <div class="banner__wrap">
+                    <div class="banner__logo">
+                        {% image banner.specific.banner_image width-80 height-30 %}
+                    </div>
+                    <h1 class="home-banner__title title">{{ banner.title }}</h1>
+                    <a
+                            href="{{ banner.specific.final_external_link }}"
+                            class="cust-btn cust-btn--white cust-btn--secondary home-banner__btn"><span>Click here to access</span></a>
+                </div>
             </div>
         </div>
-    </div>
     {% endfor %}
 </div>
