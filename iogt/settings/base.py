@@ -14,6 +14,8 @@ import os
 
 from django.utils.translation import gettext_lazy as _
 
+import django.conf.locale
+
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 
@@ -250,9 +252,52 @@ COMMENTS_XTD_APP_MODEL_OPTIONS = {
 WAGTAIL_I18N_ENABLED = True
 
 WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
+    ('ar', _('Arabic')),
+    ('ch', _('Chichewa')),
     ('en', _('English')),
     ('fr', _('French')),
+    ('km', _('Khmer')),
+    ('rw', _('Kinyarwanda')),
+    ('rn', 'Kirundi'),
+    ('ku', _('Kurdish')),
+    ('mg', _('Malagasy')),
+    ('ne', _('Nepali')),
+    ('nr', _('Ndebele')),
+    ('pt', _('Portuguese')),
+    ('qu', _('Quechua')),
+    ('ru', _('Russian')),
+    ('sho', _("Shona")),
+    ('es', _('Spanish')),
+    ('sw', _('Swahili')),
+    ('tg', _('Tajik')),
+    ('ti', _('Tigrinya')),
+    ('ur', _('Urdu')),
+    ('uz', _('Uzbek')),
+    ('zu', _('Zulu'))
 ]
+
+EXTRA_LANG_INFO = {
+    'sho': {
+        'bidi': False,
+        'code': 'sho',
+        'name': 'Shona',
+        'name_local': 'Shona'
+    },
+    'zu': {
+        'bidi': False,
+        'code': 'zu',
+        'name': 'Zulu',
+        'name_local': 'Zulu'
+    },
+    'rn': {
+        'bidi': False,
+        'code': 'rn',
+        'name': 'Kirundi',
+        'name_local': 'Ikirundi'
+    },
+}
+
+django.conf.locale.LANG_INFO.update(EXTRA_LANG_INFO)
 
 WAGTAILTRANSFER_SOURCES = {    
     'iogt_global': {
