@@ -64,7 +64,5 @@ class EmbeddedQuestionnaireChooserBlock(blocks.PageChooserBlock):
         })
         return render_to_string('blocks/embedded_questionnaire.html', context)
 
-
     class Meta:
-        # template = 'blocks/embedded_questionnaire.html'
-        icon = 'help'
+        icon = 'form'
