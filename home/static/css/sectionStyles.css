@@ -327,4 +327,35 @@
   background-color: #FFFFFF;
   color: black;
 }
+
+.article-image-holder__image {
+  max-width: 240px;
+  height: 131px;
+  left: 0px;
+  top: 38px;
+}
+
+.article-image-holder__back {
+  top: 8px;
+  left: 16px;
+}
+
+.article-content {
+  width: 240px;
+}
+
+.article-content h1 {
+  width: 240px;
+  height: 40px;
+  left: 12px;
+  top: 192px;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 20px;
+  /* or 125% */
+  /* Black and white / Black */
+  color: #303030;
+}
 /*# sourceMappingURL=sectionStyles.css.map */
