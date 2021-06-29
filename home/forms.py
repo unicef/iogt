@@ -1,7 +1,5 @@
+from django.apps import apps
 from wagtail.admin.forms import WagtailAdminPageForm
-
-from home.utils.progress import get_progress_bar_eligible_sections
-
 
 class SectionPageForm(WagtailAdminPageForm):
 
@@ -9,7 +7,8 @@ class SectionPageForm(WagtailAdminPageForm):
         cleaned_data = super().clean()
 
         if cleaned_data['show_progress_bar']:
-            if self.instance not in get_progress_bar_eligible_sections():
+            Section = apps.get_model('home', 'Section')
+            if self.instance not in Section.get_progress_bar_eligible_sections():
                 progress_bar_enabled_ancestor_title = self.instance.get_progress_bar_enabled_ancestor().title
                 self.add_error(
                     'show_progress_bar',

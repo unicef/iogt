@@ -1,8 +1,11 @@
+from django.contrib.admin.utils import flatten
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 
 from modelcluster.contrib.taggit import ClusterTaggableManager
+from rest_framework import status
 from taggit.models import TaggedItemBase
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (
@@ -30,6 +33,7 @@ from .blocks import (MediaBlock, SocialMediaLinkBlock,
 from .forms import SectionPageForm
 from .utils.progress_manager import ProgressManager
 
+User = get_user_model()
 
 class HomePage(Page):
     template = 'home/home_page.html'
@@ -134,10 +138,11 @@ class Section(Page):
     base_form_class = SectionPageForm
 
     def get_descendant_articles(self):
-        return Article.objects.descendant_of(self).type(Article)
+        return Article.objects.descendant_of(self).exact_type(Article)
 
     def get_progress_bar_enabled_ancestor(self):
-        return Section.objects.ancestor_of(self, inclusive=True).type(Section).filter(show_progress_bar=True).first()
+        return Section.objects.ancestor_of(self, inclusive=True).exact_type(Section).filter(
+            show_progress_bar=True).first()
 
     def get_user_progress_dict(self, request):
         progress_manager = ProgressManager(request)
@@ -161,6 +166,22 @@ class Section(Page):
         context['user_progress'] = self.get_user_progress_dict(request)
 
         return context
+
+    @staticmethod
+    def get_progress_bar_eligible_sections():
+        """
+        Eligibility criteria:
+        Sections whose ancestors don't have show_progress_bar=True are eligible to
+        show progress bars.
+        :return:e
+        """
+        progress_bar_sections = Section.objects.filter(show_progress_bar=True)
+        all_descendants = [list(Section.objects.type(Section).descendant_of(section).values_list('pk', flat=True)) for
+                           section in
+                           progress_bar_sections]
+        all_descendants = set(flatten(all_descendants))
+
+        return Section.objects.exclude(pk__in=all_descendants)
 
 
 class ArticleRecommendation(Orderable):
@@ -273,8 +294,8 @@ class Article(Page, CommentableMixin):
 
     def serve(self, request):
         response = super().serve(request)
-        progress_manager = ProgressManager(request)
-        progress_manager.record_article_read(self)
+        if response.status_code == status.HTTP_200_OK:
+            User.record_article_read(request=request, article=self)
         return response
 
     def description(self):
