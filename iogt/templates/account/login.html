@@ -3,44 +3,37 @@
 {% load i18n %}
 {% load account socialaccount %}
 
-{% block title %}{% trans "Sign In" %}{% endblock %}
+{% block title %}{% trans "Log In" %}{% endblock %}
 
 {% block allauth_content %}
 
-<h1>{% trans "Sign In" %}</h1>
+    <h1>{% trans "Log In" %}</h1>
 
-{% get_providers as socialaccount_providers %}
+    {% get_providers as socialaccount_providers %}
 
-{% if socialaccount_providers %}
-<p>{% blocktrans with site.name as site_name %}Please sign in with one
-of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
-for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
-
-<div class="socialaccount_ballot">
-
-  <ul class="socialaccount_providers">
-    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
-  </ul>
-
-  <div class="login-or">{% trans 'or' %}</div>
-
-</div>
-
-{% include "socialaccount/snippets/login_extra.html" %}
-
-{% else %}
-<p>{% blocktrans %}If you have not created an account yet, then please
-<a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
-{% endif %}
-
-<form class="login" method="POST" action="{% url 'account_login' %}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-  {% endif %}
-  <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
-  <button class="primaryAction accounts-form-btn" type="submit">{% trans "Sign In" %}</button>
-</form>
+    <form class="login" method="POST" action="{% url 'account_login' %}">
+        {% csrf_token %}
+        <div class="profile-form__inputs">
+            {% for field in form %}
+                {% if field.name != "remember" %}
+                    <label class="cust-input profile-form__input">
+                        {{ field }}
+                        {% if field.errors %}
+                            <span class="cust-input__error">{% trans field.errors %}</span> {% endif %}
+                    </label>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="profile-form__btns">
+            <button type="submit"
+                    class="cust-btn cust-btn--dark profile-form__btn"><span>Log in</span>
+            </button>
+            <a href="{% url 'account_signup' %}"
+               class="cust-btn profile-form__btn"><span>Create your account</span></a>
+        </div>
+        <p class="text profile-form__desc">A quia quas et atque eos vero
+            temporibus quis ullam. Recusandae recusandae omnis aspernatur
+            quisquam at dolorem aspernatur quod non.</p>
+    </form>
 
 {% endblock %}

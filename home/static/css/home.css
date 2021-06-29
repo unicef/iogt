@@ -1,0 +1,224 @@
+
+.dark-overlay {
+    background-color: rgba(0, 0, 0, .6);
+    height: 100vh;
+    left: 0;
+    opacity: 0;
+    position: fixed;
+    top: 0;
+    transition: all .45s;
+    visibility: hidden;
+    width: 100vw;
+    z-index: 1
+}
+
+.dark-overlay.active {
+    opacity: 1;
+    visibility: visible
+}
+
+.home-banner {
+    background-color: #acc9fa;
+    background-image: url("/static/images/home_banner.png");
+    background-position: 100% 100%;
+    background-repeat: no-repeat;
+    background-size: 120px auto;
+    border-radius: 8px;
+    margin: 4px 0;
+    padding: 12px 0
+}
+
+.home-banner__logo {
+    max-width: 80px
+}
+
+.home-banner__title {
+    margin: 6px 0 14px;
+    max-width: 140px
+}
+
+.home-banner__btn {
+    max-width: 134px
+}
+
+.covid-banner {
+    background-color: #ef6f84;
+    background-image: url("/static/images/covid_banner.png");
+    background-position: 100%;
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+    border-radius: 8px;
+    margin: 6px 0;
+    padding: 14px 0 25px
+}
+
+.covid-banner__title {
+    margin-bottom: 5px
+}
+
+.covid-banner__desc {
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 16px;
+    max-width: 70px
+}
+
+.link-banner {
+    background-color: #ffde67;
+    background-image: url("/static/images/link_banner.png");
+    background-size: 100% 100%;
+    border-radius: 8px;
+    margin: 6px 0
+}
+
+.link-banner__wrap {
+    -webkit-align-items: center;
+    align-items: center;
+    display: -webkit-flex;
+    display: flex
+}
+
+.link-banner__title {
+    margin-right: auto
+}
+
+.link-banner__link {
+    -webkit-align-items: center;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 50%;
+    display: -webkit-flex;
+    display: flex;
+    height: 30px;
+    -webkit-justify-content: center;
+    justify-content: center;
+    width: 30px
+}
+
+.articles-list {
+    margin-bottom: 32px
+}
+
+.articles-list__item {
+    border-bottom: 1px solid #efefef;
+    display: -webkit-flex;
+    display: flex;
+    padding: 8px 0;
+    text-decoration: none
+}
+
+.articles-list__item-header {
+    -webkit-align-items: center;
+    align-items: center;
+    display: -webkit-flex;
+    display: flex;
+    margin-bottom: 8px;
+    padding-right: 6px
+}
+
+.articles-list__item-header--red {
+    color: #ee3851
+}
+
+.articles-list__item-header--blue {
+    color: #1daeec
+}
+
+.articles-list__item-header--purple {
+    color: #8b5cd6
+}
+
+.articles-list__item-header--green {
+    color: #1a9090
+}
+
+.articles-list__item-comment, .articles-list__item-tag {
+    font: 500 10px/10px Poppins, sans-serif
+}
+
+.articles-list__item-tag {
+    margin-right: 22px
+}
+
+.articles-list__item-comment {
+    position: relative
+}
+
+.articles-list__item-comment:before {
+    background-image: url(/static/images/icons/comment.svg);
+    background-position: 50%;
+    background-repeat: no-repeat;
+    content: "";
+    display: block;
+    height: 8px;
+    left: -12px;
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    width: 8px
+}
+
+.articles-list__item-header--blue .articles-list__item-comment:before {
+    background-image: url(/static/images/icons/comment-blue.svg)
+}
+
+.articles-list__item-header--purple .articles-list__item-comment:before {
+    background-image: url(/static/images/icons/comment-purple.svg)
+}
+
+.articles-list__item-header--green .articles-list__item-comment:before {
+    background-image: url(/static/images/icons/comment-green.svg)
+}
+
+.articles-list__item-content {
+    -webkit-flex: 1;
+    flex: 1
+}
+
+.articles-list__item-img {
+    height: 68px;
+    width: 68px
+}
+
+.articles-list__item-img img {
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    width: 100%
+}
+
+.articles-list__item-text {
+    color: #303030;
+    font: 700 10px/16px Poppins, sans-serif;
+    padding-right: 6px
+}
+
+.polls-widget__title {
+    margin-bottom: 16px
+}
+
+.polls-widget__form {
+    margin-top: 16px
+}
+
+.polls-widget__form-title {
+    color: #9a9a9a;
+    font-size: 8px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    line-height: 12px;
+    text-transform: uppercase
+}
+
+.polls-widget__item {
+    margin-bottom: 10px
+}
+
+.polls-widget__item:last-child {
+    margin-bottom: 0
+}
+
+.polls-widget__submit {
+    margin-top: 24px
+}
