@@ -25,7 +25,7 @@ from wagtailmarkdown.blocks import MarkdownBlock
 from wagtailmenus.models import AbstractFlatMenuItem, BooleanField
 
 from comments.models import CommentableMixin
-from iogt.views import create_final_external_link, check_user_session
+from iogt.views import check_user_session
 from questionnaires.models import Survey, Poll
 from .blocks import (MediaBlock, SocialMediaLinkBlock,
                      SocialMediaShareButtonBlock,
@@ -197,8 +197,8 @@ class Section(Page):
         all_descendants = [list(
             Section.objects.type(Section).descendant_of(section).values_list(
                 'pk', flat=True)) for
-                           section in
-                           progress_bar_sections]
+            section in
+            progress_bar_sections]
         all_descendants = set(flatten(all_descendants))
 
         return Section.objects.exclude(pk__in=all_descendants)
@@ -389,8 +389,6 @@ class BannerPage(Page):
         ImageChooserPanel('banner_icon_button'),
         FieldPanel('align_center')
     ]
-
-
 
 
 class FooterIndexPage(Page):

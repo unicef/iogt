@@ -4,9 +4,6 @@
     <div class="container articles-list__container">
         <h2 class="title articles-list__title">Feature articles</h2>
         {% for article in articles %}
-            <script>
-				console.log("{{ article.specific.category }}");
-            </script>
             <a href="{% pageurl article %}" class="articles-list__item">
                 <div class="articles-list__item-content">
                     <div class="articles-list__item-header articles-list__item-header--red">
