@@ -11,7 +11,7 @@ from wagtail.core import hooks
 from wagtail.core.models import PageViewRestriction
 from wagtail.core.rich_text import LinkHandler
 
-from home.models import FooterIndexPage, Section
+from home.models import FooterIndexPage, BannerIndexPage, Section, SectionIndexPage
 
 
 class ExternalLinkHandler(LinkHandler, ABC):
@@ -38,9 +38,10 @@ def check_group(page, request, serve_args, serve_kwargs):
                     if not any(group in current_user_groups for group in restriction.groups.all()):
                         raise PermissionDenied
 
+
 @hooks.register('construct_explorer_page_queryset')
-def sort_footer_page_listing_by_path(parent_page, pages, request):
-    if isinstance(parent_page, FooterIndexPage):
+def sort_page_listing_by_path(parent_page, pages, request):
+    if isinstance(parent_page, (BannerIndexPage, FooterIndexPage, Section, SectionIndexPage)):
         pages = pages.order_by('path')
 
     return pages
