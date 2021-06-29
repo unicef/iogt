@@ -20,13 +20,15 @@ from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 from wagtailmarkdown.blocks import MarkdownBlock
+from wagtailmenus.models import AbstractFlatMenuItem
 
 from comments.models import CommentableMixin
 from iogt.views import create_final_external_link, check_user_session
 from questionnaires.models import Survey, Poll
 
 from .blocks import (MediaBlock, SocialMediaLinkBlock,
-                     SocialMediaShareButtonBlock, EmbeddedQuestionnaireChooserBlock)
+                     SocialMediaShareButtonBlock, EmbeddedQuestionnaireChooserBlock,
+                     PageButtonBlock)
 
 
 class HomePage(Page):
@@ -170,7 +172,7 @@ class Article(Page, CommentableMixin):
         ('image', ImageChooserBlock()),
         ('list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
         ('numbered_list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
-        ('page', blocks.PageChooserBlock()),
+        ('page_button', PageButtonBlock()),
         ('embedded_poll', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')),
         ('embedded_survey', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')),
         ('media', MediaBlock(icon='media')),
@@ -437,6 +439,7 @@ class SiteSettings(BaseSetting):
         verbose_name = 'Site Settings'
         verbose_name_plural = 'Site Settings'
 
+
 class CacheSettings(BaseSetting):
     cache = models.BooleanField(
         default=True,
@@ -455,3 +458,21 @@ class CacheSettings(BaseSetting):
 
     class Meta:
         verbose_name = "Cache settings"
+
+
+class IogtFlatMenuItem(AbstractFlatMenuItem):
+    menu = ParentalKey(
+        'wagtailmenus.FlatMenu',
+        on_delete=models.CASCADE,
+        related_name="iogt_flat_menu_items",
+    )
+    icon = models.ForeignKey(
+        'wagtailimages.Image',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+    )
+
+    panels = AbstractFlatMenuItem.panels + [
+        ImageChooserPanel('icon'),
+    ]

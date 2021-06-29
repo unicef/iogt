@@ -66,3 +66,10 @@ class EmbeddedQuestionnaireChooserBlock(blocks.PageChooserBlock):
 
     class Meta:
         icon = 'form'
+
+class PageButtonBlock(blocks.StructBlock):
+    page = blocks.PageChooserBlock()
+    text = blocks.CharBlock(required=False, max_length=255)
+
+    class Meta:
+        template = 'blocks/page_button.html'
