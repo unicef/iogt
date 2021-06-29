@@ -1,8 +1,11 @@
+from django.contrib.admin.utils import flatten
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 
 from modelcluster.contrib.taggit import ClusterTaggableManager
+from rest_framework import status
 from taggit.models import TaggedItemBase
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (
@@ -29,7 +32,10 @@ from questionnaires.models import Survey, Poll
 from .blocks import (MediaBlock, SocialMediaLinkBlock,
                      SocialMediaShareButtonBlock, EmbeddedQuestionnaireChooserBlock,
                      PageButtonBlock)
+from .forms import SectionPageForm
+from .utils.progress_manager import ProgressManager
 
+User = get_user_model()
 
 class HomePage(Page):
     template = 'home/home_page.html'
@@ -108,7 +114,10 @@ class Section(Page):
         blank=True,
         null=True,
     )
+
     tags = ClusterTaggableManager(through='SectionTaggedItem', blank=True)
+    show_progress_bar = models.BooleanField(default=False)
+
     show_in_menus_default = True
 
     promote_panels = Page.promote_panels + [
@@ -124,6 +133,27 @@ class Section(Page):
         ], heading=_('Featured Content')),
     ]
 
+    settings_panels = Page.settings_panels + [
+        FieldPanel('show_progress_bar')
+    ]
+
+    base_form_class = SectionPageForm
+
+    def get_descendant_articles(self):
+        return Article.objects.descendant_of(self).exact_type(Article)
+
+    def get_progress_bar_enabled_ancestor(self):
+        return Section.objects.ancestor_of(self, inclusive=True).exact_type(Section).filter(
+            show_progress_bar=True).first()
+
+    def get_user_progress_dict(self, request):
+        progress_manager = ProgressManager(request)
+        read_article_count, total_article_count = progress_manager.get_progress(self)
+        return {
+            'read': read_article_count,
+            'total': total_article_count
+        }
+
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
@@ -134,7 +164,26 @@ class Section(Page):
         context['articles'] = self.get_children().live().type(Article)
         context['surveys'] = self.get_children().live().type(Survey)
         context['polls'] = self.get_children().live().type(Poll)
+
+        context['user_progress'] = self.get_user_progress_dict(request)
+
         return context
+
+    @staticmethod
+    def get_progress_bar_eligible_sections():
+        """
+        Eligibility criteria:
+        Sections whose ancestors don't have show_progress_bar=True are eligible to
+        show progress bars.
+        :return:e
+        """
+        progress_bar_sections = Section.objects.filter(show_progress_bar=True)
+        all_descendants = [list(Section.objects.type(Section).descendant_of(section).values_list('pk', flat=True)) for
+                           section in
+                           progress_bar_sections]
+        all_descendants = set(flatten(all_descendants))
+
+        return Section.objects.exclude(pk__in=all_descendants)
 
 
 class ArticleRecommendation(Orderable):
@@ -224,12 +273,34 @@ class Article(Page, CommentableMixin):
         ObjectList(CommentableMixin.comments_panels, heading='Comments')
     ])
 
+    def _get_progress_enabled_section(self):
+        """
+        Returning .first() will bypass any discrepancies in settings show_progress_bar=True
+        for sections
+        :return:
+        """
+        return Section.objects.ancestor_of(self).type(Section).filter(show_progress_bar=True).first()
+
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
         context['breadcrumbs'] = [crumb for crumb in self.get_ancestors() if not crumb.is_root()]
         context['sections'] = self.get_ancestors().type(Section)
+
+        progress_enabled_section = self._get_progress_enabled_section()
+
+        if progress_enabled_section:
+            context.update({
+                'user_progress': progress_enabled_section.get_user_progress_dict(request)
+            })
+
         return context
+
+    def serve(self, request):
+        response = super().serve(request)
+        if response.status_code == status.HTTP_200_OK:
+            User.record_article_read(request=request, article=self)
+        return response
 
     def description(self):
         for block in self.body:

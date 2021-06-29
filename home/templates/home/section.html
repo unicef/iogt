@@ -27,6 +27,9 @@
                {% image page.lead_image height-280 class="main-image-tablet-desktop" %}
             </section>
         </div>
+        {% if user_progress %}
+            {% render_user_progress  user_progress %}
+        {% endif %}
         {% render_featured_content_list featured_content %}
         {% render_sub_sections_list sub_sections %}
         {% render_articles_list articles %}
