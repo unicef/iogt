@@ -160,7 +160,7 @@ class Survey(QuestionnairePage, AbstractForm):
         )
 
         site_settings = SiteSettings.get_for_default_site()
-        if site_settings.registration_survey.pk == self.pk:
+        if site_settings.registration_survey and site_settings.registration_survey.pk == self.pk:
             user.has_filled_registration_survey = True
             user.save(update_fields=['has_filled_registration_survey'])
 
@@ -176,6 +176,11 @@ class Survey(QuestionnairePage, AbstractForm):
             return self.serve_questions_separately(request)
 
         return super().serve(request, *args, **kwargs)
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context.update({'back_url': request.GET.get('back_url')})
+        return context
 
     def serve_questions_separately(self, request, *args, **kwargs):
         session_key_data = "form_data-%s" % self.pk
@@ -375,6 +380,7 @@ class Poll(QuestionnairePage, AbstractForm):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         results = dict()
+
         # Get information about form fields
         data_fields = [
             (field.clean_name, field.label)
@@ -411,6 +417,7 @@ class Poll(QuestionnairePage, AbstractForm):
 
         context.update({
             'results': results,
+            'back_url': request.GET.get('back_url'),
         })
         return context
 
