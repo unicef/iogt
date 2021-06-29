@@ -17,7 +17,7 @@
         <div style="display:none">{{ form.honeypot }}</div>
 
         <div class="row form-group {% if 'comment' in form.errors %}has-danger{% endif %}">
-            <div class="offset-md-1 col-md-10">
+            <div class="offset-md-1 col-md-10 " >
                 {{ form.comment }}
                 {% for error in form.comment.errors %}
                     <div class="alert-danger">{{ error }}</div>
@@ -77,9 +77,9 @@
     </fieldset>
 
 
-    <div class="row form-group">
-        <div class="offset-md-3 col-md-7">
-            <input type="submit" name="post" value="{% trans 'Send' %}" class="btn btn-primary button"/>
+    <div class='comments__input-holder'>
+        <div class="comments__submit">
+            <input type="submit" name="post" value="{% trans 'Leave comment' %}" />
         </div>
     </div>
 </form>
