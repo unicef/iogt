@@ -73,7 +73,7 @@
     <div class="desktopArticles">
         {% for article in articles %}
         <div class="articleContainer">
-            <div class="desktopArticleContainer" style="border-bottom: medium solid rgb(191, 0, 18);">
+            <div class="desktopArticleContainer" >
                 <div class="image">
                     <a href="{% pageurl article %}">
                         {% image article.specific.lead_image fill-336x186 class="mainImage" %}

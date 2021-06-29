@@ -3,31 +3,21 @@
 <div class="desktopSubSections">
     {% for sub_section in sub_sections %}
     <div class="subSectionsContainer">
-        <div class="desktopSubSectionsContainer" style="border-bottom: medium solid rgb(191, 0, 18);">
+        <div class="desktopSubSectionsContainer" >
             <div class="image">
                 <a href="{% pageurl sub_section %}">
                     {% image sub_section.specific.lead_image fill-336x186 class="mainImage" %}
                 </a>
-                <div class="share">
-                    <img src="{% static 'images/share.png'%}">
-                </div>
             </div>
             <div class="content">
-                <div style="color: rgb(191, 0, 18);" class="tag">
-                    <div>
-			    <span>{# CORONAVIRUS (COVID-19) | ABOUT CORONAVIRUS #}</span>
-                    </div>
-                    <div class="byline">
-                        {{ sub_section.first_published_at|date }} /
-                        <span class="author">by {{ sub_section.owner.get_full_name }}</span>
-                    </div>
-                </div>
                 <div class="title">
-                    <a href="{% pageurl sub_section %}">
-                        <span>{{ sub_section.title }}</span>
-                    </a>
+                    <section class='section-page-sections'>
+                        <a class='section-page-sections__section' href="{% pageurl sub_section %}">
+                        {{ sub_section.title }} 
+                        <img class='section-page-details__survey--image2' src="{% static 'images/Stroke 3.png' %}" alt=''>
+                        </a>
+                    </section>
                 </div>
-                <p class="desc">{{ sub_section.specific.description|striptags|truncatewords:21 }}</p>
             </div>
         </div>
     </div>

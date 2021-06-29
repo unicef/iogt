@@ -181,9 +181,6 @@
    }
 }
 
-.quiz-holder{  
-   border-top: 0.5px solid #EFEFEF;
-}
 
 .quiz {
    margin:10px 0;
@@ -191,17 +188,16 @@
    flex-direction: row;
    align-items: center;
    padding: 8px 12px;
-   width: 216px;
-   height: 38px;
+   width: 220px;
    left: 12px;
    background: #E8F8FD;
    border-radius: 8px;
+   text-decoration: none;
+
 
 &__details {
    p {
-      position: static;
-      width: 181px;
-      height: 16px;
+      width: 180px;
       left: 0px;
       top: 12px;
       font-family: Poppins;
@@ -218,11 +214,15 @@
    }
 }
 
+&__imageholder {
+  display: flex;
+  justify-content: flex-end;
+  width: 20px;
+}
+
 &__image {
    height: 8px;
    width: 7px;
-   left: 200px;
-   top: 13px;
    border-radius: 0px;
 }
 }
