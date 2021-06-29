@@ -3,17 +3,18 @@
     {% for banner in banners %}
         {% image banner.specific.banner_background_image width-400 as background %}
         {% image banner.specific.banner_image width-400 as top_image %}
+        {% image banner.specific.banner_icon_button width-200 as icon_button %}
         <div class="banner"
              style="{% if background.url %}background-image: url('{{ background.url }}');{% endif %}">
             <div class="container">
-                <div class="banner__wrap">
+                <div {% if banner.specific.align_center %}class="banner__wrap"{% endif %}>
                     {% if top_image.url %}
                         <div class="banner__logo">
                             <img src="{{ top_image.url }}"
                                  alt="{{ top_image.alt }}">
                         </div>
                     {% endif %}
-                    <h1 class="banner__title title">{{ banner.title }}</h1>
+                    <h1 class="{% if not banner.specific.align_center  %}banner__title{% endif %} title">{{ banner.title }}</h1>
                     {% if banner.specific.banner_description %}
                         <div class="banner__desc">
                             {{ banner.specific.banner_description | safe }}
@@ -21,9 +22,14 @@
                     {% endif %}
                     {% if banner.specific.banner_link_page %}
                         <a href="{{ banner.specific.banner_link_page }}"
-                           class="cust-btn cust-btn--white cust-btn--secondary banner__btn">
+                           class="{% if icon_button.url %}banner__link{% else %}cust-btn cust-btn--white cust-btn--secondary banner__btn{% endif %}">
                             {% if banner.specific.banner_button_text %}
-                                <span>{{ banner.specific.banner_button_text }}</span> {% endif %}
+                                <span>{{ banner.specific.banner_button_text }}</span>
+                            {% endif %}
+                            {% if icon_button.url %}
+                                <img src="{{ icon_button.url }}"
+                                     alt="{{ icon_button.alt }}">
+                            {% endif %}
                         </a>
                     {% endif %}
                 </div>

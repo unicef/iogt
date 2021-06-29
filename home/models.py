@@ -368,6 +368,7 @@ class BannerPage(Page):
         null=True, blank=True,
         help_text=_('Icon Button')
     )
+    align_center = BooleanField(default=False)
 
     content_panels = Page.content_panels + [
         FieldPanel('banner_description'),
@@ -375,7 +376,8 @@ class BannerPage(Page):
         ImageChooserPanel('banner_background_image'),
         PageChooserPanel('banner_link_page'),
         FieldPanel('banner_button_text'),
-        ImageChooserPanel('banner_icon_button')
+        ImageChooserPanel('banner_icon_button'),
+        FieldPanel('align_center')
     ]
 
     @property

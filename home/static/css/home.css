@@ -18,9 +18,9 @@
 }
 
 .banner {
-    background-position: 100% 100%;
+    background-position: center;
     background-repeat: no-repeat;
-    background-size: 120px auto;
+    background-size: cover;
     border-radius: 8px;
     margin: 4px 0;
     padding: 12px 0
@@ -46,6 +46,20 @@
     max-width: 70px
 }
 
+.banner__desc p {
+    margin: 0;
+}
+
+.banner__wrap {
+    -webkit-align-items: center;
+    align-items: center;
+    display: -webkit-flex;
+    display: flex;
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
+    width: 100%;
+}
+
 .banner__link {
     -webkit-align-items: center;
     align-items: center;
@@ -58,6 +72,13 @@
     justify-content: center;
     width: 30px
 }
+
+.banner__link img {
+    display: block;
+    height: 10px;
+    width: 6px
+}
+
 
 .articles-list {
     margin-bottom: 32px
