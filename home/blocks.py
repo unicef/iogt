@@ -60,7 +60,7 @@ class EmbeddedQuestionnaireChooserBlock(blocks.PageChooserBlock):
     def render_basic(self, value, context=None):
         context.update({
             'object': value,
-            'form': value.get_form()
+            'form': value.get_form(),
         })
         return render_to_string('blocks/embedded_questionnaire.html', context)
 

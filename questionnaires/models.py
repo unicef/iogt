@@ -177,6 +177,11 @@ class Survey(QuestionnairePage, AbstractForm):
 
         return super().serve(request, *args, **kwargs)
 
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context.update({'back_url': request.GET.get('back_url')})
+        return context
+
     def serve_questions_separately(self, request, *args, **kwargs):
         session_key_data = "form_data-%s" % self.pk
         is_last_step = False
@@ -375,6 +380,7 @@ class Poll(QuestionnairePage, AbstractForm):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         results = dict()
+
         # Get information about form fields
         data_fields = [
             (field.clean_name, field.label)
@@ -411,6 +417,7 @@ class Poll(QuestionnairePage, AbstractForm):
 
         context.update({
             'results': results,
+            'back_url': request.GET.get('back_url'),
         })
         return context
 

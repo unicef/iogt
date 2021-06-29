@@ -7,7 +7,7 @@
     <div>
         <p>{{ object.description }}</p>
         <hr>
-        <form action="{% pageurl object %}" method="POST">
+        <form action="{% pageurl object %}?back_url={{ request.path }}" method="POST">
             {% csrf_token %}
             <div>
                 {{ form.as_p }}
