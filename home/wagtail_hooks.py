@@ -3,16 +3,15 @@ from urllib.parse import urlparse
 from django.urls import resolve
 from wagtail.core.models import Page
 from abc import ABC
-
 from django.core.exceptions import PermissionDenied
 from django.urls import reverse
 from django.utils.html import escape
+from django.utils.translation import gettext_lazy as _
+
 from wagtail.core import hooks
 from wagtail.core.models import PageViewRestriction
 from wagtail.core.rich_text import LinkHandler
-
 from home.models import FooterIndexPage, BannerIndexPage, Section, SectionIndexPage
-
 
 class ExternalLinkHandler(LinkHandler, ABC):
     identifier = "external"
@@ -27,6 +26,7 @@ class ExternalLinkHandler(LinkHandler, ABC):
 @hooks.register("register_rich_text_features")
 def register_external_link(features):
     features.register_link_type(ExternalLinkHandler)
+
 
 @hooks.register('before_serve_page', order=-1)
 def check_group(page, request, serve_args, serve_kwargs):
@@ -46,6 +46,12 @@ def sort_page_listing_by_path(parent_page, pages, request):
 
     return pages
 
+
+@hooks.register('construct_main_menu')
+def rename_forms_menu_item(request, menu_items):
+    for item in menu_items:
+        if item.name == "forms":
+            item.label = _("Form Data")
 
 @hooks.register('construct_page_chooser_queryset')
 def limit_page_chooser(pages, request):
