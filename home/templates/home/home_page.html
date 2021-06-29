@@ -6,8 +6,11 @@
 {% endblock extra_css %}
 
 {% block content %}
+    <script>
+		console.log("{{ banners }}");
+    </script>
     <div class="home">
-                {% render_banners_list banners %}
+        {% render_banners_list banners %}
         {#        {% render_featured_content_list featured_content %}#}
         {% include "nav_bar.html" %}
         <div class="container container--main">

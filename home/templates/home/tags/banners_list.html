@@ -1,8 +1,5 @@
 {% load static wagtailcore_tags wagtailimages_tags %}
 <div class="container container--main">
-    <script>
-		console.log("{% for banner in banners %}{{ banners }} {% endfor %}");
-    </script>
     {% for banner in banners %}
         {% image banner.specific.banner_background_image width-400 as background %}
         {% image banner.specific.banner_image width-400 as top_image %}
@@ -19,13 +16,16 @@
                     <h1 class="banner__title title">{{ banner.title }}</h1>
                     {% if banner.specific.banner_description %}
                         <div class="banner__desc">
-                            {{ banner.specific.banner_description }}
+                            {{ banner.specific.banner_description | safe }}
                         </div>
                     {% endif %}
-                    <a href="{{ banner.specific.final_external_link }}"
-                       class="cust-btn cust-btn--white cust-btn--secondary banner__btn">
-                        <span>Click here to access</span>
-                    </a>
+                    {% if banner.specific.banner_link_page %}
+                        <a href="{{ banner.specific.banner_link_page }}"
+                           class="cust-btn cust-btn--white cust-btn--secondary banner__btn">
+                            {% if banner.specific.banner_button_text %}
+                                <span>{{ banner.specific.banner_button_text }}</span> {% endif %}
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -1,40 +1,39 @@
 from django.db import models
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
-
 from modelcluster.contrib.taggit import ClusterTaggableManager
-from taggit.models import TaggedItemBase
 from modelcluster.fields import ParentalKey
+from taggit.models import TaggedItemBase
 from wagtail.admin.edit_handlers import (
     FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, PageChooserPanel,
-    StreamFieldPanel, TabbedInterface, FieldRowPanel
+    StreamFieldPanel, TabbedInterface
 )
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
 from wagtail.core import blocks
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Orderable, Page, Site
-
 from wagtail.core.rich_text import get_text_for_indexing
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
-from wagtailmarkdown.blocks import MarkdownBlock
-from wagtailmenus.models import AbstractFlatMenuItem
-
-from wagtail_color_panel.fields import ColorField
 from wagtail_color_panel.edit_handlers import NativeColorPanel
+from wagtail_color_panel.fields import ColorField
+from wagtailmarkdown.blocks import MarkdownBlock
+from wagtailmenus.models import AbstractFlatMenuItem, BooleanField
 
 from comments.models import CommentableMixin
 from iogt.views import create_final_external_link, check_user_session
 from questionnaires.models import Survey, Poll
-
 from .blocks import (MediaBlock, SocialMediaLinkBlock,
                      SocialMediaShareButtonBlock)
 
 
 class HomePage(Page):
     template = 'home/home_page.html'
+    show_polls = BooleanField(default=True)
+    show_questionnaire = BooleanField(default=True)
+    show_survey = BooleanField(default=True)
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
@@ -43,22 +42,28 @@ class HomePage(Page):
         MultiFieldPanel([
             InlinePanel('featured_content', label=_("Featured Content")),
         ], heading=_('Featured Content')),
+        FieldPanel("show_polls"),
+        FieldPanel("show_questionnaire"),
+        FieldPanel("show_survey"),
     ]
 
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
         context['banners'] = [
-            home_page_banner.banner_page for home_page_banner in self.home_page_banners.filter(banner_page__live=True)
+            home_page_banner.banner_page for home_page_banner in
+            self.home_page_banners.filter(banner_page__live=True)
         ]
         context['featured_content'] = [
-            featured_content.content for featured_content in self.featured_content.filter(content__live=True)
+            featured_content.content for featured_content in
+            self.featured_content.filter(content__live=True)
         ]
         return context
 
 
 class FeaturedContent(Orderable):
-    source = ParentalKey(Page, related_name='featured_content', on_delete=models.CASCADE, blank=True)
+    source = ParentalKey(Page, related_name='featured_content',
+                         on_delete=models.CASCADE, blank=True)
     content = models.ForeignKey(Page, on_delete=models.CASCADE)
 
     panels = [
@@ -67,7 +72,8 @@ class FeaturedContent(Orderable):
 
 
 class HomePageBanner(Orderable):
-    source = ParentalKey(Page, related_name='home_page_banners', on_delete=models.CASCADE, blank=True)
+    source = ParentalKey(Page, related_name='home_page_banners',
+                         on_delete=models.CASCADE, blank=True)
     banner_page = models.ForeignKey('home.BannerPage', on_delete=models.CASCADE)
 
     panels = [
@@ -77,12 +83,14 @@ class HomePageBanner(Orderable):
 
 class SectionTaggedItem(TaggedItemBase):
     """The through model between Section and Tag"""
-    content_object = ParentalKey('Section', related_name='tagged_items', on_delete=models.CASCADE)
+    content_object = ParentalKey('Section', related_name='tagged_items',
+                                 on_delete=models.CASCADE)
 
 
 class ArticleTaggedItem(TaggedItemBase):
     """The through model between Article and Tag"""
-    content_object = ParentalKey('Article', related_name='tagged_items', on_delete=models.CASCADE)
+    content_object = ParentalKey('Article', related_name='tagged_items',
+                                 on_delete=models.CASCADE)
 
 
 class SectionIndexPage(Page):
@@ -122,7 +130,8 @@ class Section(Page):
         ImageChooserPanel('icon'),
         FieldPanel('color'),
         MultiFieldPanel([
-            InlinePanel('featured_content', max_num=1, label=_("Featured Content")),
+            InlinePanel('featured_content', max_num=1,
+                        label=_("Featured Content")),
         ], heading=_('Featured Content')),
     ]
 
@@ -130,7 +139,8 @@ class Section(Page):
         check_user_session(request)
         context = super().get_context(request)
         context['featured_content'] = [
-            featured_content.content for featured_content in self.featured_content.filter(content__live=True)
+            featured_content.content for featured_content in
+            self.featured_content.filter(content__live=True)
         ]
         context['sub_sections'] = self.get_children().live().type(Section)
         context['articles'] = self.get_children().live().type(Article)
@@ -140,7 +150,8 @@ class Section(Page):
 
 
 class ArticleRecommendation(Orderable):
-    source = ParentalKey('Article', related_name='recommended_articles', on_delete=models.CASCADE, blank=True)
+    source = ParentalKey('Article', related_name='recommended_articles',
+                         on_delete=models.CASCADE, blank=True)
     article = models.ForeignKey('Article', on_delete=models.CASCADE)
 
     panels = [
@@ -149,7 +160,8 @@ class ArticleRecommendation(Orderable):
 
 
 class SectionRecommendation(Orderable):
-    source = ParentalKey('Article', related_name='recommended_sections', on_delete=models.CASCADE)
+    source = ParentalKey('Article', related_name='recommended_sections',
+                         on_delete=models.CASCADE)
     section = models.ForeignKey('Section', on_delete=models.CASCADE)
 
     panels = [
@@ -199,7 +211,8 @@ class Article(Page, CommentableMixin):
         ImageChooserPanel('lead_image'),
         StreamFieldPanel('body'),
         MultiFieldPanel([
-            InlinePanel('recommended_articles', label=_("Recommended Articles")),
+            InlinePanel('recommended_articles',
+                        label=_("Recommended Articles")),
             InlinePanel('recommended_sections', label=_("Recommended Sections"))
         ],
             heading='Recommended Content')
@@ -227,7 +240,8 @@ class Article(Page, CommentableMixin):
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
-        context['breadcrumbs'] = [crumb for crumb in self.get_ancestors() if not crumb.is_root()]
+        context['breadcrumbs'] = [crumb for crumb in self.get_ancestors() if
+                                  not crumb.is_root()]
         context['sections'] = self.get_ancestors().type(Section)
         return context
 
@@ -266,11 +280,22 @@ class BannerPage(Page):
     banner_background_color = ColorField(default="#acc9fa")
 
     banner_link_page = models.ForeignKey(
-        Page, null=True, blank=True, related_name='banners', on_delete=models.PROTECT,
+        Page, null=True, blank=True, related_name='banners',
+        on_delete=models.PROTECT,
         help_text=_('Optional page to which the banner will link to'))
-    external_link = models.URLField(
+
+    banner_button_text = models.CharField(
         null=True, blank=True,
-        help_text=_('Optional external link which a banner will link to e.g., https://www.google.com'))
+        max_length=35,
+        help_text=_('The title for a button')
+    )
+    banner_icon_button = models.ForeignKey(
+        'wagtailimages.Image',
+        related_name='+',
+        on_delete=models.PROTECT,
+        null=True, blank=True,
+        help_text=_('Icon Button')
+    )
 
     content_panels = Page.content_panels + [
         FieldPanel('banner_description'),
@@ -278,7 +303,8 @@ class BannerPage(Page):
         ImageChooserPanel('banner_background_image'),
         NativeColorPanel('banner_background_color'),
         PageChooserPanel('banner_link_page'),
-        FieldPanel('external_link'),
+        FieldPanel('banner_button_text'),
+        ImageChooserPanel('banner_icon_button')
     ]
 
     @property
@@ -374,7 +400,9 @@ class SiteSettings(BaseSetting):
         default=9437184,
         help_text='Show warning if uploaded media file size is greater than this in bytes. Default is 9 MB')
     allow_anonymous_comment = models.BooleanField(default=False)
-    registration_survey = models.ForeignKey('questionnaires.Survey', null=True, blank=True, on_delete=models.SET_NULL)
+    registration_survey = models.ForeignKey('questionnaires.Survey', null=True,
+                                            blank=True,
+                                            on_delete=models.SET_NULL)
 
     panels = [
         ImageChooserPanel('logo'),
@@ -459,7 +487,8 @@ class CacheSettings(BaseSetting):
     cache = models.BooleanField(
         default=True,
         verbose_name=_("Prompt users to download?"),
-        help_text=_("check to prompt first time users to download the website as an app"),
+        help_text=_(
+            "check to prompt first time users to download the website as an app"),
     )
 
     panels = [
