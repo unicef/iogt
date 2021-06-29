@@ -13,3 +13,4 @@ django-debug-toolbar==3.2.1
 libsass==0.21.*
 django-compressor==2.4.*
 django-sass-processor==1.0.*
+wagtail-transfer~=0.7.0

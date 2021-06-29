@@ -1,4 +1,9 @@
 {% load static menu_tags %}
+{% load i18n %}
+
+{% get_current_language as LANGUAGE_CODE %}
+
+
 <header class="header">
     <div class="header-top">
         <div class="header-top-language-strip">
@@ -34,6 +39,7 @@
                 </div>
             </div>
         </div>
+
         <div class="header-middle">
             <a class="logo-small" href='/'>
                 <img src="{% static "images/iogt-logo-two-lines.png" %}"/>
@@ -72,18 +78,17 @@
                 <button type="submit">
                     <i class="material-icons">search</i>
                 </button>
-            </form>      
+            </form>
             {% if request.user.is_anonymous %}
                 <a class="signin" href="{% url 'account_signup' %}">Sign Up</a>
             {% else %}
                 <a class="signin" href="{% url 'user_profile' %}">Profile</a>
                 <a class="signin" href="{% url 'account_logout' %}">Sign out</a>
             {% endif %}
-            
         </div>
 
     </div>
-   
+
     <nav class="nav">
         <div class="categories-dropdown">
             <div class="btn-group">
@@ -95,6 +100,8 @@
             <div class="categories-dropdown-content">
                 <dl>
                     <span>
+
+                    {% comment %}
                         <a class="dl-title" href='/'>
                             <dt>Topic title
                                 <i class="material-icons">arrow_drop_up</i>
@@ -103,6 +110,10 @@
                         <a class="dl-item" href='/'>
                             <dd>Topic item</dd>
                         </a>
+                    {% endcomment %}
+
+                        {% flat_menu LANGUAGE_CODE|add:'_menu_live' max_levels=1 show_menu_heading=False  fall_back_to_default_site_menus=True %}
+
                     </span>
                 </dl>
             </div>

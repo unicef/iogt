@@ -5,7 +5,7 @@
         <div class="articleContainer">
             <div class="mobileAndFeatureArticleContainer">
                 <div class="content">
-                    <p style="color: rgb(191, 0, 18);" class="tag">CORONAVIRUS (COVID-19)</p>
+			<p style="color: rgb(191, 0, 18);" class="tag">{# CORONAVIRUS (COVID-19) #}</p>
                     <h1 class="title">{{ article.title }}</h1>
                 </div>
                 <div class="image">
@@ -22,7 +22,7 @@
         {% for article in articles %}
         <div class="mobileHomeArticleContainer">
             <div class="mobileTagContainer">
-                <h1 class="mobileTag" style="color: rgb(191, 0, 18);">CORONAVIRUS (COVID-19)</h1>
+		    <h1 class="mobileTag" style="color: rgb(191, 0, 18);">{# CORONAVIRUS (COVID-19) #}</h1>
                 <div class="share">
                     <img src="{% static 'images/nav-icons/forward-green.png'%}">
                 </div>
@@ -51,7 +51,7 @@
                 </div>
                 <div class="content" style="border-bottom-color: rgb(191, 0, 18);">
                     <div style="color: rgb(191, 0, 18);" class="tag">
-                        <span>CORONAVIRUS (COVID-19) | ABOUT CORONAVIRUS</span>
+			    <span>{# CORONAVIRUS (COVID-19) | ABOUT CORONAVIRUS #}</span>
                     </div>
                     <div class="byline">
                         {{ article.first_published_at|date }} /
@@ -85,7 +85,7 @@
                 <div class="content">
                     <div style="color: rgb(191, 0, 18);" class="tag">
                         <div>
-                            <span>CORONAVIRUS (COVID-19) | ABOUT CORONAVIRUS</span>
+				<span>{# CORONAVIRUS (COVID-19) | ABOUT CORONAVIRUS #}</span>
                         </div>
                         <div class="byline">
                             {{ article.first_published_at|date }} /
