@@ -6,8 +6,8 @@
 {% endblock extra_css %}
 
 {% block content %}
- <article  > 
   {% image page.lead_image height-115 width-360 class="main-image-phone" %}
+ <article > 
   <section class='article-content'>
       <h1>{{ page.title }}</h1>
       {% include_block page.body %}
@@ -32,7 +32,6 @@
             {% endif %}
        </section>
  </article>
-
  <section class='comments'>
  {% get_comment_count for page as comment_count %}
     {% if page.allow_comments or comment_count %}
@@ -43,30 +42,32 @@
                     {% render_comment_form for page %}
                 </div>
             {% else %}
-                <p>
-                    Only registered users can post comments. Please,
-                    <a href="{% url 'account_login' %}?next={{ page.get_absolute_url }}">login</a>.
-                </p>
-            {% endif %}
+            <div class='comments__login'>
+              Please log in or create your account
+             <div class='comments__input-holder'>
+                <div class="comments__submit">
+                    <a href="{% url 'account_login' %}?next={{ page.get_absolute_url }}">Log in/Create account</a>.
+                </div>
+             </div>
+            </div>
+            
+        {% endif %}
         {% else %}
             <p >
                 New comments have been disabled for this page.
             </p>
         {% endif %}
-        
-
         {% if comment_count %}
             <div >
                 {% render_xtdcomment_tree for page allow_flagging allow_feedback show_feedback %}
             </div>
             <div class='comments__input-holder'>
                 <div class="comments__load">
-                <button >Load More</button>
+                <button >View more comments</button>
             </div>
             </div>
         {% endif %}
     {% endif %}
-
  </section>
  <section class='recommended_reading'>
     {% if page.recommended_articles.count %}

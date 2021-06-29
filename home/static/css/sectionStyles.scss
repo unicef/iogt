@@ -283,10 +283,8 @@
 // article page styles
 
 .main-image-phone {
-   width: 360px;
+   min-width: 360px;
    height: 196px;
-   left: 0px;
-   top: 142px;
 }
 
 .article-content {
@@ -296,7 +294,6 @@
 
    h1 {
       width: 318px;
-      top: 370px;
       font-style: normal;
       font-weight: bold;
       font-size: 24px;
@@ -537,6 +534,11 @@
    background-color: #F7F7F9;;
    }
 
+   &__login {
+      background-color: #F7F7F9;
+      padding: 20px;
+   }
+
   &__submit {
    display: flex;
    flex-direction: row;
@@ -556,7 +558,8 @@
    flex-grow: 0;
    margin: 16px 0px;
    
-   input { 
+   input, a { 
+      text-decoration: none;
       background-color: #303030;
       color:white;
       border:none;

@@ -329,10 +329,8 @@
 }
 
 .main-image-phone {
-  width: 360px;
+  min-width: 360px;
   height: 196px;
-  left: 0px;
-  top: 142px;
 }
 
 .article-content {
@@ -343,7 +341,6 @@
 
 .article-content h1 {
   width: 318px;
-  top: 370px;
   font-style: normal;
   font-weight: bold;
   font-size: 24px;
@@ -627,6 +624,11 @@
   background-color: #F7F7F9;
 }
 
+.comments__login {
+  background-color: #F7F7F9;
+  padding: 20px;
+}
+
 .comments__submit {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -662,7 +664,8 @@
   margin: 16px 0px;
 }
 
-.comments__submit input {
+.comments__submit input, .comments__submit a {
+  text-decoration: none;
   background-color: #303030;
   color: white;
   border: none;
