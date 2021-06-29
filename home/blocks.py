@@ -1,4 +1,5 @@
 from django.forms.utils import flatatt
+from django.template.loader import render_to_string
 from django.utils.html import format_html, format_html_join
 
 from wagtail.core import blocks
@@ -52,3 +53,18 @@ class SocialMediaShareButtonBlock(blocks.StructBlock):
 
     class Meta:
         icon = 'site'
+
+
+class EmbeddedQuestionnaireChooserBlock(blocks.PageChooserBlock):
+
+    def render_basic(self, value, context=None):
+        context.update({
+            'object': value,
+            'form': value.get_form()
+        })
+        return render_to_string('blocks/embedded_questionnaire.html', context)
+
+
+    class Meta:
+        # template = 'blocks/embedded_questionnaire.html'
+        icon = 'help'

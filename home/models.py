@@ -7,7 +7,7 @@ from taggit.models import TaggedItemBase
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (
     FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, PageChooserPanel,
-    StreamFieldPanel, TabbedInterface, FieldRowPanel
+    StreamFieldPanel, TabbedInterface
 )
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
@@ -26,7 +26,7 @@ from iogt.views import create_final_external_link, check_user_session
 from questionnaires.models import Survey, Poll
 
 from .blocks import (MediaBlock, SocialMediaLinkBlock,
-                     SocialMediaShareButtonBlock)
+                     SocialMediaShareButtonBlock, EmbeddedQuestionnaireChooserBlock)
 
 
 class HomePage(Page):
@@ -171,6 +171,8 @@ class Article(Page, CommentableMixin):
         ('list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
         ('numbered_list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
         ('page', blocks.PageChooserBlock()),
+        ('embedded_poll', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')),
+        ('embedded_survey', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')),
         ('media', MediaBlock(icon='media')),
     ])
     show_in_menus_default = True

@@ -160,7 +160,7 @@ class Survey(QuestionnairePage, AbstractForm):
         )
 
         site_settings = SiteSettings.get_for_default_site()
-        if site_settings.registration_survey.pk == self.pk:
+        if site_settings.reregistration_survey and site_settings.registration_survey.pk == self.pk:
             user.has_filled_registration_survey = True
             user.save(update_fields=['has_filled_registration_survey'])
 
