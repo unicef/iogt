@@ -3,7 +3,8 @@
 {% for poll in polls %}
 <a class='quiz' href="{% pageurl poll %}">
     <span class='quiz__details'>
-        <p>Quiz</p>
+        <p>POll</p>
+        {{ page.title }}
         <p class='quiz__details--bold'>{{ poll.title }}</p>
     </span>
     <div class="quiz__imageholder">

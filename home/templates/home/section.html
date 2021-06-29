@@ -8,9 +8,9 @@
     <section class='section-page-details'>
         <a href='' class='section-page-details__back'>
           <img class='section-page-details__back--image1' src="{% static 'images/white-stroke.png' %}">
-           Back
+           Back 
         </a>
-        <h1 class='section-page-details__title'>Covid-19</h1>
+        <h1 class='section-page-details__title'>{{ page.title }}</h1>
         <a href='' class='section-page-details__survey'> 
           <img class='section-page-details__survey--image1' src="{% static 'images/path490.png' %}">
           Early Life tips quick survey
@@ -18,7 +18,19 @@
         </a>
     </section>
     {% render_sub_sections_list sub_sections %}
-     <div class="nav-bar">
+        
+    <section class='suggested-articles'>
+     {% render_featured_content_list featured_content %}
+     {% render_polls_list polls %} 
+     {% render_surveys_list surveys %}
+     {% comment %}{% render_articles_list articles %} {% endcomment %}
+        {% comment %} <section class='questionnaire'>
+            <p class='questionnaire__title'>Share your story with us!</p>
+            <p class='questionnaire__CTA'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris rhoncus urna rhoncus nisi imperdiet iaculis.</p>
+            <a href='' class='button__white'>Start here</a>
+        </section> {% endcomment %}
+    </section>
+        <div class="nav-bar">
             <div class="nav-bar__wrap">
                 <div class="nav-bar__item nav-bar-item active"><a href="#"><span
                         class="nav-bar-item__icon"><img
@@ -42,19 +54,6 @@
                         class="nav-bar-item__title">Chat</span></a></div>
             </div>
         </div>
-        
-    <section class='suggested-articles'>
-     {% render_featured_content_list featured_content %}
-     {% render_polls_list polls %} 
-     {% render_surveys_list surveys %}
-     {% comment %}{% render_articles_list articles %} {% endcomment %}
-        {% comment %} <section class='questionnaire'>
-            <p class='questionnaire__title'>Share your story with us!</p>
-            <p class='questionnaire__CTA'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris rhoncus urna rhoncus nisi imperdiet iaculis.</p>
-            <a href='' class='button__white'>Start here</a>
-        </section> {% endcomment %}
-    </section>
-
 {% endblock content %}
 
 
