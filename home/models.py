@@ -277,7 +277,6 @@ class BannerPage(Page):
         on_delete=models.PROTECT,
         help_text=_('Background image')
     )
-    banner_background_color = ColorField(default="#acc9fa")
 
     banner_link_page = models.ForeignKey(
         Page, null=True, blank=True, related_name='banners',
@@ -301,7 +300,6 @@ class BannerPage(Page):
         FieldPanel('banner_description'),
         ImageChooserPanel('banner_image'),
         ImageChooserPanel('banner_background_image'),
-        NativeColorPanel('banner_background_color'),
         PageChooserPanel('banner_link_page'),
         FieldPanel('banner_button_text'),
         ImageChooserPanel('banner_icon_button')

@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'wagtailmarkdown',
     'wagtail_transfer',
     'wagtail.contrib.settings',
-    'wagtail_color_panel',
 
     'django_comments_xtd',
     'django_comments',
