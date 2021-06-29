@@ -88,8 +88,25 @@
     border-bottom: 1px solid #efefef;
     display: -webkit-flex;
     display: flex;
-    padding: 8px 0;
-    text-decoration: none
+    text-decoration: none;
+    padding: 16px 0;
+}
+
+
+.articles-list__item-comment, .articles-list__item-tag {
+    font-size: 12px;
+    line-height: 12px
+}
+
+.articles-list__item-img {
+    height: 86px;
+    width: 86px
+}
+
+.articles-list__item-text {
+    font-size: 16px;
+    line-height: 22px;
+    padding-right: 12px
 }
 
 .articles-list__item-header {
@@ -130,7 +147,7 @@
 }
 
 .articles-list__item-comment:before {
-    background-image: url(/static/images/icons/comment.svg);
+    background-image: url("/static/icons/comment.svg");
     background-position: 50%;
     background-repeat: no-repeat;
     content: "";
@@ -145,15 +162,15 @@
 }
 
 .articles-list__item-header--blue .articles-list__item-comment:before {
-    background-image: url(/static/images/icons/comment-blue.svg)
+    background-image: url("/static/icons/comment-blue.svg")
 }
 
 .articles-list__item-header--purple .articles-list__item-comment:before {
-    background-image: url(/static/images/icons/comment-purple.svg)
+    background-image: url("/static/icons/comment-purple.svg")
 }
 
 .articles-list__item-header--green .articles-list__item-comment:before {
-    background-image: url(/static/images/icons/comment-green.svg)
+    background-image: url("/static/icons/comment-green.svg")
 }
 
 .articles-list__item-content {

@@ -275,6 +275,11 @@ input:checked + .cust-check__title {
 }
 
 .icon-btn__icon img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.icon-btn__icon img {
     display: block
 }
 

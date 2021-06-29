@@ -1,14 +1,18 @@
 {% load static wagtailcore_tags wagtailimages_tags %}
 
-    <div class="articles-list">
-        <div class="container articles-list__container">
-
-            {% for article in articles %}
+<div class="articles-list articles-list--home">
+    <div class="container articles-list__container">
+        <h2 class="title articles-list__title">Feature articles</h2>
+        {% for article in articles %}
+            <script>
+				console.log("{{ article.specific.category }}");
+            </script>
             <a href="{% pageurl article %}" class="articles-list__item">
                 <div class="articles-list__item-content">
                     <div class="articles-list__item-header articles-list__item-header--red">
-                        <p class="articles-list__item-tag">{{ article.category }}</p>
-                        <span class="articles-list__item-comment">{{ article.comments | length }}</span>
+                        <p class="articles-list__item-tag">{{ article.specific.section }}</p>
+                        {% if article.specific.allow_comments %}
+                            <span class="articles-list__item-comment">{{ article.comments | length }}</span> {% endif %}
                     </div>
                     <div class="articles-list__item-text">
                         <p>{{ article.title }}</p>
@@ -18,7 +22,8 @@
                     {% image article.specific.lead_image original %}
                 </div>
             </a>
-            {% endfor %}
+        {% endfor %}
 
-        </div>
     </div>
+</div>
+

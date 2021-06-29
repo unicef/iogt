@@ -6,87 +6,12 @@
 {% endblock extra_css %}
 
 {% block content %}
-    <script>
-		console.log("{{ page.show_polls }}");
-    </script>
     <div class="home">
         {% render_banners_list banners %}
         {% include "nav_bar.html" %}
         <div class="container container--main">
-            <div class="articles-list">
-                <div class="container articles-list__container"><a href="#"
-                                                                   class="articles-list__item">
-                    <div class="articles-list__item-content">
-                        <div class="articles-list__item-text"><p>In ut repellat
-                            deserunt
-                            laudantium animi veritatis recusandae.</p></div>
-                    </div>
-                    <div class="articles-list__item-img"><img
-                            src="{% static "/images/article-1.png" %}"
-                            alt="Article image">
-                    </div>
-                </a><a href="#" class="articles-list__item">
-                    <div class="articles-list__item-content">
-                        <div class="articles-list__item-text"><p>Recusandae
-                            reiciendis
-                            sapiente est.</p></div>
-                    </div>
-                    <div class="articles-list__item-img"><img
-                            src="{% static "/images/article-2.png" %}"
-                            alt="Article image">
-                    </div>
-                </a><a href="#" class="articles-list__item">
-                    <div class="articles-list__item-content">
-                        <div class="articles-list__item-text"><p>Omnis porro
-                            illo
-                            aspernatur id laborum.</p></div>
-                    </div>
-                    <div class="articles-list__item-img"><img
-                            src="{% static "/images/article-3.png" %}"
-                            alt="Article image">
-                    </div>
-                </a><a href="#" class="articles-list__item">
-                    <div class="articles-list__item-content">
-                        <div class="articles-list__item-text"><p>Unde illum
-                            sequi
-                            laudantium.</p></div>
-                    </div>
-                    <div class="articles-list__item-img"><img
-                            src="{% static "/images/article-4.png" %}"
-                            alt="Article image">
-                    </div>
-                </a><a href="#" class="articles-list__item">
-                    <div class="articles-list__item-content">
-                        <div class="articles-list__item-text"><p>Unde illum
-                            sequi
-                            laudantium autem ratione.</p></div>
-                    </div>
-                    <div class="articles-list__item-img"><img
-                            src="{% static "/images/article-5.png" %}"
-                            alt="Article image">
-                    </div>
-                </a><a href="#" class="articles-list__item">
-                    <div class="articles-list__item-content">
-                        <div class="articles-list__item-text"><p>Unde illum
-                            sequi
-                            laudantium autem ratione.</p></div>
-                    </div>
-                    <div class="articles-list__item-img"><img
-                            src="{% static "/images/article-2.png" %}"
-                            alt="Article image">
-                    </div>
-                </a><a href="#" class="articles-list__item">
-                    <div class="articles-list__item-content">
-                        <div class="articles-list__item-text"><p>Unde illum
-                            sequi
-                            laudantium autem ratione.</p></div>
-                    </div>
-                    <div class="articles-list__item-img"><img
-                            src="{% static "/images/article-1.png" %}"
-                            alt="Article image">
-                    </div>
-                </a></div>
-            </div>
+
+            {% render_articles_list featured_content %}
             {% if page.show_polls %}
                 {% render_polls_list polls %}
             {% endif %}

@@ -4,9 +4,9 @@ from django.db import models
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 from modelcluster.contrib.taggit import ClusterTaggableManager
+from modelcluster.fields import ParentalKey
 from rest_framework import status
 from taggit.models import TaggedItemBase
-from modelcluster.fields import ParentalKey
 from taggit.models import TaggedItemBase
 from wagtail.admin.edit_handlers import (
     FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, PageChooserPanel,
@@ -28,12 +28,14 @@ from comments.models import CommentableMixin
 from iogt.views import create_final_external_link, check_user_session
 from questionnaires.models import Survey, Poll
 from .blocks import (MediaBlock, SocialMediaLinkBlock,
-                     SocialMediaShareButtonBlock, EmbeddedQuestionnaireChooserBlock,
+                     SocialMediaShareButtonBlock,
+                     EmbeddedQuestionnaireChooserBlock,
                      PageButtonBlock)
 from .forms import SectionPageForm
 from .utils.progress_manager import ProgressManager
 
 User = get_user_model()
+
 
 class HomePage(Page):
     template = 'home/home_page.html'
@@ -154,12 +156,14 @@ class Section(Page):
         return Article.objects.descendant_of(self).exact_type(Article)
 
     def get_progress_bar_enabled_ancestor(self):
-        return Section.objects.ancestor_of(self, inclusive=True).exact_type(Section).filter(
+        return Section.objects.ancestor_of(self, inclusive=True).exact_type(
+            Section).filter(
             show_progress_bar=True).first()
 
     def get_user_progress_dict(self, request):
         progress_manager = ProgressManager(request)
-        read_article_count, total_article_count = progress_manager.get_progress(self)
+        read_article_count, total_article_count = progress_manager.get_progress(
+            self)
         return {
             'read': read_article_count,
             'total': total_article_count
@@ -190,7 +194,9 @@ class Section(Page):
         :return:e
         """
         progress_bar_sections = Section.objects.filter(show_progress_bar=True)
-        all_descendants = [list(Section.objects.type(Section).descendant_of(section).values_list('pk', flat=True)) for
+        all_descendants = [list(
+            Section.objects.type(Section).descendant_of(section).values_list(
+                'pk', flat=True)) for
                            section in
                            progress_bar_sections]
         all_descendants = set(flatten(all_descendants))
@@ -236,8 +242,10 @@ class Article(Page, CommentableMixin):
         ('list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
         ('numbered_list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
         ('page_button', PageButtonBlock()),
-        ('embedded_poll', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')),
-        ('embedded_survey', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')),
+        ('embedded_poll',
+         EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')),
+        ('embedded_survey', EmbeddedQuestionnaireChooserBlock(
+            target_model='questionnaires.Survey')),
         ('media', MediaBlock(icon='media')),
     ])
     show_in_menus_default = True
@@ -294,7 +302,8 @@ class Article(Page, CommentableMixin):
         for sections
         :return:
         """
-        return Section.objects.ancestor_of(self).type(Section).filter(show_progress_bar=True).first()
+        return Section.objects.ancestor_of(self).type(Section).filter(
+            show_progress_bar=True).first()
 
     def get_context(self, request):
         check_user_session(request)
@@ -307,7 +316,8 @@ class Article(Page, CommentableMixin):
 
         if progress_enabled_section:
             context.update({
-                'user_progress': progress_enabled_section.get_user_progress_dict(request)
+                'user_progress': progress_enabled_section.get_user_progress_dict(
+                    request)
             })
 
         return context
@@ -380,14 +390,7 @@ class BannerPage(Page):
         FieldPanel('align_center')
     ]
 
-    @property
-    def final_external_link(self):
-        if self.banner_link_page:
-            return self.banner_link_page.url
-        if self.external_link:
-            return create_final_external_link(self.external_link)
-        else:
-            return "#"
+
 
 
 class FooterIndexPage(Page):
@@ -590,6 +593,20 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
         on_delete=models.SET_NULL,
     )
 
+    color = models.CharField(
+        max_length=6,
+        blank=True,
+        null=True
+    )
+
+    color_text = models.CharField(
+        max_length=6,
+        blank=True,
+        null=True
+    )
+
     panels = AbstractFlatMenuItem.panels + [
         ImageChooserPanel('icon'),
+        FieldPanel('color'),
+        FieldPanel('color_text')
     ]

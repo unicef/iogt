@@ -22,6 +22,7 @@ def render_featured_content_list(featured_content):
 def render_polls_list(polls):
     return {'polls': polls}
 
+
 @register.inclusion_tag('home/tags/questionnaire.html')
 def render_questionnaire_list(questionnaire):
     return {'questionnaire': questionnaire}

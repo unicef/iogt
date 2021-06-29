@@ -1,5 +1,5 @@
-{% load static %}
-{% load menu_tags %}
+{% load static wagtailuserbar menu_tags home_tags %}
+
 
 <footer class="footer">
     <div class="footer__nav-bar">
@@ -25,67 +25,11 @@
         </form>
         <div class="footer__nav">
             <div class="footer__column">
-                {% flat_menu 'first_footer_menu' %}
-                <a href="#" class="icon-btn icon-btn--red footer__link">
-                    <span class="icon-btn__icon">
-                        <img src="{% static "/icons/heart.png" %}"
-                             alt="Heart icon">
-                    </span>
-                    <span class="icon-btn__title">Covid-19</span>
-                </a>
-                <a href="#" class="icon-btn icon-btn--blue footer__link">
-                    <span class="icon-btn__icon">
-                        <img src="{% static "/icons/youth.png" %}"
-                             alt="Youth icon">
-                    </span>
-                    <span class="icon-btn__title">Youth</span>
-                </a>
-                <a href="#" class="icon-btn icon-btn--violet footer__link">
-                    <span class="icon-btn__icon">
-                        <img src="{% static "/icons/peace.png" %}"
-                             alt="Parents & Caregivers icon">
-                    </span>
-                    <span class="icon-btn__title">Parents & Caregivers</span>
-                </a>
-                <a href="#" class="icon-btn icon-btn--green footer__link">
-                    <span class="icon-btn__icon">
-                        <img src="{% static "/icons/case.png" %}"
-                             alt="Frontline Workers & Educators">
-                    </span>
-                    <span class="icon-btn__title">Frontline Workers & Educators</span>
-                </a>
+                {% flat_menu "first_footer_menu" template="menus/footer.html" %}
             </div>
             <hr>
             <div class="footer__column">
-                <a href="{% url 'account_login' %}"
-                   class="icon-btn footer__link">
-                    <span class="icon-btn__icon">
-                        <img src="{% static "/icons/arrow-icon.png" %}"
-                             alt="Heart icon">
-                    </span>
-                    <span class="icon-btn__title">Log in</span>
-                </a>
-                <a href="#" class="icon-btn footer__link">
-                    <span class="icon-btn__icon">
-                        <img src="{% static "/icons/finger-up.png" %}"
-                             alt="Heart icon">
-                    </span>
-                    <span class="icon-btn__title">Are you a fan of IoGT?</span>
-                </a>
-                <a href="#" class="icon-btn footer__link">
-                    <span class="icon-btn__icon">
-                        <img src="{% static "/icons/loudSpeaker.png" %}"
-                             alt="Heart icon">
-                    </span>
-                    <span class="icon-btn__title">About Internet of Good Things</span>
-                </a>
-                <a href="#" class="icon-btn footer__link">
-                    <span class="icon-btn__icon">
-                        <img src="{% static "/icons/wifi-aerial.png" %}"
-                             alt="Heart icon">
-                    </span>
-                    <span class="icon-btn__title">Use IoGT FREE of data charges</span>
-                </a>
+                {% flat_menu "second_footer_menu" template="menus/footer.html" %}
             </div>
         </div>
         <div class="footer__copyright"><p>© The Internet of Good Things</p>
