@@ -569,4 +569,32 @@
 }
 
 
+.individual-comment {
+   margin-top: 1px;
+   padding: 20px;
+   position: static;
+   width: 360px;
+   left: 0px;
+   background: #F7F7F9;
+
+   p {
+      margin:0;
+   }
+
+   &__data {
+      display: flex;
+      justify-content: space-between;
+   }
+
+   &__date {
+      font-family: Poppins;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 12px;
+      color: #4B4B4B;
+      opacity: 0.4;
+   }
+}
+
 

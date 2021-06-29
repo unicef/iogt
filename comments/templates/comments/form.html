@@ -17,7 +17,7 @@
         <div style="display:none">{{ form.honeypot }}</div>
 
         <div class="row form-group {% if 'comment' in form.errors %}has-danger{% endif %}">
-            <div class="offset-md-1 col-md-10 " >
+            <div class="offset-md-1 col-md-10">
                 {{ form.comment }}
                 {% for error in form.comment.errors %}
                     <div class="alert-danger">{{ error }}</div>

@@ -668,4 +668,36 @@
   line-height: 22px;
   color: #FFFFFF;
 }
+
+.individual-comment {
+  margin-top: 1px;
+  padding: 20px;
+  position: static;
+  width: 360px;
+  left: 0px;
+  background: #F7F7F9;
+}
+
+.individual-comment p {
+  margin: 0;
+}
+
+.individual-comment__data {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.individual-comment__date {
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 12px;
+  color: #4B4B4B;
+  opacity: 0.4;
+}
 /*# sourceMappingURL=sectionStyles.css.map */

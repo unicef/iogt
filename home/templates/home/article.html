@@ -43,7 +43,7 @@
                     {% render_comment_form for page %}
                 </div>
             {% else %}
-                <p >
+                <p>
                     Only registered users can post comments. Please,
                     <a href="{% url 'account_login' %}?next={{ page.get_absolute_url }}">login</a>.
                 </p>
@@ -53,14 +53,17 @@
                 New comments have been disabled for this page.
             </p>
         {% endif %}
-        <br>
+        
 
         {% if comment_count %}
-            <hr/>
             <div >
                 {% render_xtdcomment_tree for page allow_flagging allow_feedback show_feedback %}
             </div>
-            <button >Load More</button>
+            <div class='comments__input-holder'>
+                <div class="comments__submit">
+                <button >Load More</button>
+            </div>
+            </div>
         {% endif %}
     {% endif %}
 
