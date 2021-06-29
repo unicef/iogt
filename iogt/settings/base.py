@@ -264,4 +264,6 @@ WAGTAILTRANSFER_SOURCES = {
 
 WAGTAILTRANSFER_SECRET_KEY = 'fake_secret_key'
 
+WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME = 'iogt_flat_menu_items'
+
 from .profanity_settings import *
