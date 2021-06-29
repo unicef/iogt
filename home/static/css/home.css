@@ -17,9 +17,7 @@
     visibility: visible
 }
 
-.home-banner {
-    background-color: #acc9fa;
-    background-image: url("/static/images/home_banner.png");
+.banner {
     background-position: 100% 100%;
     background-repeat: no-repeat;
     background-size: 120px auto;
@@ -28,61 +26,27 @@
     padding: 12px 0
 }
 
-.home-banner__logo {
+.banner__logo {
     max-width: 80px
 }
 
-.home-banner__title {
+.banner__title {
     margin: 6px 0 14px;
     max-width: 140px
 }
 
-.home-banner__btn {
+.banner__btn {
     max-width: 134px
 }
 
-.covid-banner {
-    background-color: #ef6f84;
-    background-image: url("/static/images/covid_banner.png");
-    background-position: 100%;
-    background-repeat: no-repeat;
-    background-size: auto 100%;
-    border-radius: 8px;
-    margin: 6px 0;
-    padding: 14px 0 25px
-}
-
-.covid-banner__title {
-    margin-bottom: 5px
-}
-
-.covid-banner__desc {
+.banner__desc {
     font-size: 10px;
     font-weight: 500;
     line-height: 16px;
     max-width: 70px
 }
 
-.link-banner {
-    background-color: #ffde67;
-    background-image: url("/static/images/link_banner.png");
-    background-size: 100% 100%;
-    border-radius: 8px;
-    margin: 6px 0
-}
-
-.link-banner__wrap {
-    -webkit-align-items: center;
-    align-items: center;
-    display: -webkit-flex;
-    display: flex
-}
-
-.link-banner__title {
-    margin-right: auto
-}
-
-.link-banner__link {
+.banner__link {
     -webkit-align-items: center;
     align-items: center;
     background-color: #fff;

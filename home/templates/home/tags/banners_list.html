@@ -1,16 +1,31 @@
 {% load static wagtailcore_tags wagtailimages_tags %}
 <div class="container container--main">
+    <script>
+		console.log("{% for banner in banners %}{{ banners }} {% endfor %}");
+    </script>
     {% for banner in banners %}
-        <div class="banner">
+        {% image banner.specific.banner_background_image width-400 as background %}
+        {% image banner.specific.banner_image width-400 as top_image %}
+        <div class="banner"
+             style="{% if background.url %}background-image: url('{{ background.url }}');{% endif %}{% if banner.specific.banner_background_color %}background-color: {{ banner.specific.banner_background_color }};{% endif %}">
             <div class="container">
                 <div class="banner__wrap">
-                    <div class="banner__logo">
-                        {% image banner.specific.banner_image width-80 height-30 %}
-                    </div>
-                    <h1 class="home-banner__title title">{{ banner.title }}</h1>
-                    <a
-                            href="{{ banner.specific.final_external_link }}"
-                            class="cust-btn cust-btn--white cust-btn--secondary home-banner__btn"><span>Click here to access</span></a>
+                    {% if top_image.url %}
+                        <div class="banner__logo">
+                            <img src="{{ top_image.url }}"
+                                 alt="{{ top_image.alt }}">
+                        </div>
+                    {% endif %}
+                    <h1 class="banner__title title">{{ banner.title }}</h1>
+                    {% if banner.specific.banner_description %}
+                        <div class="banner__desc">
+                            {{ banner.specific.banner_description }}
+                        </div>
+                    {% endif %}
+                    <a href="{{ banner.specific.final_external_link }}"
+                       class="cust-btn cust-btn--white cust-btn--secondary banner__btn">
+                        <span>Click here to access</span>
+                    </a>
                 </div>
             </div>
         </div>

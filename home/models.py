@@ -21,6 +21,9 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 from wagtailmarkdown.blocks import MarkdownBlock
 
+from wagtail_color_panel.fields import ColorField
+from wagtail_color_panel.edit_handlers import NativeColorPanel
+
 from comments.models import CommentableMixin
 from iogt.views import create_final_external_link, check_user_session
 from questionnaires.models import Survey, Poll
@@ -249,8 +252,18 @@ class BannerPage(Page):
         'wagtailimages.Image',
         related_name='+',
         on_delete=models.PROTECT,
+        null=True, blank=True,
         help_text=_('Image to display as the banner')
     )
+    banner_background_image = models.ForeignKey(
+        'wagtailimages.Image',
+        related_name='+',
+        null=True, blank=True,
+        on_delete=models.PROTECT,
+        help_text=_('Background image')
+    )
+    banner_background_color = ColorField(default="#acc9fa")
+
     banner_link_page = models.ForeignKey(
         Page, null=True, blank=True, related_name='banners', on_delete=models.PROTECT,
         help_text=_('Optional page to which the banner will link to'))
@@ -261,6 +274,8 @@ class BannerPage(Page):
     content_panels = Page.content_panels + [
         FieldPanel('banner_description'),
         ImageChooserPanel('banner_image'),
+        ImageChooserPanel('banner_background_image'),
+        NativeColorPanel('banner_background_color'),
         PageChooserPanel('banner_link_page'),
         FieldPanel('external_link'),
     ]
