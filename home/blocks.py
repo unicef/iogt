@@ -52,3 +52,11 @@ class SocialMediaShareButtonBlock(blocks.StructBlock):
 
     class Meta:
         icon = 'site'
+
+
+class PageButtonBlock(blocks.StructBlock):
+    text = blocks.CharBlock(required=False, max_length=255)
+    page = blocks.PageChooserBlock()
+
+    class Meta:
+        template = 'blocks/page_button.html'

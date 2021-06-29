@@ -27,7 +27,7 @@ from iogt.views import create_final_external_link, check_user_session
 from questionnaires.models import Survey, Poll
 
 from .blocks import (MediaBlock, SocialMediaLinkBlock,
-                     SocialMediaShareButtonBlock)
+                     SocialMediaShareButtonBlock, PageButtonBlock)
 
 
 class HomePage(Page):
@@ -171,7 +171,7 @@ class Article(Page, CommentableMixin):
         ('image', ImageChooserBlock()),
         ('list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
         ('numbered_list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
-        ('page', blocks.PageChooserBlock()),
+        ('page_button', PageButtonBlock()),
         ('media', MediaBlock(icon='media')),
     ])
     show_in_menus_default = True

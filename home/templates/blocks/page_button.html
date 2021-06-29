@@ -1,0 +1,7 @@
+{% load wagtailcore_tags i18n %}
+
+<a href="{% pageurl value.page %}">
+  <button>
+    {{ value.text | default: value.page.title }}
+  </button>
+</a>
