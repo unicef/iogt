@@ -39,6 +39,7 @@
 
 <main id="app">
     <div id="content-wrap">
+        <div class='dark-overlay js-dark-overlay'></div>
         {% if settings.home.CacheSettings.cache and first_time_user %}
             {% include "cache_banner.html" %}
         {% endif %}

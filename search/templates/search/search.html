@@ -5,37 +5,45 @@
 {% block body_class %}template-searchresults{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/section.css' %}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'css/section.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/search.css' %}">
 {% endblock extra_css %}
 
 {% block title %}Search{% endblock %}
 
 {% block content %}
-    <div class="search-container">
-        <h2>
-            Searching results for: "{{ search_query }}"
-        </h2>
-
-    </div>
 
     {% if search_results %}
+        <div class="search-container">
+            <h2>
+                Searching results for: "{{ search_query }}"
+            </h2>
 
+        </div>
         {% render_articles_list search_results %}
 
         <div class="page-controls-container">
 
-        {% if search_results.has_previous %}
-            <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}" style="float:left">Previous</a>
-        {% endif %}
+            {% if search_results.has_previous %}
+                <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}"
+                   style="float:left">Previous</a>
+            {% endif %}
 
-        {% if search_results.has_next %}
-            <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}" style="float:right">Next</a>
-        {% endif %}
+            {% if search_results.has_next %}
+                <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}"
+                   style="float:right">Next</a>
+            {% endif %}
         </div>
-    {% elif search_query %}
-        <div style="margin-left: 5%">
-        No results found
+    {% else %}
+        <div class="search-not-found">
+            <div class="container search-not-found__container"><p
+                    class="title search-not-found__title">No results
+                found</p>
+                <div class="text search-not-found__text"><p>It seems we
+                    can’t find any results based on your search.</p>
+                </div>
+            </div>
         </div>
     {% endif %}
 {% endblock %}

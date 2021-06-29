@@ -194,6 +194,10 @@
     padding-right: 6px
 }
 
+.polls-widget {
+    padding: 0 0 30px
+}
+
 .polls-widget__title {
     margin-bottom: 16px
 }
@@ -221,4 +225,35 @@
 
 .polls-widget__submit {
     margin-top: 24px
+}
+
+.auth-banner {
+    background-color: #ee3851;
+    border-radius: 8px;
+    padding: 36px 0 16px
+}
+
+.auth-banner__title {
+    color: #fff;
+    margin: 0 auto;
+    max-width: 178px;
+    text-align: center
+}
+
+.auth-banner__btn {
+    border: none;
+    margin: 20px auto 0;
+    max-width: 150px
+}
+
+.survey-widget {
+    padding: 32px 0
+}
+
+.survey-widget__title {
+    margin: 0
+}
+
+.survey-widget__desc {
+    margin: 8px 0 20px
 }

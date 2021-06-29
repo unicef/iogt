@@ -7,163 +7,177 @@
 
 {% block content %}
     <div class="home">
-        {#        {% render_banners_list banners %}#}
+                {% render_banners_list banners %}
         {#        {% render_featured_content_list featured_content %}#}
-        <div class="dark-overlay js-dark-overlay hideOnNonJSDevice"></div>
-        <div class="home-banner">
-            <div class="container">
-                <div class="home-banner__wrap">
-                    <div class="home-banner__logo"><img
-                            src="{% static "images/logo_Primary.png" %}"
-                            alt="logo"></div>
-                    <h1 class="home-banner__title title">Free of data
-                        charges</h1><a
-                        href="#"
-                        class="cust-btn cust-btn--white cust-btn--secondary home-banner__btn"><span>Click here to access</span></a>
+        <div class="container container--main">
+            <div class="home-banner">
+                <div class="container">
+                    <div class="home-banner__wrap">
+                        <div class="home-banner__logo"><img
+                                src="{% static "/images/logo_Primary.png" %}"
+                                alt="logo"></div>
+                        <h1 class="home-banner__title title">Free of data
+                            charges</h1><a
+                            href="#"
+                            class="cust-btn cust-btn--white cust-btn--secondary home-banner__btn"><span>Click here to access</span></a>
+                    </div>
+                </div>
+            </div>
+            <div class="covid-banner">
+                <div class="container">
+                    <div class="covid-banner__wrap"><h2
+                            class="h2 covid-banner__title">
+                        Covid-19 parenting</h2>
+                        <div class="covid-banner__desc"><p>Talking about
+                            Covid-19</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="link-banner">
+                <div class="container">
+                    <div class="link-banner__wrap"><h2
+                            class="h2 link-banner__title">
+                        Free of data charges</h2><a href="#"
+                                                    class="link-banner__link"><img
+                            src="{% static "icons/arrow-right.svg" %}"
+                            alt="arrow"></a>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="covid-banner">
-            <div class="container">
-                <div class="covid-banner__wrap"><h2
-                        class="h2 covid-banner__title">
-                    Covid-19 parenting</h2>
-                    <div class="covid-banner__desc"><p>Talking about
-                        Covid-19</p></div>
+        {% include "nav_bar.html" %}
+        <div class="container container--main">
+            <div class="articles-list">
+                <div class="container articles-list__container"><a href="#"
+                                                                   class="articles-list__item">
+                    <div class="articles-list__item-content">
+                        <div class="articles-list__item-text"><p>In ut repellat
+                            deserunt
+                            laudantium animi veritatis recusandae.</p></div>
+                    </div>
+                    <div class="articles-list__item-img"><img
+                            src="{% static "/images/article-1.png" %}"
+                            alt="Article image">
+                    </div>
+                </a><a href="#" class="articles-list__item">
+                    <div class="articles-list__item-content">
+                        <div class="articles-list__item-text"><p>Recusandae
+                            reiciendis
+                            sapiente est.</p></div>
+                    </div>
+                    <div class="articles-list__item-img"><img
+                            src="{% static "/images/article-2.png" %}"
+                            alt="Article image">
+                    </div>
+                </a><a href="#" class="articles-list__item">
+                    <div class="articles-list__item-content">
+                        <div class="articles-list__item-text"><p>Omnis porro
+                            illo
+                            aspernatur id laborum.</p></div>
+                    </div>
+                    <div class="articles-list__item-img"><img
+                            src="{% static "/images/article-3.png" %}"
+                            alt="Article image">
+                    </div>
+                </a><a href="#" class="articles-list__item">
+                    <div class="articles-list__item-content">
+                        <div class="articles-list__item-text"><p>Unde illum
+                            sequi
+                            laudantium.</p></div>
+                    </div>
+                    <div class="articles-list__item-img"><img
+                            src="{% static "/images/article-4.png" %}"
+                            alt="Article image">
+                    </div>
+                </a><a href="#" class="articles-list__item">
+                    <div class="articles-list__item-content">
+                        <div class="articles-list__item-text"><p>Unde illum
+                            sequi
+                            laudantium autem ratione.</p></div>
+                    </div>
+                    <div class="articles-list__item-img"><img
+                            src="{% static "/images/article-5.png" %}"
+                            alt="Article image">
+                    </div>
+                </a><a href="#" class="articles-list__item">
+                    <div class="articles-list__item-content">
+                        <div class="articles-list__item-text"><p>Unde illum
+                            sequi
+                            laudantium autem ratione.</p></div>
+                    </div>
+                    <div class="articles-list__item-img"><img
+                            src="{% static "/images/article-2.png" %}"
+                            alt="Article image">
+                    </div>
+                </a><a href="#" class="articles-list__item">
+                    <div class="articles-list__item-content">
+                        <div class="articles-list__item-text"><p>Unde illum
+                            sequi
+                            laudantium autem ratione.</p></div>
+                    </div>
+                    <div class="articles-list__item-img"><img
+                            src="{% static "/images/article-1.png" %}"
+                            alt="Article image">
+                    </div>
+                </a></div>
+            </div>
+            <div class="polls-widget">
+                <div class="container">
+                    <div class="polls-widget__wrap"><h2
+                            class="title polls-widget__title">Polls</h2>
+                        <div class="polls-widget__desc text"><p>Are you aged 12
+                            to 25?
+                            What effect would you say Internet of Good Things
+                            (IoGT) can
+                            have on young people your age?</p></div>
+                        <form class="polls-widget__form"><h4
+                                class="polls-widget__form-title">Answers</h4>
+                            <label
+                                    class="cust-check polls-widget__item"><input
+                                    type="radio" name="poll_rank"
+                                    value="Mostly positive">
+                                <span class="cust-check__title">Mostly positive</span></label>
+                            <label class="cust-check polls-widget__item"><input
+                                    type="radio" name="poll_rank"
+                                    value="Mostly positive"> <span
+                                    class="cust-check__title">Mostly positive</span></label>
+                            <label class="cust-check polls-widget__item"><input
+                                    type="radio" name="poll_rank"
+                                    value="Mostly positive"> <span
+                                    class="cust-check__title">Mostly positive</span></label>
+                            <button type="submit"
+                                    class="cust-btn cust-btn--dark polls-widget__submit">
+                                <span>Log in to vote</span></button>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="link-banner">
-            <div class="container">
-                <div class="link-banner__wrap"><h2
-                        class="h2 link-banner__title">Free of
-                    data charges</h2><a href="#" class="link-banner__link"><img
-                        src="{% static "icons/arrow-right.svg" %}"
-                        alt="arrow"></a>
+            <div class="auth-banner">
+                <div class="container">
+                    <div class="auth-banner__wrap"><h2
+                            class="auth-banner__title title">
+                        How can you prevent coronavirus?</h2>
+                        <a href="{{ login_url }}"
+                           class="cust-btn cust-btn--white auth-banner__btn"><span>Log in / Create account</span></a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="nav-bar">
-            <div class="nav-bar__wrap">
-                <div class="nav-bar__item nav-bar-item active"><a href="#"><span
-                        class="nav-bar-item__icon"><img
-                        src="{% static "icons/home.png" %}"
-                        alt=" Home"></span><span
-                        class="nav-bar-item__title">Home</span></a></div>
-                <div class="nav-bar__item nav-bar-item"><a href="#"><span
-                        class="nav-bar-item__icon"><img
-                        src="{% static "icons/burger.png" %}"
-                        alt="Category"></span><span
-                        class="nav-bar-item__title">Category</span></a></div>
-                <div class="nav-bar__item nav-bar-item"><a href="#"><span
-                        class="nav-bar-item__icon"><img
-                        src="{% static "icons/profile.png" %}"
-                        alt="Profile"></span><span
-                        class="nav-bar-item__title">Profile</span></a></div>
-                <div class="nav-bar__item nav-bar-item"><a href="#"><span
-                        class="nav-bar-item__icon"><img
-                        src="{% static "icons/chat.png" %}"
-                        alt="Chat"></span><span
-                        class="nav-bar-item__title">Chat</span></a></div>
-            </div>
-        </div>
-        <div class="articles-list">
-            <div class="container articles-list__container"><a href="#"
-                                                               class="articles-list__item">
-                <div class="articles-list__item-content">
-                    <div class="articles-list__item-text"><p>In ut repellat
-                        deserunt
-                        laudantium animi veritatis recusandae.</p></div>
-                </div>
-                <div class="articles-list__item-img"><img
-                        src="{% static "images/article-1.png" %}"
-                        alt="Article image"></div>
-            </a><a href="#" class="articles-list__item">
-                <div class="articles-list__item-content">
-                    <div class="articles-list__item-text"><p>Recusandae
-                        reiciendis
-                        sapiente est.</p></div>
-                </div>
-                <div class="articles-list__item-img"><img
-                        src="{% static "images/article-2.png" %}"
-                        alt="Article image"></div>
-            </a><a href="#" class="articles-list__item">
-                <div class="articles-list__item-content">
-                    <div class="articles-list__item-text"><p>Omnis porro illo
-                        aspernatur
-                        id laborum.</p></div>
-                </div>
-                <div class="articles-list__item-img"><img
-                        src="{% static "images/article-3.png" %}"
-                        alt="Article image"></div>
-            </a><a href="#" class="articles-list__item">
-                <div class="articles-list__item-content">
-                    <div class="articles-list__item-text"><p>Unde illum sequi
-                        laudantium.</p></div>
-                </div>
-                <div class="articles-list__item-img"><img
-                        src="{% static "images/article-4.png" %}"
-                        alt="Article image"></div>
-            </a><a href="#" class="articles-list__item">
-                <div class="articles-list__item-content">
-                    <div class="articles-list__item-text"><p>Unde illum sequi
-                        laudantium
-                        autem ratione.</p></div>
-                </div>
-                <div class="articles-list__item-img"><img
-                        src="{% static "images/article-5.png" %}"
-                        alt="Article image"></div>
-            </a><a href="#" class="articles-list__item">
-                <div class="articles-list__item-content">
-                    <div class="articles-list__item-text"><p>Unde illum sequi
-                        laudantium
-                        autem ratione.</p></div>
-                </div>
-                <div class="articles-list__item-img"><img
-                        src="{% static "images/article-2.png" %}"
-                        alt="Article image"></div>
-            </a><a href="#" class="articles-list__item">
-                <div class="articles-list__item-content">
-                    <div class="articles-list__item-text"><p>Unde illum sequi
-                        laudantium
-                        autem ratione.</p></div>
-                </div>
-                <div class="articles-list__item-img"><img
-                        src="{% static "images/article-1.png" %}"
-                        alt="Article image"></div>
-            </a></div>
-        </div>
-        <div class="polls-widget">
-            <div class="container">
-                <div class="polls-widget__wrap"><h2
-                        class="title polls-widget__title">
-                    Polls</h2>
-                    <div class="polls-widget__desc text"><p>Are you aged 12 to
-                        25? What
-                        effect would you say Internet of Good Things (IoGT) can
-                        have on
-                        young people your age?</p></div>
-                    <form class="polls-widget__form"><h4
-                            class="polls-widget__form-title">Answers</h4><label
-                            class="cust-check polls-widget__item"><input
-                            type="radio"
-                            name="poll_rank"
-                            value="Mostly positive">
-                        <span class="cust-check__title">Mostly positive</span></label>
-                        <label class="cust-check polls-widget__item"><input
-                                type="radio"
-                                name="poll_rank"
-                                value="Mostly positive">
-                            <span class="cust-check__title">Mostly positive</span></label>
-                        <label class="cust-check polls-widget__item"><input
-                                type="radio"
-                                name="poll_rank"
-                                value="Mostly positive">
-                            <span class="cust-check__title">Mostly positive</span></label>
-                        <button type="submit"
-                                class="cust-btn cust-btn--dark polls-widget__submit">
-                            <span>Log in to vote</span></button>
-                    </form>
+            <div class="survey-widget">
+                <div class="container">
+                    <div class="survey-widget__wrap"><h2
+                            class="survey-widget__title title">Take a quick
+                        survey!</h2>
+                        <div class="text survey-widget__desc"><p>Your opinion is
+                            important to us! We want to understand if Internet
+                            of Good
+                            Things (IoGT) is useful for you and your community.
+                            Please
+                            take 2 minutes to answer these short questions.</p>
+                        </div>
+                        <a href="#"
+                           class="cust-btn cust-btn--violet"><span>Start here</span></a>
+                    </div>
                 </div>
             </div>
         </div>

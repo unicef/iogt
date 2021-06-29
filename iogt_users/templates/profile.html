@@ -8,8 +8,12 @@
 {% endblock %}
 
 {% block allauth_content %}
-    <h1 class="title profile__title">Hey, Anita <span
-            class="profile__icon">A</span></h1>
+    {% if user.name %}
+        <h1 class="title profile__title"> Hey, {{ user.name }}
+            <span
+                    class="profile__icon">{{ user.name | first | upper }}</span>
+        </h1>
+    {% endif %}
     <div class="profile__btns">
         <a href="#"
            class="icon-btn profile__btn"><span

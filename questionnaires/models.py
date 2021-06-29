@@ -22,6 +22,8 @@ from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 from wagtail.images.blocks import ImageChooserBlock
 
+from questionnaires.blocks import SkipLogicField
+
 
 class QuestionnairePage(Page):
     template = None
@@ -76,6 +78,7 @@ class SurveyFormField(AbstractFormField):
         help_text=_('Column header used during CSV export of survey '
                     'responses.'),
     )
+    skip_logic = SkipLogicField()
     page_break = models.BooleanField(
         default=False,
         help_text=_(
@@ -87,7 +90,7 @@ class SurveyFormField(AbstractFormField):
         FieldPanel('help_text'),
         FieldPanel('required'),
         FieldPanel('field_type', classname="formbuilder-type"),
-        FieldPanel('choices', classname="formbuilder-choices"),
+        StreamFieldPanel('skip_logic'),
         FieldPanel('default_value', classname="formbuilder-default"),
         FieldPanel('admin_label'),
         FieldPanel('page_break'),

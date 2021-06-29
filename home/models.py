@@ -12,7 +12,7 @@ from wagtail.admin.edit_handlers import (
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
 from wagtail.core import blocks
-from wagtail.core.fields import StreamField
+from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Orderable, Page, Site
 
 from wagtail.core.rich_text import get_text_for_indexing
@@ -243,6 +243,8 @@ class BannerPage(Page):
     parent_page_types = ['home.BannerIndexPage']
     subpage_types = []
 
+    banner_description = RichTextField(null=True, blank=True)
+
     banner_image = models.ForeignKey(
         'wagtailimages.Image',
         related_name='+',
@@ -257,6 +259,7 @@ class BannerPage(Page):
         help_text=_('Optional external link which a banner will link to e.g., https://www.google.com'))
 
     content_panels = Page.content_panels + [
+        FieldPanel('banner_description'),
         ImageChooserPanel('banner_image'),
         PageChooserPanel('banner_link_page'),
         FieldPanel('external_link'),

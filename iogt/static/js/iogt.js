@@ -38,12 +38,12 @@ $selects.forEach(function ($select) {
 	});
 });
 
-$searchBtn.addEventListener('click', function (e) {
-	e.preventDefault();
-	this.parentElement.classList.add('active');
-	$overlay.classList.add('active');
-	$searchResult.classList.add('active');
-});
+// $searchBtn.addEventListener('click', function (e) {
+// 	e.preventDefault();
+// 	this.parentElement.classList.add('active');
+// 	$overlay.classList.add('active');
+// 	$searchResult.classList.add('active');
+// });
 
 $searchClose.addEventListener('click', function (e) {
 	e.preventDefault();
