@@ -2,6 +2,7 @@ from django.contrib.admin.utils import flatten
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.encoding import force_str
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey
@@ -31,6 +32,7 @@ from .blocks import (MediaBlock, SocialMediaLinkBlock,
                      EmbeddedQuestionnaireChooserBlock,
                      PageButtonBlock)
 from .forms import SectionPageForm
+from .mixins import PageUtilsMixin
 from .utils.progress_manager import ProgressManager
 
 User = get_user_model()
@@ -99,7 +101,7 @@ class SectionIndexPage(Page):
     subpage_types = ['home.Section']
 
 
-class Section(Page):
+class Section(Page, PageUtilsMixin):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
@@ -207,7 +209,7 @@ class ArticleRecommendation(Orderable):
     ]
 
 
-class Article(Page, CommentableMixin):
+class Article(Page, PageUtilsMixin, CommentableMixin):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
