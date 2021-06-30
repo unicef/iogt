@@ -498,6 +498,7 @@ class QuizFormField(AbstractFormField):
         help_text=_('Column header used during CSV export of survey '
                     'responses.'),
     )
+    skip_logic = SkipLogicField()
     page_break = models.BooleanField(
         default=False,
         help_text=_(
@@ -518,6 +519,7 @@ class QuizFormField(AbstractFormField):
         FieldPanel('help_text'),
         FieldPanel('required'),
         FieldPanel('field_type', classname="formbuilder-type"),
+        StreamFieldPanel('skip_logic'),
         FieldPanel('default_value', classname="formbuilder-default"),
         FieldPanel('correct_answer'),
         FieldPanel('feedback'),
