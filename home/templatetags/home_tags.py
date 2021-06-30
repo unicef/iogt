@@ -46,3 +46,7 @@ def render_questionnaire_list(questionnaire):
 @register.inclusion_tag('home/tags/section_progress.html')
 def render_user_progress(user_progress):
     return user_progress
+
+@register.inclusion_tag('home/tags/sub_sections.html')
+def render_sub_sections_list(sub_sections):
+    return {'sub_sections': sub_sections}
