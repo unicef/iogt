@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags questionnaires_tags  %}
+
+{% block content %}
+    <div> thank you page</div>
+
+    <div>{{ page.thank_you_text }}</div>
+
+    <div>Result: {{ result|get_item:'total_correct' }}/{{ result|get_item:'total' }}</div>
+
+    <form action="{% pageurl page %}" method="POST">
+        {% csrf_token %}
+        <div>
+            {% for field in form.visible_fields %}
+                {{ field.label }}
+                {{ field }}
+                <br />
+                {{ fields_info|get_item:field.name|get_item:'feedback' }}
+                <br />
+                {{ fields_info|get_item:field.name|get_item:'correct_answer' }}
+                <br />
+                {{ fields_info|get_item:field.name|get_item:'is_correct' }}
+                <br />
+                <br />
+            {% endfor %}
+        </div>
+    </form>
+
+    {% if back_url %}
+        <a href="{{ back_url }}">< Back</a>
+    {% endif %}
+{% endblock %}
