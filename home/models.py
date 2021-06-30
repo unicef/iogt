@@ -45,6 +45,7 @@ class HomePage(Page):
         ('page_button', PageButtonBlock()),
         ('embedded_poll', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')),
         ('embedded_survey', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')),
+        ('embedded_quiz', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Quiz')),
         ('article', PageChooserBlock(target_model='home.Article')),
     ], null=True)
 
@@ -237,8 +238,8 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         ('page_button', PageButtonBlock()),
         ('embedded_poll',
          EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')),
-        ('embedded_survey', EmbeddedQuestionnaireChooserBlock(
-            target_model='questionnaires.Survey')),
+        ('embedded_survey', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')),
+        ('embedded_quiz', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Quiz')),
         ('media', MediaBlock(icon='media')),
     ])
     show_in_menus_default = True
