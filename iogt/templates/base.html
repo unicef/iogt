@@ -44,13 +44,13 @@
 
 <main id="app">
     <div id="content-wrap">
-      {% comment %} {% if settings.home.CacheSettings.cache and first_time_user %}
+        {% if settings.home.CacheSettings.cache and first_time_user %}
             {% include "cache_banner.html" %}
         {% endif %}
         {% include "header.html" %}
-        {% include "messages.html" %}  {% endcomment %}
+        {% include "messages.html" %} 
         {% block content %}{% endblock %}
-        {% comment %} {% include "footer.html" %} {% endcomment %}
+        {% include "footer.html" %}
     </div>
 </main>
 
