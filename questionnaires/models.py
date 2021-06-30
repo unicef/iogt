@@ -647,6 +647,7 @@ class Quiz(QuestionnairePage, AbstractForm):
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
+        context.update({'back_url': request.GET.get('back_url')})
 
         if request.method == 'POST':
             form_class = self.get_form_class()
