@@ -374,11 +374,11 @@ class BannerPage(Page):
     content_panels = Page.content_panels + [
         FieldPanel('banner_description'),
         ImageChooserPanel('banner_image'),
-        ImageChooserPanel('banner_background_image'),
+        #ImageChooserPanel('banner_background_image'),
         PageChooserPanel('banner_link_page'),
-        FieldPanel('banner_button_text'),
-        ImageChooserPanel('banner_icon_button'),
-        FieldPanel('align_center')
+        #FieldPanel('banner_button_text'),
+        #ImageChooserPanel('banner_icon_button'),
+        #FieldPanel('align_center')
     ]
 
 

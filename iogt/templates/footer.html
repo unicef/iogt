@@ -1,9 +1,11 @@
-{% load static wagtailuserbar menu_tags home_tags %}
+{% load static wagtailcore_tags wagtailimages_tags wagtailuserbar menu_tags home_tags %}
+{% load i18n %}
 
+{% get_current_language as LANGUAGE_CODE %}
 
 <footer class="footer">
     <div class="footer__nav-bar">
-        {% flat_menu "nav_bar" template="nav_bar.html" %}
+        {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
     </div>
     <div class="container">
         <form class="footer__search" action="{% url "search" %}">
