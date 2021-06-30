@@ -9,8 +9,14 @@
     <div class="home">
         {% render_banners_list banners %}
         {% flat_menu "nav_bar" template="nav_bar.html" %}
-        <div class="container container--main">
-            {% render_articles_list featured_content %}
+{#        <div class="container container--main">#}
+{#            {% render_articles_list featured_content %}#}
+{#        </div>#}
+
+        <div class="main-text">
+            {% if page.new_featured_content %}
+                {% include_block page.new_featured_content %}
+            {% endif %}
         </div>
     </div>
 {% endblock content %}

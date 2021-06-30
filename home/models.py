@@ -2,7 +2,6 @@ from django.contrib.admin.utils import flatten
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.encoding import force_str
-from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey
@@ -15,6 +14,7 @@ from wagtail.admin.edit_handlers import (
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
 from wagtail.core import blocks
+from wagtail.core.blocks import PageChooserBlock
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Orderable, Page, Site
 from wagtail.core.rich_text import get_text_for_indexing
@@ -41,13 +41,21 @@ User = get_user_model()
 class HomePage(Page):
     template = 'home/home_page.html'
 
+    new_featured_content = StreamField([
+        ('page_button', PageButtonBlock()),
+        ('embedded_poll', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')),
+        ('embedded_survey', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')),
+        ('article', PageChooserBlock(target_model='home.Article')),
+    ], null=True)
+
     content_panels = Page.content_panels + [
         MultiFieldPanel([
             InlinePanel('home_page_banners', label=_("Home Page Banner")),
         ], heading=_('Home Page Banners')),
         MultiFieldPanel([
             InlinePanel('featured_content', label=_("Featured Content")),
-        ], heading=_('Featured Content'))
+        ], heading=_('Featured Content')),
+        StreamFieldPanel('new_featured_content')
     ]
 
     def get_context(self, request):
