@@ -639,6 +639,25 @@ input:checked + .cust-check__title {
     text-align: center
 }
 
+.pagination__arrow svg {
+    height: 16px;
+    width: 12px
+}
+
+.pagination__list-item--active, .pagination__list-item a {
+    font-size: 14px;
+    line-height: 16px
+}
+
+.pagination__list-item--active {
+    height: 26px;
+    width: 26px
+}
+
+.profile-form__input {
+    margin-bottom: 12px
+}
+
 .nav-bar {
     background-color: #0094f4
 }
