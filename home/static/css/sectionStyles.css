@@ -1,7 +1,6 @@
 .section-page-details {
   background-image: url("https://11tcma2eyqgmz6zyt1x6na8n-wpengine.netdna-ssl.com/wp-content/uploads/2020/03/ShipStation-COVID-Blog-Asset-Feature-1-860x354.png");
   color: #FFFFFF;
-  width: 320px;
   left: 0px;
   top: 144px;
   display: -webkit-box;
@@ -333,6 +332,7 @@
 }
 
 .article-content__chat-btn {
+  margin-top: 20px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

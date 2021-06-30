@@ -63,7 +63,6 @@
     async function cache() {
 		if ('serviceWorker' in navigator && confirm("Install this website as an app on your device?") === true) {
 			try {
-                alert(1)
 				await navigator.serviceWorker.register('{% url "sw.js" %}', {scope: '/'});
 			} catch {
 				alert(failMsg);
