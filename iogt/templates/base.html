@@ -56,19 +56,19 @@
 
 {# Global javascript #}
 <script>
-	const successMsg = "Your app is now ready to install. If you are using a iOS device, you can install it by clicking 'Share', scrolling down and tapping 'Add to Home Screen. If using Android choose 'Add to home screen' and you should be all set!";
+
 	const failMsg = 'Something went wrong. Can you try refreshing the page, and clicking the download website button?';
 
-	async function cache() {
+    async function cache() {
 		if ('serviceWorker' in navigator && confirm("Install this website as an app on your device?") === true) {
 			try {
+                alert(1)
 				await navigator.serviceWorker.register('{% url "sw.js" %}', {scope: '/'});
-				alert(successMsg);
 			} catch {
 				alert(failMsg);
 			}
 		}
-	}
+	} 
 </script>
 <noscript>
     <style type="text/css">

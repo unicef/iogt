@@ -504,6 +504,7 @@ class SiteSettings(BaseSetting):
         verbose_name_plural = 'Site Settings'
 
 
+@register_setting
 class CacheSettings(BaseSetting):
     cache = models.BooleanField(
         default=True,

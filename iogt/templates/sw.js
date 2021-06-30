@@ -14,10 +14,14 @@ workbox.googleAnalytics.initialize({
 // so this will be done programmatically
 
 const appShell = [
-  "{{ test_url }}",
+  "/youth",
 ].map((partialUrl) => `${location.protocol}//${location.host}${partialUrl}`);
 
 workbox.precaching.precacheAndRoute(appShell.map(url => ({
   url,
   revision: null,
 })));
+
+const successMsg = "Your app is now ready to install. If you are using a iOS device, you can install it by clicking 'Share', scrolling down and tapping 'Add to Home Screen. If using Android choose 'Add to home screen' and you should be all set!";
+
+alert(successMsg)
