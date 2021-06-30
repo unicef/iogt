@@ -22,7 +22,9 @@ from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 from wagtail.images.blocks import ImageChooserBlock
 
-from questionnaires.blocks import SkipLogicField
+from questionnaires.blocks import SkipLogicField, SkipState
+from questionnaires.forms import SurveyForm
+from questionnaires.utils import SkipLogicPaginator
 
 
 class QuestionnairePage(Page):
@@ -96,8 +98,41 @@ class SurveyFormField(AbstractFormField):
         FieldPanel('page_break'),
     ]
 
+    @property
+    def has_skipping(self):
+        return any(
+            logic.value['skip_logic'] != SkipState.NEXT
+            for logic in self.skip_logic
+        )
+
+    def choice_index(self, choice):
+        if choice:
+            if self.field_type == 'checkbox':
+                # clean checkboxes have True/False
+                try:
+                    return ['on', 'off'].index(choice)
+                except ValueError:
+                    return [True, False].index(choice)
+            return self.choices.split(',').index(choice)
+        else:
+            return False
+
+    def next_action(self, choice):
+        return self.skip_logic[self.choice_index(choice)].value['skip_logic']
+
+    def is_next_action(self, choice, *actions):
+        if self.has_skipping:
+            return self.next_action(choice) in actions
+        return False
+
+    def next_page(self, choice):
+        logic = self.skip_logic[self.choice_index(choice)]
+        return logic.value[self.next_action(choice)]
+
 
 class Survey(QuestionnairePage, AbstractForm):
+    base_form_class = SurveyForm
+
     parent_page_types = ["home.HomePage", "home.Section", "home.Article"]
     template = "survey/survey.html"
     multi_step = models.BooleanField(
@@ -144,6 +179,9 @@ class Survey(QuestionnairePage, AbstractForm):
             for field in self.get_form_fields()
         )
 
+    def get_form_class_for_step(self, step):
+        return self.form_builder(step.object_list).get_form_class()
+
     def get_form_fields(self):
         return self.survey_form_fields.all()
 
@@ -160,7 +198,7 @@ class Survey(QuestionnairePage, AbstractForm):
         )
 
         site_settings = SiteSettings.get_for_default_site()
-        if site_settings.registration_survey.pk == self.pk:
+        if site_settings.registration_survey and site_settings.registration_survey.pk == self.pk:
             user.has_filled_registration_survey = True
             user.save(update_fields=['has_filled_registration_survey'])
 
@@ -177,12 +215,24 @@ class Survey(QuestionnairePage, AbstractForm):
 
         return super().serve(request, *args, **kwargs)
 
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context.update({'back_url': request.GET.get('back_url')})
+        return context
+
     def serve_questions_separately(self, request, *args, **kwargs):
         session_key_data = "form_data-%s" % self.pk
         is_last_step = False
         step_number = request.GET.get("p", 1)
 
-        paginator = Paginator(self.get_form_fields(), per_page=1)
+        form_data = json.loads(request.session.get(session_key_data, '{}'))
+
+        paginator = SkipLogicPaginator(
+            self.get_form_fields(),
+            request.POST,
+            form_data,
+        )
+
         try:
             step = paginator.page(step_number)
         except PageNotAnInteger:
@@ -195,18 +245,28 @@ class Survey(QuestionnairePage, AbstractForm):
             # The first step will be submitted with step_number == 2,
             # so we need to get a form from previous step
             # Edge case - submission of the last step
-            prev_step = (
-                step if is_last_step else paginator.page(step.previous_page_number())
-            )
+            try:
+                prev_step = (
+                    step if is_last_step else paginator.page(step.previous_page_number())
+                )
+            except EmptyPage:
+                prev_step = step
+                step = paginator.page(prev_step.next_page_number())
 
             # Create a form only for submitted step
             prev_form_class = self.get_form_class_for_step(prev_step)
-            prev_form = prev_form_class(request.POST, page=self, user=request.user)
+            prev_form = prev_form_class(
+                paginator.new_answers,
+                page=self,
+                user=request.user
+            )
             if prev_form.is_valid():
                 # If data for step is valid, update the session
-                form_data = request.session.get(session_key_data, {})
                 form_data.update(prev_form.cleaned_data)
-                request.session[session_key_data] = form_data
+                request.session[session_key_data] = json.dumps(
+                    form_data,
+                    cls=DjangoJSONEncoder
+                )
 
                 if prev_step.has_next():
                     # Create a new form for a following step, if the following step is present
@@ -214,8 +274,9 @@ class Survey(QuestionnairePage, AbstractForm):
                     form = form_class(page=self, user=request.user)
                 else:
                     # If there is no next step, create form for all fields
+                    data = json.loads(request.session.get(session_key_data, '{}'))
                     form = self.get_form(
-                        request.session[session_key_data], page=self, user=request.user
+                        data, page=self, user=request.user
                     )
 
                     if form.is_valid():
@@ -375,6 +436,7 @@ class Poll(QuestionnairePage, AbstractForm):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         results = dict()
+
         # Get information about form fields
         data_fields = [
             (field.clean_name, field.label)
@@ -411,6 +473,7 @@ class Poll(QuestionnairePage, AbstractForm):
 
         context.update({
             'results': results,
+            'back_url': request.GET.get('back_url'),
         })
         return context
 

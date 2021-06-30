@@ -14,6 +14,27 @@
          {% render_featured_content_list featured_content %}
     </section>
     <section>
+    <div class="home">
+        <div class="single-article">
+            <section class="article-content">
+                <ul class="tag-section">
+                    <div class="tags">
+                        {% if page.tags.count %}
+                            <h3>Tags:</h3>
+                            {% for tag in page.tags.all %}
+                                <span class="tagit-label tag">{{ tag.slug }}</span>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <img src="{% static 'images/nav-icons/forward-green.png' %}">
+                </ul>
+               {% image page.lead_image height-280 class="main-image-tablet-desktop" %}
+            </section>
+        </div>
+        {% if user_progress %}
+            {% render_user_progress  user_progress %}
+        {% endif %}
+        {% render_featured_content_list featured_content %}
         {% render_sub_sections_list sub_sections %}
     </section>
     <section class='suggested-articles'>

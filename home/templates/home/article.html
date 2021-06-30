@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static wagtailcore_tags wagtailimages_tags comments comments_xtd  home_tags questionnaires_tags sass_tags %}
+{% load static wagtailcore_tags wagtailimages_tags home_tags comments comments_xtd %}
 
 {% block extra_css %}
 
@@ -29,6 +30,35 @@
                 {% if page.get_next_sibling %}
                     <a href="{% pageurl page.get_next_sibling %}" class='article-navigation__button--next'>Next</a>
                 {% endif %}
+    {% if user_progress %}
+        {% render_user_progress user_progress %}
+    {% endif %}
+    <div class="single-article">
+        <ul class="breadcrumb">
+            {% for crumb in breadcrumbs %}
+                <li>
+                    <a href="{% pageurl crumb %}">{{ crumb.title }}</a>
+                </li>
+            {% endfor %}
+            <li>{{ page.title }}</li>
+        </ul>
+        {% image page.lead_image height-115 class="main-image-phone" %}
+        <section class="article-content">
+            <ul class="tag-section">
+                {% for section in sections %}
+                    <li>
+                        <a class="tag" href="{% pageurl section %}">{{ section.title }}</a>
+                    </li>
+                {% endfor %}
+                <img src="{% static 'images/nav-icons/forward-green.png' %}">
+            </ul>
+
+        <div class="tags">
+            {% if page.tags.count %}
+                <h3>Tags:</h3>
+                {% for tag in page.tags.all %}
+                    <span class="tagit-label tag">{{ tag.slug }}</span>
+                {% endfor %}
             {% endif %}
        </section>
  </article>

@@ -8,7 +8,7 @@
     <div>
         <p>{{ page.description }}</p>
         <hr>
-        <form action="{% pageurl page %}" method="POST">
+        <form action="{% pageurl page %}{% if self.multi_step or self.has_page_breaks %}?p={{ fields_step.number|add:"1" }}{% endif %}" method="POST">
             {% csrf_token %}
             <div>
                 {{ form.as_p }}
