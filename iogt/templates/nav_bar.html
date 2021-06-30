@@ -1,42 +1,16 @@
-{% load static menu_tags %}
+{% load static wagtailimages_tags menu_tags %}
 
 <div class="nav-bar">
     <div class="nav-bar__wrap">
-        <div class="nav-bar__item nav-bar-item active">
-            <a href="/">
+        {% for item in menu_items %}
+            <div class="nav-bar__item nav-bar-item">
+                <a href="/">
                     <span class="nav-bar-item__icon">
-                        <img src="{% static "/icons/home.png" %}"
-                             alt="Home">
+                        {% image item.icon fill-20x20 %}
                     </span>
-                <span class="nav-bar-item__title">Home</span>
-            </a>
-        </div>
-        <div class="nav-bar__item nav-bar-item">
-            <a href="#">
-                    <span class="nav-bar-item__icon">
-                        <img src="{% static "/icons/burger.png" %}"
-                             alt="Category">
-                    </span>
-                <span class="nav-bar-item__title">Category</span>
-            </a>
-        </div>
-        <div class="nav-bar__item nav-bar-item {% if "profile" in request.path %} active{% endif %}">
-            <a href="{% url "user_profile" %}">
-                    <span class="nav-bar-item__icon">
-                        <img src="{% static "/icons/profile.png" %}"
-                             alt="Profile">
-                    </span>
-                <span class="nav-bar-item__title">Profile</span>
-            </a>
-        </div>
-        <div class="nav-bar__item nav-bar-item">
-            <a href="#">
-                    <span class="nav-bar-item__icon">
-                        <img src="{% static "icons/chat.png" %}"
-                             alt="Chat">
-                    </span>
-                <span class="nav-bar-item__title">Chat</span>
-            </a>
-        </div>
+                    <span class="nav-bar-item__title">{{ item.text }}</span>
+                </a>
+            </div>
+        {% endfor %}
     </div>
 </div>

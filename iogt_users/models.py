@@ -6,8 +6,10 @@ from django.dispatch import receiver
 
 
 class User(AbstractUser):
-    first_name = models.CharField('first name', max_length=150, null=True, blank=True)
-    last_name = models.CharField('last name', max_length=150, null=True, blank=True)
+    first_name = models.CharField('first name', max_length=150, null=True,
+                                  blank=True)
+    last_name = models.CharField('last name', max_length=150, null=True,
+                                 blank=True)
     email = models.EmailField('email address', null=True, blank=True)
     terms_accepted = models.BooleanField(default=False)
 

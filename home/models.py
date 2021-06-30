@@ -39,9 +39,6 @@ User = get_user_model()
 
 class HomePage(Page):
     template = 'home/home_page.html'
-    show_polls = BooleanField(default=True)
-    show_questionnaire = BooleanField(default=True)
-    show_survey = BooleanField(default=True)
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
@@ -49,10 +46,7 @@ class HomePage(Page):
         ], heading=_('Home Page Banners')),
         MultiFieldPanel([
             InlinePanel('featured_content', label=_("Featured Content")),
-        ], heading=_('Featured Content')),
-        FieldPanel("show_polls"),
-        FieldPanel("show_questionnaire"),
-        FieldPanel("show_survey"),
+        ], heading=_('Featured Content'))
     ]
 
     def get_context(self, request):

@@ -1,6 +1,8 @@
 {% extends 'account/base.html' %}
 {% load i18n static %}
 
+{% block title %}{% trans "Edit my profile" %}{% endblock %}
+
 {% block extra_css %}
     {{ block.super }}
     <link rel="stylesheet" type="text/css"
@@ -8,27 +10,36 @@
 {% endblock %}
 
 {% block allauth_content %}
-    {% if user.name %}
-        <h1 class="title profile__title"> Hey, {{ user.name }}
+    {% if user.username %}
+        <h1 class="title profile__title"> Hey, {{ user.username }}
             <span
-                    class="profile__icon">{{ user.name | first | upper }}</span>
+                    class="profile__icon">{{ user.username | first | upper }}</span>
         </h1>
     {% endif %}
     <div class="profile__btns">
-        <a href="#"
-           class="icon-btn profile__btn"><span
-                class="icon-btn__icon"><img
-                src="{% static "icons/pencil.png" %}"
-                alt="Pencil icon"> </span><span
-                class="icon-btn__title">Edit my profile</span> </a><a
-            href="#"
-            class="icon-btn profile__btn"><span
-            class="icon-btn__icon"><img src="{% static "icons/bell.png" %}"
-                                        alt="bell icon"> </span><span
-            class="icon-btn__title">Notifications</span> </a><a href="#"
-                                                                class="icon-btn profile__btn"><span
-            class="icon-btn__icon"><img src="{% static "icons/lock.png" %}"
-                                        alt="lock icon"> </span><span
-            class="icon-btn__title">Change Digital Pin</span></a></div>
-
+        <a href="{% url "user_profile_edit" %}" class="icon-btn profile__btn">
+            <span class="icon-btn__icon">
+                <img src="{% static "icons/pencil.png" %}" alt="Pencil icon">
+            </span>
+            <span class="icon-btn__title">Edit my profile</span>
+        </a>
+        <a href="#" class="icon-btn profile__btn">
+            <span class="icon-btn__icon">
+                <img src="{% static "icons/bell.png" %}" alt="bell icon">
+            </span>
+            <span class="icon-btn__title">Notifications</span>
+        </a>
+        <a href="#" class="icon-btn profile__btn">
+            <span class="icon-btn__icon">
+                <img src="{% static "icons/lock.png" %}" alt="lock icon">
+            </span>
+            <span class="icon-btn__title">Change Digital Pin</span>
+        </a>
+        <a href="{% url "account_logout" %}" class="icon-btn profile__btn">
+            <span class="icon-btn__icon">
+                <img src="{% static "icons/arrow_icon_left.svg" %}" alt="lock icon">
+            </span>
+            <span class="icon-btn__title">Log out</span>
+        </a>
+    </div>
 {% endblock %}

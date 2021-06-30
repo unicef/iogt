@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags home_tags %}
+{% load static wagtailcore_tags wagtailimages_tags home_tags menu_tags %}
 
 {% block extra_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
@@ -8,33 +8,9 @@
 {% block content %}
     <div class="home">
         {% render_banners_list banners %}
-        {% include "nav_bar.html" %}
+        {% flat_menu "main_menu" template="nav_bar.html" %}
         <div class="container container--main">
-
             {% render_articles_list featured_content %}
-            {% if page.show_polls %}
-                {% render_polls_list polls %}
-            {% endif %}
-            {% if page.show_questionnaire %}
-                {% render_questionnaire_list questionnaire %}
-            {% endif %}
-            <div class="survey-widget">
-                <div class="container">
-                    <div class="survey-widget__wrap"><h2
-                            class="survey-widget__title title">Take a quick
-                        survey!</h2>
-                        <div class="text survey-widget__desc"><p>Your opinion is
-                            important to us! We want to understand if Internet
-                            of Good
-                            Things (IoGT) is useful for you and your community.
-                            Please
-                            take 2 minutes to answer these short questions.</p>
-                        </div>
-                        <a href="#"
-                           class="cust-btn cust-btn--violet"><span>Start here</span></a>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 {% endblock content %}
