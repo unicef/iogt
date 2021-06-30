@@ -511,16 +511,15 @@ class Quiz(QuestionnairePage, AbstractForm):
 
     def serve(self, request, *args, **kwargs):
         # TODO add page brakes logic
-        def serve(self, request, *args, **kwargs):
-            if (
-                    not self.allow_multiple_submissions
-                    and self.get_submission_class()
-                    .objects.filter(page=self, user__pk=request.user.pk)
-                    .exists()
-            ):
-                return render(request, self.template, self.get_context(request))
+        if (
+                not self.allow_multiple_submissions
+                and self.get_submission_class()
+                .objects.filter(page=self, user__pk=request.user.pk)
+                .exists()
+        ):
+            return render(request, self.template, self.get_context(request))
 
-        return super().serve(self, request, *args, **kwargs)
+        return super().serve(request, *args, **kwargs)
 
     def process_form_submission(self, form):
         from home.models import SiteSettings
