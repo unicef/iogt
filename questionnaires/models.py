@@ -65,6 +65,12 @@ class QuestionnairePage(Page, PageUtilsMixin):
         max_length=40, null=True, default="Submit", help_text=_("Submit button text")
     )
 
+    direct_display = models.BooleanField(default=False)
+
+    settings_panels = Page.settings_panels + [
+        FieldPanel('direct_display')
+    ]
+
     def __str__(self):
         return self.title
 
