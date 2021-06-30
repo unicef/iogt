@@ -1,10 +1,5 @@
 {% extends "base.html" %}
 {% load static wagtailcore_tags wagtailimages_tags comments comments_xtd  home_tags questionnaires_tags sass_tags %}
-{% load static wagtailcore_tags wagtailimages_tags home_tags comments comments_xtd %}
-
-{% block extra_css %}
-
-{% endblock extra_css %}
 
 {% block content %}
   {% image page.lead_image height-115 width-360 class="main-image-phone" %}
@@ -13,15 +8,8 @@
       <h1>{{ page.title }}</h1>
       {% include_block page.body %}
      <button class='article-content__chat-btn'>Start Chatting</button>
-     {% comment %} <section class='quiz-holder'>
-            <a class='quiz-holder__quiz'>
-                <span class='quiz-holder__quiz__details'>
-                    <p >Quiz</p>
-                    <p class='quiz__details--bold'>How concerned are you about the Coronavirus?</p>
-                </span>
-                <img class="quiz-holder__image" src="{% static 'images/Stroke 3.png' %}" alt=''>
-            </a>
-       </section> {% endcomment %}
+     {% render_polls_list polls %} 
+     {% render_surveys_list surveys %}
        <section class='article-navigation'>
             {% if page.get_prev_sibling or page.get_next_sibling %}
                 {% if page.get_prev_sibling %}
@@ -30,37 +18,9 @@
                 {% if page.get_next_sibling %}
                     <a href="{% pageurl page.get_next_sibling %}" class='article-navigation__button--next'>Next</a>
                 {% endif %}
-    {% if user_progress %}
-        {% render_user_progress user_progress %}
-    {% endif %}
-    <div class="single-article">
-        <ul class="breadcrumb">
-            {% for crumb in breadcrumbs %}
-                <li>
-                    <a href="{% pageurl crumb %}">{{ crumb.title }}</a>
-                </li>
-            {% endfor %}
-            <li>{{ page.title }}</li>
-        </ul>
-        {% image page.lead_image height-115 class="main-image-phone" %}
-        <section class="article-content">
-            <ul class="tag-section">
-                {% for section in sections %}
-                    <li>
-                        <a class="tag" href="{% pageurl section %}">{{ section.title }}</a>
-                    </li>
-                {% endfor %}
-                <img src="{% static 'images/nav-icons/forward-green.png' %}">
-            </ul>
-
-        <div class="tags">
-            {% if page.tags.count %}
-                <h3>Tags:</h3>
-                {% for tag in page.tags.all %}
-                    <span class="tagit-label tag">{{ tag.slug }}</span>
-                {% endfor %}
+    
             {% endif %}
-       </section>
+       </section> 
  </article>
  <section class='comments'>
  {% get_comment_count for page as comment_count %}
