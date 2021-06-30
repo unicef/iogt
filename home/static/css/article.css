@@ -1626,5 +1626,14 @@ DESKTOP CSS SETTTINGS. At this point, able to reuse some of the sections and inc
       margin-top: 25px;
     }
 
-
 }
+
+.user-progress-container {
+  width: 70%;
+  margin: auto;
+  background-color: blanchedalmond;
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 5px;
+}
+

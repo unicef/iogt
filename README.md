@@ -35,6 +35,11 @@ Create a super user account for administration purposes.
 ./manage.py createsuperuser
 ```
 
+Compile .po language files stored in locale/
+```
+./manage.py compilemessages
+```
+
 Finally, start the server.
 ```
 ./manage.py runserver

@@ -1,35 +1,10 @@
 {% load static wagtailcore_tags wagtailimages_tags %}
 
-<div class="desktopFeaturedContent">
-    {% for featured_content in featured_content_items %}
-    <div class="featuredContentContainer">
-        <div class="desktopFeaturedContentContainer" style="border-bottom: medium solid rgb(191, 0, 18);">
-            <div class="image">
-                <a href="{% pageurl featured_content %}">
-                    {% image featured_content.specific.lead_image fill-336x186 class="mainImage" %}
-                </a>
-                <div class="share">
-                    <img src="{% static 'images/share.png'%}">
-                </div>
-            </div>
-            <div class="content">
-                <div style="color: rgb(191, 0, 18);" class="tag">
-                    <div>
-			    <span>{# CORONAVIRUS (COVID-19) | ABOUT CORONAVIRUS #}</span>
-                    </div>
-                    <div class="byline">
-                        {{ featured_content.first_published_at|date }} /
-                        <span class="author">by {{ featured_content.owner.get_full_name }}</span>
-                    </div>
-                </div>
-                <div class="title">
-                    <a href="{% pageurl featured_content %}">
-                        <span>{{ featured_content.title }}</span>
-                    </a>
-                </div>
-                <p class="desc">{{ featured_content.specific.description|striptags|truncatewords:21 }}</p>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-</div>
+{% for featured_content in featured_content_items %}
+        <a href="{% pageurl featured_content %}" class='section-page-details__survey'> 
+          <img class='section-page-details__survey--image1' src="{% static 'images/path490.png' %}">
+            {{ featured_content.title }}
+          <img class='section-page-details__survey--image2' src="{% static 'images/Stroke 3.png' %}">
+        </a>
+{% endfor %}
+

@@ -1,0 +1,20 @@
+{% load wagtailcore_tags i18n %}
+
+<div class="questionnaire-container">
+    <hr>
+    <h2>{{ object.title }}</h2>
+    {{ form.non_field_errors }}
+    <div>
+        <p>{{ object.description }}</p>
+        <hr>
+        <form action="{% pageurl object %}?back_url={{ request.path }}" method="POST">
+            {% csrf_token %}
+            <div>
+                {{ form.as_p }}
+            </div>
+            <div>
+                <input type="submit" value="{% trans object.submit_button_text %}"/>
+            </div>
+        </form>
+    </div>
+</div>

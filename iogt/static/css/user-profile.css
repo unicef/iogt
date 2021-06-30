@@ -1,8 +1,59 @@
-.user-profile-table .key-column {
-    min-width: 100px;
-    font-weight: bold;
+
+.profile__title {
+    display: inline-block;
+    line-height: 32px;
+    width: 100%
 }
 
-.inline-heading {
-    display:inline-block;
+.profile__title:after {
+    clear: both
+}
+
+.profile__icon {
+    background-color: #0070e2;
+    border-radius: 50%;
+    color: #fff;
+    display: inline-block;
+    float: right;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    vertical-align: middle;
+    width: 32px
+}
+
+.profile__btns {
+    margin-top: 20px;
+}
+
+.profile__btn {
+    margin-bottom: 8px
+}
+
+.profile__btn:last-child {
+    margin-bottom: 0
+}
+
+.profile-form__input {
+    margin-bottom: 12px
+}
+
+.profile-form__input:last-child {
+    margin-bottom: 0
+}
+
+.profile-form__btns {
+    margin: 20px 0
+}
+
+.profile-form__btn {
+    margin-bottom: 8px
+}
+
+.profile-form__btn:last-child {
+    margin-bottom: 0
+}
+
+.profile-form__desc {
+    color: #9a9a9a
 }
