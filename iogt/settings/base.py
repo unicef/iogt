@@ -14,6 +14,8 @@ import os
 
 from django.utils.translation import gettext_lazy as _
 
+import django.conf.locale
+
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 
@@ -247,8 +249,97 @@ COMMENTS_XTD_APP_MODEL_OPTIONS = {
 WAGTAIL_I18N_ENABLED = True
 
 WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
+    ('ar', _('Arabic')),
+    ('ch', _('Chichewa')),
     ('en', _('English')),
     ('fr', _('French')),
+    ('km', _('Khmer')),
+    ('rw', _('Kinyarwanda')),
+    ('rn', 'Kirundi'),
+    ('ku', _('Kurdish')),
+    ('mg', _('Malagasy')),
+    ('ne', _('Nepali')),
+    ('nr', _('Ndebele')),
+    ('pt', _('Portuguese')),
+    ('qu', _('Quechua')),
+    ('ru', _('Russian')),
+    ('sho', _("Shona")),
+    ('es', _('Spanish')),
+    ('sw', _('Swahili')),
+    ('tg', _('Tajik')),
+    ('ti', _('Tigrinya')),
+    ('ur', _('Urdu')),
+    ('uz', _('Uzbek')),
+    ('zu', _('Zulu'))
+]
+
+EXTRA_LANG_INFO = {
+    'ch': {
+        'bidi': False,
+        'code': 'ch',
+        'name': 'Chichewa',
+        'name_local': 'Chichewa',
+    },
+    'ku': {
+        'bidi': False,
+        'code': 'ku',
+        'name': 'Kurdish',
+        'name_local': 'Kurdish'
+    },
+    'mg': {
+        'bidi': False,
+        'code': 'mg',
+        'name': 'Malagasy',
+        'name_local': 'Malagasy',
+    },
+    'nr': {
+        'bidi': False,
+        'code': 'nr',
+        'name': 'Ndebele',
+        'name_local': 'Ndebele',
+    },
+    'qu': {
+        'bidi': False,
+        'code': 'qu',
+        'name': 'Quechua',
+        'name_local': 'Quechua',
+    },
+    'rn': {
+        'bidi': False,
+        'code': 'rn',
+        'name': 'Kirundi',
+        'name_local': 'Ikirundi',
+    },
+    'rw': {
+        'bidi': False,
+        'code': 'rw',
+        'name': 'Kinyarwanda',
+        'name_local': 'Kinyarwanda',
+    },
+    'sho': {
+        'bidi': False,
+        'code': 'sho',
+        'name': 'Shona',
+        'name_local': 'Shona',
+    },
+    'ti': {
+        'bidi': False,
+        'code': 'ti',
+        'name': 'Tigrinya',
+        'name_local': 'Tigrinya',
+    },
+    'zu': {
+        'bidi': False,
+        'code': 'zu',
+        'name': 'Zulu',
+        'name_local': 'Zulu',
+    },
+}
+
+django.conf.locale.LANG_INFO.update(EXTRA_LANG_INFO)
+
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, "locale"),
 ]
 
 WAGTAILTRANSFER_SOURCES = {
