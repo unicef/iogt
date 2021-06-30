@@ -29,12 +29,12 @@
     <div class="search-results js-search-result search__results">
 
         {% if search_results %}
-            <!-- <div class="search-results__header">
-               <div class="container search-results__header-container">
-                   <p class="title search-results__title">Articles</p>
-                    <button class="search-results__text search-results__view">All {{ search_results | length }} result</button>
-               </div>
-           </div> -->
+            <div class="search-results__header">
+                <div class="container search-results__header-container">
+                    <p class="title search-results__title">Articles</p>
+                    <!--  <button class="search-results__text search-results__view">All {{ search_results | length }} result</button> -->
+                </div>
+            </div>
 
             {% render_articles_list search_results %}
 
@@ -45,16 +45,24 @@
                         {% if search_results.has_previous %}
                             <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}"
                                class="pagination__arrow pagination__arrow-prev">
-                                <svg viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M7 13L1 7.0005L7 1" stroke="#303030" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <svg viewBox="0 0 8 14" fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7 13L1 7.0005L7 1"
+                                          stroke="#303030" stroke-width="1.5"
+                                          stroke-linecap="round"
+                                          stroke-linejoin="round"/>
                                 </svg>
                             </a>
                         {% endif %}
                         {% if search_results.has_next %}
                             <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}"
                                class="pagination__arrow pagination__arrow-next">
-                                <svg viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M7 13L1 7.0005L7 1" stroke="#303030" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <svg viewBox="0 0 8 14" fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7 13L1 7.0005L7 1"
+                                          stroke="#303030" stroke-width="1.5"
+                                          stroke-linecap="round"
+                                          stroke-linejoin="round"/>
                                 </svg>
                             </a>
                         {% endif %}

@@ -63,6 +63,11 @@ class HomePage(Page):
             home_page_banner.banner_page for home_page_banner in
             self.home_page_banners.filter(banner_page__live=True)
         ]
+        context['featured_content'] = [
+            featured_content.content for featured_content in
+            self.featured_content.filter(content__live=True)
+        ]
+        context["footer"] = FooterPage.objects.live()
         return context
 
 
@@ -257,7 +262,8 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         ImageChooserPanel('lead_image'),
         StreamFieldPanel('body'),
         MultiFieldPanel([
-            InlinePanel('recommended_articles', label=_("Recommended Articles")),
+            InlinePanel('recommended_articles',
+                        label=_("Recommended Articles")),
         ],
             heading='Recommended Content')
     ]
@@ -368,11 +374,11 @@ class BannerPage(Page):
     content_panels = Page.content_panels + [
         FieldPanel('banner_description'),
         ImageChooserPanel('banner_image'),
-        ImageChooserPanel('banner_background_image'),
+        #ImageChooserPanel('banner_background_image'),
         PageChooserPanel('banner_link_page'),
-        FieldPanel('banner_button_text'),
-        ImageChooserPanel('banner_icon_button'),
-        FieldPanel('align_center')
+        #FieldPanel('banner_button_text'),
+        #ImageChooserPanel('banner_icon_button'),
+        #FieldPanel('align_center')
     ]
 
 
