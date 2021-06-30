@@ -2,20 +2,35 @@
 
 {% load i18n %}
 
-{% block title %}{% trans "Signup" %}{% endblock %}
+{% block title %}{% trans "Create your account" %}{% endblock %}
 
 {% block allauth_content %}
-<h1>{% trans "Sign Up" %}</h1>
-
-<p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
-
-<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-  {% endif %}
-  <button class="accounts-form-btn" type="submit">{% trans "Next" %} &raquo;</button>
-</form>
+    <h1 class="title profile__title">{% trans "Create your account" %}</h1>
+    <form class="signup" id="signup_form" method="post"
+          action="{% url 'account_signup' %}">
+        {% csrf_token %}
+        <div class="profile-form__inputs">
+            {{ form.as_p }}
+        </div>
+        {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}"
+                   value="{{ redirect_field_value }}"/>
+        {% endif %}
+        <div class="profile-form__btns">
+            <button type="submit"
+                    class="cust-btn cust-btn--dark profile-form__btn">
+                <span>{% trans "Create your account" %}</span>
+            </button>
+            <a href="{{ login_url }}"
+               class="cust-btn profile-form__btn"><span>Log in</span></a>
+        </div>
+        <div class="text profile-form__desc">
+            <p>
+                A quia quas et atque eos vero temporibus quis ullam.
+                Recusandae recusandae omnis aspernatur quisquam at dolorem
+                aspernatur quod non.
+            </p>
+        </div>
+    </form>
 
 {% endblock %}

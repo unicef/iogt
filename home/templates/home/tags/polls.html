@@ -1,0 +1,33 @@
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+<div class="polls-widget">
+    <div class="container">
+        <div class="polls-widget__wrap"><h2
+                class="title polls-widget__title">Polls</h2>
+            <div class="polls-widget__desc text"><p>Are you aged 12
+                to 25?
+                What effect would you say Internet of Good Things
+                (IoGT) can
+                have on young people your age?</p></div>
+            <form class="polls-widget__form"><h4
+                    class="polls-widget__form-title">Answers</h4>
+                <label
+                        class="cust-check polls-widget__item"><input
+                        type="radio" name="poll_rank"
+                        value="Mostly positive">
+                    <span class="cust-check__title">Mostly positive</span></label>
+                <label class="cust-check polls-widget__item"><input
+                        type="radio" name="poll_rank"
+                        value="Mostly positive"> <span
+                        class="cust-check__title">Mostly positive</span></label>
+                <label class="cust-check polls-widget__item"><input
+                        type="radio" name="poll_rank"
+                        value="Mostly positive"> <span
+                        class="cust-check__title">Mostly positive</span></label>
+                <button type="submit"
+                        class="cust-btn cust-btn--dark polls-widget__submit">
+                    <span>Log in to vote</span></button>
+            </form>
+        </div>
+    </div>
+</div>

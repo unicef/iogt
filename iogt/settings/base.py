@@ -219,7 +219,8 @@ COMMENTS_APP = 'django_comments_xtd'
 COMMENTS_XTD_MAX_THREAD_LEVEL = 1
 
 # Miscellaneous
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/users/profile/"
+LOGOUT_REDIRECT_URL = "/"
 LOGIN_URL = 'account_login'
 WAGTAIL_FRONTEND_LOGIN_URL = LOGIN_URL
 
