@@ -1,8 +1,6 @@
-@import '../../../styles/mixins';
 
 .section-page-details { 
    background-image: url('https://11tcma2eyqgmz6zyt1x6na8n-wpengine.netdna-ssl.com/wp-content/uploads/2020/03/ShipStation-COVID-Blog-Asset-Feature-1-860x354.png');
-   
    color: #FFFFFF;
    width: 320px;
    left: 0px;
@@ -30,11 +28,8 @@
       font-weight: 500;
       font-size: 10px;
       line-height: 12px;
-      /* identical to box height, or 120% */
-      
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      
       color: #FFFFFF;
 
       &--image1 {
@@ -57,7 +52,6 @@
       font-weight: 800;
       font-size: 24px;
       line-height: 28px;
-
    }
 
    &__survey {
@@ -99,7 +93,6 @@
          top: 13px;
          border-radius: 0px;
       }
-
    }
 }
 
@@ -129,7 +122,6 @@
 }
 
 
-
 .suggested-articles {
    display: flex;
    flex-direction: column;
@@ -156,12 +148,7 @@
       font-weight: bold;
       font-size: 16px;
       line-height: 22px;
-      /* or 137% */
-
       letter-spacing: 0.01em;
-
-      /* Black and white / Black */
-
       color: #303030;
       margin: 8px 0px;
    }
@@ -171,7 +158,6 @@
       height: 86px;
       left: 234px;
       top: 0px;
-      
    }
 }
 
@@ -328,9 +314,6 @@
       line-height: 22px;
       color: #303030;
    }
-
-
- 
 }
 
 .quiz-holder {
@@ -454,7 +437,6 @@
       p {
          margin:0;
       }
-      
    }
 
    a {
@@ -598,8 +580,6 @@
       line-height: 22px;
    }
 }
-
-
 }
 
 

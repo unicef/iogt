@@ -40,7 +40,6 @@
   font-weight: 500;
   font-size: 10px;
   line-height: 12px;
-  /* identical to box height, or 120% */
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #FFFFFF;
@@ -186,9 +185,7 @@
   font-weight: bold;
   font-size: 16px;
   line-height: 22px;
-  /* or 137% */
   letter-spacing: 0.01em;
-  /* Black and white / Black */
   color: #303030;
   margin: 8px 0px;
 }
