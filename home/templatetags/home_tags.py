@@ -30,3 +30,8 @@ def render_banners_list(banners):
 @register.inclusion_tag('home/tags/sub_sections.html')
 def render_sub_sections_list(sub_sections):
     return {'sub_sections': sub_sections}
+
+
+@register.inclusion_tag('home/tags/section_progress.html')
+def render_user_progress(user_progress):
+    return user_progress
