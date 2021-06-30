@@ -16,7 +16,7 @@ class UsersExportAdmin(ModelAdmin):
                    'terms_accepted', 'has_filled_registration_survey')
     add_to_settings_menu = True
     list_per_page = 20
-    menu_order = 1001
+    menu_order = 601
 
 
 modeladmin_register(UsersExportAdmin)

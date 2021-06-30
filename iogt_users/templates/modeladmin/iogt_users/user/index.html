@@ -25,7 +25,12 @@
                 </div>
                 {% block header_extra %}
                     <div class="right">
-                         <div class="dropdown dropdown-button match-width col">
+                        {% if user_can_create %}
+                            <div class="actionbutton" style="display:inline-block">
+                                {% include 'modeladmin/includes/button.html' with button=view.button_helper.add_button %}
+                            </div>
+                        {% endif %}
+                         <div class="actionbutton" style="display:inline-block; margin-left: 20px">
                                 <a disabled="true" class="button button--icon">{% icon name="group" wrapped=1 %}{% trans 'Upload Users' %}</a>
 
                             </div>
