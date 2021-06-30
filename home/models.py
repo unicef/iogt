@@ -41,7 +41,7 @@ User = get_user_model()
 class HomePage(Page):
     template = 'home/home_page.html'
 
-    new_featured_content = StreamField([
+    home_featured_content = StreamField([
         ('page_button', PageButtonBlock()),
         ('embedded_poll', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')),
         ('embedded_survey', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')),
@@ -53,10 +53,7 @@ class HomePage(Page):
         MultiFieldPanel([
             InlinePanel('home_page_banners', label=_("Home Page Banner")),
         ], heading=_('Home Page Banners')),
-        MultiFieldPanel([
-            InlinePanel('featured_content', label=_("Featured Content")),
-        ], heading=_('Featured Content')),
-        StreamFieldPanel('new_featured_content')
+        StreamFieldPanel('home_featured_content')
     ]
 
     def get_context(self, request):
@@ -65,10 +62,6 @@ class HomePage(Page):
         context['banners'] = [
             home_page_banner.banner_page for home_page_banner in
             self.home_page_banners.filter(banner_page__live=True)
-        ]
-        context['featured_content'] = [
-            featured_content.content for featured_content in
-            self.featured_content.filter(content__live=True)
         ]
         return context
 
