@@ -60,6 +60,7 @@ class HomePage(Page):
             featured_content.content for featured_content in
             self.featured_content.filter(content__live=True)
         ]
+        context["footer"] = FooterPage.objects.live()
         return context
 
 

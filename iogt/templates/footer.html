@@ -29,6 +29,9 @@
             </div>
             <hr>
             <div class="footer__column">
+                {% for u in footer %}
+                    {{ u }}
+                {% endfor %}
                 {% flat_menu "second_footer_menu" template="menus/footer.html" %}
             </div>
         </div>

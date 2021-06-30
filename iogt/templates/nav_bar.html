@@ -4,7 +4,7 @@
     <div class="nav-bar__wrap">
         {% for item in menu_items %}
             <div class="nav-bar__item nav-bar-item">
-                <a href="/">
+                <a href="{{ item.href }}">
                     <span class="nav-bar-item__icon">
                         {% image item.icon original %}
                     </span>
