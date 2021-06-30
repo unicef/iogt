@@ -507,6 +507,12 @@ class QuizFormField(AbstractFormField):
     correct_answer = models.CharField(verbose_name=_('correct_answer'),
                                       max_length=256,
                                       help_text=_('Please provide correct answer for this question'))
+    feedback = models.CharField(verbose_name=_('Feedback'),
+                                max_length=255,
+                                help_text=_('Feedback message for user answer.'),
+                                null=True,
+                                blank=True)
+
     panels = [
         FieldPanel('label'),
         FieldPanel('help_text'),
@@ -514,6 +520,7 @@ class QuizFormField(AbstractFormField):
         FieldPanel('field_type', classname="formbuilder-type"),
         FieldPanel('default_value', classname="formbuilder-default"),
         FieldPanel('correct_answer'),
+        FieldPanel('feedback'),
         FieldPanel('admin_label'),
         FieldPanel('page_break'),
     ]
@@ -604,19 +611,39 @@ class Quiz(QuestionnairePage, AbstractForm):
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
-        results = dict()
 
-        data_fields = [
-            (field.clean_name, field.label)
-            for field in self.get_form_fields()
-        ]
+        if request.method == 'POST':
+            form_class = self.get_form_class()
+            form = form_class(data=request.POST, page=self, user=request.user)
 
-        submissions = self.get_submission_class().objects.filter(page=self)
-        # TODO work on correct answers response
+            for k, v in form.fields.items():
+                form.fields[k].widget.attrs['readonly'] = True
+
+            fields_info = {}
+
+            total = 0
+            total_correct = 0
+            for field in self.get_form_fields():
+                # TODO: handle multi-value case
+                is_correct = form.data[field.clean_name] == field.correct_answer
+                if is_correct:
+                    total_correct += 1
+                total += 1
+                fields_info[field.clean_name] = {
+                    'feedback': field.feedback,
+                    'correct_answer': field.correct_answer,
+                    'is_correct': is_correct,
+                }
+
+            context['form'] = form
+            context['fields_info'] = fields_info
+            context['result'] = {
+                'total': total,
+                'total_correct': total_correct,
+            }
+
         return context
-
 
     class Meta:
         verbose_name = "quiz"
         verbose_name_plural = "quizzes"
-
