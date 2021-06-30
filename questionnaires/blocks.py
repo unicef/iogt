@@ -35,6 +35,6 @@ class SkipLogicBlock(blocks.StructBlock):
             (SkipState.QUESTION, _("Another question")),
         ],
         default=SkipState.NEXT,
-        required=True,
+        required=False,
     )
     question = blocks.IntegerBlock(required=False)
