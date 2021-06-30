@@ -1,5 +1,4 @@
 .search-container {
-    margin-left: 5%;
     margin-top: 5%
 }
 
@@ -13,4 +12,121 @@
 
 .page-previous {
     float: left;
+}
+
+
+.articles-list {
+    margin-bottom: 32px
+}
+
+.articles-list__item {
+    border-bottom: 1px solid #efefef;
+    display: -webkit-flex;
+    display: flex;
+    text-decoration: none;
+    padding: 16px 0;
+}
+
+
+.articles-list__item-comment, .articles-list__item-tag {
+    font-size: 12px;
+    line-height: 12px
+}
+
+.articles-list__item-img {
+    height: 86px;
+    width: 86px
+}
+
+.articles-list__item-text {
+    font-size: 16px;
+    line-height: 22px;
+    padding-right: 12px
+}
+
+.articles-list__item-header {
+    -webkit-align-items: center;
+    align-items: center;
+    display: -webkit-flex;
+    display: flex;
+    margin-bottom: 8px;
+    padding-right: 6px
+}
+
+.articles-list__item-header--red {
+    color: #ee3851
+}
+
+.articles-list__item-header--blue {
+    color: #1daeec
+}
+
+.articles-list__item-header--purple {
+    color: #8b5cd6
+}
+
+.articles-list__item-header--green {
+    color: #1a9090
+}
+
+.articles-list__item-comment, .articles-list__item-tag {
+    font: 500 10px/10px Poppins, sans-serif
+}
+
+.articles-list__item-tag {
+    margin-right: 22px
+}
+
+.articles-list__item-comment {
+    position: relative
+}
+
+.articles-list__item-comment:before {
+    background-image: url("/static/icons/comment.svg");
+    background-position: 50%;
+    background-repeat: no-repeat;
+    content: "";
+    display: block;
+    height: 8px;
+    left: -12px;
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    width: 8px
+}
+
+.articles-list__item-header--blue .articles-list__item-comment:before {
+    background-image: url("/static/icons/comment-blue.svg")
+}
+
+.articles-list__item-header--purple .articles-list__item-comment:before {
+    background-image: url("/static/icons/comment-purple.svg")
+}
+
+.articles-list__item-header--green .articles-list__item-comment:before {
+    background-image: url("/static/icons/comment-green.svg")
+}
+
+.articles-list__item-content {
+    -webkit-flex: 1;
+    flex: 1
+}
+
+.articles-list__item-img {
+    height: 68px;
+    width: 68px
+}
+
+.articles-list__item-img img {
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    width: 100%
+}
+
+.articles-list__item-text {
+    color: #303030;
+    font: 700 10px/16px Poppins, sans-serif;
+    padding-right: 6px
 }
