@@ -1,7 +1,10 @@
 @import '../../../styles/mixins';
 
 .section-page-details { 
-   background-image: url('https://11tcma2eyqgmz6zyt1x6na8n-wpengine.netdna-ssl.com/wp-content/uploads/2020/03/ShipStation-COVID-Blog-Asset-Feature-1-860x354.png');
+   background-size: 1800px 900px;
+   background-repeat: no-repeat;
+   background-position: top;
+   background-attachment: fixed;
    color: #FFFFFF;
    width: 360px;
    left: 0px;

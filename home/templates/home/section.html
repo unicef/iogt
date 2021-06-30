@@ -5,7 +5,8 @@
 {% endblock extra_css %}
 
 {% block content %}
-    <section class='section-page-details'>
+  {% image page.lead_image height-115 width-360  %}
+    <section class='section-page-details' style="background-image: url({{page.lead_image }})">
         <a href='' class='section-page-details__back'>
           <img class='section-page-details__back--image1' src="{% static 'images/white-stroke.png' %}">
            Back 
