@@ -1,17 +1,19 @@
+from abc import ABC
 from urllib.parse import urlparse
 
-from django.urls import resolve
-from wagtail.core.models import Page
-from abc import ABC
 from django.core.exceptions import PermissionDenied
+from django.urls import resolve
 from django.urls import reverse
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
-
 from wagtail.core import hooks
+from wagtail.core.models import Page
 from wagtail.core.models import PageViewRestriction
 from wagtail.core.rich_text import LinkHandler
-from home.models import FooterIndexPage, BannerIndexPage, Section, SectionIndexPage
+
+from home.models import FooterIndexPage, BannerIndexPage, Section, \
+    SectionIndexPage
+
 
 class ExternalLinkHandler(LinkHandler, ABC):
     identifier = "external"
@@ -35,13 +37,15 @@ def check_group(page, request, serve_args, serve_kwargs):
             if not restriction.accept_request(request):
                 if restriction.restriction_type == PageViewRestriction.GROUPS:
                     current_user_groups = request.user.groups.all()
-                    if not any(group in current_user_groups for group in restriction.groups.all()):
+                    if not any(group in current_user_groups for group in
+                               restriction.groups.all()):
                         raise PermissionDenied
 
 
 @hooks.register('construct_explorer_page_queryset')
 def sort_page_listing_by_path(parent_page, pages, request):
-    if isinstance(parent_page, (BannerIndexPage, FooterIndexPage, Section, SectionIndexPage)):
+    if isinstance(parent_page, (
+            BannerIndexPage, FooterIndexPage, Section, SectionIndexPage)):
         pages = pages.order_by('path')
 
     return pages
@@ -52,6 +56,7 @@ def rename_forms_menu_item(request, menu_items):
     for item in menu_items:
         if item.name == "forms":
             item.label = _("Form Data")
+
 
 @hooks.register('construct_page_chooser_queryset')
 def limit_page_chooser(pages, request):

@@ -14,15 +14,7 @@
     <form class="login" method="POST" action="{% url 'account_login' %}">
         {% csrf_token %}
         <div class="profile-form__inputs">
-            {% for field in form %}
-                {% if field.name != "remember" %}
-                    <label class="cust-input profile-form__input">
-                        {{ field }}
-                        {% if field.errors %}
-                            <span class="cust-input__error">{% trans field.errors %}</span> {% endif %}
-                    </label>
-                {% endif %}
-            {% endfor %}
+            {{ form.as_p }}
         </div>
         <div class="profile-form__btns">
             <button type="submit"

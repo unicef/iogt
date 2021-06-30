@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
@@ -210,8 +209,7 @@ ACCOUNT_ADAPTER = 'iogt_users.adapters.AccountAdapter'
 
 WAGTAIL_USER_EDIT_FORM = 'iogt_users.forms.WagtailAdminUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'iogt_users.forms.WagtailAdminUserCreateForm'
-WAGTAIL_USER_CUSTOM_FIELDS = ['first_name', 'last_name', 'email',
-                              'terms_accepted']
+WAGTAIL_USER_CUSTOM_FIELDS = ['first_name', 'last_name', 'email', 'terms_accepted']
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
@@ -225,14 +223,9 @@ COMMENTS_APP = 'django_comments_xtd'
 COMMENTS_XTD_MAX_THREAD_LEVEL = 1
 
 # Miscellaneous
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/users/profile/"
+LOGOUT_REDIRECT_URL = "/"
 LOGIN_URL = 'account_login'
-ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
-ACCOUNT_USER_MODEL_EMAIL_FIELD = None
-ACCOUNT_EMAIL_REQUIRED = False
-ACCOUNT_USERNAME_REQUIRED = True
-ACCOUNT_AUTHENTICATION_METHOD = 'username'
-DATE_INPUT_FORMATS = '%d/%m/%Y'
 WAGTAIL_FRONTEND_LOGIN_URL = LOGIN_URL
 
 #  To help obfuscating comments before they are sent for confirmation.
@@ -358,7 +351,7 @@ WAGTAILTRANSFER_SOURCES = {
     'iogt_global': {
         'BASE_URL': 'http://iogt.org',
         'SECRET_KEY': 'fake_secret_key_2',
-    }, }
+    },}
 
 WAGTAILTRANSFER_SECRET_KEY = 'fake_secret_key'
 
