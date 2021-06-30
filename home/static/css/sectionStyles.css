@@ -308,18 +308,17 @@
 }
 
 .main-image-phone {
-  min-width: 360px;
-  height: 196px;
+  min-width: 320px;
 }
 
 .article-content {
-  width: 360px;
+  width: 320px;
   padding: 0px 22px;
   font-family: Poppins;
 }
 
 .article-content h1 {
-  width: 318px;
+  width: 295px;
   font-style: normal;
   font-weight: bold;
   font-size: 24px;
@@ -484,7 +483,7 @@
 }
 
 .recommended_reading {
-  width: 360px;
+  width: 320px;
   padding-top: 40px;
   padding: 0px 20px;
   font-family: Poppins;
@@ -532,7 +531,7 @@
 }
 
 .comments {
-  width: 360px;
+  width: 320px;
   padding-top: 40px;
 }
 
@@ -584,7 +583,7 @@
 }
 
 .comments__form {
-  width: 360px;
+  width: 320px;
   background-color: #F7F7F9;
 }
 
@@ -623,7 +622,7 @@
           align-items: center;
   padding: 12px 16px;
   position: static;
-  width: 320px;
+  width: 280px;
   height: 46px;
   left: calc(50% - 320px/2);
   top: 196px;
@@ -671,7 +670,7 @@
           align-items: center;
   padding: 12px 16px;
   position: static;
-  width: 320px;
+  width: 280px;
   height: 46px;
   left: calc(50% - 320px/2);
   top: 196px;
@@ -706,7 +705,7 @@
   margin-top: 1px;
   padding: 20px;
   position: static;
-  width: 360px;
+  width: 320px;
   left: 0px;
   background: #F7F7F9;
 }
@@ -718,8 +717,6 @@
   font-weight: 500;
   font-size: 16px;
   line-height: 24px;
-  /* or 150% */
-  /* Black and white / Dark */
   color: #4B4B4B;
 }
 

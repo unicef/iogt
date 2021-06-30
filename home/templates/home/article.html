@@ -2,7 +2,8 @@
 {% load static wagtailcore_tags wagtailimages_tags comments comments_xtd  home_tags questionnaires_tags sass_tags %}
 
 {% block content %}
-{% image page.lead_image height-115 width-360 class="main-image-phone" %}
+{% image page.lead_image width-320 class="main-image-phone" %}
+  {{page.parent_section.title}}
  <article > 
   <section class='article-content'>
       <h1>{{ page.title }}</h1>
@@ -18,7 +19,6 @@
                 {% if page.get_next_sibling %}
                     <a href="{% pageurl page.get_next_sibling %}" class='article-navigation__button--next'>Next</a>
                 {% endif %}
-    
             {% endif %}
        </section> 
  </article>
@@ -40,7 +40,6 @@
                 </div>
              </div>
             </div>
-            
         {% endif %}
         {% else %}
             <p >
