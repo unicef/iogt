@@ -9,6 +9,7 @@ from django.db import models
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from home.blocks import MediaBlock
+from home.mixins import PageUtilsMixin
 from iogt.settings import base
 from iogt_users.models import User
 from modelcluster.fields import ParentalKey
@@ -27,7 +28,7 @@ from questionnaires.forms import SurveyForm
 from questionnaires.utils import SkipLogicPaginator
 
 
-class QuestionnairePage(Page):
+class QuestionnairePage(Page, PageUtilsMixin):
     template = None
     parent_page_types = []
     subpage_types = []
