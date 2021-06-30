@@ -180,21 +180,6 @@
                         </ul>
                     {% endif %}
                 </div>
-                <div class="recommended-sections-section">
-                    {% if page.recommended_sections.count %}
-                    <h1>Recommended Sections</h1>
-                        <ul class="recommended-sections-list">
-                        {% for recommended_section_model in page.recommended_sections.all %}
-                            <li>
-                            <a class="recommended-section-item" href="{% pageurl recommended_section_model.section %}">
-                                {{ recommended_section_model.section.title }}
-                            </a>
-                            {% image recommended_section_model.section.lead_image fill-100x50 %}
-                            </li>
-                        {% endfor %}
-                        </ul>
-                    {% endif %}
-                </div>
             </div>
 
         </section>

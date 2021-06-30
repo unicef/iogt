@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register, ModelAdminGroup
+from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 
 from home.models import SiteSettings
 from iogt_users.filters import GroupsFilter
@@ -7,7 +7,7 @@ from iogt_users.filters import GroupsFilter
 
 class UsersExportAdmin(ModelAdmin):
     model = get_user_model()
-    menu_label = 'Users Data'
+    menu_label = 'Export/Import Users'
     menu_icon = 'user'
     list_display = ('username', 'date_joined', 'is_staff', 'is_active')
     list_filter = (GroupsFilter, 'date_joined', 'is_staff', 'is_active')
@@ -17,7 +17,7 @@ class UsersExportAdmin(ModelAdmin):
                    'terms_accepted', 'has_filled_registration_survey', 'registration_survey_response',)
     add_to_settings_menu = True
     list_per_page = 20
-    menu_order = 1001
+    menu_order = 601
 
     def registration_survey_response(self, obj):
         site_settings = SiteSettings.get_for_default_site()
@@ -26,11 +26,4 @@ class UsersExportAdmin(ModelAdmin):
         return user_submission.form_data if user_submission else ''
 
 
-class ExportGroup(ModelAdminGroup):
-    menu_label = 'Export'
-    menu_icon = 'download'
-    menu_order = 1000
-    items = (UsersExportAdmin,)
-
-
-modeladmin_register(ExportGroup)
+modeladmin_register(UsersExportAdmin)

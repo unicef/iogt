@@ -30,6 +30,10 @@
                                 {% include 'modeladmin/includes/button.html' with button=view.button_helper.add_button %}
                             </div>
                         {% endif %}
+                         <div class="actionbutton" style="display:inline-block; margin-left: 20px">
+                                <a disabled="true" class="button button--icon">{% icon name="group" wrapped=1 %}{% trans 'Upload Users' %}</a>
+
+                            </div>
                         {% if view.list_export %}
                             <div class="dropdown dropdown-button match-width col">
                                 <a href="?export=xlsx&{{ request.GET.urlencode }}" class="button bicolor button--icon">{% icon name="download" wrapped=1 %}{% trans 'Download XLSX' %}</a>
