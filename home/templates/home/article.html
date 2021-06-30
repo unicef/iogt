@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags comments comments_xtd %}
+{% load static wagtailcore_tags wagtailimages_tags comments comments_xtd  home_tags questionnaires_tags sass_tags %}
 
 {% block extra_css %}
 
@@ -12,7 +12,7 @@
       <h1>{{ page.title }}</h1>
       {% include_block page.body %}
      <button class='article-content__chat-btn'>Start Chatting</button>
-     <section class='quiz-holder'>
+     {% comment %} <section class='quiz-holder'>
             <a class='quiz-holder__quiz'>
                 <span class='quiz-holder__quiz__details'>
                     <p >Quiz</p>
@@ -20,7 +20,7 @@
                 </span>
                 <img class="quiz-holder__image" src="{% static 'images/Stroke 3.png' %}" alt=''>
             </a>
-       </section>
+       </section> {% endcomment %}
        <section class='article-navigation'>
             {% if page.get_prev_sibling or page.get_next_sibling %}
                 {% if page.get_prev_sibling %}

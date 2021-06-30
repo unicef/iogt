@@ -1,9 +1,10 @@
 {% load static wagtailcore_tags wagtailimages_tags %}
 
 {% for featured_content in featured_content_items %}
-    <div class='suggested-article'>
-        <a href="{% pageurl featured_content %}">What precautions can you take against the coronavirus</a>
-            {% image featured_content.specific.lead_image fill-336x186 class="mainImage" %}
-    </div>
+        <a href="{% pageurl featured_content %}" class='section-page-details__survey'> 
+          <img class='section-page-details__survey--image1' src="{% static 'images/path490.png' %}">
+            {{ featured_content.title }}
+          <img class='section-page-details__survey--image2' src="{% static 'images/Stroke 3.png' %}">
+        </a>
 {% endfor %}
 
