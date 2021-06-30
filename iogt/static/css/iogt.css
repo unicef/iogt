@@ -462,10 +462,6 @@ input:checked + .cust-check__title {
     margin: 0
 }
 
-.search-page-form .profile-form__input {
-    margin-bottom: 12px;
-}
-
 .search-results {
     background-color: #fff;
     transition: all .45s;
@@ -564,6 +560,10 @@ input:checked + .cust-check__title {
     -webkit-transform: translateY(-50%) rotate(-90deg);
     transform: translateY(-50%) rotate(-90deg);
     width: 6px
+}
+
+.search-results__pagination {
+    margin-bottom: 30px
 }
 
 .search-variants {
