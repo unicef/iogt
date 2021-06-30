@@ -12,14 +12,10 @@
         </a>
         <h1 class='section-page-details__title'>{{ page.title }}</h1>
          {% render_featured_content_list featured_content %}
-        {% comment %} <a href='' class='section-page-details__survey'> 
-          <img class='section-page-details__survey--image1' src="{% static 'images/path490.png' %}">
-          Early Life tips quick survey
-          <img class='section-page-details__survey--image2' src="{% static 'images/Stroke 3.png' %}">
-        </a> {% endcomment %}
     </section>
-    {% render_sub_sections_list sub_sections %}
-        
+    <section>
+        {% render_sub_sections_list sub_sections %}
+    </section>
     <section class='suggested-articles'>
      {% render_polls_list polls %} 
      {% render_surveys_list surveys %}

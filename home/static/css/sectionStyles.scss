@@ -3,12 +3,14 @@
 .section-page-details { 
    background-image: url('https://11tcma2eyqgmz6zyt1x6na8n-wpengine.netdna-ssl.com/wp-content/uploads/2020/03/ShipStation-COVID-Blog-Asset-Feature-1-860x354.png');
    color: #FFFFFF;
-   width: 240px;
-   height: 169px;
+   width: 360px;
+   left: 0px;
+   top: 144px;
    display:flex;
    flex-direction: column;
    justify-content: space-around;
-
+   padding-bottom: 22.55px;
+   padding-top: 24px;
 
    &__back {
       color:white;
@@ -23,11 +25,16 @@
       justify-content: center;
       align-items: center;
       font-family: Poppins;
-      font-size: 8px;
       font-style: normal;
       font-weight: 500;
+      font-size: 10px;
       line-height: 12px;
+      /* identical to box height, or 120% */
+      
       letter-spacing: 0.1em;
+      text-transform: uppercase;
+      
+      color: #FFFFFF;
 
       &--image1 {
          height: 12px;
@@ -40,18 +47,15 @@
    }
 
    &__title{
-      margin:0;
-      margin-left: 12px;
-      width: 74px;
-      height: 20px;
-      top: 89px;
+      width: 111px;
+      height: 28px;
+      padding-left: 20px;
+      top: 223.45px;
       font-family: Poppins;
-      font-size: 16px;
       font-style: normal;
       font-weight: 800;
-      line-height: 20px;
-      letter-spacing: 0em;
-      text-align: left;
+      font-size: 24px;
+      line-height: 28px;
 
    }
 
@@ -61,7 +65,7 @@
       align-items: center;
       justify-content: space-around;
       text-decoration: none;
-      color:black;
+      color:#303030;
       padding: 8px 12px;
       margin: 0% 5%;
       top: 72.78%;
@@ -69,24 +73,26 @@
       background: #FFFFFF;
       border-radius: 8px;
       font-family: Poppins;
-      font-size: 10px;
       font-style: normal;
-      font-weight: 700;
-      line-height: 16px;
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 22px;
       letter-spacing: 0.01em;
       text-align: left;
 
 
       &--image1 {
-         height: 15.969493865966797px;
-         width: 16px;
+         height: 22;
+         width: 20px;
          left: 0px;
          top: 16.9847412109375px;
          border-radius: 0px;
+         margin-right: 10px;
       }
 
       &--image2 {
-         height: 8px;
+         margin-left: 10px;
+         height: 12px;
          width: 7px;
          left: 200px;
          top: 13px;
@@ -111,25 +117,17 @@
       bottom: 82.68%;
       border-bottom: 1px solid #EFEFEF;
       font-family: Poppins;
-      font-size: 10px;
       font-style: normal;
-      font-weight: 700;
-      line-height: 16px;
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 22px;
       letter-spacing: 0.01em;
+      color: #303030;
       text-align: left;
    }
 }
 
 
-
-.footer{
-   background-color:  #0094F4;
-   height:40px;
-   display:flex;
-   align-items: center;
-   justify-content: center;
-   color:white;
-}
 
 .suggested-articles {
    display: flex;
@@ -140,44 +138,39 @@
 }
 
 .suggested-article {
-   width: 216px;
+   width: 320px;
    display: flex;
+   justify-content: space-between;
    padding: 12px 0;
    border-bottom: 0.5px solid #EFEFEF;
    a {
+      width: 222px;
       text-decoration: none;
       position: static;
-      width: 142px;
       height: 48px;
       left: 0px;
       top: 0px;
-
       font-family: Poppins;
       font-style: normal;
       font-weight: bold;
-      font-size: 10px;
-      line-height: 16px;
+      font-size: 16px;
+      line-height: 22px;
+      /* or 137% */
 
       letter-spacing: 0.01em;
 
+      /* Black and white / Black */
+
       color: #303030;
-      flex: none;
-      order: 0;
-      align-self: stretch;
-      flex-grow: 0;
       margin: 8px 0px;
    }
 
    img {
-      position: static;
-      width: 68px;
-      height: 68px;
-      left: 148px;
+      width: 86px;
+      height: 86px;
+      left: 234px;
       top: 0px;
-      flex: none;
-      order: 1;
-      flex-grow: 0;
-      margin: 0px 6px;
+      
    }
 }
 
@@ -185,32 +178,35 @@
 .quiz {
    margin:10px 0;
    display: flex;
-   flex-direction: row;
+   justify-content: space-between;
    align-items: center;
-   padding: 8px 12px;
-   width: 220px;
    left: 12px;
-   background: #E8F8FD;
-   border-radius: 8px;
    text-decoration: none;
+   padding: 8px 12px;
+   width: 320px;
+   left: 0px;
+   background: #F3EFFB;
+   border-radius: 8px;
 
 
 &__details {
    p {
-      width: 180px;
+      width: 280px;
       left: 0px;
       top: 12px;
       font-family: Poppins;
       font-style: normal;
-      font-size: 10px;
+      letter-spacing: 0.01em;
+      font-size: 12px;
+      color: #8B5CD6;
       line-height: 16px;
       letter-spacing: 0.01em;
-      color: #1DAEEC;
       margin:0
    }
 
-   &--bold {
+   p:nth-of-type(2n) {
       font-weight: bold;
+      font-size: 16px;;
    }
 }
 
@@ -221,7 +217,7 @@
 }
 
 &__image {
-   height: 8px;
+   height: 12px;
    width: 7px;
    border-radius: 0px;
 }
