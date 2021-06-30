@@ -24,7 +24,7 @@ from wagtail.core.models import Page
 from wagtail.images.blocks import ImageChooserBlock
 
 from questionnaires.blocks import SkipLogicField, SkipState
-from questionnaires.forms import SurveyForm
+from questionnaires.forms import SurveyForm, QuizForm
 from questionnaires.utils import SkipLogicPaginator
 
 
@@ -528,8 +528,41 @@ class QuizFormField(AbstractFormField):
         FieldPanel('page_break'),
     ]
 
+    @property
+    def has_skipping(self):
+        return any(
+            logic.value['skip_logic'] != SkipState.NEXT
+            for logic in self.skip_logic
+        )
+
+    def choice_index(self, choice):
+        if choice:
+            if self.field_type == 'checkbox':
+                # clean checkboxes have True/False
+                try:
+                    return ['on', 'off'].index(choice)
+                except ValueError:
+                    return [True, False].index(choice)
+            return self.choices.split(',').index(choice)
+        else:
+            return False
+
+    def next_action(self, choice):
+        return self.skip_logic[self.choice_index(choice)].value['skip_logic']
+
+    def is_next_action(self, choice, *actions):
+        if self.has_skipping:
+            return self.next_action(choice) in actions
+        return False
+
+    def next_page(self, choice):
+        logic = self.skip_logic[self.choice_index(choice)]
+        return logic.value[self.next_action(choice)]
+
 
 class Quiz(QuestionnairePage, AbstractForm):
+    base_form_class = QuizForm
+
     parent_page_types = ["home.HomePage", "home.Section", "home.Article"]
     template = "quizzes/quiz.html"
 
@@ -614,6 +647,7 @@ class Quiz(QuestionnairePage, AbstractForm):
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
+        context.update({'back_url': request.GET.get('back_url')})
 
         if request.method == 'POST':
             form_class = self.get_form_class()
