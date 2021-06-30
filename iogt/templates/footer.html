@@ -1,116 +1,35 @@
-{% load static %}
-{% load menu_tags %}
+{% load static wagtailuserbar menu_tags home_tags %}
+
 
 <footer class="footer">
-    <div class="footer__nav-bar nav-bar">
-        <div class="nav-bar__wrap">
-            <div class="nav-bar__item nav-bar-item active">
-                <a href="/">
-                    <span class="nav-bar-item__icon">
-                        <img src="{% static "/icons/home.png" %}"
-                             alt="Home">
-                    </span>
-                    <span class="nav-bar-item__title">Home</span>
-                </a>
-            </div>
-            <div class="nav-bar__item nav-bar-item">
-                <a href="#">
-                    <span class="nav-bar-item__icon">
-                        <img src="{% static "/icons/burger.png" %}"
-                             alt="Category">
-                    </span>
-                    <span class="nav-bar-item__title">Category</span>
-                </a>
-            </div>
-            <div class="nav-bar__item nav-bar-item">
-                <a href="{% url "user_profile" %}">
-                    <span class="nav-bar-item__icon">
-                        <img src="{% static "/icons/profile.png" %}"
-                             alt="Profile">
-                    </span>
-                    <span class="nav-bar-item__title">Profile</span>
-                </a>
-            </div>
-            <div class="nav-bar__item nav-bar-item">
-                <a href="#">
-                    <span class="nav-bar-item__icon">
-                        <img src="{% static "icons/chat.png" %}"
-                             alt="Chat">
-                    </span>
-                    <span class="nav-bar-item__title">Chat</span>
-                </a>
-            </div>
-        </div>
+    <div class="footer__nav-bar">
+         {% flat_menu "nav_bar" template="nav_bar.html" %}
     </div>
     <div class="container">
         <form class="footer__search" action="{% url "search" %}">
-            <label
-                    class="cust-input profile-form__input">
-                <input name="search" placeholder="Search here" pattern="\S+.*">
+            <label class="cust-input cust-input--icon profile-form__input">
+                <span class="cust-input__icon">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7.33333 12.6667C10.2789 12.6667 12.6667 10.2789 12.6667 7.33333C12.6667 4.38781 10.2789 2 7.33333 2C4.38781 2 2 4.38781 2 7.33333C2 10.2789 4.38781 12.6667 7.33333 12.6667Z"
+                              stroke="currentcolor" stroke-width="1.5"
+                              stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M13.9996 14L11.0996 11.1" stroke="currentcolor"
+                              stroke-width="1.5" stroke-linecap="round"
+                              stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                <input type="text" name="query" placeholder="Search here"
+                       pattern="\S+.*"/>
             </label>
         </form>
         <div class="footer__nav">
             <div class="footer__column">
-                <a href="#" class="icon-btn icon-btn--red footer__link">
-                    <span class="icon-btn__icon">
-                        <img src="{% static "/icons/heart.png" %}"
-                             alt="Heart icon">
-                    </span>
-                    <span class="icon-btn__title">Covid-19</span>
-                </a>
-                <a href="#" class="icon-btn icon-btn--blue footer__link">
-                    <span class="icon-btn__icon">
-                        <img src="{% static "/icons/youth.png" %}"
-                             alt="Youth icon">
-                    </span>
-                    <span class="icon-btn__title">Youth</span>
-                </a>
-                <a href="#" class="icon-btn icon-btn--violet footer__link">
-                    <span class="icon-btn__icon">
-                        <img src="{% static "/icons/peace.png" %}"
-                             alt="Parents & Caregivers icon">
-                    </span>
-                    <span class="icon-btn__title">Parents & Caregivers</span>
-                </a>
-                <a href="#" class="icon-btn icon-btn--green footer__link">
-                    <span class="icon-btn__icon">
-                        <img src="{% static "/icons/case.png" %}"
-                             alt="Frontline Workers & Educators">
-                    </span>
-                    <span class="icon-btn__title">Frontline Workers & Educators</span>
-                </a>
+                {% flat_menu "main_menu" template="menus/footer.html" %}
             </div>
             <hr>
             <div class="footer__column">
-                <a href="{% url 'account_login' %}"
-                   class="icon-btn footer__link">
-                    <span class="icon-btn__icon">
-                        <img src="{% static "/icons/arrow-icon.png" %}"
-                             alt="Heart icon">
-                    </span>
-                    <span class="icon-btn__title">Log in</span>
-                </a>
-                <a href="#" class="icon-btn footer__link">
-                    <span class="icon-btn__icon">
-                        <img src="{% static "/icons/finger-up.png" %}"
-                             alt="Heart icon">
-                    </span>
-                    <span class="icon-btn__title">Are you a fan of IoGT?</span>
-                </a>
-                <a href="#" class="icon-btn footer__link">
-                    <span class="icon-btn__icon">
-                        <img src="{% static "/icons/loudSpeaker.png" %}"
-                             alt="Heart icon">
-                    </span>
-                    <span class="icon-btn__title">About Internet of Good Things</span>
-                </a>
-                <a href="#" class="icon-btn footer__link">
-                    <span class="icon-btn__icon">
-                        <img src="{% static "/icons/wifi-aerial.png" %}"
-                             alt="Heart icon">
-                    </span>
-                    <span class="icon-btn__title">Use IoGT FREE of data charges</span>
-                </a>
+{#                {% flat_menu "second_footer_menu" template="menus/footer.html" %}#}
             </div>
         </div>
         <div class="footer__copyright"><p>© The Internet of Good Things</p>

@@ -10,22 +10,7 @@
           action="{% url 'account_signup' %}">
         {% csrf_token %}
         <div class="profile-form__inputs">
-            {% for field in form %}
-                {% if field.name != "gender" %}
-                    {% if field.name != "email" %}
-                        <label class="cust-input profile-form__input">
-                            {{ field }}
-                            {% if field.errors %}
-                                <span class="cust-input__error">{% trans field.help_text %}</span> {% endif %}
-                        </label>
-                    {% endif %}
-                {% else %}
-                    {{ field }}
-                    {% if field.errors %}
-                        <span class="cust-input__error">{% trans field.help_text %}</span>
-                    {% endif %}
-                {% endif %}
-            {% endfor %}
+            {{ form.as_p }}
         </div>
         {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}"

@@ -1,84 +1,22 @@
-
-.dark-overlay {
-    background-color: rgba(0, 0, 0, .6);
-    height: 100vh;
-    left: 0;
-    opacity: 0;
-    position: fixed;
-    top: 0;
-    transition: all .45s;
-    visibility: hidden;
-    width: 100vw;
-    z-index: 1
+.search-container {
+    margin-top: 5%
 }
 
-.dark-overlay.active {
-    opacity: 1;
-    visibility: visible
+.page-controls-container {
+    margin: 5%
 }
 
-.banner {
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    border-radius: 8px;
-    margin: 4px 0;
-    padding: 12px 0
+.page-next {
+    float: right;
 }
 
-.banner__logo {
-    max-width: 80px
+.page-previous {
+    float: left;
 }
 
-.banner__title {
-    margin: 6px 0 14px;
-    max-width: 140px
+.search-results__pagination {
+    margin-bottom: 30px
 }
-
-.banner__btn {
-    max-width: 134px
-}
-
-.banner__desc {
-    font-size: 10px;
-    font-weight: 500;
-    line-height: 16px;
-    max-width: 70px
-}
-
-.banner__desc p {
-    margin: 0;
-}
-
-.banner__wrap {
-    -webkit-align-items: center;
-    align-items: center;
-    display: -webkit-flex;
-    display: flex;
-    justify-content: space-between;
-    -webkit-justify-content: space-between;
-    width: 100%;
-}
-
-.banner__link {
-    -webkit-align-items: center;
-    align-items: center;
-    background-color: #fff;
-    border-radius: 50%;
-    display: -webkit-flex;
-    display: flex;
-    height: 30px;
-    -webkit-justify-content: center;
-    justify-content: center;
-    width: 30px
-}
-
-.banner__link img {
-    display: block;
-    height: 10px;
-    width: 6px
-}
-
 
 .articles-list {
     margin-bottom: 32px
@@ -194,68 +132,4 @@
     color: #303030;
     font: 700 10px/16px Poppins, sans-serif;
     padding-right: 6px
-}
-
-.polls-widget {
-    padding: 0 0 30px
-}
-
-.polls-widget__title {
-    margin-bottom: 16px
-}
-
-.polls-widget__form {
-    margin-top: 16px
-}
-
-.polls-widget__form-title {
-    color: #9a9a9a;
-    font-size: 8px;
-    font-weight: 500;
-    letter-spacing: .1em;
-    line-height: 12px;
-    text-transform: uppercase
-}
-
-.polls-widget__item {
-    margin-bottom: 10px
-}
-
-.polls-widget__item:last-child {
-    margin-bottom: 0
-}
-
-.polls-widget__submit {
-    margin-top: 24px
-}
-
-.auth-banner {
-    background-color: #ee3851;
-    border-radius: 8px;
-    padding: 36px 0 16px
-}
-
-.auth-banner__title {
-    color: #fff;
-    margin: 0 auto;
-    max-width: 178px;
-    text-align: center
-}
-
-.auth-banner__btn {
-    border: none;
-    margin: 20px auto 0;
-    max-width: 150px
-}
-
-.survey-widget {
-    padding: 32px 0
-}
-
-.survey-widget__title {
-    margin: 0
-}
-
-.survey-widget__desc {
-    margin: 8px 0 20px
 }

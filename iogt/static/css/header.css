@@ -21,6 +21,10 @@
     justify-content: space-between
 }
 
+.header__left {
+    z-index: 1;
+}
+
 .header__right {
     -webkit-align-items: center;
     align-items: center;

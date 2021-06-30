@@ -4,11 +4,10 @@ from django.db import models
 from django.utils.encoding import force_str
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
-
 from modelcluster.contrib.taggit import ClusterTaggableManager
+from modelcluster.fields import ParentalKey
 from rest_framework import status
 from taggit.models import TaggedItemBase
-from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (
     FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, PageChooserPanel,
     StreamFieldPanel, TabbedInterface
@@ -16,22 +15,21 @@ from wagtail.admin.edit_handlers import (
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
 from wagtail.core import blocks
-from wagtail.core.fields import StreamField
+from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Orderable, Page, Site
-
 from wagtail.core.rich_text import get_text_for_indexing
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 from wagtailmarkdown.blocks import MarkdownBlock
-from wagtailmenus.models import AbstractFlatMenuItem
+from wagtailmenus.models import AbstractFlatMenuItem, BooleanField
 
 from comments.models import CommentableMixin
-from iogt.views import create_final_external_link, check_user_session
+from iogt.views import check_user_session
 from questionnaires.models import Survey, Poll
-
 from .blocks import (MediaBlock, SocialMediaLinkBlock,
-                     SocialMediaShareButtonBlock, EmbeddedQuestionnaireChooserBlock,
+                     SocialMediaShareButtonBlock,
+                     EmbeddedQuestionnaireChooserBlock,
                      PageButtonBlock)
 from .forms import SectionPageForm
 from .mixins import PageUtilsMixin
@@ -49,23 +47,26 @@ class HomePage(Page):
         ], heading=_('Home Page Banners')),
         MultiFieldPanel([
             InlinePanel('featured_content', label=_("Featured Content")),
-        ], heading=_('Featured Content')),
+        ], heading=_('Featured Content'))
     ]
 
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
         context['banners'] = [
-            home_page_banner.banner_page for home_page_banner in self.home_page_banners.filter(banner_page__live=True)
+            home_page_banner.banner_page for home_page_banner in
+            self.home_page_banners.filter(banner_page__live=True)
         ]
         context['featured_content'] = [
-            featured_content.content for featured_content in self.featured_content.filter(content__live=True)
+            featured_content.content for featured_content in
+            self.featured_content.filter(content__live=True)
         ]
         return context
 
 
 class FeaturedContent(Orderable):
-    source = ParentalKey(Page, related_name='featured_content', on_delete=models.CASCADE, blank=True)
+    source = ParentalKey(Page, related_name='featured_content',
+                         on_delete=models.CASCADE, blank=True)
     content = models.ForeignKey(Page, on_delete=models.CASCADE)
 
     panels = [
@@ -74,7 +75,8 @@ class FeaturedContent(Orderable):
 
 
 class HomePageBanner(Orderable):
-    source = ParentalKey(Page, related_name='home_page_banners', on_delete=models.CASCADE, blank=True)
+    source = ParentalKey(Page, related_name='home_page_banners',
+                         on_delete=models.CASCADE, blank=True)
     banner_page = models.ForeignKey('home.BannerPage', on_delete=models.CASCADE)
 
     panels = [
@@ -84,12 +86,14 @@ class HomePageBanner(Orderable):
 
 class SectionTaggedItem(TaggedItemBase):
     """The through model between Section and Tag"""
-    content_object = ParentalKey('Section', related_name='tagged_items', on_delete=models.CASCADE)
+    content_object = ParentalKey('Section', related_name='tagged_items',
+                                 on_delete=models.CASCADE)
 
 
 class ArticleTaggedItem(TaggedItemBase):
     """The through model between Article and Tag"""
-    content_object = ParentalKey('Article', related_name='tagged_items', on_delete=models.CASCADE)
+    content_object = ParentalKey('Article', related_name='tagged_items',
+                                 on_delete=models.CASCADE)
 
 
 class SectionIndexPage(Page):
@@ -132,7 +136,8 @@ class Section(Page, PageUtilsMixin):
         ImageChooserPanel('icon'),
         FieldPanel('color'),
         MultiFieldPanel([
-            InlinePanel('featured_content', max_num=1, label=_("Featured Content")),
+            InlinePanel('featured_content', max_num=1,
+                        label=_("Featured Content")),
         ], heading=_('Featured Content')),
     ]
 
@@ -146,12 +151,14 @@ class Section(Page, PageUtilsMixin):
         return Article.objects.descendant_of(self).exact_type(Article)
 
     def get_progress_bar_enabled_ancestor(self):
-        return Section.objects.ancestor_of(self, inclusive=True).exact_type(Section).filter(
+        return Section.objects.ancestor_of(self, inclusive=True).exact_type(
+            Section).filter(
             show_progress_bar=True).first()
 
     def get_user_progress_dict(self, request):
         progress_manager = ProgressManager(request)
-        read_article_count, total_article_count = progress_manager.get_progress(self)
+        read_article_count, total_article_count = progress_manager.get_progress(
+            self)
         return {
             'read': read_article_count,
             'total': total_article_count
@@ -161,7 +168,8 @@ class Section(Page, PageUtilsMixin):
         check_user_session(request)
         context = super().get_context(request)
         context['featured_content'] = [
-            featured_content.content for featured_content in self.featured_content.filter(content__live=True)
+            featured_content.content for featured_content in
+            self.featured_content.filter(content__live=True)
         ]
         context['sub_sections'] = self.get_children().live().type(Section)
         context['articles'] = self.get_children().live().type(Article)
@@ -181,16 +189,19 @@ class Section(Page, PageUtilsMixin):
         :return:e
         """
         progress_bar_sections = Section.objects.filter(show_progress_bar=True)
-        all_descendants = [list(Section.objects.type(Section).descendant_of(section).values_list('pk', flat=True)) for
-                           section in
-                           progress_bar_sections]
+        all_descendants = [list(
+            Section.objects.type(Section).descendant_of(section).values_list(
+                'pk', flat=True)) for
+            section in
+            progress_bar_sections]
         all_descendants = set(flatten(all_descendants))
 
         return Section.objects.exclude(pk__in=all_descendants)
 
 
 class ArticleRecommendation(Orderable):
-    source = ParentalKey('Article', related_name='recommended_articles', on_delete=models.CASCADE, blank=True)
+    source = ParentalKey('Article', related_name='recommended_articles',
+                         on_delete=models.CASCADE, blank=True)
     article = models.ForeignKey('Article', on_delete=models.CASCADE)
 
     panels = [
@@ -216,8 +227,10 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         ('list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
         ('numbered_list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
         ('page_button', PageButtonBlock()),
-        ('embedded_poll', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')),
-        ('embedded_survey', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')),
+        ('embedded_poll',
+         EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')),
+        ('embedded_survey', EmbeddedQuestionnaireChooserBlock(
+            target_model='questionnaires.Survey')),
         ('media', MediaBlock(icon='media')),
     ])
     show_in_menus_default = True
@@ -272,19 +285,22 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         for sections
         :return:
         """
-        return Section.objects.ancestor_of(self).type(Section).filter(show_progress_bar=True).first()
+        return Section.objects.ancestor_of(self).type(Section).filter(
+            show_progress_bar=True).first()
 
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
-        context['breadcrumbs'] = [crumb for crumb in self.get_ancestors() if not crumb.is_root()]
+        context['breadcrumbs'] = [crumb for crumb in self.get_ancestors() if
+                                  not crumb.is_root()]
         context['sections'] = self.get_ancestors().type(Section)
 
         progress_enabled_section = self._get_progress_enabled_section()
 
         if progress_enabled_section:
             context.update({
-                'user_progress': progress_enabled_section.get_user_progress_dict(request)
+                'user_progress': progress_enabled_section.get_user_progress_dict(
+                    request)
             })
 
         return context
@@ -311,33 +327,51 @@ class BannerPage(Page):
     parent_page_types = ['home.BannerIndexPage']
     subpage_types = []
 
+    banner_description = RichTextField(null=True, blank=True)
+
     banner_image = models.ForeignKey(
         'wagtailimages.Image',
         related_name='+',
         on_delete=models.PROTECT,
+        null=True, blank=True,
         help_text=_('Image to display as the banner')
     )
-    banner_link_page = models.ForeignKey(
-        Page, null=True, blank=True, related_name='banners', on_delete=models.PROTECT,
-        help_text=_('Optional page to which the banner will link to'))
-    external_link = models.URLField(
+    banner_background_image = models.ForeignKey(
+        'wagtailimages.Image',
+        related_name='+',
         null=True, blank=True,
-        help_text=_('Optional external link which a banner will link to e.g., https://www.google.com'))
+        on_delete=models.PROTECT,
+        help_text=_('Background image')
+    )
+
+    banner_link_page = models.ForeignKey(
+        Page, null=True, blank=True, related_name='banners',
+        on_delete=models.PROTECT,
+        help_text=_('Optional page to which the banner will link to'))
+
+    banner_button_text = models.CharField(
+        null=True, blank=True,
+        max_length=35,
+        help_text=_('The title for a button')
+    )
+    banner_icon_button = models.ForeignKey(
+        'wagtailimages.Image',
+        related_name='+',
+        on_delete=models.PROTECT,
+        null=True, blank=True,
+        help_text=_('Icon Button')
+    )
+    align_center = BooleanField(default=False)
 
     content_panels = Page.content_panels + [
+        FieldPanel('banner_description'),
         ImageChooserPanel('banner_image'),
+        ImageChooserPanel('banner_background_image'),
         PageChooserPanel('banner_link_page'),
-        FieldPanel('external_link'),
+        FieldPanel('banner_button_text'),
+        ImageChooserPanel('banner_icon_button'),
+        FieldPanel('align_center')
     ]
-
-    @property
-    def final_external_link(self):
-        if self.banner_link_page:
-            return self.banner_link_page.url
-        if self.external_link:
-            return create_final_external_link(self.external_link)
-        else:
-            return "#"
 
 
 class FooterIndexPage(Page):
@@ -423,7 +457,9 @@ class SiteSettings(BaseSetting):
         default=9437184,
         help_text='Show warning if uploaded media file size is greater than this in bytes. Default is 9 MB')
     allow_anonymous_comment = models.BooleanField(default=False)
-    registration_survey = models.ForeignKey('questionnaires.Survey', null=True, blank=True, on_delete=models.SET_NULL)
+    registration_survey = models.ForeignKey('questionnaires.Survey', null=True,
+                                            blank=True,
+                                            on_delete=models.SET_NULL)
 
     panels = [
         ImageChooserPanel('logo'),
@@ -509,7 +545,8 @@ class CacheSettings(BaseSetting):
     cache = models.BooleanField(
         default=True,
         verbose_name=_("Prompt users to download?"),
-        help_text=_("check to prompt first time users to download the website as an app"),
+        help_text=_(
+            "check to prompt first time users to download the website as an app"),
     )
 
     panels = [
@@ -538,6 +575,20 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
         on_delete=models.SET_NULL,
     )
 
+    color = models.CharField(
+        max_length=6,
+        blank=True,
+        null=True
+    )
+
+    color_text = models.CharField(
+        max_length=6,
+        blank=True,
+        null=True
+    )
+
     panels = AbstractFlatMenuItem.panels + [
         ImageChooserPanel('icon'),
+        FieldPanel('color'),
+        FieldPanel('color_text')
     ]
