@@ -116,3 +116,6 @@ legacy-initdb.d/
 
 !iogt/templates/wagtailmedia/media/
 .vscode/
+
+# Translations
+*.mo
