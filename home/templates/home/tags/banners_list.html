@@ -2,8 +2,14 @@
 <div class="container container--main">
     {% for banner in banners %}
         <div class="banner">
-        {% image banner.specific.banner_background_image original as banner_img %}
-            <a href="{{ banner.specific.banner_link_page }}">
+        {% image banner.specific.banner_image original as banner_img %}
+            {% if banner.specific.banner_link_page %}
+                <a href="{% pageurl banner.specific.banner_link_page %}">
+            {% elif banner.specific.external_link %}
+                <a href="{{ banner.specific.external_link }}" target="_blank">
+            {% else %}
+                <a href="#">
+            {% endif %}
                 <img src="{{ banner_img.url }}" alt="{{ banner_img.alt }}">
             </a>
         </div>
