@@ -15,7 +15,7 @@
         </div>
         <div class="header__right">
             <div class="select header__select js-select hideOnNonJSDevice">
-                <div class="select__selected"><p>English</p>
+                <div class="select__selected"><p>{{ lang.name_local }}</p>
                     <div class="select__selected-icon"><img
                             src="{% static "/icons/arrow-down.svg" %}"
                             alt="Arrow down">
@@ -24,7 +24,9 @@
                 <div class="select__options">
                     {% for language in languages %}
                         <div class="select__option {% if language.code == LANGUAGE_CODE %}select__option--selected{% endif %}">
-                            <p>{{ language.name_local }}</p>
+                            <a href="/{{ language.code }}">
+                                <p>{{ language.name_local }}</p>
+                            </a>
                         </div>
                     {% endfor %}
                 </div>

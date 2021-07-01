@@ -1,4 +1,4 @@
-{% load static wagtailuserbar home_tags sass_tags wagtailsettings_tags  %}
+{% load static wagtailuserbar home_tags sass_tags wagtailsettings_tags %}
 {% get_settings %}
 
 <!DOCTYPE html>
@@ -22,17 +22,19 @@
     <link rel="manifest" href="{% static 'manifest/manifest.webmanifest' %}">
     <link rel="apple-touch-icon" href="{% static 'icons/unicef-logo.png' %}">
 
-        {# Global stylesheets #}
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/iogt.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% sass_src 'css/sectionStyles.css' %}">
+    {# Global stylesheets #}
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/iogt.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}">
+    <link rel="stylesheet" type="text/css"
+          href="{% sass_src 'css/sectionStyles.css' %}">
 
 
 
 
-     
+
 
     {% block extra_css %}
         {# Override this in templates to add extra stylesheets #}
@@ -44,32 +46,33 @@
 
 <main id="app">
     <div id="content-wrap">
-         {% if settings.home.CacheSettings.cache and first_time_user %}
+        {% if settings.home.CacheSettings.cache and first_time_user %}
             {% include "cache_banner.html" %}
         {% endif %}
         {% include "header.html" %}
-        {% include "messages.html" %} 
+        {% include "messages.html" %}
         {% block content %}{% endblock %}
         {% include "footer.html" %}
     </div>
 </main>
 
 {# Global javascript #}
+<script src="{% static "js/iogt.js" %}"></script>
 <script>
 
 	const failMsg = 'Something went wrong. Can you try refreshing the page, and clicking the download website button?';
-    const successMsg = "Your app is now ready to install. If you are using a iOS device, you can install it by clicking 'Share', scrolling down and tapping 'Add to Home Screen. If using Android choose 'Add to home screen' and you should be all set!";
+	const successMsg = "Your app is now ready to install. If you are using a iOS device, you can install it by clicking 'Share', scrolling down and tapping 'Add to Home Screen. If using Android choose 'Add to home screen' and you should be all set!";
 
-    async function cache() {
+	async function cache() {
 		if ('serviceWorker' in navigator && confirm("Install this website as an app on your device?") === true) {
 			try {
 				await navigator.serviceWorker.register('{% url "sw.js" %}', {scope: '/'});
-                alert(successMsg)
+				alert(successMsg);
 			} catch {
 				alert(failMsg);
 			}
 		}
-	} 
+	}
 </script>
 <noscript>
     <style type="text/css">
@@ -80,12 +83,8 @@
         .showOnNonJSDevice {
             display: block !important;
         }
-        </script> 
-        <noscript>
-            <style type="text/css">
-                .hideOnNonJSDevice { display:none; }
-            </style>
-        </noscript>
-        {% block extra_js %}{% endblock %}
-    </body>
+    </style>
+</noscript>
+{% block extra_js %}{% endblock %}
+</body>
 </html>

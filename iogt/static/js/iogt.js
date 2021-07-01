@@ -19,11 +19,13 @@ const $searchBtn = document.querySelector('.js-search-btn');
 const $searchClose = document.querySelector('.js-search-close');
 const $overlay = document.querySelector('.js-dark-overlay');
 const $searchResult = document.querySelector('.js-search-result');
-
+console.log(1);
 $selects.forEach(function ($select) {
+	console.log($select);
 	const $selectOptions = $select.querySelectorAll('.select__option');
 
 	$select.addEventListener('click', function () {
+		console.log(1);
 		this.classList.toggle('active');
 	});
 

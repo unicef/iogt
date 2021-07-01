@@ -339,7 +339,7 @@ input:checked + .cust-check__title {
     border-bottom-right-radius: 10px;
     height: 100%;
     left: 0;
-    position: absolute;
+    /*position: absolute;*/
     transition: all .45s;
     width: 100%
 }
@@ -354,7 +354,6 @@ input:checked + .cust-check__title {
 .search__btn {
     background-color: transparent;
     border: none;
-    border-left: 1px solid #efefef;
     height: 24px;
     margin-left: auto;
     padding: 0 14px;
