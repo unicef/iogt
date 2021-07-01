@@ -504,6 +504,14 @@
   padding: 0;
 }
 
+.recommended_reading ul p:first-of-type {
+  font-weight: normal;
+  padding-bottom: 8px;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 12px;
+}
+
 .recommended_reading ul p {
   margin: 0;
 }

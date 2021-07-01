@@ -439,6 +439,14 @@
    ul {
       list-style: none;
       padding:0;
+      
+      p:first-of-type {
+         font-weight: normal;
+         padding-bottom: 8px;
+         font-weight: 500;
+         font-size: 12px;
+         line-height: 12px;
+      }
       p {
          margin:0;
       }
