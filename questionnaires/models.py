@@ -316,6 +316,7 @@ class Survey(QuestionnairePage, AbstractForm):
         data_fields = [
             ('user', _('User')),
             ('submit_time', _('Submission Date')),
+            ('page_url', _('Page URL'))
         ]
         data_fields += [
             (field.clean_name, field.admin_label)
@@ -338,6 +339,7 @@ class UserSubmission(AbstractFormSubmission):
         form_data.update(
             {
                 "user": self.user if self.user else None,
+                "page_url": self.page.full_url,
             }
         )
         return form_data
@@ -488,6 +490,7 @@ class Poll(QuestionnairePage, AbstractForm):
         data_fields = [
             ('user', _('User')),
             ('submit_time', _('Submission Date')),
+            ('page_url', _('Page URL')),
         ]
         data_fields += [
             (field.clean_name, field.label)
@@ -644,6 +647,7 @@ class Quiz(QuestionnairePage, AbstractForm):
         data_fields = [
             ('user', _('User')),
             ('submit_time', _('Submission Date')),
+            ('page_url', _('Page URL')),
         ]
         data_fields += [
             (field.clean_name, field.admin_label)
