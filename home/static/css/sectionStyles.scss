@@ -165,14 +165,15 @@
    left: 12px;
    width: 280px;
    left: 0px;
-   // background-color: #F3EFFB;
    border-radius: 8px;
    padding: 8px 12px;
+ 
 
   a {
      text-decoration: none;
      display: flex;
      align-items: center;
+     color: inherit; 
    }
 &__details {
    p {
