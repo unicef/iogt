@@ -5,7 +5,7 @@ from django.views.generic import TemplateView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from questionnaires.models import Poll, Survey
+from questionnaires.models import Poll, Survey, Quiz
 
 
 def check_user_session(request):
@@ -41,7 +41,9 @@ class SitemapAPIView(APIView):
         footer_urls = [f'{protocol}://{site}{p.url}' for p in FooterPage.objects.live()],
         poll_urls = [f'{protocol}://{site}{p.url}' for p in Poll.objects.live()],
         survey_urls = [f'{protocol}://{site}{p.url}' for p in Survey.objects.live()],
+        quiz_urls = [f'{protocol}://{site}{p.url}' for p in Quiz.objects.live()],
 
-        sitemap = flatten(home_page_urls + section_urls + article_urls + footer_urls + poll_urls + survey_urls)
+        sitemap = flatten(
+            home_page_urls + section_urls + article_urls + footer_urls + poll_urls + survey_urls + quiz_urls)
 
         return Response(sitemap)
