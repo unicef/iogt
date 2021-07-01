@@ -360,7 +360,7 @@ WAGTAILTRANSFER_SECRET_KEY = 'fake_secret_key'
 WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME = 'iogt_flat_menu_items'
 
 WAGTAIL_RICH_TEXT_FIELD_FEATURES = [
-    'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'h2', 'h3', 'h4',
     'bold', 'italic',
     'ol', 'ul',
     'hr',
