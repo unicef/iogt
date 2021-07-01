@@ -1,0 +1,11 @@
+{% load static wagtailcore_tags wagtailimages_tags i18n %}
+<footer class="top-level-sections">
+    <nav>
+        <div class="links">
+          {% for section in top_level_sections %}
+            {% image section.specific.lead_image fill-20x20 %}
+            <a href="{% pageurl section %}">{% translate section.specific.title %}</a>
+          {% endfor %}
+        </div>
+    </nav>
+</footer>
