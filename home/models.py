@@ -26,7 +26,7 @@ from wagtailmenus.models import AbstractFlatMenuItem, BooleanField
 
 from comments.models import CommentableMixin
 from iogt.views import check_user_session
-from questionnaires.models import Survey, Poll
+from questionnaires.models import Survey, Poll, Quiz
 from .blocks import (MediaBlock, SocialMediaLinkBlock,
                      SocialMediaShareButtonBlock,
                      EmbeddedQuestionnaireChooserBlock,
@@ -182,6 +182,7 @@ class Section(Page, PageUtilsMixin):
         context['articles'] = self.get_children().live().type(Article)
         context['surveys'] = self.get_children().live().type(Survey)
         context['polls'] = self.get_children().live().type(Poll)
+        context['quizzes'] = self.get_children().live().type(Quiz)
 
         context['user_progress'] = self.get_user_progress_dict(request)
 
