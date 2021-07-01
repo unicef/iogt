@@ -1,4 +1,4 @@
-{% load static menu_tags %}
+{% load static menu_tags wagtailimages_tags %}
 {% load i18n %}
 
 {% get_current_language as LANGUAGE_CODE %}
@@ -11,7 +11,7 @@
     <div class="container header__container">
         <div class="header__left">
             <a href="/" class="logo">
-                <img src="{% static "/images/logo.svg" %}" alt="Logo">
+               {% image settings.home.SiteSettings.logo fill-30x30 %}
             </a>
         </div>
         <div class="header__right">
