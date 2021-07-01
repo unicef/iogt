@@ -5,7 +5,8 @@
 {% endblock extra_css %}
 
 {% block content %}
-    <section class='section-page-details' >
+   {% image page.lead_image width-320 as lead_image %}
+   <section class='section-page-details' style="background-image: url({{ lead_image.url }})">
         <a href="{{page.parent_section.url}}" class='section-page-details__back'>
           <img class='section-page-details__back--image1' src="{% static 'images/white-stroke.png' %}">
            Back 
@@ -17,7 +18,7 @@
         {% render_sub_sections_list sub_sections %}
     </section>
     <section class='suggested-articles'>
-     {% render_polls_list polls %} 
+     {% render_polls_list polls  %} 
      {% render_surveys_list surveys %}
      {% render_quizzes_list quizzes %}
      {% render_articles_list articles %}
