@@ -329,6 +329,11 @@
   color: #4B4B4B;
 }
 
+.article-content video, .article-content audio {
+  width: 280px;
+  margin: 10px 0px;
+}
+
 .article-content__chat-btn {
   margin-top: 20px;
   display: -webkit-box;
