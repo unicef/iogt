@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: " en-US" }}">
+{% include head.html %}
+
+<body data-bs-spy="scroll" data-bs-target="#navbar" data-bs-offset="0">
+    {% include navbar.html %}
+    <main class="container">
+        <div class="row py-5">
+            {% assign content_col_size = "col-md-12" %}
+            {% unless page.hide_sidebar %}
+            <!-- Sidebar Column -->
+            <div class="col-md-3" id="tg-sb-sidebar">
+                {% include sidebar.html %}
+            </div>
+            {% assign content_col_size = "col-md-9" %}
+            {% endunless %}
+
+            <!-- Content Column -->
+            <div class="{{content_col_size}}" id="tg-sb-content">
+                {{content}}
+            </div>
+        </div>
+    </main>
+    {% include footer.html %}
+</body>
+
+</html>

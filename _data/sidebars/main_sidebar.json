@@ -1,0 +1,165 @@
+{
+    "title": "sidebar",
+    "folders": [
+        {
+            "title": "Introduction",
+            "folderitems": [
+                {
+                    "title": "What is Molo?",
+                    "url": "/intro/intro-to-molo/"
+                },
+                {
+                    "title": "Navigating Molo",
+                    "url": "/intro/navigating-molo/"
+                },
+                {
+                    "title": "Search Functionality",
+                    "url": "/intro/search-functionality/"
+                },
+                {
+                    "title": "Reordering Pages",
+                    "url": "/intro/reordering-pages/"
+                }
+            ]
+        },
+        {
+            "title": "Creating Your Content",
+            "folderitems": [
+                {
+                    "title": "Tips for content creation",
+                    "url": "/content/tips/"
+                },
+                {
+                    "title": "Call to Action!",
+                    "url": "/content/call-to-action/"
+                },
+                {
+                    "title": "Ease the user journey",
+                    "url": "/content/user-journey/"
+                },
+                {
+                    "title": "Creating Sections",
+                    "url": "/content/sections/"
+                },
+                {
+                    "title": "Changing Section color",
+                    "url": "/content/section-colors/"
+                },
+                {
+                    "title": "Homepage Banner",
+                    "url": "/content/home-banner/"
+                },
+                {
+                    "title": "Creating a footer Page",
+                    "url": "/content/footer/"
+                },
+                {
+                    "title": "Creating Polls",
+                    "url": "/content/polls/"
+                },
+                {
+                    "title": "Creating Article pages",
+                    "url": "/content/articles/"
+                },
+                {
+                    "title": "Editing existing pages",
+                    "url": "/content/editing/"
+                },
+                {
+                    "title": "The Promote Tab",
+                    "url": "/content/promote/"
+                },
+                {
+                    "title": "Automatic content rotation",
+                    "url": "content/auto-rotate/"
+                },
+                {
+                    "title": "Recommended Settings",
+                    "url": "/content/settings/"
+                },
+                {
+                    "title": "Uploading and adding images",
+                    "url": "/content/images/"
+                },
+                {
+                    "title": "Adding languages",
+                    "url": "/content/languages/"
+                },
+                {
+                    "title": "Translating content",
+                    "url": "/content/translate/"
+                }
+            ]
+        },
+        {
+            "title": "Commenting",
+            "folderitems": [
+                {
+                    "title": "Activating comments",
+                    "url": "/comments/activating/"
+                },
+                {
+                    "title": "Replying to comments",
+                    "url": "/comments/replying/"
+                },
+                {
+                    "title": "Deleting Comments",
+                    "url": "/comments/deleting/"
+                },
+                {
+                    "title": "Canned response",
+                    "url": "/comments/canned/"
+                },
+                {
+                    "title": "Reported Comments",
+                    "url": "/comments/reporting/"
+                },
+                {
+                    "title": "Moderation best practices",
+                    "url": "/comments/moderation-tips/"
+                },
+                {
+                    "title": "How to reply to messages, comments or user posts",
+                    "url": "/comments/replying-messages-comments-posts/"
+                },
+                {
+                    "title": "Handling trolls/vandalism on a Fan page",
+                    "url": "/comments/trolls/"
+                }
+            ]
+        },
+        {
+            "title": "Creating a Survey",
+            "folderitems": [
+                {
+                    "title": "On the homepage",
+                    "url": "/surveys/homepage-surveys/"
+                },
+                {
+                    "title": "Create a survey in a particular content channel",
+                    "url": "/surveys/creating/"
+                },
+                {
+                    "title": "Allowing anonymous submissions to your surveys",
+                    "url": "/surveys/anon-submissions/"
+                },
+                {
+                    "title": "Different types of questions",
+                    "url": "/surveys/question-types/"
+                },
+                {
+                    "title": "Make survey appear in site footer",
+                    "url": "/surveys/footer-surveys/"
+                },
+                {
+                    "title": "Accessing survey results",
+                    "url": "/surveys/accessing-results/"
+                },
+                {
+                    "title": "Need More",
+                    "url": "/surveys/need-more/"
+                }
+            ]
+        }
+    ]
+}
