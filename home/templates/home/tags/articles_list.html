@@ -1,25 +1,7 @@
 {% load static wagtailcore_tags wagtailimages_tags %}
-
-<div class="articles-list articles-list--home">
-    <div class="container articles-list__container">
-        {% for article in articles %}
-            <a href="{% pageurl article %}" class="articles-list__item">
-                <div class="articles-list__item-content">
-                    <div class="articles-list__item-header articles-list__item-header--red">
-                        <p class="articles-list__item-tag">{{ article.specific.section }}</p>
-                        {% if article.specific.allow_comments %}
-                            <span class="articles-list__item-comment">{{ article.comments | length }}</span> {% endif %}
-                    </div>
-                    <div class="articles-list__item-text">
-                        <p>{{ article.title }}</p>
-                    </div>
-                </div>
-                <div class="articles-list__item-img">
-                    {% image article.specific.lead_image original %}
-                </div>
-            </a>
-        {% endfor %}
+{% for article in articles %}
+    <div class='suggested-article'>
+        <a href="{% pageurl article %}">{{ article.title }}</a>
+        {% image article.specific.lead_image fill-336x186 class="mainImage" %}
     </div>
-
-
-
+{% endfor %}
