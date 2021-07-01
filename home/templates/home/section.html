@@ -6,7 +6,7 @@
 
 {% block content %}
     <section class='section-page-details' >
-        <a href='' class='section-page-details__back'>
+        <a href="{{page.parent_section.url}}" class='section-page-details__back'>
           <img class='section-page-details__back--image1' src="{% static 'images/white-stroke.png' %}">
            Back 
         </a>

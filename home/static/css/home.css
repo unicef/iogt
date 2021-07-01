@@ -21,9 +21,10 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    border-radius: 8px;
-    margin: 4px 0;
-    padding: 12px 0
+}
+
+.banner:last-child {
+    margin-bottom: 4px;
 }
 
 .banner__logo {

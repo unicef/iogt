@@ -44,8 +44,7 @@
 
 <main id="app">
     <div id="content-wrap">
-        <div class='dark-overlay js-dark-overlay'></div>
-        {% if settings.home.CacheSettings.cache and first_time_user %}
+         {% if settings.home.CacheSettings.cache and first_time_user %}
             {% include "cache_banner.html" %}
         {% endif %}
         {% include "header.html" %}
@@ -57,19 +56,20 @@
 
 {# Global javascript #}
 <script>
-	const successMsg = "Your app is now ready to install. If you are using a iOS device, you can install it by clicking 'Share', scrolling down and tapping 'Add to Home Screen. If using Android choose 'Add to home screen' and you should be all set!";
-	const failMsg = 'Something went wrong. Can you try refreshing the page, and clicking the download website button?';
 
-	async function cache() {
+	const failMsg = 'Something went wrong. Can you try refreshing the page, and clicking the download website button?';
+    const successMsg = "Your app is now ready to install. If you are using a iOS device, you can install it by clicking 'Share', scrolling down and tapping 'Add to Home Screen. If using Android choose 'Add to home screen' and you should be all set!";
+
+    async function cache() {
 		if ('serviceWorker' in navigator && confirm("Install this website as an app on your device?") === true) {
 			try {
 				await navigator.serviceWorker.register('{% url "sw.js" %}', {scope: '/'});
-				alert(successMsg);
+                alert(successMsg)
 			} catch {
 				alert(failMsg);
 			}
 		}
-	}
+	} 
 </script>
 <noscript>
     <style type="text/css">
