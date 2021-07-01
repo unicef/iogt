@@ -24,7 +24,7 @@ from wagtail.core.models import Page
 from wagtail.images.blocks import ImageChooserBlock
 
 from questionnaires.blocks import SkipLogicField, SkipState
-from questionnaires.forms import SurveyForm
+from questionnaires.forms import SurveyForm, QuizForm
 from questionnaires.utils import SkipLogicPaginator
 
 
@@ -64,6 +64,12 @@ class QuestionnairePage(Page, PageUtilsMixin):
     submit_button_text = models.CharField(
         max_length=40, null=True, default="Submit", help_text=_("Submit button text")
     )
+
+    direct_display = models.BooleanField(default=False)
+
+    settings_panels = Page.settings_panels + [
+        FieldPanel('direct_display')
+    ]
 
     def __str__(self):
         return self.title
@@ -488,3 +494,199 @@ class Poll(QuestionnairePage, AbstractForm):
             for field in self.get_form_fields()
         ]
         return data_fields
+
+
+class QuizFormField(AbstractFormField):
+    page = ParentalKey("Quiz", on_delete=models.CASCADE, related_name="quiz_form_fields")
+    required = models.BooleanField(verbose_name=_('required'), default=True)
+    admin_label = models.CharField(
+        verbose_name=_('admin_label'),
+        max_length=256,
+        help_text=_('Column header used during CSV export of survey '
+                    'responses.'),
+    )
+    skip_logic = SkipLogicField()
+    page_break = models.BooleanField(
+        default=False,
+        help_text=_(
+            'Inserts a page break which puts the next question onto a new page'
+        )
+    )
+    correct_answer = models.CharField(verbose_name=_('correct_answer'),
+                                      max_length=256,
+                                      help_text=_('Please provide correct answer for this question'))
+    feedback = models.CharField(verbose_name=_('Feedback'),
+                                max_length=255,
+                                help_text=_('Feedback message for user answer.'),
+                                null=True,
+                                blank=True)
+
+    panels = [
+        FieldPanel('label'),
+        FieldPanel('help_text'),
+        FieldPanel('required'),
+        FieldPanel('field_type', classname="formbuilder-type"),
+        StreamFieldPanel('skip_logic'),
+        FieldPanel('default_value', classname="formbuilder-default"),
+        FieldPanel('correct_answer'),
+        FieldPanel('feedback'),
+        FieldPanel('admin_label'),
+        FieldPanel('page_break'),
+    ]
+
+    @property
+    def has_skipping(self):
+        return any(
+            logic.value['skip_logic'] != SkipState.NEXT
+            for logic in self.skip_logic
+        )
+
+    def choice_index(self, choice):
+        if choice:
+            if self.field_type == 'checkbox':
+                # clean checkboxes have True/False
+                try:
+                    return ['on', 'off'].index(choice)
+                except ValueError:
+                    return [True, False].index(choice)
+            return self.choices.split(',').index(choice)
+        else:
+            return False
+
+    def next_action(self, choice):
+        return self.skip_logic[self.choice_index(choice)].value['skip_logic']
+
+    def is_next_action(self, choice, *actions):
+        if self.has_skipping:
+            return self.next_action(choice) in actions
+        return False
+
+    def next_page(self, choice):
+        logic = self.skip_logic[self.choice_index(choice)]
+        return logic.value[self.next_action(choice)]
+
+
+class Quiz(QuestionnairePage, AbstractForm):
+    base_form_class = QuizForm
+
+    parent_page_types = ["home.HomePage", "home.Section", "home.Article"]
+    template = "quizzes/quiz.html"
+
+    content_panels = Page.content_panels + [
+        FormSubmissionsPanel(),
+        MultiFieldPanel(
+            [
+                FieldPanel("allow_anonymous_submissions"),
+                FieldPanel("allow_multiple_submissions"),
+                FieldPanel("submit_button_text"),
+            ],
+            heading=_(
+                "General settings for quiz",
+            ),
+        ),
+        MultiFieldPanel(
+            [
+                StreamFieldPanel("description"),
+            ],
+            heading=_(
+                "Description at quiz page",
+            ),
+        ),
+        MultiFieldPanel(
+            [
+                StreamFieldPanel("thank_you_text"),
+            ],
+            heading="Description at thank you page",
+        ),
+        InlinePanel("quiz_form_fields", label="Form fields"),
+    ]
+
+    @cached_property
+    def has_page_breaks(self):
+        return any(
+            field.page_break
+            for field in self.get_form_fields()
+        )
+
+    def get_form_fields(self):
+        return self.quiz_form_fields.all()
+
+    def get_submission_class(self):
+        return UserSubmission
+
+    def serve(self, request, *args, **kwargs):
+        # TODO add page brakes logic
+        if (
+                not self.allow_multiple_submissions
+                and self.get_submission_class()
+                .objects.filter(page=self, user__pk=request.user.pk)
+                .exists()
+        ):
+            return render(request, self.template, self.get_context(request))
+
+        return super().serve(request, *args, **kwargs)
+
+    def process_form_submission(self, form):
+        from home.models import SiteSettings
+        user = form.user
+        self.get_submission_class().objects.create(
+            form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder),
+            page=self,
+            user=user,
+        )
+
+        site_settings = SiteSettings.get_for_default_site()
+        if site_settings.registration_survey and site_settings.registration_survey.pk == self.pk:
+            user.has_filled_registration_survey = True
+            user.save(update_fields=['has_filled_registration_survey'])
+
+    def get_data_fields(self):
+        data_fields = [
+            ('user', _('User')),
+            ('submit_time', _('Submission Date')),
+        ]
+        data_fields += [
+            (field.clean_name, field.admin_label)
+            for field in self.get_form_fields()
+        ]
+        return data_fields
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context.update({'back_url': request.GET.get('back_url')})
+
+        if request.method == 'POST':
+            form_class = self.get_form_class()
+            form = form_class(data=request.POST, page=self, user=request.user)
+
+            for k, v in form.fields.items():
+                form.fields[k].widget.attrs['readonly'] = True
+
+            fields_info = {}
+
+            total = 0
+            total_correct = 0
+            for field in self.get_form_fields():
+                # TODO: handle multi-value case
+                is_correct = form.data[field.clean_name] == field.correct_answer
+                if is_correct:
+                    total_correct += 1
+                total += 1
+                fields_info[field.clean_name] = {
+                    'feedback': field.feedback,
+                    'correct_answer': field.correct_answer,
+                    'is_correct': is_correct,
+                }
+
+            context['form'] = form
+            context['fields_info'] = fields_info
+            context['result'] = {
+                'total': total,
+                'total_correct': total_correct,
+            }
+
+        return context
+
+    class Meta:
+        verbose_name = "quiz"
+        verbose_name_plural = "quizzes"
