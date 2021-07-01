@@ -33,7 +33,7 @@ INSTALLED_APPS = [
     'iogt_content_migration',
     'questionnaires',
     'messaging',
-
+    'django.contrib.humanize',
     'wagtail_localize',
     'wagtail_localize.locales',
     'wagtail.contrib.forms',
@@ -241,6 +241,8 @@ COMMENTS_XTD_CONTACT_EMAIL = "helpdesk@example.com"
 COMMENTS_XTD_CONFIRM_EMAIL = False
 
 COMMENTS_XTD_FORM_CLASS = 'comments.forms.CommentForm'
+
+
 
 COMMENTS_XTD_APP_MODEL_OPTIONS = {
     'default': {
