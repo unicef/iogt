@@ -2,14 +2,15 @@ from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.urls import include, path
-from iogt_users import urls as users_urls
-from search import views as search_views
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
-from home import views as pwa_views
 from wagtail_transfer import urls as wagtailtransfer_urls
+
+from home import views as pwa_views
 from iogt.views import TransitionPageView, SitemapAPIView
+from iogt_users import urls as users_urls
+from search import views as search_views
 
 urlpatterns = [
     path('django-admin/', admin.site.urls),
@@ -42,7 +43,8 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
     # add django debug toolbar links
-    urlpatterns = urlpatterns + [path(r"__debug__/", include(debug_toolbar.urls))]
+    urlpatterns = urlpatterns + [
+        path(r"__debug__/", include(debug_toolbar.urls))]
 
 urlpatterns = urlpatterns + i18n_patterns(
     path("", include(wagtail_urls)),
