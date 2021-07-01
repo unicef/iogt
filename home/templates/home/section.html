@@ -1,15 +1,28 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags home_tags %}
+{% load static wagtailcore_tags wagtailimages_tags home_tags questionnaires_tags sass_tags%}
 
 {% block extra_css %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/section.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/banner.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/featured_content.css' %}">
 {% endblock extra_css %}
 
 {% block content %}
-    <div class="home">
-        {% render_banners_list banners %}
-        {% render_featured_content_list featured_content %}
-    </div>
+    <section class='section-page-details' >
+        <a href="{{page.parent_section.url}}" class='section-page-details__back'>
+          <img class='section-page-details__back--image1' src="{% static 'images/white-stroke.png' %}">
+           Back 
+        </a>
+        <h1 class='section-page-details__title'>{{ page.title }}</h1>
+         {% render_featured_content_list featured_content %}
+    </section>
+    <section>
+        {% render_sub_sections_list sub_sections %}
+    </section>
+    <section class='suggested-articles'>
+     {% render_polls_list polls %} 
+     {% render_surveys_list surveys %}
+     {% render_quizzes_list quizzes %}
+     {% render_articles_list articles %}
+    </section>
 {% endblock content %}
+
+
+

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load wagtailimages_tags %}
+
+{% block content %}
+    <h1>Question: {{ page.name }}</h1>
+    <h2>Votes total: {{ page.total_votes }}</h2>
+    <hr>
+    {{ page.thank_you_text }}
+    <hr>
+
+    {% if page.show_results %}
+    <h2>Results</h2>
+        {% for question, answers in results.items %}
+            <h3>{{ question }}</h3>
+            {% for answer, count in answers.items %}
+                {% if page.result_as_percentage %}
+                <div>{{ answer }}: {{ count }}%</div>
+                {% else %}
+                <div>{{ answer }}: {{ count }}</div>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+
+    {% if page.show_results %}
+        <h3>All answers:</h3>
+        {% for answer in answers %}
+            <p>{{ answer.title }} |
+                {% if poll.result_as_percentage %}
+                    {{ answer.percentage }} %
+                {% else %}
+                    {{ answer.votes }} vote{{ answer.votes|pluralize }}
+                  {% endif %}
+            </p>
+        {% endfor %}
+    {% endif %}
+
+    {% if back_url %}
+        <a href="{{ back_url }}">< Back</a>
+    {% endif %}
+{% endblock %}
