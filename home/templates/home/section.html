@@ -18,8 +18,13 @@
         {% render_sub_sections_list sub_sections %}
     </section>
     <section class='suggested-articles'>
-     {% render_polls_list polls  %} 
-     {% render_surveys_list surveys %}
+    {{page.color}}
+     <section class='quiz' style="background-color:{{ page.background_color }}; color: {{page.font_color}}">
+      {% render_polls_list polls %} 
+     </section>
+    <section class='quiz' style="background-color:{{ page.background_color }}; color: {{page.font_color}}">
+    {% render_surveys_list surveys %}
+     </section>
      {% render_articles_list articles %} 
     </section>
 {% endblock content %}
