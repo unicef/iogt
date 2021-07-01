@@ -14,6 +14,7 @@ from wagtail.admin.edit_handlers import (
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
 from wagtail.core import blocks
+from wagtail.core.blocks import PageChooserBlock
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Orderable, Page, Site
 from wagtail.core.rich_text import get_text_for_indexing
@@ -40,13 +41,19 @@ User = get_user_model()
 class HomePage(Page):
     template = 'home/home_page.html'
 
+    home_featured_content = StreamField([
+        ('page_button', PageButtonBlock()),
+        ('embedded_poll', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')),
+        ('embedded_survey', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')),
+        ('embedded_quiz', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Quiz')),
+        ('article', PageChooserBlock(target_model='home.Article')),
+    ], null=True)
+
     content_panels = Page.content_panels + [
         MultiFieldPanel([
             InlinePanel('home_page_banners', label=_("Home Page Banner")),
         ], heading=_('Home Page Banners')),
-        MultiFieldPanel([
-            InlinePanel('featured_content', label=_("Featured Content")),
-        ], heading=_('Featured Content'))
+        StreamFieldPanel('home_featured_content')
     ]
 
     def get_context(self, request):
@@ -229,8 +236,8 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         ('page_button', PageButtonBlock()),
         ('embedded_poll',
          EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')),
-        ('embedded_survey', EmbeddedQuestionnaireChooserBlock(
-            target_model='questionnaires.Survey')),
+        ('embedded_survey', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')),
+        ('embedded_quiz', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Quiz')),
         ('media', MediaBlock(icon='media')),
     ])
     show_in_menus_default = True
@@ -541,6 +548,7 @@ class SiteSettings(BaseSetting):
         verbose_name_plural = 'Site Settings'
 
 
+@register_setting
 class CacheSettings(BaseSetting):
     cache = models.BooleanField(
         default=True,

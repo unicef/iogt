@@ -508,3 +508,12 @@
     object-fit: cover;
   }
 }
+
+.user-progress-container {
+  width: 70%;
+  margin: auto;
+  background-color: blanchedalmond;
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 5px;
+}
