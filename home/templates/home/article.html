@@ -2,13 +2,19 @@
 {% load static wagtailcore_tags wagtailimages_tags comments comments_xtd  home_tags questionnaires_tags sass_tags %}
 
 {% block content %}
-{% image page.lead_image width-320 class="main-image-phone" %}
-<a href="{{page.parent_section.url}}">Go back</a>
+
+{% image page.lead_image width-320 height-200 as lead_image %}
+   <section class='article-page-details' style="background-image: url({{ lead_image.url }})">
+        <a href="{{page.parent_section.url}}" class='section-page-details__back'>
+          <img class='section-page-details__back--image1' src="{% static 'images/white-stroke.png' %}">
+           Back 
+        </a>
+    </section>
+
  <article > 
   <section class='article-content'>
       <h1>{{ page.title }}</h1>
       {% include_block page.body %}
-     <button class='article-content__chat-btn'>Start Chatting</button>
      {% render_polls_list polls %} 
      {% render_surveys_list surveys %}
        <section class='article-navigation'>
@@ -64,6 +70,7 @@
         <ul class='recommended_articles'>
         {% for recommended_article_model in page.recommended_articles.all %}
             <li>
+            hi
             <a href="{% pageurl recommended_article_model.article %}">
             <p class='title'> {{ recommended_article_model.article.title }}</p>
                {% image recommended_article_model.article.lead_image fill-100x110 %}
