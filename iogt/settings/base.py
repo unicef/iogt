@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'wagtailmedia',
     'wagtailmarkdown',
     'wagtail_transfer',
+    'wagtailsvg',
     'wagtail.contrib.settings',
 
     'django_comments_xtd',
@@ -69,7 +70,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites'
+    'django.contrib.sites',
 ]
 
 MIDDLEWARE = [
