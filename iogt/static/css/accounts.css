@@ -1,42 +1,93 @@
-.accounts-content-wrapper {
-    display: block;
-    max-width: 400px;
-    margin: 0 auto 40px;
-    min-height: 300px;
-}
-
-form p label {
-    display:block;
-    padding-bottom: 10px;
-}
-
-form p input {
-    width: 100%;
-}
-
-form p input {
-    width: 100%;
-}
-
-form p input[type=checkbox] {
-    width: auto;
-    float: left;
-}
-
-form p label[for=id_remember] {
-    display: inline
-}
-
-.accounts-form-btn {
-    float:right;
-    font-size: 18px;
-    background-color: #20cd84;
-    color: white;
-    border-width: 0px;
-    padding: 5px 15px;
-    display: block;
-}
-
-label[for="id_terms_accepted"] {
+.profile__title {
     display: inline-block;
+    width: 100%;
+    line-height: 32px;
+    margin-bottom: 20px;
+}
+
+.profile__title:after {
+    clear: both;
+}
+
+.profile__icon {
+    width: 32px;
+    height: 32px;
+    display: inline-block;
+    vertical-align: middle;
+    float: right;
+    background-color: #0070E2;
+    color: #fff;
+    text-align: center;
+    line-height: 32px;
+    border-radius: 50%;
+}
+
+form p {
+    margin: 0;
+    margin-bottom: 12px;
+    width: 100%;
+}
+
+form p:last-child {
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+}
+
+form label {
+    display: none;
+}
+
+form label[for='id_terms_accepted'], form label[for='id_remember'] {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 14px;
+    margin-right: 10px;
+}
+
+form input {
+    background-color: #f7f7f9;
+    border: 1px solid #efefef;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 14px;
+    padding: 8px 12px;
+    width: 100%
+}
+
+form input[type="checkbox"] {
+    display: inline-block;
+    margin: 0;
+    width: auto;
+}
+
+.profile-form__btns {
+    margin: 20px 0;
+}
+
+.profile-form__btn {
+    margin-bottom: 8px;
+}
+
+.profile-form__btn:last-child {
+    margin-bottom: 0;
+}
+
+.profile-form__desc {
+    color: #9A9A9A;
+}
+
+.errorlist {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.errorlist li {
+    color: #fb3d24;
+    font-size: 8px;
+    font-weight: 500;
+    line-height: 14px;
 }

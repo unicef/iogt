@@ -6,12 +6,33 @@ from django.dispatch import receiver
 
 
 class User(AbstractUser):
-    first_name = None
-    last_name = None
-    display_name = models.CharField(max_length=150, blank=True, null=True)
+    first_name = models.CharField('first name', max_length=150, null=True,
+                                  blank=True)
+    last_name = models.CharField('last name', max_length=150, null=True,
+                                 blank=True)
+    email = models.EmailField('email address', null=True, blank=True)
     terms_accepted = models.BooleanField(default=False)
 
     has_filled_registration_survey = models.BooleanField(default=False)
+
+    read_articles = models.ManyToManyField(to='home.Article')
+
+    @classmethod
+    def record_article_read(cls, request, article):
+        user = request.user
+        if user.is_anonymous:
+            read_articles = request.session.get('read_articles', [])
+            if read_articles:
+                if article.pk not in read_articles:
+                    # https://code.djangoproject.com/wiki/NewbieMistakes#Appendingtoalistinsessiondoesntwork
+                    read_articles = request.session['read_articles']
+                    read_articles.append(article.pk)
+                    request.session['read_articles'] = read_articles
+            else:
+                request.session['read_articles'] = [article.pk]
+        else:
+            if not user.read_articles.filter(id=article.id).exists():
+                user.read_articles.add(article)
 
     class Meta:
         ordering = ('id',)

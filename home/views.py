@@ -1,7 +1,29 @@
+from django.urls import reverse
+from django.views.generic import TemplateView
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
 from .models import ManifestSettings
+
+
+class TestView(TemplateView):
+    template_name = "home/test.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context["id"] = "lorem ipsum"
+        return context
+
+
+class ServiceWorkerView(TemplateView):
+    template_name = 'sw.js'
+    content_type = 'application/javascript'
+    name = 'sw.js'
+
+    def get_context_data(self, **kwargs):
+        return {
+            'test_url': reverse('test'),
+        }
 
 
 def get_manifest(request):
