@@ -1,7 +1,7 @@
 {% load static wagtailcore_tags wagtailimages_tags %}
 
 {% for quiz in quizzes %}
-<a class='quiz' href="{% pageurl quiz %}">
+<a  href="{% pageurl quiz %}">
     <span class='quiz__details'>
         <p>QUIZ</p>
         <p class='quiz__details--bold'>{{ quiz.title }}</p>

@@ -126,8 +126,13 @@ class Section(Page, PageUtilsMixin):
         blank=True,
         on_delete=models.PROTECT,
     )
-    color = models.CharField(
-        max_length=6,
+    background_color = models.CharField(
+        max_length=8,
+        blank=True,
+        null=True,
+    )
+    font_color = models.CharField(
+        max_length=8,
         blank=True,
         null=True,
     )
@@ -144,7 +149,8 @@ class Section(Page, PageUtilsMixin):
     content_panels = Page.content_panels + [
         ImageChooserPanel('lead_image'),
         SvgChooserPanel('icon'),
-        FieldPanel('color'),
+        FieldPanel('background_color'),
+        FieldPanel('font_color'),
         MultiFieldPanel([
             InlinePanel('featured_content', max_num=1,
                         label=_("Featured Content")),
