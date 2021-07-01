@@ -13,6 +13,11 @@ def render_polls_list(polls):
     return {'polls': polls}
 
 
+@register.inclusion_tag('questionnaires/tags/quizzes_list.html')
+def render_quizzes_list(quizzes):
+    return {'quizzes': quizzes}
+
+
 @register.filter
 def get_item(dictionary, key):
     return dictionary.get(key)
