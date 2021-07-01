@@ -65,7 +65,7 @@
       top: 72.78%;
       bottom: 7.1%;
       background: #FFFFFF;
-      border-radius: 8px;
+      border-radius: 30px;
       font-family: Poppins;
       font-style: normal;
       font-weight: bold;
@@ -157,6 +157,7 @@
       height: 86px;
       left: 234px;
       top: 0px;
+      border-radius: 8px;
    }
 }
 
@@ -171,7 +172,7 @@
    padding: 8px 12px;
    width: 280px;
    left: 0px;
-   background: #F3EFFB;
+   background-color: #F3EFFB;
    border-radius: 8px;
 
 
@@ -455,6 +456,10 @@
       letter-spacing: 0.01em;
       color: #303030;
    }
+
+   img {
+      border-radius: 8px;
+   }
 }
 
 
@@ -604,6 +609,18 @@
    &__data {
       display: flex;
       justify-content: space-between;
+      align-items: center;
+
+     p:first-of-type {
+        color:white;
+        width: 32px;
+         height: 32px;
+         border-radius: 50%;
+         background-color: #0094F4;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+     }
    }
 
    &__date {
@@ -616,7 +633,4 @@
       opacity: 0.4;
    }
 }
-
-
-
 
