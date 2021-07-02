@@ -25,13 +25,32 @@ collections:
     output: true
 
 defaults:
-  -
-    scope:
+  - scope:
       path: ""
       type: "pages"
     values:
       layout: page_docs
       sidebar: main_sidebar
+  - scope:
+      path: "_pages/cms-manual/intro"
+      type: "pages"
+    values:
+      section: "Introduction"
+  - scope:
+      path: "_pages/cms-manual/content"
+      type: "pages"
+    values:
+      section: "Creating Your Content"
+  - scope:
+      path: "_pages/cms-manual/comments"
+      type: "pages"
+    values:
+      section: "Commenting"
+  - scope:
+      path: "_pages/cms-manual/surveys"
+      type: "pages"
+    values:
+      section: "Creating a Survey"
 
 sidebars:
   main_sidebar
