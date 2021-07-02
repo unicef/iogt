@@ -1,6 +1,6 @@
 ---
 title: Search functionality
-permalink: /intro/search-functionality/
+permalink: /cms-manual/intro/search-functionality/
 ---
 
 To quickly locate articles or find information, use the search functionality.

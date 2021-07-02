@@ -1,6 +1,6 @@
 ---
 title: Navigating the CMS
-permalink: /intro/navigating-wagtail/
+permalink: /cms-manual/intro/navigating-wagtail/
 ---
 
 Once you have logged in, you will be redirected to the CMS home page, also known as the Dashboard.
