@@ -1,6 +1,6 @@
 ---
 title: Navigating the CMS
-permalink: /intro/navigating-molo/
+permalink: /intro/navigating-wagtail/
 ---
 
 Once you have logged in, you will be redirected to the CMS home page, also known as the Dashboard.
@@ -44,3 +44,38 @@ As noted above, the root Pages view contains the different language versions you
 
 {% include figure.html src="/assets/img/docs/pages-root.png" alt="Pages root view" caption="Pages root view. You should not create child pages here." %}
 
+From the Pages view, you can navigate to any immediate child Index. An Index group similar content. Some common Indicies you will be using include:
+- Polls
+- Sections
+- Footer
+- Banners
+
+These Indicies will be covered in detail in sepeate sections of this documentation.
+
+**Here's what you need to know:**
+
+Polls, Footer Page, Sections and Banner are displayed below the breadcrumb (the row of page names beginning with the folder icon). Each section is also a page (in this case the Home page). Clicking the title of the section takes you to the Edit screen for the page.
+
+As you move down through the site, the breadcrumb will display the path you have taken. Clicking on the page titles in the breadcrumb will take you to its Pages view. In the image below, the breadcrumbs are 'Kenya Internet of Good Things (French)' > Sections > COVID-19 > Sur la plage'. Notice that this Section does not contain any further sub-Section; all of the content here are Articles. Also notice at the top of the screen, you can see the breadcrumbs (trail of pages) navigated to reach this Section view.
+
+{% include figure.html src="/assets/img/docs/pages-breadcrumb.png" alt="Pages breadcrumb and Section view" caption="Pages breadcrumb and Section view. In this example,  we have naviagated through 'Kenya Internet of Good Things (French)' > Sections > COVID-19 > Sur la plage, where we now are looking at the Article content within the 'Sur la plage' section." %}
+
+Just below the title of the Section, there are several toolbar buttons, each with a different function that will be explained briefly here, and in more depth in separate sections of this documentation:
+
+- Edit: Edit properties of the parent Section (in the image above, the "Sur la plage" section)
+- View Live: View the production version of the site, as a user would see
+- Add child page: Adding a new child page from one of six different types:
+    - Article
+    - Home page
+    - Poll
+    - Quiz
+    - Section
+    - Survey
+- More
+    - Move: Change the parent page of the currently selected Section (example: Sur la plage)
+    - Copy: Duplicate the current Section
+    - Delete: Complete remove the current section and all of its subpages
+    - Unpublish: Disallow users from accessing this Section from the live site, optionally disallowing access to subpages. _Note: if access to subpages is **not** removed, they will become_ orphaned _meaning that they can be accessed by users, but only through direct URL._
+    - History: View a log of the actions taken on this Section
+
+Hovering over the right edge of a child page from this view reveals a plus button. Clicking on this plus button allows you to add a child page to that subpage (not the Section currently viewed, which in the example above is "Sur la plage").
