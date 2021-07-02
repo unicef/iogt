@@ -1,5 +1,5 @@
 ---
-title: Search functionality
+title: Search Functionality
 permalink: /cms-manual/intro/search-functionality/
 ---
 

@@ -71,7 +71,7 @@ body {
 
 .btn-toggle {
     &:hover {
-        background: $teal-100;
+        background: $teal-200 !important;
     }
 
     &::before {
@@ -89,7 +89,7 @@ body {
     text-decoration: none;
 
     &:hover {
-        background: $teal-100;
+        background: $teal-200 !important;
     }
 }
 
