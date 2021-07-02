@@ -30,15 +30,15 @@
             "title": "Creating Your Content",
             "folderitems": [
                 {
-                    "title": "Tips for content creation",
+                    "title": "Tips for Content Creation",
                     "url": "/cms-manual/content/tips/"
                 },
                 {
-                    "title": "Call to Action!",
+                    "title": "Call to Action",
                     "url": "/cms-manual/content/call-to-action/"
                 },
                 {
-                    "title": "Ease the user journey",
+                    "title": "Ease the User Journey",
                     "url": "/cms-manual/content/user-journey/"
                 },
                 {
@@ -46,7 +46,7 @@
                     "url": "/cms-manual/content/sections/"
                 },
                 {
-                    "title": "Changing Section color",
+                    "title": "Changing Section Colors",
                     "url": "/cms-manual/content/section-colors/"
                 },
                 {
@@ -54,7 +54,7 @@
                     "url": "/cms-manual/content/home-banner/"
                 },
                 {
-                    "title": "Creating a footer Page",
+                    "title": "Creating a Footer Page",
                     "url": "/cms-manual/content/footer/"
                 },
                 {
@@ -62,11 +62,11 @@
                     "url": "/cms-manual/content/polls/"
                 },
                 {
-                    "title": "Creating Article pages",
+                    "title": "Creating Article Pages",
                     "url": "/cms-manual/content/articles/"
                 },
                 {
-                    "title": "Editing existing pages",
+                    "title": "Editing Existing Pages",
                     "url": "/cms-manual/content/editing/"
                 },
                 {
@@ -74,7 +74,7 @@
                     "url": "/cms-manual/content/promote/"
                 },
                 {
-                    "title": "Automatic content rotation",
+                    "title": "Automatic Content Rotation",
                     "url": "/cms-manual/content/auto-rotate/"
                 },
                 {
@@ -82,15 +82,15 @@
                     "url": "/cms-manual/content/settings/"
                 },
                 {
-                    "title": "Uploading and adding images",
+                    "title": "Uploading and Adding Images",
                     "url": "/cms-manual/content/images/"
                 },
                 {
-                    "title": "Adding languages",
+                    "title": "Adding Languages",
                     "url": "/cms-manual/content/languages/"
                 },
                 {
-                    "title": "Translating content",
+                    "title": "Translating Content",
                     "url": "/cms-manual/content/translate/"
                 }
             ]
@@ -99,11 +99,11 @@
             "title": "Commenting",
             "folderitems": [
                 {
-                    "title": "Activating comments",
+                    "title": "Activating Comments",
                     "url": "/cms-manual/comments/activating/"
                 },
                 {
-                    "title": "Replying to comments",
+                    "title": "Replying to Comments",
                     "url": "/cms-manual/comments/replying/"
                 },
                 {
@@ -111,7 +111,7 @@
                     "url": "/cms-manual/comments/deleting/"
                 },
                 {
-                    "title": "Canned response",
+                    "title": "Canned Responses",
                     "url": "/cms-manual/comments/canned/"
                 },
                 {
@@ -119,15 +119,15 @@
                     "url": "/cms-manual/comments/reporting/"
                 },
                 {
-                    "title": "Moderation best practices",
+                    "title": "Moderation Best Practices",
                     "url": "/cms-manual/comments/moderation-tips/"
                 },
                 {
-                    "title": "How to reply to messages, comments or user posts",
+                    "title": "Replying to Messages, Comments, and User Posts",
                     "url": "/cms-manual/comments/replying-messages-comments-posts/"
                 },
                 {
-                    "title": "Handling trolls/vandalism on a Fan page",
+                    "title": "Trolls and Vandalism",
                     "url": "/cms-manual/comments/trolls/"
                 }
             ]
@@ -136,27 +136,27 @@
             "title": "Creating a Survey",
             "folderitems": [
                 {
-                    "title": "On the homepage",
+                    "title": "On the Homepage",
                     "url": "/cms-manual/surveys/homepage-surveys/"
                 },
                 {
-                    "title": "Create a survey in a particular content channel",
+                    "title": "Creating Surveys",
                     "url": "/cms-manual/surveys/creating/"
                 },
                 {
-                    "title": "Allowing anonymous submissions to your surveys",
+                    "title": "Anonymous Submissions",
                     "url": "/cms-manual/surveys/anon-submissions/"
                 },
                 {
-                    "title": "Different types of questions",
+                    "title": "Question Types",
                     "url": "/cms-manual/surveys/question-types/"
                 },
                 {
-                    "title": "Make survey appear in site footer",
+                    "title": "Surveys in Site Footer",
                     "url": "/cms-manual/surveys/footer-surveys/"
                 },
                 {
-                    "title": "Accessing survey results",
+                    "title": "Survey Results",
                     "url": "/cms-manual/surveys/accessing-results/"
                 },
                 {
