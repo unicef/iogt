@@ -1,6 +1,6 @@
 ---
 title: Reordering Pages
-permalink: /intro/reordering-pages
+permalink: /cms-manual/intro/reordering-pages
 ---
 
 Please note that when creating content pages, the order of these pages on the site Frontend will follow a chronological listing format. The first article you load will remain at the top of the page, with subsequent articles appearing below it. It's important to note that Molo will show your content items in the reverse order, with the latest article loaded appearing at the top of a list of articles. When loading content, be clear how you want content to appear to your site visitor and check the order on the Frontend URL. 

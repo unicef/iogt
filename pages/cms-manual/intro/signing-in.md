@@ -1,6 +1,6 @@
 ---
 title: Signing into the CMS
-permalink: /intro/signing-in/
+permalink: /cms-manual/intro/signing-in/
 ---
 
 Enter the login details you recieved. If you are unable to log in, please send an email to Chris: <a href="mailto:cbrooks@unicef.org">cbrooks@unicer.org</a>.

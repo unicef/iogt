@@ -1,6 +1,6 @@
 ---
 title: What is Wagtail?
-permalink: /intro/intro-to-wagtail/
+permalink: /cms-manual/intro/intro-to-wagtail/
 ---
 
 The IoGT open-source Content Management System (CMS) is built on Wagtail with supporting functionality on Django.

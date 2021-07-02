@@ -6,23 +6,23 @@
             "folderitems": [
                 {
                     "title": "What is Wagtail?",
-                    "url": "/intro/intro-to-wagtail/"
+                    "url": "/cms-manual/intro/intro-to-wagtail/"
                 },
                 {
                     "title": "Signing into the CMS",
-                    "url": "/intro/signing-in/"
+                    "url": "/cms-manual/intro/signing-in/"
                 },
                 {
                     "title": "Navigating the CMS",
-                    "url": "/intro/navigating-wagtail/"
+                    "url": "/cms-manual/intro/navigating-wagtail/"
                 },
                 {
                     "title": "Search Functionality",
-                    "url": "/intro/search-functionality/"
+                    "url": "/cms-manual/intro/search-functionality/"
                 },
                 {
                     "title": "Reordering Pages",
-                    "url": "/intro/reordering-pages/"
+                    "url": "/cms-manual/intro/reordering-pages/"
                 }
             ]
         },
@@ -31,67 +31,67 @@
             "folderitems": [
                 {
                     "title": "Tips for content creation",
-                    "url": "/content/tips/"
+                    "url": "/cms-manual/content/tips/"
                 },
                 {
                     "title": "Call to Action!",
-                    "url": "/content/call-to-action/"
+                    "url": "/cms-manual/content/call-to-action/"
                 },
                 {
                     "title": "Ease the user journey",
-                    "url": "/content/user-journey/"
+                    "url": "/cms-manual/content/user-journey/"
                 },
                 {
                     "title": "Creating Sections",
-                    "url": "/content/sections/"
+                    "url": "/cms-manual/content/sections/"
                 },
                 {
                     "title": "Changing Section color",
-                    "url": "/content/section-colors/"
+                    "url": "/cms-manual/content/section-colors/"
                 },
                 {
                     "title": "Homepage Banner",
-                    "url": "/content/home-banner/"
+                    "url": "/cms-manual/content/home-banner/"
                 },
                 {
                     "title": "Creating a footer Page",
-                    "url": "/content/footer/"
+                    "url": "/cms-manual/content/footer/"
                 },
                 {
                     "title": "Creating Polls",
-                    "url": "/content/polls/"
+                    "url": "/cms-manual/content/polls/"
                 },
                 {
                     "title": "Creating Article pages",
-                    "url": "/content/articles/"
+                    "url": "/cms-manual/content/articles/"
                 },
                 {
                     "title": "Editing existing pages",
-                    "url": "/content/editing/"
+                    "url": "/cms-manual/content/editing/"
                 },
                 {
                     "title": "The Promote Tab",
-                    "url": "/content/promote/"
+                    "url": "/cms-manual/content/promote/"
                 },
                 {
                     "title": "Automatic content rotation",
-                    "url": "content/auto-rotate/"
+                    "url": "/cms-manual/content/auto-rotate/"
                 },
                 {
                     "title": "Recommended Settings",
-                    "url": "/content/settings/"
+                    "url": "/cms-manual/content/settings/"
                 },
                 {
                     "title": "Uploading and adding images",
-                    "url": "/content/images/"
+                    "url": "/cms-manual/content/images/"
                 },
                 {
                     "title": "Adding languages",
-                    "url": "/content/languages/"
+                    "url": "/cms-manual/content/languages/"
                 },
                 {
                     "title": "Translating content",
-                    "url": "/content/translate/"
+                    "url": "/cms-manual/content/translate/"
                 }
             ]
         },
@@ -100,35 +100,35 @@
             "folderitems": [
                 {
                     "title": "Activating comments",
-                    "url": "/comments/activating/"
+                    "url": "/cms-manual/comments/activating/"
                 },
                 {
                     "title": "Replying to comments",
-                    "url": "/comments/replying/"
+                    "url": "/cms-manual/comments/replying/"
                 },
                 {
                     "title": "Deleting Comments",
-                    "url": "/comments/deleting/"
+                    "url": "/cms-manual/comments/deleting/"
                 },
                 {
                     "title": "Canned response",
-                    "url": "/comments/canned/"
+                    "url": "/cms-manual/comments/canned/"
                 },
                 {
                     "title": "Reported Comments",
-                    "url": "/comments/reporting/"
+                    "url": "/cms-manual/comments/reporting/"
                 },
                 {
                     "title": "Moderation best practices",
-                    "url": "/comments/moderation-tips/"
+                    "url": "/cms-manual/comments/moderation-tips/"
                 },
                 {
                     "title": "How to reply to messages, comments or user posts",
-                    "url": "/comments/replying-messages-comments-posts/"
+                    "url": "/cms-manual/comments/replying-messages-comments-posts/"
                 },
                 {
                     "title": "Handling trolls/vandalism on a Fan page",
-                    "url": "/comments/trolls/"
+                    "url": "/cms-manual/comments/trolls/"
                 }
             ]
         },
@@ -137,31 +137,31 @@
             "folderitems": [
                 {
                     "title": "On the homepage",
-                    "url": "/surveys/homepage-surveys/"
+                    "url": "/cms-manual/surveys/homepage-surveys/"
                 },
                 {
                     "title": "Create a survey in a particular content channel",
-                    "url": "/surveys/creating/"
+                    "url": "/cms-manual/surveys/creating/"
                 },
                 {
                     "title": "Allowing anonymous submissions to your surveys",
-                    "url": "/surveys/anon-submissions/"
+                    "url": "/cms-manual/surveys/anon-submissions/"
                 },
                 {
                     "title": "Different types of questions",
-                    "url": "/surveys/question-types/"
+                    "url": "/cms-manual/surveys/question-types/"
                 },
                 {
                     "title": "Make survey appear in site footer",
-                    "url": "/surveys/footer-surveys/"
+                    "url": "/cms-manual/surveys/footer-surveys/"
                 },
                 {
                     "title": "Accessing survey results",
-                    "url": "/surveys/accessing-results/"
+                    "url": "/cms-manual/surveys/accessing-results/"
                 },
                 {
                     "title": "Need More",
-                    "url": "/surveys/need-more/"
+                    "url": "/cms-manual/surveys/need-more/"
                 }
             ]
         }
