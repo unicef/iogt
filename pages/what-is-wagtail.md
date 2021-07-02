@@ -1,14 +1,14 @@
 ---
-title: What is Molo?
-permalink: /intro/intro-to-molo/
+title: What is Wagtail?
+permalink: /intro/intro-to-wagtail/
 ---
 
-The IoGT open-source Content Management System (CMS) is built on Molo with supporting functionality on Django.
+The IoGT open-source Content Management System (CMS) is built on Wagtail with supporting functionality on Django.
 
 A CMS is an application that allows you to publish, edit, modify, organise, delete and maintain the content on your site. It allows both developers and editors to manage content.
 
 This CMS Manual will explain how to:
-- navigate the main user interface of Molo;
+- navigate the main user interface of Wagtail;
 - add multi-languages;
 - create different kinds of pages in different languages;
 - modify, save, publish and unpublish pages;

@@ -5,8 +5,8 @@
             "title": "Introduction",
             "folderitems": [
                 {
-                    "title": "What is Molo?",
-                    "url": "/intro/intro-to-molo/"
+                    "title": "What is Wagtail?",
+                    "url": "/intro/intro-to-wagtail/"
                 },
                 {
                     "title": "Signing into the CMS",
@@ -14,7 +14,7 @@
                 },
                 {
                     "title": "Navigating the CMS",
-                    "url": "/intro/navigating-molo/"
+                    "url": "/intro/navigating-wagtail/"
                 },
                 {
                     "title": "Search Functionality",
