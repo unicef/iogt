@@ -38,3 +38,10 @@ sidebars:
 
 exclude:
   - .idea/
+  - .git/
+  - .vscode/
+  - .gitignore
+  - .prettierrc
+  - CNAME
+  - Gemfile
+  - Gemfile.lock
