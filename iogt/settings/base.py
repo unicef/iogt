@@ -12,9 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
-from django.utils.translation import gettext_lazy as _
-
 import django.conf.locale
+from django.utils.translation import gettext_lazy as _
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -209,7 +208,8 @@ ACCOUNT_ADAPTER = 'iogt_users.adapters.AccountAdapter'
 
 WAGTAIL_USER_EDIT_FORM = 'iogt_users.forms.WagtailAdminUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'iogt_users.forms.WagtailAdminUserCreateForm'
-WAGTAIL_USER_CUSTOM_FIELDS = ['first_name', 'last_name', 'email', 'terms_accepted']
+WAGTAIL_USER_CUSTOM_FIELDS = ['first_name', 'last_name', 'email',
+                              'terms_accepted']
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
@@ -241,8 +241,6 @@ COMMENTS_XTD_CONTACT_EMAIL = "helpdesk@example.com"
 COMMENTS_XTD_CONFIRM_EMAIL = False
 
 COMMENTS_XTD_FORM_CLASS = 'comments.forms.CommentForm'
-
-
 
 COMMENTS_XTD_APP_MODEL_OPTIONS = {
     'default': {
@@ -353,10 +351,8 @@ WAGTAILTRANSFER_SOURCES = {
     'iogt_global': {
         'BASE_URL': 'http://iogt.org',
         'SECRET_KEY': 'fake_secret_key_2',
-    },}
+    }, }
 
 WAGTAILTRANSFER_SECRET_KEY = 'fake_secret_key'
 
 WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME = 'iogt_flat_menu_items'
-
-from .profanity_settings import *

@@ -1,21 +1,69 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
-{% load i18n %}
+{% load static wagtailcore_tags i18n %}
+
+{% block title %}{% trans page.title %}{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/survey.css' %}">
+{% endblock %}
 
 {% block content %}
-    <h1>{{ page.title }}</h1>
-    {{ form.non_field_errors }}
-    <div>
-        <p>{{ page.description }}</p>
-        <hr>
-        <form action="{% pageurl page %}{% if self.multi_step or self.has_page_breaks %}?p={{ fields_step.number|add:"1" }}{% endif %}" method="POST">
-            {% csrf_token %}
-            <div>
-                {{ form.as_p }}
-            </div>
-            <div>
-                <input type="submit" value="{% trans page.submit_button_text %}"/>
-            </div>
-        </form>
+    <div class="survey-page">
+        <div class="container btn-back-container">
+            <a href="#" class="btn-back">
+                <figure class="btn-back__icon">
+                    <svg width="8" height="14" viewBox="0 0 8 14" fill="none"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 13L1 7.0005L7 1" stroke="#303030"
+                              stroke-width="1.5"
+                              stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </figure>
+                <span class="btn-back__title">{% trans "BACK" %}</span>
+            </a>
+        </div>
+        <div class="container">
+            <h1 class="title survey-page__title">{% trans page.title %}</h1>
+            {% if page.description %}
+                <p>{% trans page.description %}</p>{% endif %}
+            <form action="{% pageurl page %}
+{% if self.multi_step or self.has_page_breaks %}?p={{ fields_step.number|add:"1" }}
+{% endif %}" method="POST" class="survey-page__content">
+                {% csrf_token %}
+                <div class="survey-page__content">
+                    {% for field in form %}
+                        <div class="quest-item">
+                            <div class="quest-item__header">
+                                <p class="quest-item__number">{{ field.index }}
+                                    of 7 questions</p>
+                                <p class="quest-item__step-desc">
+                                    <span>Select one</span>
+                                </p>
+                            </div>
+                            <div class="quest-item__desc">
+                                <p>{{ field.type }}</p>
+                            </div>
+                            <div class="quest-item__content">
+                                {{ field.blocks }}
+                                <label class="cust-check quest-item__input">
+                                    <input type="radio"
+                                           name="learnt_tips"
+                                           value="All of this information is new to me">
+                                    <span class="cust-check__title">All of this information is new to me</span>
+                                </label>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="survey-page__btns">
+                    <button type="submit"
+                            class="cust-btn cust-btn--dark survey-page__btn">
+                        <span>{% trans page.submit_button_text %}</span>
+                    </button>
+                    <a href="/" type="submit"
+                       class="cust-btn cust-btn--clear survey-page__btn"><span>{% trans "Go to homepage" %}</span></a>
+                </div>
+            </form>
+        </div>
     </div>
 {% endblock content %}
