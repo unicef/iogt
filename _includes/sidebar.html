@@ -2,7 +2,7 @@
 
 <div class="flex-shrink-0 p-3 bg-white">
     <ul class="list-unstyled ps-0">
-        <li class="mb-1">{{ sidebar.title }}</li>
+        <li class="mb-1 fw-bold fs-5">{{ sidebar.title }}</li>
         {% for folder in sidebar.folders %}
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#{{ folder.title | slugify }}-collapse"> {{ folder.title }}</button>
