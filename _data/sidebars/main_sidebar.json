@@ -9,7 +9,11 @@
                     "url": "/intro/intro-to-molo/"
                 },
                 {
-                    "title": "Navigating Molo",
+                    "title": "Signing into the CMS",
+                    "url": "/intro/signing-in/"
+                },
+                {
+                    "title": "Navigating the CMS",
                     "url": "/intro/navigating-molo/"
                 },
                 {

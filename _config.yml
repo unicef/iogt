@@ -8,12 +8,21 @@ description: >-
 
 author: "UNICEF IoGT"
 
+markdown: kramdown
+
+kramdown:
+  input: GFM
+
 sass:
   sass_dir: _sass
 
 plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
+
+collections:
+  pages:
+    output: true
 
 defaults:
   -
