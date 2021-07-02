@@ -7,6 +7,8 @@
     <div class="footer__nav-bar">
         {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
     </div>
+    {% top_level_sections %}
+    {% footer %}
     <div class="container">
         <form class="footer__search" action="{% url "search" %}">
             <label class="cust-input cust-input--icon profile-form__input">

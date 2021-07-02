@@ -1,6 +1,6 @@
 from django import template
 
-from home.models import FooterPage
+from home.models import FooterPage, SectionIndexPage
 
 register = template.Library()
 
@@ -9,6 +9,14 @@ register = template.Library()
 def footer(context):
     return {
         'footer_pages': FooterPage.objects.live(),
+        'request': context['request'],
+    }
+
+
+@register.inclusion_tag('home/tags/top_level_sections.html', takes_context=True)
+def top_level_sections(context):
+    return {
+        'top_level_sections': SectionIndexPage.objects.first().get_children(),
         'request': context['request'],
     }
 
