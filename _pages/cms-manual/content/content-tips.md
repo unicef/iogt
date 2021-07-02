@@ -1,5 +1,5 @@
 ---
-title: Tips for Content Creations
+title: Tips for Content Creation
 permalink: /cms-manual/content/tips/
 ---
 

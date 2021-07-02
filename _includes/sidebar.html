@@ -1,17 +1,17 @@
 {% assign sidebar = site.data.sidebars[page.sidebar] %}
 
-<div class="flex-shrink-0 p-3 bg-white">
+<div class="flex-shrink-0 p-3 bg-light">
     <ul class="list-unstyled ps-0">
         <li class="mb-1 fw-bold fs-5">{{ sidebar.title }}</li>
         {% for folder in sidebar.folders %}
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#{{ folder.title | slugify }}-collapse"> {{ folder.title }}</button>
         </li>
-        <div class="collapse" id="{{ folder.title | slugify }}-collapse">
+        <div class="collapse {% if page.section == folder.title %} show {% endif %}" id="{{ folder.title | slugify }}-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                 {% for item in folder.folderitems %}
                 <li>
-                    <a href="{{ item.url | relative_url }}" class="link-dark rounded">{{ item.title }}</a>
+                    <a href="{{ item.url | relative_url }}" class="link-dark rounded {% if page.title == item.title %} highlighted {% endif %}">{{ item.title }}</a>
                 </li>
                 {% endfor %}
             </ul>
