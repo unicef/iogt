@@ -6,23 +6,22 @@
 {% for item in comments reversed %}
     <div class="individual-comment">
         <a name="c{{ item.comment.id }}"></a>
-        <div >
-            <div >
-                <h6>
-                    <div >
-                       <div class='individual-comment__data'>
-                         <p>{{item.comment.user.username.0|capfirst}}</p>
-                         <p> {{ item.comment.user.username }}</p>
-                         <p class='individual-comment__date'> {{ item.comment.submit_date|naturaltime }} </p>
-                       </div>
-                        {% if item.comment.url and not item.comment.is_removed %}
-                            <a href="{{ item.comment.url }}" target="_new">
-                        {% endif %}
-                       
-                        {% if item.comment.url %}</a>{% endif %}
-                        {% if item.comment.user and item.comment.user|has_permission:"django_comments.can_moderate" %}
-                            &nbsp;<span >{% trans "moderator" %}</span>{% endif %}&nbsp;&nbsp;
-                        <span>
+        <div>
+            <div>
+                <div class='individual-comment__data'>
+                <span>
+                    <p>{{item.comment.user.username.0|capfirst}}</p>
+                    <p>{{ item.comment.user.username }}</p>
+                </span>
+                    <p class='individual-comment__date'>{{ item.comment.submit_date|naturaltime }}</p>
+                </div>
+                {% if item.comment.url and not item.comment.is_removed %}
+                    <a href="{{ item.comment.url }}" target="_new">
+                {% endif %}
+                {% if item.comment.url %}</a>{% endif %}
+                {% if item.comment.user and item.comment.user|has_permission:"django_comments.can_moderate" %}
+                    &nbsp;<span >{% trans "moderator" %}</span>{% endif %}&nbsp;&nbsp;
+                <span>
           {% if not item.comment.is_removed %}
               {% if perms.comments.can_moderate %}
                   {% if item.flagged_count %}
@@ -36,7 +35,7 @@
                   <i title="{% trans 'comment flagged' %}"></i>
               {% elif allow_flagging %}
                   <a href="{% url 'comments-flag' item.comment.pk %}">
-                <i class="fas fa-flag" title="{% trans 'flag comment' %}"></i>
+                <i class="fas fa-flag" title="{% trans 'flag comment' %}">hey</i>
               </a>
               {% endif %}
               {% if perms.comments.can_moderate %}
@@ -45,8 +44,6 @@
               {% endif %}
           {% endif %}
         </span>
-                    </div>
-                </h6>
                 {% if item.comment.is_removed %}
                     <p class="text-muted{% if not allow_feedback and not item.comment.allow_thread %} pb-3{% endif %}">
                         <em>{% trans "This comment has been removed." %}</em></p>
@@ -54,13 +51,13 @@
                     <div class="content{% if not allow_feedback and not item.comment.allow_thread %} pb-3{% endif %}">
                         {% include "includes/django_comments_xtd/comment_content.html" with content=item.comment.comment %}
                     </div>
-                    {% comment %} {% if allow_feedback %}
+                  {% if allow_feedback %}
                         {% include "django_comments_xtd/user_feedback.html" %}
-                    {% endif %} {% endcomment %}
-                    {% comment %} {% if item.comment.allow_thread and not item.comment.is_removed and item.comment.content_object.allow_comments %}
+                    {% endif %} 
+                  {% if item.comment.allow_thread and not item.comment.is_removed and item.comment.content_object.allow_comments %}
                         {% if allow_feedback %}&nbsp;&nbsp;<span class="text-muted">&bull;</span>&nbsp;&nbsp;{% endif %}
                         <a class="small mutedlink" href="{{ item.comment.get_reply_url }}">{% trans "Reply" %}</a>
-                    {% endif %} {% endcomment %}
+                    {% endif %} 
                 {% endif %}
             </div>
             <div >

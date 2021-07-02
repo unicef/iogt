@@ -11,10 +11,11 @@
       justify-content: space-around;
   padding-bottom: 22.55px;
   padding-top: 24px;
-  height: 196px;
+  min-height: 196px;
 }
 
 .section-page-details__back {
+  padding: 10px 0;
   color: white;
   text-decoration: none;
   width: 67px;
@@ -80,6 +81,7 @@
   color: #303030;
   padding: 8px 12px;
   margin: 0% 5%;
+  padding-bottom: 22.5px;
   top: 72.78%;
   bottom: 7.1%;
   background: #FFFFFF;
@@ -723,31 +725,32 @@
   background: #F7F7F9;
 }
 
-.individual-comment p {
-  margin: 0;
+.individual-comment span {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.individual-comment span p {
   font-family: Poppins;
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
   line-height: 24px;
   color: #4B4B4B;
-}
-
-.individual-comment__data {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  margin: 0;
 }
 
-.individual-comment__data p:first-of-type {
+.individual-comment span p:first-of-type {
   color: white;
   width: 32px;
+  margin-right: 8px;
   height: 32px;
   border-radius: 50%;
   background-color: #0094F4;
@@ -757,6 +760,18 @@
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.individual-comment__data {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -878,5 +893,27 @@
   left: 200px;
   top: 13px;
   border-radius: 0px;
+}
+
+.comment-holder {
+  border: 1px solid #F7F7F9;
+}
+
+.form-control {
+  background-color: #FFFFFF;
+  width: 280px;
+  min-height: 160px;
+  border: 1px solid #EFEFEF;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.01em;
+  color: #9A9A9A;
 }
 /*# sourceMappingURL=sectionStyles.css.map */
