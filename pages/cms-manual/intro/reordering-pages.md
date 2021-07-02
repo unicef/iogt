@@ -9,9 +9,13 @@ Wagtail allows you to reorder the appearance of sections, subsections or article
 
 **Here's what you need to know about Handles:**
 
-# #########ADD IMAGES#########
+- First, enable the Handles by clicking on the "Sort" icon. It is the first column in the child page list.
 
-1. First, enable the Handles by clicking on the icon to the far left of the list of Child pages.
-2. Once clicked, the Handles should now be visible as six dots as on a dice.
-3. Reorder the pages by dragging and dropping the Handles up or down into the desired position.
-4. The new order will be automatically saved each time you drag and drop an item.
+{% include figure.html src="/assets/img/docs/reorder-pages.png" alt="Sort icon" caption="Click on the Sort icon to show the Handles" %}
+
+- Once clicked, the Handles should now be visible as six dots (as on a die) to the left of the child page name.
+
+{% include figure.html src="/assets/img/docs/pages-handles.png" alt="Handles" caption="The Handles will appear to the left of the child page name." %}
+
+- Reorder the pages by dragging and dropping the Handles up or down into the desired position.
+- The new order will be automatically saved each time you drag and drop an item.
