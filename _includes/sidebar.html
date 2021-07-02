@@ -5,7 +5,7 @@
         <li class="mb-1 fw-bold fs-5">{{ sidebar.title }}</li>
         {% for folder in sidebar.folders %}
         <li class="mb-1">
-            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#{{ folder.title | slugify }}-collapse"> {{ folder.title }}</button>
+            <button class="btn btn-toggle align-items-center rounded collapsed {% if page.section == folder.title %} highlighted {% endif %}" data-bs-toggle="collapse" data-bs-target="#{{ folder.title | slugify }}-collapse"> {{ folder.title }}</button>
         </li>
         <div class="collapse {% if page.section == folder.title %} show {% endif %}" id="{{ folder.title | slugify }}-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
