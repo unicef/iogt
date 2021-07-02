@@ -33,7 +33,6 @@
 }
 
 .header__select {
-    margin-right: 46px;
     z-index: 1
 }
 
@@ -117,5 +116,6 @@
 
 .select p {
     color: #303030;
-    font: 600 10px/10px Poppins, sans-serif
+    font: 600 10px/10px Poppins, sans-serif;
+    margin: 0;
 }

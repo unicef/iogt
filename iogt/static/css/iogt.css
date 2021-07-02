@@ -339,9 +339,9 @@ input:checked + .cust-check__title {
     border-bottom-right-radius: 10px;
     height: 100%;
     left: 0;
-    position: absolute;
+    /*position: absolute;*/
     transition: all .45s;
-    width: 100%
+    /*width: 100%*/
 }
 
 .search, .search__btn {
@@ -354,7 +354,6 @@ input:checked + .cust-check__title {
 .search__btn {
     background-color: transparent;
     border: none;
-    border-left: 1px solid #efefef;
     height: 24px;
     margin-left: auto;
     padding: 0 14px;
@@ -779,4 +778,20 @@ input:checked + .cust-check__title {
     margin-top: 2px;
     text-align: center;
     width: 100%
+}
+
+.language-input {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+}
+
+.language-input:checked + .select__selected + .select__options {
+    opacity: 1;
+    visibility: visible
+}
+
+.language-input:checked + .select__selected .select__selected-icon {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg)
 }

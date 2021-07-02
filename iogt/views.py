@@ -35,13 +35,20 @@ class SitemapAPIView(APIView):
         protocol = request.scheme
         site = get_current_site(request)
 
-        home_page_urls = [f'{protocol}://{site}{p.url}' for p in HomePage.objects.live()],
-        section_urls = [f'{protocol}://{site}{p.url}' for p in Section.objects.live()],
-        article_urls = [f'{protocol}://{site}{p.url}' for p in Article.objects.live()],
-        footer_urls = [f'{protocol}://{site}{p.url}' for p in FooterPage.objects.live()],
-        poll_urls = [f'{protocol}://{site}{p.url}' for p in Poll.objects.live()],
-        survey_urls = [f'{protocol}://{site}{p.url}' for p in Survey.objects.live()],
-        quiz_urls = [f'{protocol}://{site}{p.url}' for p in Quiz.objects.live()],
+        home_page_urls = [f'{protocol}://{site}{p.url}' for p in
+                          HomePage.objects.live()],
+        section_urls = [f'{protocol}://{site}{p.url}' for p in
+                        Section.objects.live()],
+        article_urls = [f'{protocol}://{site}{p.url}' for p in
+                        Article.objects.live()],
+        footer_urls = [f'{protocol}://{site}{p.url}' for p in
+                       FooterPage.objects.live()],
+        poll_urls = [f'{protocol}://{site}{p.url}' for p in
+                     Poll.objects.live()],
+        survey_urls = [f'{protocol}://{site}{p.url}' for p in
+                       Survey.objects.live()],
+        quiz_urls = [f'{protocol}://{site}{p.url}' for p in
+                     Quiz.objects.live()],
 
         sitemap = flatten(
             home_page_urls + section_urls + article_urls + footer_urls + poll_urls + survey_urls + quiz_urls)
