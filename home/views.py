@@ -1,7 +1,7 @@
-from django.urls import reverse
-from django.views.generic import TemplateView
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
+from django.views.generic import TemplateView
 
 from .models import ManifestSettings
 
@@ -16,13 +16,13 @@ class TestView(TemplateView):
 
 
 class ServiceWorkerView(TemplateView):
-    template_name = 'sw.js'
-    content_type = 'application/javascript'
-    name = 'sw.js'
+    template_name = "sw.js"
+    content_type = "application/javascript"
+    name = "sw.js"
 
     def get_context_data(self, **kwargs):
         return {
-            'test_url': reverse('test'),
+            "test_url": reverse("test"),
         }
 
 
@@ -39,22 +39,22 @@ def get_manifest(request):
         "lang": manifest.language,
         "icons": [
             {
-                "src": "",
-                "type": f"",
-                "sizes": f"{manifest.icon_96_96.height}x{manifest.icon_96_96.width}"
+                "src": f"{manifest.icon_96_96.file.url}",
+                "type": f"image/{manifest.icon_96_96.title.split('.')[1]}",
+                "sizes": f"{manifest.icon_96_96.height}x{manifest.icon_96_96.width}",
             },
             {
-                "src": "",
-                "type": f"",
-                "sizes": f"{manifest.icon_512_512.height}x{manifest.icon_512_512.width}"
+                "src": f"{manifest.icon_512_512.file.url}",
+                "type": f"image/{manifest.icon_512_512.title.split('.')[1]}",
+                "sizes": f"{manifest.icon_512_512.height}x{manifest.icon_512_512.width}",
             },
             {
-                "src": "",
-                "type": f"",
+                "src": f"{manifest.icon_196_196.file.url}",
+                "type": f"image/{manifest.icon_196_196.title.split('.')[1]}",
                 "sizes": f"{manifest.icon_196_196.height}x{manifest.icon_196_196.width}",
-                "purpose": "any maskable"
-            }
-        ]
+                "purpose": "any maskable",
+            },
+        ],
     }
 
     return JsonResponse(response)
