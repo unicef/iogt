@@ -19,7 +19,7 @@
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="theme-color" content="#493174">
-    <link rel="manifest" href="{% static 'manifest/manifest.webmanifest' %}">
+    <link rel="manifest" href="{% url "manifest" %}">
     <link rel="apple-touch-icon" href="{% static 'icons/unicef-logo.png' %}">
 
         {# Global stylesheets #}
@@ -28,11 +28,6 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}">
         <link rel="stylesheet" type="text/css" href="{% sass_src 'css/sectionStyles.css' %}">
-
-
-
-
-     
 
     {% block extra_css %}
         {# Override this in templates to add extra stylesheets #}
