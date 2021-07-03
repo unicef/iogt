@@ -32,11 +32,11 @@ class XtdCommentAdmin(ModelAdmin):
 
     def status(self, obj):
         if not obj.is_public:
-            button_html = f'<span class ="status-tag" > Deleted </span>'
+            button_html = 'Deleted'
         elif obj.is_removed:
-            button_html = f'<span class ="status-tag" > Hidden </span>'
+            button_html = 'Hidden'
         else:
-            button_html = f'<span class ="status-tag primary"> Public </span>'
+            button_html = 'Public'
         return format_html(button_html)
 
     def get_queryset(self, request):

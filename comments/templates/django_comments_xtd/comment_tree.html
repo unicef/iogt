@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load comments %}
 {% load comments_xtd %}
+{% load humanize %}
 
 {% for item in comments reversed %}
     <div class="individual-comment">
@@ -10,8 +11,9 @@
                 <h6>
                     <div >
                        <div class='individual-comment__data'>
+                         <p>{{item.comment.user.username.0|capfirst}}</p>
                          <p> {{ item.comment.user.username }}</p>
-                         <p class='individual-comment__date'> {{ item.comment.submit_date }} </p>
+                         <p class='individual-comment__date'> {{ item.comment.submit_date|naturaltime }} </p>
                        </div>
                         {% if item.comment.url and not item.comment.is_removed %}
                             <a href="{{ item.comment.url }}" target="_new">

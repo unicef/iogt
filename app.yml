@@ -1,4 +1,4 @@
-runtime: python39
+runtime: python38
 
 env_variables:
   DJANGO_SETTINGS_MODULE: "iogt.settings.gae"
