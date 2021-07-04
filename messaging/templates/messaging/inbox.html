@@ -11,10 +11,6 @@
 <div class="messaging-inbox-container">
     <h2 class="with-actions">
         Inbox
-        <a class="button" href="{% url "messaging:message_create" %}">
-            <i class="fas fa-envelope"></i>
-            New Message
-        </a>
     </h2>
 
     <section class="mailbox">
@@ -24,7 +20,7 @@
                     <div class="participants">{{ thread.users.all|join:", " }}</div>
                     <div class="latest-message">
                         <p class="subject">{{ thread.subject }}</p>
-                        <p class="content">{{ thread.latest_message.content }}</p>
+                        <p class="text">{{ thread.latest_message.text }}</p>
                     </div>
                 </a>
             </div>

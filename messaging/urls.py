@@ -1,21 +1,14 @@
-from django.conf.urls import url
-from django.urls import path
+from django.urls import path, include
 
+from .api.urls import urlpatterns as api_urls
 from . import views
 
 app_name = "messaging"
 
 urlpatterns = [
-    url(r"^inbox/$", views.InboxView.as_view(),
-        name="inbox"),
-    url(r"^create/$", views.MessageCreateView.as_view(),
-        name="message_create"),
-    url(r"^create/(?P<user_id>\d+)/$", views.MessageCreateView.as_view(),
-        name="message_user_create"),
-    url(r"^thread/(?P<pk>\d+)/$", views.ThreadView.as_view(),
-        name="thread_detail"),
-    url(r"^thread/(?P<pk>\d+)/delete/$", views.ThreadDeleteView.as_view(),
-        name="thread_delete"),
-    url(r"^rapidpro_interface/$", views.rapidpro_interface,
-        name="rapidpro_interface"),
+    path('api/', include(api_urls)),
+    path('inbox/', views.InboxView.as_view(), name="inbox"),
+    path('create/', views.MessageCreateView.as_view(), name="message_create"),
+    path('thread/<int:pk>/', views.ThreadView.as_view(), name="thread_view"),
+    path('thread/<int:pk>/delete/', views.ThreadDeleteView.as_view(), name="thread_delete"),
 ]

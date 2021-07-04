@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'rest_framework',
     'sass_processor',
 
     'django.contrib.admin',
@@ -350,11 +351,16 @@ LOCALE_PATHS = [
     os.path.join(BASE_DIR, "locale"),
 ]
 
+# ========= Rapid Pro =================
+RAPIDPRO_BOT_USER_ID = os.getenv('RAPIDPRO_BOT_USER_ID')
+RAPIDPRO_BOT_USER_USERNAME = os.getenv('RAPIDPRO_BOT_USER_USERNAME')
+RAPIDPRO_BOT_USER_PASSWORD = os.getenv('RAPIDPRO_BOT_USER_PASSWORD')
+
 WAGTAILTRANSFER_SOURCES = {
     'iogt_global': {
         'BASE_URL': 'http://iogt.org',
         'SECRET_KEY': 'fake_secret_key_2',
-    },}
+    }, }
 
 WAGTAILTRANSFER_SECRET_KEY = 'fake_secret_key'
 

@@ -28,6 +28,7 @@ from wagtailsvg.models import Svg
 from wagtailsvg.edit_handlers import SvgChooserPanel
 
 
+from messaging.blocks import ChatBotButtonBlock
 from comments.models import CommentableMixin
 from iogt.views import check_user_session
 from questionnaires.models import Survey, Poll, Quiz
@@ -257,6 +258,7 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         ('embedded_survey', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')),
         ('embedded_quiz', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Quiz')),
         ('media', MediaBlock(icon='media')),
+        ('chat_bot', ChatBotButtonBlock()),
     ])
     show_in_menus_default = True
 
