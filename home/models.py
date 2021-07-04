@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.admin.utils import flatten
 from django.contrib.auth import get_user_model
 from django.db import models
@@ -245,7 +246,7 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
     tags = ClusterTaggableManager(through='ArticleTaggedItem', blank=True)
     body = StreamField([
         ('heading', blocks.CharBlock(form_classname="full title")),
-        ('paragraph', blocks.RichTextBlock()),
+        ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
         ('markdown', MarkdownBlock(icon='code')),
         ('image', ImageChooserBlock()),
         ('list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
