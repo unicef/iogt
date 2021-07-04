@@ -11,7 +11,8 @@
     <div class="container header__container">
         <div class="header__left">
             <a href="/" class="logo">
-               {% image settings.home.SiteSettings.logo fill-30x30 %}
+               {% image settings.home.SiteSettings.logo fill-30x30 as logo %}
+              <img src="{{ logo.url }}" />
             </a>
         </div>
         <div class="header__right">

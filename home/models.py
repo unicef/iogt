@@ -23,6 +23,9 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 from wagtailmarkdown.blocks import MarkdownBlock
 from wagtailmenus.models import AbstractFlatMenuItem, BooleanField
+from wagtailsvg.models import Svg
+from wagtailsvg.edit_handlers import SvgChooserPanel
+
 
 from comments.models import CommentableMixin
 from iogt.views import check_user_session
@@ -117,11 +120,11 @@ class Section(Page, PageUtilsMixin):
         null=True
     )
     icon = models.ForeignKey(
-        'wagtailimages.Image',
-        on_delete=models.PROTECT,
+        Svg,
         related_name='+',
-        blank=True,
         null=True,
+        blank=True,
+        on_delete=models.PROTECT,
     )
     background_color = models.CharField(
         max_length=8,
@@ -145,7 +148,7 @@ class Section(Page, PageUtilsMixin):
 
     content_panels = Page.content_panels + [
         ImageChooserPanel('lead_image'),
-        ImageChooserPanel('icon'),
+        SvgChooserPanel('icon'),
         FieldPanel('background_color'),
         FieldPanel('font_color'),
         MultiFieldPanel([
@@ -231,6 +234,13 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         blank=True,
         null=True
     )
+    icon = models.ForeignKey(
+        Svg,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
 
     tags = ClusterTaggableManager(through='ArticleTaggedItem', blank=True)
     body = StreamField([
@@ -267,6 +277,7 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
 
     content_panels = Page.content_panels + [
         ImageChooserPanel('lead_image'),
+        SvgChooserPanel('icon'),
         StreamFieldPanel('body'),
         MultiFieldPanel([
             InlinePanel('recommended_articles',
@@ -584,9 +595,10 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
         related_name="iogt_flat_menu_items",
     )
     icon = models.ForeignKey(
-        'wagtailimages.Image',
-        blank=True,
+        Svg,
+        related_name='+',
         null=True,
+        blank=True,
         on_delete=models.SET_NULL,
     )
 
@@ -603,7 +615,7 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
     )
 
     panels = AbstractFlatMenuItem.panels + [
-        ImageChooserPanel('icon'),
+        SvgChooserPanel('icon'),
         FieldPanel('color'),
         FieldPanel('color_text')
     ]

@@ -3,7 +3,7 @@
     <nav>
         <div class="links">
           {% for section in top_level_sections %}
-            {% image section.specific.icon fill-20x20 %}
+            <img src="{{ section.specific.icon.url }}" />
             <a href="{% pageurl section %}">{% translate section.specific.title %}</a>
           {% endfor %}
         </div>
