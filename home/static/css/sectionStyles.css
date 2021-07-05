@@ -329,6 +329,11 @@
   color: #4B4B4B;
 }
 
+.article-content video, .article-content audio {
+  width: 280px;
+  margin: 10px 0px;
+}
+
 .article-content__chat-btn {
   margin-top: 20px;
   display: -webkit-box;
@@ -497,6 +502,14 @@
 .recommended_reading ul {
   list-style: none;
   padding: 0;
+}
+
+.recommended_reading ul p:first-of-type {
+  font-weight: normal;
+  padding-bottom: 8px;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 12px;
 }
 
 .recommended_reading ul p {

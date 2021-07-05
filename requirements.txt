@@ -15,3 +15,4 @@ django-compressor==2.4.*
 django-sass-processor==1.0.*
 wagtail-transfer~=0.7.0
 whitenoise==5.2.*
+wagtailsvg==0.0.14

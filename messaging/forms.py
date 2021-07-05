@@ -2,7 +2,9 @@ from django import forms
 from django.contrib.auth import get_user_model
 
 from .hooks import hookset
-from .models import Message, ChatbotChannel
+from .models import Message, ChatbotChannel, Thread
+
+User = get_user_model()
 
 
 class UserModelChoiceField(forms.ModelChoiceField):
@@ -29,26 +31,10 @@ class ChatbotChannelModelMultipleChoiceField(forms.ModelMultipleChoiceField):
         return obj.display_name
 
 
-class NewMessageForm(forms.ModelForm):
-
+class NewMessageForm(forms.Form):
     subject = forms.CharField()
-    chatbot = ChatbotChannelModelChoiceField(queryset=ChatbotChannel.objects.none())
-    content = forms.CharField(widget=forms.Textarea)
-
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop("user")
-        super().__init__(*args, **kwargs)
-        self.fields["chatbot"].queryset = ChatbotChannel.objects.all()
-
-    def save(self, commit=True):
-        data = self.cleaned_data
-        return Message.new_message(
-            self.user, [], data["chatbot"], data["subject"], data["content"]
-        )
-
-    class Meta:
-        model = Message
-        fields = ["chatbot", "subject", "content"]
+    chatbot = ChatbotChannelModelChoiceField(queryset=ChatbotChannel.objects.all())
+    text = forms.CharField(widget=forms.Textarea)
 
 
 class NewMessageFormMultiple(forms.ModelForm):
@@ -77,17 +63,7 @@ class NewMessageFormMultiple(forms.ModelForm):
         fields = ["to_user", "chatbot", "subject", "content"]
 
 
-class MessageReplyForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        self.thread = kwargs.pop("thread")
-        self.user = kwargs.pop("user")
-        super().__init__(*args, **kwargs)
-
-    def save(self, commit=True):
-        return Message.new_reply_to_rapidpro(
-            self.thread, self.user, self.cleaned_data["content"]
-        )
-
-    class Meta:
-        model = Message
-        fields = ["content"]
+class MessageReplyForm(forms.Form):
+    text = forms.CharField(widget=forms.Textarea)
+    thread = forms.ModelChoiceField(queryset=Thread.objects.all(), widget=forms.HiddenInput)
+    user = forms.ModelChoiceField(queryset=User.objects.all(), widget=forms.HiddenInput)

@@ -291,6 +291,11 @@
       color: #4B4B4B;
    }
 
+   video, audio {
+   width:280px;
+   margin:10px 0px;
+}
+
    &__chat-btn {
       margin-top: 20px;
       display: flex;
@@ -434,6 +439,14 @@
    ul {
       list-style: none;
       padding:0;
+      
+      p:first-of-type {
+         font-weight: normal;
+         padding-bottom: 8px;
+         font-weight: 500;
+         font-size: 12px;
+         line-height: 12px;
+      }
       p {
          margin:0;
       }
