@@ -35,11 +35,6 @@ def render_textarea(field):
     return {'field': field}
 
 
-@register.inclusion_tag('questionnaires/tags/text_field.html')
-def render_text_field(field):
-    return {'field': field}
-
-
 @register.filter
 def get_item(dictionary, key):
     return dictionary.get(key)
