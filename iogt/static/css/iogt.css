@@ -104,10 +104,11 @@ input:focus, input:focus-visible {
 
 .cust-input {
     display: block;
-    position: relative;
+    overflow: hidden;
+    position: relative
 }
 
-.cust-input input {
+.cust-input input, .cust-input textarea {
     background-color: #f7f7f9;
     border: 1px solid #efefef;
     border-radius: 8px;
@@ -115,12 +116,54 @@ input:focus, input:focus-visible {
     font-weight: 500;
     line-height: 14px;
     padding: 8px 12px;
+    resize: none;
     width: 100%
 }
 
-.cust-input input:focus {
+.cust-input input::-webkit-input-placeholder, .cust-input textarea::-webkit-input-placeholder {
+    color: #9a9a9a;
+    font-family: Poppins, sans-serif;
+    font-weight: 500
+}
+
+.cust-input input:-ms-input-placeholder, .cust-input textarea:-ms-input-placeholder {
+    color: #9a9a9a;
+    font-family: Poppins, sans-serif;
+    font-weight: 500
+}
+
+.cust-input input::placeholder, .cust-input textarea::placeholder {
+    color: #9a9a9a;
+    font-family: Poppins, sans-serif;
+    font-weight: 500
+}
+
+.cust-input input:focus, .cust-input textarea:focus {
     background-color: transparent;
     border-color: #303030
+}
+
+.cust-input textarea {
+    display: block;
+    height: 100px;
+    padding-bottom: 20px
+}
+
+.cust-input__length-text {
+    bottom: 8px;
+    color: #d8d8d8;
+    font-size: 8px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    line-height: 12px;
+    position: absolute;
+    right: 12px;
+    text-align: right;
+    text-transform: uppercase
+}
+
+textarea:focus ~ .cust-input__length-text {
+    opacity: 0
 }
 
 .cust-input__error {
@@ -132,8 +175,12 @@ input:focus, input:focus-visible {
     text-align: right
 }
 
-.cust-input.error input {
+.cust-input.error input, .cust-input.error textarea {
     border-color: #fb3d24
+}
+
+.cust-input.error .cust-input__error {
+    display: block
 }
 
 .cust-input--icon input {

@@ -58,6 +58,8 @@
                                 {% render_radios field %}
                             {% elif field.field.widget.input_type == "checkbox" %}
                                 {% render_checkboxes field %}
+                            {% elif "textar" in field.field.widget.template_name %}
+                                {% render_textarea field %}
                             {% elif field.field.widget.input_type == "text" %}
                                 {% render_text_field field %}
                             {% endif %}
