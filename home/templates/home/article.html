@@ -56,11 +56,6 @@
             <div >
                 {% render_xtdcomment_tree for page allow_flagging allow_feedback show_feedback %}
             </div>
-            <div class='comments__input-holder'>
-                <div class="comments__load">
-                <button >View more comments</button>
-            </div>
-            </div>
         {% endif %}
     {% endif %}
  </section>
@@ -72,7 +67,6 @@
             <li>
             <a href="{% pageurl recommended_article_model.article %}">
             <div>
-              <p style="color:{{recommended_article_model.article.parent_section.background_color}}"> {{recommended_article_model.article.parent_section}} </p>
               <p class='title'> {{ recommended_article_model.article.title }}</p>
             </div>
                {% image recommended_article_model.article.lead_image fill-100x110 %}

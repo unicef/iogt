@@ -303,18 +303,12 @@
   color: black;
 }
 
-.main-image-phone {
-  min-width: 320px;
-}
-
 .article-content {
-  width: 320px;
   padding: 0px 22px;
   font-family: Poppins;
 }
 
 .article-content h1 {
-  width: 295px;
   font-style: normal;
   font-weight: bold;
   font-size: 24px;
@@ -484,7 +478,6 @@
 }
 
 .recommended_reading {
-  width: 320px;
   padding-top: 40px;
   padding: 0px 20px;
   font-family: Poppins;
@@ -504,16 +497,14 @@
   padding: 0;
 }
 
-.recommended_reading ul p:first-of-type {
-  font-weight: normal;
-  padding-bottom: 8px;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 12px;
-}
-
 .recommended_reading ul p {
-  margin: 0;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 0.01em;
+  color: #303030;
 }
 
 .recommended_reading a {
@@ -544,7 +535,6 @@
 }
 
 .comments {
-  width: 320px;
   padding-top: 40px;
 }
 
@@ -608,9 +598,11 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  width: 100vw;
+  padding-left: 20px;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
   background-color: #F7F7F9;
 }
 
@@ -718,7 +710,6 @@
   margin-top: 1px;
   padding: 20px;
   position: static;
-  width: 320px;
   left: 0px;
   background: #F7F7F9;
 }
@@ -802,8 +793,11 @@
   display: flex;
   padding-bottom: 22.55px;
   padding-top: 24px;
-  height: 196px;
+  height: 40vh;
+  background-size: cover;
+  /* <------ */
   background-repeat: no-repeat;
+  background-position: center center;
 }
 
 .article-page-details__back {
@@ -905,11 +899,13 @@
 
 .comment-holder {
   border: 1px solid #F7F7F9;
+  width: 100vw;
+  background-color: #F7F7F9;
 }
 
 .form-control {
   background-color: #FFFFFF;
-  width: 280px;
+  width: 100%;
   min-height: 160px;
   border: 1px solid #EFEFEF;
   -webkit-box-sizing: border-box;
