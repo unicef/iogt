@@ -12,8 +12,7 @@
 {% block allauth_content %}
     {% if user.username %}
         <h1 class="title profile__title"> Hey, {{ user.username }}
-            <span
-                    class="profile__icon">{{ user.username | first | upper }}</span>
+            <span class="profile__icon">{{ user.username | first | upper }}</span>
         </h1>
     {% endif %}
     <div class="profile__btns">
