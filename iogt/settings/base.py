@@ -12,8 +12,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
-import django.conf.locale
 from django.utils.translation import gettext_lazy as _
+
+import django.conf.locale
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -242,6 +243,8 @@ COMMENTS_XTD_CONTACT_EMAIL = "helpdesk@example.com"
 COMMENTS_XTD_CONFIRM_EMAIL = False
 
 COMMENTS_XTD_FORM_CLASS = 'comments.forms.CommentForm'
+
+
 
 COMMENTS_XTD_APP_MODEL_OPTIONS = {
     'default': {
