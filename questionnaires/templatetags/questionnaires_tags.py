@@ -3,9 +3,9 @@ from django import template
 register = template.Library()
 
 
-@register.inclusion_tag('questionnaires/tags/surveys_list.html')
-def render_surveys_list(surveys):
-    return {'surveys': surveys}
+@register.inclusion_tag('questionnaires/tags/radios.html')
+def render_radios(field):
+    return {'field': field}
 
 
 @register.inclusion_tag('questionnaires/tags/polls_list.html')
