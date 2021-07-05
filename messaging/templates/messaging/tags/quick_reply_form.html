@@ -1,0 +1,9 @@
+<div class="quick-reply-form">
+  <form action="{% url 'messaging:thread_view' thread.pk %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="thread" value="{{ thread.pk }}"/>
+    <input type="hidden" name="user" value="{{ user.pk }}"/>
+    <input type="hidden" name="text" value="{{ text }}"/>
+    <button type="submit">{{ text }}</button>
+  </form>
+</div>

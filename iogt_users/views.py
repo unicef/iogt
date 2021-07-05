@@ -1,15 +1,11 @@
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView, TemplateView
 
-from iogt_users.utils import has_completed_registration_survey
 
-
-@method_decorator(user_passes_test(has_completed_registration_survey, login_url='/users/post-registration-survey'),
-                  name='dispatch')
 @method_decorator(login_required, name='dispatch')
 class UserDetailView(TemplateView):
     template_name = 'profile.html'
@@ -18,8 +14,6 @@ class UserDetailView(TemplateView):
         return {'user': self.request.user}
 
 
-@method_decorator(user_passes_test(has_completed_registration_survey, login_url='/users/post-registration-survey'),
-                  name='dispatch')
 @method_decorator(login_required, name='dispatch')
 class UserDetailEditView(UpdateView):
     model = User

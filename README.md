@@ -35,6 +35,11 @@ Create a super user account for administration purposes.
 ./manage.py createsuperuser
 ```
 
+Compile .po language files stored in locale/
+```
+./manage.py compilemessages
+```
+
 Finally, start the server.
 ```
 ./manage.py runserver
@@ -128,6 +133,9 @@ Run the following command:
 ```
 make test
 ```
+
+## Configuring the Chatbot
+Follow instructions [here](messaging/README.md)
 
 [1]: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment
 [2]: https://www.unicef.org/innovation/IoGT

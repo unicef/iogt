@@ -1,0 +1,12 @@
+{% load static wagtailimages_tags menu_tags %}
+{% for item in menu_items %}
+    <a href="{{ item.href }}" class="icon-btn footer__link"
+            {% if item.link_page.color %}
+       style="background-color: #{{ item.color }}; border-color: #{{ item.color }}" {% endif %}>
+                    <span class="icon-btn__icon">
+                          <img src="{{ item.icon.url }}" />
+                    </span>
+        <span class="icon-btn__title" {% if item.color_text %}
+              style="color: #{{ item.color_text }};" {% endif %}>{{ item.text }}</span>
+    </a>
+{% endfor %}
