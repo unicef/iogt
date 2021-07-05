@@ -162,6 +162,38 @@ input:focus, input:focus-visible {
     display: block
 }
 
+.cust-check {
+    display: block
+}
+
+.cust-check--white .cust-check__title {
+    background: transparent;
+    border-color: #e8f8fd
+}
+
+.cust-check--active .cust-check__title {
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+    border-color: #0070e2;
+    border-width: 1.5px
+}
+
+.cust-check__percent {
+    color: #303030;
+    font: 700 10px/14px Poppins, sans-serif
+}
+
+.cust-check__percent-item {
+    background: #e8f8fd;
+    border-radius: 8px 0 0 8px;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 0;
+    z-index: -1
+}
+
 .cust-check input {
     display: none
 }
@@ -176,11 +208,92 @@ input:focus, input:focus-visible {
     display: flex;
     font-size: 10px;
     font-weight: 700;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
     letter-spacing: .01em;
     line-height: 14px;
     padding: 8px 12px;
+    position: relative;
     transition: .45s
 }
+
+.cust-check__title span {
+    display: block
+}
+
+input:checked + .cust-check__title {
+    background-color: #dadae3
+}
+
+.cust-check--2 .cust-check__title {
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+    -webkit-justify-content: flex-start;
+    justify-content: flex-start;
+    padding: 8px
+}
+
+.cust-check--2 .cust-check__check {
+    border: 1px solid #d8d8d8;
+    border-radius: 4px;
+    display: block;
+    -webkit-flex-shrink: 0;
+    flex-shrink: 0;
+    height: 14px;
+    margin-right: 8px;
+    width: 14px
+}
+
+.cust-check--2 input:checked ~ .cust-check__title .cust-check__check {
+    background-color: #303030;
+    background-image: url("static/icons/checked-white.svg");
+    background-position: 50%;
+    background-repeat: no-repeat
+}
+
+.cust-check--2 input:checked ~ .cust-check__title {
+    background-color: transparent
+}
+
+.cust-check--2.success input:checked ~ .cust-check__title {
+    background-color: #71c083;
+    color: #fff
+}
+
+.cust-check--2.success input:checked ~ .cust-check__title .cust-check__check {
+    background-color: #fff;
+    background-image: url("static/icons/checked-green.svg");
+    border-color: #fff
+}
+
+.cust-check--2.error input:checked ~ .cust-check__title {
+    background-color: #fb3d24;
+    color: #fff
+}
+
+.cust-check--2.error input:checked ~ .cust-check__title .cust-check__check {
+    -webkit-align-items: center;
+    align-items: center;
+    background-color: #fff;
+    background-image: none;
+    border-color: #fff;
+    display: -webkit-flex;
+    display: flex;
+    font-size: 7px;
+    -webkit-justify-content: center;
+    justify-content: center
+}
+
+.cust-check--2.error input:checked ~ .cust-check__title .cust-check__check:after {
+    color: #fb3d24;
+    content: "\01F5D9"
+}
+
+.cust-check__subtitle {
+    color: #0094f4;
+    font: 800 8px/12px Poppins, sans-serif
+}
+
 
 input:checked + .cust-check__title {
     background-color: #dadae3
@@ -339,9 +452,9 @@ input:checked + .cust-check__title {
     border-bottom-right-radius: 10px;
     height: 100%;
     left: 0;
-    position: absolute;
+    /*position: absolute;*/
     transition: all .45s;
-    width: 100%
+    /*width: 100%*/
 }
 
 .search, .search__btn {
@@ -354,7 +467,6 @@ input:checked + .cust-check__title {
 .search__btn {
     background-color: transparent;
     border: none;
-    border-left: 1px solid #efefef;
     height: 24px;
     margin-left: auto;
     padding: 0 14px;
@@ -497,7 +609,7 @@ input:checked + .cust-check__title {
 }
 
 .search-results__list-item a:after {
-    background-image: url(/images/icons/arrow-pink.svg);
+    background-image: url("static/icons/arrow-pink.svg");
     background-position: 50%;
     background-repeat: no-repeat;
     content: "";
@@ -548,7 +660,7 @@ input:checked + .cust-check__title {
 }
 
 .search-results__view:after {
-    background-image: url(/images/icons/arrow-down.svg);
+    background-image: url("static/icons/arrow-down.svg");
     background-position: 50%;
     background-repeat: no-repeat;
     content: "";
@@ -610,7 +722,7 @@ input:checked + .cust-check__title {
 }
 
 .search-variants__item a:after {
-    background-image: url(/images/icons/arrow-down.svg);
+    background-image: url("static/icons/arrow-down.svg");
     background-position: 50%;
     background-repeat: no-repeat;
     content: "";
