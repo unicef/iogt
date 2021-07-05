@@ -16,7 +16,8 @@
                          xmlns="http://www.w3.org/2000/svg">
                         <path d="M7 13L1 7.0005L7 1" stroke="#303030"
                               stroke-width="1.5"
-                              stroke-linecap="round" stroke-linejoin="round"/>
+                              stroke-linecap="round"
+                              stroke-linejoin="round"></path>
                     </svg>
                 </figure>
                 <span class="btn-back__title">{% trans "BACK" %}</span>
@@ -31,29 +32,7 @@
 {% endif %}" method="POST" class="survey-page__content">
                 {% csrf_token %}
                 <div class="survey-page__content">
-                    {% for field in form %}
-                        <div class="quest-item">
-                            <div class="quest-item__header">
-                                <p class="quest-item__number">{{ field.index }}
-                                    of 7 questions</p>
-                                <p class="quest-item__step-desc">
-                                    <span>Select one</span>
-                                </p>
-                            </div>
-                            <div class="quest-item__desc">
-                                <p>{{ field.type }}</p>
-                            </div>
-                            <div class="quest-item__content">
-                                {{ field.blocks }}
-                                <label class="cust-check quest-item__input">
-                                    <input type="radio"
-                                           name="learnt_tips"
-                                           value="All of this information is new to me">
-                                    <span class="cust-check__title">All of this information is new to me</span>
-                                </label>
-                            </div>
-                        </div>
-                    {% endfor %}
+                    {{ form.as_p }}
                 </div>
                 <div class="survey-page__btns">
                     <button type="submit"
