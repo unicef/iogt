@@ -4,9 +4,11 @@ from home.models import Article, Section
 from iogt.settings.base import SEARCH_RESULTS_PER_PAGE
 from wagtail.search.models import Query
 
+from questionnaires.models import Survey, Quiz
+
 
 def search(request):
-    search_groups = (Article, Section)  # add models which should be searchable
+    search_groups = (Article, Section, Survey, Quiz)
 
     search_query = request.GET.get("query")
     page = request.GET.get("page", 1)
