@@ -17,7 +17,7 @@
     <section>
         {% render_sub_sections_list sub_sections %}
     </section>
-    <section class='suggested-articles'>
+    <section class='quiz-holder'>
      <section class='quiz' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
       {% render_polls_list polls %} 
      </section>
@@ -27,8 +27,8 @@
       <section class='quiz' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
     {% render_quizzes_list quizzes %}
      </section>
-     {% render_articles_list articles %} 
     </section>
+     {% render_articles_list articles %} 
 {% endblock content %}
 
 

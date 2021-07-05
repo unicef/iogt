@@ -1,7 +1,14 @@
 {% load static wagtailcore_tags wagtailimages_tags %}
-{% for article in articles %}
-    <div class='suggested-article'>
-        <a href="{% pageurl article %}">{{ article.title }}</a>
-        {% image article.specific.lead_image fill-336x186 class="mainImage" %}
-    </div>
-{% endfor %}
+
+<section class='related_reading'>
+        <ul>
+         {% for article in articles %} 
+            <li>
+                <a href="{% pageurl article %}">
+                    <p > {{ article.title }}</p>
+                    {% image article.specific.lead_image fill-336x186 class='related_reading__img' %}
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+  </section>          
