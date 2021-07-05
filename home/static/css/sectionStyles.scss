@@ -462,12 +462,13 @@
       padding:0;
 
       p {
-         width: 60%;
+         width: 50%;
          font-family: Poppins;
          font-style: normal;
          font-weight: bold;
-         font-size: 16px;
-         line-height: 22px;
+         font-size: 18px;
+         margin-right: 5px;
+         line-height: 24px;
          letter-spacing: 0.01em;
          color: #303030;
       }
@@ -492,7 +493,7 @@
 
    img {
       border-radius: 8px;
-      width: 50%;
+      width: 45%;
       height: auto;
    }
 }

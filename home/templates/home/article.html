@@ -63,7 +63,7 @@
         {% for recommended_article_model in page.recommended_articles.all %}
             <li>
                 <a href="{% pageurl recommended_article_model.article %}">
-                    <p class='title'> {{ recommended_article_model.article.title }}</p>
+                    <p > {{ recommended_article_model.article.title }}</p>
                     {% image recommended_article_model.article.lead_image scale-30 class='related_reading__img' %}
                 </a>
             </li>
