@@ -1,5 +1,4 @@
-{% load static menu_tags wagtailimages_tags %}
-{% load i18n %}
+{% load static menu_tags i18n wagtailimages_tags home_tags %}
 
 {% get_current_language as LANGUAGE_CODE %}
 {% get_language_info for LANGUAGE_CODE as lang %}
@@ -11,12 +10,15 @@
     <div class="container header__container">
         <div class="header__left">
             <a href="/" class="logo">
-               {% image settings.home.SiteSettings.logo fill-30x30 as logo %}
-              <img src="{{ logo.url }}" />
+                {% image settings.home.SiteSettings.logo fill-30x30 %}
             </a>
         </div>
         <div class="header__right">
-            <div class="select header__select js-select hideOnNonJSDevice">
+            <label for="language-code" class="select header__select">
+                <input type="checkbox" class="language-input"
+                       id="language-code"
+                       name="language-code"
+                >
                 <div class="select__selected"><p>{{ lang.name_local }}</p>
                     <div class="select__selected-icon"><img
                             src="{% static "/icons/arrow-down.svg" %}"
@@ -26,18 +28,13 @@
                 <div class="select__options">
                     {% for language in languages %}
                         <div class="select__option {% if language.code == LANGUAGE_CODE %}select__option--selected{% endif %}">
-                            <p>{{ language.name_local }}</p>
+                            <a href="{% locale_set language.code request.path %}">
+                                <p>{{ language.name_local }}</p>
+                            </a>
                         </div>
                     {% endfor %}
                 </div>
-            </div>
-            <div class="showOnNonJSDevice">
-                <select class="select header__select">
-                    {% for language in languages %}
-                        <option class="select__option" value="{{ language.name_local }}" {% if language.code == LANGUAGE_CODE %}selected{% endif %}>{{ language.name_local }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+            </label>
             <form class="search" action="{% url "search" %}" method="POST">
                 <a class="search__btn js-search-btn" href="{% url "search" %}">
                     <img src="{% static "icons/search.svg" %}" alt="Search">
@@ -46,143 +43,143 @@
                     <input id="search" name="search" placeholder="Type here">
                 </div>
                 <button class="search__close js-search-close"></button>
-{#                <div class="search-results js-search-result search__results">#}
-{#                    <div class="search-results__header">#}
-{#                        <div class="container search-results__header-container">#}
-{#                            <p class="title search-results__title">#}
-{#                                Surveys/Polls</p>#}
-{#                            <button class="search-results__text search-results__view">#}
-{#                                All 4 result#}
-{#                            </button>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <div class="search-results__list">#}
-{#                        <div class="container">#}
-{#                            <ul class="search-results__list-items">#}
-{#                                <li class="search-results__list-item"><a#}
-{#                                        href="#">Early Life Tips quick#}
-{#                                    survey</a></li>#}
-{#                                <li class="search-results__list-item"><a#}
-{#                                        href="#">Dicta officiis fugit vel neque#}
-{#                                    ea</a></li>#}
-{#                            </ul>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <div class="search-results__header">#}
-{#                        <div class="container search-results__header-container">#}
-{#                            <p class="title search-results__title">Articles</p>#}
-{#                            <button class="search-results__text search-results__view">#}
-{#                                All 13 result#}
-{#                            </button>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <div class="articles-list">#}
-{#                        <div class="container articles-list__container"><a#}
-{#                                href="#" class="articles-list__item">#}
-{#                            <div class="articles-list__item-content">#}
-{#                                <div class="articles-list__item-header articles-list__item-header--red">#}
-{#                                    <p class="articles-list__item-tag">#}
-{#                                        Covid-19</p><span#}
-{#                                        class="articles-list__item-comment">9</span>#}
-{#                                </div>#}
-{#                                <div class="articles-list__item-text"><p>In ut#}
-{#                                    repellat deserunt laudantium animi veritatis#}
-{#                                    recusandae.</p></div>#}
-{#                            </div>#}
-{#                            <div class="articles-list__item-img"><img#}
-{#                                    src="/images/article-1.png"#}
-{#                                    alt="Article image"></div>#}
-{#                        </a><a href="#" class="articles-list__item">#}
-{#                            <div class="articles-list__item-content">#}
-{#                                <div class="articles-list__item-header articles-list__item-header--blue">#}
-{#                                    <p class="articles-list__item-tag">Youth</p>#}
-{#                                    <span class="articles-list__item-comment">9</span>#}
-{#                                </div>#}
-{#                                <div class="articles-list__item-text"><p>#}
-{#                                    Recusandae reiciendis sapiente est.</p>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                            <div class="articles-list__item-img"><img#}
-{#                                    src="/images/article-2.png"#}
-{#                                    alt="Article image"></div>#}
-{#                        </a><a href="#" class="articles-list__item">#}
-{#                            <div class="articles-list__item-content">#}
-{#                                <div class="articles-list__item-header articles-list__item-header--purple">#}
-{#                                    <p class="articles-list__item-tag">Parents &#}
-{#                                        Caregivers</p><span#}
-{#                                        class="articles-list__item-comment">9</span>#}
-{#                                </div>#}
-{#                                <div class="articles-list__item-text"><p>Omnis#}
-{#                                    porro illo aspernatur id laborum.</p></div>#}
-{#                            </div>#}
-{#                            <div class="articles-list__item-img"><img#}
-{#                                    src="/images/article-3.png"#}
-{#                                    alt="Article image"></div>#}
-{#                        </a><a href="#" class="articles-list__item">#}
-{#                            <div class="articles-list__item-content">#}
-{#                                <div class="articles-list__item-header articles-list__item-header--green">#}
-{#                                    <p class="articles-list__item-tag">Frontline#}
-{#                                        Workers & Educators</p><span#}
-{#                                        class="articles-list__item-comment">9</span>#}
-{#                                </div>#}
-{#                                <div class="articles-list__item-text"><p>Unde#}
-{#                                    illum sequi laudantium.</p></div>#}
-{#                            </div>#}
-{#                            <div class="articles-list__item-img"><img#}
-{#                                    src="/images/article-4.png"#}
-{#                                    alt="Article image"></div>#}
-{#                        </a><a href="#" class="articles-list__item">#}
-{#                            <div class="articles-list__item-content">#}
-{#                                <div class="articles-list__item-header articles-list__item-header--blue">#}
-{#                                    <p class="articles-list__item-tag">Youth</p>#}
-{#                                    <span class="articles-list__item-comment">9</span>#}
-{#                                </div>#}
-{#                                <div class="articles-list__item-text"><p>Unde#}
-{#                                    illum sequi laudantium autem ratione.</p>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                            <div class="articles-list__item-img"><img#}
-{#                                    src="/images/article-5.png"#}
-{#                                    alt="Article image"></div>#}
-{#                        </a><a href="#" class="articles-list__item">#}
-{#                            <div class="articles-list__item-content">#}
-{#                                <div class="articles-list__item-header articles-list__item-header--red">#}
-{#                                    <p class="articles-list__item-tag">#}
-{#                                        Covid-19</p><span#}
-{#                                        class="articles-list__item-comment">9</span>#}
-{#                                </div>#}
-{#                                <div class="articles-list__item-text"><p>Unde#}
-{#                                    illum sequi laudantium autem ratione.</p>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                            <div class="articles-list__item-img"><img#}
-{#                                    src="/images/article-2.png"#}
-{#                                    alt="Article image"></div>#}
-{#                        </a><a href="#" class="articles-list__item">#}
-{#                            <div class="articles-list__item-content">#}
-{#                                <div class="articles-list__item-header articles-list__item-header--blue">#}
-{#                                    <p class="articles-list__item-tag">Youth</p>#}
-{#                                    <span class="articles-list__item-comment">9</span>#}
-{#                                </div>#}
-{#                                <div class="articles-list__item-text"><p>Unde#}
-{#                                    illum sequi laudantium autem ratione.</p>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                            <div class="articles-list__item-img"><img#}
-{#                                    src="/images/article-1.png"#}
-{#                                    alt="Article image"></div>#}
-{#                        </a></div>#}
-{#                    </div>#}
-{#                </div>#}
-{#                <div class="search-not-found">#}
-{#                    <div class="container search-not-found__container"><p#}
-{#                            class="title search-not-found__title">No results#}
-{#                        found</p>#}
-{#                        <div class="text search-not-found__text"><p>It seems we#}
-{#                            can’t find any results based on your search.</p>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
+                {#                <div class="search-results js-search-result search__results">#}
+                {#                    <div class="search-results__header">#}
+                {#                        <div class="container search-results__header-container">#}
+                {#                            <p class="title search-results__title">#}
+                {#                                Surveys/Polls</p>#}
+                {#                            <button class="search-results__text search-results__view">#}
+                {#                                All 4 result#}
+                {#                            </button>#}
+                {#                        </div>#}
+                {#                    </div>#}
+                {#                    <div class="search-results__list">#}
+                {#                        <div class="container">#}
+                {#                            <ul class="search-results__list-items">#}
+                {#                                <li class="search-results__list-item"><a#}
+                {#                                        href="#">Early Life Tips quick#}
+                {#                                    survey</a></li>#}
+                {#                                <li class="search-results__list-item"><a#}
+                {#                                        href="#">Dicta officiis fugit vel neque#}
+                {#                                    ea</a></li>#}
+                {#                            </ul>#}
+                {#                        </div>#}
+                {#                    </div>#}
+                {#                    <div class="search-results__header">#}
+                {#                        <div class="container search-results__header-container">#}
+                {#                            <p class="title search-results__title">Articles</p>#}
+                {#                            <button class="search-results__text search-results__view">#}
+                {#                                All 13 result#}
+                {#                            </button>#}
+                {#                        </div>#}
+                {#                    </div>#}
+                {#                    <div class="articles-list">#}
+                {#                        <div class="container articles-list__container"><a#}
+                {#                                href="#" class="articles-list__item">#}
+                {#                            <div class="articles-list__item-content">#}
+                {#                                <div class="articles-list__item-header articles-list__item-header--red">#}
+                {#                                    <p class="articles-list__item-tag">#}
+                {#                                        Covid-19</p><span#}
+                {#                                        class="articles-list__item-comment">9</span>#}
+                {#                                </div>#}
+                {#                                <div class="articles-list__item-text"><p>In ut#}
+                {#                                    repellat deserunt laudantium animi veritatis#}
+                {#                                    recusandae.</p></div>#}
+                {#                            </div>#}
+                {#                            <div class="articles-list__item-img"><img#}
+                {#                                    src="/images/article-1.png"#}
+                {#                                    alt="Article image"></div>#}
+                {#                        </a><a href="#" class="articles-list__item">#}
+                {#                            <div class="articles-list__item-content">#}
+                {#                                <div class="articles-list__item-header articles-list__item-header--blue">#}
+                {#                                    <p class="articles-list__item-tag">Youth</p>#}
+                {#                                    <span class="articles-list__item-comment">9</span>#}
+                {#                                </div>#}
+                {#                                <div class="articles-list__item-text"><p>#}
+                {#                                    Recusandae reiciendis sapiente est.</p>#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                            <div class="articles-list__item-img"><img#}
+                {#                                    src="/images/article-2.png"#}
+                {#                                    alt="Article image"></div>#}
+                {#                        </a><a href="#" class="articles-list__item">#}
+                {#                            <div class="articles-list__item-content">#}
+                {#                                <div class="articles-list__item-header articles-list__item-header--purple">#}
+                {#                                    <p class="articles-list__item-tag">Parents &#}
+                {#                                        Caregivers</p><span#}
+                {#                                        class="articles-list__item-comment">9</span>#}
+                {#                                </div>#}
+                {#                                <div class="articles-list__item-text"><p>Omnis#}
+                {#                                    porro illo aspernatur id laborum.</p></div>#}
+                {#                            </div>#}
+                {#                            <div class="articles-list__item-img"><img#}
+                {#                                    src="/images/article-3.png"#}
+                {#                                    alt="Article image"></div>#}
+                {#                        </a><a href="#" class="articles-list__item">#}
+                {#                            <div class="articles-list__item-content">#}
+                {#                                <div class="articles-list__item-header articles-list__item-header--green">#}
+                {#                                    <p class="articles-list__item-tag">Frontline#}
+                {#                                        Workers & Educators</p><span#}
+                {#                                        class="articles-list__item-comment">9</span>#}
+                {#                                </div>#}
+                {#                                <div class="articles-list__item-text"><p>Unde#}
+                {#                                    illum sequi laudantium.</p></div>#}
+                {#                            </div>#}
+                {#                            <div class="articles-list__item-img"><img#}
+                {#                                    src="/images/article-4.png"#}
+                {#                                    alt="Article image"></div>#}
+                {#                        </a><a href="#" class="articles-list__item">#}
+                {#                            <div class="articles-list__item-content">#}
+                {#                                <div class="articles-list__item-header articles-list__item-header--blue">#}
+                {#                                    <p class="articles-list__item-tag">Youth</p>#}
+                {#                                    <span class="articles-list__item-comment">9</span>#}
+                {#                                </div>#}
+                {#                                <div class="articles-list__item-text"><p>Unde#}
+                {#                                    illum sequi laudantium autem ratione.</p>#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                            <div class="articles-list__item-img"><img#}
+                {#                                    src="/images/article-5.png"#}
+                {#                                    alt="Article image"></div>#}
+                {#                        </a><a href="#" class="articles-list__item">#}
+                {#                            <div class="articles-list__item-content">#}
+                {#                                <div class="articles-list__item-header articles-list__item-header--red">#}
+                {#                                    <p class="articles-list__item-tag">#}
+                {#                                        Covid-19</p><span#}
+                {#                                        class="articles-list__item-comment">9</span>#}
+                {#                                </div>#}
+                {#                                <div class="articles-list__item-text"><p>Unde#}
+                {#                                    illum sequi laudantium autem ratione.</p>#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                            <div class="articles-list__item-img"><img#}
+                {#                                    src="/images/article-2.png"#}
+                {#                                    alt="Article image"></div>#}
+                {#                        </a><a href="#" class="articles-list__item">#}
+                {#                            <div class="articles-list__item-content">#}
+                {#                                <div class="articles-list__item-header articles-list__item-header--blue">#}
+                {#                                    <p class="articles-list__item-tag">Youth</p>#}
+                {#                                    <span class="articles-list__item-comment">9</span>#}
+                {#                                </div>#}
+                {#                                <div class="articles-list__item-text"><p>Unde#}
+                {#                                    illum sequi laudantium autem ratione.</p>#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                            <div class="articles-list__item-img"><img#}
+                {#                                    src="/images/article-1.png"#}
+                {#                                    alt="Article image"></div>#}
+                {#                        </a></div>#}
+                {#                    </div>#}
+                {#                </div>#}
+                {#                <div class="search-not-found">#}
+                {#                    <div class="container search-not-found__container"><p#}
+                {#                            class="title search-not-found__title">No results#}
+                {#                        found</p>#}
+                {#                        <div class="text search-not-found__text"><p>It seems we#}
+                {#                            can’t find any results based on your search.</p>#}
+                {#                        </div>#}
+                {#                    </div>#}
+                {#                </div>#}
             </form>
         </div>
     </div>
