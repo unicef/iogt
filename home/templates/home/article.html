@@ -70,9 +70,11 @@
         <ul class='recommended_articles'>
         {% for recommended_article_model in page.recommended_articles.all %}
             <li>
-            hi
             <a href="{% pageurl recommended_article_model.article %}">
-            <p class='title'> {{ recommended_article_model.article.title }}</p>
+            <div>
+              <p style="color:{{recommended_article_model.article.parent_section.background_color}}"> {{recommended_article_model.article.parent_section}} </p>
+              <p class='title'> {{ recommended_article_model.article.title }}</p>
+            </div>
                {% image recommended_article_model.article.lead_image fill-100x110 %}
             </a>
             </li>
