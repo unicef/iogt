@@ -1,15 +1,19 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags home_tags %}
+{% load static wagtailcore_tags wagtailimages_tags home_tags menu_tags %}
 
 {% block extra_css %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/section.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/banner.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/featured_content.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
 {% endblock extra_css %}
 
 {% block content %}
     <div class="home">
         {% render_banners_list banners %}
-        {% render_featured_content_list featured_content %}
+        {% flat_menu "nav_bar" template="nav_bar.html" %}
+
+        <div class="container container--main">
+            {% if page.home_featured_content %}
+                {% include_block page.home_featured_content %}
+            {% endif %}
+        </div>
     </div>
 {% endblock content %}

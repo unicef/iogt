@@ -1,180 +1,105 @@
-import json
-import uuid
-from urllib import request, parse
-
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
-from django.urls import reverse_lazy
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import (
-    CreateView,
-    DeleteView,
-    TemplateView,
-    UpdateView,
-)
+from django.views import View
+from django.views.generic import (DeleteView, TemplateView,)
 
-from .forms import MessageReplyForm, NewMessageForm, NewMessageFormMultiple
-from .models import Thread, Message
+from .chat import ChatManager
+from .forms import MessageReplyForm, NewMessageForm
+from .models import Thread
 
-try:
-    from account.decorators import login_required
-except:  # noqa
-    from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
+
+User = get_user_model()
 
 
+@method_decorator(login_required, name='dispatch')
 class InboxView(TemplateView):
     """
     View inbox thread list.
     """
     template_name = "messaging/inbox.html"
 
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.kwargs.get("deleted", None):
-            threads = Thread.ordered(Thread.deleted(self.request.user))
-            folder = "deleted"
+        folder = self.kwargs.get('deleted', 'inbox')
+        if folder == 'deleted':
+            threads = Thread.thread_objects.of_user(self.request.user).deleted().order_by_latest()
         else:
-            threads = Thread.ordered(Thread.inbox(self.request.user))
-            folder = "inbox"
+            threads = Thread.thread_objects.of_user(self.request.user).inbox().order_by_latest()
 
         context.update({
             "folder": folder,
-            "threads": threads,
-            "threads_unread": Thread.ordered(Thread.unread(self.request.user))
+            "threads": threads.prefetch_related('messages'),
+            "unread_threads": Thread.thread_objects.of_user(self.request.user).unread().order_by_latest(),
         })
         return context
 
 
-
-class ThreadView(UpdateView):
+@method_decorator(login_required, name='dispatch')
+class ThreadView(View):
     """
-    View a single Thread or POST a reply.
+    List thread messages and reply view.
     """
     model = Thread
-    form_class = MessageReplyForm
-    context_object_name = "thread"
-    template_name = "messaging/thread_detail.html"
-    success_url = reverse_lazy("messaging:inbox")
+    context_object_name = 'thread'
 
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
+    def get_context(self, thread, form=None):
+        return {
+            'thread': thread,
+            'form': form or MessageReplyForm(initial={
+                'thread': thread,
+                'user': self.request.user,
+            })}
 
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.filter(userthread__user=self.request.user).distinct()
-        return qs
+    def get(self, request, pk):
+        thread = get_object_or_404(Thread, pk=pk)
+        return render(request, 'messaging/thread.html', context=self.get_context(thread))
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs.update({
-            "user": self.request.user,
-            "thread": self.object
-        })
-        return kwargs
+    def post(self, request, pk):
+        thread = get_object_or_404(Thread, pk=pk)
+        form = MessageReplyForm(data=request.POST)
+        if form.is_valid():
+            text = form.cleaned_data['text']
 
-    def get(self, request, *args, **kwargs):
-        response = super().get(request, *args, **kwargs)
-        self.object.userthread_set.filter(user=request.user).update(unread=False)
-        return response
+            chat_manager = ChatManager(thread)
+            chat_manager.record_reply(text=text, sender=request.user, mark_unread=False)
+
+            return redirect(reverse('messaging:thread_view', kwargs={'pk': thread.pk}))
+        else:
+            return render(request, 'messaging/thread.html', context=self.get_context(thread, form))
 
 
-class MessageCreateView(CreateView):
+@method_decorator(login_required, name='dispatch')
+class MessageCreateView(View):
     """
     Create a new thread message.
     """
-    template_name = "messaging/message_create.html"
+    def post(self, request):
+        form = NewMessageForm(data=request.POST)
+        if form.is_valid():
+            user = request.user
+            data = form.cleaned_data
+            ChatManager.initiate_thread(
+                sender=user, recipients=[], chatbot=data['chatbot'], subject=data['subject'], text=data['text'])
 
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
+            return redirect('messaging:inbox')
 
-    def get_form_class(self):
-        if self.form_class is None:
-            if self.kwargs.get("multiple", False):
-                return NewMessageFormMultiple
-        return NewMessageForm
-
-    def get_initial(self):
-        user_id = self.kwargs.get("user_id", None)
-        if user_id is not None:
-            user_id = [int(user_id)]
-        elif "to_user" in self.request.GET and self.request.GET["to_user"].isdigit():
-            user_id = map(int, self.request.GET.getlist("to_user"))
-        if not self.kwargs.get("multiple", False) and user_id:
-            user_id = user_id[0]
-        return {"to_user": user_id}
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs.update({
-            "user": self.request.user,
-        })
-        return kwargs
+        messages.add_message(request, messages.ERROR, 'Can\'t connect with bot.')
+        return redirect(request.META.get('HTTP_REFERER'))
 
 
+@method_decorator(login_required, name='dispatch')
 class ThreadDeleteView(DeleteView):
     """
     Delete a thread.
     """
     model = Thread
-    success_url = reverse_lazy("messaging:inbox")
     template_name = "messaging/thread_confirm_delete.html"
 
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
-
     def delete(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        success_url = self.get_success_url()
-        self.object.userthread_set.filter(user=request.user).update(deleted=True)
-        return HttpResponseRedirect(success_url)
-
-
-# @csrf_exempt is a temp fix to make things work,
-# see https://stackoverflow.com/questions/17716624/django-csrf-cookie-not-set
-# TODO: Implement a secure(?) solution.
-@csrf_exempt
-def rapidpro_interface(request):
-    if not request.method == 'POST':
-        # TODO: What exactly to do in this case.
-        return HttpResponse("Bad request.")
-    # TODO: Check other header info, such as auth token, content type.
-
-    fields = json.loads(request.body.decode("utf-8"))
-    msg_id = fields.get('id')
-    content = fields.get('text')
-    thread_uuid = fields.get('to')
-    bot_identifier = fields.get('from')  # currently unused
-    channel_uuid = fields.get('channel')
-    quick_replies = fields.get('quick_replies')
-
-    # TODO: Decide how to treat each of these potential errors:
-    # - Invalid thread UUID
-    # - channel UUID mismatch
-    thread = Thread.objects.get(uuid=uuid.UUID(thread_uuid))
-    assert uuid.UUID(channel_uuid) == thread.chatbot.channel_uuid()
-    
-    # TODO(geoo89): Look for messages with the same rapid_pro_message_id.
-    # They are single messages in RapidPro that got split up and we need
-    # to stitch them back together.
-    # msg_parts = Message.objects.filter(thread=thread, rapid_pro_message_id=msg_id)
-    # TODO(geoo89): Extract attachments from messages.
-
-    Message.new_reply(
-            thread, None, content,
-            sent_from_bot=True,
-            rapid_pro_message_id=msg_id,
-            quick_replies=json.dumps(quick_replies))
-
-    # When defining a channel in RapidPro, we can specify a string
-    # that the response should contain for RapidPro to consider the
-    # message as successfully delivered.
-    return HttpResponse("All Good.")
+        self.get_object().user_threads.filter(user=request.user).update(is_active=False)
+        return HttpResponseRedirect(reverse("messaging:inbox"))

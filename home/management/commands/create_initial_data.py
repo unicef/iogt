@@ -91,6 +91,9 @@ class Command(BaseCommand):
 
         models.HomePageBanner.objects.create(source=home, banner_page=banner_page)
 
+        # Create RapidPro Bot User
+        management.call_command('sync_rapidpro_bot_user')
+        
         footer_index_page = models.FooterIndexPage(title='Footers')
         home.add_child(instance=footer_index_page)
 

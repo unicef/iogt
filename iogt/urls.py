@@ -9,7 +9,7 @@ from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 from home import views as pwa_views
 from wagtail_transfer import urls as wagtailtransfer_urls
-from iogt.views import TransitionPageView
+from iogt.views import TransitionPageView, SitemapAPIView
 
 urlpatterns = [
     path('django-admin/', admin.site.urls),
@@ -29,6 +29,7 @@ urlpatterns = [
     path('messaging/', include('messaging.urls'), name='messaging-urls'),
     path('wagtail-transfer/', include(wagtailtransfer_urls)),
     path("external-link/", TransitionPageView.as_view(), name="external-link"),
+    path('sitemap/', SitemapAPIView.as_view(), name='sitemap'),
 ]
 
 if settings.DEBUG:

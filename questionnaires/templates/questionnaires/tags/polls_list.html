@@ -1,29 +1,14 @@
 {% load static wagtailcore_tags wagtailimages_tags %}
 
-<div class="desktopSubSections">
-    {% for poll in polls %}
-    <div class="subSectionsContainer">
-        <div class="desktopSubSectionsContainer" style="border-bottom: medium solid rgb(191, 0, 18);">
-            <div class="image">
-                <a href="{% pageurl poll %}">
-                    {% image poll.specific.lead_image fill-336x186 class="mainImage" %}
-                </a>
-            </div>
-            <div class="content">
-                <div style="color: rgb(191, 0, 18);" class="tag">
-                    <div class="byline">
-                        {{ poll.first_published_at|date }} /
-                        <span class="author">by {{ poll.owner.get_full_name }}</span>
-                    </div>
-                </div>
-                <div class="title">
-                    <a href="{% pageurl poll %}">
-                        <span>{{ poll.title }}</span>
-                    </a>
-                </div>
-                <p class="desc">{{ poll.specific.description|striptags|truncatewords:21 }}</p>
-            </div>
-        </div>
+{% for poll in polls %}
+<a href="{% pageurl poll %}">
+    <span class='quiz__details'>
+        <p>POll</p>
+        {{ page.title }}
+        <p class='quiz__details--bold'>{{ poll.title }}</p>
+    </span>
+    <div class="quiz__imageholder">
+        <img  class="quiz__image" src="{% static 'images/Stroke 3.png' %}" alt=''>
     </div>
-    {% endfor %}
-</div>
+</a>
+{% endfor %}
