@@ -43,6 +43,10 @@
                                     <span>
                                         {% if field.field.widget.input_type  == "radio" %}
                                             Select one
+                                        {% elif  field.field.widget.input_type  == "checkbox" %}
+                                            Check all that apply
+                                        {% else %}
+                                            Optional
                                         {% endif %}
                                     </span>
                                 </p>
@@ -52,6 +56,8 @@
                             </div>
                             {% if field.field.widget.input_type == "radio" %}
                                 {% render_radios field %}
+                            {% elif field.field.widget.input_type == "checkbox" %}
+                                {% render_checkboxes field %}
                             {% endif %}
                         </div>
                     {% endfor %}
