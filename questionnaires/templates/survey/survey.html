@@ -28,20 +28,8 @@
             <h1 class="title survey-page__title">{% trans page.title %}</h1>
             {% if page.description %}
                 <p>{% trans page.description %}</p>{% endif %}
-            <form action="
-
-
-
-
-
-
-
-
-
-
-
-
-                    {% pageurl page %}{% if self.multi_step or self.has_page_breaks %}?p={{ fields_step.number|add:"1" }}{% endif %}"
+            <form action="{% pageurl page %}
+{% if self.multi_step or self.has_page_breaks %}?p={{ fields_step.number|add:"1" }}{% endif %}"
                   method="POST" class="survey-page__content">
                 {% csrf_token %}
                 <div class="survey-page__content">
@@ -52,15 +40,27 @@
                                     of {{ form.fields | length }}
                                     questions</p>
                                 <p class="quest-item__step-desc">
-                                    <span>{% if field.field.widget.input_type  == "radio" %}
-                                        Select one{% endif %}</span>
+                                    <span>
+                                        {% if field.field.widget.input_type  == "radio" %}
+                                            Select one
+                                        {% elif  field.field.widget.input_type  == "checkbox" %}
+                                            Check all that apply
+                                        {% else %}
+                                            Optional
+                                        {% endif %}
+                                    </span>
                                 </p>
                             </div>
                             <div class="quest-item__desc">
                                 <p>{{ field.label }}</p>
                             </div>
-                            {% render_radios field %}
-
+                            {% if field.field.widget.input_type == "radio" %}
+                                {% render_radios field %}
+                            {% elif field.field.widget.input_type == "checkbox" %}
+                                {% render_checkboxes field %}
+                            {% elif field.field.widget.input_type == "text" %}
+                                {% render_text_field field %}
+                            {% endif %}
                         </div>
                     {% endfor %}
                 </div>
