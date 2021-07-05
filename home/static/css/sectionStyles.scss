@@ -266,13 +266,38 @@
 
 // article page styles
 
+.article {
+
+   &__img {
+      width:100%;
+      height:auto
+   }
+   
+   &__back {
+      display:flex;
+      color:white;
+      text-decoration: none;
+      background-color: #0094F4;
+      padding: 15px 20px;
+   }
+
+   &__back--image1 {
+      margin-right: 6px;
+   }
+}
+
+
 
 .article-content {
    padding: 0px 22px;
    font-family: Poppins;
 
+   img {
+      width:100%;
+      height:auto
+   }
+
    h1 {
-     
       font-style: normal;
       font-weight: bold;
       font-size: 24px;
@@ -290,8 +315,9 @@
    }
 
    video, audio {
-   width: 280px;
    margin:10px 0px;
+   width:100%;
+   height:auto
 }
 
    &__chat-btn {
@@ -417,9 +443,9 @@
 }
 
 
-.recommended_reading {
+.related_reading {
    padding-top: 40px;
-   padding: 0px 20px;
+   margin: 0px 20px;
    font-family: Poppins;
    font-style: normal;
 
@@ -434,9 +460,9 @@
    ul {
       list-style: none;
       padding:0;
-      
-     
+
       p {
+         width: 60%;
          font-family: Poppins;
          font-style: normal;
          font-weight: bold;
@@ -466,6 +492,8 @@
 
    img {
       border-radius: 8px;
+      width: 50%;
+      height: auto;
    }
 }
 
@@ -660,15 +688,16 @@
    }
 }
 
+
 .article-page-details { 
    color: #FFFFFF;
    display:flex;
    padding-bottom: 22.55px;
    padding-top: 24px;
-   height: 40vh;
-   background-size:     cover;                      /* <------ */
-    background-repeat:   no-repeat;
-    background-position: center center;
+   width:100%;
+   height:auto;
+          
+    
 
    &__back {
       color:white;
