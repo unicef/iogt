@@ -1,4 +1,4 @@
-{% if allow_feedback %}
+{% comment %} {% if allow_feedback %}
     <span class="small">
     {% if show_feedback and item.likedit_users %}
         <a class="badge badge-primary text-white cfb-counter" data-toggle="tooltip"
@@ -11,7 +11,5 @@
         <input type="hidden" name="next" value="{% url 'comments-xtd-sent' %}"/>
         <button type="submit">Like</button>
     </form>
-
-
 </span>
-{% endif %}
+{% endif %} {% endcomment %}

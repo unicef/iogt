@@ -1,5 +1,4 @@
-{% load static menu_tags wagtailimages_tags %}
-{% load i18n %}
+{% load static menu_tags i18n wagtailimages_tags home_tags %}
 
 {% get_current_language as LANGUAGE_CODE %}
 {% get_language_info for LANGUAGE_CODE as lang %}
@@ -16,7 +15,11 @@
             </a>
         </div>
         <div class="header__right">
-            <div class="select header__select js-select hideOnNonJSDevice">
+            <label for="language-code" class="select header__select">
+                <input type="checkbox" class="language-input"
+                       id="language-code"
+                       name="language-code"
+                >
                 <div class="select__selected"><p>{{ lang.name_local }}</p>
                     <div class="select__selected-icon"><img
                             src="{% static "/icons/arrow-down.svg" %}"
@@ -26,18 +29,13 @@
                 <div class="select__options">
                     {% for language in languages %}
                         <div class="select__option {% if language.code == LANGUAGE_CODE %}select__option--selected{% endif %}">
-                            <p>{{ language.name_local }}</p>
+                            <a href="{% locale_set language.code request.path %}">
+                                <p>{{ language.name_local }}</p>
+                            </a>
                         </div>
                     {% endfor %}
                 </div>
-            </div>
-            <div class="showOnNonJSDevice">
-                <select class="select header__select">
-                    {% for language in languages %}
-                        <option class="select__option" value="{{ language.name_local }}" {% if language.code == LANGUAGE_CODE %}selected{% endif %}>{{ language.name_local }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+            </label>
             <form class="search" action="{% url "search" %}" method="POST">
                 <a class="search__btn js-search-btn" href="{% url "search" %}">
                     <img src="{% static "icons/search.svg" %}" alt="Search">

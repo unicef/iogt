@@ -6,11 +6,10 @@
 {% endblock extra_css %}
 
 {% block content %}
-    <div class="home">
+    <div class="home-page">
         {% render_banners_list banners %}
-        {% flat_menu "nav_bar" template="nav_bar.html" %}
-
-        <div class="container container--main">
+        {% comment %} {% flat_menu "nav_bar" template="nav_bar.html" %} {% endcomment %}
+        <div class="home-page__featured-content">
             {% if page.home_featured_content %}
                 {% include_block page.home_featured_content %}
             {% endif %}

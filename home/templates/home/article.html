@@ -2,16 +2,13 @@
 {% load static wagtailcore_tags wagtailimages_tags comments comments_xtd  home_tags questionnaires_tags sass_tags %}
 
 {% block content %}
-
-{% image page.lead_image width-320 height-200 as lead_image %}
-   <section class='article-page-details' style="background-image: url({{ lead_image.url }})">
-        <a href="{{page.parent_section.url}}" class='section-page-details__back'>
-          <img class='section-page-details__back--image1' src="{% static 'images/white-stroke.png' %}">
-           Back 
-        </a>
-    </section>
-
- <article > 
+   
+ <article class='article'> 
+ {% image page.lead_image width-320 class='article__img' %}
+ {% comment %} <a href="{{page.parent_section.url}}" class='article__back' style="background-color:{{ page.parent_section.background_color }}">
+    <img class='article__back--image1' src="{% static 'icons/back.svg' %}">
+    Back to {{ page.parent_section}}
+</a> {% endcomment %}
   <section class='article-content'>
       <h1>{{ page.title }}</h1>
       {% include_block page.body %}
@@ -56,27 +53,19 @@
             <div >
                 {% render_xtdcomment_tree for page allow_flagging allow_feedback show_feedback %}
             </div>
-            <div class='comments__input-holder'>
-                <div class="comments__load">
-                <button >View more comments</button>
-            </div>
-            </div>
         {% endif %}
     {% endif %}
  </section>
- <section class='recommended_reading'>
+ <section class='related_reading'>
     {% if page.recommended_articles.count %}
     <h2>Related Articles</h2>
-        <ul class='recommended_articles'>
+        <ul>
         {% for recommended_article_model in page.recommended_articles.all %}
             <li>
-            <a href="{% pageurl recommended_article_model.article %}">
-            <div>
-              <p style="color:{{recommended_article_model.article.parent_section.background_color}}"> {{recommended_article_model.article.parent_section}} </p>
-              <p class='title'> {{ recommended_article_model.article.title }}</p>
-            </div>
-               {% image recommended_article_model.article.lead_image fill-100x110 %}
-            </a>
+                <a href="{% pageurl recommended_article_model.article %}">
+                    <p > {{ recommended_article_model.article.title }}</p>
+                    {% image recommended_article_model.article.lead_image scale-30 class='related_reading__img' %}
+                </a>
             </li>
         {% endfor %}
         </ul>
