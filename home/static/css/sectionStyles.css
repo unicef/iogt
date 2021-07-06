@@ -429,7 +429,6 @@
   height: 46px;
   left: calc(50% - 156px/2 - 82px);
   top: 0px;
-  border: 1px solid #EFEFEF;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   border-radius: 24px;
@@ -445,6 +444,7 @@
   font-size: 16px;
   line-height: 22px;
   color: #303030;
+  border: 1.5px solid #D8D8D8;
 }
 
 .article-navigation__button--next {
@@ -993,5 +993,26 @@
   background-image: url("/static/icons/cancel.svg");
   background-repeat: no-repeat;
   border: none;
+}
+
+.home-page__featured-content {
+  padding: 0 22px;
+}
+
+.home-page__featured-content .related_reading {
+  margin: 0;
+}
+
+.banner-holder {
+  margin-top: 8px;
+  margin-bottom: 20px;
+  padding: 0 12px;
+}
+
+.banner-holder img {
+  margin-bottom: 6px;
+  width: 100vw;
+  height: auto;
+  border-radius: 12px;
 }
 /*# sourceMappingURL=sectionStyles.css.map */

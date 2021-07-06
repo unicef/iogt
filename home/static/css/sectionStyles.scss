@@ -369,7 +369,7 @@
       height: 46px;
       left: calc(50% - 156px/2 - 82px);
       top: 0px;
-      border: 1px solid #EFEFEF;
+      
       box-sizing: border-box;
       border-radius: 24px;
    }
@@ -384,6 +384,7 @@
       font-size: 16px;
       line-height: 22px;
       color: #303030;
+      border: 1.5px solid #D8D8D8;
    }
 
    &__button--next {
@@ -839,4 +840,31 @@
    }
 
   
+}
+
+
+
+// home page styling
+
+.home-page {
+  &__featured-content {
+   padding: 0 22px;
+  
+   .related_reading {
+      margin:0
+   }
+  }
+}
+
+.banner-holder {
+   margin-top: 8px;
+   margin-bottom: 20px;
+   padding: 0 12px;
+
+   img {
+      margin-bottom: 6px;
+      width: 100vw;
+      height: auto;
+      border-radius: 12px;
+   }
 }
