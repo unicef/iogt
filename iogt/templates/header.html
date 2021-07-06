@@ -15,7 +15,7 @@
     <div class="home-header__options">
         <select>
             {% for language in languages %}
-                <option class="kisho" value="{{ language.name_local }}" {% if language.code == LANGUAGE_CODE %}selected{% endif %}>{{ language.name_local }}</option>
+                <option value="{{ language.name_local }}" {% if language.code == LANGUAGE_CODE %}selected{% endif %}>{{ language.name_local }}</option>
             {% endfor %}
         </select>  
         <a class="js-search-btn" href="{% url "search" %}">
