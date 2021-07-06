@@ -293,7 +293,7 @@ input:checked + .cust-check__title {
 
 .cust-check--2 input:checked ~ .cust-check__title .cust-check__check {
     background-color: #303030;
-    background-image: url("static/icons/checked-white.svg");
+    background-image: url("/static/icons/checked-white.svg");
     background-position: 50%;
     background-repeat: no-repeat
 }
@@ -309,7 +309,7 @@ input:checked + .cust-check__title {
 
 .cust-check--2.success input:checked ~ .cust-check__title .cust-check__check {
     background-color: #fff;
-    background-image: url("static/icons/checked-green.svg");
+    background-image: url("/static/icons/checked-green.svg");
     border-color: #fff
 }
 
@@ -697,7 +697,7 @@ input:checked + .cust-check__title {
 }
 
 .search-results__list-item a:after {
-    background-image: url("static/icons/arrow-pink.svg");
+    background-image: url("/static/icons/arrow-pink.svg");
     background-position: 50%;
     background-repeat: no-repeat;
     content: "";
@@ -748,7 +748,7 @@ input:checked + .cust-check__title {
 }
 
 .search-results__view:after {
-    background-image: url("static/icons/arrow-down.svg");
+    background-image: url("/static/icons/arrow-down.svg");
     background-position: 50%;
     background-repeat: no-repeat;
     content: "";
@@ -810,7 +810,7 @@ input:checked + .cust-check__title {
 }
 
 .search-variants__item a:after {
-    background-image: url("static/icons/arrow-down.svg");
+    background-image: url("/static/icons/arrow-down.svg");
     background-position: 50%;
     background-repeat: no-repeat;
     content: "";
