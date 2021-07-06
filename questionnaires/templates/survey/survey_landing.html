@@ -1,13 +1,19 @@
 {% extends "base.html" %}
-{% load wagtailimages_tags %}
+{% load static wagtailimages_tags %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/survey.css' %}">
+{% endblock %}
 
 {% block content %}
-    <div> thank you page</div>
-
-    <div>{{ page.thank_you_text }}</div>
-
-
-    {% if back_url %}
-        <a href="{{ back_url }}">< Back</a>
-    {% endif %}
+    <div class="container">
+        <h1 class="title survey-page__title survey-page__title--center">Thank
+            you for your input!</h1>
+        <div class="survey-page__desc"><p>Complete a Covid-19 course</p></div>
+        <div class="survey-page__btns">
+            <button class="cust-btn cust-btn--dark survey-page__btn"><span>Get Started</span>
+            </button>
+            <a href="/" class="cust-btn cust-btn--clear survey-page__btn"><span>Go to homepage</span></a>
+        </div>
+    </div>
 {% endblock %}
