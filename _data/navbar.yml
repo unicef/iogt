@@ -22,9 +22,9 @@ pages:
 
   - name: Developer Resources
     link: "dev-resources"
-    dropdown:
-      - name: CMS Manual
-        link: /cms-manual/intro/intro-to-wagtail/
+    # dropdown:
+    #   - name: CMS Manual
+    #     link: /cms-manual/intro/intro-to-wagtail/
 
   - name: Numbers
     link: "numbers"
