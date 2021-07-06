@@ -1,19 +1,22 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% load static wagtailcore_tags %}
 {% load home_tags %}
 
 {% block body_class %}template-searchresults{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css"
-          href="{% static 'css/section.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/section.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/search.css' %}">
 {% endblock extra_css %}
 
-{% block title %}Search{% endblock %}
+{% block title %}{% trans "Search results for" %}: {{ search_query }}{% endblock %}
 
 {% block content %}
     <div class="search-container">
+    <h2>
+        {% trans "Searching results for" %}: "{{ search_query }}"
+    </h2>
 
     <!--<div class="container btn-back-container">
     <a href="#" class="btn-back">
@@ -32,16 +35,16 @@
             <div class="search-results__header">
                 <div class="container search-results__header-container">
                     <p class="title search-results__title">{{ group }} | {{ results.search_results_no }} result{{ results.search_results_no|pluralize }}</p>
-                    <!--  <button class="search-results__text search-results__view">All {{ search_results | length }} result</button> -->
+                    <!--  <button class="search-results__text search-results__view">All {{ value.search_results_no }} result</button> -->
                 </div>
             </div>
                 {% render_articles_list results.search_results %}
-            {% endfor %}
+
 
             <div class="page-controls-container">
                 <div class="container">
                     <div class="pagination search-results__pagination">
-                        {% if search_results.has_previous %}
+                        {% if value.search_results.has_previous %}
                             <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}"
                                class="pagination__arrow pagination__arrow-prev">
                                 <svg viewBox="0 0 8 14" fill="none"
@@ -53,7 +56,7 @@
                                 </svg>
                             </a>
                         {% endif %}
-                        {% if search_results.has_next %}
+                        {% if value.search_results.has_next %}
                             <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}"
                                class="pagination__arrow pagination__arrow-next">
                                 <svg viewBox="0 0 8 14" fill="none"
@@ -68,6 +71,7 @@
                     </div>
                 </div>
             </div>
+            {% endfor %}
         {% elif search_query %}
             <div class="search-not-found">
                 <div class="container search-not-found__container">
