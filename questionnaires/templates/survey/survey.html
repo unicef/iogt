@@ -11,7 +11,8 @@
 {% block content %}
     <div class="survey-page">
         <div class="container btn-back-container">
-            <a href="#" class="btn-back">
+            <a href="{% if back_url != None %}{{ back_url }}{% else %}/{% endif %}"
+               class="btn-back">
                 <figure class="btn-back__icon">
                     <svg width="8" height="14" viewBox="0 0 8 14" fill="none"
                          xmlns="http://www.w3.org/2000/svg">
