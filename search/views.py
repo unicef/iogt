@@ -17,10 +17,10 @@ def search(request):
 
     # Search
     for search_group in search_groups:
-        search_results_amount = 0
+        search_results_count = 0
         if search_query:
             search_results = search_group.objects.live().search(search_query)
-            search_results_amount = search_results.count()
+            search_results_count = search_results.count()
             query = Query.get(search_query)
 
             # Record hit
@@ -38,7 +38,7 @@ def search(request):
         if search_results:
             results["search_groups"][search_group.__name__] = {
                 "search_results": search_results,
-                "search_results_amount": search_results_amount,
+                "search_results_count": search_results_count,
             }
 
     return TemplateResponse(request, "search/search.html", results)
