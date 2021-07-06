@@ -11,16 +11,16 @@ def search(request):
     search_groups = (Article, Section, Survey, Quiz)
 
     search_query = request.GET.get("query")
-    page = request.GET.get("page", 1)
+    page = int(request.GET.get("page", 1))
 
     results = {"search_query": search_query, "search_groups": {}}
 
     # Search
     for search_group in search_groups:
-        search_results_no = 0
+        search_results_amount = 0
         if search_query:
             search_results = search_group.objects.live().search(search_query)
-            search_results_no = search_results.count()
+            search_results_amount = search_results.count()
             query = Query.get(search_query)
 
             # Record hit
@@ -32,15 +32,13 @@ def search(request):
         paginator = Paginator(search_results, SEARCH_RESULTS_PER_PAGE)
         try:
             search_results = paginator.page(page)
-        except PageNotAnInteger:
-            search_results = paginator.page(1)
         except EmptyPage:
             search_results = paginator.page(paginator.num_pages)
 
         if search_results:
             results["search_groups"][search_group.__name__] = {
                 "search_results": search_results,
-                "search_results_no": search_results_no,
+                "search_results_amount": search_results_amount,
             }
 
     return TemplateResponse(request, "search/search.html", results)

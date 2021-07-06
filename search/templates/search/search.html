@@ -34,8 +34,8 @@
             {% for group, results in search_groups.items %}
             <div class="search-results__header">
                 <div class="container search-results__header-container">
-                    <p class="title search-results__title">{{ group }} | {{ results.search_results_no }} result{{ results.search_results_no|pluralize }}</p>
-                    <!--  <button class="search-results__text search-results__view">All {{ value.search_results_no }} result</button> -->
+                    <p class="title search-results__title">{{ group }} | {{ results.search_results_amount }} result{{ results.search_results_amount|pluralize }}</p>
+                    <!--  <button class="search-results__text search-results__view">All {{ value.search_results_amount }} result</button> -->
                 </div>
             </div>
                 {% render_articles_list results.search_results %}
