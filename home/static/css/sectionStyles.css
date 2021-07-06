@@ -994,4 +994,17 @@
   background-repeat: no-repeat;
   border: none;
 }
+
+.banner-holder {
+  margin-top: 8px;
+  margin-bottom: 60px;
+  padding: 0 12px;
+}
+
+.banner-holder img {
+  margin-bottom: 6px;
+  width: 100vw;
+  height: auto;
+  border-radius: 12px;
+}
 /*# sourceMappingURL=sectionStyles.css.map */
