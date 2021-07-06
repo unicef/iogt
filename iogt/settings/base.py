@@ -377,6 +377,6 @@ WAGTAIL_RICH_TEXT_FIELD_FEATURES = [
 ]
 
 # Search results
-SEARCH_RESULTS_PER_PAGE = 9
+SEARCH_RESULTS_PER_PAGE = 10
 
 from .profanity_settings import *

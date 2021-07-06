@@ -40,12 +40,11 @@
             </div>
                 {% render_articles_list results.search_results %}
 
-
             <div class="page-controls-container">
                 <div class="container">
                     <div class="pagination search-results__pagination">
-                        {% if value.search_results.has_previous %}
-                            <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}"
+                        {% if results.search_results.has_previous %}
+                            <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ results.search_results.previous_page_number }}"
                                class="pagination__arrow pagination__arrow-prev">
                                 <svg viewBox="0 0 8 14" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
@@ -56,8 +55,8 @@
                                 </svg>
                             </a>
                         {% endif %}
-                        {% if value.search_results.has_next %}
-                            <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}"
+                        {% if results.search_results.has_next %}
+                            <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ results.search_results.next_page_number }}"
                                class="pagination__arrow pagination__arrow-next">
                                 <svg viewBox="0 0 8 14" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
