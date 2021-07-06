@@ -11,7 +11,10 @@
 {% block content %}
     <div class="survey-page">
         <div class="container btn-back-container">
-            <a href="{% if back_url != None %}{{ back_url }}{% else %}/{% endif %}"
+            <a href="
+
+
+                    {% if back_url != None %}{{ back_url }}{% else %}/{% endif %}"
                class="btn-back">
                 <figure class="btn-back__icon">
                     <svg width="8" height="14" viewBox="0 0 8 14" fill="none"
@@ -64,6 +67,9 @@
                             {% elif field.field.widget.input_type == "text" %}
                                 {% render_text_field field %}
                             {% endif %}
+                            {% for err in  field.errors %}
+                                <p class="cust-input__error">{{ err }}</p>
+                            {% endfor %}
                         </div>
                     {% endfor %}
                 </div>
