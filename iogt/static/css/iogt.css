@@ -380,6 +380,15 @@ input:checked + .cust-check__title {
     border-radius: 8px
 }
 
+.cust-btn--clear {
+    background: none !important;
+    border: none !important;
+}
+
+.cust-btn--clear span {
+    text-decoration: underline
+}
+
 .cust-btn--dark {
     background-color: #303030
 }
@@ -390,6 +399,19 @@ input:checked + .cust-check__title {
 
 .cust-btn--dark:hover {
     background-color: #4a4a4a
+}
+
+.cust-btn--violet {
+    background-color: #8b5cd6;
+    border: none
+}
+
+.cust-btn--violet span {
+    color: #fff
+}
+
+.cust-btn--violet:hover {
+    background-color: #f3effb
 }
 
 .cust-btn--white {
