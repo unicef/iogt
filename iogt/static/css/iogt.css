@@ -432,7 +432,8 @@ input:checked + .cust-check__title {
     -webkit-align-items: center;
     align-items: center;
     display: -webkit-flex;
-    display: flex
+    display: flex;
+    margin: 0;
 }
 
 .btn-back__pageTitle, .btn-back__title {
