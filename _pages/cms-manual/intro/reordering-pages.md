@@ -1,11 +1,11 @@
 ---
 title: Reordering Pages
-permalink: /cms-manual/intro/reordering-pages
+permalink: /cms-manual/intro/reordering-pages/
 ---
 
-Please note that when creating content pages, the order of these pages on the site Frontend will follow a chronological listing format. The first article you load will remain at the top of the page, with subsequent articles appearing below it. It's important to note that Molo will show your content items in the reverse order, with the latest article loaded appearing at the top of a list of articles. When loading content, be clear how you want content to appear to your site visitor and check the order on the Frontend URL. 
+Please note that when creating content pages, the order of these pages on the site Frontend will follow a chronological listing format. The first article you load will remain at the top of the page, with subsequent articles appearing below it. It's important to note that Molo will show your content items in the reverse order, with the latest article loaded appearing at the top of a list of articles. When loading content, be clear how you want content to appear to your site visitor and check the order on the Frontend URL.
 
-Wagtail allows you to reorder the appearance of sections, subsections or articles on the Front end. You can individually move them into a new listing position using the page reordering Handles. These appear as two small arrows facing opposite directions to the left of any list of Child pages. 
+Wagtail allows you to reorder the appearance of sections, subsections or articles on the Front end. You can individually move them into a new listing position using the page reordering Handles. These appear as two small arrows facing opposite directions to the left of any list of Child pages.
 
 **Here's what you need to know about Handles:**
 
