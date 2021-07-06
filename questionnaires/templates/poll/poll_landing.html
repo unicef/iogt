@@ -1,41 +1,55 @@
 {% extends "base.html" %}
-{% load wagtailimages_tags %}
+{% load questionnaires_tags %}
+{% load static wagtailimages_tags i18n %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/polls.css' %}">
+{% endblock %}
 
 {% block content %}
-    <h1>Question: {{ page.name }}</h1>
-    <h2>Votes total: {{ page.total_votes }}</h2>
-    <hr>
-    {{ page.thank_you_text }}
-    <hr>
-
+    <div class="container btn-back-container">
+        <a href="{{ back_url }}" class="btn-back">
+            <figure class="btn-back__icon">
+                <svg width="8" height="14" viewBox="0 0 8 14" fill="none"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 13L1 7.0005L7 1" stroke="#303030"
+                          stroke-width="1.5"
+                          stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+            </figure>
+            <span class="btn-back__title">BACK</span></a>
+    </div>
     {% if page.show_results %}
-    <h2>Results</h2>
-        {% for question, answers in results.items %}
-            <h3>{{ question }}</h3>
-            {% for answer, count in answers.items %}
-                {% if page.result_as_percentage %}
-                <div>{{ answer }}: {{ count }}%</div>
-                {% else %}
-                <div>{{ answer }}: {{ count }}</div>
-                {% endif %}
-            {% endfor %}
-        {% endfor %}
-    {% endif %}
-
-    {% if page.show_results %}
-        <h3>All answers:</h3>
-        {% for answer in answers %}
-            <p>{{ answer.title }} |
-                {% if poll.result_as_percentage %}
-                    {{ answer.percentage }} %
-                {% else %}
-                    {{ answer.votes }} vote{{ answer.votes|pluralize }}
-                  {% endif %}
-            </p>
-        {% endfor %}
-    {% endif %}
-
-    {% if back_url %}
-        <a href="{{ back_url }}">< Back</a>
+        <div class="polls">
+            <div class="polls-widget">
+                <div class="container">
+                    <div class="polls-widget__wrap">
+                        <h1 class="title polls-widget__title">{% trans page.title %}</h1>
+                        <div class="polls-widget__form">
+                            {% snake_case page.title as current_answer %}
+                            <h4 class="polls-widget__form-title">{% trans "Thank you for your response!" %}</h4>
+                            {% for question, answers in results.items %}
+                                {% for answer, count in answers.items %}
+                                    <div class="cust-check cust-check--white polls-widget__item{% if answer == request.POST|get_value_from_querydict:current_answer %} cust-check--active{% endif %}">
+                                        <div class="cust-check__title">
+                                            <div class="cust-check__title-left">
+                                                <span>{% trans answer %}</span>
+                                                {% if answer == request.POST|get_value_from_querydict:current_answer %}
+                                                    <span class="cust-check__subtitle">Your answer</span>{% endif %}
+                                            </div>
+                                            <div class="cust-check__title-right">
+                                                <span class="cust-check__percent">{{ count |floatformat:"0" }}%</span>
+                                            </div>
+                                            <div class="cust-check__percent-item"
+                                                 style="width: {{ count |floatformat:"0" }}%"></div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endif %}
 {% endblock %}
