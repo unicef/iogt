@@ -25,11 +25,13 @@ def render_radios(field):
 
 @register.inclusion_tag('questionnaires/tags/checkboxes.html')
 def render_checkboxes(field):
+    print(field)
     return {'field': field}
 
 
 @register.inclusion_tag('questionnaires/tags/textarea.html')
 def render_textarea(field):
+    print(field)
     return {'field': field}
 
 
