@@ -8,9 +8,8 @@
 {% block content %}
     <div class="home">
         {% render_banners_list banners %}
-        {% flat_menu "nav_bar" template="nav_bar.html" %}
-
-        <div class="container container--main">
+        {% comment %} {% flat_menu "nav_bar" template="nav_bar.html" %} {% endcomment %}
+        <div >
             {% if page.home_featured_content %}
                 {% include_block page.home_featured_content %}
             {% endif %}
