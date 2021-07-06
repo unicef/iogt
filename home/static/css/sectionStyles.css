@@ -995,6 +995,14 @@
   border: none;
 }
 
+.home-page__featured-content {
+  padding: 0 22px;
+}
+
+.home-page__featured-content .related_reading {
+  margin: 0;
+}
+
 .banner-holder {
   margin-top: 8px;
   margin-bottom: 20px;

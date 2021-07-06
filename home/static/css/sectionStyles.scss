@@ -845,6 +845,16 @@
 
 // home page styling
 
+.home-page {
+  &__featured-content {
+   padding: 0 22px;
+  
+   .related_reading {
+      margin:0
+   }
+  }
+}
+
 .banner-holder {
    margin-top: 8px;
    margin-bottom: 20px;
