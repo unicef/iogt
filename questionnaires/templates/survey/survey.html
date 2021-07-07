@@ -64,7 +64,7 @@
                                 {% render_textarea field %}
                             {% elif field.field.widget.input_type == "text" %}
                                 {% render_text_field field %}
-                            {% elif "select" in field.field.widget.template_name %}
+                            {% elif "/select" in field.field.widget.template_name %}
                                 {% render_select field %}
                             {% endif %}
                             {% for err in  field.errors %}

@@ -50,7 +50,7 @@
                             </h4>
                             {% if field.field.widget.input_type == "radio" %}
                                 {% render_polls_radios field %}
-                            {% elif "select" in field.field.widget.template_name %}
+                            {% elif "/select" in field.field.widget.template_name %}
                                 {% render_select field %}
                             {% endif %}
                             {% for err in  field.errors %}
