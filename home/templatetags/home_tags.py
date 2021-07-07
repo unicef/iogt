@@ -15,8 +15,9 @@ def footer(context):
 
 @register.inclusion_tag('home/tags/top_level_sections.html', takes_context=True)
 def top_level_sections(context):
+    section_index_page = SectionIndexPage.objects.first()
     return {
-        'top_level_sections': SectionIndexPage.objects.first().get_children(),
+        'top_level_sections': section_index_page.get_children() if section_index_page else None,
         'request': context['request'],
     }
 

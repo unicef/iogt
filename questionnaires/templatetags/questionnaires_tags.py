@@ -40,6 +40,11 @@ def render_text_field(field):
     return {'field': field}
 
 
+@register.inclusion_tag("questionnaires/tags/select.html")
+def render_select(field):
+    return {"field": field}
+
+
 @register.inclusion_tag('questionnaires/tags/polls_radios.html')
 def render_polls_radios(field):
     return {"field": field}
