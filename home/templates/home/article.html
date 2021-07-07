@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags comments comments_xtd  home_tags questionnaires_tags sass_tags %}
+{% load static wagtailcore_tags wagtailimages_tags comments comments_xtd  home_tags questionnaires_tags sass_tags i18n %}
 
 {% block content %}
    
@@ -7,7 +7,7 @@
  {% image page.lead_image width-320 class='article__img' %}
  {% comment %} <a href="{{page.parent_section.url}}" class='article__back' style="background-color:{{ page.parent_section.background_color }}">
     <img class='article__back--image1' src="{% static 'icons/back.svg' %}">
-    Back to {{ page.parent_section}}
+    {% translate "Back to" %} {{ page.parent_section}}
 </a> {% endcomment %}
   <section class='article-content'>
       <h1>{{ page.title }}</h1>
@@ -17,10 +17,10 @@
        <section class='article-navigation'>
             {% if page.get_prev_sibling or page.get_next_sibling %}
                 {% if page.get_prev_sibling %}
-                    <a href="{% pageurl page.get_prev_sibling %}" class='article-navigation__button--previous'>Previous</a>
+                    <a href="{% pageurl page.get_prev_sibling %}" class='article-navigation__button--previous'>{% translate "Previous" %}</a>
                 {% endif %}
                 {% if page.get_next_sibling %}
-                    <a href="{% pageurl page.get_next_sibling %}" class='article-navigation__button--next'>Next</a>
+                    <a href="{% pageurl page.get_next_sibling %}" class='article-navigation__button--next'>{% translate "Next" %}</a>
                 {% endif %}
             {% endif %}
        </section> 
