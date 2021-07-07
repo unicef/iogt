@@ -12,8 +12,6 @@
     <div class="survey-page">
         <div class="container btn-back-container">
             <a href="
-
-
                     {% if back_url != None %}{{ back_url }}{% else %}/{% endif %}"
                class="btn-back">
                 <figure class="btn-back__icon">
@@ -45,7 +43,7 @@
                                     questions</p>
                                 <p class="quest-item__step-desc">
                                     <span>
-                                        {% if field.field.widget.input_type  == "radio" %}
+                                        {% if field.field.widget.input_type  == "radio" or "select" in field.field.widget.template_name %}
                                             Select one
                                         {% elif  field.field.widget.input_type  == "checkbox" %}
                                             Check all that apply
@@ -66,6 +64,8 @@
                                 {% render_textarea field %}
                             {% elif field.field.widget.input_type == "text" %}
                                 {% render_text_field field %}
+                            {% elif "/select" in field.field.widget.template_name %}
+                                {% render_select field %}
                             {% endif %}
                             {% for err in  field.errors %}
                                 <p class="cust-input__error">{{ err }}</p>

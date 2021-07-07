@@ -40,7 +40,7 @@
                                           stroke-linecap="round"
                                           stroke-linejoin="round"/>
                                 </svg>
-                                {% if field.field.widget.input_type  == "radio" %}
+                                {% if field.field.widget.input_type  == "radio" or "select" in field.field.widget.template_name %}
                                     Select one
                                 {% elif  field.field.widget.input_type  == "checkbox" %}
                                     Check all that apply
@@ -50,6 +50,8 @@
                             </h4>
                             {% if field.field.widget.input_type == "radio" %}
                                 {% render_polls_radios field %}
+                            {% elif "/select" in field.field.widget.template_name %}
+                                {% render_select field %}
                             {% endif %}
                             {% for err in  field.errors %}
                                 <p class="cust-input__error">{{ err }}</p>
