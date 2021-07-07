@@ -916,8 +916,6 @@
 // footer styles
 
 .footer {
-  margin-left: 20px;
-  margin-right: 20px;
   margin-top: 60px;
   border-top: 1px solid #EFEFEF;
 
@@ -925,6 +923,8 @@
      padding:0;
      padding-top: 22px;
      border:none;
+     margin-left: 20px;
+     margin-right: 20px;
   }
 
   select {
@@ -934,6 +934,7 @@
   label, svg {
      display:flex;
      align-items: center;
+     
   }
   
   &__copyright {
@@ -947,6 +948,8 @@
   }
 
   &__form {
+   margin-left: 20px;
+   margin-right: 20px;
    margin-top: 35px;
    left: 20px;
    top: 92px;
@@ -975,6 +978,8 @@
 // top level setion
 
 .top-level, .bottom-level {
+   margin-left: 20px;
+   margin-right: 20px;
    margin-top: 32px;
    border-top: 1px solid #EFEFEF;
    padding-top: 16px;
@@ -1007,4 +1012,62 @@
       background-color: #F7F7F9;
    }
 
+}
+
+
+// sticky footer
+
+.sticky-footer {
+   position: fixed;
+   bottom: 0px;
+   width: 100vw;
+}
+
+.nav-bar {
+   background-color: #0094f4;
+}
+
+.nav-bar__wrap {
+   -webkit-align-items: center;
+   align-items: center;
+   display: flex
+}
+
+.nav-bar__item {
+   width: 25%
+}
+
+.nav-bar-item a {
+   align-items: center;
+   background-color: #0094f4;
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: center;
+   padding: 8px 0;
+   text-decoration: none
+}
+
+.nav-bar-item.active a {
+   background-color: #0070e2
+}
+
+.nav-bar-item__icon {
+   display: block;
+   height: 20px;
+   width: 20px
+}
+
+.nav-bar-item__icon img {
+   max-width: 100%;
+   max-height: 100%;
+}
+
+.nav-bar-item__title {
+   color: #fff;
+   font-size: 8px;
+   font-weight: 600;
+   line-height: 16px;
+   margin-top: 2px;
+   text-align: center;
+   width: 100%
 }
