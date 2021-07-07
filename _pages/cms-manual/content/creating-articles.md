@@ -28,7 +28,7 @@ There are three core components of the Article:
 
 {% include figure.html src="/assets/img/docs/article-publishing-options.png" alt="Article publishing options" caption="Article publishing options" %}
 
-## Article content formatting table
+## Article Content Formatting Guide
 
 <table class="table">
     <thead>
