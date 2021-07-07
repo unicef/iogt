@@ -1,3 +1,4 @@
+# Build the project
 build:
 	docker-compose build
 down:
