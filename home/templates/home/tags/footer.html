@@ -1,7 +1,7 @@
 {% load static wagtailcore_tags wagtailimages_tags i18n %}
-<footer class="footer">
+<footer >
     <nav>
-        <div class="links">
+        <div >
           {% for footer_page in footer_pages %}
             <img src="{{ footer_page.specific.icon.url }}" />
             <a href="{% pageurl footer_page %}">{% translate footer_page.specific.title %}</a>
