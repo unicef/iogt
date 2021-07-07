@@ -189,6 +189,26 @@ ul.breadcrumb a {
   color: #6b6b6b;
 }
 
+.siblings-container {
+  display: block;
+  padding: 30px 0;
+}
+
+.siblings-container .prev-sibling {
+  border: 1px solid lightgrey;
+  float: left;
+  border-radius: 3px;
+  padding: 5px;
+
+}
+
+.siblings-container .next-sibling {
+  border: 1px solid lightgrey;
+  float: right;
+  border-radius: 3px;
+  padding: 5px;
+}
+
     /* Feature- Related Articles */
     .related-articles-section {
 
@@ -1399,7 +1419,7 @@ DESKTOP CSS SETTTINGS. At this point, able to reuse some of the sections and inc
     }
 
     .comment-single, .comment-reply {
-      font-size: 10px;
+      font-size: 14px;
     }
 
     .comment-single {
@@ -1565,4 +1585,55 @@ DESKTOP CSS SETTTINGS. At this point, able to reuse some of the sections and inc
       border-radius: 4px;
     }
 
+    .tags h3 {
+      display: inline-block;
+    }
+    .tags .tagit-label {
+      border-radius: 2px;
+      background-color: #007d7e;
+      padding: .2em .5em;
+      color: #fff;
+      line-height: 2em;
+      white-space: nowrap;
+      margin: 0 5px;
+    }
+
+    .recommended-articles-section ul li {
+      display: block;
+      margin-bottom: 20px;
+    }
+    .recommended-articles-section ul li .recommended-article-item {
+        font-size: 14px;
+        display: inline-block;
+        width: 50%
+    }
+
+    .recommended-sections-section h1, .recommended-articles-section h1{
+        text-align: center;
+        font-size: 35px;
+        border-bottom: 1px solid #6B6B6B;
+        padding-bottom: 20px;
+
+    }
+
+    .recommended-sections-section {
+      margin-top: 40px
+    }
+
+    .recommended-sections-list li{
+      display: block;
+      font-size: 22px;
+      margin-top: 25px;
+    }
+
 }
+
+.user-progress-container {
+  width: 70%;
+  margin: auto;
+  background-color: blanchedalmond;
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 5px;
+}
+

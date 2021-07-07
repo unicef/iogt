@@ -1,27 +1,11 @@
-{% load static wagtailcore_tags wagtailimages_tags %}
+{% load static wagtailcore_tags wagtailimages_tags i18n %}
 <footer class="footer">
     <nav>
-        {% for block in footer.navigation %}
         <div class="links">
-            <span>{{block.value.title}}</span>
-            {% for link in block.value.links %}
-            <a href="{% pageurl link.value %}">{{link.value.title}}</a>
-            {% endfor %}
+          {% for footer_page in footer_pages %}
+            <img src="{{ footer_page.specific.icon.url }}" />
+            <a href="{% pageurl footer_page %}">{% translate footer_page.specific.title %}</a>
+          {% endfor %}
         </div>
-        {% endfor %}
     </nav>
-
-    <div class="copyright">
-        <div class="logo">
-            {% for block in footer.logos %}
-            {% image block.value width-150 %}
-            {% endfor %}
-        </div>
-        <div class="links">
-            {% for block in footer.essential %}
-            <a href="{% pageurl block.value %}">{{block.value.title}}</a>
-            {% endfor %}
-        </div>
-    </div>
-
 </footer>

@@ -1,105 +1,14 @@
-{% load static wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags wagtailimages_tags %}
 
-    <div class="featureArticles">
+ <section class='related_reading'>
+        <ul>
         {% for article in articles %}
-        <div class="articleContainer">
-            <div class="mobileAndFeatureArticleContainer">
-                <div class="content">
-                    <p style="color: rgb(191, 0, 18);" class="tag">CORONAVIRUS (COVID-19)</p>
-                    <h1 class="title">{{ article.title }}</h1>
-                </div>
-                <div class="image">
-                    <a href="{% pageurl article %}">
-                        {% image article.specific.lead_image fill-31x26 class="mainImage" %}
-                    </a>
-                </div>
-            </div>
-        </div>
+            <li>
+               <a href="{% pageurl article %}">
+                    <p > {{ article.title }}</p>
+                    {% image article.specific.lead_image fill-260x186 class='related_reading__img' %}
+                </a>
+            </li>
         {% endfor %}
-    </div>
-
-    <div class="mobileArticles">
-        {% for article in articles %}
-        <div class="mobileHomeArticleContainer">
-            <div class="mobileTagContainer">
-                <h1 class="mobileTag" style="color: rgb(191, 0, 18);">CORONAVIRUS (COVID-19)</h1>
-                <div class="share">
-                    <img src="{% static 'images/nav-icons/forward-green.png'%}">
-                </div>
-            </div>
-            <a href="{% pageurl article %}">
-                <div>
-                    {% image article.specific.lead_image height-130 %}
-                </div>
-                <h1 class="mobileHeader">{{ article.title }}</h1>
-            </a>
-        </div>
-        {% endfor %}
-    </div>
-
-    <div class="tabletArticles">
-        {% for article in articles %}
-        <div class="articleContainer" >
-            <div class="tabletArticleContainer">
-                <div class="image">
-                    <a href="{% pageurl article %}">
-                        {% image article.specific.lead_image fill-336x186 class="mainImage" %}
-                    </a>
-                    <div class="share">
-                        <img src="{% static 'images/share.png'%}">
-                    </div>
-                </div>
-                <div class="content" style="border-bottom-color: rgb(191, 0, 18);">
-                    <div style="color: rgb(191, 0, 18);" class="tag">
-                        <span>CORONAVIRUS (COVID-19) | ABOUT CORONAVIRUS</span>
-                    </div>
-                    <div class="byline">
-                        {{ article.first_published_at|date }} /
-                        <span class="author">by {{ article.owner.get_full_name }}</span>
-                    </div>
-
-                    <div class="title">
-                        <a href="{% pageurl article %}">
-                            <span>{{ article.title }}</span>
-                        </a>
-                    </div>
-                    <p class="desc">{{ article.specific.description|striptags|truncatewords:21 }}</p>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-
-    <div class="desktopArticles">
-        {% for article in articles %}
-        <div class="articleContainer">
-            <div class="desktopArticleContainer" style="border-bottom: medium solid rgb(191, 0, 18);">
-                <div class="image">
-                    <a href="{% pageurl article %}">
-                        {% image article.specific.lead_image fill-336x186 class="mainImage" %}
-                    </a>
-                    <div class="share">
-                        <img src="{% static 'images/share.png'%}">
-                    </div>
-                </div>
-                <div class="content">
-                    <div style="color: rgb(191, 0, 18);" class="tag">
-                        <div>
-                            <span>CORONAVIRUS (COVID-19) | ABOUT CORONAVIRUS</span>
-                        </div>
-                        <div class="byline">
-                            {{ article.first_published_at|date }} /
-                            <span class="author">by {{ article.owner.get_full_name }}</span>
-                        </div>
-                    </div>
-                    <div class="title">
-                        <a href="{% pageurl article %}">
-                            <span>{{ article.title }}</span>
-                        </a>
-                    </div>
-                    <p class="desc">{{ article.specific.description|striptags|truncatewords:21 }}</p>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
+        </ul>
+  </section>  

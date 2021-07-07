@@ -1,0 +1,13 @@
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% for survey in surveys %}
+<a  href="{% pageurl survey %}">
+    <span class='quiz__details'>
+        <p>SURVEY</p>
+        <p >{{ survey.title }}</p>
+    </span>
+    <div class="quiz__imageholder">
+         <img  class="quiz__image" src="{% static 'icons/forward.svg' %}" alt='arrow-right'>
+    </div>
+</a>
+{% endfor %}

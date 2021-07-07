@@ -1,12 +1,34 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags home_tags %}
+{% load static wagtailcore_tags wagtailimages_tags home_tags questionnaires_tags sass_tags%}
 
 {% block extra_css %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/section.css' %}">
 {% endblock extra_css %}
 
 {% block content %}
-    <div class="home">
-        {% render_articles_list articles %}
-    </div>
+   {% image page.lead_image width-320 class='article__img' %}
+     {% comment %} <a href="{{page.parent_section.url}}" class='article__back' style="background-color:{{ page.parent_section.background_color }}">
+          <img class='article__back--image1' src="{% static 'icons/back.svg' %}">
+          Go back
+    </a> {% endcomment %}
+    <section class='featured-content' style="background-color:{{ page.background_color }}">
+        {% render_featured_content_list featured_content %}
+     </section>
+    <section>
+        {% render_sub_sections_list sub_sections %}
+    </section>
+    <section class='quiz-holder'>
+     <section class='quiz-holder__quiz' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
+      {% render_polls_list polls %} 
+     </section>
+    <section class='quiz-holder__quiz' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
+    {% render_surveys_list surveys %}
+     </section>
+      <section class='quiz-holder__quiz' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
+          {% render_quizzes_list quizzes %} 
+     </section>
+    </section>
+     {% render_articles_list articles %} 
 {% endblock content %}
+
+
+

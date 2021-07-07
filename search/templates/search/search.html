@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% load static wagtailcore_tags %}
 {% load home_tags %}
 
@@ -9,33 +10,105 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/search.css' %}">
 {% endblock extra_css %}
 
-{% block title %}Search{% endblock %}
+{% block title %}{% trans "Search results for" %}: {{ search_query }}{% endblock %}
 
 {% block content %}
     <div class="search-container">
-        <h2>
-            Searching results for: "{{ search_query }}"
-        </h2>
+    <h2>
+        {% trans "Searching results for" %}: "{{ search_query }}"
+    </h2>
 
+    <!--<div class="container btn-back-container">
+    <a href="#" class="btn-back">
+        <figure class="btn-back__icon">
+            <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 13L1 7.0005L7 1" stroke="#303030" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </figure>
+        <span class="btn-back__title">BACK</span>
+        <p class="btn-back__pageTitle">{{ search_query }}</p>
+    </a>
+</div>-->
+    <div class="search-results js-search-result search__results">
+        {% if search_groups %}
+            {% for group, results in search_groups.items %}
+            <div class="search-results__header">
+                <div class="container search-results__header-container">
+                    <p class="title search-results__title">{{ group }} | {{ results.search_results_count }} result{{ results.search_results_count|pluralize }}</p>
+                    <!--  <button class="search-results__text search-results__view">All {{ value.search_results_count }} result</button> -->
+                </div>
+            </div>
+                {% render_articles_list results.search_results %}
+
+            <div class="page-controls-container">
+                <div class="container">
+                    <div class="pagination search-results__pagination">
+                        {% if results.search_results.has_previous %}
+                            <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ results.search_results.previous_page_number }}"
+                               class="pagination__arrow pagination__arrow-prev">
+                                <svg viewBox="0 0 8 14" fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7 13L1 7.0005L7 1"
+                                          stroke="#303030" stroke-width="1.5"
+                                          stroke-linecap="round"
+                                          stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        {% endif %}
+                        {% if results.search_results.has_next %}
+                            <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ results.search_results.next_page_number }}"
+                               class="pagination__arrow pagination__arrow-next">
+                                <svg viewBox="0 0 8 14" fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7 13L1 7.0005L7 1"
+                                          stroke="#303030" stroke-width="1.5"
+                                          stroke-linecap="round"
+                                          stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% elif search_query %}
+            <div class="search-not-found">
+                <div class="container search-not-found__container">
+                    <p class="title search-not-found__title">No results found</p>
+                    <div class="text search-not-found__text">
+                        <p>It seems we can’t find any results based on your search.</p>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="search-page">
+                <div class="container search-page__container">
+                    <form class="footer__search search-page-form"
+                          action="/search">
+                        <label class="cust-input cust-input--icon profile-form__input">
+                            <span class="cust-input__icon">
+                                <svg width="16" height="16" viewBox="0 0 16 16"
+                                     fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7.33333 12.6667C10.2789 12.6667 12.6667 10.2789 12.6667 7.33333C12.6667 4.38781 10.2789 2 7.33333 2C4.38781 2 2 4.38781 2 7.33333C2 10.2789 4.38781 12.6667 7.33333 12.6667Z"
+                                          stroke="currentcolor" stroke-width="1.5"
+                                          stroke-linecap="round"
+                                          stroke-linejoin="round"/>
+                                    <path d="M13.9996 14L11.0996 11.1"
+                                          stroke="currentcolor" stroke-width="1.5"
+                                          stroke-linecap="round"
+                                          stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                                <input type="text" name="query"
+                                       placeholder="Search here" pattern="\S+.*"/>
+                        </label>
+                        <button type="submit"
+                                class="cust-btn cust-btn--dark polls-widget__submit">
+                            <span>See results</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
     </div>
-
-    {% if search_results %}
-
-        {% render_articles_list search_results %}
-
-        <div class="page-controls-container">
-
-        {% if search_results.has_previous %}
-            <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}" style="float:left">Previous</a>
-        {% endif %}
-
-        {% if search_results.has_next %}
-            <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}" style="float:right">Next</a>
-        {% endif %}
-        </div>
-    {% elif search_query %}
-        <div style="margin-left: 5%">
-        No results found
-        </div>
-    {% endif %}
 {% endblock %}

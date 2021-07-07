@@ -1,53 +1,42 @@
-{% load static %}
+{% load static wagtailcore_tags wagtailimages_tags wagtailuserbar menu_tags home_tags %}
+{% load i18n %}
+
+{% get_current_language as LANGUAGE_CODE %}
+
 <footer class="footer">
-    <nav>
-        <div class="links">
-            <span>CORONAVIRUS (COVID-19)</span>
-            <a href='/'>ABOUT CORONAVIRUS</a>
-            <a href='/'>STUDENT TOOLKIT</a>
-            <a href='/'>COVID-19 PARENTING</a>
-            <a href='/'>HEALTH WORKER RESOURCES</a>
-        </div>
-        <div class="links">
-            <span>YOUTH</span>
-            <div class="columns">
-                <div class="column">
-                    <a href='/'>INTERNET SAFETY</a>
-                    <a href='/'>CAREER ADVICE</a>
-                    <a href='/'>GIRL'S ZONE</a>
-                    <a href='/'>FREEDOM FOR GIRLS</a>
-                    <a href='/'>HIV / AIDS AND SAFE SEX</a>
-                    <a href='/'>THE FUTURE IS YOURS!</a>
-                </div>
-                <div class="column">
-                    <a href='/'>ACT FOR CLIMATE</a>
-                    <a href='/'>END VIOLENCE</a>
-                    <a href='/'>U-REPORT</a>
-                    <a href='/'>SUSTAINABLE GOALS - PRACTICAL GUIDE</a>
-                    <a href='/'>YOUR RIGHTS</a>
-                </div>
+    <div class="footer__nav-bar">
+        {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
+    </div>
+    {% top_level_sections %}
+    {% footer %}
+    <div class="container">
+        <form class="footer__search" action="{% url "search" %}">
+            <label class="cust-input cust-input--icon profile-form__input">
+                <span class="cust-input__icon">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7.33333 12.6667C10.2789 12.6667 12.6667 10.2789 12.6667 7.33333C12.6667 4.38781 10.2789 2 7.33333 2C4.38781 2 2 4.38781 2 7.33333C2 10.2789 4.38781 12.6667 7.33333 12.6667Z"
+                              stroke="currentcolor" stroke-width="1.5"
+                              stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M13.9996 14L11.0996 11.1" stroke="currentcolor"
+                              stroke-width="1.5" stroke-linecap="round"
+                              stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                <input type="text" name="query" placeholder="Search here"
+                       pattern="\S+.*"/>
+            </label>
+        </form>
+        <div class="footer__nav">
+            <div class="footer__column">
+                {% flat_menu "main_menu" template="menus/footer.html" %}
+            </div>
+            <hr>
+            <div class="footer__column">
+                {% flat_menu "second_footer_menu" template="menus/footer.html" %}
             </div>
         </div>
-        <div class="links">
-            <span>PARENTS & CAREGIVERS</span>
-            <a href='/'>VACCINES</a>
-            <a href='/'>PRE-SCHOOL YEARS</a>
-            <a href='/'>NUTRITION AND BREASTFEEDING</a>
-            <a href='/'>EARLY LIFE TIPS!</a>
-            <a href='/'>FACTS FOR LIFE</a>
-        </div>
-    </nav>
-    <div class="copyright">
-        <div class="logo">
-            <img src="{% static "images/iogt-logo.svg" %}">
-        </div>
-        <div class="links">
-            <a href="/terms-of-use">Terms of Use</a>
-            <a href="/privacy-policy">Privacy Policy</a>
-            <a href="/about-us">About Us</a>
-        </div>
-        <div>
-            <span>© The Internet of Good Things. All Rights Reserved.</span>
+        <div class="footer__copyright"><p>© The Internet of Good Things</p>
         </div>
     </div>
 </footer>

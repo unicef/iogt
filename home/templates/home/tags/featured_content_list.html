@@ -1,0 +1,8 @@
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% for featured_content in featured_content_items %}
+        <a href="{% pageurl featured_content %}" > 
+            {{ featured_content.title }} 
+        </a>
+{% endfor %}
+

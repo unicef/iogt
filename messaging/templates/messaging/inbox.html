@@ -1,0 +1,32 @@
+{% extends "messaging/base.html" %}
+​
+{% load i18n %}
+{% load messaging_tags %}
+​
+{% block title %}Messages{% endblock %}
+​
+{% block body_class %}{{ block.super }} messaging-inbox{% endblock %}
+​
+{% block content %}
+<div class="messaging-inbox-container">
+    <h2 class="with-actions">
+        Inbox
+    </h2>
+
+    <section class="mailbox">
+        {% for thread in threads %}
+            <div class="thread {% if thread|unread:user %}unread{% endif %}">
+                <a href="{{thread.get_absolute_url}}">
+                    <div class="participants">{{ thread.users.all|join:", " }}</div>
+                    <div class="latest-message">
+                        <p class="subject">{{ thread.subject }}</p>
+                        <p class="text">{{ thread.latest_message.text }}</p>
+                    </div>
+                </a>
+            </div>
+        {% empty %}
+            <div class="no-messages">You have no messages.</div>
+        {% endfor %}
+    </section>
+</div>
+{% endblock %}

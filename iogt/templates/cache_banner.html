@@ -1,0 +1,15 @@
+{% load i18n %}
+{% load static %}
+
+<div class="hideOnNonJSDevice cache-banner" >
+    <form action="" method="post">
+    <span class='cache-banner__close-holder' >
+       <input type="submit" value="{% trans '' %}" class='cache-banner__close-holder__button'/>
+    </span>
+     <p>This appears to be your first visit here. Our website is also available as a downloadable app.</p>
+     <p>Would you like to download it?</p>
+        {% csrf_token %}
+        <input type="submit" value="{% trans 'Download' %}" class='cache-banner__download' onclick="cache()"/>
+        <input id="first_time_user" name="first_time_user" type="hidden" value="False">
+    </form>
+</div>

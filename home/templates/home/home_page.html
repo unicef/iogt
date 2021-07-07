@@ -1,15 +1,18 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
+{% load static wagtailcore_tags wagtailimages_tags home_tags menu_tags %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+{% endblock extra_css %}
 
 {% block content %}
-
-<h1>{{ page.title }}</h1>
-<div class="sections">
-    <ul>
-        {% for article in articles %}
-        <li><a href="{% pageurl section %}">{{ section.title }}</a></li>
-        {% endfor %}
-    </ul>
-</div>
-
+    <div class="home-page">
+        {% render_banners_list banners %}
+        {% comment %} {% flat_menu "nav_bar" template="nav_bar.html" %} {% endcomment %}
+        <div class="home-page__featured-content">
+            {% if page.home_featured_content %}
+                {% include_block page.home_featured_content %}
+            {% endif %}
+        </div>
+    </div>
 {% endblock content %}

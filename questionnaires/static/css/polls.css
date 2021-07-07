@@ -1,0 +1,41 @@
+
+.polls-widget {
+    padding: 0 0 30px
+}
+
+.polls-widget__title {
+    margin-bottom: 16px
+}
+
+.polls-widget__form {
+    margin-top: 16px
+}
+
+.polls-widget__form-title {
+    -webkit-align-items: center;
+    align-items: center;
+    color: #9a9a9a;
+    display: -webkit-flex;
+    display: flex;
+    font-size: 8px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    line-height: 12px;
+    text-transform: uppercase
+}
+
+.polls-widget__form-title svg {
+    margin-right: 5px
+}
+
+.polls-widget__item {
+    margin-bottom: 10px
+}
+
+.polls-widget__item:last-child {
+    margin-bottom: 0
+}
+
+.polls-widget__submit {
+    margin-top: 24px
+}
