@@ -1,11 +1,9 @@
 {% load static wagtailcore_tags wagtailimages_tags wagtailuserbar menu_tags home_tags %}
 {% load i18n %}
-
 {% get_current_language as LANGUAGE_CODE %}
 {% get_language_info for LANGUAGE_CODE as lang %}
 {% get_available_languages as LANGUAGES %}
 {% get_language_info_list for LANGUAGES as languages %}
-
 {% get_current_language as LANGUAGE_CODE %}
 
 <footer class='footer'>
@@ -37,7 +35,5 @@
     {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
     {% top_level_sections %}
     {% footer %}
-    {% comment %} {% flat_menu "main_menu" template="menus/footer.html" %}
-    {% flat_menu "second_footer_menu" template="menus/footer.html" %}  {% endcomment %}
     <p class='footer__copyright'>© The Internet of Good Things</p>
 </footer>

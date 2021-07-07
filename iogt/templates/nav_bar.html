@@ -6,7 +6,7 @@
             <div class="nav-bar__item nav-bar-item{% if request.path == item.href%} active{% endif %}">
                 <a href="{{ item.href }}">
                     <span class="nav-bar-item__icon">
-                        {% image item.icon original %}
+                         <img src="{{ item.icon.url }}" />
                     </span>
                     <span class="nav-bar-item__title">{{ item.text }}</span>
                 </a>
