@@ -10,8 +10,8 @@ class SkipState:
     QUESTION = "question"
 
 
-VALID_SKIP_SELECTORS = ["radio", "checkbox", "dropdown"]
-VALID_SKIP_LOGIC = VALID_SKIP_SELECTORS + ["checkboxes"]
+VALID_SKIP_SELECTORS = ["radio", "checkbox", "dropdown", "checkboxes", "multiselect"]
+VALID_SKIP_LOGIC = VALID_SKIP_SELECTORS
 
 
 class SkipLogicField(StreamField):
