@@ -15,14 +15,16 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         user = User.objects.filter(username=settings.RAPIDPRO_BOT_USER_USERNAME).first()
-        display_name = 'RapidPro Bot'
+        first_name = 'RapidPro'
+        last_name = 'Bot'
         if user:
-            user.display_name = display_name
+            user.first_name = first_name
+            user.last_name = last_name
             user.set_password(settings.RAPIDPRO_BOT_USER_PASSWORD)
             user.save(update_fields=['display_name', 'password'])
             self.stdout.write(self.style.SUCCESS(f'RapidPro Bot User updated successfully. ID: {user.pk}'))
         else:
             bot_user = User.objects.create_user(
                 username=settings.RAPIDPRO_BOT_USER_USERNAME, password=settings.RAPIDPRO_BOT_USER_PASSWORD,
-                display_name=display_name)
+                first_name=first_name, last_name=last_name)
             self.stdout.write(self.style.SUCCESS(f'RapidPro Bot User created successfully. ID: {bot_user.pk}'))
