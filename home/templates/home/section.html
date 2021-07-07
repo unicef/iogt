@@ -6,26 +6,35 @@
 
 {% block content %}
    {% image page.lead_image width-320 class='article__img' %}
-     <a href="{{page.parent_section.url}}" class='article__back' style="background-color:{{ page.parent_section.background_color }}">
+     {% comment %} <a href="{{page.parent_section.url}}" class='article__back' style="background-color:{{ page.parent_section.background_color }}">
           <img class='article__back--image1' src="{% static 'icons/back.svg' %}">
           Go back
-    </a>
-    <section class='featured-content' style="background-color:{{ page.background_color }}">
+    </a> {% endcomment %}
+
+    {% if featured_content %}
+   <section class='featured-content' style="background-color:{{ page.background_color }}">
         {% render_featured_content_list featured_content %}
-     </section>
+    </section>
+    {% endif %}
     <section>
         {% render_sub_sections_list sub_sections %}
     </section>
-    <section class='quiz-holder'>
-     <section class='quiz-holder__quiz' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
-      {% render_polls_list polls %} 
-     </section>
-    <section class='quiz-holder__quiz' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
-    {% render_surveys_list surveys %}
-     </section>
-      <section class='quiz-holder__quiz' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
-          {% render_quizzes_list quizzes %} 
-     </section>
+   <section class='quiz-holder'>
+        {% if polls %}
+        <section class='quiz-holder__quiz' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
+        {% render_polls_list polls %} 
+        </section>
+        {% endif %}
+        {% if surveys %}
+        <section class='quiz-holder__quiz' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
+        {% render_surveys_list surveys %}
+        </section>
+        {% endif %}
+        {% if quizzes %}
+        <section class='quiz-holder__quiz' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
+            {% render_quizzes_list quizzes %} 
+        </section>
+        {% endif %}
     </section>
      {% render_articles_list articles %} 
 {% endblock content %}

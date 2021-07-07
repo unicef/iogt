@@ -1136,13 +1136,13 @@
   color: #9A9A9A;
 }
 
-.top-level {
+.top-level, .bottom-level {
   margin-top: 32px;
   border-top: 1px solid #EFEFEF;
   padding-top: 16px;
 }
 
-.top-level__section {
+.top-level__section, .bottom-level__section {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1151,7 +1151,7 @@
   border-radius: 8px;
 }
 
-.top-level__section a {
+.top-level__section a, .bottom-level__section a {
   color: inherit;
   text-decoration: none;
   font-family: Poppins;
@@ -1161,5 +1161,9 @@
   line-height: 22px;
   letter-spacing: 0.01em;
   padding-left: 10px;
+}
+
+.bottom-level__section {
+  background-color: #F7F7F9;
 }
 /*# sourceMappingURL=sectionStyles.css.map */

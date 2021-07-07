@@ -22,7 +22,7 @@
         </select>  
     </div>
 </div>
-    <form class='footer__form'action="{% url "search" %}">
+    <form class='footer__form' action="{% url "search" %}">
         <label >
             <span >
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -39,4 +39,5 @@
     {% footer %}
     {% comment %} {% flat_menu "main_menu" template="menus/footer.html" %}
     {% flat_menu "second_footer_menu" template="menus/footer.html" %}  {% endcomment %}
+    <p class='footer__copyright'>© The Internet of Good Things</p>
 </footer>

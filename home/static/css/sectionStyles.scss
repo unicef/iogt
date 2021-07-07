@@ -913,6 +913,7 @@
    }
 }
 
+// footer styles
 
 .footer {
   margin-left: 20px;
@@ -935,6 +936,15 @@
      align-items: center;
   }
   
+  &&__copyright {
+   font-family: Poppins;
+   font-style: normal;
+   font-weight: 500;
+   font-size: 10px;
+   line-height: 16px;
+   text-align: center;
+   color: #9A9A9A;
+  }
 
   &__form {
    margin-top: 35px;
@@ -964,7 +974,7 @@
 
 // top level setion
 
-.top-level {
+.top-level, .bottom-level {
    margin-top: 32px;
    border-top: 1px solid #EFEFEF;
    padding-top: 16px;
@@ -987,4 +997,14 @@
          padding-left: 10px;
       }
    }
+}
+
+
+
+.bottom-level {
+
+   &__section {
+      background-color: #F7F7F9;
+   }
+
 }

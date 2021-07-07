@@ -1,11 +1,12 @@
 {% load static wagtailcore_tags wagtailimages_tags i18n %}
-<footer >
+<footer class="bottom-level">
     <nav>
-        <div >
-          {% for footer_page in footer_pages %}
+     {% for footer_page in footer_pages %}
+        <div class='bottom-level__section'>
             <img src="{{ footer_page.specific.icon.url }}" />
             <a href="{% pageurl footer_page %}">{% translate footer_page.specific.title %}</a>
-          {% endfor %}
         </div>
+         {% endfor %}
     </nav>
 </footer>
+
