@@ -5,7 +5,8 @@
         <div class="articles-list__item-header articles-list__item-header--red">
             <p class="articles-list__item-tag">{{ value.specific.section }}</p>
             {% if value.specific.allow_comments %}
-                <span class="articles-list__item-comment">{{ value.comments | length }}</span> {% endif %}
+                <span class="articles-list__item-comment">{{ value.comments | length }}</span>
+            {% endif %}
         </div>
         <div class="articles-list__item-text">
             <p>{{ value.title }}</p>
