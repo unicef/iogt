@@ -23,8 +23,7 @@
                               stroke-linejoin="round"/>
                     </svg>
                 </span>
-                <input type="text" name="query" placeholder="Search here"
-                       pattern="\S+.*"/>
+                <input type="text" name="query" placeholder="{% translate "Search here" %}" pattern="\S+.*"/>
             </label>
         </form>
         <div class="footer__nav">
@@ -36,7 +35,7 @@
                 {% flat_menu "second_footer_menu" template="menus/footer.html" %}
             </div>
         </div>
-        <div class="footer__copyright"><p>© The Internet of Good Things</p>
+        <div class="footer__copyright"><p>{% translate "© The Internet of Good Things"%}</p>
         </div>
     </div>
 </footer>

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags home_tags questionnaires_tags sass_tags%}
+{% load static wagtailcore_tags wagtailimages_tags home_tags questionnaires_tags sass_tags i18n %}
 
 {% block extra_css %}
 {% endblock extra_css %}
@@ -8,7 +8,7 @@
    {% image page.lead_image width-320 class='article__img' %}
      <a href="{{page.parent_section.url}}" class='article__back' style="background-color:{{ page.parent_section.background_color }}">
           <img class='article__back--image1' src="{% static 'icons/back.svg' %}">
-          Go back
+          {% translate "Go back" %}
     </a>
     <section class='featured-content' style="background-color:{{ page.background_color }}">
         {% render_featured_content_list featured_content %}

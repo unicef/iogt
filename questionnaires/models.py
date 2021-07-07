@@ -9,6 +9,8 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
+from wagtail_localize.fields import TranslatableField
+
 from home.blocks import MediaBlock
 from home.mixins import PageUtilsMixin
 from iogt_users.models import User
@@ -204,6 +206,7 @@ class SurveyFormField(AbstractFormField):
         FieldPanel('page_break'),
     ]
 
+
     @property
     def has_skipping(self):
         return any(
@@ -276,6 +279,14 @@ class Survey(QuestionnairePage, AbstractForm):
             heading="Description at thank you page",
         ),
         InlinePanel("survey_form_fields", label="Form fields"),
+    ]
+
+    translatable_fields = [
+        TranslatableField('title'),
+        TranslatableField('description'),
+        TranslatableField('submit_button_text'),
+        TranslatableField('survey_form_fields'),
+        TranslatableField('thank_you_text')
     ]
 
     @cached_property
