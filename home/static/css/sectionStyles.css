@@ -996,7 +996,8 @@
 }
 
 .home-page__featured-content {
-  padding: 0 22px;
+  padding: 0 8px;
+  width: 100%;
 }
 
 .home-page__featured-content .related_reading {
@@ -1245,4 +1246,5 @@
   text-align: center;
   width: 100%;
 }
+
 /*# sourceMappingURL=sectionStyles.css.map */

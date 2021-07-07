@@ -168,11 +168,11 @@ textarea:focus ~ .cust-input__length-text {
 
 .cust-input__error {
     color: #fb3d24;
-    display: none;
+    /*display: none;*/
     font-size: 8px;
     font-weight: 500;
     line-height: 14px;
-    text-align: right
+    text-align: left;
 }
 
 .cust-input.error input, .cust-input.error textarea {
@@ -293,7 +293,7 @@ input:checked + .cust-check__title {
 
 .cust-check--2 input:checked ~ .cust-check__title .cust-check__check {
     background-color: #303030;
-    background-image: url("static/icons/checked-white.svg");
+    background-image: url("/static/icons/checked-white.svg");
     background-position: 50%;
     background-repeat: no-repeat
 }
@@ -309,7 +309,7 @@ input:checked + .cust-check__title {
 
 .cust-check--2.success input:checked ~ .cust-check__title .cust-check__check {
     background-color: #fff;
-    background-image: url("static/icons/checked-green.svg");
+    background-image: url("/static/icons/checked-green.svg");
     border-color: #fff
 }
 
@@ -822,7 +822,7 @@ input:checked + .cust-check__title {
 }
 
 .search-results__list-item a:after {
-    background-image: url("static/icons/arrow-pink.svg");
+    background-image: url("/static/icons/arrow-pink.svg");
     background-position: 50%;
     background-repeat: no-repeat;
     content: "";
@@ -873,7 +873,7 @@ input:checked + .cust-check__title {
 }
 
 .search-results__view:after {
-    background-image: url("static/icons/arrow-down.svg");
+    background-image: url("/static/icons/arrow-down.svg");
     background-position: 50%;
     background-repeat: no-repeat;
     content: "";
@@ -935,7 +935,7 @@ input:checked + .cust-check__title {
 }
 
 .search-variants__item a:after {
-    background-image: url("static/icons/arrow-down.svg");
+    background-image: url("/static/icons/arrow-down.svg");
     background-position: 50%;
     background-repeat: no-repeat;
     content: "";
@@ -1052,3 +1052,112 @@ input:checked + .cust-check__title {
     margin-bottom: 12px
 }
 
+.nav-bar {
+    background-color: #0094f4
+}
+
+.nav-bar__wrap {
+    -webkit-align-items: center;
+    align-items: center;
+    display: -webkit-flex;
+    display: flex
+}
+
+.nav-bar__item {
+    width: 25%
+}
+
+.nav-bar-item a {
+    -webkit-align-items: center;
+    align-items: center;
+    background-color: #0094f4;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-justify-content: center;
+    justify-content: center;
+    padding: 8px 0;
+    text-decoration: none
+}
+
+.nav-bar-item.active a {
+    background-color: #0070e2
+}
+
+.nav-bar-item__icon {
+    display: block;
+    height: 20px;
+    width: 20px
+}
+
+.nav-bar-item__icon img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.nav-bar-item__title {
+    color: #fff;
+    font-size: 8px;
+    font-weight: 600;
+    line-height: 16px;
+    margin-top: 2px;
+    text-align: center;
+    width: 100%
+}
+
+.language-input {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+}
+
+.language-input:checked + .select__selected + .select__options {
+    opacity: 1;
+    visibility: visible
+}
+
+.language-input:checked + .select__selected .select__selected-icon {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg)
+}
+
+
+.btn-back {
+    -webkit-align-items: center;
+    align-items: center;
+    display: -webkit-flex;
+    display: flex;
+    text-decoration: none
+}
+
+.btn-back-container {
+    margin-top: 12px
+}
+
+.btn-back__icon {
+    -webkit-align-items: center;
+    align-items: center;
+    display: -webkit-flex;
+    display: flex
+}
+
+.btn-back__pageTitle, .btn-back__title {
+    font: 500 8px/12px Poppins, sans-serif
+}
+
+.btn-back__title {
+    color: #303030;
+    margin-left: 12px
+}
+
+.btn-back__pageTitle {
+    color: #9a9a9a;
+    letter-spacing: .1em;
+    margin-left: auto;
+    text-transform: uppercase
+}
+
+.hr {
+    border: 1px solid #efefef
+}

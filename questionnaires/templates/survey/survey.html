@@ -51,6 +51,9 @@
                             {% elif "/select" in field.field.widget.template_name %}
                                 {% render_select field %}
                             {% endif %}
+                            {% for err in  field.errors %}
+                                <p class="cust-input__error">{{ err }}</p>
+                            {% endfor %}
                         </div>
                     {% endfor %}
                 </div>
