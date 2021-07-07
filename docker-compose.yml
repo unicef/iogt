@@ -5,15 +5,21 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.dev
-    command: bash -c "python manage.py runserver 0.0.0.0:8000 --settings=iogt.settings.docker_compose_dev"
+    environment:
+      DB_NAME: postgres
+      DB_USER: postgres
+      DB_PASSWORD: iogt
+      DB_HOST: db
+      DB_PORT: 5432
+      DJANGO_SETTINGS_MODULE: iogt.settings.docker_compose_dev
+    command: bash -c "python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./:/app/
     ports:
       - "8000:8000"
     depends_on:
       - elasticsearch
-    networks:
-      - elastic
+      - db
   elasticsearch:
     image: 'docker.elastic.co/elasticsearch/elasticsearch:7.12.1'
     environment:
@@ -22,12 +28,16 @@ services:
       - es-data01:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
-    networks:
-      - elastic
+  db:
+    image: postgres:alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: iogt
+    volumes:
+      - /var/lib/postgresql/data
+      - ./initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
 
 volumes:
   es-data01:
-
-networks:
-  elastic:
-    driver: bridge
