@@ -28,7 +28,6 @@ urlpatterns = [
     path("external-link/", TransitionPageView.as_view(), name="external-link"),
     path('messaging/', include('messaging.urls'), name='messaging-urls'),
     path('wagtail-transfer/', include(wagtailtransfer_urls)),
-    path("external-link/", TransitionPageView.as_view(), name="external-link"),
     path('sitemap/', SitemapAPIView.as_view(), name='sitemap'),
 ]
 

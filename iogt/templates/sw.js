@@ -10,17 +10,24 @@ workbox.googleAnalytics.initialize({
   },
 });
 
-// The below implementation will basically convert "{{ test_url }}" which is test/ into http://localhost:8000/test
-// The relative paths such as test/ of the pages inside the app will be provided by the backend devs,
-// so this will be done programmatically
+const precacheController = new workbox.precaching.PrecacheController();
 
-
-const appShell = [
-  "/youth",
-  '/'
-].map((partialUrl) => `${location.protocol}//${location.host}${partialUrl}`);
-
-workbox.precaching.precacheAndRoute(appShell.map(url => ({
-  url,
-  revision: null,
-})));
+self.addEventListener('install', event => {
+    const resp = fetch(`${location.protocol}//${location.host}/sitemap/`)
+        .then(response => response.json())
+        .then(urls => {
+            precacheController.addToCacheList(urls.map(url => ({
+                url,
+                revision: null,
+            })));
+            workbox.precaching.precacheAndRoute(urls.map(url => ({
+                url,
+                revision: null,
+            })));
+        })
+        .then(() => {
+            // Passing in event is required in Workbox v6+
+            precacheController.install(event)
+        });
+    event.waitUntil(resp);
+});
