@@ -1,0 +1,6 @@
+Action,Markdown,Example
+Bold,Add ** around the text you want to bold,**My Text**
+Italics,Add _ around the text you want to italicize,_My Text_
+Underline,Add &lt;u&gt; before and &lt;/u&gt; after the text you want to underline,<u>My Text</u>
+Line Break,Add &lt;br&gt; where you want the line break. Add two &lt;br&gt; for a paragraph break,<br><br>
+External Link,Add [] around the displayed text and () around the link URL,[My Link](https://example.com)
