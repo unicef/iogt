@@ -25,6 +25,7 @@ class Command(BaseCommand):
         models.Section.objects.all().delete()
         models.SectionIndexPage.objects.all().delete()
         Image.objects.all().delete()
+        Page.objects.filter(id=2).delete()
 
     def create_image(self):
         response = requests.get('https://via.placeholder.com/729x576.png?text=Youth')
@@ -35,25 +36,25 @@ class Command(BaseCommand):
         return Image.objects.create(title=title, file=image_file)
 
     def create_homepage(self):
-        Page.objects.filter(id=2).delete()
         homepage_content_type, _ = ContentType.objects.get_or_create(
             model='homepage', app_label='home')
 
         # Create a new homepage
-        homepage = models.HomePage.objects.create(
-            title="Home",
-            draft_title="Home",
-            slug='home',
-            content_type=homepage_content_type,
-            path='00010001',
-            depth=2,
-            numchild=0,
-            url_path='/home/',
-        )
+        homepage = models.HomePage.objects.get_or_create(slug='home', defaults={
+            'title': "Home",
+            'draft_title': "Home",
+            'content_type': homepage_content_type,
+            'path': '00010001',
+            'depth': 2,
+            'numchild': 0,
+            'url_path': '/home/',
+        })
 
         # Create a site with the new homepage set as the root
-        Site.objects.create(
-            hostname='localhost', root_page=homepage, is_default_site=True)
+        Site.objects.get_or_create(hostname='localhost', defaults={
+            'root_page': homepage,
+            'is_default_site': True,
+        })
 
     def create(self, owner, home):
         article = models.Article(
@@ -70,7 +71,7 @@ class Command(BaseCommand):
         youth = models.Section(
             title='Youth',
             show_in_menus=True,
-            color='1CABE2'
+            font_color='1CABE2'
         )
         section_index_page = models.SectionIndexPage(title='Sections')
 
