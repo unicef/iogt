@@ -20,23 +20,6 @@ const $searchClose = document.querySelector('.js-search-close');
 const $overlay = document.querySelector('.js-dark-overlay');
 const $searchResult = document.querySelector('.js-search-result');
 
-$selects.forEach(function ($select) {
-	const $selectOptions = $select.querySelectorAll('.select__option');
-
-	$select.addEventListener('click', function () {
-		this.classList.toggle('active');
-	});
-
-	$selectOptions.forEach(function ($option) {
-		$option.addEventListener('click', function () {
-			$select.querySelector('.select__selected p').innerText = this.innerText;
-			$selectOptions.forEach(function ($selectOption) {
-				$selectOption.classList.remove('select__option--selected');
-			});
-			this.classList.add('select__option--selected');
-		});
-	});
-});
 
 // $searchBtn.addEventListener('click', function (e) {
 // 	e.preventDefault();

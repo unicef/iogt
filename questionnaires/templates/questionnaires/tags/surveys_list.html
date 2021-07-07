@@ -4,11 +4,10 @@
 <a  href="{% pageurl survey %}">
     <span class='quiz__details'>
         <p>SURVEY</p>
-        <p class='quiz__details--bold'>{{ survey.title }}</p>
+        <p >{{ survey.title }}</p>
     </span>
     <div class="quiz__imageholder">
-        <img  class="quiz__image" src="{% static 'images/Stroke 3.png' %}" alt=''>
+         <img  class="quiz__image" src="{% static 'icons/forward.svg' %}" alt='arrow-right'>
     </div>
 </a>
 {% endfor %}
-
