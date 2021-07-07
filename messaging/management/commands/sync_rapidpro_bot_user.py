@@ -21,7 +21,7 @@ class Command(BaseCommand):
             user.first_name = first_name
             user.last_name = last_name
             user.set_password(settings.RAPIDPRO_BOT_USER_PASSWORD)
-            user.save(update_fields=['display_name', 'password'])
+            user.save(update_fields=['first_name', 'last_name', 'password'])
             self.stdout.write(self.style.SUCCESS(f'RapidPro Bot User updated successfully. ID: {user.pk}'))
         else:
             bot_user = User.objects.create_user(
