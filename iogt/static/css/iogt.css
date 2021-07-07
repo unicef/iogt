@@ -168,11 +168,11 @@ textarea:focus ~ .cust-input__length-text {
 
 .cust-input__error {
     color: #fb3d24;
-    display: none;
+    /*display: none;*/
     font-size: 8px;
     font-weight: 500;
     line-height: 14px;
-    text-align: right
+    text-align: left;
 }
 
 .cust-input.error input, .cust-input.error textarea {
@@ -293,7 +293,7 @@ input:checked + .cust-check__title {
 
 .cust-check--2 input:checked ~ .cust-check__title .cust-check__check {
     background-color: #303030;
-    background-image: url("static/icons/checked-white.svg");
+    background-image: url("/static/icons/checked-white.svg");
     background-position: 50%;
     background-repeat: no-repeat
 }
@@ -309,7 +309,7 @@ input:checked + .cust-check__title {
 
 .cust-check--2.success input:checked ~ .cust-check__title .cust-check__check {
     background-color: #fff;
-    background-image: url("static/icons/checked-green.svg");
+    background-image: url("/static/icons/checked-green.svg");
     border-color: #fff
 }
 
@@ -380,6 +380,15 @@ input:checked + .cust-check__title {
     border-radius: 8px
 }
 
+.cust-btn--clear {
+    background: none !important;
+    border: none !important;
+}
+
+.cust-btn--clear span {
+    text-decoration: underline
+}
+
 .cust-btn--dark {
     background-color: #303030
 }
@@ -390,6 +399,19 @@ input:checked + .cust-check__title {
 
 .cust-btn--dark:hover {
     background-color: #4a4a4a
+}
+
+.cust-btn--violet {
+    background-color: #8b5cd6;
+    border: none
+}
+
+.cust-btn--violet span {
+    color: #fff
+}
+
+.cust-btn--violet:hover {
+    background-color: #f3effb
 }
 
 .cust-btn--white {
@@ -413,6 +435,47 @@ input:checked + .cust-check__title {
     font-size: 14px;
     line-height: 14px;
     width: 100%
+}
+
+
+.btn-back {
+    -webkit-align-items: center;
+    align-items: center;
+    display: -webkit-flex;
+    display: flex;
+    text-decoration: none
+}
+
+.btn-back-container {
+    margin-top: 12px
+}
+
+.btn-back__icon {
+    -webkit-align-items: center;
+    align-items: center;
+    display: -webkit-flex;
+    display: flex;
+    margin: 0;
+}
+
+.btn-back__pageTitle, .btn-back__title {
+    font: 500 8px/12px Poppins, sans-serif
+}
+
+.btn-back__title {
+    color: #303030;
+    margin-left: 12px
+}
+
+.btn-back__pageTitle {
+    color: #9a9a9a;
+    letter-spacing: .1em;
+    margin-left: auto;
+    text-transform: uppercase
+}
+
+.hr {
+    border: 1px solid #efefef
 }
 
 .icon-btn {
@@ -656,7 +719,7 @@ input:checked + .cust-check__title {
 }
 
 .search-results__list-item a:after {
-    background-image: url("static/icons/arrow-pink.svg");
+    background-image: url("/static/icons/arrow-pink.svg");
     background-position: 50%;
     background-repeat: no-repeat;
     content: "";
@@ -707,7 +770,7 @@ input:checked + .cust-check__title {
 }
 
 .search-results__view:after {
-    background-image: url("static/icons/arrow-down.svg");
+    background-image: url("/static/icons/arrow-down.svg");
     background-position: 50%;
     background-repeat: no-repeat;
     content: "";
@@ -769,7 +832,7 @@ input:checked + .cust-check__title {
 }
 
 .search-variants__item a:after {
-    background-image: url("static/icons/arrow-down.svg");
+    background-image: url("/static/icons/arrow-down.svg");
     background-position: 50%;
     background-repeat: no-repeat;
     content: "";
@@ -938,4 +1001,60 @@ input:checked + .cust-check__title {
     margin-top: 2px;
     text-align: center;
     width: 100%
+}
+
+.language-input {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+}
+
+.language-input:checked + .select__selected + .select__options {
+    opacity: 1;
+    visibility: visible
+}
+
+.language-input:checked + .select__selected .select__selected-icon {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg)
+}
+
+
+.btn-back {
+    -webkit-align-items: center;
+    align-items: center;
+    display: -webkit-flex;
+    display: flex;
+    text-decoration: none
+}
+
+.btn-back-container {
+    margin-top: 12px
+}
+
+.btn-back__icon {
+    -webkit-align-items: center;
+    align-items: center;
+    display: -webkit-flex;
+    display: flex
+}
+
+.btn-back__pageTitle, .btn-back__title {
+    font: 500 8px/12px Poppins, sans-serif
+}
+
+.btn-back__title {
+    color: #303030;
+    margin-left: 12px
+}
+
+.btn-back__pageTitle {
+    color: #9a9a9a;
+    letter-spacing: .1em;
+    margin-left: auto;
+    text-transform: uppercase
+}
+
+.hr {
+    border: 1px solid #efefef
 }

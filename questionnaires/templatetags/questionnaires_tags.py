@@ -25,13 +25,11 @@ def render_radios(field):
 
 @register.inclusion_tag('questionnaires/tags/checkboxes.html')
 def render_checkboxes(field):
-    print(field)
     return {'field': field}
 
 
 @register.inclusion_tag('questionnaires/tags/textarea.html')
 def render_textarea(field):
-    print(field)
     return {'field': field}
 
 
@@ -40,6 +38,22 @@ def render_text_field(field):
     return {'field': field}
 
 
+@register.inclusion_tag('questionnaires/tags/polls_radios.html')
+def render_polls_radios(field):
+    return {"field": field}
+
+
 @register.filter
 def get_item(dictionary, key):
     return dictionary.get(key)
+
+
+@register.filter
+def get_value_from_querydict(querydict, key):
+    dictionary = dict(querydict)
+    return dictionary.get(key)[0]
+
+
+@register.simple_tag
+def snake_case(text):
+    return text.lower().replace(" ", "_").replace("__", "_").replace('?', '')

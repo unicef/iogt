@@ -84,7 +84,7 @@ class QuestionnairePage(Page, PageUtilsMixin):
             .exists()
         ):
             return render(request, self.template, self.get_context(request))
-        if self.multi_step:
+        if hasattr(self, "multi_step") and self.multi_step:
             return self.serve_questions_separately(request)
 
         return super().serve(request, *args, **kwargs)

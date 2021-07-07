@@ -1,0 +1,12 @@
+{% load wagtailcore_tags i18n wagtailimages_tags %}
+
+ <section class='related_reading'>
+        <ul>
+            <li>
+               <a href="{% pageurl value %}">
+                    <p > {{ value.title }}</p>
+                    {% image value.lead_image fill-260x186 class='related_reading__img' %}
+                </a>
+            </li>
+        </ul>
+  </section>
