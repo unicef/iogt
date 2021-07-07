@@ -36,11 +36,11 @@ class Command(BaseCommand):
         return Image.objects.create(title=title, file=image_file)
 
     def create_homepage(self):
-        homepage_content_type, _ = ContentType.objects.get_or_create(
+        homepage_content_type, __ = ContentType.objects.get_or_create(
             model='homepage', app_label='home')
 
         # Create a new homepage
-        homepage = models.HomePage.objects.get_or_create(slug='home', defaults={
+        homepage, __ = models.HomePage.objects.update_or_create(slug='home', defaults={
             'title': "Home",
             'draft_title': "Home",
             'content_type': homepage_content_type,
@@ -48,6 +48,7 @@ class Command(BaseCommand):
             'depth': 2,
             'numchild': 0,
             'url_path': '/home/',
+            'show_in_menus': True,
         })
 
         # Create a site with the new homepage set as the root

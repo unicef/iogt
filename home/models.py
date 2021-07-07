@@ -44,6 +44,7 @@ User = get_user_model()
 
 class HomePage(Page):
     template = 'home/home_page.html'
+    show_in_menus_default = True
 
     home_featured_content = StreamField([
         ('page_button', PageButtonBlock()),

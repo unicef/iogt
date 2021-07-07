@@ -14,7 +14,7 @@ def _create_flat_menu(apps, schema_editor):
     homepage = HomePage.objects.get(slug='home')
     IogtFlatMenuItem.objects.create(link_page=homepage, menu=flat_menu, url_append='#home')
     IogtFlatMenuItem.objects.create(
-        link_page=homepage, menu=flat_menu, link_text='Sections', url_append='#top-level-sections')
+        link_url='#', menu=flat_menu, link_text='Sections', url_append='top-level-sections')
 
 
 def _delete_flat_menu(apps, schema_editor):

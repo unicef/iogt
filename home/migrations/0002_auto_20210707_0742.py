@@ -29,6 +29,7 @@ def _create_homepage(apps, schema_editor):
         depth=2,
         numchild=0,
         url_path='/home/',
+        show_in_menus=True
     )
 
     # Create a site with the new homepage set as the root
