@@ -23,7 +23,7 @@
                         <div class="quest-item">
                             <div class="quest-item__header">
                                 <p class="quest-item__number">{{ forloop.counter }}
-                                    of {{ fields_step.paginator.count|add:"1" }}
+                                    of {% if self.multi_step or self.has_page_breaks %}{{ fields_step.paginator.count }}{% else %}{{ form.fields | length }}{% endif %}
                                     questions</p>
                                 <p class="quest-item__step-desc">
                                     <span>
