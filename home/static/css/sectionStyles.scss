@@ -164,58 +164,6 @@
 
 
 
-.questionnaire {
-   width: 232px;
-   height: 186px;
-   left: 0px;
-   top: 0px;
-   background-color: red;
-   border-radius: 8px;
-   margin: 24px 0;
-
-&__title {
-   width: 139px;
-   height: 40px;
-   padding-left: 14px;
-   top: 18px;
-   font-family: Poppins;
-   font-style: normal;
-   font-weight: bold;
-   font-size: 16px;
-   line-height: 20px;
-   color: $white;
-}
-
-&__CTA {
-   width: 200px;
-   height: 64px;
-   padding-left: 16px;
-   top: 62px;
-   font-family: Poppins;
-   font-style: normal;
-   font-weight: 500;
-   font-size: 10px;
-   line-height: 16px;color: $white;
-}
-
-
-.button__white {
-   text-decoration: none;
-   padding: 8px 16px;
-   border-radius: 28px;
-   margin-left: 16px;
-   font-family: Poppins;
-   font-style: normal;
-   font-weight: 600;
-   font-size: 10px;
-   line-height: 14px;
-   border: none;
-   background-color:$white;
-   color:black
-}
-
-}
-
 
 // article page styles
 
