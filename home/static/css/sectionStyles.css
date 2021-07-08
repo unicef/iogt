@@ -444,7 +444,7 @@
   font-size: 16px;
   line-height: 22px;
   color: #303030;
-  border: 1.5px solid #D8D8D8;
+  border: 1.5px solid #d8d8d8;
 }
 
 .article-navigation__button--next {
@@ -896,7 +896,7 @@
   font-size: 16px;
   line-height: 24px;
   letter-spacing: 0.01em;
-  color: #9A9A9A;
+  color: #9a9a9a;
 }
 
 .content {
@@ -937,7 +937,6 @@
   font-weight: normal;
   font-size: 16px;
   line-height: 24px;
-  color: #000000;
 }
 
 .cache-banner p:nth-of-type(2n) {
@@ -1114,7 +1113,7 @@
   font-size: 10px;
   line-height: 16px;
   text-align: center;
-  color: #9A9A9A;
+  color: #9a9a9a;
   padding-top: 32px;
   padding-bottom: 60px;
 }
@@ -1144,7 +1143,7 @@
   font-size: 16px;
   line-height: 22px;
   letter-spacing: 0.01em;
-  color: #9A9A9A;
+  color: #9a9a9a;
 }
 
 .top-level, .bottom-level {
@@ -1186,10 +1185,6 @@
   width: 100vw;
 }
 
-.nav-bar {
-  background-color: #0094f4;
-}
-
 .nav-bar__wrap {
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -1207,7 +1202,7 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  background-color: #0094f4;
+  background-color: #0094F4;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1221,7 +1216,7 @@
 }
 
 .nav-bar-item.active a {
-  background-color: #0070e2;
+  background-color: #0070E2;
 }
 
 .nav-bar-item__icon {
@@ -1236,7 +1231,7 @@
 }
 
 .nav-bar-item__title {
-  color: #fff;
+  color: #FFFFFF;
   font-size: 8px;
   font-weight: 600;
   line-height: 16px;
