@@ -53,6 +53,10 @@ class Command(BaseCommand):
         self.migrate(root)
 
     def clear(self):
+        models.FooterPage.objects.all().delete()
+        models.FooterIndexPage.objects.all().delete()
+        models.BannerPage.objects.all().delete()
+        models.BannerIndexPage.objects.all().delete()
         models.Article.objects.all().delete()
         models.Section.objects.all().delete()
         models.HomePage.objects.all().delete()
@@ -192,7 +196,7 @@ class Command(BaseCommand):
             title=row['title'],
             draft_title=row['draft_title'],
             show_in_menus=True,
-            color='1CABE2',
+            font_color='1CABE2',
             slug=row['slug'],
             path=home.path + row['path'][12:],
             depth=row['depth']-1,
