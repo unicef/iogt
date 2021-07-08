@@ -79,7 +79,8 @@
                                        tabindex="0">
                                     <input type="{{ field.field.widget.input_type }}"
                                            name="{{ field.name }}"
-                                           {% if checkbox.choice_label in field.value %}checked{% else %}disabled{% endif %}
+                                           disabled
+                                           {% if checkbox.choice_label in field.value %}checked{% endif %}
                                            value="{{ checkbox.choice_label }}">
                                     <div class="cust-check__title">
                                         <span class="cust-check__check"></span>
