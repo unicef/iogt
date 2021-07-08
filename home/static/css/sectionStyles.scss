@@ -503,7 +503,6 @@
 
   &__input-holder {
    display:flex;
-   width:100vw;
    padding-left: 20px;
    justify-content: flex-start;
    background-color: #F7F7F9;;
@@ -844,7 +843,7 @@
 .home-page {
   &__featured-content {
    padding: 0 22px;
-  
+
    .related_reading {
       margin:0
    }
@@ -945,6 +944,8 @@
    line-height: 16px;
    text-align: center;
    color: #9A9A9A;
+   padding-top: 32px;
+   padding-bottom: 60px;
   }
 
   &__form {
@@ -1007,7 +1008,6 @@
 
 
 .bottom-level {
-
    &__section {
       background-color: #F7F7F9;
    }
