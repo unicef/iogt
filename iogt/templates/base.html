@@ -1,4 +1,4 @@
-{% load static wagtailuserbar home_tags sass_tags wagtailsettings_tags  %}
+{% load static wagtailuserbar home_tags sass_tags wagtailsettings_tags menu_tags %}
 {% get_settings %}
 
 <!DOCTYPE html>
@@ -49,6 +49,7 @@
             {% include "cache_banner.html" %}
         {% endif %}
         {% include "header.html" %}
+        {% flat_menu "nav_bar" template="nav_bar.html" %}
         {% include "messages.html" %} 
         {% block content %}{% endblock %}
         {% include "footer.html" %}

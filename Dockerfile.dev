@@ -4,6 +4,9 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
 
+RUN apt update -y
+RUN apt install gettext -y
+
 RUN pip install --upgrade pip
 ADD ./requirements.txt ./requirements.dev.txt ./
 RUN pip install -r requirements.dev.txt

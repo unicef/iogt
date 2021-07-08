@@ -10,4 +10,4 @@ services:
       - /var/lib/postgresql/data
       - ./legacy-initdb.d:/docker-entrypoint-initdb.d
     ports:
-      - 5432:5432
+      - 54321:5432

@@ -1,4 +1,5 @@
 from django import template
+from wagtail.core.models import Locale
 
 from home.models import FooterPage, SectionIndexPage
 from iogt.settings.base import LANGUAGES
@@ -9,7 +10,7 @@ register = template.Library()
 @register.inclusion_tag('home/tags/footer.html', takes_context=True)
 def footer(context):
     return {
-        'footer_pages': FooterPage.objects.live(),
+        'footer_pages': FooterPage.get_active_footers(),
         'request': context['request'],
     }
 
@@ -17,7 +18,7 @@ def footer(context):
 @register.inclusion_tag('home/tags/top_level_sections.html', takes_context=True)
 def top_level_sections(context):
     return {
-        'top_level_sections': SectionIndexPage.objects.first().get_children(),
+        'top_level_sections': SectionIndexPage.get_top_level_sections(),
         'request': context['request'],
     }
 
