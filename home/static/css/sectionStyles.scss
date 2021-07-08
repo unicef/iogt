@@ -368,7 +368,7 @@
       width: 132px;
       height: 46px;
       left: calc(50% - 156px/2 - 82px);
-      top: 0px;     
+      top: 0px;
       box-sizing: border-box;
       border-radius: 24px;
    }
@@ -911,4 +911,163 @@
          padding-left:10px;
       }
    }
+}
+
+// footer styles
+
+.footer {
+  margin-top: 60px;
+  border-top: 1px solid #EFEFEF;
+
+  .home-header {
+     padding:0;
+     padding-top: 22px;
+     border:none;
+     margin-left: 20px;
+     margin-right: 20px;
+  }
+
+  select {
+     margin: 0;
+  }
+
+  label, svg {
+     display:flex;
+     align-items: center;
+     
+  }
+  
+  &__copyright {
+   font-family: Poppins;
+   font-style: normal;
+   font-weight: 500;
+   font-size: 10px;
+   line-height: 16px;
+   text-align: center;
+   color: #9A9A9A;
+  }
+
+  &__form {
+   margin-left: 20px;
+   margin-right: 20px;
+   margin-top: 35px;
+   left: 20px;
+   top: 92px;
+   background: #F7F7F9;
+   border: 1px solid #EFEFEF;
+   box-sizing: border-box;
+   border-radius: 8px;
+   padding: 14.75px;
+
+   input {
+      width: 96%;
+      border:none;
+      background: #F7F7F9;
+      padding-left: 14.58px;
+      font-family: Poppins;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 22px;
+      letter-spacing: 0.01em;
+      color: #9A9A9A;
+   }
+  }
+}
+
+// top level setion
+
+.top-level, .bottom-level {
+   margin-left: 20px;
+   margin-right: 20px;
+   margin-top: 32px;
+   border-top: 1px solid #EFEFEF;
+   padding-top: 16px;
+
+   &__section {
+      display:flex;
+      margin-top: 8px;
+      padding: 13px 12px;
+      border-radius: 8px;
+     
+      a {
+         color:inherit;
+         text-decoration: none;
+         font-family: Poppins;
+         font-style: normal;
+         font-weight: bold;
+         font-size: 16px;
+         line-height: 22px;
+         letter-spacing: 0.01em;
+         padding-left: 10px;
+      }
+   }
+}
+
+
+
+.bottom-level {
+
+   &__section {
+      background-color: #F7F7F9;
+   }
+
+}
+
+
+// sticky footer
+
+.sticky-footer {
+   position: fixed;
+   bottom: 0px;
+   width: 100vw;
+}
+
+.nav-bar {
+   background-color: #0094f4;
+}
+
+.nav-bar__wrap {
+   -webkit-align-items: center;
+   align-items: center;
+   display: flex
+}
+
+.nav-bar__item {
+   width: 25%
+}
+
+.nav-bar-item a {
+   align-items: center;
+   background-color: #0094f4;
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: center;
+   padding: 8px 0;
+   text-decoration: none
+}
+
+.nav-bar-item.active a {
+   background-color: #0070e2
+}
+
+.nav-bar-item__icon {
+   display: block;
+   height: 20px;
+   width: 20px
+}
+
+.nav-bar-item__icon img {
+   max-width: 100%;
+   max-height: 100%;
+}
+
+.nav-bar-item__title {
+   color: #fff;
+   font-size: 8px;
+   font-weight: 600;
+   line-height: 16px;
+   margin-top: 2px;
+   text-align: center;
+   width: 100%
 }

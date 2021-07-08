@@ -10,30 +10,12 @@
 
 {% block content %}
     <div class="survey-page">
-        <div class="container btn-back-container">
-            <a href="
-
-
-                    {% if back_url != None %}{{ back_url }}{% else %}/{% endif %}"
-               class="btn-back">
-                <figure class="btn-back__icon">
-                    <svg width="8" height="14" viewBox="0 0 8 14" fill="none"
-                         xmlns="http://www.w3.org/2000/svg">
-                        <path d="M7 13L1 7.0005L7 1" stroke="#303030"
-                              stroke-width="1.5"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"></path>
-                    </svg>
-                </figure>
-                <span class="btn-back__title">{% trans "BACK" %}</span>
-            </a>
-        </div>
+        {% include 'back_button.html' with back_url=back_url %}
         <div class="container">
             <h1 class="title survey-page__title">{% trans page.title %}</h1>
             {% if page.description %}
                 <p>{% trans page.description %}</p>{% endif %}
-            <form action="{% pageurl page %}
-{% if self.multi_step or self.has_page_breaks %}?p={{ fields_step.number|add:"1" }}{% endif %}"
+            <form action="{% pageurl page %}{% if self.multi_step or self.has_page_breaks %}?p={{ fields_step.number|add:"1" }}&back_url={{ request.path }}{% else %}?back_url={{ request.path }}{% endif %}"
                   method="POST" class="survey-page__content">
                 {% csrf_token %}
                 <div class="survey-page__content">
@@ -41,11 +23,11 @@
                         <div class="quest-item">
                             <div class="quest-item__header">
                                 <p class="quest-item__number">{{ forloop.counter }}
-                                    of {{ form.fields | length }}
+                                    of {{ fields_step.paginator.count|add:"1" }}
                                     questions</p>
                                 <p class="quest-item__step-desc">
                                     <span>
-                                        {% if field.field.widget.input_type  == "radio" %}
+                                        {% if field.field.widget.input_type  == "radio" or "select" in field.field.widget.template_name %}
                                             Select one
                                         {% elif  field.field.widget.input_type  == "checkbox" %}
                                             Check all that apply
@@ -66,6 +48,8 @@
                                 {% render_textarea field %}
                             {% elif field.field.widget.input_type == "text" %}
                                 {% render_text_field field %}
+                            {% elif "/select" in field.field.widget.template_name %}
+                                {% render_select field %}
                             {% endif %}
                             {% for err in  field.errors %}
                                 <p class="cust-input__error">{{ err }}</p>
@@ -76,9 +60,11 @@
                 <div class="survey-page__btns">
                     <button type="submit"
                             class="cust-btn cust-btn--dark survey-page__btn">
-                        <span>{% trans page.submit_button_text %}</span>
+                        <span>{% if fields_step.paginator.num_pages == fields_step.number %}
+                            {% trans page.submit_button_text %}{% else %}
+                            {% trans "Next step" %}{% endif %}</span>
                     </button>
-                    <a href="/" type="submit"
+                    <a href="/"
                        class="cust-btn cust-btn--clear survey-page__btn"><span>{% trans "Go to homepage" %}</span></a>
                 </div>
             </form>

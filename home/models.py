@@ -16,7 +16,7 @@ from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
 from wagtail.core import blocks
 from wagtail.core.fields import StreamField, RichTextField
-from wagtail.core.models import Orderable, Page, Site
+from wagtail.core.models import Orderable, Page, Site, Locale
 from wagtail.core.rich_text import get_text_for_indexing
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
@@ -44,6 +44,7 @@ User = get_user_model()
 
 class HomePage(Page):
     template = 'home/home_page.html'
+    show_in_menus_default = True
 
     home_featured_content = StreamField([
         ('page_button', PageButtonBlock()),
@@ -110,6 +111,10 @@ class ArticleTaggedItem(TaggedItemBase):
 class SectionIndexPage(Page):
     parent_page_types = ['home.HomePage']
     subpage_types = ['home.Section']
+
+    @classmethod
+    def get_top_level_sections(cls):
+        return cls.objects.filter(locale=Locale.get_active()).first().get_children().live()
 
 
 class Section(Page, PageUtilsMixin):
@@ -414,6 +419,10 @@ class FooterPage(Article):
     parent_page_types = ['home.FooterIndexPage']
     subpage_types = []
     template = 'home/article.html'
+
+    @classmethod
+    def get_active_footers(cls):
+        return cls.objects.filter(locale=Locale.get_active()).live()
 
 
 @register_setting
