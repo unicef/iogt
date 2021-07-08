@@ -9,7 +9,7 @@ from django.views.generic import (DeleteView, TemplateView, )
 
 from .chat import ChatManager
 from .forms import MessageReplyForm, NewMessageForm
-from .models import Thread
+from .models import Thread, UserThread
 
 from django.contrib.auth.decorators import login_required
 
@@ -19,10 +19,34 @@ User = get_user_model()
 class InboxIndexView(TemplateView):
     template_name = 'messaging/inbox_index.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        folder = self.kwargs.get('deleted', 'inbox')
+        if folder == 'deleted':
+            threads = Thread.thread_objects.of_user(self.request.user).deleted().order_by_latest()
+        else:
+            threads = Thread.thread_objects.of_user(self.request.user).inbox().order_by_latest()
 
-class MessageDetailView(TemplateView):
-    template_name = 'messaging/message_detail.html'
+        context.update({
+            "folder": folder,
+            "threads": threads.prefetch_related('messages'),
+            "user_threads": UserThread.objects.filter(user=self.request.user, is_active=True).order_by(
+                '-thread__last_message_at'),
+            "unread_threads": Thread.thread_objects.of_user(self.request.user).unread().order_by_latest(),
+        })
+        return context
 
+
+class MessageDetailView(View):
+
+    def get_context(self, thread):
+        return {
+            'thread': thread
+        }
+
+    def get(self, request, thread_id):
+        thread = get_object_or_404(Thread, pk=thread_id)
+        return render(request, 'messaging/message_detail.html', context=self.get_context(thread))
 
 
 @method_decorator(login_required, name='dispatch')

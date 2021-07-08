@@ -1,11 +1,44 @@
 {% extends "messaging/base.html" %}
-{% load messaging_tags %}
+{% load messaging_tags humanize %}
 
 {% block content %}
 <div class="chat">
     <a href="#" class="btn-back">Back</a>
-    <h1> U-Report </h1>
+    <h1> {{ thread.subject }} </h1>
     <div class="messages">
+{#        {% for message in thread.messages.all %}#}
+{#            <div class="thread-message">#}
+{#                <div class="message-byline">#}
+{#                    {% if message.sent_from_bot %}#}
+{#                        <div class="message-from">{{ thread.chatbot.display_name }}</div>#}
+{#                    {% else %}#}
+{#                        <div class="message-from">{{ message.sender.username }}</div>#}
+{#                    {% endif %}#}
+{#                    <div class="message-sent">{{ message.sent_at }}</div>#}
+{#                </div>#}
+{#                <div class="message-content">{{ message.text|urlize|linebreaks }}</div>#}
+{#                {% for quick_reply in message.quick_replies %}#}
+{#                    {% render_quick_reply_form thread user quick_reply %}#}
+{#                {% endfor %}#}
+{#            </div>#}
+{#        {% endfor %}#}
+        {% for message in thread.messages.all %}
+            {% if message.sender.is_rapidpro_bot_user %}
+                <div class="message">
+            {% else %}
+                <div class="message reply">
+             {% endif %}
+            <time class="message-time">{{ message.sent_at|naturaltime}}</time>
+            <div class="message-box">
+                {{ message.text|urlize|linebreaks }}
+            </div>
+            <div class="quick-replies">
+                {% for quick_reply in message.quick_replies %}
+                    {% render_quick_reply_form thread user quick_reply %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
         <div class="message">
             <time class="message-time">Today 11:33</time>
             <div class="message-box">
@@ -23,9 +56,9 @@
         <li><a href="#">1. Is Covid-19 seerious?</a></li>
         <li><a href="#">2. Should I wear mask?</a></li>
     </ol>
-    <div class="login-info">
-        <a href="#" class="login">Log in / Create account</a>
-        <p>Log in to save your chat history and receive updates</p>
-    </div>
+{#    <div class="login-info">#}
+{#        <a href="#" class="login">Log in / Create account</a>#}
+{#        <p>Log in to save your chat history and receive updates</p>#}
+{#    </div>#}
 </div>
 {% endblock %}

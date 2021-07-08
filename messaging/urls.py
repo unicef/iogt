@@ -7,8 +7,8 @@ app_name = "messaging"
 
 urlpatterns = [
     path('api/', include(api_urls)),
-    path('v2/inbox', views.InboxIndexView.as_view(), name='inboxv2'),
-    path('v2/message', views.MessageDetailView.as_view(), name='messagev2'),
+    path('v2/inbox/', views.InboxIndexView.as_view(), name='inboxv2'),
+    path('v2/message/<int:thread_id>', views.MessageDetailView.as_view(), name='messagev2'),
 
     path('inbox/', views.InboxView.as_view(), name="inbox"),
     path('create/', views.MessageCreateView.as_view(), name="message_create"),
