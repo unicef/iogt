@@ -1215,10 +1215,6 @@
   text-decoration: none;
 }
 
-.nav-bar-item.active a {
-  background-color: #0070E2;
-}
-
 .nav-bar-item__icon {
   display: block;
   height: 20px;
@@ -1238,5 +1234,9 @@
   margin-top: 2px;
   text-align: center;
   width: 100%;
+}
+
+.nav-bar-item.active a {
+  background-color: #0070E2;
 }
 /*# sourceMappingURL=sectionStyles.css.map */
