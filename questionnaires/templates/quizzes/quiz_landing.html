@@ -77,7 +77,7 @@
                             <div class="quest-item__content" tabindex="0">
                                 <label class="cust-check cust-check--2 quest-item__input{% if fields_info|get_item:field.name|get_item:'is_correct' %} success{% else %} error{% endif %}"
                                        tabindex="0">
-                                    <input type="checkbox"
+                                    <input type="{{ field.field.widget.input_type }}"
                                            name="{{ field.name }}"
                                            {% if checkbox.choice_label in field.value %}checked{% else %}disabled{% endif %}
                                            value="{{ checkbox.choice_label }}">
