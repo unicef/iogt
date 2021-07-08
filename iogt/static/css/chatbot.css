@@ -125,9 +125,14 @@
     height: 14px;
 }
 
+.messages {
+    overflow: hidden;
+    padding: 5px 0;
+}
+
 .chat .message {
     overflow: hidden;
-    padding: 5px 0 20px;
+    padding: 0 40px 15px 0;
 }
 
 .chat .message-time {
@@ -148,6 +153,19 @@
     line-height: 20px;
     font-weight: 500;
     border-radius: 6px 6px 6px 0;
+    text-align: left;
+    display: inline-block;
+    vertical-align: top;
+    min-width: 70px;
+}
+
+.message.reply{
+    text-align: right;
+    padding: 0 0 15px 40px;
+}
+
+.message.reply .message-box{
+    border-radius: 6px 6px 0 6px;
 }
 
 .message-box:after {
@@ -164,11 +182,17 @@
     pointer-events: none;
 }
 
+.message.reply .message-box:after {
+    right: 0;
+    left: auto;
+    border-left: 0;
+    border-right: 20px solid #f7f7f9;
+}
+
 .covid-info-link {
     padding: 0;
     margin: 0;
     list-style: none;
-    counter-reset: item;
     font-size: 16px;
     line-height: 22px;
     font-weight: bold;
@@ -176,7 +200,6 @@
 }
 
 .covid-info-link li {
-    counter-increment: item;
     overflow: hidden;
     margin: 4px 0;
 }
@@ -190,10 +213,6 @@
     display: block;
     background: #f7f7f9;
     transition: all 0.2s linear;
-}
-
-.covid-info-link a:before {
-    content: counter(item)". ";
 }
 
 .covid-info-link a:hover {
