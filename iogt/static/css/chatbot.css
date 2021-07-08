@@ -1,0 +1,227 @@
+.chat {
+    overflow: hidden;
+    padding: 20px;
+}
+
+.chat h1 {
+    color: black;
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 28px;
+    margin: 0 0 24px;
+}
+
+.chat-links {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.chat-links li {
+    padding: 6px 0;
+}
+
+.chat-links a {
+    display: block;
+    background: #f7f7f9;
+    border-radius: 8px;
+    padding: 8px 30px 8px 12px;
+    color: #9a9a9a;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    text-decoration: none;
+    position: relative;
+    transition: all 0.2s linear;
+}
+
+.chat-links a .title {
+    display: block;
+    font-size: 16px;
+    line-height: 24px;
+    color: #303030;
+    margin: 0 0 3px;
+    transition: all 0.2s linear;
+}
+
+.chat-links a:before {
+    position: absolute;
+    left: -7px;
+    top: -7px;
+    height: 14px;
+    width: 14px;
+    border: 2px solid white;
+    background: #fb3d24;
+    border-radius: 100%;
+}
+
+.chat-links a:after {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    content: "";
+    background: url("/static/icons/arrow_right_big.svg") no-repeat;
+    width: 8px;
+    height: 14px;
+    transition: all 0.2s linear;
+}
+
+.chat-links a:hover,
+.chat-links a:hover .title {
+    color: white;
+    transition: all 0.2s linear;
+}
+
+.chat-links li.active a span,
+.chat-links a:hover span {
+    opacity: 0.5;
+}
+
+.chat-links a:hover {
+    background: #0094f4;
+}
+
+.chat-links li.active a {
+    background: #0094f4;
+    color: white;
+}
+
+.chat-links li.active a .title {
+    color: white;
+}
+
+.chat-links li.active a:before {
+    content: "";
+}
+
+.chat-links li.active a:after,
+.chat-links a:hover:after {
+    transition: all 0.2s linear;
+    background: url("/static/icons/arrow_right_big_white.svg") no-repeat;
+}
+
+.chat .btn-back {
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    color: #303030;
+    font-size: 10px;
+    line-height: 12px;
+    padding: 1px 0 1px 15px;
+    margin: 0 0 20px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.chat .btn-back:after {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    content: "";
+    background: url("/static/icons/arrow-left.svg") no-repeat;
+    width: 8px;
+    height: 14px;
+}
+
+.chat .message {
+    overflow: hidden;
+    padding: 5px 0 20px;
+}
+
+.chat .message-time {
+    display: block;
+    font-size: 12px;
+    line-height: 16px;
+    color: #9a9a9a;
+    margin: 0 0 5px;
+}
+
+.message-box {
+    position: relative;
+    margin: 0 0 10px;
+    background: #f7f7f9;
+    padding: 12px;
+    color: #303030;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+    border-radius: 6px 6px 6px 0;
+}
+
+.message-box:after {
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-left: 20px solid #f7f7f9;
+    border-bottom: 10px solid transparent;
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    content: "";
+    border-radius: 2px;
+    pointer-events: none;
+}
+
+.covid-info-link {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    counter-reset: item;
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: bold;
+    letter-spacing: 0.01em;
+}
+
+.covid-info-link li {
+    counter-increment: item;
+    overflow: hidden;
+    margin: 4px 0;
+}
+
+.covid-info-link a {
+    border: 1px solid #efefef;
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #303030;
+    text-decoration: none;
+    display: block;
+    background: #f7f7f9;
+    transition: all 0.2s linear;
+}
+
+.covid-info-link a:before {
+    content: counter(item)". ";
+}
+
+.covid-info-link a:hover {
+    color: white;
+    background: #0094F4;
+    border-color: #0094F4;
+}
+
+.login-info {
+    text-align: center;
+    color: #9A9A9A;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 500;
+}
+
+.login-info .login {
+    display: inline-block;
+    vertical-align: top;
+    margin: 12px;
+    color: #303030;
+    font-weight: bold;
+}
+
+.login-info .login:hover {
+    text-decoration: none;
+}
+
+.login-info p {
+    margin: 0 0 10px;
+}

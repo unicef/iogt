@@ -47,7 +47,7 @@ class Command(BaseCommand):
         youth = models.Section(
             title='Youth',
             show_in_menus=True,
-            color='1CABE2'
+            font_color='1CABE2'
         )
         section_index_page = models.SectionIndexPage(title='Sections')
         
@@ -69,7 +69,7 @@ class Command(BaseCommand):
         models.HomePageBanner.objects.create(source=home, banner_page=banner_page)
 
         # Create RapidPro Bot User
-        management.call_command('sync_rapidpro_bot_user')
+        # management.call_command('sync_rapidpro_bot_user')
         
         footer_index_page = models.FooterIndexPage(title='Footers')
         home.add_child(instance=footer_index_page)

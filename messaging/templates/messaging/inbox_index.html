@@ -1,0 +1,28 @@
+{% extends "messaging/base.html" %}
+{% load messaging_tags %}
+
+{% block content %}
+<div class="chat">
+    <h1>Chat</h1>
+    <ul class="chat-links">
+        <li class="active">
+            <a href="#">
+                <strong class="title">U-Report</strong>
+                <span>You have received new message</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <strong class="title">Youth Report</strong>
+                <span>Start chatting</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <strong class="title">Healthbody</strong>
+                <span>Start chatting</span>
+            </a>
+        </li>
+    </ul>
+</div>
+{% endblock %}

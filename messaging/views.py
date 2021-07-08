@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.generic import (DeleteView, TemplateView,)
+from django.views.generic import (DeleteView, TemplateView, )
 
 from .chat import ChatManager
 from .forms import MessageReplyForm, NewMessageForm
@@ -14,6 +14,15 @@ from .models import Thread
 from django.contrib.auth.decorators import login_required
 
 User = get_user_model()
+
+
+class InboxIndexView(TemplateView):
+    template_name = 'messaging/inbox_index.html'
+
+
+class MessageDetailView(TemplateView):
+    template_name = 'messaging/message_detail.html'
+
 
 
 @method_decorator(login_required, name='dispatch')
@@ -78,6 +87,7 @@ class MessageCreateView(View):
     """
     Create a new thread message.
     """
+
     def post(self, request):
         form = NewMessageForm(data=request.POST)
         if form.is_valid():
