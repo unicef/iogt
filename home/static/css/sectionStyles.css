@@ -583,7 +583,6 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  width: 100vw;
   padding-left: 20px;
   -webkit-box-pack: start;
       -ms-flex-pack: start;
@@ -996,8 +995,7 @@
 }
 
 .home-page__featured-content {
-  padding: 0 8px;
-  width: 100%;
+  padding: 0 22px;
 }
 
 .home-page__featured-content .related_reading {
@@ -1119,6 +1117,8 @@
   line-height: 16px;
   text-align: center;
   color: #9A9A9A;
+  padding-top: 32px;
+  padding-bottom: 60px;
 }
 
 .footer__form {
@@ -1246,5 +1246,4 @@
   text-align: center;
   width: 100%;
 }
-
 /*# sourceMappingURL=sectionStyles.css.map */
