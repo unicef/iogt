@@ -1,4 +1,4 @@
-{% load static wagtailcore_tags wagtailimages_tags %}
+{% load i18n static wagtailcore_tags wagtailimages_tags %}
 
 {% for ckeckbox in field.value %}
     <div class="quest-item__content">
@@ -8,7 +8,7 @@
                    value="{{ ckeckbox }}">
             <span class="cust-check__title">
                 <span class="cust-check__check"></span>
-                {{ ckeckbox }}
+                {% trans ckeckbox %}
             </span>
         </label>
     </div>
