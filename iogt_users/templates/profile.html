@@ -11,7 +11,10 @@
 
 {% block allauth_content %}
     {% if user.username %}
-        <h1 class="title profile__title">{% trans "Hey" %}, {% trans user.username %}
+        <h1 class="title profile__title">
+            {% blocktrans with username=user.username %}
+                Hey, {{ username }}
+            {% endblocktrans %}
             <span class="profile__icon">{{ user.username | first | upper }}</span>
         </h1>
     {% endif %}
