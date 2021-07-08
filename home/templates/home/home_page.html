@@ -6,9 +6,9 @@
 {% endblock extra_css %}
 
 {% block content %}
-    <div class="home-page" id="home">
+    <div class="home-page">
         {% render_banners_list banners %}
-        <div class="home-page__featured-content">
+        <div>
             {% if page.home_featured_content %}
                 {% include_block page.home_featured_content %}
             {% endif %}

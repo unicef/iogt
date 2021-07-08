@@ -114,7 +114,10 @@ class SectionIndexPage(Page):
 
     @classmethod
     def get_top_level_sections(cls):
-        return cls.objects.filter(locale=Locale.get_active()).first().get_children().live()
+        section_index_page = cls.objects.filter(locale=Locale.get_active()).first()
+        if section_index_page:
+            return section_index_page.get_children().live()
+        return cls.objects.none()
 
 
 class Section(Page, PageUtilsMixin):
