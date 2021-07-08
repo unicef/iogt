@@ -6,9 +6,8 @@
 {% endblock extra_css %}
 
 {% block content %}
-    <div class="home-page">
+    <div class="home-page" id="home">
         {% render_banners_list banners %}
-        {% comment %} {% flat_menu "nav_bar" template="nav_bar.html" %} {% endcomment %}
         <div class="home-page__featured-content">
             {% if page.home_featured_content %}
                 {% include_block page.home_featured_content %}

@@ -358,6 +358,12 @@ input:checked + .cust-check__title {
     width: 100%
 }
 
+.cust-btn span, .cust-select {
+    font-size: 16px;
+    line-height: 22px
+}
+
+
 .cust-btn span {
     color: #303030;
     display: block;
@@ -420,23 +426,120 @@ input:checked + .cust-check__title {
 }
 
 .cust-select {
-    background-color: #f7f7f9;
+    display: inline-block;
+    width: 100%;
+    height: 34px;
+    line-height: 30px;
+    position: relative;
+}
+
+.cust-select input:not(:checked) ~ #text {
+    color: black;
+    background: white;
     border: 1px solid #efefef;
-    border-radius: 8px;
+    border-radius: 12px;
+}
+
+.cust-select input:checked ~ #text {
+    background: transparent;
+    color: transparent;
+    z-index: 2;
+}
+
+.cust-select #text {
+    position: absolute;
     display: block;
-    font-size: 10px;
-    font-weight: 500;
-    line-height: 14px;
-    padding: 8px 12px;
-    width: 100%
+    top: 0;
+    padding-left: 10px;
+    width: 100%;
+    font-size: 12px;
 }
 
-.cust-select option {
-    font-size: 14px;
-    line-height: 14px;
-    width: 100%
+#cust-select:disabled ~ .cust-select__items #text {
+    background: #efefef;
 }
 
+#cust-select:not(:checked) ~ .cust-select__items {
+    height: 30px;
+    border: none;
+
+}
+
+.cust-select__items label {
+    display: none;
+    padding-left: 10px;
+    background: white;
+    font-size: 12px;
+}
+
+.cust-select__items label:hover {
+    background: #efefef;
+    cursor: pointer;
+}
+
+#cust-select:checked ~ .cust-select__items {
+    padding-top: 36px;
+}
+
+#cust-select:checked ~ .cust-select__items label {
+    display: block;
+    border-left: 1px solid #efefef;
+    border-right: 1px solid #efefef;
+}
+
+#cust-select:checked ~ .cust-select__items label:first-of-type {
+    border-top: 1px solid #efefef;
+    border-top-right-radius: 12px;
+    border-top-left-radius: 12px;
+}
+
+#cust-select:checked ~ .cust-select__items label:last-of-type {
+    border-bottom: 1px solid #efefef;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+.cust-select__items input:checked ~ label {
+
+}
+
+.cust-select__items input:checked + label {
+    display: block !important;
+    border: none;
+    background: white;
+}
+
+.cust-select__items {
+    display: block;
+    min-height: 30px;
+    position: absolute;
+    /*overflow: hidden;*/
+    width: 100%;
+    cursor: pointer;
+}
+
+.cust-select:after {
+    content: "";
+    background-image: url("/static/icons/arrow-down.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: inline-block;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 10px;
+    height: 5px;
+    text-align: center;
+    line-height: 26px;
+    cursor: pointer;
+}
+
+.cust-select input {
+    display: none;
+}
 
 .btn-back {
     -webkit-align-items: center;
