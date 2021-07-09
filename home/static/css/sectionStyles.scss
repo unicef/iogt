@@ -892,7 +892,7 @@
    text-align: center;
    color: $gray;
    padding-top: 32px;
-   padding-bottom: 60px;
+   padding-bottom: 80px;
   }
 
   &__form {
@@ -968,34 +968,51 @@
    position: fixed;
    bottom: 0px;
    width: 100vw;
+   a { 
+      text-decoration: none;
+   }
 }
 
 .nav-bar {
    &__wrap {
-   -webkit-align-items: center;
-   align-items: center;
-   display: flex
+      width: 100vw;
+      display: flex;
+      // justify-content: space-around;
+      background-color: $unicef;
  }
-   &__item {
-   width: 25%
- } 
 }
 
 .nav-bar-item  {
+
    a {
-      align-items: center;
       background-color:$unicef;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       padding: 8px 0;
       text-decoration: none;
+      background-color: $unicef;
+      min-width: 33.33vw;
+   }
+
+   &__active {
+      background-color:$unicef;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      justify-content: center;
+      padding: 8px 0;
+      text-decoration: none;
+      background-color: $unicef-accent;
+      min-width: 33.33vw;
    }
 
    &__icon {
-      display: block;
-      height: 20px;
-      width: 20px;
+      width: 25.2px;
+      height: 24.82px;
+      left: calc(50% - 25.2px/2 + 0px);
+      top: calc(50% - 24.82px/2 + 24.82px);
 
       img {
          max-width: 100%;
@@ -1005,17 +1022,16 @@
 
    &__title {
       color:$white;
-      font-size: 8px;
+      font-size: 10px;
       font-weight: 600;
-      line-height: 16px;
+      line-height: 20px;
       margin-top: 2px;
       text-align: center;
-      width: 100%
+      width: 100%;
    }
+
 }
 
-.nav-bar-item.active a {
-   background-color: $unicef-accent;
-}
+
 
 
