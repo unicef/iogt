@@ -94,6 +94,8 @@ class Command(BaseCommand):
         self.migrate_images()
         home = self.create_home_page(root)
         section_index_page = self.create_section_index_page(home)
+        banner_index_page = self.create_banner_index_page(home)
+        footer_index_page = self.create_footer_index_page(home)
         self.migrate_sections(section_index_page)
         self.migrate_articles(section_index_page)
         self.fix_page_tree_hack(section_index_page)
@@ -139,6 +141,18 @@ class Command(BaseCommand):
         homepage.add_child(instance=section_index_page)
 
         return section_index_page
+
+    def create_banner_index_page(self, homepage):
+        banner_index_page = models.BannerIndexPage(title='Banners')
+        homepage.add_child(instance=banner_index_page)
+
+        return banner_index_page
+
+    def create_footer_index_page(self, homepage):
+        footer_footer_page = models.FooterIndexPage(title='Footers')
+        homepage.add_child(instance=footer_footer_page)
+
+        return footer_footer_page
 
     def migrate_images(self):
         cur = self.db_query('select * from wagtailimages_image')
