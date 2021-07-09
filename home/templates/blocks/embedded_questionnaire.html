@@ -20,18 +20,18 @@
                                 questions</p>
                             <p class="quest-item__step-desc">
                                     <span>
-                                        {% if field.field.widget.input_type  == "radio" or "select" in field.field.widget.template_name %}
-                                            Select one
-                                        {% elif  field.field.widget.input_type  == "checkbox" %}
-                                            Check all that apply
-                                        {% else %}
-                                            Optional
-                                        {% endif %}
+                                         {% if field.field.widget.input_type  == "radio" or "select" in field.field.widget.template_name %}
+                                             {% trans "Select one" %}
+                                         {% elif  field.field.widget.input_type  == "checkbox" %}
+                                             {% trans "Check all that apply" %}
+                                         {% else %}
+                                             {% trans "Optional" %}
+                                         {% endif %}
                                     </span>
                             </p>
                         </div>
                         <div class="quest-item__desc">
-                            <p>{{ field.label }}</p>
+                            <p>{% trans field.label %}</p>
                         </div>
                         {% if field.field.widget.input_type == "radio" %}
                             {% render_radios field %}
@@ -45,7 +45,7 @@
                             {% render_select field %}
                         {% endif %}
                         {% for err in  field.errors %}
-                            <p class="cust-input__error">{{ err }}</p>
+                            <p class="cust-input__error">{% trans err %}</p>
                         {% endfor %}
                     </div>
                 {% else %}
@@ -66,11 +66,11 @@
                                   stroke-linejoin="round"/>
                         </svg>
                         {% if field.field.widget.input_type  == "radio" or "select" in field.field.widget.template_name %}
-                            Select one
+                            {% trans "Select one" %}
                         {% elif  field.field.widget.input_type  == "checkbox" %}
-                            Check all that apply
+                            {% trans "Check all that apply" %}
                         {% else %}
-                            Optional
+                            {% trans "Optional" %}
                         {% endif %}
                     </h4>
                     {% if field.field.widget.input_type == "radio" %}
@@ -79,7 +79,7 @@
                         {% render_select field %}
                     {% endif %}
                     {% for err in  field.errors %}
-                        <p class="cust-input__error">{{ err }}</p>
+                        <p class="cust-input__error">{% trans err %}</p>
                     {% endfor %}
                 {% endif %}
             {% endfor %}
