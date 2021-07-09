@@ -1,4 +1,4 @@
-{% load static menu_tags i18n wagtailimages_tags home_tags %}
+{% comment %} {% load static menu_tags i18n wagtailimages_tags home_tags %}
 
 {% get_current_language as LANGUAGE_CODE %}
 {% get_language_info for LANGUAGE_CODE as lang %}
@@ -21,4 +21,28 @@
             <img src="{% static "icons/search.svg" %}" alt="Search">
         </a>
     </div>
+</header> {% endcomment %}
+
+
+{% load static menu_tags i18n wagtailimages_tags home_tags %}
+
+{% get_current_language as LANGUAGE_CODE %}
+{% get_language_info for LANGUAGE_CODE as lang %}
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as languages %}
+
+
+<header class="home-header">
+    <a href="/" >
+        {% image settings.home.SiteSettings.logo width-50 class='header-logo'  %}
+    </a>
+    <select>
+            {% for language in languages %}
+                <option value="{{ language.name_local }}" {% if language.code == LANGUAGE_CODE %}selected{% endif %}>{{ language.name_local }}</option>
+            {% endfor %}
+        </select> 
+
+        <a class="js-search-btn" href="{% url "search" %}">
+            <img src="{% static "icons/search.svg" %}" alt="Search">
+        </a>
 </header>
