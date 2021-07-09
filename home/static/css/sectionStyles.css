@@ -193,57 +193,6 @@
   text-align: left;
 }
 
-.questionnaire {
-  width: 232px;
-  height: 186px;
-  left: 0px;
-  top: 0px;
-  background-color: red;
-  border-radius: 8px;
-  margin: 24px 0;
-}
-
-.questionnaire__title {
-  width: 139px;
-  height: 40px;
-  padding-left: 14px;
-  top: 18px;
-  font-family: Poppins;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 16px;
-  line-height: 20px;
-  color: #FFFFFF;
-}
-
-.questionnaire__CTA {
-  width: 200px;
-  height: 64px;
-  padding-left: 16px;
-  top: 62px;
-  font-family: Poppins;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 10px;
-  line-height: 16px;
-  color: #FFFFFF;
-}
-
-.questionnaire .button__white {
-  text-decoration: none;
-  padding: 8px 16px;
-  border-radius: 28px;
-  margin-left: 16px;
-  font-family: Poppins;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 10px;
-  line-height: 14px;
-  border: none;
-  background-color: #FFFFFF;
-  color: black;
-}
-
 .article__img {
   width: 100%;
   height: auto;
@@ -444,7 +393,7 @@
   font-size: 16px;
   line-height: 22px;
   color: #303030;
-  border: 1.5px solid #D8D8D8;
+  border: 1.5px solid #d8d8d8;
 }
 
 .article-navigation__button--next {
@@ -483,7 +432,7 @@
   font-family: Poppins;
   font-style: normal;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 16px;
   margin-right: 5px;
   line-height: 24px;
   letter-spacing: 0.01em;
@@ -571,7 +520,6 @@
 }
 
 .comments__form {
-  width: 320px;
   background-color: #F7F7F9;
 }
 
@@ -611,7 +559,6 @@
           align-items: center;
   padding: 12px 16px;
   position: static;
-  width: 280px;
   height: 46px;
   left: calc(50% - 320px/2);
   top: 196px;
@@ -898,7 +845,7 @@
   font-size: 16px;
   line-height: 24px;
   letter-spacing: 0.01em;
-  color: #9A9A9A;
+  color: #9a9a9a;
 }
 
 .content {
@@ -939,7 +886,6 @@
   font-weight: normal;
   font-size: 16px;
   line-height: 24px;
-  color: #000000;
 }
 
 .cache-banner p:nth-of-type(2n) {
@@ -1116,9 +1062,9 @@
   font-size: 10px;
   line-height: 16px;
   text-align: center;
-  color: #9A9A9A;
+  color: #9a9a9a;
   padding-top: 32px;
-  padding-bottom: 60px;
+  padding-bottom: 80px;
 }
 
 .footer__form {
@@ -1146,7 +1092,7 @@
   font-size: 16px;
   line-height: 22px;
   letter-spacing: 0.01em;
-  color: #9A9A9A;
+  color: #9a9a9a;
 }
 
 .top-level, .bottom-level {
@@ -1188,28 +1134,20 @@
   width: 100vw;
 }
 
-.nav-bar {
-  background-color: #0094f4;
+.sticky-footer a {
+  text-decoration: none;
 }
 
 .nav-bar__wrap {
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  width: 100vw;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-}
-
-.nav-bar__item {
-  width: 25%;
+  background-color: #0094F4;
 }
 
 .nav-bar-item a {
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  background-color: #0094f4;
+  background-color: #0094F4;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1220,16 +1158,35 @@
           justify-content: center;
   padding: 8px 0;
   text-decoration: none;
+  background-color: #0094F4;
+  min-width: 33.33vw;
 }
 
-.nav-bar-item.active a {
-  background-color: #0070e2;
+.nav-bar-item__active {
+  background-color: #0094F4;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  justify-content: center;
+  padding: 8px 0;
+  text-decoration: none;
+  background-color: #0070E2;
+  min-width: 33.33vw;
 }
 
 .nav-bar-item__icon {
-  display: block;
-  height: 20px;
-  width: 20px;
+  width: 25.2px;
+  height: 24.82px;
+  left: calc(50% - 25.2px/2 + 0px);
+  top: calc(50% - 24.82px/2 + 24.82px);
 }
 
 .nav-bar-item__icon img {
@@ -1238,10 +1195,10 @@
 }
 
 .nav-bar-item__title {
-  color: #fff;
-  font-size: 8px;
+  color: #FFFFFF;
+  font-size: 10px;
   font-weight: 600;
-  line-height: 16px;
+  line-height: 20px;
   margin-top: 2px;
   text-align: center;
   width: 100%;
