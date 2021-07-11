@@ -16,6 +16,7 @@ from django.contrib.auth.decorators import login_required
 User = get_user_model()
 
 
+@method_decorator(login_required, name='dispatch')
 class InboxIndexView(TemplateView):
     template_name = 'messaging/inbox_index.html'
 
@@ -37,60 +38,16 @@ class InboxIndexView(TemplateView):
         return context
 
 
-class MessageDetailView(View):
+@method_decorator(login_required, name='dispatch')
+class ThreadView(View):
 
     def get_context(self, thread):
-        return {
-            'thread': thread
-        }
+        return {'thread': thread}
 
     def get(self, request, thread_id):
         thread = get_object_or_404(Thread, pk=thread_id)
+        thread.mark_read(request.user)
         return render(request, 'messaging/message_detail.html', context=self.get_context(thread))
-
-
-@method_decorator(login_required, name='dispatch')
-class InboxView(TemplateView):
-    """
-    View inbox thread list.
-    """
-    template_name = "messaging/inbox.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        folder = self.kwargs.get('deleted', 'inbox')
-        if folder == 'deleted':
-            threads = Thread.thread_objects.of_user(self.request.user).deleted().order_by_latest()
-        else:
-            threads = Thread.thread_objects.of_user(self.request.user).inbox().order_by_latest()
-
-        context.update({
-            "folder": folder,
-            "threads": threads.prefetch_related('messages'),
-            "unread_threads": Thread.thread_objects.of_user(self.request.user).unread().order_by_latest(),
-        })
-        return context
-
-
-@method_decorator(login_required, name='dispatch')
-class ThreadView(View):
-    """
-    List thread messages and reply view.
-    """
-    model = Thread
-    context_object_name = 'thread'
-
-    def get_context(self, thread, form=None):
-        return {
-            'thread': thread,
-            'form': form or MessageReplyForm(initial={
-                'thread': thread,
-                'user': self.request.user,
-            })}
-
-    def get(self, request, pk):
-        thread = get_object_or_404(Thread, pk=pk)
-        return render(request, 'messaging/thread.html', context=self.get_context(thread))
 
     def post(self, request, pk):
         thread = get_object_or_404(Thread, pk=pk)
@@ -101,9 +58,10 @@ class ThreadView(View):
             chat_manager = ChatManager(thread)
             chat_manager.record_reply(text=text, sender=request.user, mark_unread=False)
 
-            return redirect(reverse('messaging:thread_view', kwargs={'pk': thread.pk}))
+            return redirect(reverse('messaging:thread', kwargs={'pk': thread.pk}))
         else:
-            return render(request, 'messaging/thread.html', context=self.get_context(thread, form))
+            return render(request, 'messaging/message_detail.html', context=self.get_context(thread, form))
+
 
 
 @method_decorator(login_required, name='dispatch')

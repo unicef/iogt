@@ -30,6 +30,9 @@ class Thread(models.Model):
     def latest_message(self):
         return self.messages.order_by('-sent_at').first()
 
+    def mark_read(self, user):
+        self.user_threads.filter(user=user).update(is_read=True)
+
     def mark_unread(self, sender=None):
         """
         Mark all related UserThread(s) unread

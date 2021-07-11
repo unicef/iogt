@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="chat">
-    <a href="#" class="btn-back">Back</a>
+    <a href="{% url 'messaging:inbox' %}" class="btn-back">Back</a>
     <h1> {{ thread.subject }} </h1>
     <div class="messages">
 {#        {% for message in thread.messages.all %}#}
