@@ -14,7 +14,7 @@
         <div class="container">
             <h1 class="title survey-page__title">{% trans page.title %}</h1>
             {% if page.description %}
-                <p>{% trans page.description %}</p>{% endif %}
+                <p>{{ page.description }}</p>{% endif %}
             <form action="{% pageurl page %}{% if self.multi_step or self.has_page_breaks %}?p={{ fields_step.number|add:"1" }}&back_url={{ request.path }}{% else %}?back_url={{ request.path }}{% endif %}"
                   method="POST" class="survey-page__content">
                 {% csrf_token %}
