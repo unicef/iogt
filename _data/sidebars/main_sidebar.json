@@ -136,10 +136,6 @@
             "title": "Creating a Survey",
             "folderitems": [
                 {
-                    "title": "Homepage Surveys",
-                    "url": "/cms-manual/surveys/homepage-surveys/"
-                },
-                {
                     "title": "Creating Surveys",
                     "url": "/cms-manual/surveys/creating-surveys/"
                 },
