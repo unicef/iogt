@@ -154,10 +154,15 @@
                 {
                     "title": "Survey Results",
                     "url": "/cms-manual/surveys/survey-results/"
-                },
+                }
+            ]
+        },
+        {
+            "title": "Need More?",
+            "folderitems": [
                 {
-                    "title": "Need More",
-                    "url": "/cms-manual/surveys/need-more/"
+                    "title": "Need More? ",
+                    "url": "/cms-manual/need-more/need-more/"
                 }
             ]
         }
