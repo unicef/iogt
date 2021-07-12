@@ -7,19 +7,19 @@
 {% get_current_language as LANGUAGE_CODE %}
 
 <footer class='footer'>
-<div class="home-header">
-    <a href="/" >
-        {% image settings.home.SiteSettings.logo fill-102x40 as logo %}
-        <img src="{{ logo.url }}" />
-    </a>
-    <div class="home-header__options">
-        <select>
-            {% for language in languages %}
-                <option value="{{ language.name_local }}" {% if language.code == LANGUAGE_CODE %}selected{% endif %}>{{ language.name_local }}</option>
-            {% endfor %}
-        </select>  
-    </div>
-</div>
+    <div class="sm-home-header">
+        <a href="/" >
+            {% image settings.home.SiteSettings.logo fill-102x40 as logo %}
+            <img src="{{ logo.url }}" />
+        </a>
+        <div class="sm-home-header__options">
+            <select>
+                {% for language in languages %}
+                    <option value="{{ language.name_local }}" {% if language.code == LANGUAGE_CODE %}selected{% endif %}>{{ language.name_local }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>  
     <form class='footer__form' action="{% url "search" %}">
         <label >
             <span >

@@ -985,12 +985,8 @@
   margin-top: 60px;
   border-top: 1px solid $fog;
 
-  .home-header {
-     padding:0;
-     padding-top: 22px;
-     border:none;
-     margin-left: 20px;
-     margin-right: 20px;
+  .sm-home-header {
+     display: none;
   }
 
   select {
@@ -1000,12 +996,38 @@
   label, svg {
      display:flex;
      align-items: center;
-     
   }
-  
+
+  svg {
+     height: 10px;
+  }
+
+   padding-left: 12px;
+   padding-right: 12px;
+ 
+
+  &__form {
+   margin-top: 25px;
+   background: $pearl;
+   border: 1px solid $fog;
+   border-radius: 8px;
+   padding: 8px;
+
+   input {
+      border:none;
+      background: $pearl;
+      font-family: Poppins;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 22px;
+      font-size: 10px;
+      line-height: 16px;
+      letter-spacing: 0.01em;
+      color: $gray;
+   }
+
+    
   &__copyright {
-   font-family: Poppins;
-   font-style: normal;
    font-weight: 500;
    font-size: 10px;
    line-height: 16px;
@@ -1014,31 +1036,39 @@
    padding-top: 32px;
    padding-bottom: 80px;
   }
+  }
 
-  &__form {
-   margin-left: 20px;
-   margin-right: 20px;
-   margin-top: 35px;
-   left: 20px;
-   top: 92px;
-   background: $pearl;
-   border: 1px solid $fog;
-   box-sizing: border-box;
-   border-radius: 8px;
-   padding: 14.75px;
-
-   input {
-      width: 96%;
+  @include sm {
+   padding-left: 20px;
+   padding-right: 20px;
+   .sm-home-header {
+      display: flex;
+      padding:0;
+      padding-top: 22px;
       border:none;
+   }
+
+   &__form {
+      margin-top: 35px;
       background: $pearl;
-      padding-left: 14.58px;
-      font-family: Poppins;
-      font-style: normal;
-      font-weight: 500;
-      font-size: 16px;
-      line-height: 22px;
-      letter-spacing: 0.01em;
-      color: $gray;
+      border: 1px solid $fog;
+      box-sizing: border-box;
+      border-radius: 8px;
+      padding: 13px;
+   
+      input {
+         width: 96%;
+         border:none;
+         padding-left: 13px;
+         padding-left: 13px;
+         font-weight: 500;
+         font-size: 16px;
+         line-height: 22px;
+      }
+     }
+
+     svg {
+      height: 14px;
    }
   }
 }
@@ -1046,16 +1076,15 @@
 // top level setion
 
 .top-level, .bottom-level {
-   margin-left: 20px;
-   margin-right: 20px;
+  
    margin-top: 32px;
    border-top: 1px solid $fog;
-   padding-top: 16px;
+   padding-top: 12px;
 
    &__section {
       display:flex;
       margin-top: 8px;
-      padding: 13px 12px;
+      padding: 9px 12px;
       border-radius: 8px;
      
       a {
@@ -1064,10 +1093,21 @@
          font-family: Poppins;
          font-style: normal;
          font-weight: bold;
-         font-size: 16px;
-         line-height: 22px;
+         font-size: 10px;
+         line-height: 16px;
          letter-spacing: 0.01em;
          padding-left: 10px;
+      }
+   }
+
+   @include sm {
+      &__section {
+         padding: 13px 12px;
+         
+         a {
+            font-size: 16px;
+            line-height: 22px;
+         }
       }
    }
 }

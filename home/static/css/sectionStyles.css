@@ -1160,14 +1160,12 @@
 .footer {
   margin-top: 60px;
   border-top: 1px solid #EFEFEF;
+  padding-left: 12px;
+  padding-right: 12px;
 }
 
-.footer .home-header {
-  padding: 0;
-  padding-top: 22px;
-  border: none;
-  margin-left: 20px;
-  margin-right: 20px;
+.footer .sm-home-header {
+  display: none;
 }
 
 .footer select {
@@ -1183,9 +1181,32 @@
           align-items: center;
 }
 
-.footer__copyright {
+.footer svg {
+  height: 10px;
+}
+
+.footer__form {
+  margin-top: 25px;
+  background: #F7F7F9;
+  border: 1px solid #EFEFEF;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.footer__form input {
+  border: none;
+  background: #F7F7F9;
   font-family: Poppins;
   font-style: normal;
+  font-weight: 500;
+  line-height: 22px;
+  font-size: 10px;
+  line-height: 16px;
+  letter-spacing: 0.01em;
+  color: #9a9a9a;
+}
+
+.footer__form__copyright {
   font-weight: 500;
   font-size: 10px;
   line-height: 16px;
@@ -1195,40 +1216,46 @@
   padding-bottom: 80px;
 }
 
-.footer__form {
-  margin-left: 20px;
-  margin-right: 20px;
-  margin-top: 35px;
-  left: 20px;
-  top: 92px;
-  background: #F7F7F9;
-  border: 1px solid #EFEFEF;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-  border-radius: 8px;
-  padding: 14.75px;
-}
-
-.footer__form input {
-  width: 96%;
-  border: none;
-  background: #F7F7F9;
-  padding-left: 14.58px;
-  font-family: Poppins;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 22px;
-  letter-spacing: 0.01em;
-  color: #9a9a9a;
+@media only screen and (min-width: 360px) {
+  .footer {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .footer .sm-home-header {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    padding: 0;
+    padding-top: 22px;
+    border: none;
+  }
+  .footer__form {
+    margin-top: 35px;
+    background: #F7F7F9;
+    border: 1px solid #EFEFEF;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+    border-radius: 8px;
+    padding: 13px;
+  }
+  .footer__form input {
+    width: 96%;
+    border: none;
+    padding-left: 13px;
+    padding-left: 13px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+  }
+  .footer svg {
+    height: 14px;
+  }
 }
 
 .top-level, .bottom-level {
-  margin-left: 20px;
-  margin-right: 20px;
   margin-top: 32px;
   border-top: 1px solid #EFEFEF;
-  padding-top: 16px;
+  padding-top: 12px;
 }
 
 .top-level__section, .bottom-level__section {
@@ -1236,7 +1263,7 @@
   display: -ms-flexbox;
   display: flex;
   margin-top: 8px;
-  padding: 13px 12px;
+  padding: 9px 12px;
   border-radius: 8px;
 }
 
@@ -1246,10 +1273,20 @@
   font-family: Poppins;
   font-style: normal;
   font-weight: bold;
-  font-size: 16px;
-  line-height: 22px;
+  font-size: 10px;
+  line-height: 16px;
   letter-spacing: 0.01em;
   padding-left: 10px;
+}
+
+@media only screen and (min-width: 360px) {
+  .top-level__section, .bottom-level__section {
+    padding: 13px 12px;
+  }
+  .top-level__section a, .bottom-level__section a {
+    font-size: 16px;
+    line-height: 22px;
+  }
 }
 
 .bottom-level__section {
