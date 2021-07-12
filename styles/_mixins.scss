@@ -29,7 +29,7 @@ $white: #FFFFFF;
 
 
 @mixin sm {
-    @media only screen and (min-width: 360px) and (max-width: 768px) { @content; }
+    @media only screen and (min-width: 360px) { @content; }
 }
 
 
