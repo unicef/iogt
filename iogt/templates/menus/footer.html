@@ -4,7 +4,7 @@
             {% if item.link_page.color %}
        style="background-color: #{{ item.color }}; border-color: #{{ item.color }}" {% endif %}>
                     <span class="icon-btn__icon">
-                          {% image item.icon original %}
+                          <img src="{{ item.icon.url }}" />
                     </span>
         <span class="icon-btn__title" {% if item.color_text %}
               style="color: #{{ item.color_text }};" {% endif %}>{{ item.text }}</span>

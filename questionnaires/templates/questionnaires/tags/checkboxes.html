@@ -1,0 +1,15 @@
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% for ckeckbox in field %}
+    <div class="quest-item__content">
+        <label class="cust-check cust-check--2 quest-item__input">
+            <input type="{{ field.field.widget.input_type }}"
+                   name="{{ field.name }}"
+                   value="{{ ckeckbox.choice_label }}">
+            <div class="cust-check__title">
+                <span class="cust-check__check"></span>
+                <span>{{ ckeckbox.choice_label }}</span>
+            </div>
+        </label>
+    </div>
+{% endfor %}

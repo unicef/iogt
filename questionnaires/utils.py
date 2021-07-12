@@ -6,9 +6,9 @@ from .blocks import SkipState
 
 
 class SkipLogicPaginator(Paginator):
-    def __init__(self, object_list, data=dict(), answered=dict()):
-        self.new_answers = data.copy()
-        self.previous_answers = answered
+    def __init__(self, object_list, new_answers=dict, previous_answers=dict):
+        self.new_answers = new_answers.copy()
+        self.previous_answers = previous_answers
 
         super().__init__(object_list, per_page=1)
 
@@ -106,7 +106,7 @@ class SkipLogicPaginator(Paginator):
 
     @property
     def previous_page(self):
-        # Prevent returning 0 if the on the first page
+        # Prevent returning 0 if on the first page
         return max(1, next(
             page for page, break_index in enumerate(self.page_breaks)
             if break_index > self.last_question_previous_page

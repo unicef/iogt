@@ -1,16 +1,16 @@
 {% load static wagtailimages_tags menu_tags %}
 
-<div class="nav-bar">
+<nav class="nav-bar sticky-footer">
     <div class="nav-bar__wrap">
         {% for item in menu_items %}
-            <div class="nav-bar__item nav-bar-item{% if request.path == item.href%} active{% endif %}">
+            <div class="nav-bar-item">
                 <a href="{{ item.href }}">
                     <span class="nav-bar-item__icon">
-                        {% image item.icon original %}
+                         <img src="{{ item.icon.url }}" />
                     </span>
                     <span class="nav-bar-item__title">{{ item.text }}</span>
                 </a>
             </div>
         {% endfor %}
     </div>
-</div>
+</nav>

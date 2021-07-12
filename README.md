@@ -134,6 +134,9 @@ Run the following command:
 make test
 ```
 
+## Configuring the Chatbot
+Follow instructions [here](messaging/README.md)
+
 [1]: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment
 [2]: https://www.unicef.org/innovation/IoGT
 [3]: https://github.com/unicef/iogt/blob/develop/LICENSE

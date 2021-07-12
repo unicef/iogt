@@ -3,6 +3,7 @@ from django.template.loader import render_to_string
 from django.utils.html import format_html, format_html_join
 
 from wagtail.core import blocks
+from wagtail.core.blocks import PageChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtailmedia.blocks import AbstractMediaChooserBlock
 
@@ -60,6 +61,7 @@ class EmbeddedQuestionnaireChooserBlock(blocks.PageChooserBlock):
     def render_basic(self, value, context=None):
         context.update({
             'object': value,
+            'type': value.__class__.__name__,
             'form': value.get_form(),
         })
         return render_to_string('blocks/embedded_questionnaire.html', context)
@@ -67,9 +69,18 @@ class EmbeddedQuestionnaireChooserBlock(blocks.PageChooserBlock):
     class Meta:
         icon = 'form'
 
+
 class PageButtonBlock(blocks.StructBlock):
     page = blocks.PageChooserBlock()
     text = blocks.CharBlock(required=False, max_length=255)
 
     class Meta:
         template = 'blocks/page_button.html'
+
+
+class ArticleChooserBlock(PageChooserBlock):
+    def __init__(self, *args, **kwargs):
+        super().__init__(target_model='home.Article', *args, **kwargs)
+
+    class Meta:
+        template = 'blocks/article_page.html'

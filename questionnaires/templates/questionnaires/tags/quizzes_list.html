@@ -1,13 +1,13 @@
 {% load static wagtailcore_tags wagtailimages_tags %}
 
 {% for quiz in quizzes %}
-<a  href="{% pageurl quiz %}">
+<a href="{% pageurl quiz %}">
     <span class='quiz__details'>
         <p>QUIZ</p>
-        <p class='quiz__details--bold'>{{ quiz.title }}</p>
+        <p>{{ quiz.title }}</p>
     </span>
     <div class="quiz__imageholder">
-        <img  class="quiz__image" src="{% static 'images/Stroke 3.png' %}" alt=''>
+       <img  class="quiz__image" src="{% static 'icons/forward.svg' %}" alt='arrow-right'>
     </div>
 </a>
 {% endfor %}

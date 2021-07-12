@@ -1,20 +1,92 @@
-{% load wagtailcore_tags i18n %}
+{% load static wagtailcore_tags i18n questionnaires_tags %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'css/questionnaires.css' %}">
+{% endblock %}
 
 <div class="questionnaire-container">
-    <hr>
-    <h2>{{ object.title }}</h2>
-    {{ form.non_field_errors }}
-    <div>
-        <p>{{ object.description }}</p>
-        <hr>
-        <form action="{% pageurl object %}?back_url={{ request.path }}" method="POST">
-            {% csrf_token %}
-            <div>
-                {{ form.as_p }}
-            </div>
-            <div>
-                <input type="submit" value="{% trans object.submit_button_text %}"/>
-            </div>
-        </form>
-    </div>
+    <h1 class="title {% if type == "Survey" %}survey-page__title{% else %}polls-widget__title{% endif %}">{% trans object.title %}</h1>
+    <form action="{% pageurl object %}?back_url={{ request.path }}"
+          method="POST">
+        {% csrf_token %}
+        <div {% if type == "Survey" %}class="survey-page__content"{% endif %}>
+            {% for field in form %}
+                {% if type == "Survey" %}
+                    <div class="quest-item">
+                        <div class="quest-item__header">
+                            <p class="quest-item__number">{{ forloop.counter }}
+                                of {{ form.fields | length }}
+                                questions</p>
+                            <p class="quest-item__step-desc">
+                                    <span>
+                                         {% if field.field.widget.input_type  == "radio" or "select" in field.field.widget.template_name %}
+                                             {% trans "Select one" %}
+                                         {% elif  field.field.widget.input_type  == "checkbox" %}
+                                             {% trans "Check all that apply" %}
+                                         {% else %}
+                                             {% trans "Optional" %}
+                                         {% endif %}
+                                    </span>
+                            </p>
+                        </div>
+                        <div class="quest-item__desc">
+                            <p>{% trans field.label %}</p>
+                        </div>
+                        {% if field.field.widget.input_type == "radio" %}
+                            {% render_radios field %}
+                        {% elif field.field.widget.input_type == "checkbox" %}
+                            {% render_checkboxes field %}
+                        {% elif "textar" in field.field.widget.template_name %}
+                            {% render_textarea field %}
+                        {% elif field.field.widget.input_type == "text" %}
+                            {% render_text_field field %}
+                        {% elif "select" in field.field.widget.template_name %}
+                            {% render_select field %}
+                        {% endif %}
+                        {% for err in  field.errors %}
+                            <p class="cust-input__error">{% trans err %}</p>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <h4 class="polls-widget__form-title">
+                        <svg width="10" height="10" viewBox="0 0 10 10"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5.00004 9.16646C7.30123 9.16646 9.16671 7.30098 9.16671 4.9998C9.16671 2.69861 7.30123 0.83313 5.00004 0.83313C2.69885 0.83313 0.833374 2.69861 0.833374 4.9998C0.833374 7.30098 2.69885 9.16646 5.00004 9.16646Z"
+                                  stroke="#9A9A9A" stroke-width="0.75"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"></path>
+                            <path d="M5 6.66667V5" stroke="#9A9A9A"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"/>
+                            <path d="M5 3.33334H5.00508"
+                                  stroke="#9A9A9A"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"/>
+                        </svg>
+                        {% if field.field.widget.input_type  == "radio" or "select" in field.field.widget.template_name %}
+                            {% trans "Select one" %}
+                        {% elif  field.field.widget.input_type  == "checkbox" %}
+                            {% trans "Check all that apply" %}
+                        {% else %}
+                            {% trans "Optional" %}
+                        {% endif %}
+                    </h4>
+                    {% if field.field.widget.input_type == "radio" %}
+                        {% render_polls_radios field %}
+                    {% elif "select" in field.field.widget.template_name %}
+                        {% render_select field %}
+                    {% endif %}
+                    {% for err in  field.errors %}
+                        <p class="cust-input__error">{% trans err %}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </div>
+        <button type="submit"
+                class="cust-btn cust-btn--dark {% if type == "Survey" %}survey-page__btn{% else %}polls-widget__submit{% endif %}">
+            <span>{% trans object.submit_button_text %}</span>
+        </button>
+    </form>
 </div>

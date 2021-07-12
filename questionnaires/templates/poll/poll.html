@@ -1,21 +1,58 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
-{% load i18n %}
+{% load static i18n wagtailcore_tags questionnaires_tags %}
+
 
 {% block content %}
-    <h1>{{ page.title }}</h1>
-    {{ form.non_field_errors }}
-    <div>
-        <p>{{ page.description }}</p>
-        <hr>
-        <form action="{% pageurl page %}" method="POST">
-            {% csrf_token %}
-            <div>
-                {{ form.as_p }}
+    {% include 'back_button.html' with back_url=back_url %}
+    <div class="polls">
+        <div class="polls-widget">
+            <div class="container">
+                <div class="polls-widget__wrap"><h1
+                        class="title polls-widget__title">{% trans page.title %}</h1>
+                    <form class="polls-widget__form" action="{% pageurl page %}?back_url={{ request.path }}"
+                          method="POST">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <h4 class="polls-widget__form-title">
+                                <svg width="10" height="10" viewBox="0 0 10 10"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5.00004 9.16646C7.30123 9.16646 9.16671 7.30098 9.16671 4.9998C9.16671 2.69861 7.30123 0.83313 5.00004 0.83313C2.69885 0.83313 0.833374 2.69861 0.833374 4.9998C0.833374 7.30098 2.69885 9.16646 5.00004 9.16646Z"
+                                          stroke="#9A9A9A" stroke-width="0.75"
+                                          stroke-linecap="round"
+                                          stroke-linejoin="round"/>
+                                    <path d="M5 6.66667V5" stroke="#9A9A9A"
+                                          stroke-linecap="round"
+                                          stroke-linejoin="round"/>
+                                    <path d="M5 3.33334H5.00508"
+                                          stroke="#9A9A9A"
+                                          stroke-linecap="round"
+                                          stroke-linejoin="round"/>
+                                </svg>
+                                {% if field.field.widget.input_type  == "radio" or "select" in field.field.widget.template_name %}
+                                   {% trans "Select one" %}
+                                {% elif  field.field.widget.input_type  == "checkbox" %}
+                                   {% trans "Check all that apply" %}
+                                {% else %}
+                                   {% trans "Optional" %}
+                                {% endif %}
+                            </h4>
+                            {% if field.field.widget.input_type == "radio" %}
+                                {% render_polls_radios field %}
+                            {% elif "/select" in field.field.widget.template_name %}
+                                {% render_select field %}
+                            {% endif %}
+                            {% for err in  field.errors %}
+                                <p class="cust-input__error">{{ err }}</p>
+                            {% endfor %}
+                        {% endfor %}
+                        <button type="submit"
+                                class="cust-btn cust-btn--dark polls-widget__submit">
+                            <span>{% trans page.submit_button_text %}</span>
+                        </button>
+                    </form>
+                </div>
             </div>
-            <div>
-                <input type="submit" value="{% trans page.submit_button_text %}"/>
-            </div>
-        </form>
+        </div>
     </div>
 {% endblock content %}

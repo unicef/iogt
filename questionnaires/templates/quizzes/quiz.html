@@ -1,21 +1,69 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
-{% load i18n %}
+{% load static i18n questionnaires_tags wagtailcore_tags %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/quiz.css' %}">
+{% endblock %}
 
 {% block content %}
-    <h1>{{ page.title }}</h1>
-    {{ form.non_field_errors }}
-    <div>
-        <p>{{ page.description }}</p>
-        <hr>
-        <form action="{% pageurl page %}" method="POST">
-            {% csrf_token %}
-            <div>
-                {{ form.as_p }}
-            </div>
-            <div>
-                <input type="submit" value="{% trans page.submit_button_text %}"/>
-            </div>
-        </form>
+    {% include 'back_button.html' with back_url=back_url %}
+    <div class="quiz-page">
+        <div class="container">
+            <h1 class="title quiz-page__title">{% trans page.title %}</h1>
+            <form action="
+                    {% pageurl page %}{% if self.multi_step or self.has_page_breaks %}?p={{ fields_step.number|add:"1" }}&back_url=
+                        {{ request.path }}{% else %}?back_url={{ request.path }}{% endif %}"
+                  method="POST" class="quiz-page__content">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="quest-item">
+                        <div class="quest-item__header">
+                            <p class="quest-item__number">{{ forloop.counter }}
+                                of
+                                {% if self.multi_step or self.has_page_breaks %}
+                                    {{ fields_step.paginator.count }}{% else %}
+                                    {{ form.fields | length }}{% endif %}
+                                questions</p>
+                            <p class="quest-item__step-desc">
+                                <span>
+                                    {% if field.field.widget.input_type  == "radio" or "select" in field.field.widget.template_name %}
+                                        {% trans "Select one" %}
+                                    {% elif  field.field.widget.input_type  == "checkbox" %}
+                                        {% trans "Check all that apply" %}
+                                    {% else %}
+                                        {% trans "Optional" %}
+                                    {% endif %}
+                                </span>
+                            </p>
+                        </div>
+                        <div class="quest-item__desc">
+                            <p>{% trans field.label %}</p>
+                        </div>
+                        <div class="quest-item__content" tabindex="0">
+                            {% if field.field.widget.input_type == "radio" %}
+                                {% render_radios field %}
+                            {% elif field.field.widget.input_type == "checkbox" %}
+                                {% render_checkboxes field %}
+                            {% elif "/select" in field.field.widget.template_name %}
+                                {% render_select field %}
+                            {% endif %}
+                            {% for err in  field.errors %}
+                                <p class="cust-input__error">{{ err }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="survey-page__btns">
+                    <button type="submit"
+                            class="cust-btn cust-btn--dark survey-page__btn">
+                        <span>{% if fields_step.paginator.num_pages == fields_step.number %}
+                            {% trans page.submit_button_text %}{% else %}
+                            {% trans "Next step" %}{% endif %}</span>
+                    </button>
+                    <a href="/"
+                       class="cust-btn cust-btn--clear survey-page__btn"><span>{% trans "Go to homepage" %}</span></a>
+                </div>
+            </form>
+        </div>
     </div>
 {% endblock content %}

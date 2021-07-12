@@ -1,16 +1,18 @@
 import json
 
+from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.utils.functional import cached_property
 
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.core.paginator import EmptyPage, PageNotAnInteger
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
+from wagtail_localize.fields import TranslatableField
+
 from home.blocks import MediaBlock
 from home.mixins import PageUtilsMixin
-from iogt.settings import base
 from iogt_users.models import User
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (FieldPanel, InlinePanel,
@@ -74,6 +76,105 @@ class QuestionnairePage(Page, PageUtilsMixin):
     def __str__(self):
         return self.title
 
+    def serve(self, request, *args, **kwargs):
+        if (
+            not self.allow_multiple_submissions
+            and self.get_submission_class()
+            .objects.filter(page=self, user__pk=request.user.pk)
+            .exists()
+        ):
+            return render(request, self.template, self.get_context(request))
+        if hasattr(self, "multi_step") and self.multi_step:
+            return self.serve_questions_separately(request)
+
+        return super().serve(request, *args, **kwargs)
+
+    def serve_questions_separately(self, request, *args, **kwargs):
+        session_key_data = "form_data-%s" % self.pk
+        is_last_step = False
+        step_number = request.GET.get("p", 1)
+
+        if step_number == 1:
+            request.session.pop(session_key_data, None)
+
+        form_data = request.session.get(session_key_data, {})
+
+        paginator = SkipLogicPaginator(
+            self.get_form_fields(),
+            request.POST,
+            form_data,
+        )
+
+        try:
+            step = paginator.page(step_number)
+        except PageNotAnInteger:
+            step = paginator.page(1)
+        except EmptyPage:
+            step = paginator.page(paginator.num_pages)
+            is_last_step = True
+
+        if request.method == "POST":
+            # The first step will be submitted with step_number == 2,
+            # so we need to get a form from previous step
+            # Edge case - submission of the last step
+            try:
+                prev_step = (
+                    step if is_last_step else paginator.page(step.previous_page_number())
+                )
+            except EmptyPage:
+                prev_step = step
+                step = paginator.page(prev_step.next_page_number())
+
+            # Create a form only for submitted step
+            prev_form_class = self.get_form_class_for_step(prev_step)
+            prev_form = prev_form_class(
+                paginator.new_answers,
+                page=self,
+                user=request.user
+            )
+            if prev_form.is_valid():
+                # If data for step is valid, update the session
+                form_data = request.session.get(session_key_data, {})
+                form_data.update(prev_form.cleaned_data)
+                request.session[session_key_data] = form_data
+
+                if prev_step.has_next():
+                    # Create a new form for a following step, if the following step is present
+                    form_class = self.get_form_class_for_step(step)
+                    form = form_class(page=self, user=request.user)
+                else:
+                    # If there is no next step, create form for all fields
+                    form = self.get_form(
+                        request.session[session_key_data],
+                        page=self, user=request.user
+                    )
+
+                    if form.is_valid():
+                        # Perform validation again for whole form.
+                        # After successful validation, save data into DB,
+                        # and remove from the session.
+                        form_submission = self.process_form_submission(form)
+                        request.session.pop(session_key_data, None)
+                        # render the landing page
+                        return self.render_landing_page(
+                            request, form_submission, *args, **kwargs
+                        )
+            else:
+                # If data for step is invalid
+                # we will need to display form again with errors,
+                # so restore previous state.
+                form = prev_form
+                step = prev_step
+        else:
+            # Create empty form for non-POST requests
+            form_class = self.get_form_class_for_step(step)
+            form = form_class(page=self, user=request.user)
+
+        context = self.get_context(request)
+        context["form"] = form
+        context["fields_step"] = step
+        return render(request, self.template, context)
+
     class Meta:
         abstract = True
 
@@ -104,6 +205,7 @@ class SurveyFormField(AbstractFormField):
         FieldPanel('admin_label'),
         FieldPanel('page_break'),
     ]
+
 
     @property
     def has_skipping(self):
@@ -179,6 +281,14 @@ class Survey(QuestionnairePage, AbstractForm):
         InlinePanel("survey_form_fields", label="Form fields"),
     ]
 
+    translatable_fields = [
+        TranslatableField('title'),
+        TranslatableField('description'),
+        TranslatableField('submit_button_text'),
+        TranslatableField('survey_form_fields'),
+        TranslatableField('thank_you_text')
+    ]
+
     @cached_property
     def has_page_breaks(self):
         return any(
@@ -209,108 +319,10 @@ class Survey(QuestionnairePage, AbstractForm):
             user.has_filled_registration_survey = True
             user.save(update_fields=['has_filled_registration_survey'])
 
-    def serve(self, request, *args, **kwargs):
-        if (
-            not self.allow_multiple_submissions
-            and self.get_submission_class()
-            .objects.filter(page=self, user__pk=request.user.pk)
-            .exists()
-        ):
-            return render(request, self.template, self.get_context(request))
-        if self.multi_step:
-            return self.serve_questions_separately(request)
-
-        return super().serve(request, *args, **kwargs)
-
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         context.update({'back_url': request.GET.get('back_url')})
         return context
-
-    def serve_questions_separately(self, request, *args, **kwargs):
-        session_key_data = "form_data-%s" % self.pk
-        is_last_step = False
-        step_number = request.GET.get("p", 1)
-
-        form_data = json.loads(request.session.get(session_key_data, '{}'))
-
-        paginator = SkipLogicPaginator(
-            self.get_form_fields(),
-            request.POST,
-            form_data,
-        )
-
-        try:
-            step = paginator.page(step_number)
-        except PageNotAnInteger:
-            step = paginator.page(1)
-        except EmptyPage:
-            step = paginator.page(paginator.num_pages)
-            is_last_step = True
-
-        if request.method == "POST":
-            # The first step will be submitted with step_number == 2,
-            # so we need to get a form from previous step
-            # Edge case - submission of the last step
-            try:
-                prev_step = (
-                    step if is_last_step else paginator.page(step.previous_page_number())
-                )
-            except EmptyPage:
-                prev_step = step
-                step = paginator.page(prev_step.next_page_number())
-
-            # Create a form only for submitted step
-            prev_form_class = self.get_form_class_for_step(prev_step)
-            prev_form = prev_form_class(
-                paginator.new_answers,
-                page=self,
-                user=request.user
-            )
-            if prev_form.is_valid():
-                # If data for step is valid, update the session
-                form_data.update(prev_form.cleaned_data)
-                request.session[session_key_data] = json.dumps(
-                    form_data,
-                    cls=DjangoJSONEncoder
-                )
-
-                if prev_step.has_next():
-                    # Create a new form for a following step, if the following step is present
-                    form_class = self.get_form_class_for_step(step)
-                    form = form_class(page=self, user=request.user)
-                else:
-                    # If there is no next step, create form for all fields
-                    data = json.loads(request.session.get(session_key_data, '{}'))
-                    form = self.get_form(
-                        data, page=self, user=request.user
-                    )
-
-                    if form.is_valid():
-                        # Perform validation again for whole form.
-                        # After successful validation, save data into DB,
-                        # and remove from the session.
-                        form_submission = self.process_form_submission(form)
-                        del request.session[session_key_data]
-                        # render the landing page
-                        return self.render_landing_page(
-                            request, form_submission, *args, **kwargs
-                        )
-            else:
-                # If data for step is invalid
-                # we will need to display form again with errors,
-                # so restore previous state.
-                form = prev_form
-                step = prev_step
-        else:
-            # Create empty form for non-POST requests
-            form_class = self.get_form_class_for_step(step)
-            form = form_class(page=self, user=request.user)
-
-        context = self.get_context(request)
-        context["form"] = form
-        context["fields_step"] = step
-        return render(request, self.template, context)
 
     def get_data_fields(self):
         data_fields = [
@@ -331,7 +343,7 @@ class Survey(QuestionnairePage, AbstractForm):
 
 class UserSubmission(AbstractFormSubmission):
     user = models.ForeignKey(
-        base.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True
+        get_user_model(), on_delete=models.CASCADE, blank=True, null=True
     )
 
     def get_data(self):
@@ -575,6 +587,13 @@ class Quiz(QuestionnairePage, AbstractForm):
     parent_page_types = ["home.HomePage", "home.Section", "home.Article"]
     template = "quizzes/quiz.html"
 
+    multi_step = models.BooleanField(
+        default=False,
+        verbose_name="Multi-step",
+        help_text="Whether to display the survey questions to the user one at"
+        " a time, instead of all at once.",
+    )
+
     content_panels = Page.content_panels + [
         FormSubmissionsPanel(),
         MultiFieldPanel(
@@ -582,6 +601,7 @@ class Quiz(QuestionnairePage, AbstractForm):
                 FieldPanel("allow_anonymous_submissions"),
                 FieldPanel("allow_multiple_submissions"),
                 FieldPanel("submit_button_text"),
+                FieldPanel("multi_step"),
             ],
             heading=_(
                 "General settings for quiz",
@@ -611,37 +631,21 @@ class Quiz(QuestionnairePage, AbstractForm):
             for field in self.get_form_fields()
         )
 
+    def get_form_class_for_step(self, step):
+        return self.form_builder(step.object_list).get_form_class()
+
     def get_form_fields(self):
         return self.quiz_form_fields.all()
 
     def get_submission_class(self):
         return UserSubmission
 
-    def serve(self, request, *args, **kwargs):
-        # TODO add page brakes logic
-        if (
-                not self.allow_multiple_submissions
-                and self.get_submission_class()
-                .objects.filter(page=self, user__pk=request.user.pk)
-                .exists()
-        ):
-            return render(request, self.template, self.get_context(request))
-
-        return super().serve(request, *args, **kwargs)
-
     def process_form_submission(self, form):
-        from home.models import SiteSettings
-        user = form.user
         self.get_submission_class().objects.create(
             form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder),
             page=self,
-            user=user,
+            user=form.user,
         )
-
-        site_settings = SiteSettings.get_for_default_site()
-        if site_settings.registration_survey and site_settings.registration_survey.pk == self.pk:
-            user.has_filled_registration_survey = True
-            user.save(update_fields=['has_filled_registration_survey'])
 
     def get_data_fields(self):
         data_fields = [
@@ -672,7 +676,7 @@ class Quiz(QuestionnairePage, AbstractForm):
             total_correct = 0
             for field in self.get_form_fields():
                 # TODO: handle multi-value case
-                is_correct = form.data[field.clean_name] == field.correct_answer
+                is_correct = form.data.get(field.clean_name) == field.correct_answer
                 if is_correct:
                     total_correct += 1
                 total += 1

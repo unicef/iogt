@@ -1,5 +1,6 @@
 import os
 
+from django.conf import settings
 from django.contrib.admin.utils import flatten
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -25,9 +26,8 @@ from wagtail.admin.edit_handlers import (
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
 from wagtail.core import blocks
-from wagtail.core.blocks import PageChooserBlock
 from wagtail.core.fields import StreamField, RichTextField
-from wagtail.core.models import Orderable, Page, Site
+from wagtail.core.models import Orderable, Page, Site, Locale
 from wagtail.core.rich_text import get_text_for_indexing
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
@@ -35,14 +35,18 @@ from wagtail.images.models import Image
 from wagtail.search import index
 from wagtailmarkdown.blocks import MarkdownBlock
 from wagtailmenus.models import AbstractFlatMenuItem, BooleanField
+from wagtailsvg.models import Svg
+from wagtailsvg.edit_handlers import SvgChooserPanel
 
+
+from messaging.blocks import ChatBotButtonBlock
 from comments.models import CommentableMixin
 from iogt.views import check_user_session
 from questionnaires.models import Survey, Poll, Quiz
 from .blocks import (MediaBlock, SocialMediaLinkBlock,
                      SocialMediaShareButtonBlock,
                      EmbeddedQuestionnaireChooserBlock,
-                     PageButtonBlock)
+                     PageButtonBlock, ArticleChooserBlock)
 from .forms import SectionPageForm
 from .mixins import PageUtilsMixin
 from .utils.progress_manager import ProgressManager
@@ -52,13 +56,14 @@ User = get_user_model()
 
 class HomePage(Page):
     template = 'home/home_page.html'
+    show_in_menus_default = True
 
     home_featured_content = StreamField([
         ('page_button', PageButtonBlock()),
         ('embedded_poll', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')),
         ('embedded_survey', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')),
         ('embedded_quiz', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Quiz')),
-        ('article', PageChooserBlock(target_model='home.Article')),
+        ('article', ArticleChooserBlock()),
     ], null=True)
 
     content_panels = Page.content_panels + [
@@ -119,6 +124,13 @@ class SectionIndexPage(Page):
     parent_page_types = ['home.HomePage']
     subpage_types = ['home.Section']
 
+    @classmethod
+    def get_top_level_sections(cls):
+        section_index_page = cls.objects.filter(locale=Locale.get_active()).first()
+        if section_index_page:
+            return section_index_page.get_children().live()
+        return cls.objects.none()
+
 
 class Section(Page, PageUtilsMixin):
     lead_image = models.ForeignKey(
@@ -129,11 +141,11 @@ class Section(Page, PageUtilsMixin):
         null=True
     )
     icon = models.ForeignKey(
-        'wagtailimages.Image',
-        on_delete=models.PROTECT,
+        Svg,
         related_name='+',
-        blank=True,
         null=True,
+        blank=True,
+        on_delete=models.PROTECT,
     )
     background_color = models.CharField(
         max_length=8,
@@ -157,7 +169,7 @@ class Section(Page, PageUtilsMixin):
 
     content_panels = Page.content_panels + [
         ImageChooserPanel('lead_image'),
-        ImageChooserPanel('icon'),
+        SvgChooserPanel('icon'),
         FieldPanel('background_color'),
         FieldPanel('font_color'),
         MultiFieldPanel([
@@ -243,11 +255,18 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         blank=True,
         null=True
     )
+    icon = models.ForeignKey(
+        Svg,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
 
     tags = ClusterTaggableManager(through='ArticleTaggedItem', blank=True)
     body = StreamField([
         ('heading', blocks.CharBlock(form_classname="full title")),
-        ('paragraph', blocks.RichTextBlock()),
+        ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
         ('markdown', MarkdownBlock(icon='code')),
         ('image', ImageChooserBlock()),
         ('list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
@@ -258,6 +277,7 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         ('embedded_survey', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')),
         ('embedded_quiz', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Quiz')),
         ('media', MediaBlock(icon='media')),
+        ('chat_bot', ChatBotButtonBlock()),
     ])
     show_in_menus_default = True
 
@@ -279,6 +299,7 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
 
     content_panels = Page.content_panels + [
         ImageChooserPanel('lead_image'),
+        SvgChooserPanel('icon'),
         StreamFieldPanel('body'),
         MultiFieldPanel([
             InlinePanel('recommended_articles',
@@ -413,6 +434,10 @@ class FooterPage(Article):
     parent_page_types = ['home.FooterIndexPage']
     subpage_types = []
     template = 'home/article.html'
+
+    @classmethod
+    def get_active_footers(cls):
+        return cls.objects.filter(locale=Locale.get_active()).live()
 
 
 @register_setting
@@ -596,9 +621,10 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
         related_name="iogt_flat_menu_items",
     )
     icon = models.ForeignKey(
-        'wagtailimages.Image',
-        blank=True,
+        Svg,
+        related_name='+',
         null=True,
+        blank=True,
         on_delete=models.SET_NULL,
     )
 
@@ -615,7 +641,7 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
     )
 
     panels = AbstractFlatMenuItem.panels + [
-        ImageChooserPanel('icon'),
+        SvgChooserPanel('icon'),
         FieldPanel('color'),
         FieldPanel('color_text')
     ]

@@ -1,11 +1,16 @@
 {% load static wagtailcore_tags wagtailimages_tags i18n %}
-<footer class="footer">
+<footer class="bottom-level">
     <nav>
-        <div class="links">
-          {% for footer_page in footer_pages %}
-            {% image footer_page.specific.lead_image fill-20x20 %}
-            <a href="{% pageurl footer_page %}">{% translate footer_page.specific.title %}</a>
-          {% endfor %}
+    <div class='bottom-level__section'>
+            <img src="{% static 'icons/login.svg' %}" />
+            <a href="{% url 'account_login' %}">Log in</a>
         </div>
+     {% for footer_page in footer_pages %}
+        <div class='bottom-level__section'>
+            <img src="{{ footer_page.specific.icon.url }}" />
+            <a href="{% pageurl footer_page %}">{% translate footer_page.specific.title %}</a>
+        </div>
+         {% endfor %}
     </nav>
 </footer>
+

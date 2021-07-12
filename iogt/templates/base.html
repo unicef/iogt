@@ -1,4 +1,4 @@
-{% load static wagtailuserbar home_tags sass_tags wagtailsettings_tags  %}
+{% load static wagtailuserbar home_tags sass_tags wagtailsettings_tags menu_tags %}
 {% get_settings %}
 
 <!DOCTYPE html>
@@ -25,8 +25,6 @@
         {# Global stylesheets #}
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" type="text/css" href="{% static 'css/iogt.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}">
         <link rel="stylesheet" type="text/css" href="{% sass_src 'css/sectionStyles.css' %}">
 
     {% block extra_css %}
@@ -43,6 +41,7 @@
             {% include "cache_banner.html" %}
         {% endif %}
         {% include "header.html" %}
+        {% flat_menu "nav_bar" template="nav_bar.html" %}
         {% include "messages.html" %} 
         {% block content %}{% endblock %}
         {% include "footer.html" %}

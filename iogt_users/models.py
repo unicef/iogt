@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -14,6 +15,14 @@ class User(AbstractUser):
     terms_accepted = models.BooleanField(default=False)
 
     has_filled_registration_survey = models.BooleanField(default=False)
+
+    @property
+    def is_rapidpro_bot_user(self):
+        return self.pk == settings.RAPIDPRO_BOT_USER_ID
+
+    @classmethod
+    def get_rapidpro_bot_user(cls):
+        return cls.objects.get(pk=settings.RAPIDPRO_BOT_USER_ID)
 
     read_articles = models.ManyToManyField(to='home.Article')
 

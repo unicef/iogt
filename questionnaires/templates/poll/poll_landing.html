@@ -1,41 +1,44 @@
 {% extends "base.html" %}
-{% load wagtailimages_tags %}
+{% load questionnaires_tags %}
+{% load static wagtailimages_tags i18n %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/polls.css' %}">
+{% endblock %}
 
 {% block content %}
-    <h1>Question: {{ page.name }}</h1>
-    <h2>Votes total: {{ page.total_votes }}</h2>
-    <hr>
-    {{ page.thank_you_text }}
-    <hr>
-
+    {% include 'back_button.html' with back_url=back_url %}
     {% if page.show_results %}
-    <h2>Results</h2>
-        {% for question, answers in results.items %}
-            <h3>{{ question }}</h3>
-            {% for answer, count in answers.items %}
-                {% if page.result_as_percentage %}
-                <div>{{ answer }}: {{ count }}%</div>
-                {% else %}
-                <div>{{ answer }}: {{ count }}</div>
-                {% endif %}
-            {% endfor %}
-        {% endfor %}
-    {% endif %}
-
-    {% if page.show_results %}
-        <h3>All answers:</h3>
-        {% for answer in answers %}
-            <p>{{ answer.title }} |
-                {% if poll.result_as_percentage %}
-                    {{ answer.percentage }} %
-                {% else %}
-                    {{ answer.votes }} vote{{ answer.votes|pluralize }}
-                  {% endif %}
-            </p>
-        {% endfor %}
-    {% endif %}
-
-    {% if back_url %}
-        <a href="{{ back_url }}">< Back</a>
+        <div class="polls">
+            <div class="polls-widget">
+                <div class="container">
+                    <div class="polls-widget__wrap">
+                        <h1 class="title polls-widget__title">{% trans page.title %}</h1>
+                        <div class="polls-widget__form">
+                            {% snake_case page.title as current_answer %}
+                            <h4 class="polls-widget__form-title">{% trans "Thank you for your response!" %}</h4>
+                            {% for question, answers in results.items %}
+                                {% for answer, count in answers.items %}
+                                    <div class="cust-check cust-check--white polls-widget__item{% if answer == request.POST|get_value_from_querydict:current_answer %} cust-check--active{% endif %}">
+                                        <div class="cust-check__title">
+                                            <div class="cust-check__title-left">
+                                                <span>{% trans answer %}</span>
+                                                {% if answer == request.POST|get_value_from_querydict:current_answer %}
+                                                    <span class="cust-check__subtitle">{% trans "Your answer" %}</span>{% endif %}
+                                            </div>
+                                            <div class="cust-check__title-right">
+                                                <span class="cust-check__percent">{{ count |floatformat:"0" }}%</span>
+                                            </div>
+                                            <div class="cust-check__percent-item"
+                                                 style="width: {{ count |floatformat:"0" }}%"></div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endif %}
 {% endblock %}

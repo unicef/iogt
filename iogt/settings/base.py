@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'wagtailmedia',
     'wagtailmarkdown',
     'wagtail_transfer',
+    'wagtailsvg',
     'wagtail.contrib.settings',
 
     'django_comments_xtd',
@@ -61,6 +62,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'rest_framework',
     'sass_processor',
 
     'django.contrib.admin',
@@ -69,7 +71,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites'
+    'django.contrib.sites',
 ]
 
 MIDDLEWARE = [
@@ -349,14 +351,32 @@ LOCALE_PATHS = [
     os.path.join(BASE_DIR, "locale"),
 ]
 
+# ========= Rapid Pro =================
+RAPIDPRO_BOT_USER_ID = os.getenv('RAPIDPRO_BOT_USER_ID')
+RAPIDPRO_BOT_USER_USERNAME = os.getenv('RAPIDPRO_BOT_USER_USERNAME')
+RAPIDPRO_BOT_USER_PASSWORD = os.getenv('RAPIDPRO_BOT_USER_PASSWORD')
+
 WAGTAILTRANSFER_SOURCES = {
     'iogt_global': {
         'BASE_URL': 'http://iogt.org',
         'SECRET_KEY': 'fake_secret_key_2',
-    },}
+    }, }
 
 WAGTAILTRANSFER_SECRET_KEY = 'fake_secret_key'
 
 WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME = 'iogt_flat_menu_items'
+
+WAGTAIL_RICH_TEXT_FIELD_FEATURES = [
+    'h2', 'h3', 'h4',
+    'bold', 'italic',
+    'ol', 'ul',
+    'hr',
+    'link',
+    'document-link',
+    'image',
+]
+
+# Search results
+SEARCH_RESULTS_PER_PAGE = 10
 
 from .profanity_settings import *

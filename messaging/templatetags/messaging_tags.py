@@ -10,12 +10,13 @@ def unread(thread, user):
     """
     Check whether there are any unread messages for a particular thread for a user.
     """
-    return bool(thread.userthread_set.filter(user=user, unread=True))
+    return thread.user_threads.filter(user=user, is_read=False).exists()
 
 
-@register.filter
-def unread_thread_count(user):
-    """
-    Return the number of Threads with unread messages for this user, useful for highlighting on an account bar for example.
-    """
-    return Thread.unread(user).count()
+@register.inclusion_tag('messaging/tags/quick_reply_form.html')
+def render_quick_reply_form(thread, user, text):
+    return {
+        'thread': thread,
+        'user': user,
+        'text': text,
+    }
