@@ -78,8 +78,8 @@
                     "url": "/cms-manual/content/content-rotation/"
                 },
                 {
-                    "title": "Recommended Settings",
-                    "url": "/cms-manual/content/recommended-settings/"
+                    "title": "Recommended Content",
+                    "url": "/cms-manual/content/recommended-content/"
                 },
                 {
                     "title": "Uploading and Adding Images",
@@ -136,28 +136,28 @@
             "title": "Creating a Survey",
             "folderitems": [
                 {
-                    "title": "On the Homepage",
+                    "title": "Homepage Surveys",
                     "url": "/cms-manual/surveys/homepage-surveys/"
                 },
                 {
                     "title": "Creating Surveys",
-                    "url": "/cms-manual/surveys/creating/"
+                    "url": "/cms-manual/surveys/creating-surveys/"
                 },
                 {
                     "title": "Anonymous Submissions",
-                    "url": "/cms-manual/surveys/anon-submissions/"
+                    "url": "/cms-manual/surveys/anonymous-submissions/"
                 },
                 {
                     "title": "Question Types",
                     "url": "/cms-manual/surveys/question-types/"
                 },
                 {
-                    "title": "Surveys in Site Footer",
+                    "title": "Footer Surveys",
                     "url": "/cms-manual/surveys/footer-surveys/"
                 },
                 {
                     "title": "Survey Results",
-                    "url": "/cms-manual/surveys/accessing-results/"
+                    "url": "/cms-manual/surveys/survey-results/"
                 },
                 {
                     "title": "Need More",
