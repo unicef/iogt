@@ -93,12 +93,12 @@ class Command(BaseCommand):
     def migrate(self, root):
         self.migrate_images()
         home = self.create_home_page(root)
-        section_index_page = self.create_section_index_page(home)
-        banner_index_page = self.create_banner_index_page(home)
-        footer_index_page = self.create_footer_index_page(home)
+        section_index_page, banner_index_page, footer_index_page = self.create_index_pages(home)
         self.migrate_sections(section_index_page)
         self.migrate_articles(section_index_page)
-        self.fix_page_tree_hack(section_index_page)
+        self.migrate_banners(banner_index_page)
+        self.migrate_footers(footer_index_page)
+        Page.fix_tree()
 
     def create_home_page(self, root):
         cur = self.db_query('select * from core_main main join wagtailcore_page page on main.page_ptr_id = page.id')
@@ -136,23 +136,17 @@ class Command(BaseCommand):
             raise Exception('Could not find site in v1 DB')
         return home
 
-    def create_section_index_page(self, homepage):
+    def create_index_pages(self, homepage):
         section_index_page = models.SectionIndexPage(title='Sections')
         homepage.add_child(instance=section_index_page)
 
-        return section_index_page
-
-    def create_banner_index_page(self, homepage):
         banner_index_page = models.BannerIndexPage(title='Banners')
         homepage.add_child(instance=banner_index_page)
 
-        return banner_index_page
-
-    def create_footer_index_page(self, homepage):
         footer_footer_page = models.FooterIndexPage(title='Footers')
         homepage.add_child(instance=footer_footer_page)
 
-        return footer_footer_page
+        return section_index_page, banner_index_page, footer_footer_page
 
     def migrate_images(self):
         cur = self.db_query('select * from wagtailimages_image')
@@ -205,14 +199,6 @@ class Command(BaseCommand):
             self.create_section(section_index_page, row)
         cur.close()
 
-    # Hack to make pages appear under the home page in Wagtail Admin. Not sure
-    # why this is necessary, nor why it works. Better solutions are welcome.
-    def fix_page_tree_hack(self, section_index_page):
-        try:
-            section_index_page.add_child(instance=models.Section(title='temp'))
-        except:
-            self.stdout.write('Page tree hack applied')
-
     def create_section(self, section_index_page, row):
         section = models.Section(
             title=row['title'],
@@ -255,3 +241,44 @@ class Command(BaseCommand):
             if block['type'] == 'paragraph':
                 block['type'] = 'markdown'
         return json.dumps(v2_body)
+
+    def migrate_banners(self, banner_index_page):
+        cur = self.db_query("select * from core_bannerpage cbp join wagtailcore_page wcp on cbp.page_ptr_id  = wcp.id order by wcp.path")
+        for row in cur:
+            self.create_banner(banner_index_page, row)
+        cur.close()
+
+    def create_banner(self, banner_index_page, row):
+        banner = models.BannerPage(
+            banner_image=self.image_map.get(row['banner_id']),
+            title=row['title'],
+            draft_title=row['draft_title'],
+            slug=row['slug'],
+            path=banner_index_page.path + row['path'][12:],
+            depth=row['depth'],
+            numchild=row['numchild'],
+            live=row['live']
+        )
+        banner.save()
+        self.stdout.write(f"saved banner, title={banner.title}")
+
+    def migrate_footers(self, footer_index_page):
+        cur = self.db_query("select * from core_footerpage cfp join core_articlepage cap on cfp.articlepage_ptr_id = cap.page_ptr_id join wagtailcore_page wcp on cap.page_ptr_id = wcp.id order by wcp.path")
+        for row in cur:
+            self.create_footer(footer_index_page, row)
+        cur.close()
+
+    def create_footer(self, footer_index_page, row):
+        footer = models.FooterPage(
+            lead_image=self.image_map.get(row['image_id']),
+            title=row['title'],
+            draft_title=row['draft_title'],
+            slug=row['slug'],
+            path=footer_index_page.path + row['path'][12:],
+            depth=row['depth'],
+            numchild=row['numchild'],
+            live=row['live'],
+            body=self.map_article_body(row['body']),
+        )
+        footer.save()
+        self.stdout.write(f"saved footer, title={footer.title}")
