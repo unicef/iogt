@@ -350,56 +350,64 @@
 
 
 .related_reading {
-   margin: 0px 20px;
-   font-family: Poppins;
-   font-style: normal;
 
-   h2 {
-      height: 28px;
-      font-weight: 800;
-      font-size: 24px;
-      line-height: 28px;
-      color: $black;
-   }
+   // margin: 0px 12px;
+   // font-family: Poppins;
+   // font-style: normal;
 
-   ul {
-      list-style: none;
-      padding:0;
-
-      p {
-         width: 50%;
+  
+   @include sm {
+      margin: 0px 20px;
+      font-family: Poppins;
+      font-style: normal;
+   
+      h2 {
+         height: 28px;
+         font-weight: 800;
+         font-size: 24px;
+         line-height: 28px;
+         color: $black;
+      }
+   
+      ul {
+         list-style: none;
+         padding:0;
+   
+         p {
+            width: 50%;
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 16px;
+            margin-right: 5px;
+            line-height: 24px;
+            letter-spacing: 0.01em;
+            color: $black;
+         }
+      }
+   
+      a {
+         display:flex;
+         justify-content: space-between;
+         align-items: center;
+         padding: 16px 0px;
+         border-bottom: 1px solid $fog;
+         text-decoration: none;
+         color:black;
          font-family: Poppins;
          font-style: normal;
          font-weight: bold;
          font-size: 16px;
-         margin-right: 5px;
-         line-height: 24px;
+         line-height: 22px;
          letter-spacing: 0.01em;
          color: $black;
       }
-   }
-
-   a {
-      display:flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 0px;
-      border-bottom: 1px solid $fog;
-      text-decoration: none;
-      color:black;
-      font-family: Poppins;
-      font-style: normal;
-      font-weight: bold;
-      font-size: 16px;
-      line-height: 22px;
-      letter-spacing: 0.01em;
-      color: $black;
-   }
-
-   img {
-      border-radius: 8px;
-      width: 45%;
-      height: auto;
+   
+      img {
+         border-radius: 8px;
+         width: 45%;
+         height: auto;
+      }
    }
 }
 
@@ -798,6 +806,16 @@
 }
 
 .banner-holder {
+   margin-top: 4px;
+   padding: 0 4px;
+
+   img {
+      margin-bottom: 4px;
+      width: 100vw;
+      height: auto;
+      border-radius: 12px;
+   }
+ @include sm {
    margin-top: 8px;
    margin-bottom: 20px;
    padding: 0 12px;
@@ -808,24 +826,52 @@
       height: auto;
       border-radius: 12px;
    }
+ }
+
 }
 
 // header styling
 
-.home-header {
+.xs-home-header {
    display: flex;
    align-items: center;
    justify-content: space-between;
-   background:$white;
-   border: 1px solid $fog;
-   border-bottom-left-radius: 10px;
-   border-bottom-right-radius: 10px;
    padding:12px;
 
-   &__options {
-      width:50vw;
+   &__search {
+      height: 11px;
+      width: 11px;
+   }
+
+   &__select {
+      font-weight: 600;
+      font-size: 10px;
+      background-color: $gold;
+      border:none;
+      border-radius: 8px;
+      font-family: Poppins;
+      font-style: normal;
+      color: $black;
+      padding: 2px;
+   }
+
+   @include sm {
+      display: none;
+   } 
+}
+
+.sm-home-header {
+   display: none;
+
+      @include sm {
       display: flex;
-      justify-content: flex-end;
+      align-items: center;
+      justify-content: space-between;
+      background:$white;
+      border: 1px solid $fog;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+      padding:12px;
 
       select {
          appearance: none;
@@ -849,15 +895,46 @@
          background-position: 80px;
          background-size: 10px;
       }
+   
+      &__options {
+         width:50vw;
+         display: flex;
+         justify-content: flex-end;
 
-      img {
-         margin: 0;
-         border-left: 1px solid $fog;
-         padding: 5px 0;
-         padding-left:10px;
+         select {
+            appearance: none;
+            margin-right:10px;
+            background: $gold;
+            border:none;
+            border-radius: 8px;
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 12px;
+            line-height: 16px;
+            color: $black;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            padding: 5px 12px;
+            background-image: url("/static/icons/down.svg");
+            background-repeat: no-repeat;
+            background-position: 80px;
+            background-size: 10px;
+         }
+
+         img {
+            margin: 0;
+            border-left: 1px solid $fog;
+            padding: 5px 0;
+            padding-left:10px;
+         }
       }
    }
-}
+} 
+
+ 
 
 // footer styles
 
