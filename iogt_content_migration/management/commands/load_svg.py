@@ -13,20 +13,31 @@ class Command(BaseCommand):
             required=True,
             help='Path to IoGT SVG directory'
         )
+        parser.add_argument(
+            '--clean',
+            required=False,
+            action='store_true',
+            help='Remove existing SVG'
+        )
 
     def handle(self, *args, **options):
         self.svg_dir = options.get('svg_dir')
-        self._clear()
+        clean = options.get('clean')
+        if clean:
+            self._clean()
         self._load_svg()
 
-    def _clear(self):
+        self.stdout.write(self.style.SUCCESS('SVG loaded successfully.'))
+
+    def _clean(self):
         Svg.objects.all().delete()
+        self.stdout.write(self.style.ERROR('Existing SVG removed.'))
 
     def _open_svg_file(self, svg_path):
         try:
             return open(svg_path, 'rb')
         except:
-            self.stdout.write(f'SVG file not found: {svg_path}.')
+            self.stdout.write(self.style.WARNING(f'SVG file not found: {svg_path}.'))
 
     def _load_svg(self):
         for dir in os.listdir(self.svg_dir):
