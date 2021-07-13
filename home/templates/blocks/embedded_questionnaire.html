@@ -39,7 +39,7 @@
                             {% render_checkboxes field %}
                         {% elif "textar" in field.field.widget.template_name %}
                             {% render_textarea field %}
-                        {% elif field.field.widget.input_type == "text" %}
+                        {% elif field.field.widget.input_type == "text" or field.field.widget.input_type == "number" or field.field.widget.input_type == "email"%}
                             {% render_text_field field %}
                         {% elif "select" in field.field.widget.template_name %}
                             {% render_select field %}
