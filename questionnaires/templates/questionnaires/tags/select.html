@@ -2,9 +2,9 @@
 {% load static wagtailcore_tags wagtailimages_tags %}
 
 <div class="quest-item__content">
-    <label for="cust-select" class="quest-item__input cust-select">
+    <label for="cust-select-{{ field.name }}" class="quest-item__input cust-select">
         <input type="radio" name="{{ field.name }}" value="not_changed"
-               id="cust-select">
+               id="cust-select-{{ field.name }}">
         <div class="cust-select__items">
             {% for option in field %}
                 <input type="radio" name="{{ field.name }}"
