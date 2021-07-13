@@ -129,7 +129,7 @@ class Command(BaseCommand):
                 hostname=v1_site['hostname'],
                 port=v1_site['port'],
                 root_page=home,
-                is_default_site=v1_site['is_default_site'],
+                is_default_site=True,
                 site_name=v1_site['site_name'] if v1_site['site_name'] else 'Internet of Good Things',
             )
         else:
