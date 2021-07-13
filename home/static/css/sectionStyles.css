@@ -800,6 +800,10 @@
   color: #303030;
 }
 
+.individual-comment .content {
+  margin-bottom: 20px;
+}
+
 .individual-comment .report-comment {
   font-style: normal;
   font-weight: 600;
@@ -807,7 +811,6 @@
   line-height: 16px;
   color: #303030;
   text-decoration: none;
-  padding-top: 12px;
 }
 
 @media only screen and (min-width: 360px) {
