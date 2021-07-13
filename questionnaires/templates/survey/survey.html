@@ -20,7 +20,7 @@
                 {% csrf_token %}
                 <div class="survey-page__content">
                     {% for field in form %}
-                        <div class="quest-item">
+                        <div class="quest-item" tabindex="0">
                             <div class="quest-item__header">
                                 <p class="quest-item__number">{% if form_length != None %}{{ forloop.counter |add:form_length }}{% else %}{{ forloop.counter }}{% endif %}
                                     of {% if self.multi_step or self.has_page_breaks %}{{ fields_step.paginator.count }}{% else %}{{ form.fields | length }}{% endif %}
