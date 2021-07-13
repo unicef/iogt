@@ -102,7 +102,7 @@
     margin-top: 16px
 }
 
-.quest-item__input {
+.quest-item__input, .quest-item__label {
     margin-bottom: 8px
 }
 
