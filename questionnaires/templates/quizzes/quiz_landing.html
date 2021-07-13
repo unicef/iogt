@@ -74,14 +74,10 @@
                             <p>{% trans field.label %}</p>
                         </div>
                         {% for checkbox in field %}
+
                             <div class="quest-item__content" tabindex="0">
-                                <label class="cust-check cust-check--2 quest-item__input{% if fields_info|get_item:field.name|get_item:'is_correct' %} success{% else %} error{% endif %}"
+                                <label class="cust-check cust-check--2 quest-item__input{% if fields_info|get_item:field.name|get_item:'is_correct' or fields_info|get_item:field.name|get_item:'correct_answer' ==  checkbox.choice_label %} success{% endif %}{% if checkbox.choice_label in field.value and not fields_info|get_item:field.name|get_item:'is_correct' %} error{% endif %}"
                                        tabindex="0">
-                                    <input type="checkbox"
-                                           name="{{ field.name }}"
-                                           disabled
-                                           {% if checkbox.choice_label in field.value %}checked{% endif %}
-                                           value="{{ checkbox.choice_label }}">
                                     <div class="cust-check__title">
                                         <span class="cust-check__check"></span>
                                         <span>{% trans checkbox.choice_label %}</span>

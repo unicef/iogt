@@ -322,6 +322,7 @@ class Survey(QuestionnairePage, AbstractForm):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         context.update({'back_url': request.GET.get('back_url')})
+        context.update({'form_length': request.GET.get('form_length')})
         return context
 
     def get_data_fields(self):

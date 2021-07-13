@@ -2,12 +2,13 @@
 
 {% for ckeckbox in field %}
     <div class="quest-item__content">
-        <label class="cust-check cust-check--2 quest-item__input">
+        <label class="quest-item__label quest-item__input--visible" for="ckeckbox-{{ forloop.counter }}">
             <input type="{{ field.field.widget.input_type }}"
+                   id="ckeckbox-{{ forloop.counter }}"
                    name="{{ field.name }}"
                    value="{{ ckeckbox.choice_label }}">
             <div class="cust-check__title">
-                <span class="cust-check__check"></span>
+{#                <span class="cust-check__check"></span>#}
                 <span>{{ ckeckbox.choice_label }}</span>
             </div>
         </label>

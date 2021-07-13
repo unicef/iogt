@@ -245,7 +245,29 @@ textarea:focus ~ .cust-input__length-text {
     display: none
 }
 
-.cust-check__title {
+.quest-item__label {
+    display: flex;
+    background-color: #f7f7f9;
+    border: 1px solid #efefef;
+    display: -webkit-flex;
+    display: flex;
+     -webkit-align-items: center;
+    align-items: center;
+    padding: 8px 12px;
+}
+.quest-item__label input{
+    margin: 0;
+    margin-right: 12px;
+}
+
+.quest-item__label .cust-check__title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .01em;
+    line-height: 14px;
+}
+
+.quest-item__input .cust-check__title {
     -webkit-align-items: center;
     align-items: center;
     background-color: #f7f7f9;
@@ -268,7 +290,7 @@ textarea:focus ~ .cust-input__length-text {
     display: block
 }
 
-input:checked + .cust-check__title {
+.quest-item__input input:checked + .cust-check__title {
     background-color: #dadae3
 }
 
@@ -303,25 +325,27 @@ input:checked + .cust-check__title {
     border: 1px solid #000;
 }
 
-.cust-check--2.success input:checked ~ .cust-check__title {
+.cust-check--2.success .cust-check__title {
     background-color: #71c083;
     color: #fff;
     border: none;
 }
 
-.cust-check--2.success input:checked ~ .cust-check__title .cust-check__check {
+.cust-check--2.success .cust-check__title .cust-check__check {
     background-color: #fff;
     background-image: url("/static/icons/checked-green.svg");
+    background-position: center;
+    background-repeat: no-repeat;
     border-color: #fff
 }
 
-.cust-check--2.error input:checked ~ .cust-check__title {
+.cust-check--2.error .cust-check__title {
     background-color: #fb3d24;
     color: #fff;
     border: none;
 }
 
-.cust-check--2.error input:checked ~ .cust-check__title .cust-check__check {
+.cust-check--2.error .cust-check__title .cust-check__check {
     -webkit-align-items: center;
     align-items: center;
     background-color: #fff;
@@ -334,7 +358,7 @@ input:checked + .cust-check__title {
     justify-content: center
 }
 
-.cust-check--2.error input:checked ~ .cust-check__title .cust-check__check:after {
+.cust-check--2.error .cust-check__title .cust-check__check:after {
     content: "\274C";
     color: #fb3d24;
 }
@@ -342,11 +366,6 @@ input:checked + .cust-check__title {
 .cust-check__subtitle {
     color: #0094f4;
     font: 800 8px/12px Poppins, sans-serif
-}
-
-
-input:checked + .cust-check__title {
-    background-color: #dadae3
 }
 
 .cust-btn {
@@ -546,6 +565,10 @@ input:checked + .cust-check__title {
 
 .cust-select input {
     display: none;
+}
+
+.quest-item__input--visible input {
+    display: block;
 }
 
 .btn-back {
@@ -1508,6 +1531,7 @@ input:checked + .cust-check__title {
     .survey-widget__desc {
         margin: 16px 0 32px
     }
+
     #cust-select:checked ~ .cust-select__items label {
         padding: 5px 10px;
     }
