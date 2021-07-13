@@ -157,6 +157,7 @@
     display: inline-block;
     vertical-align: top;
     min-width: 70px;
+    word-break: break-word;
 }
 
 .message.reply{
@@ -203,7 +204,8 @@
 .covid-info-link li {
     overflow: hidden;
     margin: 4px 0;
-    background-color: transparent;
+    background: none;
+    max-width: inherit;
 }
 
 .covid-info-link a,

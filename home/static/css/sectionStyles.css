@@ -1186,6 +1186,7 @@
   position: fixed;
   bottom: 0px;
   width: 100vw;
+  z-index: 99;
 }
 
 .nav-bar {
