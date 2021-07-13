@@ -254,6 +254,9 @@ textarea:focus ~ .cust-input__length-text {
      -webkit-align-items: center;
     align-items: center;
     padding: 8px 12px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
 }
 .quest-item__label input{
     margin: 0;
