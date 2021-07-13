@@ -1,5 +1,4 @@
-{% load static wagtailuserbar home_tags sass_tags wagtailsettings_tags menu_tags i18n %}
-{% get_current_language as LANGUAGE %}
+{% load static wagtailuserbar home_tags sass_tags wagtailsettings_tags menu_tags %}
 {% get_settings %}
 
 <!DOCTYPE html>
@@ -20,7 +19,7 @@
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="theme-color" content="#493174">
-    <link rel="manifest" href="{% url "manifest" LANGUAGE %}">
+    <link rel="manifest" href="{% url "manifest" %}">
     <link rel="apple-touch-icon" href="{% static 'icons/unicef-logo.png' %}">
 
         {# Global stylesheets #}

@@ -26,7 +26,8 @@ class ServiceWorkerView(TemplateView):
         }
 
 
-def get_manifest(request, language):
+def get_manifest(request):
+    language = request.LANGUAGE_CODE
     manifest = get_object_or_404(ManifestSettings, language=language)
     response = {
         "name": manifest.name,
