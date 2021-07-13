@@ -5,6 +5,9 @@
 ### Prerequisites
 
 - v1 database backup
+```
+pg_restore --clean --if-exists --file=backup.sql --no-owner <path-to-backup>
+```
 - v1 media directory
 - up-to-date v2 app with all db migrations run
 
