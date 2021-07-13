@@ -203,6 +203,7 @@
 .covid-info-link li {
     overflow: hidden;
     margin: 4px 0;
+    background-color: transparent;
 }
 
 .covid-info-link a,

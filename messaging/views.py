@@ -49,8 +49,8 @@ class ThreadView(View):
         thread.mark_read(request.user)
         return render(request, 'messaging/message_detail.html', context=self.get_context(thread))
 
-    def post(self, request, pk):
-        thread = get_object_or_404(Thread, pk=pk)
+    def post(self, request, thread_id):
+        thread = get_object_or_404(Thread, pk=thread_id)
         form = MessageReplyForm(data=request.POST)
         if form.is_valid():
             text = form.cleaned_data['text']
@@ -58,7 +58,7 @@ class ThreadView(View):
             chat_manager = ChatManager(thread)
             chat_manager.record_reply(text=text, sender=request.user, mark_unread=False)
 
-            return redirect(reverse('messaging:thread', kwargs={'pk': thread.pk}))
+            return redirect(reverse('messaging:thread', kwargs={'thread_id': thread.pk}))
         else:
             return render(request, 'messaging/message_detail.html', context=self.get_context(thread, form))
 
