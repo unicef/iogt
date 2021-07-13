@@ -14,10 +14,9 @@
 {% block content %}
     <div class="home-page">
         {% render_banners_list banners %}
-         {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
         <div>
             {% if page.home_featured_content %}
-               
+                {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
                 {% include_block page.home_featured_content %}
             {% endif %}
         </div>
