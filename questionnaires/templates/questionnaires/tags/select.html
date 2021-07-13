@@ -2,17 +2,24 @@
 {% load static wagtailcore_tags wagtailimages_tags %}
 
 <div class="quest-item__content">
-    <label for="cust-select" class="quest-item__input cust-select">
-        <input type="radio" name="{{ field.name }}" value="not_changed"
-               id="cust-select">
-        <div class="cust-select__items">
-            {% for option in field %}
-                <input type="radio" name="{{ field.name }}"
-                       value="{{ option.choice_label }}"
-                       id="{{ field.name }}[{{ forloop.counter0 }}]">
-                <label for="{{ field.name }}[{{ forloop.counter0 }}]">{% trans option.choice_label %}</label>
-            {% endfor %}
-            <span id="text">{% trans field.label %}</span>
-        </div>
-    </label>
+{#    <label for="cust-select"#}
+{#           class="quest-item__input cust-select hideOnNonJSDevice">#}
+{#        <input type="radio" name="{{ field.name }}" value="not_changed"#}
+{#               id="cust-select">#}
+{#        <div class="cust-select__items">#}
+{#            {% for option in field %}#}
+{#                <input type="radio" name="{{ field.name }}"#}
+{#                       value="{{ option.choice_label }}"#}
+{#                       id="{{ field.name }}[{{ forloop.counter0 }}]">#}
+{#                <label for="{{ field.name }}[{{ forloop.counter0 }}]">{% trans option.choice_label %}</label>#}
+{#            {% endfor %}#}
+{#            <span id="text">{% trans field.label %}</span>#}
+{#        </div>#}
+{#    </label>#}
+    <select name="{{ field.name }}"
+            style="width: 100%">
+        {% for option in field %}
+            <option value="{{ option.choice_label }}">{% trans option.choice_label %}</option>
+        {% endfor %}
+    </select>
 </div>
