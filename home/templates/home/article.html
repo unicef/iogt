@@ -5,15 +5,11 @@
    
  <article class='article'> 
  {% image page.lead_image width-320 class='article__img' %}
- {% comment %} <a href="{{page.parent_section.url}}" class='article__back' style="background-color:{{ page.parent_section.background_color }}">
-    <img class='article__back--image1' src="{% static 'icons/back.svg' %}">
-    {% translate "Back to" %} {{ page.parent_section}}
-</a> {% endcomment %}
   <section class='article-content'>
       <h1>{{ page.title }}</h1>
       {% include_block page.body %}
      {% render_polls_list polls %} 
-     {% render_surveys_list surveys %}
+      {% render_surveys_list surveys %}
        <section class='article-navigation'>
             {% if page.get_prev_sibling or page.get_next_sibling %}
                 {% if page.get_prev_sibling %}
@@ -25,9 +21,10 @@
             {% endif %}
        </section> 
  </article>
- <section class='comments'>
+ 
  {% get_comment_count for page as comment_count %}
     {% if page.allow_comments or comment_count %}
+    <section class='comments'>
         <h2>Comments <span class='comments__count'>{{ comment_count }}</span></h2>
         {% if page.allow_comments %}
             {% if user.is_authenticated %}
@@ -36,7 +33,7 @@
                 </div>
             {% else %}
             <div class='comments__login'>
-              Please log in or create your account
+              <p>Please log in or create your account</p>
              <div class='comments__input-holder'>
                 <div class="comments__submit">
                     <a href="{% url 'account_login' %}?next={{ page.get_absolute_url }}">Log in/Create account</a>.
@@ -53,9 +50,10 @@
             <div >
                 {% render_xtdcomment_tree for page allow_flagging allow_feedback show_feedback %}
             </div>
+    </section>
         {% endif %}
     {% endif %}
- </section>
+
  <section class='related_reading'>
     {% if page.recommended_articles.count %}
     <h2>Related Articles</h2>
@@ -64,7 +62,8 @@
             <li>
                 <a href="{% pageurl recommended_article_model.article %}">
                     <p > {{ recommended_article_model.article.title }}</p>
-                    {% image recommended_article_model.article.lead_image original class='related_reading__img' %}
+                    {% image recommended_article_model.article.lead_image width-75 class='related_reading__img--xs' %}
+                    {% image recommended_article_model.article.lead_image original class='related_reading__img--sm' %}
                 </a>
             </li>
         {% endfor %}
