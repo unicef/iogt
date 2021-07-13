@@ -64,7 +64,8 @@
             <li>
                 <a href="{% pageurl recommended_article_model.article %}">
                     <p > {{ recommended_article_model.article.title }}</p>
-                    {% image recommended_article_model.article.lead_image original class='related_reading__img' %}
+                    {% image recommended_article_model.article.lead_image width-75 class='related_reading__img--xs' %}
+                    {% image recommended_article_model.article.lead_image original class='related_reading__img--sm' %}
                 </a>
             </li>
         {% endfor %}

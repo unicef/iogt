@@ -6,9 +6,10 @@
             <li>
                <a href="{% pageurl article %}">
                     <p > {{ article.title }}</p>
-                    {% image article.specific.lead_image original class='related_reading__img' %}
+                    {% image article.specific.lead_image width-75 class='related_reading__img--xs' %}
+                    {% image article.specific.lead_image original class='related_reading__img--sm' %}
                 </a>
             </li>
         {% endfor %}
         </ul>
-  </section>
+  </section>  
