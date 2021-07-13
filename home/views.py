@@ -37,6 +37,8 @@ def get_manifest(request):
         "theme_color": manifest.theme_color,
         "description": manifest.description,
         "lang": manifest.language,
+        "start_url": manifest.start_url,
+        "display": manifest.display,
         "icons": [
             {
                 "src": f"{manifest.icon_96_96.file.url}",
@@ -57,4 +59,6 @@ def get_manifest(request):
         ],
     }
 
-    return JsonResponse(response)
+    http_response = JsonResponse(response)
+    http_response['Content-Disposition'] = 'attachment; filename="manifest.json"'
+    return http_response
