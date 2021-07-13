@@ -1,13 +1,7 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
- <section class='related_reading'>
-        <ul>
-            <li>
-               <a href="{% pageurl value %}">
-                    <p>{{ value.title }}</p>
-                    {% image value.specific.lead_image width-75 class='related_reading__img--xs' %}
-                    {% image value.specific.lead_image original class='related_reading__img--sm' %}
-                </a>
-            </li>
-        </ul>
-  </section>  
+<a href="{% pageurl value %}">
+    <p>{{ value.title }}</p>
+    {% image value.specific.lead_image width-75 class='related_reading__img--xs' %}
+    {% image value.specific.lead_image original class='related_reading__img--sm' %}
+</a>

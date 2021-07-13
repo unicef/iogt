@@ -17,7 +17,13 @@
         <div>
             {% if page.home_featured_content %}
                 {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
-                {% include_block page.home_featured_content %}
+                <section class='related_reading'>
+                    <ul>
+                        <li>
+                        {% include_block page.home_featured_content %}
+                        </li>
+                    </ul>
+                </section>  
             {% endif %}
         </div>
     </div>
