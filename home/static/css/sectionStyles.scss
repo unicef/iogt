@@ -1158,6 +1158,7 @@
    &__wrap {
       width: 100vw;
       display: flex;
+      justify-content: space-around;
       background-color: $unicef;
  }
 }
@@ -1172,7 +1173,6 @@
       padding: 8px 0;
       text-decoration: none;
       background-color: $unicef;
-      min-width: 33.33vw;
    }
 
    &__active {

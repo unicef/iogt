@@ -1326,6 +1326,8 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
   background-color: #0094F4;
 }
 
@@ -1342,7 +1344,6 @@
   padding: 8px 0;
   text-decoration: none;
   background-color: #0094F4;
-  min-width: 33.33vw;
 }
 
 .nav-bar-item__active {
