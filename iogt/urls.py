@@ -31,7 +31,7 @@ urlpatterns = [
     path('messaging/', include('messaging.urls'), name='messaging-urls'),
     path('wagtail-transfer/', include(wagtailtransfer_urls)),
     path('sitemap/', SitemapAPIView.as_view(), name='sitemap'),
-    path("manifest.webmanifest", get_manifest, name="manifest"),
+    path("manifest.webmanifest/<str:language>/", get_manifest, name="manifest"),
 ]
 
 if settings.DEBUG:

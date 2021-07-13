@@ -685,9 +685,26 @@ class ManifestSettings(models.Model):
         verbose_name=_("Short name"),
         help_text=_("Provide short name"),
     )
-    scope = models.URLField(
+    scope = models.CharField(
+        max_length=255,
         verbose_name=_("Scope"),
         help_text=_("Provide scope"),
+    )
+    start_url = models.CharField(
+        max_length=255,
+        verbose_name=_("Start URL"),
+        help_text=_("Provide start URL"),
+    )
+    display = models.CharField(
+        max_length=255,
+        choices=[
+            ('FULLSCREEN', 'fullscreen'),
+            ('STANDALONE', 'standalone'),
+            ('MINIMAL_UI', 'minimal-ui'),
+            ('BROWSER', 'browser')
+        ],
+        verbose_name=_("Browser UI"),
+        help_text=_("Provide browser UI"),
     )
     background_color = models.CharField(
         max_length=10,
@@ -715,7 +732,6 @@ class ManifestSettings(models.Model):
         "wagtailimages.Image",
         on_delete=models.SET_NULL,
         null=True,
-        blank=True,
         related_name="+",
         verbose_name=_("Icon 96x96"),
         help_text=_("Add PNG icon 96x96 px"),
@@ -725,7 +741,6 @@ class ManifestSettings(models.Model):
         "wagtailimages.Image",
         on_delete=models.SET_NULL,
         null=True,
-        blank=True,
         related_name="+",
         verbose_name=_("Icon 512x512"),
         help_text=_("Add PNG icon 512x512 px"),
@@ -735,7 +750,6 @@ class ManifestSettings(models.Model):
         "wagtailimages.Image",
         on_delete=models.SET_NULL,
         null=True,
-        blank=True,
         related_name="+",
         verbose_name=_("Icon 196x196 (maskable)"),
         help_text=_(
@@ -757,6 +771,8 @@ class ManifestSettings(models.Model):
                 FieldPanel("short_name"),
                 FieldPanel("description"),
                 FieldPanel("scope"),
+                FieldPanel("start_url"),
+                FieldPanel("display"),
             ],
             heading="Info",
         ),
