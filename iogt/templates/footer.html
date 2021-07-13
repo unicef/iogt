@@ -6,7 +6,9 @@
 {% get_language_info_list for LANGUAGES as languages %}
 {% get_current_language as LANGUAGE_CODE %}
 
-<footer class='footer'>
+<footer class='footer-main'>
+ {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
+    <div class='footer'>
     <div class="sm-home-header">
         <a href="/" >
             {% image settings.home.SiteSettings.logo fill-102x40 as logo %}
@@ -31,10 +33,8 @@
             <input type="text" name="query" placeholder="Search here" pattern="\S+.*"/>
         </label>
     </form>
-  
-    {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
     {% top_level_sections %}
     {% footer %}
-
     <p class='footer__copyright'>{% translate "© The Internet of Good Things"%}</p>
+    </div>
 </footer>

@@ -981,9 +981,14 @@
 
 // footer styles
 
+.footer-main {
+   margin-top: 60px;
+}
+
 .footer {
-  margin-top: 60px;
   border-top: 1px solid $fog;
+  padding-left: 12px;
+  padding-right: 12px;
 
   .sm-home-header {
      display: none;
@@ -1001,10 +1006,6 @@
   svg {
      height: 10px;
   }
-
-   padding-left: 12px;
-   padding-right: 12px;
- 
 
   &__form {
    margin-top: 25px;
@@ -1041,6 +1042,7 @@
   @include sm {
    padding-left: 20px;
    padding-right: 20px;
+   
    .sm-home-header {
       display: flex;
       padding:0;
@@ -1124,20 +1126,21 @@
 
 // sticky footer
 
-.sticky-footer {
-   position: fixed;
-   bottom: 0px;
-   width: 100vw;
-   a { 
-      text-decoration: none;
-   }
+.sticky {
+   @include sm {
+      position: fixed;
+      bottom: 0px;
+      width: 100vw;
+      a { 
+         text-decoration: none;
+      }
+   } 
 }
 
 .nav-bar {
    &__wrap {
       width: 100vw;
       display: flex;
-      // justify-content: space-around;
       background-color: $unicef;
  }
 }
@@ -1169,8 +1172,8 @@
    }
 
    &__icon {
-      width: 25.2px;
-      height: 24.82px;
+      width: 18px;
+      height: 18px;
       left: calc(50% - 25.2px/2 + 0px);
       top: calc(50% - 24.82px/2 + 24.82px);
 
@@ -1182,13 +1185,24 @@
 
    &__title {
       color:$white;
-      font-size: 10px;
+      font-size: 8px;
       font-weight: 600;
       line-height: 20px;
       margin-top: 2px;
       text-align: center;
       width: 100%;
    }
+
+  @include sm {
+   &__icon {
+      width: 25.2px;
+      height: 24.82px;
+   }
+
+   &__title {
+      font-size: 10px;
+   }
+  }
 
 }
 
