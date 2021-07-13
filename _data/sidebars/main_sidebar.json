@@ -100,26 +100,26 @@
             "folderitems": [
                 {
                     "title": "Activating Comments",
-                    "url": "/cms-manual/comments/activating/"
+                    "url": "/cms-manual/comments/activating-comments/"
                 },
                 {
                     "title": "Replying to Comments",
-                    "url": "/cms-manual/comments/replying/"
+                    "url": "/cms-manual/comments/replying-comments/"
                 },
                 {
                     "title": "Deleting Comments",
-                    "url": "/cms-manual/comments/deleting/"
+                    "url": "/cms-manual/comments/deleting-comments/"
                 },
                 {
                     "title": "Canned Responses",
-                    "url": "/cms-manual/comments/canned/"
+                    "url": "/cms-manual/comments/canned-responses/"
                 },
                 {
-                    "title": "Reported Comments",
-                    "url": "/cms-manual/comments/reporting/"
+                    "title": "Reporting Comments",
+                    "url": "/cms-manual/comments/reporting-comments/"
                 },
                 {
-                    "title": "Moderation Best Practices",
+                    "title": "Moderation Tips",
                     "url": "/cms-manual/comments/moderation-tips/"
                 },
                 {
@@ -128,7 +128,7 @@
                 },
                 {
                     "title": "Trolls and Vandalism",
-                    "url": "/cms-manual/comments/trolls/"
+                    "url": "/cms-manual/comments/trolls-vandalism/"
                 }
             ]
         },
