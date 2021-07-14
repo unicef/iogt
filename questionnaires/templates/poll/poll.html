@@ -1,14 +1,18 @@
 {% extends "base.html" %}
 {% load static i18n wagtailcore_tags questionnaires_tags %}
 
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/polls.css' %}">
+{% endblock %}
 
 {% block content %}
     {% include 'back_button.html' with back_url=back_url %}
     <div class="polls">
         <div class="polls-widget">
             <div class="container">
-                <div class="polls-widget__wrap"><h1
-                        class="title polls-widget__title">{% trans page.title %}</h1>
+                <div class="polls-widget__wrap">
+                    <h1 class="title polls-widget__title">{% trans page.title %}</h1>
+                    {% if page.description %}<div class="polls-widget__description">{{ page.description }}</div>{% endif %}
                     <form class="polls-widget__form" action="{% pageurl page %}?back_url={{ request.path }}"
                           method="POST">
                         {% csrf_token %}
@@ -29,16 +33,18 @@
                                           stroke-linecap="round"
                                           stroke-linejoin="round"/>
                                 </svg>
-                                {% if field.field.widget.input_type  == "radio" or "/select" in field.field.widget.template_name %}
-                                   {% trans "Select one" %}
+                                {% if not field.field.required %}
+                                    {% trans "Optional" %}
+                                {% elif field.field.widget.input_type  == "radio" or "/select" in field.field.widget.template_name %}
+                                    {% trans "Select one" %}
                                 {% elif  field.field.widget.input_type  == "checkbox" %}
-                                   {% trans "Check all that apply" %}
-                                {% else %}
-                                   {% trans "Optional" %}
+                                    {% trans "Check all that apply" %}
                                 {% endif %}
                             </h4>
-                            {% if field.field.widget.input_type == "radio" %}
+                           {% if field.field.widget.input_type == "radio" %}
                                 {% render_polls_radios field %}
+                            {% elif field.field.widget.input_type == "checkbox" %}
+                                {% render_checkboxes field %}
                             {% elif "/select" in field.field.widget.template_name %}
                                 {% render_select field %}
                             {% endif %}

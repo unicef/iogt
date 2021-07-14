@@ -15,9 +15,9 @@
                     <div class="polls-widget__wrap">
                         <h1 class="title polls-widget__title">{% trans page.title %}</h1>
                         <div class="polls-widget__form">
-                            {% snake_case page.title as current_answer %}
-                            <h4 class="polls-widget__form-title">{% trans "Thank you for your response!" %}</h4>
+                            {% if page.thank_you_text %}<div class="polls-widget__form-title">{{ page.thank_you_text }}</div>{% endif %}
                             {% for question, answers in results.items %}
+                                {% snake_case question as current_answer %}
                                 {% for answer, count in answers.items %}
                                     <div class="cust-check cust-check--white polls-widget__item{% if answer == request.POST|get_value_from_querydict:current_answer %} cust-check--active{% endif %}">
                                         <div class="cust-check__title">

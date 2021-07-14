@@ -21,7 +21,8 @@
     font-weight: 500;
     letter-spacing: .1em;
     line-height: 12px;
-    text-transform: uppercase
+    text-transform: uppercase;
+    margin: 0;
 }
 
 .polls-widget__form-title svg {
@@ -38,4 +39,29 @@
 
 .polls-widget__submit {
     margin-top: 24px
+}
+
+.cust-check--white .cust-check__title {
+    background: transparent;
+    border: 1px solid #E8F8FD;
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3px 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+}
+
+.cust-check--active .cust-check__title {
+    border: 2px solid #0070e2;
+}
+
+.quest-item__content {
+    margin-bottom: 8px;
+}
+
+.quest-item__content:last-child {
+    margin-bottom: 0;
 }

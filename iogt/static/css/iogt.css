@@ -146,7 +146,9 @@ input:focus, input:focus-visible {
 .cust-input textarea {
     display: block;
     height: 100px;
-    padding-bottom: 20px
+    padding-bottom: 20px;
+    overflow-y: scroll;
+    resize: none;
 }
 
 .cust-input__length-text {
@@ -251,14 +253,24 @@ textarea:focus ~ .cust-input__length-text {
     border: 1px solid #efefef;
     display: -webkit-flex;
     display: flex;
-     -webkit-align-items: center;
+    -webkit-align-items: center;
     align-items: center;
     padding: 8px 12px;
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;
     border-radius: 8px;
 }
-.quest-item__label input{
+
+.quest-item__label--single {
+    align-items: flex-start;
+    background: none;
+    border: none;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+.quest-item__label input {
     margin: 0;
     margin-right: 12px;
 }
@@ -447,11 +459,15 @@ textarea:focus ~ .cust-input__length-text {
 }
 
 .cust-select {
-    display: inline-block;
+    display: block;
     width: 100%;
-    height: 46px;
-    line-height: 30px;
+    padding: 5px 10px;
     position: relative;
+    border: none;
+    background: #f7f7f9;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
 }
 
 .cust-select input:not(:checked) ~ #text {

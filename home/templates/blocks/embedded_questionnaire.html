@@ -20,12 +20,12 @@
                                 questions</p>
                             <p class="quest-item__step-desc">
                                     <span>
-                                         {% if field.field.widget.input_type  == "radio" or "select" in field.field.widget.template_name %}
+                                         {% if not field.field.required %}
+                                             {% trans "Optional" %}
+                                         {% elif field.field.widget.input_type  == "radio" or "/select" in field.field.widget.template_name %}
                                              {% trans "Select one" %}
                                          {% elif  field.field.widget.input_type  == "checkbox" %}
                                              {% trans "Check all that apply" %}
-                                         {% else %}
-                                             {% trans "Optional" %}
                                          {% endif %}
                                     </span>
                             </p>
@@ -39,9 +39,9 @@
                             {% render_checkboxes field %}
                         {% elif "textar" in field.field.widget.template_name %}
                             {% render_textarea field %}
-                        {% elif field.field.widget.input_type == "text" %}
+                        {% elif field.field.widget.input_type == "text" or field.field.widget.input_type == "number" or field.field.widget.input_type == "email"%}
                             {% render_text_field field %}
-                        {% elif "select" in field.field.widget.template_name %}
+                        {% elif "/select" in field.field.widget.template_name %}
                             {% render_select field %}
                         {% endif %}
                         {% for err in  field.errors %}
