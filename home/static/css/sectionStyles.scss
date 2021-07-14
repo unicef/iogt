@@ -140,30 +140,28 @@
 .section-page-sections {
    &__section{
       text-decoration: none;
-      color:black;
+      color:$black;
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
       padding: 8px 12px;
-      left: 0%;
-      right: 0%;
-      top: 14.94%;
-      bottom: 82.68%;
       border-bottom: 1px solid $fog;
       font-family: Poppins;
       font-style: normal;
       font-weight: bold;
-      font-size: 16px;
-      line-height: 22px;
+      font-size: 10px;
       letter-spacing: 0.01em;
-      color: $black;
       text-align: left;
    }
+   @include sm {
+      &__section{
+         padding: 8px 20px;
+         font-size: 16px;
+         line-height: 22px;
+      }
+   }
 }
-
-
-
 
 // article page styles
 
@@ -190,7 +188,7 @@
 
 
 .article-content {
-   padding: 0px 22px;
+   padding: 0px 12px;
    font-family: Poppins;
 
    img {
@@ -201,24 +199,24 @@
    h1 {
       font-style: normal;
       font-weight: bold;
-      font-size: 24px;
-      line-height: 28px;
+      font-size: 16px;
+      line-height: 20px;
       color: $black;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
    }
 
    p {
       font-style: normal;
       font-weight: 500;
-      font-size: 16px;
-      line-height: 24px;
+      font-size: 10px;
+      line-height: 16px;
       color:$dark;
    }
 
    video, audio {
-   margin:10px 0px;
-   width:100%;
-   height:auto
+      margin:10px 0px;
+      width:100%;
+      height:auto
 }
 
    &__chat-btn {
@@ -227,28 +225,86 @@
       flex-direction: row;
       justify-content: center;
       align-items: center;
-      padding: 12px 16px;
-      height: 46px;
+      padding: 8px 16px;
       border: 1px solid $black;
-      background-color: white;;
-      box-sizing: border-box;
+      background-color: white;
       border-radius: 8px;
       width: 100%;
-      left: 106.5px;
-      top: 12px;
-      font-family: Poppins;
       font-style: normal;
       font-weight: 600;
-      font-size: 16px;
-      line-height: 22px;
+      font-size: 10px;
+      line-height: 16px;
       color: $black;
       text-decoration: none;
+   }
+
+   @include sm {
+      padding: 0px 22px;
+      
+      h1 {
+         font-size: 24px;
+         line-height: 28px;
+         margin-bottom: 24px;
+      }
+   
+      p {
+         font-size: 16px;
+         line-height: 24px;
+      }
+   
+      &__chat-btn {
+         font-size: 16px;
+         line-height: 22px;
+         padding: 12px 16px;
+      }
    }
 }
 
 .quiz-holder {
-   margin:12px;
-   margin-top: 32px;
+   margin:40px 12px;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+
+   a {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: inherit; 
+    }
+
+    p:first-of-type {
+      font-weight: 500;
+      font-size: 8px;
+      line-height: 12px;
+      text-transform: uppercase;
+    }
+
+   p {
+      font-family: Poppins;
+      font-style: normal;
+      padding-right: 20px;
+      margin: 0;
+   }
+
+   p:nth-of-type(2n) {
+      font-weight: bold;
+      font-size: 10px;
+      line-height: 16px;
+      letter-spacing: 0.01em;
+   }
+
+   &__quiz {
+      width: 100%;
+      margin: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+   }
+   
+   @include sm {
+   margin: 0px 20px;
    display: flex;
    flex-direction: column;
    justify-content: center;
@@ -292,11 +348,7 @@
       padding: 8px 12px;
       border-radius: 8px;
    }
-
-   &__image {
-      width: 12px;
-      height: 12px;
-   }
+}
 }
 
 
@@ -304,47 +356,86 @@
 .article-navigation {
    display:flex;
    justify-content: space-between;
-   padding-top: 24px;
+   padding-top: 12px;
 
    a {
       display: flex;
       flex-direction: row;
       justify-content: center;
       align-items: center;
-      padding: 12px 16px;
+      padding: 8px 12px;
       text-decoration: none;
-      position: static;
-      width: 132px;
-      height: 46px;
+      width: 105px;
+      height: 32px;
       left: calc(50% - 156px/2 - 82px);
-      top: 0px;
-      box-sizing: border-box;
-      border-radius: 24px;
+      border-radius: 18px;
    }
 
    &__button--previous{
-      height: 22px;
-      left: 43px;
-      top: 12px;
       font-family: Poppins;
       font-style: normal;
       font-weight: 600;
-      font-size: 16px;
-      line-height: 22px;
+      font-size: 10px;
+line-height: 16px;
       color: $black;
       border: 1.5px solid $gray-light;
    }
 
    &__button--next {
       height: 22px;
-      left: 59.5px;
-      top: 12px;
-      background-color: black;
+      background-color: $black;
       font-style: normal;
       font-weight: 600;
-      font-size: 16px;
-      line-height: 22px;
+      font-size: 10px;
+      line-height: 16px;
       color: $white;
+   }
+
+   @include sm {
+      display:flex;
+      justify-content: space-between;
+      padding-top: 24px;
+   
+      a {
+         display: flex;
+         flex-direction: row;
+         justify-content: center;
+         align-items: center;
+         padding: 12px 16px;
+         text-decoration: none;
+         position: static;
+         width: 132px;
+         height: 46px;
+         left: calc(50% - 156px/2 - 82px);
+         top: 0px;
+         box-sizing: border-box;
+         border-radius: 24px;
+      }
+   
+      &__button--previous{
+         height: 22px;
+         left: 43px;
+         top: 12px;
+         font-family: Poppins;
+         font-style: normal;
+         font-weight: 600;
+         font-size: 16px;
+         line-height: 22px;
+         color: $black;
+         border: 1.5px solid $gray-light;
+      }
+   
+      &__button--next {
+         height: 22px;
+         left: 59.5px;
+         top: 12px;
+         background-color: black;
+         font-style: normal;
+         font-weight: 600;
+         font-size: 16px;
+         line-height: 22px;
+         color: $white;
+      }
    }
 }
 
@@ -448,41 +539,36 @@
    }
 
    &__img--sm {
-      display:block
+      display: block
    }
 }
 }
 
 
 
-.comments {  
-   padding-top: 40px;
+.comments { 
+  padding-top: 12px;
 
   h2 {
+   margin: 0;
    display: flex;
    flex-direction: row;
    align-items: center;
-   padding: 20px;
-   height: 62px;
-   left: 0%;
-   right: 0%;
-   top: 0px;
+   padding: 12px 9px;
    background: $pearl;
-   margin-bottom: 0;
+   font-size: 10px;
+   line-height: 16px;
   }
 
   &__count {
-   width: 30px;
-   height: 30px;
+   width: 16px;
+   height: 16px;
    background: $black;
-   left: calc(50% - 16px/2);
-   top: calc(50% - 16px/2);
    font-family: Poppins;
    font-style: normal;
    font-weight: bold;
-   font-size: 12px;
+   font-size: 10px;
    line-height: 16px;
-   text-align: center;
    letter-spacing: 0.01em;
    color: $white;
    border-radius: 50%;
@@ -502,14 +588,19 @@
 
   &__input-holder {
    display:flex;
-   padding-left: 20px;
-   justify-content: flex-start;
    background-color: $pearl;
+   
    }
 
    &__login {
       background-color: $pearl;
-      padding: 20px;
+      font-size: 10px;
+      line-height: 16px;
+      padding: 12px;
+
+      p {
+         margin-top: 0;
+      }
    }
 
   &__submit {
@@ -518,18 +609,12 @@
    justify-content: center;
    align-items: center;
    padding: 12px 16px;
-   position: static;
-   // width: 280px;
-   height: 46px;
-   left: calc(50% - 320px/2);
-   top: 196px;
    background-color: $black;
    border-radius: 24px;
-   flex: none;
-   order: 1;
-   align-self: stretch;
-   flex-grow: 0;
-   margin: 16px 0px;
+   margin-bottom: 10px;
+   width: 100%;
+   margin-left: 12px;
+   margin-right: 12px;
    
    input, a { 
       text-decoration: none;
@@ -539,51 +624,55 @@
       font-family: Poppins;
       font-style: normal;
       font-weight: 600;
+      font-size: 10px;
+      line-height: 16px;
+      color: $white;
+   }
+
+  
+}
+
+@include sm {
+   padding-top: 40px;
+
+  h2 {
+   padding: 20px;
+   font-size: 16px;
+   line-height: 22px;
+  }
+
+  &__count {
+   width: 30px;
+   height: 30px;
+   font-size: 12px;
+   line-height: 16px;
+   margin-left: 10px;
+  }
+  
+
+   &__login {
+      padding: 20px;
+      font-size: 16px;
+      line-height: 24px;
+   }
+
+  &__submit {
+   padding: 12px 16px;
+   margin: 16px 0px;
+   
+   input, a { 
       font-size: 16px;
       line-height: 22px;
-      color: $white;
    }
 }
 
-&__load {
-   display: flex;
-   flex-direction: row;
-   justify-content: center;
-   align-items: center;
-   padding: 12px 16px;
-   position: static;
-   width: 280px;
-   height: 46px;
-   left: calc(50% - 320px/2);
-   top: 196px;
-   background-color: $pearl;
-   border: 1px solid $black;
-   border-radius: 24px;
-   flex: none;
-   order: 1;
-   align-self: stretch;
-   flex-grow: 0;
-   margin: 16px 0px;
-   
-   button { 
-      background-color: $pearl;
-      color: $black;
-      border:none;
-      font-family: Poppins;
-      font-style: normal;
-      font-weight: 600;
-      font-size: 16px;
-      line-height: 22px;
    }
-}
 }
 
 
 .individual-comment {
    margin-top: 1px;
-   padding: 20px;
-   position: static;
-   left: 0px;
+   padding: 12px;
    background: $pearl;
 
    span {
@@ -594,7 +683,7 @@
          font-style: normal;
          font-weight: 500;
          font-size: 16px;
-         line-height: 24px;
+         line-height: 20px;
          color: $dark;
          display: flex;
          align-items: center;
@@ -617,8 +706,8 @@
          font-family: Poppins;
          font-style: normal;
          font-weight: bold;
-         font-size: 16px;
-         line-height: 24px;
+         font-size: 10px;
+         line-height: 16px;
          letter-spacing: 0.01em;
          color: $black;
       }
@@ -636,10 +725,75 @@
       font-family: Poppins;
       font-style: normal;
       font-weight: 500;
-      font-size: 12px;
-      line-height: 12px;
+      font-size: 10px;
+      line-height: 16px;
       color:$dark;
       opacity: 0.4;
+   }
+
+   .content, &__moderator {
+      font-family: Poppins;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 10px;
+      line-height: 16px;
+      color: $black;
+   }
+
+   .content {
+      margin-bottom: 20px;
+   }
+
+   .report-comment {
+      font-style: normal;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 16px;
+      color: $black;
+      text-decoration: none;
+   }
+
+  
+   @include sm {
+      padding: 20px;
+   
+      span {
+     
+   
+         p {
+            font-size: 16px;
+            line-height: 24px;
+            margin:0;
+         }
+   
+         p:first-of-type {
+             width: 32px;
+             margin-right: 8px;
+             height: 32px;
+             border-radius: 50%;
+         }
+   
+         p:nth-of-type(2n) {
+            font-size: 16px;
+            line-height: 24px;
+            letter-spacing: 0.01em;
+         }
+      }
+   
+      &__date {
+         font-size: 12px;
+         line-height: 12px;
+      }
+
+      .content, &__moderator {
+         font-size: 16px;
+         line-height: 24px;
+      }
+   
+      .report-comment {
+         font-size: 14px;
+         line-height: 20px;
+      }
    }
 }
 
@@ -651,8 +805,6 @@
    padding-top: 24px;
    width:100%;
    height:auto;
-          
-    
 
    &__back {
       color:white;
@@ -755,36 +907,26 @@
    border-radius: 8px;
    padding:7px 12px;
    font-style: normal;
+   font-size: 10px;
+   line-height: 16px;
    font-weight: 500;
-   font-size: 16px;
-   line-height: 24px;
    letter-spacing: 0.01em;
    color:$gray;
+
+   @include sm {
+      font-size: 16px;
+      line-height: 24px;
+   }
 }
 
-.content {
-   font-style: normal;
-   font-weight: 500;
-   font-size: 16px;
-   line-height: 24px;
-   color: $dark;
-}
 
-.report-comment {
-   font-style: normal;
-   font-weight: 600;
-   font-size: 14px;
-   line-height: 20px;
-   color: $black;
-   text-decoration: none;
-   padding-top: 12px;
-}
+
 
 .cache-banner {
    display: none;
 
    @include sm {
-      display: flex;
+   display: flex;
    flex-direction: column;
    padding: 12px;
    padding-top: 8px;
@@ -866,7 +1008,7 @@
  @include sm {
    margin-top: 8px;
    margin-bottom: 20px;
-   padding: 0 12px;
+   padding: 0px 12px;
 
    img {
       margin-bottom: 6px;
@@ -1180,7 +1322,6 @@
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      justify-content: center;
       justify-content: center;
       padding: 8px 0;
       text-decoration: none;
