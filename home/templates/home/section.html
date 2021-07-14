@@ -7,7 +7,7 @@
 {% block content %}
    {% image page.lead_image width-320 class='article__img' %}
     {% if featured_content %}
-   <section class='featured-content' style="background-color:{{ page.background_color }}">
+   <section class='featured-content' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
         {% render_featured_content_list featured_content %}
     </section>
     {% endif %}
