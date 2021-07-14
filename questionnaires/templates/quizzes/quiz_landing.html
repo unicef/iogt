@@ -20,7 +20,7 @@
                         {% trans "Correct" %}
                     </div>
                     <div class="quiz-answer-banner__answer error">
-                        1 {% trans "Incorrect" %}</div>
+                        {% subtract result|get_item:'total' result|get_item:'total_correct'%} {% trans "Incorrect" %}</div>
                 </div>
                 <div class="quiz-answer-banner__btns">
                     <a href="#"
