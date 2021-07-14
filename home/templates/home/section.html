@@ -6,11 +6,6 @@
 
 {% block content %}
    {% image page.lead_image width-320 class='article__img' %}
-     {% comment %} <a href="{{page.parent_section.url}}" class='article__back' style="background-color:{{ page.parent_section.background_color }}">
-          <img class='article__back--image1' src="{% static 'icons/back.svg' %}">
-          {% translate "Go back" %}
-    </a> {% endcomment %}
-
     {% if featured_content %}
    <section class='featured-content' style="background-color:{{ page.background_color }}">
         {% render_featured_content_list featured_content %}
@@ -19,6 +14,7 @@
     <section>
         {% render_sub_sections_list sub_sections %}
     </section>
+     {% if polls or surveys or quizzes %}
    <section class='quiz-holder'>
         {% if polls %}
         <section class='quiz-holder__quiz' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
@@ -36,6 +32,7 @@
         </section>
         {% endif %}
     </section>
+    {% endif %}
      {% render_articles_list articles %} 
 {% endblock content %}
 
