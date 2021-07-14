@@ -183,14 +183,8 @@
   font-style: normal;
   font-weight: bold;
   font-size: 10px;
-  line-height: 16px;
   letter-spacing: 0.01em;
   text-align: left;
-}
-
-.section-page-sections__section img {
-  width: 6px;
-  height: 8px;
 }
 
 @media only screen and (min-width: 360px) {
@@ -198,10 +192,6 @@
     padding: 8px 12px;
     font-size: 16px;
     line-height: 22px;
-  }
-  .section-page-sections__section img {
-    width: 8px;
-    height: 10px;
   }
 }
 
