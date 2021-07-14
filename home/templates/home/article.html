@@ -1,5 +1,10 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags comments comments_xtd  home_tags questionnaires_tags sass_tags i18n %}
+{% load static wagtailcore_tags wagtailimages_tags comments comments_xtd  wagtailuserbar menu_tags  home_tags questionnaires_tags sass_tags i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_language_info for LANGUAGE_CODE as lang %}
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as languages %}
+{% get_current_language as LANGUAGE_CODE %}
 
 {% block content %}
    
@@ -24,6 +29,7 @@
 
  {% get_comment_count for page as comment_count %}
     {% if page.allow_comments or comment_count %}
+      {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
     <section class='comments'>
         <h2>Comments <span class='comments__count'>{{ comment_count }}</span></h2>
         {% if page.allow_comments %}
@@ -56,7 +62,7 @@
 
  <section class='related_reading'>
     {% if page.recommended_articles.count %}
-    <h2>Related Articles</h2>
+    <h3>Related Articles</h3>
         <ul>
         {% for recommended_article_model in page.recommended_articles.all %}
             <li>

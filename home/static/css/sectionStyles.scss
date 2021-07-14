@@ -400,6 +400,7 @@
       height: 32px;
       left: calc(50% - 156px/2 - 82px);
       border-radius: 18px;
+      margin-bottom: 12px;
    }
 
    &__button--previous{
@@ -407,7 +408,7 @@
       font-style: normal;
       font-weight: 600;
       font-size: 10px;
-line-height: 16px;
+      line-height: 16px;
       color: $black;
       border: 1.5px solid $gray-light;
    }
@@ -577,8 +578,8 @@ line-height: 16px;
 
 
 
+
 .comments {
-  padding-top: 12px;
 
   h2 {
    margin: 0;
@@ -589,6 +590,14 @@ line-height: 16px;
    background: $pearl;
    font-size: 10px;
    line-height: 16px;
+  }
+
+  h3 {
+   font-family: Poppins;
+   font-style: normal;
+   font-weight: 800;
+   font-size: 16px;
+   line-height: 24px;
   }
 
   &__count {
@@ -666,7 +675,7 @@ line-height: 16px;
    }
 
   
-}
+}}
 
 @include sm {
    padding-top: 40px;
@@ -675,6 +684,11 @@ line-height: 16px;
    padding: 20px;
    font-size: 16px;
    line-height: 22px;
+  }
+
+  h3 {
+   font-size: 24px;
+   line-height: 28px;
   }
 
   &__count {
@@ -690,6 +704,12 @@ line-height: 16px;
       padding: 20px;
       font-size: 16px;
       line-height: 24px;
+   }
+
+
+  &__input-holder {
+   padding: 0px 20px;
+   
    }
 
   &__submit {

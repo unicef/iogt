@@ -1,5 +1,10 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags home_tags questionnaires_tags sass_tags i18n %}
+{% load static wagtailcore_tags wagtailimages_tags home_tags questionnaires_tags sass_tags i18n wagtailuserbar menu_tags home_tags %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_language_info for LANGUAGE_CODE as lang %}
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as languages %}
+{% get_current_language as LANGUAGE_CODE %}
 
 {% block extra_css %}
 {% endblock extra_css %}
@@ -14,6 +19,7 @@
     <section>
         {% render_sub_sections_list sub_sections %}
     </section>
+    {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
      {% if polls or surveys or quizzes %}
    <section class='quiz-holder'>
         {% if polls %}

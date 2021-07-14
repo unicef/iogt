@@ -466,6 +466,7 @@
   height: 32px;
   left: calc(50% - 156px/2 - 82px);
   border-radius: 18px;
+  margin-bottom: 12px;
 }
 
 .article-navigation__button--previous {
@@ -651,10 +652,6 @@
   }
 }
 
-.comments {
-  padding-top: 12px;
-}
-
 .comments h2 {
   margin: 0;
   display: -webkit-box;
@@ -671,6 +668,14 @@
   background: #F7F7F9;
   font-size: 10px;
   line-height: 16px;
+}
+
+.comments h3 {
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 24px;
 }
 
 .comments__count {
@@ -740,13 +745,24 @@
   padding: 12px 16px;
   background-color: #303030;
   border-radius: 24px;
+  -webkit-box-flex: 0;
+      -ms-flex: none;
+          flex: none;
+  -webkit-box-ordinal-group: 2;
+      -ms-flex-order: 1;
+          order: 1;
+  -ms-flex-item-align: stretch;
+      align-self: stretch;
+  -ms-flex-positive: 0;
+      flex-grow: 0;
+  margin: 16px 0px;
+}
+
+.comments__submit input, .comments__submit a {
   margin-bottom: 10px;
   width: 100%;
   margin-left: 12px;
   margin-right: 12px;
-}
-
-.comments__submit input, .comments__submit a {
   text-decoration: none;
   background-color: #303030;
   color: white;
@@ -760,31 +776,44 @@
 }
 
 @media only screen and (min-width: 360px) {
-  .comments {
-    padding-top: 40px;
-  }
-  .comments h2 {
+  padding-top: 40px;
+  h2 {
     padding: 20px;
     font-size: 16px;
     line-height: 22px;
   }
-  .comments__count {
+  h3 {
+    font-size: 24px;
+    line-height: 28px;
+  }
+  __count {
     width: 30px;
     height: 30px;
     font-size: 12px;
     line-height: 16px;
     margin-left: 10px;
   }
-  .comments__login {
+  __login {
     padding: 20px;
     font-size: 16px;
     line-height: 24px;
   }
-  .comments__submit {
+  __input-holder {
+    padding: 0px 20px;
+  }
+  __submit {
     padding: 12px 16px;
     margin: 16px 0px;
   }
-  .comments__submit input, .comments__submit a {
+  __submit button {
+    background-color: #F7F7F9;
+    color: #303030;
+    border: none;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 600;
+  }
+  __submit input, __submit a {
     font-size: 16px;
     line-height: 22px;
   }
@@ -1445,25 +1474,14 @@
   max-width: 16px;
 }
 
-
-.sticky-footer {
-          position: fixed;
-          bottom: 0px;
-          width: 100vw;
-          z-index: 99;
-        }
-
-
 @media only screen and (min-width: 360px) {
   .top-level, .bottom-level {
     margin-top: 32px;
     padding-top: 12px;
   }
-
   .top-level__section, .bottom-level__section {
     padding: 13px 12px;
   }
-
   .top-level__section a, .bottom-level__section a {
     font-size: 16px;
     line-height: 22px;
@@ -1472,6 +1490,13 @@
 
 .bottom-level__section {
   background-color: #F7F7F9;
+}
+
+.sticky-footer {
+  position: fixed;
+  bottom: 0px;
+  width: 100vw;
+  z-index: 99;
 }
 
 @media only screen and (min-width: 360px) {
