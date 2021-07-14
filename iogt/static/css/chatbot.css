@@ -255,3 +255,43 @@
 .login-info p {
     margin: 0 0 10px;
 }
+
+.search-box {
+    position: relative;
+}
+
+.search-box:after {
+    display: block;
+    content: "";
+    clear: both;
+}
+
+.search-box .search-box {
+    border: 1px solid #efefef;
+    background: #F7F7F9;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    font-size: 14px;
+    border-radius: 8px;
+    letter-spacing: 0.01em;
+    color: #9a9a9a;
+    padding: 10px 100px 10px 10px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.btn-search {
+    position: absolute;
+    z-index: 2;
+    top: 3px;
+    right: 3px;
+    bottom: 3px;
+    background: #0094F4;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 14px;
+    line-height: 14px;
+}
