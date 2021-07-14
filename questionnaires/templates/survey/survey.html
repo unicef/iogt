@@ -13,17 +13,25 @@
         {% include 'back_button.html' with back_url=back_url %}
         <div class="container">
             <h1 class="title survey-page__title">{% trans page.title %}</h1>
-            {% if page.description %}
-                <p>{{ page.description }}</p>{% endif %}
-            <form action="{% pageurl page %}{% if self.multi_step or self.has_page_breaks %}?p={{ fields_step.number|add:"1" }}&back_url={{ request.path }}{% else %}?back_url={{ request.path }}{% endif %}&form_length={% if form_length != None %}{{ form.fields | length | add:form_length }}{% else %}{{ form.fields | length }}{% endif %}"
+            {% if page.description %}<p>{{ page.description }}</p>{% endif %}
+            <form action="{% pageurl page %}{% if self.multi_step or self.has_page_breaks %}?p={{ fields_step.number|add:"1" }}&back_url={{ request.path }}{% else %}?back_url={{ request.path }}{% endif %}&form_length={% if form_length != None %}{% if form.errors %}{{ form.fields | length }}{% else %}{{ form.fields | length | add:form_length }}{% endif %}{% else %}{{ form.fields | length }}{% endif %}"
                   method="POST" class="survey-page__content">
                 {% csrf_token %}
                 <div class="survey-page__content">
                     {% for field in form %}
                         <div class="quest-item" tabindex="0">
                             <div class="quest-item__header">
-                                <p class="quest-item__number">{% if form_length != None %}{{ forloop.counter |add:form_length }}{% else %}{{ forloop.counter }}{% endif %}
-                                    of {% if self.multi_step or self.has_page_breaks %}{{ fields_step.paginator.count }}{% else %}{{ form.fields | length }}{% endif %}
+                                <p class="quest-item__number">
+                                    {% if form_length != None %}
+                                        {% if form.errors %}
+                                            {{ forloop.counter }}{% else %}
+                                            {{ forloop.counter |add:form_length }}{% endif %}
+                                    {% else %}
+                                        {{ forloop.counter }}{% endif %}
+                                    of
+                                    {% if self.multi_step or self.has_page_breaks %}
+                                        {{ fields_step.paginator.count }}{% else %}
+                                        {{ form.fields | length }}{% endif %}
                                     questions</p>
                                 <p class="quest-item__step-desc">
                                     <span>
@@ -46,7 +54,7 @@
                                 {% render_checkboxes field %}
                             {% elif "textar" in field.field.widget.template_name %}
                                 {% render_textarea field %}
-                            {% elif field.field.widget.input_type == "text" or field.field.widget.input_type == "number" or field.field.widget.input_type == "email"%}
+                            {% elif field.field.widget.input_type == "text" or field.field.widget.input_type == "number" or field.field.widget.input_type == "email" %}
                                 {% render_text_field field %}
                             {% elif "/select" in field.field.widget.template_name %}
                                 {% render_select field %}
