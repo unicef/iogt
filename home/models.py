@@ -1,16 +1,27 @@
+import os
+
 from django.conf import settings
 from django.contrib.admin.utils import flatten
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
+from django.core.files.images import get_image_dimensions
 from django.db import models
+from django.utils.deconstruct import deconstructible
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 from modelcluster.contrib.taggit import ClusterTaggableManager
+from iogt.settings.base import WAGTAIL_CONTENT_LANGUAGES
 from modelcluster.fields import ParentalKey
 from rest_framework import status
 from taggit.models import TaggedItemBase
 from wagtail.admin.edit_handlers import (
-    FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, PageChooserPanel,
-    StreamFieldPanel, TabbedInterface
+    FieldPanel,
+    InlinePanel,
+    MultiFieldPanel,
+    ObjectList,
+    PageChooserPanel,
+    StreamFieldPanel,
+    TabbedInterface
 )
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
@@ -20,6 +31,7 @@ from wagtail.core.models import Orderable, Page, Site, Locale
 from wagtail.core.rich_text import get_text_for_indexing
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
+from wagtail.images.models import Image
 from wagtail.search import index
 from wagtailmarkdown.blocks import MarkdownBlock
 from wagtailmenus.models import AbstractFlatMenuItem, BooleanField
@@ -633,3 +645,161 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
         FieldPanel('color'),
         FieldPanel('color_text')
     ]
+
+
+@deconstructible
+class ImageValidator:
+    def __init__(self, width=None, height=None):
+        self.width = width
+        self.height = height
+
+    def __call__(self, image):
+        img = Image.objects.get(id=image)
+
+        w, h = get_image_dimensions(img.file)
+        ext = os.path.splitext(img.filename)[1]
+        valid_extensions = [".png"]
+
+        if not ext.lower() in valid_extensions:
+            raise ValidationError("Only .png images can be used")
+
+        if self.width is not None and w != self.width:
+            raise ValidationError(
+                f"({img.filename} - Width: {w}px, Height: {h}px) - The width image must be {self.width}px"
+            )
+
+        if self.height is not None and h != self.height:
+            raise ValidationError(
+                f"({img.filename} - Height: {h}px, Width: {w}px) - The height image must be {self.height}px "
+            )
+
+
+class ManifestSettings(models.Model):
+    name = models.CharField(
+        max_length=255,
+        verbose_name=_("Name"),
+        help_text=_("Provide name"),
+    )
+    short_name = models.CharField(
+        max_length=255,
+        verbose_name=_("Short name"),
+        help_text=_("Provide short name"),
+    )
+    scope = models.CharField(
+        max_length=255,
+        verbose_name=_("Scope"),
+        help_text=_("Provide scope"),
+    )
+    start_url = models.CharField(
+        max_length=255,
+        verbose_name=_("Start URL"),
+        help_text=_("Provide start URL"),
+    )
+    display = models.CharField(
+        max_length=255,
+        choices=[
+            ('FULLSCREEN', 'fullscreen'),
+            ('STANDALONE', 'standalone'),
+            ('MINIMAL_UI', 'minimal-ui'),
+            ('BROWSER', 'browser')
+        ],
+        verbose_name=_("Browser UI"),
+        help_text=_("Provide browser UI"),
+    )
+    background_color = models.CharField(
+        max_length=10,
+        verbose_name=_("Background color"),
+        help_text=_("Provide background color (example: #FFF)"),
+    )
+    theme_color = models.CharField(
+        max_length=10,
+        verbose_name=_("Theme color"),
+        help_text=_("Provide theme color(example: #493174)"),
+    )
+    description = models.CharField(
+        max_length=500,
+        verbose_name=_("Description"),
+        help_text=_("Provide description"),
+    )
+    language = models.CharField(
+        max_length=3,
+        choices=WAGTAIL_CONTENT_LANGUAGES,
+        default="en",
+        verbose_name=_("Language"),
+        help_text=_("Choose language"),
+    )
+    icon_96_96 = models.ForeignKey(
+        "wagtailimages.Image",
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="+",
+        verbose_name=_("Icon 96x96"),
+        help_text=_("Add PNG icon 96x96 px"),
+        validators=[ImageValidator(width=96, height=96)],
+    )
+    icon_512_512 = models.ForeignKey(
+        "wagtailimages.Image",
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="+",
+        verbose_name=_("Icon 512x512"),
+        help_text=_("Add PNG icon 512x512 px"),
+        validators=[ImageValidator(width=512, height=512)],
+    )
+    icon_196_196 = models.ForeignKey(
+        "wagtailimages.Image",
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="+",
+        verbose_name=_("Icon 196x196 (maskable)"),
+        help_text=_(
+            "Add PNG icon 196x196 px (maskable image can be created using https://maskable.app/)"
+        ),
+        validators=[ImageValidator(width=196, height=196)],
+    )
+
+    panels = [
+        MultiFieldPanel(
+            [
+                FieldPanel("language"),
+            ],
+            heading="Language",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel("name"),
+                FieldPanel("short_name"),
+                FieldPanel("description"),
+                FieldPanel("scope"),
+                FieldPanel("start_url"),
+                FieldPanel("display"),
+            ],
+            heading="Info",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel("theme_color"),
+                FieldPanel("background_color"),
+            ],
+            heading="Colors",
+        ),
+        MultiFieldPanel(
+            [
+                ImageChooserPanel("icon_96_96"),
+                ImageChooserPanel("icon_512_512"),
+                ImageChooserPanel("icon_196_196"),
+            ],
+            heading="Icons",
+        ),
+    ]
+
+    def __str__(self):
+        return f"Manifest for {self.name} - {self.language}"
+
+    class Meta:
+        unique_together = (
+            "language",
+            "scope",
+        )
+        verbose_name = "Manifest settings"
+        verbose_name_plural = "Manifests settings"

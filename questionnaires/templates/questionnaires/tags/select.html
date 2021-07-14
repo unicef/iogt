@@ -2,13 +2,6 @@
 {% load static wagtailcore_tags wagtailimages_tags %}
 
 <div class="quest-item__content">
-    {#    <label class="quest-item__input cust-select">#}
-    {#        <select name="{{ field.name }}">#}
-    {#            {% for option in field %}#}
-    {#                <option value="{{ option.choice_label }}">{{ option.choice_label }}</option>#}
-    {#            {% endfor %}#}
-    {#        </select>#}
-    {#    </label>#}
     <label for="cust-select" class="quest-item__input cust-select">
         <input type="radio" name="{{ field.name }}" value="not_changed"
                id="cust-select">

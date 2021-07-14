@@ -14,20 +14,20 @@
         <div class="container">
             <h1 class="title survey-page__title">{% trans page.title %}</h1>
             {% if page.description %}
-                <p>{% trans page.description %}</p>{% endif %}
-            <form action="{% pageurl page %}{% if self.multi_step or self.has_page_breaks %}?p={{ fields_step.number|add:"1" }}&back_url={{ request.path }}{% else %}?back_url={{ request.path }}{% endif %}"
+                <p>{{ page.description }}</p>{% endif %}
+            <form action="{% pageurl page %}{% if self.multi_step or self.has_page_breaks %}?p={{ fields_step.number|add:"1" }}&back_url={{ request.path }}{% else %}?back_url={{ request.path }}{% endif %}&form_length={% if form_length != None %}{{ form.fields | length | add:form_length }}{% else %}{{ form.fields | length }}{% endif %}"
                   method="POST" class="survey-page__content">
                 {% csrf_token %}
                 <div class="survey-page__content">
                     {% for field in form %}
-                        <div class="quest-item">
+                        <div class="quest-item" tabindex="0">
                             <div class="quest-item__header">
-                                <p class="quest-item__number">{{ forloop.counter }}
-                                    of {{ fields_step.paginator.count|add:"1" }}
+                                <p class="quest-item__number">{% if form_length != None %}{{ forloop.counter |add:form_length }}{% else %}{{ forloop.counter }}{% endif %}
+                                    of {% if self.multi_step or self.has_page_breaks %}{{ fields_step.paginator.count }}{% else %}{{ form.fields | length }}{% endif %}
                                     questions</p>
                                 <p class="quest-item__step-desc">
                                     <span>
-                                        {% if field.field.widget.input_type  == "radio" or "select" in field.field.widget.template_name %}
+                                        {% if field.field.widget.input_type  == "radio" or "/select" in field.field.widget.template_name %}
                                             {% trans "Select one" %}
                                         {% elif  field.field.widget.input_type  == "checkbox" %}
                                            {% trans "Check all that apply" %}

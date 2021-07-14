@@ -102,11 +102,11 @@
     margin-top: 16px
 }
 
-.quest-item__input {
+.quest-item__input, .quest-item__label {
     margin-bottom: 8px
 }
 
-.quest-item__input:last-child {
+.quest-item__input:last-child, .quest-item__label:last-child{
     margin-bottom: 0
 }
 
