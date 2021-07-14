@@ -215,14 +215,13 @@ textarea:focus ~ .cust-input__length-text {
 
 .cust-check--white .cust-check__title {
     background: transparent;
-    border-color: #e8f8fd
 }
 
 .cust-check--active .cust-check__title {
     -webkit-align-items: flex-start;
     align-items: flex-start;
-    border-color: #0070e2;
-    border-width: 1.5px
+    border: 2px solid #0070e2;
+    border-radius: 8px;
 }
 
 .cust-check__percent {
