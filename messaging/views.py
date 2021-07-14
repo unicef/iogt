@@ -42,7 +42,12 @@ class InboxIndexView(TemplateView):
 class ThreadView(View):
 
     def get_context(self, thread):
-        return {'thread': thread}
+        last_message = thread.messages.last()
+        return {
+            'thread': thread,
+            'last_message_id': last_message.id if last_message else None,
+            'user': self.request.user
+        }
 
     def get(self, request, thread_id):
         thread = get_object_or_404(Thread, pk=thread_id)
@@ -61,7 +66,6 @@ class ThreadView(View):
             return redirect(reverse('messaging:thread', kwargs={'thread_id': thread.pk}))
         else:
             return render(request, 'messaging/message_detail.html', context=self.get_context(thread, form))
-
 
 
 @method_decorator(login_required, name='dispatch')

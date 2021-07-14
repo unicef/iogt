@@ -1,64 +1,43 @@
 {% extends "messaging/base.html" %}
-{% load messaging_tags humanize %}
+{% load messaging_tags humanize i18n %}
 
 {% block content %}
-<div class="chat">
-    <a href="{% url 'messaging:inbox' %}" class="btn-back">Back</a>
-    <h1> {{ thread.subject }} </h1>
-    <div class="messages">
-{#        {% for message in thread.messages.all %}#}
-{#            <div class="thread-message">#}
-{#                <div class="message-byline">#}
-{#                    {% if message.sent_from_bot %}#}
-{#                        <div class="message-from">{{ thread.chatbot.display_name }}</div>#}
-{#                    {% else %}#}
-{#                        <div class="message-from">{{ message.sender.username }}</div>#}
-{#                    {% endif %}#}
-{#                    <div class="message-sent">{{ message.sent_at }}</div>#}
-{#                </div>#}
-{#                <div class="message-content">{{ message.text|urlize|linebreaks }}</div>#}
-{#                {% for quick_reply in message.quick_replies %}#}
-{#                    {% render_quick_reply_form thread user quick_reply %}#}
-{#                {% endfor %}#}
-{#            </div>#}
-{#        {% endfor %}#}
-        {% for message in thread.messages.all %}
-            {% if message.sender.is_rapidpro_bot_user %}
-                <div class="message">
-            {% else %}
-                <div class="message reply">
-             {% endif %}
-            <time class="message-time">{{ message.sent_at|naturaltime}}</time>
+    <div class="chat">
+        <a href="{% url 'messaging:inbox' %}" class="btn-back">Back</a>
+        <h1> {{ thread.subject }} </h1>
+        <div class="messages">
+            {% for message in thread.messages.all %}
+                {% if message.sender.is_rapidpro_bot_user %}
+                    <div class="message">
+                {% else %}
+                    <div class="message reply">
+                {% endif %}
+            <time class="message-time">{{ message.sent_at|naturaltime }}</time>
             <div class="message-box">
                 {{ message.text|urlize|linebreaks }}
             </div>
-            <div class="quick-replies">
-                {% for quick_reply in message.quick_replies %}
-                    {% render_quick_reply_form thread user quick_reply %}
-                {% endfor %}
+            {% if message.id == last_message_id %}
+                <div class="quick-replies">
+                    {% for quick_reply in message.quick_replies %}
+                        {% render_quick_reply_form thread user quick_reply %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            </div>
+            {% endfor %}
+
+            <div class="quick-reply-form">
+              <form action="{% url 'messaging:thread' thread.pk %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="thread" value="{{ thread.pk }}"/>
+                <input type="hidden" name="user" value="{{ user.pk }}"/>
+                <input type="text" name="text" value="{{ text }}"/>
+                <button type="submit">{% translate 'Send' %}</button>
+              </form>
+            </div>
+
+
             </div>
         </div>
-        {% endfor %}
-{#        <div class="message">#}
-{#            <time class="message-time">Today 11:33</time>#}
-{#            <div class="message-box">#}
-{#                Hello, how can I help you? Select a question from the list or type your question below.#}
-{#            </div>#}
-{#        </div>#}
-{#        <div class="message reply">#}
-{#            <time class="message-time">Today 11:33</time>#}
-{#            <div class="message-box">#}
-{#                Hello, how can I help you? Select a question from the list or type your question below.#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-    <ol class="covid-info-link">
-        <li><button type="button">1. Is Covid-19 seerious?</button></li>
-        <li><button type="button">2. Should I wear mask?</button></li>
-    </ol>
-{#    <div class="login-info">#}
-{#        <a href="#" class="login">Log in / Create account</a>#}
-{#        <p>Log in to save your chat history and receive updates</p>#}
-{#    </div>#}
-</div>
+    </div>
 {% endblock %}
