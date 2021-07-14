@@ -189,7 +189,7 @@
 
 @media only screen and (min-width: 360px) {
   .section-page-sections__section {
-    padding: 8px 12px;
+    padding: 8px 20px;
     font-size: 16px;
     line-height: 22px;
   }
@@ -296,8 +296,7 @@
 }
 
 .quiz-holder {
-  margin: 12px;
-  margin-top: 32px;
+  margin: 40px 12px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -328,39 +327,90 @@
 }
 
 .quiz-holder p:first-of-type {
-  font-family: Poppins;
-  font-style: normal;
   font-weight: 500;
-  font-size: 12px;
-  line-height: 16px;
-  letter-spacing: 0.1em;
+  font-size: 8px;
+  line-height: 12px;
   text-transform: uppercase;
 }
 
 .quiz-holder p {
+  font-family: Poppins;
+  font-style: normal;
   padding-right: 20px;
   margin: 0;
 }
 
 .quiz-holder p:nth-of-type(2n) {
-  font-family: Poppins;
-  font-style: normal;
   font-weight: bold;
-  font-size: 16px;
-  line-height: 22px;
+  font-size: 10px;
+  line-height: 16px;
   letter-spacing: 0.01em;
 }
 
 .quiz-holder__quiz {
   width: 100%;
-  margin: 16px;
+  margin: 10px;
   padding: 8px 12px;
   border-radius: 8px;
 }
 
-.quiz-holder__image {
-  width: 12px;
-  height: 12px;
+@media only screen and (min-width: 360px) {
+  .quiz-holder {
+    margin: 0px 20px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+  .quiz-holder a {
+    text-decoration: none;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    color: inherit;
+  }
+  .quiz-holder p:first-of-type {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .quiz-holder p {
+    padding-right: 20px;
+    margin: 0;
+  }
+  .quiz-holder p:nth-of-type(2n) {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 22px;
+    letter-spacing: 0.01em;
+  }
+  .quiz-holder__quiz {
+    width: 100%;
+    margin: 16px;
+    padding: 8px 12px;
+    border-radius: 8px;
+  }
 }
 
 .article-navigation {
