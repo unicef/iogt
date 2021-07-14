@@ -23,7 +23,7 @@
                         {% subtract result|get_item:'total' result|get_item:'total_correct'%} {% trans "Incorrect" %}</div>
                 </div>
                 <div class="quiz-answer-banner__btns">
-                    <a href="#"
+                    <a href="{% if back_url != None %}{{ back_url }}{% else %}/{% endif %}"
                        class="icon-btn icon-btn--md icon-btn--white icon-btn--rounded quiz-answer-banner__btn">
                         <span class="icon-btn__icon">
                             <svg width="4" height="8" viewBox="0 0 8 14"

@@ -204,5 +204,5 @@
     -webkit-justify-content: center;
     justify-content: center;
     white-space: nowrap;
-    width: 102px
+    width: auto;
 }
