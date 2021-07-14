@@ -29,12 +29,12 @@
                                           stroke-linecap="round"
                                           stroke-linejoin="round"/>
                                 </svg>
-                                {% if field.field.widget.input_type  == "radio" or "/select" in field.field.widget.template_name %}
-                                   {% trans "Select one" %}
+                                {% if not field.field.required %}
+                                    {% trans "Optional" %}
+                                {% elif field.field.widget.input_type  == "radio" or "/select" in field.field.widget.template_name %}
+                                    {% trans "Select one" %}
                                 {% elif  field.field.widget.input_type  == "checkbox" %}
-                                   {% trans "Check all that apply" %}
-                                {% else %}
-                                   {% trans "Optional" %}
+                                    {% trans "Check all that apply" %}
                                 {% endif %}
                             </h4>
                             {% if field.field.widget.input_type == "radio" %}
