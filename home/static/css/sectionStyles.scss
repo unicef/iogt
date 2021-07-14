@@ -171,7 +171,7 @@
       width:100%;
       height:auto
    }
-   
+
    &__back {
       display:flex;
       color:white;
@@ -315,7 +315,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      color: inherit; 
+      color: inherit;
     }
 
     p:first-of-type {
@@ -546,7 +546,7 @@ line-height: 16px;
 
 
 
-.comments { 
+.comments {
   padding-top: 12px;
 
   h2 {
@@ -611,12 +611,17 @@ line-height: 16px;
    padding: 12px 16px;
    background-color: $black;
    border-radius: 24px;
-   margin-bottom: 10px;
-   width: 100%;
-   margin-left: 12px;
-   margin-right: 12px;
-   
-   input, a { 
+   flex: none;
+   order: 1;
+   align-self: stretch;
+   flex-grow: 0;
+   margin: 16px 0px;
+
+   input, a {
+      margin-bottom: 10px;
+      width: 100%;
+      margin-left: 12px;
+      margin-right: 12px;
       text-decoration: none;
       background-color: $black;
       color:white;
@@ -659,13 +664,20 @@ line-height: 16px;
   &__submit {
    padding: 12px 16px;
    margin: 16px 0px;
-   
-   input, a { 
+
+   button {
+     background-color: $pearl;
+     color: $black;
+     border: none;
+     font-family: Poppins;
+     font-style: normal;
+     font-weight: 600;
+  }
+
+   input, a {
       font-size: 16px;
       line-height: 22px;
    }
-}
-
    }
 }
 
@@ -713,7 +725,7 @@ line-height: 16px;
       }
    }
 
- 
+
 
    &__data {
       display: flex;
@@ -798,7 +810,7 @@ line-height: 16px;
 }
 
 
-.article-page-details { 
+.article-page-details {
    color: $white;
    display:flex;
    padding-bottom: 22.55px;
@@ -1047,7 +1059,7 @@ line-height: 16px;
 
    @include sm {
       display: none;
-   } 
+   }
 }
 
 .sm-home-header {
@@ -1085,7 +1097,7 @@ line-height: 16px;
          background-position: 80px;
          background-size: 10px;
       }
-   
+
       &__options {
          width:50vw;
          display: flex;
@@ -1122,9 +1134,9 @@ line-height: 16px;
          }
       }
    }
-} 
+}
 
- 
+
 
 // footer styles
 
@@ -1136,7 +1148,7 @@ line-height: 16px;
   border-top: 1px solid $fog;
   padding-left: 12px;
   padding-right: 12px;
- 
+
 
   .sm-home-header {
      display: none;
@@ -1189,7 +1201,7 @@ line-height: 16px;
    padding-left: 20px;
    padding-right: 20px;
    margin-top: 60px;
-   
+
    .sm-home-header {
       display: flex;
       padding:0;
@@ -1204,7 +1216,7 @@ line-height: 16px;
       box-sizing: border-box;
       border-radius: 8px;
       padding: 13px;
-   
+
       input {
          width: 96%;
          border:none;
@@ -1215,7 +1227,7 @@ line-height: 16px;
          line-height: 22px;
       }
 
-      
+
      }
      &__copyright {
       font-weight: 500;
@@ -1234,14 +1246,14 @@ line-height: 16px;
 .top-level, .bottom-level {
    margin-top: 12px;
    border-top: 1px solid $fog;
- 
+
 
    &__section {
       display:flex;
       margin-top: 8px;
       padding: 9px 12px;
       border-radius: 8px;
-     
+
       a {
          color:inherit;
          text-decoration: none;
@@ -1264,7 +1276,7 @@ line-height: 16px;
       padding-top: 12px;
       &__section {
          padding: 13px 12px;
-         
+
          a {
             font-size: 16px;
             line-height: 22px;
@@ -1285,16 +1297,24 @@ line-height: 16px;
 
 // sticky footer
 
+.sticky-footer {
+           position: fixed;
+           bottom: 0px;
+           width: 100vw;
+           z-index: 99;
+        }
+
 .sticky {
    @include sm {
       position: fixed;
       bottom: 0px;
       width: 100vw;
-      a { 
+      a {
          text-decoration: none;
       }
-   } 
+   }
 }
+
 
 .nav-bar {
    &__wrap {

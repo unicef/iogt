@@ -5,11 +5,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.generic import (DeleteView, TemplateView,)
+from django.views.generic import (DeleteView, TemplateView, )
 
 from .chat import ChatManager
 from .forms import MessageReplyForm, NewMessageForm
-from .models import Thread
+from .models import Thread, UserThread
 
 from django.contrib.auth.decorators import login_required
 
@@ -18,10 +18,7 @@ User = get_user_model()
 
 @method_decorator(login_required, name='dispatch')
 class InboxView(TemplateView):
-    """
-    View inbox thread list.
-    """
-    template_name = "messaging/inbox.html"
+    template_name = 'messaging/inbox.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -34,33 +31,30 @@ class InboxView(TemplateView):
         context.update({
             "folder": folder,
             "threads": threads.prefetch_related('messages'),
+            "user_threads": UserThread.get_user_inbox(self.request.user),
             "unread_threads": Thread.thread_objects.of_user(self.request.user).unread().order_by_latest(),
         })
         return context
 
 
 @method_decorator(login_required, name='dispatch')
-class ThreadView(View):
-    """
-    List thread messages and reply view.
-    """
-    model = Thread
-    context_object_name = 'thread'
+class ThreadDetailView(View):
 
-    def get_context(self, thread, form=None):
+    def get_context(self, thread):
+        last_message = thread.messages.last()
         return {
             'thread': thread,
-            'form': form or MessageReplyForm(initial={
-                'thread': thread,
-                'user': self.request.user,
-            })}
+            'last_message_id': last_message.id if last_message else None,
+            'user': self.request.user
+        }
 
-    def get(self, request, pk):
-        thread = get_object_or_404(Thread, pk=pk)
-        return render(request, 'messaging/thread.html', context=self.get_context(thread))
+    def get(self, request, thread_id):
+        thread = get_object_or_404(Thread, pk=thread_id)
+        thread.mark_read(request.user)
+        return render(request, 'messaging/thread_detail.html', context=self.get_context(thread))
 
-    def post(self, request, pk):
-        thread = get_object_or_404(Thread, pk=pk)
+    def post(self, request, thread_id):
+        thread = get_object_or_404(Thread, pk=thread_id)
         form = MessageReplyForm(data=request.POST)
         if form.is_valid():
             text = form.cleaned_data['text']
@@ -68,9 +62,9 @@ class ThreadView(View):
             chat_manager = ChatManager(thread)
             chat_manager.record_reply(text=text, sender=request.user, mark_unread=False)
 
-            return redirect(reverse('messaging:thread_view', kwargs={'pk': thread.pk}))
+            return redirect(reverse('messaging:thread', kwargs={'thread_id': thread.pk}))
         else:
-            return render(request, 'messaging/thread.html', context=self.get_context(thread, form))
+            return render(request, 'messaging/thread_detail.html', context=self.get_context(thread, form))
 
 
 @method_decorator(login_required, name='dispatch')
@@ -78,6 +72,7 @@ class MessageCreateView(View):
     """
     Create a new thread message.
     """
+
     def post(self, request):
         form = NewMessageForm(data=request.POST)
         if form.is_valid():

@@ -1422,14 +1422,25 @@
   max-width: 16px;
 }
 
+
+.sticky-footer {
+          position: fixed;
+          bottom: 0px;
+          width: 100vw;
+          z-index: 99;
+        }
+
+
 @media only screen and (min-width: 360px) {
   .top-level, .bottom-level {
     margin-top: 32px;
     padding-top: 12px;
   }
+
   .top-level__section, .bottom-level__section {
     padding: 13px 12px;
   }
+
   .top-level__section a, .bottom-level__section a {
     font-size: 16px;
     line-height: 22px;
