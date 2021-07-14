@@ -9,6 +9,7 @@
     <div class="quiz-page">
         <div class="container">
             <div class="quiz-page__banner quiz-answer-banner">
+                {% if page.thank_you_text %}<div class="quiz-answer__description">{{ page.thank_you_text }}</div>{% endif %}
                 <div class="quiz-answer-banner__content">
                     <p class="quiz-answer-banner__counter">{{ result|get_item:'total_correct' }}
                         / {{ result|get_item:'total' }}</p>
@@ -33,7 +34,7 @@
                             </svg>
                         </span>
                         <span class="icon-btn__title">{% trans "Back to article" %}</span>
-                    </a><a href="#"
+                    </a><a href="{{ page.url }}"
                            class="icon-btn icon-btn--md icon-btn--dark icon-btn--rounded quiz-answer-banner__btn">
                     <span class="icon-btn__icon">
                         <svg width="10" height="10" viewBox="0 0 10 10"

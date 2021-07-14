@@ -56,6 +56,8 @@ def get_item(dictionary, key):
 @register.filter
 def get_value_from_querydict(querydict, key):
     dictionary = dict(querydict)
+    print(dictionary)
+    print(key)
     return dictionary.get(key)[0]
 
 
