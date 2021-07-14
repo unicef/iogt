@@ -31,8 +31,10 @@
                     {% csrf_token %}
                     <input type="hidden" name="thread" value="{{ thread.pk }}"/>
                     <input type="hidden" name="user" value="{{ user.pk }}"/>
-                    <input type="text" name="text" value="{{ text }}"/>
-                    <button type="submit">{% translate 'Send' %}</button>
+                <div class="search-box">
+                        <input type="text" name="text" placeholder="{% translate 'Reply here...' %}" class="search-box">
+                        <button type="submit" class="btn-search">{% translate 'Send' %}</button>
+                </div>
                 </form>
             </div>
             </div>

@@ -7,10 +7,8 @@ app_name = "messaging"
 
 urlpatterns = [
     path('api/', include(api_urls)),
-    path('v2/inbox/', views.InboxIndexView.as_view(), name='inbox'),
-    path('v2/message/<int:thread_id>', views.ThreadView.as_view(), name='thread'),
-
-    path('create/', views.MessageCreateView.as_view(), name="message_create"),
+    path('inbox/', views.InboxView.as_view(), name='inbox'),
+    path('message/<int:thread_id>', views.ThreadDetailView.as_view(), name='thread'),
     path('thread/<int:pk>/delete/', views.ThreadDeleteView.as_view(), name="thread_delete"),
 ]
 

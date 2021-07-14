@@ -19,7 +19,7 @@ class ThreadAdmin(admin.ModelAdmin):
 @admin.register(UserThread)
 class UserThreadAdmin(admin.ModelAdmin):
     list_display = ('id', 'is_active', 'is_read', 'thread', 'user')
-    list_filter = ('is_active', 'is_read', 'thread', 'user')
+    list_filter = ('is_active', 'is_read')
 
 
 @admin.register(Message)
@@ -33,4 +33,4 @@ class MessageAdmin(admin.ModelAdmin):
         'thread',
         'sender',
     )
-    list_filter = ('sent_at', 'thread', 'sender')
+    list_filter = ('sent_at', )

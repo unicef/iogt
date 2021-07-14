@@ -17,7 +17,7 @@ User = get_user_model()
 
 
 @method_decorator(login_required, name='dispatch')
-class InboxIndexView(TemplateView):
+class InboxView(TemplateView):
     template_name = 'messaging/inbox_index.html'
 
     def get_context_data(self, **kwargs):
@@ -38,7 +38,7 @@ class InboxIndexView(TemplateView):
 
 
 @method_decorator(login_required, name='dispatch')
-class ThreadView(View):
+class ThreadDetailView(View):
 
     def get_context(self, thread):
         last_message = thread.messages.last()
@@ -51,7 +51,7 @@ class ThreadView(View):
     def get(self, request, thread_id):
         thread = get_object_or_404(Thread, pk=thread_id)
         thread.mark_read(request.user)
-        return render(request, 'messaging/message_detail.html', context=self.get_context(thread))
+        return render(request, 'messaging/thread_detail.html', context=self.get_context(thread))
 
     def post(self, request, thread_id):
         thread = get_object_or_404(Thread, pk=thread_id)
@@ -64,7 +64,7 @@ class ThreadView(View):
 
             return redirect(reverse('messaging:thread', kwargs={'thread_id': thread.pk}))
         else:
-            return render(request, 'messaging/message_detail.html', context=self.get_context(thread, form))
+            return render(request, 'messaging/thread_detail.html', context=self.get_context(thread, form))
 
 
 @method_decorator(login_required, name='dispatch')
