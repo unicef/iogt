@@ -258,6 +258,15 @@ textarea:focus ~ .cust-input__length-text {
     border-radius: 8px;
 }
 
+.quest-item__label--single {
+    align-items: flex-start;
+    background: none;
+    border: none;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
 .quest-item__label input {
     margin: 0;
     margin-right: 12px;
