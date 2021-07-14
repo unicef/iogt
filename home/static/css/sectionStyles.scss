@@ -140,25 +140,38 @@
 .section-page-sections {
    &__section{
       text-decoration: none;
-      color:black;
+      color:$black;
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
       padding: 8px 12px;
-      left: 0%;
-      right: 0%;
-      top: 14.94%;
-      bottom: 82.68%;
       border-bottom: 1px solid $fog;
       font-family: Poppins;
       font-style: normal;
       font-weight: bold;
-      font-size: 16px;
-      line-height: 22px;
+      font-size: 10px;
+      line-height: 16px;
       letter-spacing: 0.01em;
-      color: $black;
       text-align: left;
+
+
+      img {
+         width: 6px;
+         height: 8px;
+      }
+   }
+   @include sm {
+      &__section{
+         padding: 8px 12px;
+         font-size: 16px;
+         line-height: 22px;
+
+         img {
+            width: 8px;
+            height: 10px;
+         }
+      }
    }
 }
 

@@ -1,19 +1,11 @@
 {% load static wagtailcore_tags wagtailimages_tags sass_tags %}
 
     {% for sub_section in sub_sections %}
-    <div class="subSectionsContainer">
-        <div class="desktopSubSectionsContainer" >
-            <div class="content">
-                <div class="title">
-                    <section class='section-page-sections'>
-                        <a class='section-page-sections__section' href="{% pageurl sub_section %}">
-                        {{ sub_section.title }} 
-                        <img class='section-page-details__survey--image2' src="{% static 'images/Stroke 3.png' %}" alt='arrow-right'>
-                        </a>
-                    </section>
-                </div>
-            </div>
-        </div>
-    </div>
+    <section class='section-page-sections'>
+        <a class='section-page-sections__section' href="{% pageurl sub_section %}">
+            {{ sub_section.title }} 
+            <img class='section-page-details__survey--image2' src="{% static 'images/Stroke 3.png' %}" alt='arrow-right'>
+        </a>
+    </section>
     {% endfor %}
 </div>
