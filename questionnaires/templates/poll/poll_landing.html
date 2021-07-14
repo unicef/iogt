@@ -7,18 +7,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container btn-back-container">
-        <a href="{{ back_url }}" class="btn-back">
-            <figure class="btn-back__icon">
-                <svg width="8" height="14" viewBox="0 0 8 14" fill="none"
-                     xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7 13L1 7.0005L7 1" stroke="#303030"
-                          stroke-width="1.5"
-                          stroke-linecap="round" stroke-linejoin="round"></path>
-                </svg>
-            </figure>
-            <span class="btn-back__title">BACK</span></a>
-    </div>
+    {% include 'back_button.html' with back_url=back_url %}
     {% if page.show_results %}
         <div class="polls">
             <div class="polls-widget">
@@ -35,7 +24,7 @@
                                             <div class="cust-check__title-left">
                                                 <span>{% trans answer %}</span>
                                                 {% if answer == request.POST|get_value_from_querydict:current_answer %}
-                                                    <span class="cust-check__subtitle">Your answer</span>{% endif %}
+                                                    <span class="cust-check__subtitle">{% trans "Your answer" %}</span>{% endif %}
                                             </div>
                                             <div class="cust-check__title-right">
                                                 <span class="cust-check__percent">{{ count |floatformat:"0" }}%</span>

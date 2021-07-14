@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static wagtailimages_tags %}
+{% load static wagtailimages_tags i18n %}
 
 {% block extra_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/survey.css' %}">
@@ -7,13 +7,12 @@
 
 {% block content %}
     <div class="container">
-        <h1 class="title survey-page__title survey-page__title--center">Thank
-            you for your input!</h1>
-        <div class="survey-page__desc"><p></p></div>
+        <h1 class="title survey-page__title survey-page__title--center">{% trans "Thank you for your input!" %}</h1>
+        <div class="survey-page__desc"><p>{{  page.thank_you_text }}</p></div>
         <div class="survey-page__btns">
-            <button class="cust-btn cust-btn--dark survey-page__btn"><span>Get Started</span>
+            <button class="cust-btn cust-btn--dark survey-page__btn"><span>{% trans "Get Started"%}</span>
             </button>
-            <a href="/" class="cust-btn cust-btn--clear survey-page__btn"><span>Go to homepage</span></a>
+            <a href="/" class="cust-btn cust-btn--clear survey-page__btn"><span>{% trans "Go to homepage" %}</span></a>
         </div>
     </div>
 {% endblock %}

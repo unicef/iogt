@@ -1,13 +1,7 @@
+{% load i18n %}
 {% load static wagtailcore_tags wagtailimages_tags %}
 
 <div class="quest-item__content">
-    {#    <label class="quest-item__input cust-select">#}
-    {#        <select name="{{ field.name }}">#}
-    {#            {% for option in field %}#}
-    {#                <option value="{{ option.choice_label }}">{{ option.choice_label }}</option>#}
-    {#            {% endfor %}#}
-    {#        </select>#}
-    {#    </label>#}
     <label for="cust-select" class="quest-item__input cust-select">
         <input type="radio" name="{{ field.name }}" value="not_changed"
                id="cust-select">
@@ -16,9 +10,9 @@
                 <input type="radio" name="{{ field.name }}"
                        value="{{ option.choice_label }}"
                        id="{{ field.name }}[{{ forloop.counter0 }}]">
-                <label for="{{ field.name }}[{{ forloop.counter0 }}]">{{ option.choice_label }}</label>
+                <label for="{{ field.name }}[{{ forloop.counter0 }}]">{% trans option.choice_label %}</label>
             {% endfor %}
-            <span id="text">{{ field.label }}</span>
+            <span id="text">{% trans field.label %}</span>
         </div>
     </label>
 </div>

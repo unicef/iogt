@@ -18,14 +18,13 @@
         </div>
         <div class="profile-form__btns">
             <button type="submit"
-                    class="cust-btn cust-btn--dark profile-form__btn"><span>Log in</span>
+                    class="cust-btn cust-btn--dark profile-form__btn">
+                <span>{% trans "Log in" %}</span>
             </button>
             <a href="{% url 'account_signup' %}"
-               class="cust-btn profile-form__btn"><span>Create your account</span></a>
+               class="cust-btn profile-form__btn"><span>{% trans "Create your account" %}</span></a>
         </div>
-        <p class="text profile-form__desc">A quia quas et atque eos vero
-            temporibus quis ullam. Recusandae recusandae omnis aspernatur
-            quisquam at dolorem aspernatur quod non.</p>
+        <p class="text profile-form__desc">{% trans "Placeholder text below Create your account button." %}</p>
     </form>
 
 {% endblock %}
