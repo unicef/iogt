@@ -1,0 +1,43 @@
+{% extends "messaging/base.html" %}
+{% load messaging_tags humanize i18n %}
+
+{% block content %}
+    <div class="chat">
+        <a href="{% url 'messaging:inbox' %}" class="btn-back">Back</a>
+        <h1> {{ thread.subject }} </h1>
+        <div class="messages">
+            {% for message in thread.messages.all %}
+                {% if message.sender.is_rapidpro_bot_user %}
+                    <div class="message">
+                {% else %}
+                    <div class="message reply">
+                {% endif %}
+            <time class="message-time">{{ message.sent_at|naturaltime }}</time>
+            <div class="message-box">
+                {{ message.text|urlize|linebreaks }}
+            </div>
+            {% if message.id == last_message_id %}
+                <div class="quick-replies">
+                    {% for quick_reply in message.quick_replies %}
+                        {% render_quick_reply_form thread user quick_reply %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            </div>
+            {% endfor %}
+
+            <div class="quick-reply-form">
+                <form action="{% url 'messaging:thread' thread.pk %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="thread" value="{{ thread.pk }}"/>
+                    <input type="hidden" name="user" value="{{ user.pk }}"/>
+                <div class="search-box">
+                        <input type="text" name="text" placeholder="{% translate 'Reply here...' %}" class="search-box">
+                        <button type="submit" class="btn-search">{% translate 'Send' %}</button>
+                </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
