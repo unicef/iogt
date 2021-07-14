@@ -31,8 +31,7 @@ class InboxIndexView(TemplateView):
         context.update({
             "folder": folder,
             "threads": threads.prefetch_related('messages'),
-            "user_threads": UserThread.objects.filter(user=self.request.user, is_active=True).order_by(
-                '-thread__last_message_at'),
+            "user_threads": UserThread.get_user_inbox(self.request.user),
             "unread_threads": Thread.thread_objects.of_user(self.request.user).unread().order_by_latest(),
         })
         return context

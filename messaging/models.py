@@ -57,6 +57,11 @@ class UserThread(models.Model):
     thread = models.ForeignKey('Thread', related_name='user_threads', on_delete=models.CASCADE)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
 
+    @classmethod
+    def get_user_inbox(cls, user):
+        return cls.objects.filter(user=user, is_active=True).order_by(
+                '-thread__last_message_at')
+
 
 class Message(models.Model):
     # Quick replies are encoded as a json string
