@@ -18,7 +18,7 @@ User = get_user_model()
 
 @method_decorator(login_required, name='dispatch')
 class InboxView(TemplateView):
-    template_name = 'messaging/inbox_index.html'
+    template_name = 'messaging/inbox.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
