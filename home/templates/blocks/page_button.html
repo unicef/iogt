@@ -1,5 +1,5 @@
 {% load wagtailcore_tags i18n %}
 
-<a href="{% pageurl value.page %}" class='article-content__chat-btn'>
+<a href="{% pageurl value.page %}" class='article__content__link-btn'>
     {{ value.text | default:value.page.title }}
 </a>

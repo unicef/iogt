@@ -1,13 +1,13 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
- <section class='related_reading'>
+ <section class='related-articles'>
         <ul>
         {% for article in articles %}
             <li>
                <a href="{% pageurl article %}">
                     <p > {{ article.title }}</p>
-                    {% image article.specific.lead_image width-75 class='related_reading__img--xs' %}
-                    {% image article.specific.lead_image original class='related_reading__img--sm' %}
+                    {% image article.specific.lead_image width-75 class='related-articles__img--xs' %}
+                    {% image article.specific.lead_image original class='related-articles__img--sm' %}
                 </a>
             </li>
         {% endfor %}
