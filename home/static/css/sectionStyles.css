@@ -377,6 +377,10 @@
   border-radius: 8px;
 }
 
+.quiz-holder svg {
+  stroke: currentColor;
+}
+
 @media only screen and (min-width: 360px) {
   .quiz-holder {
     margin: 0px 20px;
