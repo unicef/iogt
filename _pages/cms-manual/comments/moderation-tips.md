@@ -11,8 +11,8 @@ There are a variety of options available here. To take action on an individual c
 
 - Edit - Edit information and metadata about the comment
 - Delete - Permanently remove the comment from the site. It will no longer be visible on either the front-end or on Wagtail
-- Hide/Show - Hide or show the comment from the front-end. It will still be visble on Wagtail
-- Publish/Unpublish - Hide or show the comment from the front-end. It will still be visble on Wagtail.
+- Hide/Show - Appears to delete/undelete comments from the frontend. If hidden, other users will see "This comment has been deleted as it did not follow the site rules" or a similar message. It will still be visble on Wagtail
+- Publish/Unpublish - Make the comment fully visible/unvisible. If unpublished, there will be no indication that the comment ever existed on the frontend. It will still be visble on Wagtail.
 - Reply - Add a reply to the comment. See the section on replying for more information
 - Clear Flags - remove all content flags from the comment _(Visible only if the comment was flagged)_
 
