@@ -270,6 +270,10 @@ textarea:focus ~ .cust-input__length-text {
     border-radius: 0;
 }
 
+.quest-item__label--single .cust-check__title {
+    padding: 0;
+}
+
 .quest-item__label input {
     margin: 0;
     margin-right: 12px;
