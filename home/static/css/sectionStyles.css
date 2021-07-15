@@ -664,7 +664,7 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  padding: 12px 9px;
+  padding: 12px;
   background: #F7F7F9;
   font-size: 10px;
   line-height: 16px;
@@ -704,6 +704,7 @@
 
 .comments__form {
   background-color: #F7F7F9;
+  padding: 0px 12px;
 }
 
 .comments__loader {
@@ -756,13 +757,10 @@
   -ms-flex-positive: 0;
       flex-grow: 0;
   margin: 16px 0px;
+  width: 100%;
 }
 
 .comments__submit input, .comments__submit a {
-  margin-bottom: 10px;
-  width: 100%;
-  margin-left: 12px;
-  margin-right: 12px;
   text-decoration: none;
   background-color: #303030;
   color: white;
@@ -776,36 +774,38 @@
 }
 
 @media only screen and (min-width: 360px) {
-  padding-top: 40px;
-  h2 {
+  .comments {
+    padding-top: 40px;
+  }
+  .comments h2 {
     padding: 20px;
     font-size: 16px;
     line-height: 22px;
   }
-  h3 {
+  .comments h3 {
     font-size: 24px;
     line-height: 28px;
   }
-  __count {
+  .comments__count {
     width: 30px;
     height: 30px;
     font-size: 12px;
     line-height: 16px;
     margin-left: 10px;
   }
-  __login {
+  .comments__form {
+    padding: 0px 20px;
+  }
+  .comments__login {
     padding: 20px;
     font-size: 16px;
     line-height: 24px;
   }
-  __input-holder {
-    padding: 0px 20px;
-  }
-  __submit {
+  .comments__submit {
     padding: 12px 16px;
     margin: 16px 0px;
   }
-  __submit button {
+  .comments__submit button {
     background-color: #F7F7F9;
     color: #303030;
     border: none;
@@ -813,7 +813,7 @@
     font-style: normal;
     font-weight: 600;
   }
-  __submit input, __submit a {
+  .comments__submit input, .comments__submit a {
     font-size: 16px;
     line-height: 22px;
   }
@@ -919,6 +919,19 @@
   text-decoration: none;
 }
 
+.individual-comment .report-comment__normal-device {
+  display: none;
+}
+
+.individual-comment .report-comment__feature-phone {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  color: #303030;
+  text-decoration: none;
+}
+
 @media only screen and (min-width: 360px) {
   .individual-comment {
     padding: 20px;
@@ -950,6 +963,18 @@
   .individual-comment .report-comment {
     font-size: 14px;
     line-height: 20px;
+  }
+  .individual-comment .report-comment__normal-device {
+    display: block;
+    font-size: 14px;
+    line-height: 20px;
+    font-style: normal;
+    font-weight: 600;
+    color: #303030;
+    text-decoration: none;
+  }
+  .individual-comment .report-comment__feature-phone {
+    display: none;
   }
 }
 
@@ -1063,8 +1088,8 @@
 
 .comment-holder {
   border: 1px solid #F7F7F9;
-  width: 100vw;
   background-color: #F7F7F9;
+  padding: 0px;
 }
 
 .form-control {
@@ -1211,6 +1236,9 @@
       -ms-flex-pack: justify;
           justify-content: space-between;
   padding: 12px;
+  border: 1px solid #EFEFEF;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 .xs-home-header__search {
@@ -1255,7 +1283,7 @@
     border: 1px solid #EFEFEF;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-    padding: 12px;
+    padding: 11px 20px;
   }
   .sm-home-header select {
     -webkit-appearance: none;
@@ -1583,6 +1611,61 @@
   }
   .nav-bar-item__title {
     font-size: 10px;
+  }
+}
+
+.report-page {
+  padding: 12px;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 16px;
+}
+
+.report-page__comment {
+  font-weight: 600;
+}
+
+.report-page__submit {
+  border: 1px solid #303030;
+  background-color: #FFFFFF;
+  margin-right: 10px;
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 16px;
+}
+
+.report-page h3 {
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.report-page a {
+  color: #303030;
+}
+
+@media only screen and (min-width: 360px) {
+  .report-page {
+    padding: 20px;
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .report-page__comment {
+    font-weight: 600;
+  }
+  .report-page__submit {
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .report-page h3 {
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 28px;
+  }
+  .report-page a {
+    color: #303030;
   }
 }
 /*# sourceMappingURL=sectionStyles.css.map */
