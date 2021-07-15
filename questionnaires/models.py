@@ -495,6 +495,7 @@ class Poll(QuestionnairePage, AbstractForm):
 
         context.update({
             'results': results,
+            'result_as_percentage': self.result_as_percentage,
             'back_url': request.GET.get('back_url'),
         })
         return context
@@ -656,6 +657,7 @@ class Quiz(QuestionnairePage, AbstractForm):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         context.update({'back_url': request.GET.get('back_url')})
+        context.update({'form_length': request.GET.get('form_length')})
 
         if request.method == 'POST':
             form_class = self.get_form_class()

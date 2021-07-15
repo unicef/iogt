@@ -270,6 +270,10 @@ textarea:focus ~ .cust-input__length-text {
     border-radius: 0;
 }
 
+.quest-item__label--single .cust-check__title {
+    padding: 0;
+}
+
 .quest-item__label input {
     margin: 0;
     margin-right: 12px;
@@ -374,7 +378,8 @@ textarea:focus ~ .cust-input__length-text {
 }
 
 .cust-check--2.error .cust-check__title .cust-check__check:after {
-    content: "\274C";
+    content: "x";
+    font-size: 12px;
     color: #fb3d24;
 }
 

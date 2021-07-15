@@ -15,16 +15,7 @@
             <h1 class="title survey-page__title">{% trans page.title %}</h1>
             {% if page.description %}
                 <div class="survey-page__description">{{ page.description }}</div>{% endif %}
-            <form action="
-
-
-                    {% pageurl page %}{% if self.multi_step or self.has_page_breaks %}?p={{ fields_step.number|add:"1" }}&back_url=
-
-
-                        {{ request.path }}{% else %}?back_url={{ request.path }}{% endif %}&form_length=
-
-
-                    {% if form_length != None %}{% if form.errors %}{{ form.fields | length }}{% else %}{{ form.fields | length | add:form_length }}{% endif %}{% else %}{{ form.fields | length }}{% endif %}"
+            <form action="{% pageurl page %}{% if self.multi_step or self.has_page_breaks %}?p={{ fields_step.number|add:"1" }}&back_url={{ request.path }}{% else %}?back_url={{ request.path }}{% endif %}&form_length={% if form_length != None %}{% if form.errors %}{{ form.fields | length }}{% else %}{{ form.fields | length | add:form_length }}{% endif %}{% else %}{{ form.fields | length }}{% endif %}"
                   method="POST" class="survey-page__content">
                 {% csrf_token %}
                 <div class="survey-page__content">
@@ -66,7 +57,7 @@
                                 {% render_checkboxes field %}
                             {% elif "textar" in field.field.widget.template_name %}
                                 {% render_textarea field %}
-                            {% elif field.field.widget.input_type == "text" or field.field.widget.input_type == "number" or field.field.widget.input_type == "email" %}
+                            {% elif field.field.widget.input_type == "text" or field.field.widget.input_type == "number" or field.field.widget.input_type == "email" or field.field.widget.input_type == "url" %}
                                 {% render_text_field field %}
                             {% elif "/select" in field.field.widget.template_name %}
                                 {% render_select field %}
