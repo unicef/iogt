@@ -495,6 +495,7 @@ class Poll(QuestionnairePage, AbstractForm):
 
         context.update({
             'results': results,
+            'result_as_percentage': self.result_as_percentage,
             'back_url': request.GET.get('back_url'),
         })
         return context

@@ -27,7 +27,7 @@
                                                     <span class="cust-check__subtitle">{% trans "Your answer" %}</span>{% endif %}
                                             </div>
                                             <div class="cust-check__title-right">
-                                                <span class="cust-check__percent">{{ count |floatformat:"0" }}%</span>
+                                                <span class="cust-check__percent">{{ count |floatformat:"0" }}{% if result_as_percentage %}%{% endif %}</span>
                                             </div>
                                             <div class="cust-check__percent-item"
                                                  style="width: {{ count |floatformat:"0" }}%"></div>
