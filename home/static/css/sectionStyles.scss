@@ -333,6 +333,10 @@
       padding: 8px 12px;
       border-radius: 8px;
    }
+
+   svg {
+      stroke: currentColor
+   }
    
    @include sm {
    margin: 0px 20px;
@@ -378,7 +382,7 @@
       margin: 16px;
       padding: 8px 12px;
       border-radius: 8px;
-   }
+      }
 }
 }
 
