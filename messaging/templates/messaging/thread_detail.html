@@ -6,7 +6,7 @@
         <a href="{% url 'messaging:inbox' %}" class="btn-back">Back</a>
         <h1> {{ thread.subject }} </h1>
         <div class="load-more-button">
-            <a href="{% url 'messaging:thread' thread_id=thread.id %}?num_results={{ load_more_num_results }}">Load more</a>
+            <a href="{% url 'messaging:thread' thread_id=thread.id %}?num_results={{ load_more_num_results }}">{% translate 'Load more' %}</a>
         </div>
         <div class="messages">
             {% for message in thread_messages %}
@@ -19,7 +19,7 @@
             <div class="message-box">
                 {{ message.text|urlize|linebreaks }}
             </div>
-            {% if message.id == last_message_id %}
+            {% if message.id == most_recent_message_id %}
                 <div class="quick-replies">
                     {% for quick_reply in message.quick_replies %}
                         {% render_quick_reply_form thread user quick_reply %}
@@ -34,10 +34,10 @@
                     {% csrf_token %}
                     <input type="hidden" name="thread" value="{{ thread.pk }}"/>
                     <input type="hidden" name="user" value="{{ user.pk }}"/>
-                <div class="search-box">
+                    <div class="search-box">
                         <input type="text" name="text" placeholder="{% translate 'Reply here...' %}" class="search-box">
                         <button type="submit" class="btn-search">{% translate 'Send' %}</button>
-                </div>
+                    </div>
                 </form>
             </div>
             </div>
