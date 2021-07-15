@@ -1610,4 +1610,59 @@
     font-size: 10px;
   }
 }
+
+.report-page {
+  padding: 12px;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 16px;
+}
+
+.report-page__comment {
+  font-weight: 600;
+}
+
+.report-page__submit {
+  border: 1px solid #303030;
+  background-color: #FFFFFF;
+  margin-right: 10px;
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 16px;
+}
+
+.report-page h3 {
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.report-page a {
+  color: #303030;
+}
+
+@media only screen and (min-width: 360px) {
+  .report-page {
+    padding: 20px;
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .report-page__comment {
+    font-weight: 600;
+  }
+  .report-page__submit {
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .report-page h3 {
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 28px;
+  }
+  .report-page a {
+    color: #303030;
+  }
+}
 /*# sourceMappingURL=sectionStyles.css.map */

@@ -1465,6 +1465,65 @@
 
 }
 
+// comment report page
+
+.report-page {
+   padding: 12px;
+   font-family: Poppins;
+   font-style: normal;
+   font-weight: 500;
+   font-size: 10px;
+   line-height: 16px;
+
+   &__comment {
+      font-weight: 600;
+   }
+
+   &__submit {
+      border: 1px solid $black;
+      background-color: $white;
+      margin-right: 10px;
+      font-weight: 500;
+      font-size: 10px;
+      line-height: 16px;
+   }
+
+   h3 {
+      font-weight: 800;
+      font-size: 16px;
+      line-height: 24px;
+   }
+
+   a {
+      color: $black
+   }
+
+   @include sm {
+      padding: 20px;
+      font-size: 16px;
+      line-height: 24px;
+   
+      &__comment {
+         font-weight: 600;
+      }
+   
+      &__submit {
+         font-size: 16px;
+         line-height: 24px;
+      }
+   
+      h3 {
+         font-weight: 800;
+         font-size: 24px;
+line-height: 28px;
+      }
+   
+      a {
+         color: $black
+      }
+   }
+}
+
 
 
 
