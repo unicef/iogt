@@ -11,20 +11,24 @@
         <div class="container">
             <h1 class="title quiz-page__title">{% trans page.title %}</h1>
             {% if page.description %}<div class="quiz-page__description">{{ page.description }}</div>{% endif %}
-            <form action="
-                    {% pageurl page %}{% if self.multi_step or self.has_page_breaks %}?p={{ fields_step.number|add:"1" }}&back_url=
-                        {{ request.path }}{% else %}?back_url={{ request.path }}{% endif %}"
+            <form action="{% pageurl page %}{% if self.multi_step or self.has_page_breaks %}?p={{ fields_step.number|add:"1" }}&back_url={{ request.path }}{% else %}?back_url={{ request.path }}{% endif %}&form_length={% if form_length != None %}{% if form.errors %}{{ form.fields | length }}{% else %}{{ form.fields | length | add:form_length }}{% endif %}{% else %}{{ form.fields | length }}{% endif %}"
                   method="POST" class="quiz-page__content">
                 {% csrf_token %}
                 {% for field in form %}
                     <div class="quest-item">
                         <div class="quest-item__header">
-                            <p class="quest-item__number">{{ forloop.counter }}
-                                of
-                                {% if self.multi_step or self.has_page_breaks %}
-                                    {{ fields_step.paginator.count }}{% else %}
-                                    {{ form.fields | length }}{% endif %}
-                                questions</p>
+                            <p class="quest-item__number">
+                                {% if form_length != None %}
+                                        {% if form.errors %}
+                                            {{ forloop.counter }}{% else %}
+                                            {{ forloop.counter |add:form_length }}{% endif %}
+                                    {% else %}
+                                        {{ forloop.counter }}{% endif %}
+                                    of
+                                    {% if self.multi_step or self.has_page_breaks %}
+                                        {{ fields_step.paginator.count }}{% else %}
+                                        {{ form.fields | length }}{% endif %}
+                                    questions</p>
                             <p class="quest-item__step-desc">
                                 <span>
                                     {% if not field.field.required %}
