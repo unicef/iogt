@@ -19,7 +19,7 @@
       line-height: 22px;
       letter-spacing: 0.01em;
       color: inherit;
-      padding-left: 10px;
+      padding: 0px 10px;
       text-align: left;
    }
 
@@ -1032,11 +1032,7 @@
 
 }
 
-
-// sticky footer
-
-
-
+// navigation bar
 
 .nav-bar {
    &__wrap {
@@ -1056,9 +1052,7 @@
    }
 }
 
-
 &__item {
-
    a {
       background-color:$unicef;
       display: flex;
