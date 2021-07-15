@@ -41,11 +41,16 @@ class InboxView(TemplateView):
 class ThreadDetailView(View):
 
     def get_context(self, thread):
-        last_message = thread.messages.last()
+        num_results = int(self.request.GET.get('num_results', 20))
+        thread_messages = thread.messages.order_by('-sent_at')[:num_results]
+        most_recent_message = thread_messages.first()
+
         return {
             'thread': thread,
-            'last_message_id': last_message.id if last_message else None,
-            'user': self.request.user
+            'most_recent_message_id': most_recent_message.id if most_recent_message else None,
+            'user': self.request.user,
+            'thread_messages': reversed(thread_messages),
+            'load_more_num_results': num_results + 20,
         }
 
     def get(self, request, thread_id):
