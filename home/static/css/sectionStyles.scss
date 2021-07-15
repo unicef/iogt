@@ -586,7 +586,7 @@
    display: flex;
    flex-direction: row;
    align-items: center;
-   padding: 12px 9px;
+   padding: 12px;
    background: $pearl;
    font-size: 10px;
    line-height: 16px;
@@ -620,6 +620,7 @@
 
   &__form {
    background-color: $pearl;
+   padding:0px 12px;
   }
 
   &__loader {
@@ -629,6 +630,8 @@
   &__input-holder {
    display:flex;
    background-color: $pearl;
+
+
    
    }
 
@@ -656,12 +659,9 @@
    align-self: stretch;
    flex-grow: 0;
    margin: 16px 0px;
+   width: 100%;
 
    input, a {
-      margin-bottom: 10px;
-      width: 100%;
-      margin-left: 12px;
-      margin-right: 12px;
       text-decoration: none;
       background-color: $black;
       color:white;
@@ -675,7 +675,7 @@
    }
 
   
-}}
+}
 
 @include sm {
    padding-top: 40px;
@@ -698,18 +698,18 @@
    line-height: 16px;
    margin-left: 10px;
   }
+
+  &__form {
+   padding:0px 20px;
+  }
   
 
    &__login {
       padding: 20px;
       font-size: 16px;
       line-height: 24px;
-   }
 
-
-  &__input-holder {
-   padding: 0px 20px;
-   
+      
    }
 
   &__submit {
@@ -731,6 +731,9 @@
    }
    }
 }
+}
+
+
 
 
 .individual-comment {
@@ -814,6 +817,19 @@
       line-height: 16px;
       color: $black;
       text-decoration: none;
+
+      &__normal-device {
+         display: none;
+      }
+
+      &__feature-phone{
+         font-style: normal;
+         font-weight: 600;
+         font-size: 12px;
+         line-height: 16px;
+         color: $black;
+         text-decoration: none;
+      }
    }
 
   
@@ -856,6 +872,20 @@
       .report-comment {
          font-size: 14px;
          line-height: 20px;
+
+         &__normal-device {
+            display: block;
+            font-size: 14px;
+            line-height: 20px;
+            font-style: normal;
+            font-weight: 600;
+            color: $black;
+            text-decoration: none;
+         }
+   
+         &__feature-phone {
+            display: none;
+         }
       }
    }
 }
@@ -957,8 +987,8 @@
 
 .comment-holder {
    border: 1px solid $pearl;
-   width: 100vw;
    background-color:$pearl;
+   padding: 0px;
 }
 
 .form-control {
