@@ -378,7 +378,8 @@ textarea:focus ~ .cust-input__length-text {
 }
 
 .cust-check--2.error .cust-check__title .cust-check__check:after {
-    content: "\274C";
+    content: "x";
+    font-size: 12px;
     color: #fb3d24;
 }
 
