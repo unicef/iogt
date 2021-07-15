@@ -10,7 +10,7 @@
 {% endblock extra_css %}
 
 {% block content %}
-   {% image page.lead_image width-320 class='article__img' %}
+   {% image page.lead_image width-320 class='article__lead-img' %}
     {% if featured_content %}
    <section class='featured-content' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
         {% render_featured_content_list featured_content %}
@@ -21,19 +21,19 @@
     </section>
     {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
      {% if polls or surveys or quizzes %}
-   <section class='quiz-holder'>
+   <section class='questionnaire-components'>
         {% if polls %}
-        <section class='quiz-holder__quiz' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
+        <section class='questionnaire-components__component' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
         {% render_polls_list polls %} 
         </section>
         {% endif %}
         {% if surveys %}
-        <section class='quiz-holder__quiz' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
+        <section class='questionnaire-components__component' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
         {% render_surveys_list surveys %}
         </section>
         {% endif %}
         {% if quizzes %}
-        <section class='quiz-holder__quiz' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
+        <section class='questionnaire-components__component' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
             {% render_quizzes_list quizzes %} 
         </section>
         {% endif %}
