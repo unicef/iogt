@@ -38,16 +38,16 @@
                {% if not item.comment.is_removed %}
               {% if perms.comments.can_moderate %}
                   {% if item.flagged_count %}
-                      <span class='report-comment__normal-device'
-                            title="{% blocktrans count counter=item.flagged_count %}A user has flagged this comment as inappropriate.
-
-                                {% plural %}{{ counter }} users have flagged this comment as inappropriate.{% endblocktrans %}"> Reported by {{ item.flagged_count }}</span>
+                      <span> Reported by {{ item.flagged_count }}</span>
                   {% endif %}
               {% endif %}
               {% if allow_flagging and item.flagged %}
-                  <p title="{% trans 'comment flagged' %}" class='report-comment__feature-phone'>Reported comment</p>
-              {% elif allow_flagging %}
                   <a href="{% url 'comments-flag' item.comment.pk %}" class="report-comment">
+                   Report
+                  </a>
+                  <i title="{% trans 'comment flagged' %}" class='report-comment__disclaimer'>This is a reported comment </i>
+              {% elif allow_flagging %}
+              <a href="{% url 'comments-flag' item.comment.pk %}" class="report-comment">
                 Report
               </a>
               {% endif %}

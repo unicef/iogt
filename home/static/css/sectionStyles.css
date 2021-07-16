@@ -658,11 +658,9 @@
   text-decoration: none;
 }
 
-.individual-comment .report-comment__normal-device {
-  display: none;
-}
-
-.individual-comment .report-comment__feature-phone {
+.individual-comment .report-comment__disclaimer {
+  margin-top: 10px;
+  display: block;
   font-weight: 600;
   font-size: 12px;
   line-height: 16px;
@@ -702,16 +700,12 @@
     font-size: 14px;
     line-height: 20px;
   }
-  .individual-comment .report-comment__normal-device {
-    display: block;
+  .individual-comment .report-comment__disclaimer {
     font-size: 14px;
     line-height: 20px;
     font-weight: 600;
     color: #303030;
     text-decoration: none;
-  }
-  .individual-comment .report-comment__feature-phone {
-    display: none;
   }
 }
 
