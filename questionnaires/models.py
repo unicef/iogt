@@ -175,6 +175,16 @@ class QuestionnairePage(Page, PageUtilsMixin):
         context["fields_step"] = step
         return render(request, self.template, context)
 
+    def process_form_submission(self, form):
+        from home.models import SiteSettings
+
+        user = form.user
+        self.get_submission_class().objects.create(
+            form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder),
+            page=self,
+            user=None if user.is_anonymous else user,
+        )
+
     class Meta:
         abstract = True
 
@@ -307,21 +317,19 @@ class Survey(QuestionnairePage, AbstractForm):
 
     def process_form_submission(self, form):
         from home.models import SiteSettings
-        user = form.user
-        self.get_submission_class().objects.create(
-            form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder),
-            page=self,
-            user=user,
-        )
+
+        super().process_form_submission(form)
 
         site_settings = SiteSettings.get_for_default_site()
         if site_settings.registration_survey and site_settings.registration_survey.pk == self.pk:
+            user = form.user
             user.has_filled_registration_survey = True
             user.save(update_fields=['has_filled_registration_survey'])
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         context.update({'back_url': request.GET.get('back_url')})
+        context.update({'form_length': request.GET.get('form_length')})
         return context
 
     def get_data_fields(self):
@@ -436,13 +444,6 @@ class Poll(QuestionnairePage, AbstractForm):
     def get_submission_class(self):
         return UserSubmission
 
-    def process_form_submission(self, form):
-        self.get_submission_class().objects.create(
-            form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder),
-            page=self,
-            user=form.user,
-        )
-
     def serve(self, request, *args, **kwargs):
         if (
             not self.allow_multiple_submissions
@@ -494,6 +495,7 @@ class Poll(QuestionnairePage, AbstractForm):
 
         context.update({
             'results': results,
+            'result_as_percentage': self.result_as_percentage,
             'back_url': request.GET.get('back_url'),
         })
         return context
@@ -640,13 +642,6 @@ class Quiz(QuestionnairePage, AbstractForm):
     def get_submission_class(self):
         return UserSubmission
 
-    def process_form_submission(self, form):
-        self.get_submission_class().objects.create(
-            form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder),
-            page=self,
-            user=form.user,
-        )
-
     def get_data_fields(self):
         data_fields = [
             ('user', _('User')),
@@ -662,6 +657,7 @@ class Quiz(QuestionnairePage, AbstractForm):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         context.update({'back_url': request.GET.get('back_url')})
+        context.update({'form_length': request.GET.get('form_length')})
 
         if request.method == 'POST':
             form_class = self.get_form_class()

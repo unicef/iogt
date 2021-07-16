@@ -111,6 +111,7 @@ TEMPLATES = [
                 'wagtailmenus.context_processors.wagtailmenus',
                 'wagtail.contrib.settings.context_processors.settings',
                 "home.processors.show_welcome_banner",
+                'django.template.context_processors.i18n',
             ],
         },
     },

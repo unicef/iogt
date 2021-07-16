@@ -1,41 +1,44 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags home_tags questionnaires_tags sass_tags i18n %}
+{% load static wagtailcore_tags wagtailimages_tags home_tags questionnaires_tags sass_tags i18n wagtailuserbar menu_tags %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_language_info for LANGUAGE_CODE as lang %}
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as languages %}
+{% get_current_language as LANGUAGE_CODE %}
 
 {% block extra_css %}
 {% endblock extra_css %}
 
 {% block content %}
-   {% image page.lead_image width-320 class='article__img' %}
-     {% comment %} <a href="{{page.parent_section.url}}" class='article__back' style="background-color:{{ page.parent_section.background_color }}">
-          <img class='article__back--image1' src="{% static 'icons/back.svg' %}">
-          {% translate "Go back" %}
-    </a> {% endcomment %}
-
+   {% image page.lead_image width-320 class='article__lead-img' %}
     {% if featured_content %}
-   <section class='featured-content' style="background-color:{{ page.background_color }}">
+   <section class='featured-content' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
         {% render_featured_content_list featured_content %}
     </section>
     {% endif %}
     <section>
         {% render_sub_sections_list sub_sections %}
     </section>
-   <section class='quiz-holder'>
+    {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
+     {% if polls or surveys or quizzes %}
+   <section class='questionnaire-components'>
         {% if polls %}
-        <section class='quiz-holder__quiz' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
+        <section class='questionnaire-components__component' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
         {% render_polls_list polls %} 
         </section>
         {% endif %}
         {% if surveys %}
-        <section class='quiz-holder__quiz' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
+        <section class='questionnaire-components__component' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
         {% render_surveys_list surveys %}
         </section>
         {% endif %}
         {% if quizzes %}
-        <section class='quiz-holder__quiz' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
+        <section class='questionnaire-components__component' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
             {% render_quizzes_list quizzes %} 
         </section>
         {% endif %}
     </section>
+    {% endif %}
      {% render_articles_list articles %} 
 {% endblock content %}
 

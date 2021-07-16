@@ -22,6 +22,8 @@ if DEBUG and DEBUG_TOOLBAR_ENABLE:
         "SHOW_TOOLBAR_CALLBACK": lambda *x: True,
     }
 
+INSTALLED_APPS += ("django_extensions",)
+
 try:
     from .local import *
 except ImportError:

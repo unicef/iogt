@@ -1,33 +1,36 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags comments comments_xtd  home_tags questionnaires_tags sass_tags i18n %}
+{% load static wagtailcore_tags wagtailimages_tags comments comments_xtd  wagtailuserbar menu_tags  home_tags questionnaires_tags sass_tags i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_language_info for LANGUAGE_CODE as lang %}
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as languages %}
+{% get_current_language as LANGUAGE_CODE %}
 
 {% block content %}
    
  <article class='article'> 
- {% image page.lead_image width-320 class='article__img' %}
- {% comment %} <a href="{{page.parent_section.url}}" class='article__back' style="background-color:{{ page.parent_section.background_color }}">
-    <img class='article__back--image1' src="{% static 'icons/back.svg' %}">
-    {% translate "Back to" %} {{ page.parent_section}}
-</a> {% endcomment %}
-  <section class='article-content'>
+ {% image page.lead_image width-320 class='article__lead-img' %}
+  <section class='article__content'>
       <h1>{{ page.title }}</h1>
       {% include_block page.body %}
-     {% render_polls_list polls %} 
-     {% render_surveys_list surveys %}
-       <section class='article-navigation'>
+      {% render_polls_list polls %} 
+      {% render_surveys_list surveys %}
+       <section class='article__navigation'>
             {% if page.get_prev_sibling or page.get_next_sibling %}
                 {% if page.get_prev_sibling %}
-                    <a href="{% pageurl page.get_prev_sibling %}" class='article-navigation__button--previous'>{% translate "Previous" %}</a>
+                    <a href="{% pageurl page.get_prev_sibling %}" class='article__navigation--previous'>{% translate "Previous" %}</a>
                 {% endif %}
                 {% if page.get_next_sibling %}
-                    <a href="{% pageurl page.get_next_sibling %}" class='article-navigation__button--next'>{% translate "Next" %}</a>
+                    <a href="{% pageurl page.get_next_sibling %}" class='article__navigation--next'>{% translate "Next" %}</a>
                 {% endif %}
             {% endif %}
        </section> 
  </article>
- <section class='comments'>
+
  {% get_comment_count for page as comment_count %}
     {% if page.allow_comments or comment_count %}
+      {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
+    <section class='comments'>
         <h2>Comments <span class='comments__count'>{{ comment_count }}</span></h2>
         {% if page.allow_comments %}
             {% if user.is_authenticated %}
@@ -36,7 +39,7 @@
                 </div>
             {% else %}
             <div class='comments__login'>
-              Please log in or create your account
+              <p >Please log in or create your account</p>
              <div class='comments__input-holder'>
                 <div class="comments__submit">
                     <a href="{% url 'account_login' %}?next={{ page.get_absolute_url }}">Log in/Create account</a>.
@@ -53,18 +56,20 @@
             <div >
                 {% render_xtdcomment_tree for page allow_flagging allow_feedback show_feedback %}
             </div>
+    </section>
         {% endif %}
     {% endif %}
- </section>
- <section class='related_reading'>
+
+ <section class='related-articles'>
     {% if page.recommended_articles.count %}
-    <h2>Related Articles</h2>
+    <h3>Related Articles</h3>
         <ul>
         {% for recommended_article_model in page.recommended_articles.all %}
             <li>
                 <a href="{% pageurl recommended_article_model.article %}">
                     <p > {{ recommended_article_model.article.title }}</p>
-                    {% image recommended_article_model.article.lead_image scale-30 class='related_reading__img' %}
+                    {% image recommended_article_model.article.lead_image width-75 class='related-articles__img--xs' %}
+                    {% image recommended_article_model.article.lead_image original class='related-articles__img--sm' %}
                 </a>
             </li>
         {% endfor %}

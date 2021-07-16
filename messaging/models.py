@@ -30,6 +30,9 @@ class Thread(models.Model):
     def latest_message(self):
         return self.messages.order_by('-sent_at').first()
 
+    def mark_read(self, user):
+        self.user_threads.filter(user=user).update(is_read=True)
+
     def mark_unread(self, sender=None):
         """
         Mark all related UserThread(s) unread
@@ -53,6 +56,11 @@ class UserThread(models.Model):
 
     thread = models.ForeignKey('Thread', related_name='user_threads', on_delete=models.CASCADE)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+
+    @classmethod
+    def get_user_inbox(cls, user):
+        return cls.objects.filter(user=user, is_active=True).order_by(
+                '-thread__last_message_at')
 
 
 class Message(models.Model):

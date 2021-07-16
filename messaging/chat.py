@@ -52,15 +52,20 @@ class ChatManager:
 
     @staticmethod
     def initiate_thread(sender, recipients, chatbot, subject, text):
-        thread = Thread.objects.create(subject=subject, chatbot=chatbot)
+        sender_thread = UserThread.objects.filter(user=sender, thread__chatbot=chatbot).first()
+
+        if sender_thread:
+            thread = sender_thread.thread
+        else:
+            thread = Thread.objects.create(subject=subject, chatbot=chatbot)
+
+            user_threads = []
+            for user in recipients + [sender]:
+                user_threads.append(UserThread(user=user, thread=thread))
+            UserThread.objects.bulk_create(user_threads)
 
         chat_manager = ChatManager(thread)
         chat_manager.record_reply(sender=sender, text=text)
-
-        user_threads = []
-        for user in recipients + [sender]:
-            user_threads.append(UserThread(user=user, thread=thread))
-        UserThread.objects.bulk_create(user_threads)
 
         thread.mark_unread(sender)
         return thread

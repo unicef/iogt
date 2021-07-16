@@ -1,16 +1,29 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags home_tags menu_tags %}
+{% load static wagtailcore_tags wagtailimages_tags wagtailuserbar menu_tags home_tags %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_language_info for LANGUAGE_CODE as lang %}
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as languages %}
+{% get_current_language as LANGUAGE_CODE %}
 
 {% block extra_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
 {% endblock extra_css %}
 
 {% block content %}
-    <div class="home-page" id="home">
+    <div class="home-page">
         {% render_banners_list banners %}
-        <div class="home-page__featured-content">
+        <div>
             {% if page.home_featured_content %}
-                {% include_block page.home_featured_content %}
+                {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
+                <section class='related-articles'>
+                    <ul>
+                        <li>
+                        {% include_block page.home_featured_content %}
+                        </li>
+                    </ul>
+                </section>  
             {% endif %}
         </div>
     </div>

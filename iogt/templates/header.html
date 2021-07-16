@@ -5,20 +5,33 @@
 {% get_available_languages as LANGUAGES %}
 {% get_language_info_list for LANGUAGES as languages %}
 
+<header class="xs-home-header">
+    <a href="/" >
+        {% image settings.home.SiteSettings.logo width-60 class='xs-image' %}
+    </a>
+        <select class='xs-home-header__select'>
+            {% for language in languages %}
+                <option value="{{ language.name_local }}" {% if language.code == LANGUAGE_CODE %}selected{% endif %}>{{ language.name_local }}</option>
+            {% endfor %}
+        </select>  
+        <a class="js-search-btn" href="{% url "search" %}">
+            <img src="{% static "icons/search.svg" %}" alt="Search" class='xs-home-header__search'>
+        </a>
+</header> 
 
-<header class="home-header">
+<header class="sm-home-header">
     <a href="/" >
         {% image settings.home.SiteSettings.logo fill-102x40 as logo %}
         <img src="{{ logo.url }}" />
     </a>
-    <div class="home-header__options">
+    <div class="sm-home-header__options">
         <select>
             {% for language in languages %}
                 <option value="{{ language.name_local }}" {% if language.code == LANGUAGE_CODE %}selected{% endif %}>{{ language.name_local }}</option>
             {% endfor %}
         </select>  
         <a class="js-search-btn" href="{% url "search" %}">
-            <img src="{% static "icons/search.svg" %}" alt="Search">
+            <img src="{% static "icons/search.svg" %}" alt="Search" class='sm-home-header__search'>
         </a>
     </div>
-</header>
+</header>  

@@ -1,15 +1,31 @@
+{% load i18n %}
 {% load static wagtailcore_tags wagtailimages_tags %}
 
-{% for ckeckbox in field.value %}
-    <div class="quest-item__content">
-        <label class="cust-check cust-check--2 quest-item__input">
-            <input type="{{ field.field.widget.input_type }}"
-                   name="{{ field.name }}"
-                   value="{{ ckeckbox }}">
-            <span class="cust-check__title">
-                <span class="cust-check__check"></span>
-                {{ ckeckbox }}
-            </span>
-        </label>
-    </div>
-{% endfor %}
+{% if field|length > 1 %}
+    {% for ckeckbox in field %}
+        <div class="quest-item__content">
+            <label class="quest-item__label quest-item__input--visible"
+                   for="{{ field.name }}-{{ forloop.counter }}">
+                <input type="{{ field.field.widget.input_type }}"
+                       id="{{ field.name }}-{{ forloop.counter }}"
+                       name="{{ field.name }}"
+                       value="{{ ckeckbox.choice_label }}">
+                <div class="cust-check__title">
+                    {#                <span class="cust-check__check"></span>#}
+                    <span>{% trans ckeckbox.choice_label %}</span>
+                </div>
+            </label>
+        </div>
+    {% endfor %}
+{% else %}
+    <label class="quest-item__label quest-item__label--single quest-item__input--visible"
+           for="{{ field.name }}">
+        <input type="{{ field.field.widget.input_type }}"
+               id="{{ field.name }}"
+               name="{{ field.name }}">
+        <div class="cust-check__title">
+            {#                <span class="cust-check__check"></span>#}
+            <span>{% trans field.label %}</span>
+        </div>
+    </label>
+{% endif %}

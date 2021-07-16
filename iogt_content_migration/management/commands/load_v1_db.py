@@ -53,8 +53,13 @@ class Command(BaseCommand):
         self.migrate(root)
 
     def clear(self):
+        models.FooterPage.objects.all().delete()
+        models.FooterIndexPage.objects.all().delete()
+        models.BannerPage.objects.all().delete()
+        models.BannerIndexPage.objects.all().delete()
         models.Article.objects.all().delete()
         models.Section.objects.all().delete()
+        models.SectionIndexPage.objects.all().delete()
         models.HomePage.objects.all().delete()
         Site.objects.all().delete()
         Image.objects.all().delete()
@@ -88,9 +93,12 @@ class Command(BaseCommand):
     def migrate(self, root):
         self.migrate_images()
         home = self.create_home_page(root)
-        self.migrate_sections(home)
-        self.migrate_articles(home)
-        self.fix_page_tree_hack(home)
+        section_index_page, banner_index_page, footer_index_page = self.create_index_pages(home)
+        self.migrate_sections(section_index_page)
+        self.migrate_articles(section_index_page)
+        self.migrate_banners(banner_index_page)
+        self.migrate_footers(footer_index_page)
+        Page.fix_tree()
 
     def create_home_page(self, root):
         cur = self.db_query('select * from core_main main join wagtailcore_page page on main.page_ptr_id = page.id')
@@ -121,12 +129,24 @@ class Command(BaseCommand):
                 hostname=v1_site['hostname'],
                 port=v1_site['port'],
                 root_page=home,
-                is_default_site=v1_site['is_default_site'],
+                is_default_site=True,
                 site_name=v1_site['site_name'] if v1_site['site_name'] else 'Internet of Good Things',
             )
         else:
             raise Exception('Could not find site in v1 DB')
         return home
+
+    def create_index_pages(self, homepage):
+        section_index_page = models.SectionIndexPage(title='Sections')
+        homepage.add_child(instance=section_index_page)
+
+        banner_index_page = models.BannerIndexPage(title='Banners')
+        homepage.add_child(instance=banner_index_page)
+
+        footer_footer_page = models.FooterIndexPage(title='Footers')
+        homepage.add_child(instance=footer_footer_page)
+
+        return section_index_page, banner_index_page, footer_footer_page
 
     def migrate_images(self):
         cur = self.db_query('select * from wagtailimages_image')
@@ -173,49 +193,41 @@ class Command(BaseCommand):
         cur.close()
         return tags
 
-    def migrate_sections(self, home):
+    def migrate_sections(self, section_index_page):
         cur = self.db_query('select * from core_sectionpage csp join wagtailcore_page wcp on csp.page_ptr_id  = wcp.id order by wcp.path')
         for row in cur:
-            self.create_section(home, row)
+            self.create_section(section_index_page, row)
         cur.close()
 
-    # Hack to make pages appear under the home page in Wagtail Admin. Not sure
-    # why this is necessary, nor why it works. Better solutions are welcome.
-    def fix_page_tree_hack(self, home):
-        try:
-            home.add_child(instance=models.Section(title='temp'))
-        except:
-            self.stdout.write('Page tree hack applied')
-
-    def create_section(self, home, row):
+    def create_section(self, section_index_page, row):
         section = models.Section(
             title=row['title'],
             draft_title=row['draft_title'],
             show_in_menus=True,
-            color='1CABE2',
+            font_color='1CABE2',
             slug=row['slug'],
-            path=home.path + row['path'][12:],
-            depth=row['depth']-1,
+            path=section_index_page.path + row['path'][12:],
+            depth=row['depth'],
             numchild=row['numchild'],
             live=row['live'],
         )
         section.save()
         self.stdout.write(f"saved section, title={section.title}")
 
-    def migrate_articles(self, home):
+    def migrate_articles(self, section_index_page):
         cur = self.db_query("select * from core_articlepage cap join wagtailcore_page wcp on cap.page_ptr_id  = wcp.id where wcp.path like '000100010002%' order by wcp.path")
         for row in cur:
-            self.create_article(home, row)
+            self.create_article(section_index_page, row)
         cur.close()
 
-    def create_article(self, home, row):
+    def create_article(self, section_index_page, row):
         article = models.Article(
             lead_image=self.image_map.get(row['image_id']),
             title=row['title'],
             draft_title=row['draft_title'],
             slug=row['slug'],
-            path=home.path + row['path'][12:],
-            depth=row['depth']-1,
+            path=section_index_page.path + row['path'][12:],
+            depth=row['depth'],
             numchild=row['numchild'],
             live=row['live'],
             body=self.map_article_body(row['body']),
@@ -229,3 +241,44 @@ class Command(BaseCommand):
             if block['type'] == 'paragraph':
                 block['type'] = 'markdown'
         return json.dumps(v2_body)
+
+    def migrate_banners(self, banner_index_page):
+        cur = self.db_query("select * from core_bannerpage cbp join wagtailcore_page wcp on cbp.page_ptr_id  = wcp.id order by wcp.path")
+        for row in cur:
+            self.create_banner(banner_index_page, row)
+        cur.close()
+
+    def create_banner(self, banner_index_page, row):
+        banner = models.BannerPage(
+            banner_image=self.image_map.get(row['banner_id']),
+            title=row['title'],
+            draft_title=row['draft_title'],
+            slug=row['slug'],
+            path=banner_index_page.path + row['path'][12:],
+            depth=row['depth'],
+            numchild=row['numchild'],
+            live=row['live']
+        )
+        banner.save()
+        self.stdout.write(f"saved banner, title={banner.title}")
+
+    def migrate_footers(self, footer_index_page):
+        cur = self.db_query("select * from core_footerpage cfp join core_articlepage cap on cfp.articlepage_ptr_id = cap.page_ptr_id join wagtailcore_page wcp on cap.page_ptr_id = wcp.id order by wcp.path")
+        for row in cur:
+            self.create_footer(footer_index_page, row)
+        cur.close()
+
+    def create_footer(self, footer_index_page, row):
+        footer = models.FooterPage(
+            lead_image=self.image_map.get(row['image_id']),
+            title=row['title'],
+            draft_title=row['draft_title'],
+            slug=row['slug'],
+            path=footer_index_page.path + row['path'][12:],
+            depth=row['depth'],
+            numchild=row['numchild'],
+            live=row['live'],
+            body=self.map_article_body(row['body']),
+        )
+        footer.save()
+        self.stdout.write(f"saved footer, title={footer.title}")

@@ -4,6 +4,16 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ settings.home.SiteSettings.local_ga_tracking_code }}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){window.dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{ settings.home.SiteSettings.local_ga_tag_manager }}');
+        gtag('config', '{{ settings.home.SiteSettings.global_ga_tag_manager }}');
+        gtag('config', '{{ settings.home.SiteSettings.local_ga_tracking_code }}');
+        gtag('config', '{{ settings.home.SiteSettings.global_ga_tracking_code }}');
+    </script>
     <meta charset="utf-8"/>
     <title>
         {% block title %}
@@ -19,7 +29,7 @@
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="theme-color" content="#493174">
-    <link rel="manifest" href="{% static 'manifest/manifest.webmanifest' %}">
+    <link rel="manifest" href="{% url "manifest" %}">
     <link rel="apple-touch-icon" href="{% static 'icons/unicef-logo.png' %}">
 
         {# Global stylesheets #}
@@ -27,12 +37,8 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/iogt.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/chatbot.css' %}">
         <link rel="stylesheet" type="text/css" href="{% sass_src 'css/sectionStyles.css' %}">
-
-
-
-
-     
 
     {% block extra_css %}
         {# Override this in templates to add extra stylesheets #}
@@ -48,7 +54,6 @@
             {% include "cache_banner.html" %}
         {% endif %}
         {% include "header.html" %}
-        {% flat_menu "nav_bar" template="nav_bar.html" %}
         {% include "messages.html" %} 
         {% block content %}{% endblock %}
         {% include "footer.html" %}
