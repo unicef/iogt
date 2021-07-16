@@ -1,0 +1,34 @@
+.home-page__featured-content {
+  padding: 0 22px;
+}
+
+.home-page__featured-content .related-articles {
+  margin: 0;
+}
+
+.banner-holder {
+  margin-top: 4px;
+  padding: 0 4px;
+}
+
+.banner-holder img {
+  margin-bottom: 4px;
+  width: 100vw;
+  height: auto;
+  border-radius: 12px;
+}
+
+@media only screen and (min-width: 360px) {
+  .banner-holder {
+    margin-top: 8px;
+    margin-bottom: 20px;
+    padding: 0px 12px;
+  }
+  .banner-holder img {
+    margin-bottom: 6px;
+    width: 100vw;
+    height: auto;
+    border-radius: 12px;
+  }
+}
+/*# sourceMappingURL=home.css.map */

@@ -1,0 +1,64 @@
+@import "../../../../styles/mixins";
+
+.featured-content {
+    margin: 0 12px;
+    margin-top: 7px;
+    margin-bottom: 19px;
+    border-radius: 8px;
+    padding: 13px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  
+    a {
+      text-decoration: none;
+      font-family: Poppins;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 10px;
+      line-height: 22px;
+      letter-spacing: 0.01em;
+      color: inherit;
+      padding: 0px 10px;
+      text-align: left;
+    }
+  
+    svg {
+      stroke: currentColor;
+    }
+  
+    @include sm {
+      margin: 0 20px;
+      margin-top: 7px;
+      margin-bottom: 19px;
+      padding: 13px 12px;
+  
+      a {
+        font-size: 16px;
+        line-height: 22px;
+      }
+    }
+  }
+  
+  .sub-section {
+    text-decoration: none;
+    color: $black;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-bottom: 1px solid $fog;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 10px;
+    letter-spacing: 0.01em;
+    text-align: left;
+  
+    @include sm {
+      padding: 8px 20px;
+      font-size: 16px;
+      line-height: 22px;
+    }
+  }

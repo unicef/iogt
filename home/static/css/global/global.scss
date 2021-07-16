@@ -1,0 +1,88 @@
+@import "../../../../styles//mixins";
+
+.related-articles {
+    margin: 0px 12px;
+    font-family: Poppins;
+    font-style: normal;
+  
+    h2 {
+      font-weight: 800;
+      font-size: 16px;
+      line-height: 24px;
+      color: $black;
+    }
+  
+    ul {
+      list-style: none;
+      padding: 0;
+  
+      p {
+        width: 40%;
+        font-weight: bold;
+        margin-right: 5px;
+        font-size: 10px;
+        line-height: 16px;
+        letter-spacing: 0.01em;
+      }
+    }
+  
+    a {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0px;
+      border-bottom: 1px solid $fog;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 10px;
+      line-height: 22px;
+      letter-spacing: 0.01em;
+      color: $black;
+    }
+  
+    img {
+      border-radius: 8px;
+      width: 50%;
+      height: auto;
+    }
+  
+    &__img--sm {
+      display: none;
+    }
+  
+    @include sm {
+      margin: 0px 20px;
+  
+      h2 {
+        height: 28px;
+        font-weight: 800;
+        font-size: 24px;
+        line-height: 28px;
+      }
+  
+      ul {
+        p {
+          width: 50%;
+          font-size: 16px;
+          margin-right: 5px;
+          line-height: 24px;
+        }
+      }
+  
+      a {
+        padding: 16px 0px;
+        font-size: 16px;
+        line-height: 22px;
+        letter-spacing: 0.01em;
+        color: $black;
+      }
+  
+      &__img--xs {
+        display: none;
+      }
+  
+      &__img--sm {
+        display: block;
+      }
+    }
+  }

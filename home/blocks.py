@@ -21,7 +21,7 @@ class MediaBlock(AbstractMediaChooserBlock):
                     Your browser does not support the video tag.
                 </video>
             </div>
-            <p>Your browser does not support the video tag. Would you like to <source{0}><a href={{0}}> download the video? </a></p>
+            <p>Your browser does not support the video tag. Would you like to <a href={{0}}> download the video? </a></p>
             '''
         else:
             player_code = '''
