@@ -1,0 +1,435 @@
+@import "../../../../styles//mixins";
+
+.article {
+    &__lead-img {
+      width: 100%;
+      height: auto;
+    }
+  
+    &__content {
+      padding: 0px 12px;
+      font-family: Poppins;
+  
+      img,
+      video,
+      audio {
+        width: 100%;
+        height: auto;
+      }
+  
+      h1 {
+        font-style: normal;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 20px;
+        margin-bottom: 16px;
+      }
+  
+      p {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 16px;
+      }
+  
+      &__link-btn {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 8px 16px;
+        border: 1px solid $black;
+        border-radius: 8px;
+        width: 100%;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 10px;
+        line-height: 16px;
+        color: $black;
+        text-decoration: none;
+      }
+  
+      @include sm {
+        padding: 0px 22px;
+        h1 {
+          font-size: 24px;
+          line-height: 28px;
+          margin-bottom: 24px;
+        }
+  
+        p {
+          font-size: 16px;
+          line-height: 24px;
+        }
+  
+        &__link-btn {
+          font-size: 16px;
+          line-height: 22px;
+          padding: 12px 16px;
+        }
+      }
+    }
+  
+    &__navigation {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 12px;
+  
+      a {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 8px 12px;
+        text-decoration: none;
+        width: 105px;
+        height: 32px;
+        border-radius: 18px;
+        margin-bottom: 12px;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 600;
+      }
+  
+      &--previous {
+        font-size: 10px;
+        line-height: 16px;
+        color: $black;
+        border: 1.5px solid $gray-light;
+      }
+  
+      &--next {
+        height: 22px;
+        background-color: $black;
+        font-size: 10px;
+        line-height: 16px;
+        color: $white;
+      }
+    }
+  
+    @include sm {
+      &__navigation {
+        padding-top: 24px;
+  
+        a {
+          padding: 12px 16px;
+          width: 132px;
+          height: 46px;
+          border-radius: 24px;
+        }
+  
+        &--previous {
+          height: 22px;
+          font-size: 16px;
+          line-height: 22px;
+          border: 1.5px solid $gray-light;
+        }
+  
+        &--next {
+          height: 22px;
+          font-size: 16px;
+          line-height: 22px;
+          color: $white;
+        }
+      }
+    }
+  }
+  
+.comments {
+    font-family: Poppins;
+    font-style: normal;
+  
+    h2 {
+      margin: 0;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 12px;
+      background: $pearl;
+      font-size: 10px;
+      line-height: 16px;
+    }
+  
+    h3 {
+      font-weight: 800;
+      font-size: 16px;
+      line-height: 24px;
+    }
+  
+    &__count {
+      width: 16px;
+      height: 16px;
+      background: $black;
+      font-weight: bold;
+      font-size: 10px;
+      line-height: 16px;
+      letter-spacing: 0.01em;
+      color: $white;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: 10px;
+    }
+  
+    &__form {
+      background-color: $pearl;
+      padding: 0px 12px;
+    }
+  
+    &__loader {
+      background-color: $unicef;
+    }
+  
+    &__holder {
+      border: 1px solid $pearl;
+      background-color: $pearl;
+      padding: 0px;
+    }
+  
+    &__input-holder {
+      display: flex;
+      background-color: $pearl;
+    }
+  
+    &__login {
+      background-color: $pearl;
+      font-size: 10px;
+      line-height: 16px;
+      padding: 12px;
+  
+      p {
+        margin-top: 0;
+      }
+    }
+  
+    &__submit {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      padding: 12px 16px;
+      background-color: $black;
+      border-radius: 24px;
+      flex-grow: 0;
+      margin: 16px 0px;
+      width: 100%;
+  
+      input,
+      a {
+        text-decoration: none;
+        background-color: $black;
+        color: white;
+        border: none;
+        font-weight: 600;
+        font-size: 10px;
+        line-height: 16px;
+        color: $white;
+      }
+    }
+  
+    @include sm {
+      padding-top: 40px;
+  
+      h2 {
+        padding: 20px;
+        font-size: 16px;
+        line-height: 22px;
+      }
+  
+      h3 {
+        font-size: 24px;
+        line-height: 28px;
+      }
+  
+      &__count {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+        line-height: 16px;
+        margin-left: 10px;
+      }
+  
+      &__form {
+        padding: 0px 20px;
+      }
+  
+      &__login {
+        padding: 20px;
+        font-size: 16px;
+        line-height: 24px;
+      }
+  
+      &__submit {
+        padding: 12px 16px;
+        margin: 16px 0px;
+  
+        input,
+        a {
+          font-size: 16px;
+          line-height: 22px;
+        }
+      }
+    }
+  }
+  
+  .individual-comment {
+    margin-top: 1px;
+    padding: 12px;
+    background: $pearl;
+  
+    font-family: Poppins;
+    font-style: normal;
+  
+    span {
+      display: flex;
+  
+      p {
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 20px;
+        color: $dark;
+        display: flex;
+        align-items: center;
+        margin: 0;
+      }
+  
+      p:first-of-type {
+        color: white;
+        width: 32px;
+        margin-right: 8px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: $unicef;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+  
+      p:nth-of-type(2n) {
+        font-weight: bold;
+        font-size: 10px;
+        line-height: 16px;
+        letter-spacing: 0.01em;
+        color: $black;
+      }
+    }
+  
+    &__data {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  
+    &__date {
+      font-weight: 500;
+      font-size: 10px;
+      line-height: 16px;
+      color: $dark;
+      opacity: 0.4;
+    }
+  
+    .content,
+    &__moderator {
+      font-weight: 500;
+      font-size: 10px;
+      line-height: 16px;
+      color: $black;
+    }
+  
+    .content {
+      margin-bottom: 20px;
+    }
+  
+    .report-comment {
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 16px;
+      color: $black;
+      text-decoration: none;
+  
+  
+      &__disclaimer {
+        margin-top: 10px;
+        display: block;
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 16px;
+        color: $black;
+        text-decoration: none;
+      }
+    }
+  
+    @include sm {
+      padding: 20px;
+  
+      span {
+        p {
+          font-size: 16px;
+          line-height: 24px;
+          margin: 0;
+        }
+  
+        p:first-of-type {
+          width: 32px;
+          margin-right: 8px;
+          height: 32px;
+          border-radius: 50%;
+        }
+  
+        p:nth-of-type(2n) {
+          font-size: 16px;
+          line-height: 24px;
+          letter-spacing: 0.01em;
+        }
+      }
+  
+      &__date {
+        font-size: 12px;
+        line-height: 12px;
+      }
+  
+      .content,
+      &__moderator {
+        font-size: 16px;
+        line-height: 24px;
+      }
+  
+      .report-comment {
+        font-size: 14px;
+        line-height: 20px;
+  
+        &__disclaimer {
+          font-size: 14px;
+          line-height: 20px;
+          font-weight: 600;
+          color: $black;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+  
+  .form-control {
+    background-color: $white;
+    width: 100%;
+    min-height: 160px;
+    border: 1px solid $fog;
+    box-sizing: border-box;
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-style: normal;
+    font-size: 10px;
+    line-height: 16px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: $gray;
+  
+    @include sm {
+      font-size: 16px;
+      line-height: 24px;
+    }
+  }
+  
+  

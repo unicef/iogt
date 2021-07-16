@@ -6,6 +6,10 @@
 {% get_language_info_list for LANGUAGES as languages %}
 {% get_current_language as LANGUAGE_CODE %}
 
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/article/article.css' %}">
+{% endblock extra_css %}
+
 {% block content %}
    
  <article class='article'> 
