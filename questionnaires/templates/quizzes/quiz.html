@@ -13,17 +13,8 @@
             {% if page.description %}
                 <div class="quiz-page__description">{{ page.description }}</div>{% endif %}
             <form action="
-
-
-
                     {% pageurl page %}{% if self.multi_step or self.has_page_breaks %}?p={{ fields_step.number|add:"1" }}&back_url=
-
-
-
                         {{ request.path }}{% else %}?back_url={{ request.path }}{% endif %}&form_length=
-
-
-
                     {% if form_length != None %}{% if form.errors %}{{ form.fields | length }}{% else %}{{ form.fields | length | add:form_length }}{% endif %}{% else %}{{ form.fields | length }}{% endif %}"
                   method="POST" class="quiz-page__content">
                 {% csrf_token %}
@@ -54,9 +45,11 @@
                                 </span>
                             </p>
                         </div>
-                        <div class="quest-item__desc">
-                            <p>{% trans field.label %}</p>
-                        </div>
+                        {% if field.field.widget.input_type == "checkbox" and  field|length == 1 %}{% else %}
+                            <div class="quest-item__desc">
+                                <p>{% trans field.label %}</p>
+                            </div>
+                        {% endif %}
                         <div class="quest-item__content" tabindex="0">
                             {% if field.field.widget.input_type == "radio" %}
                                 {% render_radios field %}
