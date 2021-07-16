@@ -7,7 +7,7 @@
 
 {% for radio in field %}
     <div class="quest-item__content">
-        <label class="cust-check polls-widget__item">
+        <label class="quest-item__label quest-item__input--visible">
             <input type="{{ field.field.widget.input_type }}"
                    name="{{ field.name }}"
                    value="{{ radio.choice_label }}">
