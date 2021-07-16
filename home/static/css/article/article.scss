@@ -11,10 +11,13 @@
       font-family: Poppins;
   
       img,
-      video,
-      audio {
+      video{
         width: 100%;
         height: auto;
+      }
+
+      audio {
+        width: 100%;
       }
   
       h1 {
@@ -30,6 +33,12 @@
         font-weight: 500;
         font-size: 10px;
         line-height: 16px;
+      }
+
+      &--video,&--audio {
+          a {
+            color: $black;
+          }
       }
   
       &__link-btn {

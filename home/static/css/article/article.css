@@ -9,10 +9,13 @@
 }
 
 .article__content img,
-.article__content video,
-.article__content audio {
+.article__content video {
   width: 100%;
   height: auto;
+}
+
+.article__content audio {
+  width: 100%;
 }
 
 .article__content h1 {
@@ -28,6 +31,10 @@
   font-weight: 500;
   font-size: 10px;
   line-height: 16px;
+}
+
+.article__content--video a, .article__content--audio a {
+  color: #303030;
 }
 
 .article__content__link-btn {

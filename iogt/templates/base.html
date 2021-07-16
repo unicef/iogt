@@ -40,7 +40,6 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/footer/footer.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/navbar/navbar.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/global/global.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% sass_src 'css/sectionStyles.css' %}">
 
     {% block extra_css %}
         {# Override this in templates to add extra stylesheets #}
@@ -91,7 +90,7 @@
         </script> 
         <noscript>
             <style type="text/css">
-                .hideOnNonJSDevice { display:none; }
+                .cache-banner { display:none; }
             </style>
         </noscript>
         {% block extra_js %}{% endblock %}
