@@ -1,0 +1,13 @@
+<p class="quest-item__number">
+    {% if form_length != None %}
+        {% if form.errors %}
+            {{ forloop.counter }}{% else %}
+            {{ forloop.counter |add:form_length }}{% endif %}
+    {% else %}
+        {{ forloop.counter }}{% endif %}
+    of
+    {% if self.multi_step or self.has_page_breaks %}
+        {{ fields_step.paginator.count }}{% else %}
+        {{ form.fields | length }}{% endif %}
+    questions
+</p>

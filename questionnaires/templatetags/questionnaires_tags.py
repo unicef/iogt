@@ -48,6 +48,34 @@ def render_polls_radios(field):
     return {"field": field}
 
 
+@register.inclusion_tag('questionnaires/tags/field_description.html')
+def field_description(field):
+    return {"field": field}
+
+
+@register.inclusion_tag('questionnaires/tags/render_fields.html')
+def render_fields(field, type):
+    return {'field': field, "type": type}
+
+
+@register.inclusion_tag('questionnaires/tags/field_counter.html')
+def field_counter(field, form, forloop, form_length, fields_step, self):
+    return {"field": field, "form": form, "forloop": forloop,
+            "form_length": form_length, "fields_step": fields_step,
+            "self": self}
+
+
+@register.inclusion_tag('questionnaires/tags/submit_button.html')
+def render_submit_button(fields_step, page):
+    return {"fields_step": fields_step, "page": page}
+
+
+@register.inclusion_tag('questionnaires/tags/action_url.html')
+def get_action_url(page, self, fields_step, request, form):
+    return {"page": page, "self": self, "fields_step": fields_step,
+            "request": request, "form": form}
+
+
 @register.filter
 def get_item(dictionary, key):
     return dictionary.get(key)
@@ -63,7 +91,8 @@ def get_value_from_querydict(querydict, key):
 
 @register.simple_tag
 def snake_case(text):
-    return text.lower().replace(" ", "_").replace("__", "_").replace('?', '')
+    return text.lower().replace(" ", "_").replace("__", "_").replace('?',
+                                                                     '')
 
 
 @register.simple_tag
