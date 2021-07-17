@@ -576,11 +576,10 @@
     color: $black;
     text-decoration: none;
 
-    &__normal-device {
-      display: none;
-    }
 
-    &__feature-phone {
+    &__disclaimer {
+      margin-top: 10px;
+      display: block;
       font-weight: 600;
       font-size: 12px;
       line-height: 16px;
@@ -628,17 +627,12 @@
       font-size: 14px;
       line-height: 20px;
 
-      &__normal-device {
-        display: block;
+      &__disclaimer {
         font-size: 14px;
         line-height: 20px;
         font-weight: 600;
         color: $black;
         text-decoration: none;
-      }
-
-      &__feature-phone {
-        display: none;
       }
     }
   }
