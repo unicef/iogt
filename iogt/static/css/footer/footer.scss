@@ -1,0 +1,144 @@
+@import "../../../../styles//mixins";
+
+.footer-main {
+    margin-top: 20px;
+  }
+  
+  .footer {
+    border-top: 1px solid $fog;
+    padding-left: 12px;
+    padding-right: 12px;
+  
+    .sm-home-header {
+      display: none;
+    }
+  
+    select {
+      margin: 0;
+    }
+  
+    label,
+    svg {
+      display: flex;
+      align-items: center;
+    }
+  
+    svg {
+      height: 10px;
+    }
+  
+    &__form {
+      margin-top: 25px;
+      background: $pearl;
+      border: 1px solid $fog;
+      border-radius: 8px;
+      padding: 8px;
+  
+      input {
+        border: none;
+        background: $pearl;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 22px;
+        font-size: 10px;
+        line-height: 16px;
+        letter-spacing: 0.01em;
+        color: $gray;
+      }
+    }
+  
+    &__copyright {
+      font-weight: 500;
+      font-size: 8px;
+      line-height: 16px;
+      text-align: center;
+      color: $gray;
+      padding-top: 12px;
+    }
+  
+    @include sm {
+      padding-left: 20px;
+      padding-right: 20px;
+      margin-top: 60px;
+  
+      .sm-home-header {
+        display: flex;
+        padding: 0;
+        padding-top: 22px;
+        border: none;
+      }
+  
+      &__form {
+        margin-top: 35px;
+        border-radius: 8px;
+        padding: 13px;
+  
+        input {
+          width: 96%;
+          border: none;
+          padding-left: 13px;
+          padding-left: 13px;
+          font-size: 16px;
+          line-height: 22px;
+        }
+      }
+      &__copyright {
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 16px;
+        padding-top: 32px;
+        padding-bottom: 80px;
+      }
+    }
+  }
+  
+  // top level setion
+  
+  .top-level,
+  .bottom-level {
+    margin-top: 12px;
+    border-top: 1px solid $fog;
+    font-family: Poppins;
+    font-style: normal;
+  
+    &__section {
+      display: flex;
+      margin-top: 8px;
+      padding: 9px 12px;
+      border-radius: 8px;
+  
+      a {
+        color: inherit;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 10px;
+        line-height: 16px;
+        letter-spacing: 0.01em;
+        padding-left: 10px;
+      }
+    }
+  
+    img {
+      max-width: 16px;
+    }
+  
+    @include sm {
+      margin-top: 32px;
+      padding-top: 12px;
+      &__section {
+        padding: 13px 12px;
+  
+        a {
+          font-size: 16px;
+          line-height: 22px;
+        }
+      }
+    }
+  }
+  
+  .bottom-level {
+    &__section {
+      background-color: $pearl;
+    }
+  }

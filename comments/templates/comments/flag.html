@@ -1,10 +1,13 @@
 {% extends "django_comments_xtd/base.html" %}
-{% load i18n %}
+{% load i18n static%}
 {% load comments_xtd %}
 {% block title %}{% trans "Flag comment" %}{% endblock %}
 {% block header %}
 <a href="{{ comment.content_object.get_absolute_url }}">{{ comment.content_object }}</a>
 {% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/report-page/report-page.css' %}">
+{% endblock extra_css %}
 {% block comment_content %}
 
 <section class='report-page'>

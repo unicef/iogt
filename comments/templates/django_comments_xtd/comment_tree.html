@@ -36,11 +36,6 @@
                 {% endif %}
             </div>
                {% if not item.comment.is_removed %}
-              {% if perms.comments.can_moderate %}
-                  {% if item.flagged_count %}
-                      <span> Reported by {{ item.flagged_count }}</span>
-                  {% endif %}
-              {% endif %}
               {% if allow_flagging and item.flagged %}
                   <a href="{% url 'comments-flag' item.comment.pk %}" class="report-comment">
                    Report
@@ -50,6 +45,11 @@
               <a href="{% url 'comments-flag' item.comment.pk %}" class="report-comment">
                 Report
               </a>
+              {% endif %}
+              {% if perms.comments.can_moderate %}
+                  {% if item.flagged_count %}
+                      <span class="report-comment"> Reported by {{ item.flagged_count }}</span>
+                  {% endif %}
               {% endif %}
               {% if perms.comments.can_moderate %}
                   <a href="{% url 'comments-delete' item.comment.pk %}"><i class="fas fa-trash-alt"

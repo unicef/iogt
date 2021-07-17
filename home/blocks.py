@@ -21,7 +21,7 @@ class MediaBlock(AbstractMediaChooserBlock):
                     Your browser does not support the video tag.
                 </video>
             </div>
-            <p>Your browser does not support the video tag. Would you like to <source{0}><a href={{0}}> download the video? </a></p>
+            <p class='article__content--video'>If you cannot view the above video, perhaps you would you like to <a href={1} download> download it? </a></p>
             '''
         else:
             player_code = '''
@@ -31,12 +31,13 @@ class MediaBlock(AbstractMediaChooserBlock):
                     Your browser does not support the audio element.
                 </audio>
             </div>
+            <p class='article__content--audio'>If you cannot listen to the above audio, perhaps you would like to <a href={1} download> download it? </a></p>
             '''
 
         return format_html(player_code, format_html_join(
             '\n', "<source{0}>",
             [[flatatt(s)] for s in value.sources]
-        ))
+        ), value.url)
 
 
 class SocialMediaLinkBlock(blocks.StructBlock):

@@ -1,0 +1,63 @@
+@import "../../../../styles//mixins";
+
+.nav-bar {
+    &__wrap {
+      width: 100vw;
+      display: flex;
+      justify-content: space-around;
+      background-color: $unicef;
+    }
+  
+    @include sm {
+      position: fixed;
+      bottom: 0px;
+      width: 100vw;
+      z-index: 99;
+      a {
+        text-decoration: none;
+      }
+    }
+  
+    &__item {
+      a {
+        background-color: $unicef;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 8px 0;
+        text-decoration: none;
+        background-color: $unicef;
+      }
+  
+      &__icon {
+        width: 18px;
+        height: 18px;
+  
+        img {
+          max-width: 100%;
+          max-height: 100%;
+        }
+      }
+  
+      &__title {
+        color: $white;
+        font-size: 8px;
+        font-weight: 600;
+        line-height: 20px;
+        margin-top: 2px;
+        text-align: center;
+        width: 100%;
+      }
+  
+      @include sm {
+        &__icon {
+          width: 25.2px;
+          height: 24.82px;
+        }
+  
+        &__title {
+          font-size: 10px;
+        }
+      }
+    }
+  }
