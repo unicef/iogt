@@ -236,6 +236,10 @@ class Section(Page, PageUtilsMixin):
 
         return Section.objects.exclude(pk__in=all_descendants)
 
+    class Meta:
+        verbose_name = _("section")
+        verbose_name_plural = _("sections")
+
 
 class ArticleRecommendation(Orderable):
     source = ParentalKey('Article', related_name='recommended_articles',
@@ -365,6 +369,11 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
                 return block
         return ''
 
+    class Meta:
+        verbose_name = _("article")
+        verbose_name_plural = _("articles")
+
+
 
 class BannerIndexPage(Page):
     parent_page_types = ['home.HomePage']
@@ -451,9 +460,9 @@ class SiteSettings(BaseSetting):
     )
     show_only_translated_pages = models.BooleanField(
         default=False,
-        help_text='When selecting this option, untranslated pages'
+        help_text=_('When selecting this option, untranslated pages'
                   ' will not be visible to the front end user'
-                  ' when viewing a child language of the site')
+                  ' when viewing a child language of the site'))
     # TODO: GA, FB analytics should be global.
     fb_analytics_app_id = models.CharField(
         verbose_name=_('Facebook Analytics App ID'),
@@ -507,7 +516,7 @@ class SiteSettings(BaseSetting):
     ], null=True, blank=True)
     media_file_size_threshold = models.IntegerField(
         default=9437184,
-        help_text='Show warning if uploaded media file size is greater than this in bytes. Default is 9 MB')
+        help_text=_('Show warning if uploaded media file size is greater than this in bytes. Default is 9 MB'))
     allow_anonymous_comment = models.BooleanField(default=False)
     registration_survey = models.ForeignKey('questionnaires.Survey', null=True,
                                             blank=True,
@@ -588,8 +597,8 @@ class SiteSettings(BaseSetting):
         return self.site.site_name
 
     class Meta:
-        verbose_name = 'Site Settings'
-        verbose_name_plural = 'Site Settings'
+        verbose_name = _('Site Settings')
+        verbose_name_plural = _('Site Settings')
 
 
 @register_setting

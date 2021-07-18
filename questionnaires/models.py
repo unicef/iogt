@@ -256,9 +256,9 @@ class Survey(QuestionnairePage, AbstractForm):
     template = "survey/survey.html"
     multi_step = models.BooleanField(
         default=False,
-        verbose_name="Multi-step",
-        help_text="Whether to display the survey questions to the user one at"
-        " a time, instead of all at once.",
+        verbose_name=_("Multi-step"),
+        help_text=_("Whether to display the survey questions to the user one at"
+        " a time, instead of all at once."),
     )
 
     content_panels = Page.content_panels + [
@@ -345,8 +345,8 @@ class Survey(QuestionnairePage, AbstractForm):
         return data_fields
 
     class Meta:
-        verbose_name = "survey"
-        verbose_name_plural = "surveys"
+        verbose_name = _("survey")
+        verbose_name_plural = _("surveys")
 
 
 class UserSubmission(AbstractFormSubmission):
@@ -374,7 +374,7 @@ class PollFormField(AbstractFormField):
         ('radio', _('Radio buttons')),
     )
     field_type = models.CharField(
-        verbose_name='field type',
+        verbose_name=_('field type'),
         max_length=16,
         choices=CHOICES
     )
@@ -435,8 +435,8 @@ class Poll(QuestionnairePage, AbstractForm):
     ]
 
     class Meta:
-        verbose_name = "Poll"
-        verbose_name_plural = "Polls"
+        verbose_name = _("poll")
+        verbose_name_plural = _("polls")
 
     def get_form_fields(self):
         return self.poll_form_fields.all()
@@ -591,7 +591,7 @@ class Quiz(QuestionnairePage, AbstractForm):
 
     multi_step = models.BooleanField(
         default=False,
-        verbose_name="Multi-step",
+        verbose_name=_("Multi-step"),
         help_text="Whether to display the survey questions to the user one at"
         " a time, instead of all at once.",
     )
@@ -692,5 +692,5 @@ class Quiz(QuestionnairePage, AbstractForm):
         return context
 
     class Meta:
-        verbose_name = "quiz"
-        verbose_name_plural = "quizzes"
+        verbose_name = _("quiz")
+        verbose_name_plural = _("quizzes")
