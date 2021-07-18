@@ -59,10 +59,21 @@ def render_fields(field, type):
 
 
 @register.inclusion_tag('questionnaires/tags/field_counter.html')
-def field_counter(field, form, forloop, form_length, fields_step, self):
-    return {"field": field, "form": form, "forloop": forloop,
-            "form_length": form_length, "fields_step": fields_step,
-            "self": self}
+def field_counter(field, form, forloop, form_length, fields_step, questionnaire):
+    if form_length != None:
+        if form.errors:
+            counter = forloop.get("counter")
+        else:
+            counter = forloop.get("counter") + int(form_length)
+    else:
+        counter = forloop.get("counter")
+
+    if hasattr(questionnaire, "multi_step") and questionnaire.multi_step or questionnaire.has_page_breaks:
+        total = fields_step.paginator.count
+    else:
+        total = len(form.fields)
+
+    return {"counter": counter, "total": total}
 
 
 @register.inclusion_tag('questionnaires/tags/submit_button.html')
