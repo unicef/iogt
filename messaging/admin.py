@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 
-from .models import ChatbotChannel, Thread, UserThread, Message
+from .models import ChatbotChannel, Thread, UserThread, Message, Attachment
 
 
 @admin.register(ChatbotChannel)
@@ -34,3 +34,16 @@ class MessageAdmin(admin.ModelAdmin):
         'sender',
     )
     list_filter = ('sent_at', )
+
+
+@admin.register(Attachment)
+class AttachmentAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'created',
+        'modified',
+        'message',
+        'external_link',
+        'downloaded_file',
+    )
+    list_filter = ('created', 'modified')

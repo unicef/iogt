@@ -1,8 +1,13 @@
 import uuid
+from io import BytesIO
 
+import requests
 from django.contrib.auth import get_user_model
+from django.core.files import File
 from django.db import models
 from django.urls import reverse
+from django_extensions.db.models import TimeStampedModel
+from rest_framework import status
 
 from .querysets import ThreadQuerySet
 
@@ -60,7 +65,7 @@ class UserThread(models.Model):
     @classmethod
     def get_user_inbox(cls, user):
         return cls.objects.filter(user=user, is_active=True).order_by(
-                '-thread__last_message_at')
+            '-thread__last_message_at')
 
 
 class Message(models.Model):
@@ -74,8 +79,34 @@ class Message(models.Model):
     thread = models.ForeignKey('Thread', related_name="messages", on_delete=models.CASCADE)
     sender = models.ForeignKey(get_user_model(), null=True, related_name="sent_messages", on_delete=models.CASCADE)
 
+    attachments = models.ManyToManyField('Attachment')
+
+    def update_or_create_attachments(self, attachment_links):
+        for link in attachment_links:
+            if not self.attachments.filter(external_link=link).exists():
+                attachment, created = Attachment.objects.get_or_create(external_link=link)
+                if not attachment.downloaded_file:
+                    attachment.download_external_file()
+                self.attachments.add(attachment)
+
     class Meta:
         ordering = ("sent_at",)
 
     def get_absolute_url(self):
         return self.thread.get_absolute_url()
+
+
+class Attachment(TimeStampedModel):
+    external_link = models.URLField(null=False, blank=False)
+    downloaded_file = models.FileField(null=False, blank=False)
+
+    def download_external_file(self):
+        response = requests.get(self.external_link, allow_redirects=True)
+
+        if response.status_code == status.HTTP_200_OK:
+            image_file = File(BytesIO(response.content), name=self.external_link.split('/')[-1])
+            self.downloaded_file = image_file
+            self.save()
+
+    def __str__(self):
+        return f'Attachment for message: {self.message}'

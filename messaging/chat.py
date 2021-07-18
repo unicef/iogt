@@ -1,4 +1,7 @@
 from django.contrib.auth import get_user_model
+from django.core import validators
+from django.core.exceptions import ValidationError
+from django.core.validators import URLValidator
 from django.utils import timezone
 
 from .models import Message, Thread, UserThread
@@ -29,6 +32,12 @@ class ChatManager:
                 # be confirmed with RapidPro
                 message.text = f'{message.text}{text}'
                 message.save(update_fields=['text'])
+
+            cleaned_text, attachment_links = ChatManager._parse_rapidpro_message(message.text)
+            message.text = cleaned_text
+            message.update_or_create_attachments(attachment_links)
+            message.save()
+
         else:
             Message.objects.create(
                 rapidpro_message_id=rapidpro_message_id, sender=sender, text=text, thread=self.thread,
@@ -36,6 +45,20 @@ class ChatManager:
 
         self.thread.last_message_at = timezone.now()
         self.thread.save(update_fields=['last_message_at'])
+
+    @staticmethod
+    def _parse_rapidpro_message(message_text):
+        message_parts = message_text.split('\n')
+        attachments = []
+        cleaned_message = ""
+        for message in reversed(message_parts):
+            validator = URLValidator()
+            try:
+                validator(message)
+                attachments.append(message)
+            except ValidationError:
+                cleaned_message = f'{message}{cleaned_message}'
+        return cleaned_message, attachments
 
     def record_reply(self, text, sender, rapidpro_message_id=None, quick_replies=None, mark_unread=True):
         if quick_replies is None:
