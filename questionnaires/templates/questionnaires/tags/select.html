@@ -10,9 +10,9 @@
     {#                <input type="radio" name="{{ field.name }}"#}
     {#                       value="{{ option.choice_label }}"#}
     {#                       id="{{ field.name }}[{{ forloop.counter0 }}]">#}
-    {#                <label for="{{ field.name }}[{{ forloop.counter0 }}]">{% translate option.choice_label %}</label>#}
+    {#                <label for="{{ field.name }}[{{ forloop.counter0 }}]">{{ option.choice_label }}</label>#}
     {#            {% endfor %}#}
-    {#            <span id="text">{% translate field.label %}</span>#}
+    {#            <span id="text">{{ field.label }}</span>#}
     {#        </div>#}
     {#    </label>#}
     <select name="{{ field.name }}" class="quest-item__input cust-select">

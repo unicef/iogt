@@ -82,7 +82,7 @@
                                 of {{ form.fields | length }} questions</p>
                         </div>
                         <div class="quest-item__desc">
-                            <p>{% translate field.label %}</p>
+                            <p>{{ field.label }}</p>
                         </div>
                         {% if "textar" in field.field.widget.template_name or field.field.widget.input_type == "text" or field.field.widget.input_type == "number" or field.field.widget.input_type == "email" or field.field.widget.input_type == "url" %}
                             <div class="quest-item__content" tabindex="0">
@@ -90,7 +90,7 @@
                                        tabindex="0">
                                     <div class="cust-check__title">
                                         <span class="cust-check__check"></span>
-                                        <span>{% translate field.value %}</span>
+                                        <span>{{ field.value }}</span>
                                     </div>
                                     {% if not fields_info|get_item:field.name|get_item:'is_correct' %}
                                         <div class="quest-item__header">
@@ -115,7 +115,7 @@
                                                tabindex="0">
                                             <div class="cust-check__title">
                                                 <span class="cust-check__check"></span>
-                                                <span>{% translate checkbox.choice_label %}</span>
+                                                <span>{{ checkbox.choice_label }}</span>
                                             </div>
                                         </label>
                                     </div>

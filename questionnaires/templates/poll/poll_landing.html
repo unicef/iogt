@@ -13,7 +13,7 @@
             <div class="polls-widget">
                 <div class="container">
                     <div class="polls-widget__wrap">
-                        <h1 class="title polls-widget__title">{% translate page.title %}</h1>
+                        <h1 class="title polls-widget__title">{{ page.title }}</h1>
                         <div class="polls-widget__form">
                             {% if page.thank_you_text %}<div class="polls-widget__form-title">{{ page.thank_you_text }}</div>{% endif %}
                             {% for question, answers in results.items %}

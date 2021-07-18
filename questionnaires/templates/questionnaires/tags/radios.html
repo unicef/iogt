@@ -6,7 +6,7 @@
             <input type="{{ field.field.widget.input_type }}"
                    name="{{ field.name }}"
                    value="{{ radio.choice_label }}">
-            <span class="cust-check__title">{% translate radio.choice_label %}</span>
+            <span class="cust-check__title">{{ radio.choice_label }}</span>
         </label>
     </div>
 {% endfor %}

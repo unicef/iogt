@@ -11,7 +11,7 @@
         <div class="polls-widget">
             <div class="container">
                 <div class="polls-widget__wrap">
-                    <h1 class="title polls-widget__title">{% translate page.title %}</h1>
+                    <h1 class="title polls-widget__title">{{ page.title }}</h1>
                     {% if page.description %}
                         <div class="polls-widget__description">{{ page.description }}</div>{% endif %}
                     <form class="polls-widget__form"

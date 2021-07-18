@@ -6,7 +6,7 @@
 {% endblock %}
 
 <div class="questionnaire-container container">
-    <h1 class="title {% if type == "Survey" %}survey-page__title{% else %}polls-widget__title{% endif %}">{% translate object.title %}</h1>
+    <h1 class="title {% if type == "Survey" %}survey-page__title{% else %}polls-widget__title{% endif %}">{{ object.title }}</h1>
     <form action="{% pageurl object %}?back_url={{ request.path }}"
           method="POST">
         {% csrf_token %}
@@ -31,7 +31,7 @@
                             </p>
                         </div>
                         <div class="quest-item__desc">
-                            <p>{% translate field.label %}</p>
+                            <p>{{ field.label }}</p>
                         </div>
                         {% if field.field.widget.input_type == "radio" %}
                             {% render_radios field %}
@@ -86,7 +86,7 @@
         </div>
         <button type="submit"
                 class="cust-btn cust-btn--dark {% if type == "Survey" %}survey-page__btn{% else %}polls-widget__submit{% endif %}">
-            <span>{% translate object.submit_button_text %}</span>
+            <span>{{ object.submit_button_text }}</span>
         </button>
     </form>
 </div>
