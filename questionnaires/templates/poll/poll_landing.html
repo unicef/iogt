@@ -13,7 +13,7 @@
             <div class="polls-widget">
                 <div class="container">
                     <div class="polls-widget__wrap">
-                        <h1 class="title polls-widget__title">{% trans page.title %}</h1>
+                        <h1 class="title polls-widget__title">{% translate page.title %}</h1>
                         <div class="polls-widget__form">
                             {% if page.thank_you_text %}<div class="polls-widget__form-title">{{ page.thank_you_text }}</div>{% endif %}
                             {% for question, answers in results.items %}
@@ -22,9 +22,9 @@
                                     <div class="cust-check cust-check--white polls-widget__item{% if answer == request.POST|get_value_from_querydict:current_answer %} cust-check--active{% endif %}">
                                         <div class="cust-check__title">
                                             <div class="cust-check__title-left">
-                                                <span>{% trans answer %}</span>
+                                                <span>{% translate answer %}</span>
                                                 {% if answer == request.POST|get_value_from_querydict:current_answer %}
-                                                    <span class="cust-check__subtitle">{% trans "Your answer" %}</span>{% endif %}
+                                                    <span class="cust-check__subtitle">{% translate "Your answer" %}</span>{% endif %}
                                             </div>
                                             <div class="cust-check__title-right">
                                                 <span class="cust-check__percent">{{ count |floatformat:"0" }}{% if result_as_percentage %}%{% endif %}</span>

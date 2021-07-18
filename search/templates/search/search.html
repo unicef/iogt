@@ -10,12 +10,12 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/search.css' %}">
 {% endblock extra_css %}
 
-{% block title %}{% trans "Search results for" %}: {{ search_query }}{% endblock %}
+{% block title %}{% translate "Search results for" %}: {{ search_query }}{% endblock %}
 
 {% block content %}
     <div class="search-container">
     <h2>
-        {% trans "Searching results for" %}: "{{ search_query }}"
+        {% translate "Searching results for" %}: "{{ search_query }}"
     </h2>
 
     <!--<div class="container btn-back-container">

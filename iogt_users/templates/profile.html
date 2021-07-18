@@ -1,7 +1,7 @@
 {% extends 'account/base.html' %}
 {% load i18n static %}
 
-{% block title %}{% trans "Edit my profile" %}{% endblock %}
+{% block title %}{% translate "Edit my profile" %}{% endblock %}
 
 {% block extra_css %}
     {{ block.super }}
@@ -12,9 +12,9 @@
 {% block allauth_content %}
     {% if user.username %}
         <h1 class="title profile__title">
-            {% blocktrans with username=user.username %}
+            {% blocktranslate with username=user.username %}
                 Hey, {{ username }}
-            {% endblocktrans %}
+            {% endblocktranslate %}
             <span class="profile__icon">{{ user.username | first | upper }}</span>
         </h1>
     {% endif %}
@@ -23,26 +23,26 @@
             <span class="icon-btn__icon">
                 <img src="{% static "icons/pencil.png" %}" alt="Pencil icon">
             </span>
-            <span class="icon-btn__title">{% trans "Edit my profile" %}</span>
+            <span class="icon-btn__title">{% translate "Edit my profile" %}</span>
         </a>
         <a href="#" class="icon-btn profile__btn">
             <span class="icon-btn__icon">
                 <img src="{% static "icons/bell.png" %}" alt="bell icon">
             </span>
-            <span class="icon-btn__title">{% trans "Notifications" %}</span>
+            <span class="icon-btn__title">{% translate "Notifications" %}</span>
         </a>
         <a href="#" class="icon-btn profile__btn">
             <span class="icon-btn__icon">
                 <img src="{% static "icons/lock.png" %}" alt="lock icon">
             </span>
-            <span class="icon-btn__title">{% trans "Change Digital Pin" %}</span>
+            <span class="icon-btn__title">{% translate "Change Digital Pin" %}</span>
         </a>
         <a href="{% url "account_logout" %}" class="icon-btn profile__btn">
             <span class="icon-btn__icon">
                 <img src="{% static "icons/arrow_icon_left.svg" %}"
                      alt="lock icon">
             </span>
-            <span class="icon-btn__title">{% trans "Log out" %}</span>
+            <span class="icon-btn__title">{% translate "Log out" %}</span>
         </a>
     </div>
 {% endblock %}

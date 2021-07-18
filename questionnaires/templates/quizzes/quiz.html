@@ -9,7 +9,7 @@
     {% include 'back_button.html' with back_url=back_url %}
     <div class="quiz-page">
         <div class="container">
-            <h1 class="title quiz-page__title">{% trans page.title %}</h1>
+            <h1 class="title quiz-page__title">{% translate page.title %}</h1>
             {% if page.description %}
                 <div class="quiz-page__description">{{ page.description }}</div>{% endif %}
             <form action="{% get_action_url page self fields_step request form %} " method="POST" class="quiz-page__content">
@@ -22,7 +22,7 @@
                         </div>
                         {% if field.field.widget.input_type == "checkbox" and  field|length == 1 %}{% else %}
                             <div class="quest-item__desc">
-                                <p>{% trans field.label %}</p>
+                                <p>{% translate field.label %}</p>
                             </div>
                         {% endif %}
                         <div class="quest-item__content" tabindex="0">
@@ -33,7 +33,7 @@
                 <div class="survey-page__btns">
                    {% render_submit_button fields_step page %}
                     <a href="/"
-                       class="cust-btn cust-btn--clear survey-page__btn"><span>{% trans "Go to homepage" %}</span></a>
+                       class="cust-btn cust-btn--clear survey-page__btn"><span>{% translate "Go to homepage" %}</span></a>
                 </div>
             </form>
         </div>

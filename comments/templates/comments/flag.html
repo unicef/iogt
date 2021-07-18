@@ -1,7 +1,7 @@
 {% extends "django_comments_xtd/base.html" %}
 {% load i18n static%}
 {% load comments_xtd %}
-{% block title %}{% trans "Flag comment" %}{% endblock %}
+{% block title %}{% translate "Flag comment" %}{% endblock %}
 {% block header %}
 <a href="{{ comment.content_object.get_absolute_url }}">{{ comment.content_object }}</a>
 {% endblock %}
@@ -11,20 +11,20 @@
 {% block comment_content %}
 
 <section class='report-page'>
-  <h3>{% trans "Flag this comment?" %}</h3>
-  <p >{% trans "Click on the flag button to mark the following comment as inappropriate." %}</p>
+  <h3>{% translate "Flag this comment?" %}</h3>
+  <p >{% translate "Click on the flag button to mark the following comment as inappropriate." %}</p>
   <p class='report-page__comment'>{{ comment.comment }}</p>
   {% with object_absolute_url=comment.content_object.get_absolute_url %}
   {% if object_absolute_url %}
   <p>
-    {% trans "Posted to "%}&nbsp;<a href="{{ object_absolute_url }}">{{ comment.content_object }}</a>
+    {% translate "Posted to "%}&nbsp;<a href="{{ object_absolute_url }}">{{ comment.content_object }}</a>
   </p>
   {% endif %}
   {% endwith %}
   <form action="." method="post">{% csrf_token %}
     <input type="hidden" name="next" value="{{ comment.get_absolute_url }}"/>
-    <input type="submit" name="submit" class='report-page__submit'  value="{% trans "Flag" %}"/>
-    <a href="{{ comment.get_absolute_url }}">{% trans "cancel" %}</a>
+    <input type="submit" name="submit" class='report-page__submit'  value="{% translate "Flag" %}"/>
+    <a href="{{ comment.get_absolute_url }}">{% translate "cancel" %}</a>
   </form>
 </section>
 {% endblock %}

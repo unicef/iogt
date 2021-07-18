@@ -9,7 +9,7 @@
      <p>This appears to be your first visit here. Our website is also available as a downloadable app.</p>
      <p>Would you like to download it?</p>
         {% csrf_token %}
-        <input type="submit" value="{% trans 'Download' %}" class='cache-banner__download' onclick="cache()"/>
+        <input type="submit" value="{% translate 'Download' %}" class='cache-banner__download' onclick="cache()"/>
         <input id="first_time_user" name="first_time_user" type="hidden" value="False">
     </form>
 </div>

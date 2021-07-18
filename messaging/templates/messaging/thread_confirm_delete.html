@@ -11,14 +11,14 @@
     <h2>{{ thread.subject }}</h2>
 
     <div class="delete-warning" role="alert">
-        {% trans "Are you sure you want to delete this thread?" %}
+        {% translate "Are you sure you want to delete this thread?" %}
     </div>
 
     <form action="{% url "messaging:thread_delete" thread.pk %}" method="POST">
         {% csrf_token %}
         <div class="form-actions">
-            <a href="{% url "messaging:inbox" %}" class="cancel">{% trans "Cancel" %}</a>
-            <button>{% trans "Delete" %}</button>
+            <a href="{% url "messaging:inbox" %}" class="cancel">{% translate "Cancel" %}</a>
+            <button>{% translate "Delete" %}</button>
         </div>
     </form>
 {% endblock %}

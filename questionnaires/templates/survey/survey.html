@@ -2,7 +2,7 @@
 {% load questionnaires_tags %}
 {% load static wagtailcore_tags i18n %}
 
-{% block title %}{% trans page.title %}{% endblock %}
+{% block title %}{% translate page.title %}{% endblock %}
 
 {% block extra_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/survey.css' %}">
@@ -12,7 +12,7 @@
     <div class="survey-page">
         {% include 'back_button.html' with back_url=back_url %}
         <div class="container">
-            <h1 class="title survey-page__title">{% trans page.title %}</h1>
+            <h1 class="title survey-page__title">{% translate page.title %}</h1>
             {% if page.description %}
                 <div class="survey-page__description">{{ page.description }}</div>{% endif %}
             <form action="{% get_action_url page self fields_step request form %}"
@@ -27,7 +27,7 @@
                             </div>
                             <div class="quest-item__desc">
                                 {% if field.field.widget.input_type == "checkbox" and  field|length == 1 %}{% else %}
-                                    <p>{% trans field.label %}</p>
+                                    <p>{% translate field.label %}</p>
                                 {% endif %}
                             </div>
                             {% render_fields field "survey" %}
@@ -37,7 +37,7 @@
                 <div class="survey-page__btns">
                     {% render_submit_button fields_step page %}
                     <a href="/"
-                       class="cust-btn cust-btn--clear survey-page__btn"><span>{% trans "Go to homepage" %}</span></a>
+                       class="cust-btn cust-btn--clear survey-page__btn"><span>{% translate "Go to homepage" %}</span></a>
                 </div>
             </form>
         </div>

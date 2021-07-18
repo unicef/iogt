@@ -19,12 +19,12 @@
                 {% endif %}
                 {% if item.comment.url %}</a>{% endif %}
                 {% if item.comment.user and item.comment.user|has_permission:"django_comments.can_moderate" %}
-                    &nbsp;<span class='individual-comment__moderator'>{% trans "moderator" %}</span>{% endif %}&nbsp;&nbsp;
+                    &nbsp;<span class='individual-comment__moderator'>{% translate "moderator" %}</span>{% endif %}&nbsp;&nbsp;
                 <span>
         </span>
                 {% if item.comment.is_removed %}
                     <p class="text-muted{% if not allow_feedback and not item.comment.allow_thread %} pb-3{% endif %}">
-                        <em>{% trans "This comment has been removed." %}</em></p>
+                        <em>{% translate "This comment has been removed." %}</em></p>
                 {% else %}
                     <div class="content{% if not allow_feedback and not item.comment.allow_thread %} pb-3{% endif %}">
                         {% include "includes/django_comments_xtd/comment_content.html" with content=item.comment.comment %}
@@ -40,7 +40,7 @@
                   <a href="{% url 'comments-flag' item.comment.pk %}" class="report-comment">
                    Report
                   </a>
-                  <i title="{% trans 'comment flagged' %}" class='report-comment__disclaimer'>This is a reported comment </i>
+                  <i title="{% translate 'comment flagged' %}" class='report-comment__disclaimer'>This is a reported comment </i>
               {% elif allow_flagging %}
               <a href="{% url 'comments-flag' item.comment.pk %}" class="report-comment">
                 Report
@@ -53,7 +53,7 @@
               {% endif %}
               {% if perms.comments.can_moderate %}
                   <a href="{% url 'comments-delete' item.comment.pk %}"><i class="fas fa-trash-alt"
-                                                  title="{% trans 'remove comment' %}"></i></a>
+                                                  title="{% translate 'remove comment' %}"></i></a>
               {% endif %}
           {% endif %}
         </div>
