@@ -18,7 +18,9 @@ class ChatManager:
 
     def _record_message_in_database(self, sender, rapidpro_message_id, text, quick_replies):
         # Messages sent from User to RapidPro server don't have rapidpro_message_id
-        if rapidpro_message_id:
+        from_rapidpro_server = bool(rapidpro_message_id)
+
+        if from_rapidpro_server:
             message, created = Message.objects.get_or_create(rapidpro_message_id=rapidpro_message_id, defaults={
                 'sender': sender,
                 'text': text,
@@ -33,10 +35,7 @@ class ChatManager:
                 message.text = f'{message.text}{text}'
                 message.save(update_fields=['text'])
 
-            cleaned_text, attachment_links = ChatManager._parse_rapidpro_message(message.text)
-            message.text = cleaned_text
-            message.update_or_create_attachments(attachment_links)
-            message.save()
+            self._handle_attachments(message)
 
         else:
             Message.objects.create(
@@ -45,6 +44,12 @@ class ChatManager:
 
         self.thread.last_message_at = timezone.now()
         self.thread.save(update_fields=['last_message_at'])
+
+    def _handle_attachments(self, message):
+        cleaned_text, attachment_links = ChatManager._parse_rapidpro_message(message.text)
+        message.text = cleaned_text
+        message.update_or_create_attachments(attachment_links)
+        message.save()
 
     @staticmethod
     def _parse_rapidpro_message(message_text):
