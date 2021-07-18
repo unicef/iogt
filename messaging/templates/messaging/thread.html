@@ -7,7 +7,7 @@
 <div class="messaging-thread-detail-container">
     <h2 class="with-actions">
         {{ thread.subject }}
-        <a class="button" href="{% url "messaging:thread_delete" thread.pk %}">Delete Thread</a>
+        <a class="button" href="{% url "messaging:thread_delete" thread.pk %}">{% translate "Delete Thread" %}</a>
     </h2>
 
     <section class="thread-messages">
@@ -33,8 +33,8 @@
         {% csrf_token %}
         {{ form }}
         <div class="form-actions">
-            <a href="{% url "messaging:inbox" %}" class="cancel">Cancel</a>
-            <button>Send</button>
+            <a href="{% url "messaging:inbox" %}" class="cancel">{% translate "Cancel" %}</a>
+            <button>{% translate "Send" %}</button>
         </div>
     </form>
 </div>

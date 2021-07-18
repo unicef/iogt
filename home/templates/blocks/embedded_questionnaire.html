@@ -15,9 +15,9 @@
                 {% if type == "Survey" %}
                     <div class="quest-item">
                         <div class="quest-item__header">
-                            <p class="quest-item__number">{{ forloop.counter }}
-                                of {{ form.fields | length }}
-                                questions</p>
+                            <p class="quest-item__number">
+                                {% blocktranslate with counter=forloop.counter count total=form.fields|length %}{{ counter }} of 1 question{% plural %}{{ counter }} of {{ total }} questions{% endblocktranslate %}
+                            </p>
                             <p class="quest-item__step-desc">
                                     <span>
                                          {% if not field.field.required %}

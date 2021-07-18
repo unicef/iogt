@@ -3,7 +3,7 @@
     <nav>
     <div class='bottom-level__section'>
             <img src="{% static 'icons/login.svg' %}" />
-            <a href="{% url 'account_login' %}">Log in</a>
+            <a href="{% url 'account_login' %}">{% translate "Log in" %}</a>
         </div>
      {% for footer_page in footer_pages %}
         <div class='bottom-level__section'>

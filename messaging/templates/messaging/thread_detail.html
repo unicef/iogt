@@ -3,7 +3,7 @@
 
 {% block content %}
     <div class="chat">
-        <a href="{% url 'messaging:inbox' %}" class="btn-back">Back</a>
+        <a href="{% url 'messaging:inbox' %}" class="btn-back">{% translate "Back" %}</a>
         <h1> {{ thread.subject }} </h1>
         <div class="load-more-button">
             <a href="{% url 'messaging:thread' thread_id=thread.id %}?num_results={{ load_more_num_results }}">{% translate 'Load more' %}</a>

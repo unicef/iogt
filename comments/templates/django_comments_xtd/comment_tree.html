@@ -38,17 +38,18 @@
                {% if not item.comment.is_removed %}
               {% if allow_flagging and item.flagged %}
                   <a href="{% url 'comments-flag' item.comment.pk %}" class="report-comment">
-                   Report
+                   {% translate "Report" %}
                   </a>
-                  <i title="{% translate 'comment flagged' %}" class='report-comment__disclaimer'>This is a reported comment </i>
+                  <i title="{% translate 'comment flagged' %}" class='report-comment__disclaimer'>{% translate "This is a reported comment" %} </i>
               {% elif allow_flagging %}
               <a href="{% url 'comments-flag' item.comment.pk %}" class="report-comment">
-                Report
+                {% translate "Report" %}
               </a>
               {% endif %}
               {% if perms.comments.can_moderate %}
                   {% if item.flagged_count %}
-                      <span class="report-comment"> Reported by {{ item.flagged_count }}</span>
+                      {# Translators: Count refers to the number of people that reported a comment. #}
+                      <span class="report-comment">{% blocktranslate with item.flagged_count as count %}Reported by {{ count }}{% endblocktranslate %}</span>
                   {% endif %}
               {% endif %}
               {% if perms.comments.can_moderate %}
