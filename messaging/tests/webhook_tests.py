@@ -46,4 +46,4 @@ class RapidProWebhookTest(APITestCase):
         self.assertEqual(attachment.external_link,
                          'https://rapidpro.idems.international/media/attachments/43/15890/steps/'
                          '3de4f80a-1eab-42db-8b7e-d7c35edecd06.bin')
-        self.assertIsNotNone(attachment.downloaded_file)
+        self.assertIsNotNone(attachment.file)

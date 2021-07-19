@@ -44,6 +44,6 @@ class AttachmentAdmin(admin.ModelAdmin):
         'modified',
         'message',
         'external_link',
-        'downloaded_file',
+        'file',
     )
     list_filter = ('created', 'modified')

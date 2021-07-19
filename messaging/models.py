@@ -85,7 +85,7 @@ class Message(models.Model):
         for link in attachment_links:
             if not self.attachments.filter(external_link=link).exists():
                 attachment, created = Attachment.objects.get_or_create(external_link=link)
-                if not attachment.downloaded_file:
+                if not attachment.file:
                     attachment.download_external_file()
                 self.attachments.add(attachment)
 
@@ -98,15 +98,15 @@ class Message(models.Model):
 
 class Attachment(TimeStampedModel):
     external_link = models.URLField()
-    downloaded_file = models.FileField(null=True, blank=True)
+    file = models.FileField(null=True, blank=True)
 
     def download_external_file(self):
         response = requests.get(self.external_link, allow_redirects=True)
 
         if response.status_code == status.HTTP_200_OK:
             file = File(BytesIO(response.content), name=self.external_link.split('/')[-1])
-            self.downloaded_file = file
-            self.save()
+            self.file = file
+            self.save(update_fields=['file'])
 
     def __str__(self):
         return f'Attachment for message: {self.message}'
