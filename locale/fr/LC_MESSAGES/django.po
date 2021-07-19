@@ -1,0 +1,1300 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-07-19 17:41+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"FR-Project-Id-Version: PACKAGE VERSION\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: comments/templates/comment_reply.html:22
+msgid "Canned Responses"
+msgstr "FR-Canned Responses"
+
+#: comments/templates/comment_reply.html:35
+msgid "Reply"
+msgstr "FR-Reply"
+
+#: comments/templates/comments/delete.html:5
+msgid "Remove comment"
+msgstr "FR-Remove comment"
+
+#: comments/templates/comments/delete.html:9
+msgid "Remove this comment?"
+msgstr "FR-Remove this comment?"
+
+#: comments/templates/comments/delete.html:12
+msgid ""
+"As a moderator you can delete comments. Deleting a comment does not remove "
+"it from the site, only prevents your website from showing the text. Click on "
+"the remove button to delete the following comment:"
+msgstr ""
+"FR-As a moderator you can delete comments. Deleting a comment does not "
+"remove it from the site, only prevents your website from showing the text. "
+"Click on the remove button to delete the following comment:"
+
+#: comments/templates/comments/delete.html:45
+msgid "Remove"
+msgstr "FR-Remove"
+
+#: comments/templates/comments/deleted.html:5
+msgid "Comment removed"
+msgstr "FR-Comment removed"
+
+#: comments/templates/comments/deleted.html:12
+msgid "The comment has been removed."
+msgstr "FR-The comment has been removed."
+
+#: comments/templates/comments/deleted.html:13
+#: comments/templates/comments/flagged.html:13
+msgid ""
+"Thank you for taking the time to improve the quality of discussion in our "
+"site."
+msgstr ""
+"FR-Thank you for taking the time to improve the quality of discussion in our "
+"site."
+
+#: comments/templates/comments/flag.html:4
+msgid "Flag comment"
+msgstr "FR-Flag comment"
+
+#: comments/templates/comments/flag.html:14
+msgid "Flag this comment?"
+msgstr "FR-Flag this comment?"
+
+#: comments/templates/comments/flag.html:15
+msgid ""
+"Click on the flag button to mark the following comment as inappropriate."
+msgstr ""
+"FR-Click on the flag button to mark the following comment as inappropriate."
+
+#: comments/templates/comments/flag.html:20
+#: comments/templates/django_comments_xtd/comment.html:11
+#: comments/templates/django_comments_xtd/like.html:47
+msgid "Posted to "
+msgstr "FR-Posted to "
+
+#: comments/templates/comments/flag.html:26
+msgid "Flag"
+msgstr "FR-Flag"
+
+#: comments/templates/comments/flag.html:27
+#: comments/templates/django_comments_xtd/like.html:73
+msgid "cancel"
+msgstr "FR-cancel"
+
+#: comments/templates/comments/flagged.html:5
+msgid "Comment flagged"
+msgstr "FR-Comment flagged"
+
+#: comments/templates/comments/flagged.html:12
+msgid "The comment has been flagged."
+msgstr "FR-The comment has been flagged."
+
+#: comments/templates/comments/form.html:82
+msgid "Leave comment"
+msgstr "FR-Leave comment"
+
+#: comments/templates/comments/preview.html:5
+#: comments/templates/comments/preview.html:11
+msgid "Preview your comment"
+msgstr "FR-Preview your comment"
+
+#: comments/templates/comments/preview.html:15
+msgid "Preview of your comment for:"
+msgstr "FR-Preview of your comment for:"
+
+#: comments/templates/comments/preview.html:22
+msgid "Empty comment."
+msgstr "FR-Empty comment."
+
+#: comments/templates/comments/preview.html:49
+#: comments/templates/django_comments_xtd/reply.html:32
+msgid "Post your comment"
+msgstr "FR-Post your comment"
+
+#: comments/templates/django_comments_xtd/comment.html:15
+#: comments/templates/django_comments_xtd/comment_tree.html:27
+msgid "This comment has been removed."
+msgstr "FR-This comment has been removed."
+
+#: comments/templates/django_comments_xtd/comment_list.html:11
+msgid "List of comments"
+msgstr "FR-List of comments"
+
+#: comments/templates/django_comments_xtd/comment_list.html:21
+msgid "No comments yet."
+msgstr "FR-No comments yet."
+
+#: comments/templates/django_comments_xtd/comment_tree.html:22
+msgid "moderator"
+msgstr "FR-moderator"
+
+#: comments/templates/django_comments_xtd/comment_tree.html:41
+#: comments/templates/django_comments_xtd/comment_tree.html:46
+msgid "Report"
+msgstr "FR-Report"
+
+#: comments/templates/django_comments_xtd/comment_tree.html:43
+msgid "comment flagged"
+msgstr "FR-comment flagged"
+
+#: comments/templates/django_comments_xtd/comment_tree.html:43
+msgid "This is a reported comment"
+msgstr "FR-This is a reported comment"
+
+#. Translators: Count refers to the number of people that reported a comment.
+#: comments/templates/django_comments_xtd/comment_tree.html:52
+#, python-format
+msgid "Reported by %(count)s"
+msgstr "FR-Reported by %(count)s"
+
+#: comments/templates/django_comments_xtd/comment_tree.html:57
+msgid "remove comment"
+msgstr "FR-remove comment"
+
+#: comments/templates/django_comments_xtd/discarded.html:4
+msgid "Comment discarded"
+msgstr "FR-Comment discarded"
+
+#: comments/templates/django_comments_xtd/discarded.html:7
+msgid "Comment automatically discarded"
+msgstr "FR-Comment automatically discarded"
+
+#: comments/templates/django_comments_xtd/discarded.html:8
+msgid "Sorry, your comment has been automatically discarded"
+msgstr "FR-Sorry, your comment has been automatically discarded"
+
+#: comments/templates/django_comments_xtd/like.html:5
+msgid "Confirm your opinion"
+msgstr "FR-Confirm your opinion"
+
+#: comments/templates/django_comments_xtd/like.html:15
+msgid "You liked this comment, do you want to change it?"
+msgstr "FR-You liked this comment, do you want to change it?"
+
+#: comments/templates/django_comments_xtd/like.html:17
+msgid "Do you like this comment?"
+msgstr "FR-Do you like this comment?"
+
+#: comments/templates/django_comments_xtd/like.html:22
+msgid "Please, confirm your opinion about the comment."
+msgstr "FR-Please, confirm your opinion about the comment."
+
+#: comments/templates/django_comments_xtd/like.html:60
+msgid ""
+"Click on the \"withdraw\" button if you want to withdraw your positive "
+"opinion on this comment."
+msgstr "FR-"
+
+#: comments/templates/django_comments_xtd/like.html:69
+msgid "Withdraw"
+msgstr "FR-Withdraw"
+
+#: comments/templates/django_comments_xtd/like.html:71
+msgid "I like it"
+msgstr "FR-I like it"
+
+#: comments/templates/django_comments_xtd/liked.html:4
+msgid "Your opinion is appreciated"
+msgstr "FR-Your opinion is appreciated"
+
+#: comments/templates/django_comments_xtd/liked.html:7
+msgid "Thanks for taking the time to participate."
+msgstr "FR-Thanks for taking the time to participate."
+
+#: comments/templates/django_comments_xtd/moderated.html:4
+msgid "Comment requires approval"
+msgstr "FR-Comment requires approval"
+
+#: comments/templates/django_comments_xtd/moderated.html:8
+msgid "Comment in moderation"
+msgstr "FR-Comment in moderation"
+
+#: comments/templates/django_comments_xtd/moderated.html:14
+msgid ""
+"\n"
+"            Your comment is in moderation.<br/>\n"
+"            It has to be reviewed before being published.<br/>\n"
+"            Thank you for your patience and understanding.\n"
+"            "
+msgstr ""
+"\n"
+"FR-"
+"            Your comment is in moderation.<br/>\n"
+"            It has to be reviewed before being published.<br/>\n"
+"            Thank you for your patience and understanding.\n"
+"            "
+
+#: comments/templates/django_comments_xtd/moderated.html:22
+#, python-format
+msgid ""
+"\n"
+"            Go back to: <a href=\"%(content_object_url)s\">"
+"%(content_object_str)s</a>\n"
+"            "
+msgstr ""
+"\n"
+"FR-            Go back to: <a href=\"%(content_object_url)s\">"
+"%(content_object_str)s</a>\n"
+"            "
+
+#: comments/templates/django_comments_xtd/muted.html:4
+msgid "Comment thread muted"
+msgstr "FR-Comment thread muted"
+
+#: comments/templates/django_comments_xtd/muted.html:7
+msgid "Comment thread has been muted"
+msgstr "FR-Comment thread has been muted"
+
+#: comments/templates/django_comments_xtd/muted.html:9
+msgid "You will no longer receive email notifications for comments sent to"
+msgstr "FR-You will no longer receive email notifications for comments sent to"
+
+#: comments/templates/django_comments_xtd/only_users_can_post.html:5
+msgid "Only registered users can post comments."
+msgstr "FR-Only registered users can post comments."
+
+#: comments/templates/django_comments_xtd/reply.html:6
+msgid "Comment reply"
+msgstr "FR-Comment reply"
+
+#: comments/templates/django_comments_xtd/reply.html:11
+msgid "Reply to comment"
+msgstr "FR-Reply to comment"
+
+#: comments/views.py:38
+msgid "The comment has been updated successfully!"
+msgstr "FR-The comment has been updated successfully!"
+
+#: comments/views.py:68
+msgid "Sent Reply successfully"
+msgstr "FR-Sent Reply successfully"
+
+#: home/blocks.py:17
+msgid "Your browser does not support the video tag."
+msgstr "FR-Your browser does not support the video tag."
+
+#: home/blocks.py:18
+msgid "Your browser does not support the audio element."
+msgstr "FR-Your browser does not support the audio element."
+
+#. Translators: Part of this message (between %(start_link)s and %(end_link)s ) is a clickable download link
+#: home/blocks.py:20
+#, python-format
+msgid ""
+"If you cannot view the above video, perhaps would you like to %(start_link)s "
+"download it? %(end_link)s."
+msgstr ""
+"FR-If you cannot view the above video, perhaps would you like to "
+"%(start_link)s download it? %(end_link)s."
+
+#. Translators: Part of this message (between %(start_link)s and %(end_link)s ) is a clickable download link
+#: home/blocks.py:26
+#, python-format
+msgid ""
+"If you cannot listen to the above audio, perhaps would you like to "
+"%(start_link)s download it? %(end_link)s."
+msgstr ""
+"FR-If you cannot listen to the above audio, perhaps would you like to "
+"%(start_link)s download it? %(end_link)s."
+
+#: home/models.py:71
+msgid "Home Page Banner"
+msgstr "FR-Home Page Banner"
+
+#: home/models.py:72
+msgid "Home Page Banners"
+msgstr "FR-Home Page Banners"
+
+#: home/models.py:177 home/models.py:178
+msgid "Featured Content"
+msgstr "FR-Featured Content"
+
+#: home/models.py:240
+msgid "section"
+msgstr "FR-section"
+
+#: home/models.py:241
+msgid "sections"
+msgstr "FR-sections"
+
+#: home/models.py:310
+msgid "Recommended Articles"
+msgstr "FR-Recommended Articles"
+
+#: home/models.py:373
+msgid "article"
+msgstr "FR-article"
+
+#: home/models.py:374
+msgid "articles"
+msgstr "FR-articleS"
+
+#: home/models.py:394
+msgid "Image to display as the banner"
+msgstr "FR-Image to display as the banner"
+
+#: home/models.py:401
+msgid "Background image"
+msgstr "FR-Background image"
+
+#: home/models.py:407
+msgid "Optional page to which the banner will link to"
+msgstr "FR-Optional page to which the banner will link to"
+
+#: home/models.py:412
+msgid "The title for a button"
+msgstr "FR-The title for a button"
+
+#: home/models.py:419
+msgid "Icon Button"
+msgstr "FR-Icon Button"
+
+#: home/models.py:463
+msgid ""
+"When selecting this option, untranslated pages will not be visible to the "
+"front end user when viewing a child language of the site"
+msgstr ""
+"FR-When selecting this option, untranslated pages will not be visible to the "
+"front end user when viewing a child language of the site"
+
+#: home/models.py:468
+msgid "Facebook Analytics App ID"
+msgstr "FR-Facebook Analytics App ID"
+
+#: home/models.py:473
+msgid "The tracking ID to be used to view Facebook Analytics"
+msgstr "FR-The tracking ID to be used to view Facebook Analytics"
+
+#: home/models.py:476
+msgid "Local GA Tag Manager"
+msgstr "FR-Local GA Tag Manager"
+
+#: home/models.py:481
+msgid ""
+"Local GA Tag Manager tracking code (e.g GTM-XXX) to be used to view "
+"analytics on this site only"
+msgstr "FR-"
+
+#: home/models.py:485
+msgid "Global GA Tag Manager"
+msgstr "FR-Global GA Tag Manager"
+
+#: home/models.py:490
+msgid ""
+"Global GA Tag Manager tracking code (e.g GTM-XXX) to be used to view "
+"analytics on more than one site globally"
+msgstr "FR-"
+
+#: home/models.py:494
+msgid "Local GA Tracking Code"
+msgstr "FR-Local GA Tracking Code"
+
+#: home/models.py:499
+msgid "Local GA tracking code to be used to view analytics on this site only"
+msgstr ""
+"FR-Local GA tracking code to be used to view analytics on this site only"
+
+#: home/models.py:503
+msgid "Global GA Tracking Code"
+msgstr "FR-Global GA Tracking Code"
+
+#: home/models.py:508
+msgid ""
+"Global GA tracking code to be used to view analytics on more than one site "
+"globally"
+msgstr "FR-"
+
+#: home/models.py:519
+msgid ""
+"Show warning if uploaded media file size is greater than this in bytes. "
+"Default is 9 MB"
+msgstr ""
+"FR-Show warning if uploaded media file size is greater than this in bytes. "
+"Default is 9 MB"
+
+#: home/models.py:600 home/models.py:601
+msgid "Site Settings"
+msgstr "FR-Site Settings"
+
+#: home/models.py:608
+msgid "Prompt users to download?"
+msgstr "FR-Prompt users to download?"
+
+#: home/models.py:610
+msgid "check to prompt first time users to download the website as an app"
+msgstr "FR-check to prompt first time users to download the website as an app"
+
+#: home/models.py:689 iogt/templates/wagtailusers/users/list.html:19
+#: iogt/templates/wagtailusers/users/list.html:23
+msgid "Name"
+msgstr "FR-Name"
+
+#: home/models.py:690
+msgid "Provide name"
+msgstr "FR-Provide name"
+
+#: home/models.py:694
+msgid "Short name"
+msgstr "FR-Short name"
+
+#: home/models.py:695
+msgid "Provide short name"
+msgstr "FR-Provide short name"
+
+#: home/models.py:699
+msgid "Scope"
+msgstr "FR-Scope"
+
+#: home/models.py:700
+msgid "Provide scope"
+msgstr "FR-Provide scope"
+
+#: home/models.py:704
+msgid "Start URL"
+msgstr "FR-Start URL"
+
+#: home/models.py:705
+msgid "Provide start URL"
+msgstr "FR-Provide start URL"
+
+#: home/models.py:715
+msgid "Browser UI"
+msgstr "FR-Browser UI"
+
+#: home/models.py:716
+msgid "Provide browser UI"
+msgstr "FR-Provide browser UI"
+
+#: home/models.py:720
+msgid "Background color"
+msgstr "FR-Background color"
+
+#: home/models.py:721
+msgid "Provide background color (example: #FFF)"
+msgstr "FR-Provide background color (example: #FFF)"
+
+#: home/models.py:725
+msgid "Theme color"
+msgstr "FR-Theme color"
+
+#: home/models.py:726
+msgid "Provide theme color(example: #493174)"
+msgstr "FR-Provide theme color(example: #493174)"
+
+#: home/models.py:730
+msgid "Description"
+msgstr "FR-Description"
+
+#: home/models.py:731
+msgid "Provide description"
+msgstr "FR-Provide description"
+
+#: home/models.py:737
+msgid "Language"
+msgstr "FR-Language"
+
+#: home/models.py:738
+msgid "Choose language"
+msgstr "FR-Choose language"
+
+#: home/models.py:745
+msgid "Icon 96x96"
+msgstr "FR-Icon 96x96"
+
+#: home/models.py:746
+msgid "Add PNG icon 96x96 px"
+msgstr "FR-Add PNG icon 96x96 px"
+
+#: home/models.py:754
+msgid "Icon 512x512"
+msgstr "FR-Icon 512x512"
+
+#: home/models.py:755
+msgid "Add PNG icon 512x512 px"
+msgstr "FR-Add PNG icon 512x512 px"
+
+#: home/models.py:763
+msgid "Icon 196x196 (maskable)"
+msgstr "FR-Icon 196x196 (maskable)"
+
+#: home/models.py:765
+msgid ""
+"Add PNG icon 196x196 px (maskable image can be created using https://"
+"maskable.app/)"
+msgstr ""
+"FR-Add PNG icon 196x196 px (maskable image can be created using https://"
+"maskable.app/)"
+
+#: home/templates/blocks/embedded_questionnaire.html:19
+#: questionnaires/templates/questionnaires/tags/field_counter.html:3
+#: questionnaires/templates/quizzes/quiz_landing.html:81
+#, python-format
+msgid "%(counter)s of 1 question"
+msgid_plural "%(counter)s of %(total)s questions"
+msgstr[0] "FR-%(counter)s of 1 question"
+msgstr[1] "FR-%(counter)s of %(total)s questions"
+
+#: home/templates/blocks/embedded_questionnaire.html:24
+#: home/templates/blocks/embedded_questionnaire.html:73
+#: questionnaires/templates/questionnaires/tags/field_description.html:6
+msgid "Optional"
+msgstr "FR-Optional"
+
+#: home/templates/blocks/embedded_questionnaire.html:26
+#: home/templates/blocks/embedded_questionnaire.html:69
+#: questionnaires/templates/questionnaires/tags/field_description.html:8
+msgid "Select one"
+msgstr "FR-Select one"
+
+#: home/templates/blocks/embedded_questionnaire.html:28
+#: home/templates/blocks/embedded_questionnaire.html:71
+#: questionnaires/templates/questionnaires/tags/field_description.html:10
+msgid "Check all that apply"
+msgstr "FR-Check all that apply"
+
+#: home/templates/home/article.html:25
+msgid "Previous"
+msgstr "FR-Previous"
+
+#: home/templates/home/article.html:28
+msgid "Next"
+msgstr "FR-Next"
+
+#: home/templates/home/article.html:38
+msgid "Comments"
+msgstr "FR-Comments"
+
+#: home/templates/home/article.html:46
+msgid "Please log in or create your account"
+msgstr "FR-Please log in or create your account"
+
+#: home/templates/home/article.html:49
+msgid "Log in/Create account"
+msgstr "FR-Log in/Create account"
+
+#: home/templates/home/article.html:56
+msgid "New comments have been disabled for this page."
+msgstr "FR-New comments have been disabled for this page."
+
+#: home/templates/home/article.html:69
+msgid "Related Articles"
+msgstr "FR-Related Articles"
+
+#: home/templates/home/tags/footer.html:6 iogt/templates/account/login.html:22
+#: iogt/templates/account/signup.html:25
+msgid "Log in"
+msgstr "FR-Log in"
+
+#: home/wagtail_hooks.py:58
+msgid "Form Data"
+msgstr "FR-Form Data"
+
+#: iogt/settings/base.py:262
+msgid "Arabic"
+msgstr "FR-Arabic"
+
+#: iogt/settings/base.py:263
+msgid "Chichewa"
+msgstr "FR-Chichewa"
+
+#: iogt/settings/base.py:264
+msgid "English"
+msgstr "FR-English"
+
+#: iogt/settings/base.py:265
+msgid "French"
+msgstr "FR-French"
+
+#: iogt/settings/base.py:266
+msgid "Khmer"
+msgstr "FR-Khmer"
+
+#: iogt/settings/base.py:267
+msgid "Kinyarwanda"
+msgstr "FR-Kinyarwanda"
+
+#: iogt/settings/base.py:269
+msgid "Kurdish"
+msgstr "FR-Kurdish"
+
+#: iogt/settings/base.py:270
+msgid "Malagasy"
+msgstr "FR-Malagasy"
+
+#: iogt/settings/base.py:271
+msgid "Nepali"
+msgstr "FR-Nepali"
+
+#: iogt/settings/base.py:272
+msgid "Ndebele"
+msgstr "FR-Ndebele"
+
+#: iogt/settings/base.py:273
+msgid "Portuguese"
+msgstr "FR-Portuguese"
+
+#: iogt/settings/base.py:274
+msgid "Quechua"
+msgstr "FR-Quechua"
+
+#: iogt/settings/base.py:275
+msgid "Russian"
+msgstr "FR-Russian"
+
+#: iogt/settings/base.py:276
+msgid "Shona"
+msgstr "FR-Shona"
+
+#: iogt/settings/base.py:277
+msgid "Spanish"
+msgstr "FR-Spanish"
+
+#: iogt/settings/base.py:278
+msgid "Swahili"
+msgstr "FR-Swahili"
+
+#: iogt/settings/base.py:279
+msgid "Tajik"
+msgstr "FR-Tajik"
+
+#: iogt/settings/base.py:280
+msgid "Tigrinya"
+msgstr "FR-Tigrinya"
+
+#: iogt/settings/base.py:281
+msgid "Urdu"
+msgstr "FR-Urdu"
+
+#: iogt/settings/base.py:282
+msgid "Uzbek"
+msgstr "FR-Uzbek"
+
+#: iogt/settings/base.py:283
+msgid "Zulu"
+msgstr "FR-Zulu"
+
+#: iogt/templates/404.html:8
+msgid "Page not found"
+msgstr "FR-Page not found"
+
+#: iogt/templates/404.html:10
+msgid "Sorry, this page could not be found."
+msgstr "FR-Sorry, this page could not be found."
+
+#: iogt/templates/500.html:7 iogt/templates/500.html:11
+msgid "Internal server error"
+msgstr "FR-Internal server error"
+
+#: iogt/templates/500.html:13
+msgid "Sorry, there seems to be an error. Please try again soon."
+msgstr "FR-Sorry, there seems to be an error. Please try again soon."
+
+#: iogt/templates/account/account_inactive.html:5
+#: iogt/templates/account/account_inactive.html:8
+msgid "Account Inactive"
+msgstr "FR-Account Inactive"
+
+#: iogt/templates/account/account_inactive.html:10
+msgid "This account is inactive."
+msgstr "FR-This account is inactive."
+
+#: iogt/templates/account/login.html:6 iogt/templates/account/login.html:10
+msgid "Log In"
+msgstr "FR-Log In"
+
+#: iogt/templates/account/login.html:25 iogt/templates/account/signup.html:5
+#: iogt/templates/account/signup.html:8 iogt/templates/account/signup.html:22
+msgid "Create your account"
+msgstr "FR-Create your account"
+
+#: iogt/templates/account/login.html:27
+msgid "Placeholder text below Create your account button."
+msgstr "FR-Placeholder text below Create your account button."
+
+#: iogt/templates/account/logout.html:5 iogt/templates/account/logout.html:8
+#: iogt/templates/account/logout.html:17
+msgid "Sign Out"
+msgstr "FR-Sign Out"
+
+#: iogt/templates/account/logout.html:10
+msgid "Are you sure you want to sign out?"
+msgstr "FR-Are you sure you want to sign out?"
+
+#: iogt/templates/account/password_change.html:5
+#: iogt/templates/account/password_change.html:8
+#: iogt/templates/account/password_change.html:13
+#: iogt/templates/account/password_reset_from_key.html:4
+#: iogt/templates/account/password_reset_from_key.html:7
+#: iogt/templates/account/password_reset_from_key.html:17
+#: iogt/templates/account/password_reset_from_key_done.html:4
+#: iogt/templates/account/password_reset_from_key_done.html:7
+msgid "Change Password"
+msgstr "FR-Change Password"
+
+#: iogt/templates/account/password_change.html:14
+msgid "Forgot Password?"
+msgstr "FR-Forgot Password?"
+
+#: iogt/templates/account/password_reset.html:6
+#: iogt/templates/account/password_reset.html:10
+#: iogt/templates/account/password_reset_done.html:6
+#: iogt/templates/account/password_reset_done.html:9
+msgid "Password Reset"
+msgstr "FR-Password Reset"
+
+#: iogt/templates/account/password_reset.html:15
+msgid ""
+"Forgotten your password? Enter your e-mail address below, and we'll send you "
+"an e-mail allowing you to reset it."
+msgstr "FR-"
+
+#: iogt/templates/account/password_reset.html:20
+msgid "Reset My Password"
+msgstr "FR-Reset My Password"
+
+#: iogt/templates/account/password_reset.html:23
+msgid "Please contact us if you have any trouble resetting your password."
+msgstr "FR-Please contact us if you have any trouble resetting your password."
+
+#: iogt/templates/account/password_reset_done.html:15
+msgid ""
+"We have sent you an e-mail. Please contact us if you do not receive it "
+"within a few minutes."
+msgstr "FR-"
+
+#: iogt/templates/account/password_reset_from_key.html:7
+msgid "Bad Token"
+msgstr "FR-Bad Token"
+
+#: iogt/templates/account/password_reset_from_key.html:11
+#, python-format
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a <a href=\"%(passwd_reset_url)s\">new password reset</"
+"a>."
+msgstr ""
+"FR-The password reset link was invalid, possibly because it has already been "
+"used.  Please request a <a href=\"%(passwd_reset_url)s\">new password reset</"
+"a>."
+
+#: iogt/templates/account/password_reset_from_key.html:20
+#: iogt/templates/account/password_reset_from_key_done.html:8
+msgid "Your password is now changed."
+msgstr "FR-Your password is now changed."
+
+#: iogt/templates/account/password_set.html:5
+#: iogt/templates/account/password_set.html:8
+#: iogt/templates/account/password_set.html:13
+msgid "Set Password"
+msgstr "FR-Set Password"
+
+#: iogt/templates/account/signup.html:29
+msgid "Placeholder text below Login button."
+msgstr "FR-Placeholder text below Login button."
+
+#: iogt/templates/back_button.html:14
+msgid "BACK"
+msgstr "FR-BACK"
+
+#: iogt/templates/cache_banner.html:9
+msgid ""
+"This appears to be your first visit here. Our website is also available as a "
+"downloadable app."
+msgstr ""
+"FR-This appears to be your first visit here. Our website is also available "
+"as a downloadable app."
+
+#: iogt/templates/cache_banner.html:10
+msgid "Would you like to download it?"
+msgstr "FR-Would you like to download it?"
+
+#: iogt/templates/cache_banner.html:12
+msgid "Download"
+msgstr "FR-Download"
+
+#: iogt/templates/footer.html:33 search/templates/search/search.html:106
+msgid "Search here"
+msgstr "FR-Search here"
+
+#: iogt/templates/footer.html:38
+msgid "© The Internet of Good Things"
+msgstr "FR-© The Internet of Good Things"
+
+#: iogt/templates/transition-page.html:8
+msgid "go to external link"
+msgstr "FR-go to external link"
+
+#: iogt/templates/transition-page.html:10
+msgid "back to previous page"
+msgstr "FR-back to previous page"
+
+#: iogt/templates/wagtailusers/users/list.html:8
+#: iogt/templates/wagtailusers/users/list.html:12
+msgid "Username"
+msgstr "FR-Username"
+
+#: iogt/templates/wagtailusers/users/list.html:27
+msgid "Level"
+msgstr "FR-Level"
+
+#: iogt/templates/wagtailusers/users/list.html:28
+msgid "Status"
+msgstr "FR-Status"
+
+#: iogt/templates/wagtailusers/users/list.html:29
+msgid "Last Login"
+msgstr "FR-Last Login"
+
+#: iogt/templates/wagtailusers/users/list.html:45
+msgid "Admin"
+msgstr "FR-Admin"
+
+#: iogt/templates/wagtailusers/users/list.html:46
+msgid "Active"
+msgstr "FR-Active"
+
+#: iogt/templates/wagtailusers/users/list.html:46
+msgid "Inactive"
+msgstr "FR-Inactive"
+
+#: iogt/templates/wagtailusers/users/list.html:47
+#, python-format
+msgid "%(time_period)s ago"
+msgstr "FR-%(time_period)s ago"
+
+#: iogt_users/templates/modeladmin/iogt_users/user/index.html:34
+msgid "Upload Users"
+msgstr "FR-Upload Users"
+
+#: iogt_users/templates/modeladmin/iogt_users/user/index.html:39
+msgid "Download XLSX"
+msgstr "FR-Download XLSX"
+
+#: iogt_users/templates/modeladmin/iogt_users/user/index.html:42
+msgid "Download CSV"
+msgstr "FR-Download CSV"
+
+#: iogt_users/templates/modeladmin/iogt_users/user/index.html:63
+msgid "Filter"
+msgstr "FR-Filter"
+
+#: iogt_users/templates/modeladmin/iogt_users/user/index.html:74
+#, python-format
+msgid ""
+"No %(name)s have been created yet. One of the following must be created "
+"before you can add any %(name)s:"
+msgstr ""
+"FR-No %(name)s have been created yet. One of the following must be created "
+"before you can add any %(name)s:"
+
+#: iogt_users/templates/modeladmin/iogt_users/user/index.html:79
+#, python-format
+msgid "No %(name)s have been created yet."
+msgstr "FR-No %(name)s have been created yet."
+
+#: iogt_users/templates/modeladmin/iogt_users/user/index.html:81
+#, python-format
+msgid ""
+"\n"
+"                                                Why not <a href=\"%(url)s"
+"\">add one</a>?\n"
+"                                            "
+msgstr ""
+"\n"
+"FR-                                                Why not <a href=\"%(url)s"
+"\">add one</a>?\n"
+"                                            "
+
+#: iogt_users/templates/modeladmin/iogt_users/user/index.html:94
+msgid "Pagination"
+msgstr "FR-Pagination"
+
+#: iogt_users/templates/modeladmin/iogt_users/user/index.html:95
+#, python-format
+msgid "Page %(current_page)s of %(num_pages)s."
+msgstr "FR-Page %(current_page)s of %(num_pages)s."
+
+#: iogt_users/templates/post_registration_survey.html:5
+msgid "Post Registration Survey"
+msgstr "FR-Post Registration Survey"
+
+#: iogt_users/templates/post_registration_survey.html:6
+msgid "Please fill this survey to keep using Internet of Good Things"
+msgstr "FR-Please fill this survey to keep using Internet of Good Things"
+
+#: iogt_users/templates/post_registration_survey.html:10
+msgid "Simulate form completion"
+msgstr "FR-Simulate form completion"
+
+#: iogt_users/templates/profile.html:4 iogt_users/templates/profile.html:26
+msgid "Edit my profile"
+msgstr "FR-Edit my profile"
+
+#: iogt_users/templates/profile.html:15
+#, python-format
+msgid ""
+"\n"
+"                Hey, %(username)s\n"
+"            "
+msgstr ""
+"\n"
+"FR-                Hey, %(username)s\n"
+"            "
+
+#: iogt_users/templates/profile.html:32
+msgid "Notifications"
+msgstr "FR-Notifications"
+
+#: iogt_users/templates/profile.html:38
+msgid "Change Digital Pin"
+msgstr "FR-Change Digital Pin"
+
+#: iogt_users/templates/profile.html:45
+msgid "Log out"
+msgstr "FR-Log out"
+
+#: iogt_users/templates/profile_edit.html:4
+#: iogt_users/templates/profile_edit.html:7
+msgid "Personal Details"
+msgstr "FR-Personal Details"
+
+#: iogt_users/templates/profile_edit.html:13
+msgid "Save changes"
+msgstr "FR-Save changes"
+
+#: messaging/templates/messaging/inbox.html:6
+msgid "Chat"
+msgstr "FR-Chat"
+
+#: messaging/templates/messaging/thread.html:10
+msgid "Delete Thread"
+msgstr "FR-Delete Thread"
+
+#: messaging/templates/messaging/thread.html:36
+#: messaging/templates/messaging/thread_confirm_delete.html:20
+msgid "Cancel"
+msgstr "FR-Cancel"
+
+#: messaging/templates/messaging/thread.html:37
+#: messaging/templates/messaging/thread_detail.html:39
+msgid "Send"
+msgstr "FR-Send"
+
+#: messaging/templates/messaging/thread_confirm_delete.html:7
+msgid "Confirm Delete:"
+msgstr "FR-Confirm Delete:"
+
+#: messaging/templates/messaging/thread_confirm_delete.html:14
+msgid "Are you sure you want to delete this thread?"
+msgstr "FR-Are you sure you want to delete this thread?"
+
+#: messaging/templates/messaging/thread_confirm_delete.html:21
+msgid "Delete"
+msgstr "FR-Delete"
+
+#: messaging/templates/messaging/thread_detail.html:6
+msgid "Back"
+msgstr "FR-Back"
+
+#: messaging/templates/messaging/thread_detail.html:9
+msgid "Load more"
+msgstr "FR-Load more"
+
+#: messaging/templates/messaging/thread_detail.html:38
+msgid "Reply here..."
+msgstr "FR-Reply here..."
+
+#: questionnaires/blocks.py:22
+msgid "Answer options"
+msgstr "FR-Answer options"
+
+#: questionnaires/blocks.py:33
+msgid "Next default question"
+msgstr "FR-Next default question"
+
+#: questionnaires/blocks.py:34
+msgid "End of survey"
+msgstr "FR-End of survey"
+
+#: questionnaires/blocks.py:35
+msgid "Another question"
+msgstr "FR-Another question"
+
+#: questionnaires/forms.py:32 questionnaires/forms.py:126
+msgid "Checkbox type questions must have 2 Answer Options: a True and False"
+msgstr ""
+"FR-Checkbox type questions must have 2 Answer Options: a True and False"
+
+#: questionnaires/forms.py:41 questionnaires/forms.py:135
+msgid "This field is required."
+msgstr "FR-This field is required."
+
+#: questionnaires/models.py:58
+msgid "Check this to allow users who are NOT logged in to complete surveys."
+msgstr ""
+"FR-Check this to allow users who are NOT logged in to complete surveys."
+
+#: questionnaires/models.py:64
+msgid "Check this to allow multiple form submissions for users"
+msgstr "FR-Check this to allow multiple form submissions for users"
+
+#: questionnaires/models.py:67
+msgid "Submit button text"
+msgstr "FR-Submit button text"
+
+#: questionnaires/models.py:194 questionnaires/models.py:518
+msgid "required"
+msgstr "FR-required"
+
+#: questionnaires/models.py:196 questionnaires/models.py:520
+msgid "admin_label"
+msgstr "FR-admin_label"
+
+#: questionnaires/models.py:198 questionnaires/models.py:522
+msgid "Column header used during CSV export of survey responses."
+msgstr "FR-Column header used during CSV export of survey responses."
+
+#: questionnaires/models.py:205 questionnaires/models.py:529
+msgid "Inserts a page break which puts the next question onto a new page"
+msgstr "FR-Inserts a page break which puts the next question onto a new page"
+
+#: questionnaires/models.py:259 questionnaires/models.py:594
+msgid "Multi-step"
+msgstr "FR-multi-step"
+
+#: questionnaires/models.py:260
+msgid ""
+"Whether to display the survey questions to the user one at a time, instead "
+"of all at once."
+msgstr ""
+"FR-Whether to display the survey questions to the user one at a time, "
+"instead of all at once."
+
+#: questionnaires/models.py:274
+msgid "General settings for survey"
+msgstr "FR-General settings for survey"
+
+#: questionnaires/models.py:282
+msgid "Description at survey page"
+msgstr "FR-Description at survey page"
+
+#: questionnaires/models.py:337 questionnaires/models.py:505
+#: questionnaires/models.py:647
+msgid "User"
+msgstr "FR-User"
+
+#: questionnaires/models.py:338 questionnaires/models.py:506
+#: questionnaires/models.py:648
+msgid "Submission Date"
+msgstr "FR-Submission Date"
+
+#: questionnaires/models.py:339 questionnaires/models.py:507
+#: questionnaires/models.py:649
+msgid "Page URL"
+msgstr "FR-Page URL"
+
+#: questionnaires/models.py:348
+msgid "survey"
+msgstr "FR-survey"
+
+#: questionnaires/models.py:349
+msgid "surveys"
+msgstr "FR-surveys"
+
+#: questionnaires/models.py:371
+msgid "Checkbox"
+msgstr "FR-Checkbox"
+
+#: questionnaires/models.py:372
+msgid "Checkboxes"
+msgstr "FR-Checkboxes"
+
+#: questionnaires/models.py:373
+msgid "Multiple select"
+msgstr "FR-Multiple select"
+
+#: questionnaires/models.py:374
+msgid "Radio buttons"
+msgstr "FR-Radio buttons"
+
+#: questionnaires/models.py:377
+msgid "field type"
+msgstr "FR-field type"
+
+#: questionnaires/models.py:388
+msgid "This option allows the users to see the results."
+msgstr "FR-This option allows the users to see the results."
+
+#: questionnaires/models.py:393
+msgid ""
+"If not checked, the results will be shown as a total instead of a percentage."
+msgstr ""
+"FR-If not checked, the results will be shown as a total instead of a "
+"percentage."
+
+#: questionnaires/models.py:417
+msgid "General settings for poll"
+msgstr "FR-General settings for poll"
+
+#: questionnaires/models.py:425
+msgid "Description at poll page"
+msgstr "FR-Description at poll page"
+
+#: questionnaires/models.py:438
+msgid "poll"
+msgstr "FR-poll"
+
+#: questionnaires/models.py:439
+msgid "polls"
+msgstr "FR-polls"
+
+#: questionnaires/models.py:532
+msgid "correct_answer"
+msgstr "FR-correct_answer"
+
+#: questionnaires/models.py:534
+msgid "Please provide correct answer for this question"
+msgstr "FR-Please provide correct answer for this question"
+
+#: questionnaires/models.py:535
+msgid "Feedback"
+msgstr "FR-Feedback"
+
+#: questionnaires/models.py:537
+msgid "Feedback message for user answer."
+msgstr "FR-Feedback message for user answer."
+
+#: questionnaires/models.py:609
+msgid "General settings for quiz"
+msgstr "FR-General settings for quiz"
+
+#: questionnaires/models.py:617
+msgid "Description at quiz page"
+msgstr "FR-Description at quiz page"
+
+#: questionnaires/models.py:695
+msgid "quiz"
+msgstr "FR-quiz"
+
+#: questionnaires/models.py:696
+msgid "quizzes"
+msgstr "FR-quizzes"
+
+#: questionnaires/templates/poll/poll_landing.html:27
+msgid "Your answer"
+msgstr "FR-Your answer"
+
+#: questionnaires/templates/questionnaires/tags/polls_list.html:6
+msgid "POLL"
+msgstr "FR-POLL"
+
+#: questionnaires/templates/questionnaires/tags/quizzes_list.html:6
+msgid "QUIZ"
+msgstr "FR-QUIZ"
+
+#: questionnaires/templates/questionnaires/tags/submit_button.html:7
+msgid "Next step"
+msgstr "FR-Next step"
+
+#: questionnaires/templates/questionnaires/tags/surveys_list.html:6
+msgid "SURVEY"
+msgstr "FR-SURVEY"
+
+#: questionnaires/templates/questionnaires/tags/textarea.html:6
+msgid "No limit"
+msgstr "FR-No limit"
+
+#: questionnaires/templates/quizzes/quiz.html:36
+#: questionnaires/templates/survey/survey.html:40
+#: questionnaires/templates/survey/survey_landing.html:14
+msgid "Go to homepage"
+msgstr "FR-Go to homepage"
+
+#: questionnaires/templates/quizzes/quiz_landing.html:17
+msgid "Your results!"
+msgstr "FR-Your results!"
+
+#: questionnaires/templates/quizzes/quiz_landing.html:21
+#: questionnaires/templates/quizzes/quiz_landing.html:79
+msgid "Correct"
+msgstr "FR-Correct"
+
+#: questionnaires/templates/quizzes/quiz_landing.html:24
+#: questionnaires/templates/quizzes/quiz_landing.html:80
+msgid "Incorrect"
+msgstr "FR-Incorrect"
+
+#: questionnaires/templates/quizzes/quiz_landing.html:46
+msgid "Back to article"
+msgstr "FR-Back to article"
+
+#: questionnaires/templates/quizzes/quiz_landing.html:69
+msgid "Replay Quiz"
+msgstr "FR-Replay Quiz"
+
+#: questionnaires/templates/quizzes/quiz_landing.html:99
+#: questionnaires/templates/quizzes/quiz_landing.html:135
+msgid "Correct answer"
+msgstr "FR-Correct answer"
+
+#: questionnaires/templates/survey/survey_landing.html:12
+msgid "Get Started"
+msgstr "FR-Get Started"
+
+#: search/templates/search/search.html:13
+msgid "Search results for"
+msgstr "FR-Search results for"
+
+#: search/templates/search/search.html:18
+msgid "Searching results for"
+msgstr "FR-Searching results for"
+
+#: search/templates/search/search.html:38
+#, python-format
+msgid ""
+" 1 result\n"
+"                    "
+msgid_plural ""
+" %(counter)s results\n"
+"                    "
+msgstr[0] ""
+" FR-1 result\n"
+"                    "
+msgstr[1] ""
+" FR-%(counter)s results\n"
+"                    "
+
+#: search/templates/search/search.html:80
+msgid "No results found"
+msgstr "FR-No results found"
+
+#: search/templates/search/search.html:82
+msgid "It seems we can’t find any results based on your search."
+msgstr "FR-It seems we can’t find any results based on your search."
+
+#: search/templates/search/search.html:110
+msgid "See results"
+msgstr "FR-See results"
+
+#~ msgid ""
+#~ "A quia quas et atque eos vero temporibus quis ullam. Recusandae "
+#~ "recusandae omnis aspernatur quisquam at dolorem aspernatur quod non."
+#~ msgstr "FR-"
+
+#~ msgid "Thank you for your response!"
+#~ msgstr "FR-Thank you for your response!"
+
+#~ msgid "Thank you for your input!"
+#~ msgstr "FR-Thank you for your input!"
