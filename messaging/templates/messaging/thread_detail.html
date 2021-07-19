@@ -18,10 +18,19 @@
             <time class="message-time">{{ message.sent_at|naturaltime }}</time>
             <div class="message-box">
                 {{ message.text|urlize|linebreaks }}
-                {% for attachment in message.attachments.all %}
-{#                    {% image attachment.file fill-100x100 %}#}
-                    <h3> <a href="{% get_media_prefix %}{{attachment.file}}"> Attachment</a></h3>
-                {% endfor %}
+                <div class="attachment-box">
+                    {% for attachment in message.attachments.all %}
+                        <div class="attachment-line">
+                            {% if attachment.image is not None %}
+                                {% image attachment.image fill-50x50 %}
+                                <a href="{% get_media_prefix %}{{ attachment.image.file }}" download> Download</a>
+                            {% endif %}
+                            {% if attachment.file is not None %}
+                                <a href="{% get_media_prefix %}{{ attachment.file }}" download> {{ attachment.file }}</a>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
             {% if message.id == most_recent_message_id %}
                 <div class="quick-replies">

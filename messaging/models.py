@@ -1,16 +1,20 @@
+import logging
 import uuid
 from io import BytesIO
 
 import requests
-from PIL import Image
+from PIL import Image as PILImage, UnidentifiedImageError
 from django.contrib.auth import get_user_model
 from django.core.files import File
 from django.db import models
 from django.urls import reverse
 from django_extensions.db.models import TimeStampedModel
 from rest_framework import status
+from wagtail.images.models import Image
 
 from .querysets import ThreadQuerySet
+
+logger = logging.getLogger(__name__)
 
 
 class ChatbotChannel(models.Model):
@@ -100,7 +104,17 @@ class Message(models.Model):
 class Attachment(TimeStampedModel):
     external_link = models.URLField()
     file = models.FileField(null=True, blank=True)
-    image = models.ImageField(null=True, blank=True)
+    image = models.ForeignKey(to=Image, on_delete=models.SET_NULL, null=True, blank=True)
+
+    @staticmethod
+    def _verify_image(content):
+        try:
+            image = PILImage.open(BytesIO(content))
+            image.verify()
+            image.close()
+            return True
+        except UnidentifiedImageError:
+            return False
 
     def download_external_file(self):
         response = requests.get(self.external_link, allow_redirects=True)
@@ -108,20 +122,12 @@ class Attachment(TimeStampedModel):
         if response.status_code == status.HTTP_200_OK:
             filename = self.external_link.split('/')[-1]
             file = File(BytesIO(response.content), name=filename)
-            try:
-                image = Image.open(BytesIO(response.content))
-                image.verify()
-                image.close()
 
-                self.image = image
-                self.save()
-                return
-            except Exception as e:
-                print(e)
-                pass
-
-            self.file = file
-            self.save(update_fields=['file'])
+            if Attachment._verify_image(response.content):
+                self.image = Image.objects.create(file=file)
+            else:
+                self.file = file
+            self.save()
 
     def __str__(self):
         return f'Attachment #{self.pk}'
