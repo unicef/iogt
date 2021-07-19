@@ -97,15 +97,15 @@ class Message(models.Model):
 
 
 class Attachment(TimeStampedModel):
-    external_link = models.URLField(null=False, blank=False)
-    downloaded_file = models.FileField(null=False, blank=False)
+    external_link = models.URLField()
+    downloaded_file = models.FileField(null=True, blank=True)
 
     def download_external_file(self):
         response = requests.get(self.external_link, allow_redirects=True)
 
         if response.status_code == status.HTTP_200_OK:
-            image_file = File(BytesIO(response.content), name=self.external_link.split('/')[-1])
-            self.downloaded_file = image_file
+            file = File(BytesIO(response.content), name=self.external_link.split('/')[-1])
+            self.downloaded_file = file
             self.save()
 
     def __str__(self):
