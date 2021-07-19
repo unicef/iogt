@@ -1,4 +1,7 @@
 from django.contrib.auth import get_user_model
+from django.core import validators
+from django.core.exceptions import ValidationError
+from django.core.validators import URLValidator
 from django.utils import timezone
 
 from .models import Message, Thread, UserThread
@@ -15,7 +18,9 @@ class ChatManager:
 
     def _record_message_in_database(self, sender, rapidpro_message_id, text, quick_replies):
         # Messages sent from User to RapidPro server don't have rapidpro_message_id
-        if rapidpro_message_id:
+        from_rapidpro_server = bool(rapidpro_message_id)
+
+        if from_rapidpro_server:
             message, created = Message.objects.get_or_create(rapidpro_message_id=rapidpro_message_id, defaults={
                 'sender': sender,
                 'text': text,
@@ -29,6 +34,9 @@ class ChatManager:
                 # be confirmed with RapidPro
                 message.text = f'{message.text}{text}'
                 message.save(update_fields=['text'])
+
+            self._handle_attachments(message)
+
         else:
             Message.objects.create(
                 rapidpro_message_id=rapidpro_message_id, sender=sender, text=text, thread=self.thread,
@@ -36,6 +44,26 @@ class ChatManager:
 
         self.thread.last_message_at = timezone.now()
         self.thread.save(update_fields=['last_message_at'])
+
+    def _handle_attachments(self, message):
+        cleaned_text, attachment_links = ChatManager._parse_rapidpro_message(message.text)
+        message.text = cleaned_text
+        message.update_or_create_attachments(attachment_links)
+        message.save()
+
+    @staticmethod
+    def _parse_rapidpro_message(message_text):
+        message_parts = message_text.split('\n')
+        attachments = []
+        cleaned_message = ""
+        for message in reversed(message_parts):
+            validator = URLValidator()
+            try:
+                validator(message)
+                attachments.append(message)
+            except ValidationError:
+                cleaned_message = f'{message}{cleaned_message}'
+        return cleaned_message, attachments
 
     def record_reply(self, text, sender, rapidpro_message_id=None, quick_replies=None, mark_unread=True):
         if quick_replies is None:
