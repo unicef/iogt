@@ -1,15 +1,20 @@
+import logging
 import uuid
 from io import BytesIO
 
 import requests
+from PIL import Image as PILImage, UnidentifiedImageError
 from django.contrib.auth import get_user_model
 from django.core.files import File
 from django.db import models
 from django.urls import reverse
 from django_extensions.db.models import TimeStampedModel
 from rest_framework import status
+from wagtail.images.models import Image
 
 from .querysets import ThreadQuerySet
+
+logger = logging.getLogger(__name__)
 
 
 class ChatbotChannel(models.Model):
@@ -79,7 +84,7 @@ class Message(models.Model):
     thread = models.ForeignKey('Thread', related_name="messages", on_delete=models.CASCADE)
     sender = models.ForeignKey(get_user_model(), null=True, related_name="sent_messages", on_delete=models.CASCADE)
 
-    attachments = models.ManyToManyField('Attachment')
+    attachments = models.ManyToManyField('Attachment', blank=True)
 
     def update_or_create_attachments(self, attachment_links):
         for link in attachment_links:
@@ -99,14 +104,30 @@ class Message(models.Model):
 class Attachment(TimeStampedModel):
     external_link = models.URLField()
     file = models.FileField(null=True, blank=True)
+    image = models.ForeignKey(to=Image, on_delete=models.SET_NULL, null=True, blank=True)
+
+    @staticmethod
+    def _verify_image(content):
+        try:
+            image = PILImage.open(BytesIO(content))
+            image.verify()
+            image.close()
+            return True
+        except UnidentifiedImageError:
+            return False
 
     def download_external_file(self):
         response = requests.get(self.external_link, allow_redirects=True)
 
         if response.status_code == status.HTTP_200_OK:
-            file = File(BytesIO(response.content), name=self.external_link.split('/')[-1])
-            self.file = file
-            self.save(update_fields=['file'])
+            filename = self.external_link.split('/')[-1]
+            file = File(BytesIO(response.content), name=filename)
+
+            if Attachment._verify_image(response.content):
+                self.image = Image.objects.create(file=file)
+            else:
+                self.file = file
+            self.save()
 
     def __str__(self):
-        return f'Attachment for message: {self.message}'
+        return f'Attachment #{self.pk}'

@@ -22,6 +22,10 @@ class UserThreadAdmin(admin.ModelAdmin):
     list_filter = ('is_active', 'is_read')
 
 
+class AttachmentInlineAdmin(admin.TabularInline):
+    model = Message.attachments.through
+
+
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
     list_display = (
@@ -33,7 +37,9 @@ class MessageAdmin(admin.ModelAdmin):
         'thread',
         'sender',
     )
-    list_filter = ('sent_at', )
+    list_filter = ('sent_at',)
+    inlines = (AttachmentInlineAdmin,)
+    exclude = ('attachments', )
 
 
 @admin.register(Attachment)
@@ -42,7 +48,6 @@ class AttachmentAdmin(admin.ModelAdmin):
         'id',
         'created',
         'modified',
-        'message',
         'external_link',
         'file',
     )
