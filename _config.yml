@@ -58,6 +58,7 @@ sidebars:
 exclude:
   - .idea/
   - .git/
+  - testing/
   - .vscode/
   - .gitignore
   - .prettierrc
