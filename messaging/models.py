@@ -2,6 +2,7 @@ import uuid
 from io import BytesIO
 
 import requests
+from PIL import Image
 from django.contrib.auth import get_user_model
 from django.core.files import File
 from django.db import models
@@ -79,7 +80,7 @@ class Message(models.Model):
     thread = models.ForeignKey('Thread', related_name="messages", on_delete=models.CASCADE)
     sender = models.ForeignKey(get_user_model(), null=True, related_name="sent_messages", on_delete=models.CASCADE)
 
-    attachments = models.ManyToManyField('Attachment')
+    attachments = models.ManyToManyField('Attachment', blank=True)
 
     def update_or_create_attachments(self, attachment_links):
         for link in attachment_links:
@@ -99,14 +100,28 @@ class Message(models.Model):
 class Attachment(TimeStampedModel):
     external_link = models.URLField()
     file = models.FileField(null=True, blank=True)
+    image = models.ImageField(null=True, blank=True)
 
     def download_external_file(self):
         response = requests.get(self.external_link, allow_redirects=True)
 
         if response.status_code == status.HTTP_200_OK:
-            file = File(BytesIO(response.content), name=self.external_link.split('/')[-1])
+            filename = self.external_link.split('/')[-1]
+            file = File(BytesIO(response.content), name=filename)
+            try:
+                image = Image.open(BytesIO(response.content))
+                image.verify()
+                image.close()
+
+                self.image = image
+                self.save()
+                return
+            except Exception as e:
+                print(e)
+                pass
+
             self.file = file
             self.save(update_fields=['file'])
 
     def __str__(self):
-        return f'Attachment for message: {self.message}'
+        return f'Attachment #{self.pk}'
