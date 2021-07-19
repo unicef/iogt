@@ -23,7 +23,7 @@
                         <div class="attachment-line">
                             {% if attachment.image is not None %}
                                 {% image attachment.image fill-50x50 %}
-                                <a href="{% get_media_prefix %}{{ attachment.image.file }}" download> Download</a>
+                                <a href="{% get_media_prefix %}{{ attachment.image.file }}" download>{% translate "Download" %}</a>
                             {% endif %}
                             {% if attachment.file is not None %}
                                 <a href="{% get_media_prefix %}{{ attachment.file }}" download> {{ attachment.file }}</a>

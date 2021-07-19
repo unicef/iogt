@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-19 17:41+0000\n"
+"POT-Creation-Date: 2021-07-19 17:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -230,8 +230,7 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"FR-"
-"            Your comment is in moderation.<br/>\n"
+"FR-            Your comment is in moderation.<br/>\n"
 "            It has to be reviewed before being published.<br/>\n"
 "            Thank you for your patience and understanding.\n"
 "            "
@@ -821,6 +820,7 @@ msgid "Would you like to download it?"
 msgstr "FR-Would you like to download it?"
 
 #: iogt/templates/cache_banner.html:12
+#: messaging/templates/messaging/thread_detail.html:26
 msgid "Download"
 msgstr "FR-Download"
 
@@ -988,7 +988,7 @@ msgid "Cancel"
 msgstr "FR-Cancel"
 
 #: messaging/templates/messaging/thread.html:37
-#: messaging/templates/messaging/thread_detail.html:39
+#: messaging/templates/messaging/thread_detail.html:52
 msgid "Send"
 msgstr "FR-Send"
 
@@ -1012,7 +1012,7 @@ msgstr "FR-Back"
 msgid "Load more"
 msgstr "FR-Load more"
 
-#: messaging/templates/messaging/thread_detail.html:38
+#: messaging/templates/messaging/thread_detail.html:51
 msgid "Reply here..."
 msgstr "FR-Reply here..."
 
