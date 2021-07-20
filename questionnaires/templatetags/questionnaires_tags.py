@@ -87,6 +87,16 @@ def get_action_url(page, self, fields_step, request, form):
             "request": request, "form": form}
 
 
+@register.inclusion_tag('blocks/embedded_questionnaire.html')
+def render_questionnaire_form(questionnaire):
+    context = {
+        'object': questionnaire,
+        'type': questionnaire.__class__.__name__,
+        'form': questionnaire.get_form(),
+    }
+    return context
+
+
 @register.filter
 def get_item(dictionary, key):
     return dictionary.get(key)

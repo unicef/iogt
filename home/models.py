@@ -209,10 +209,17 @@ class Section(Page, PageUtilsMixin):
             self.featured_content.filter(content__live=True)
         ]
         context['sub_sections'] = self.get_children().live().type(Section)
+
         context['articles'] = self.get_children().live().type(Article)
-        context['surveys'] = self.get_children().live().type(Survey)
-        context['polls'] = self.get_children().live().type(Poll)
-        context['quizzes'] = self.get_children().live().type(Quiz)
+
+        survey_page_ids = self.get_children().live().type(Survey).values_list('id', flat=True)
+        context['surveys'] = Survey.objects.filter(pk__in=survey_page_ids)
+
+        poll_page_ids = self.get_children().live().type(Poll).values_list('id', flat=True)
+        context['polls'] = Poll.objects.filter(pk__in=poll_page_ids)
+
+        quiz_page_ids = self.get_children().live().type(Quiz).values_list('id', flat=True)
+        context['quizzes'] = Quiz.objects.filter(pk__in=quiz_page_ids)
 
         context['user_progress'] = self.get_user_progress_dict(request)
 
