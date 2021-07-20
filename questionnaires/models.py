@@ -663,26 +663,20 @@ class Quiz(QuestionnairePage, AbstractForm):
             form_class = self.get_form_class()
             form = form_class(data=request.POST, page=self, user=request.user)
 
-            # for k, v in form.fields.items():
-            #     form.fields[k].widget.attrs['readonly'] = True
-
             fields_info = {}
 
             total = 0
             total_correct = 0
             form_data = dict(form.data)
             for field in self.get_form_fields():
-                if field.field_type in VALID_SKIP_SELECTORS:
-                    correct_answer = field.correct_answer.split(',')
-                else:
-                    correct_answer = field.correct_answer
+                correct_answer = field.correct_answer.split(',')
 
                 if field.field_type == 'checkbox':
-                    answer = form_data.get(field.clean_name, 'off')
+                    answer = form_data.get(field.clean_name, ['off'])
                 else:
-                    answer = form_data.get(field.clean_name)
+                    answer = form_data.get(field.clean_name, [])
 
-                is_correct = answer == correct_answer
+                is_correct = set(answer) == set(correct_answer)
                 if is_correct:
                     total_correct += 1
                 total += 1
