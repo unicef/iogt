@@ -39,8 +39,8 @@ def render_text_field(field):
 
 
 @register.inclusion_tag("questionnaires/tags/select.html")
-def render_select(field):
-    return {"field": field}
+def render_select(field, is_multiselect=False):
+    return {"field": field, "is_multiselect": is_multiselect}
 
 
 @register.inclusion_tag('questionnaires/tags/polls_radios.html')

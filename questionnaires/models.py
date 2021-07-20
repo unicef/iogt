@@ -670,15 +670,25 @@ class Quiz(QuestionnairePage, AbstractForm):
 
             total = 0
             total_correct = 0
+            form_data = dict(form.data)
             for field in self.get_form_fields():
-                # TODO: handle multi-value case
-                is_correct = form.data.get(field.clean_name) == field.correct_answer
+                if not field.field_type == 'checkbox':
+                    correct_answer = field.correct_answer.split(',')
+                else:
+                    correct_answer = field.correct_answer
+
+                if field.field_type == 'checkbox':
+                    answer = form_data.get(field.clean_name, 'off')
+                else:
+                    answer = form_data.get(field.clean_name)
+
+                is_correct = answer == correct_answer
                 if is_correct:
                     total_correct += 1
                 total += 1
                 fields_info[field.clean_name] = {
                     'feedback': field.feedback,
-                    'correct_answer': field.correct_answer,
+                    'correct_answer': correct_answer,
                     'is_correct': is_correct,
                 }
 

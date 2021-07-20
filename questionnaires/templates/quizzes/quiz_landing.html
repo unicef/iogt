@@ -86,7 +86,7 @@
                         </div>
                         {% if "textar" in field.field.widget.template_name or field.field.widget.input_type == "text" or field.field.widget.input_type == "number" or field.field.widget.input_type == "email" or field.field.widget.input_type == "url" %}
                             <div class="quest-item__content" tabindex="0">
-                                <label class="cust-check cust-check--2 quest-item__input{% if fields_info|get_item:field.name|get_item:'correct_answer' ==  field.value %} success{% endif %}{% if not fields_info|get_item:field.name|get_item:'is_correct' %} error{% endif %}"
+                                <label class="cust-check cust-check--2 quest-item__input{% if fields_info|get_item:field.name|get_item:'is_correct' %} success{% else %} error{% endif %}"
                                        tabindex="0">
                                     <div class="cust-check__title">
                                         <span class="cust-check__check"></span>
@@ -108,25 +108,26 @@
                             </div>
                         {% else %}
                             {% if field|length > 1 %}
-                                {% for checkbox in field %}
+                                {% for field_option in field %}
                                     <div class="quest-item__content"
                                          tabindex="0">
-                                        <label class="cust-check cust-check--2 quest-item__input{% if fields_info|get_item:field.name|get_item:'correct_answer' ==  checkbox.choice_label %} success{% endif %}{% if checkbox.choice_label in field.value and not fields_info|get_item:field.name|get_item:'is_correct' %} error{% endif %}"
-                                               tabindex="0">
+                                        <label class="cust-check cust-check--2 quest-item__input
+                                          {% if field_option.choice_label in fields_info|get_item:field.name|get_item:'correct_answer' and field_option.data|get_item:'selected' %} success{% endif %}
+                                          {% if field_option.choice_label in fields_info|get_item:field.name|get_item:'correct_answer' and not field_option.data|get_item:'selected' %} error{% endif %}
+                                          {% if field_option.choice_label not in fields_info|get_item:field.name|get_item:'correct_answer' and field_option.data|get_item:'selected' %} error{% endif %} tabindex="0">
                                             <div class="cust-check__title">
                                                 <span class="cust-check__check"></span>
-                                                <span>{{ checkbox.choice_label }}</span>
+                                                <span>{{ field_option.choice_label }}</span>
                                             </div>
                                         </label>
                                     </div>
                                 {% endfor %}
                             {% else %}
                                 <div class="quest-item__content" tabindex="0">
-                                <label class="cust-check cust-check--2 quest-item__input{% if fields_info|get_item:field.name|get_item:'correct_answer' ==  field.value %} success{% endif %}{% if not fields_info|get_item:field.name|get_item:'is_correct' %} error{% endif %}"
+                                <label class="cust-check cust-check--2 quest-item__input{% if fields_info|get_item:field.name|get_item:'is_correct' %} success{% else %} error{% endif %}"
                                        tabindex="0">
                                     <div class="cust-check__title">
                                         <span class="cust-check__check"></span>
-                                        <span>{{ field.value }}</span>
                                     </div>
                                     {% if not fields_info|get_item:field.name|get_item:'is_correct' %}
                                         <div class="quest-item__header">

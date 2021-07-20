@@ -15,7 +15,7 @@
     {#            <span id="text">{{ field.label }}</span>#}
     {#        </div>#}
     {#    </label>#}
-    <select name="{{ field.name }}" class="quest-item__input cust-select">
+    <select name="{{ field.name }}" class="quest-item__input cust-select" {% if is_multiselect %}multiple{% endif %}>
         {% for option in field %}
             <option value="{{ option.choice_label }}">{{ option.choice_label }}</option>
         {% endfor %}
