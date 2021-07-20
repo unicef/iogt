@@ -529,9 +529,9 @@ class QuizFormField(AbstractFormField):
             'Inserts a page break which puts the next question onto a new page'
         )
     )
-    correct_answer = models.CharField(verbose_name=_('correct_answer'),
-                                      max_length=256,
-                                      help_text=_('Please provide correct answer for this question'))
+    correct_answer = models.CharField(
+        verbose_name=_('correct_answer'), max_length=256,
+        help_text=_('Comma separated list of choices. Only applicable in checkboxes, radio, dropdown and multiselect.'))
     feedback = models.CharField(verbose_name=_('Feedback'),
                                 max_length=255,
                                 help_text=_('Feedback message for user answer.'),
