@@ -456,7 +456,8 @@ class SiteSettings(BaseSetting):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name='+'
+        related_name='+',
+        help_text="Upload an image file (.jpg, .png, .svg). The ideal size is 100px x 40px"
     )
     show_only_translated_pages = models.BooleanField(
         default=False,
