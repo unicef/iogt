@@ -25,7 +25,7 @@ from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 from wagtail.images.blocks import ImageChooserBlock
 
-from questionnaires.blocks import SkipLogicField, SkipState
+from questionnaires.blocks import SkipLogicField, SkipState, VALID_SKIP_SELECTORS
 from questionnaires.forms import SurveyForm, QuizForm
 from questionnaires.utils import SkipLogicPaginator
 
@@ -663,8 +663,8 @@ class Quiz(QuestionnairePage, AbstractForm):
             form_class = self.get_form_class()
             form = form_class(data=request.POST, page=self, user=request.user)
 
-            for k, v in form.fields.items():
-                form.fields[k].widget.attrs['readonly'] = True
+            # for k, v in form.fields.items():
+            #     form.fields[k].widget.attrs['readonly'] = True
 
             fields_info = {}
 
@@ -672,7 +672,7 @@ class Quiz(QuestionnairePage, AbstractForm):
             total_correct = 0
             form_data = dict(form.data)
             for field in self.get_form_fields():
-                if not field.field_type == 'checkbox':
+                if field.field_type in VALID_SKIP_SELECTORS:
                     correct_answer = field.correct_answer.split(',')
                 else:
                     correct_answer = field.correct_answer
@@ -688,7 +688,7 @@ class Quiz(QuestionnairePage, AbstractForm):
                 total += 1
                 fields_info[field.clean_name] = {
                     'feedback': field.feedback,
-                    'correct_answer': correct_answer,
+                    'correct_answer': field.correct_answer,
                     'is_correct': is_correct,
                 }
 
