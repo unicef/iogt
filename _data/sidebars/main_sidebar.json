@@ -5,6 +5,10 @@
             "title": "Introduction",
             "folderitems": [
                 {
+                    "title": "Definitions",
+                    "url": "/cms-manual/intro/definitions/"
+                },
+                {
                     "title": "What is Wagtail?",
                     "url": "/cms-manual/intro/intro-to-wagtail/"
                 },

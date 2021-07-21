@@ -1,0 +1,105 @@
+- title: CMS
+  desc: |-
+      Abbreviation for "Content Management System". A CMS is software that helps
+      manage the creation and modification of digital content, such as articles,
+      images, videos, and documents.
+
+- title: Django
+  desc: |-
+      Django is a free and open-source software library written in Python that is
+      used to create websites.
+
+- title: Wagtail
+  desc: |-
+      Wagtail is a free and open-source CMS for Django.
+  
+- title: IoGT Wagtail CMS
+  desc: |-
+    IoGT uses Wagtail, Django, and a number of custom plugins to deploy
+    a website that can scale from feature phones all the way to desktops. Throughout
+    this documentation, this software solution will be referred to as
+    "the IoGT Wagtail CMS", or more simply as "the CMS".
+
+- title: Dashboard
+  desc: |-
+    The initial view immediately after logging into the CMS. Displays the Pages, Images,
+    Documents, and Media files currently loaded on the site, as well as your recently
+    edited Pages and any Pages that are awaiting review.
+
+- title: Page
+  desc: |-
+    In the IoGT Wagtail CMS, the Page is the simplest form of presenting content. There are
+    different variations of the Page. Each has differnt use cases. See "Page Types" below for
+    a list of different Page variations.
+
+- title: Page Types
+  desc: |-
+    Pages can be any one of the following:
+
+    * Article
+    * Homepage
+    * Poll
+    * Quiz
+    * Section
+    * Survey
+
+    For more information, see the appropriate definition for each Page Type below.
+
+- title: Article
+  desc: |-
+    Articles are a Page Type used to present text, images, and other content to the user in an
+    article-like format. Articles are created as a Child Page of a Section. Polls, Surveys, Quizzes,
+    and Media files can be linked to from within an Article.
+
+- title: Homepage
+  desc: |-
+    The IoGT Wagtail CMS will automatically create a home page for each published Section. However,
+    the special Homepage Page Type can be used to create a custom set of Child Pages to display to
+    the user. They can be used to create a small, curated list of a large Section.
+
+- title: Poll
+  desc: |-
+    Polls are a Page Type used to quickly gather information from users. Polls should be used when
+    there are fewer questions, and if these questions have simple answer types. Surveys should be used
+    when the answers need to be more complex. For more information on the types of answers Polls can
+    take, see "Answer Types" below.
+
+- title: Quiz
+  desc: |-
+    As the name suggests, Quizzes are a Page Type used to test user knowledge about a topic, either before
+    or after reading an Article about it. Quizzes have a much broader range of answer types than Polls do.
+    See "Answer Types" below for more information.
+
+- title: Section
+  desc: |-
+    Sections are a special kind of Page, as they can contain other Pages within them, including other Sections.
+    Sections that are Child Pages of other Sections are called Subsections. Sections (and Subsections) can be
+    infinitely nested. Sections (and Subsections) have an auto-generated home page; additional custom Homepages
+    can be created using the Homepage Page Type.
+
+- title: Survey
+  desc: |-
+    Whereas Polls are used to quickly gather information and opinions from users, Surveys are used to gather more
+    detailed information. As such, they have a much broader range of answer types, similar to Quizzes. See "Answer Types"
+    below for more information.
+
+- title: Answer Types
+  desc: |-
+    The answers for Polls, Quizzes, and Surveys all draw from the same set of Answer Types, however Polls can only
+    use a small subset of these Answer Types. A list of all Answer Types, along with a brief description, are presented
+    here. Answer Types presented in _italics_ are the only types Polls can use. Remember, Quizzes and Surveys can use **all**
+    of the below Answer Types. Examples are presented in (parentheses)
+
+    * Single-line text - short free-form responses
+    * Multi-line text - long free-form responses
+    * Email - email values (john.doe@example.com)
+    * Number - numerical values (42)
+    * URL - URL values (subdomain.domain.tld)
+    * _Checkbox_ - Select/unselect a single checkbox
+    * _Checkboxes_ - Select/unselect multiple checkboxes
+    * Dropdown - Select one value from a list of values
+    * _Multiple Select_ - Select multiple values from a list of values
+    * _Radio Buttons_ - Select a single value from a list of values; cannot unselect
+    * Date - Enter a date (yyyy-mm-dd -> 2020-03-11)
+    * Datetime - Enter a datetime (yyyy-mm-dd HH:mm:ss -> 2020-03-11 18:02:30)
+    * Hidden Field - Disables the question entirely; can be used for hiding questions in a live Quiz/Survey
