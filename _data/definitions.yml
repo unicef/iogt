@@ -42,6 +42,7 @@
     * Quiz
     * Section
     * Survey
+    * Banner
 
     For more information, see the appropriate definition for each Page Type below.
 
@@ -83,6 +84,12 @@
     detailed information. As such, they have a much broader range of answer types, similar to Quizzes. See "Answer Types"
     below for more information.
 
+- title: Banner Page
+  desc: |-
+    Banner Pages are special types of Pages which are images that appear at the top of Sections and link to another Page.
+    They can link to Sections, Articles, Surveys, etc. Banner Pages can only be created inside Banner Index Pages. See
+    "Index Page" below for more information.
+
 - title: Answer Types
   desc: |-
     The answers for Polls, Quizzes, and Surveys all draw from the same set of Answer Types, however Polls can only
@@ -103,3 +110,9 @@
     * Date - Enter a date (yyyy-mm-dd -> 2020-03-11)
     * Datetime - Enter a datetime (yyyy-mm-dd HH:mm:ss -> 2020-03-11 18:02:30)
     * Hidden Field - Disables the question entirely; can be used for hiding questions in a live Quiz/Survey
+  
+- title: Index Page
+  desc: |-
+    Index Pages are special types of Pages that can only exist at the root of a site language. Index Pages
+    can only contain one type of Child Page. For example, Section Index Pages can only contain Sections.
+    Banner Index pages can only contain Banners. Sites are typically organized as `site language` -> `index page` -> `Pages`

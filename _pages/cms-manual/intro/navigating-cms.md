@@ -5,30 +5,29 @@ permalink: /cms-manual/intro/navigating-wagtail/
 
 Once you have logged in, you will be redirected to the CMS home page, also known as the Dashboard.
 
-{% include figure.html src="/assets/img/docs/wagtail-dashboard.png" alt="Wagtail Dashboard" caption="Wagtail dashboard." %}
+{% include figure.html src="/assets/img/docs/wagtail-dashboard.png" alt="Wagtail Dashboard" caption="Wagtail dashboard. On the left is the Main Menu which is used to nagivate to and edit various parts of the CMS. At the top of the Dashboard shows the numbers of different types of content. Below these counts will be a list of Pages awaiting review. Below this list will be a second list of Pages which you most recently edited, if any." %}
 
-Navigate to the Dashboard by clicking on the bird icon on the top-left of the screen (this is the Wagtail logo).
+You can return to the Dashboard at any time by clicking the Wagtail logo.
 
-- The Dashboard shows the number of pages, images, documents and associated languages currently stored on Wagtail.
-- It shows pages awaiting moderation (if you have permission to view this), as well as your most recent edits.
-- The stats at the top of the page describe the total volume of content on Wagtail.
-- Clicking on the name of a page will take you to its Edit page interface.
-- Clicking Approve or Reject will either change the page status to Live or return the page to Draft status. (An email will be sent to the creator of the page letting them know the decision.)
-- The Parent column of a page awaiting moderation tells you its Parent page. Clicking the Parent page will take you to the Edit page. (Pages and sub-pages on Molo are called Parent and Child pages. This describes their relationship to each other. The Parent page is on a higher navigational level than the Child page. Read the article Structuring your content for more information on Parent pages.) 
-- Most Recent Edits displays the five pages that have been edited most recently.
-- The Date column shows you the date when the page was last edited. Hover your mouse over the date for more detailed info.
-- The Status column will indicate one of the following:
-    - Live: the page is accessible to site visitors.
-    - Draft: the page is not yet live (it is unpublished).
-    - Live + Draft: a version of the page is live, but a newer version is in Draft mode.
-- You can return to the Dashboard at any time by clicking the Wagtail logo on the top-left of the screen.
+- The Dashboard shows the number of Pages, images, documents and associated languages currently stored on Wagtail.
+- The Dashboard will also alert you to a Wagtail version update, if applicable. System administrators will determine when the best time to update is.
+- If you are authorized to moderate/review Pages, there will be a list of Pages awaiting your approval. Hovering over the title of the Page will give you several options:
+  - Request changes - reject the changes and a comment explaining why
+  - Approve - approve the changes and publish the Page
+  - Approve with comment - approve the changes and publish the Page, adding a comment
+  - Edit - edit the Page yourself
+  - Preview - preview the changes on the frontend of the site
+- If you have recently edited Pages, there will also be a list of your 5 most-recently edited Pages
+- Clicking on the title of any Page in the Dashboard will take you to its Edit interface
+- Each of the Page lists on the Dashboard also have a status.
+  - Pages awaiting review will show the review status
+  - Pages you have recently edited will show whether it is Live, Draft, or Live + Draft (indicating the Page is published but newer revisions are in a Draft state)
 
 ## The Pages menu
 
-The Pages Menu enables quick navigation from the highest to the lowest level of the site. Navigation using this menu enables you to move past a navigational level by clicking on the right arrow - or to click onto a navigational level by clicking its name. You can also navigate back by clicking the name of the containing folder above the list.
+The Pages Menu enables quick navigation through the levels of the site. Navigation using this menu enables you to move past a navigational level by clicking on the right arrow - or to open a navigational level by clicking its name. You can also navigate back by clicking the name of the containing folder above the list.
 
-The top level of the Pages menu will be the different languages your country's site is available in. For example, the site shown below is available in both English
-and in French. 
+The top level of the Pages menu will be the different languages your country's site is available in. For example, the site shown below is available in both English and in French. 
 
 {% include figure.html src="/assets/img/docs/pages-top-level.png" alt="Pages menu" caption="Wagtail Pages menu. Notice that this site has two languages: English and French." %}
 
