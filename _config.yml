@@ -51,6 +51,11 @@ defaults:
       type: "pages"
     values:
       section: "Creating a Survey"
+  - scope:
+      path: "_pages/cms-manual/thanks"
+      type: "pages"
+    values: 
+      section: "Thanks"
 
 sidebars:
   main_sidebar

@@ -1,6 +1,6 @@
 ---
-title: Need More?
-permalink: /cms-manual/need-more/need-more/
+title: Thanks For Reading!
+permalink: /cms-manual/thanks/thanks/
 ---
 
 Thanks for reading this manual. Well keep it updated as new features are being made available. 
