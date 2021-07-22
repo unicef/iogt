@@ -195,7 +195,7 @@ SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, 'static')
 ACCOUNT_FORMS = {
     "login": "allauth.account.forms.LoginForm",
     "add_email": "allauth.account.forms.AddEmailForm",
-    "change_password": "allauth.account.forms.ChangePasswordForm",
+    "change_password": "iogt_users.forms.ChangePasswordForm",
     "set_password": "allauth.account.forms.SetPasswordForm",
     "reset_password": "allauth.account.forms.ResetPasswordForm",
     "reset_password_from_key": "allauth.account.forms.ResetPasswordKeyForm",
