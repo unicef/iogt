@@ -22,11 +22,6 @@ These are the categories within the content channels under which will fall the d
 
 The article title should usually not exceed 7 words in length. Titles of articles should capture attention and preferably have a user benefit approach. Using question marks can help our audience to identify to the issues treated.
 
-## Article Description
-<p class="lead fst-italic">4&ndash;7 words</p>
-
-Description should provide more information about the content of the story or expand on the title. The descriptor can be viewed as a teaser….On Wagtail, this description should go in the “subtitle" field of an article.
-
 ## Article Content
 <p class="lead fst-italic">Aim for 200&ndash;300 words. 500 words max.</p>
 
