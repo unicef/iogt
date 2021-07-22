@@ -5,12 +5,12 @@
             "title": "Introduction",
             "folderitems": [
                 {
-                    "title": "Definitions",
-                    "url": "/cms-manual/intro/definitions/"
-                },
-                {
                     "title": "What is the IoGT Wagtail CMS?",
                     "url": "/cms-manual/intro/intro-to-cms/"
+                },
+                {
+                    "title": "Definitions",
+                    "url": "/cms-manual/intro/definitions/"
                 },
                 {
                     "title": "Signing into the CMS",
@@ -165,7 +165,7 @@
             "title": "Need More?",
             "folderitems": [
                 {
-                    "title": "Need More? ",
+                    "title": "Need More?",
                     "url": "/cms-manual/need-more/need-more/"
                 }
             ]
