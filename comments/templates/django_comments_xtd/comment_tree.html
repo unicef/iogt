@@ -36,22 +36,29 @@
                 {% endif %}
             </div>
                {% if not item.comment.is_removed %}
-              {% if allow_flagging and item.flagged %}
+              {% if allow_flagging and item.flagged and item.comment.user != user %}
                   <a href="{% url 'comments-flag' item.comment.pk %}" class="report-comment">
                    {% translate "Report" %}
                   </a>
                   <i title="{% translate 'comment flagged' %}" class='report-comment__disclaimer'>{% translate "This is a reported comment" %} </i>
-              {% elif allow_flagging %}
+              {% elif allow_flagging and item.comment.user != user %}
               <a href="{% url 'comments-flag' item.comment.pk %}" class="report-comment">
                 {% translate "Report" %}
               </a>
               {% endif %}
-              {% if perms.comments.can_moderate %}
-                  {% if item.flagged_count %}
-                      {# Translators: Count refers to the number of people that reported a comment. #}
-                      <span class="report-comment">{% blocktranslate with item.flagged_count as count %}Reported by {{ count }}{% endblocktranslate %}</span>
-                  {% endif %}
-              {% endif %}
+                   {% if perms.comments.can_moderate %}
+                       {% if item.flagged_count %}
+                           {# Translators: Count refers to the number of people that reported a comment. #}
+                           <span class="report-comment">{% blocktranslate with item.flagged_count as count %}Reported by
+                               {{ count }}{% endblocktranslate %}
+                                {% if count > 1 %}
+                                    {% translate 'users' %}
+                                {% else %}
+                                    {% translate 'user' %}
+                                {% endif %}
+                           </span>
+                       {% endif %}
+                   {% endif %}
               {% if perms.comments.can_moderate %}
                   <a href="{% url 'comments-delete' item.comment.pk %}"><i class="fas fa-trash-alt"
                                                   title="{% translate 'remove comment' %}"></i></a>
