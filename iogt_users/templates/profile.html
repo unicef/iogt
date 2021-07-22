@@ -25,13 +25,14 @@
             </span>
             <span class="icon-btn__title">{% translate "Edit my profile" %}</span>
         </a>
-        <a href="#" class="icon-btn profile__btn">
-            <span class="icon-btn__icon">
-                <img src="{% static "icons/bell.png" %}" alt="bell icon">
-            </span>
-            <span class="icon-btn__title">{% translate "Notifications" %}</span>
-        </a>
-        <a href="#" class="icon-btn profile__btn">
+{#        Commenting the notifications section until functionality is added #}
+{#        <a href="#" class="icon-btn profile__btn">#}
+{#            <span class="icon-btn__icon">#}
+{#                <img src="{% static "icons/bell.png" %}" alt="bell icon">#}
+{#            </span>#}
+{#            <span class="icon-btn__title">{% translate "Notifications" %}</span>#}
+{#        </a>#}
+        <a href="{% url 'account_change_password' %}" class="icon-btn profile__btn">
             <span class="icon-btn__icon">
                 <img src="{% static "icons/lock.png" %}" alt="lock icon">
             </span>

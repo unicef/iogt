@@ -5,7 +5,7 @@
 
 {% block allauth_content %}
     <h1 class="title profile__title">{% translate "Personal Details" %}</h1>
-    <form method="post">
+    <form method="post" class="edit-profile">
         {% csrf_token %}
         {{ form.as_p }}
         <div class="profile-form__btns">
