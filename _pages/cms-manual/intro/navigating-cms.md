@@ -31,6 +31,8 @@ The top level of the Pages menu will be the different languages your country's s
 
 {% include figure.html src="/assets/img/docs/pages-top-level.png" alt="Pages menu" caption="Wagtail Pages menu. Notice that this site has two languages: English and French." %}
 
+{% include figure.html src="/assets/img/docs/pages-hierarchy.png" alt="Pages hierarchy diagram" caption="This is the pages hierarchy. Remember, Sections can be infinitely nested and can contain any Page type except Banner Pages and Index Pages. There can also be as many Site Languages as required." %}
+
 **Here's what you need to know:**
 - Click the Explorer button in the sidebar to access the Menu.
 - Clicking the name of a page will take you to the Pages view for the Banner, Section, Footer pages or Polls _within that page_. 
