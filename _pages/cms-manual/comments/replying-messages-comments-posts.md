@@ -11,7 +11,7 @@ When responding to users, keep in mind the voice of the platform: Depending on t
 - Acknowledge/reference what they have said or asked
 - Issue a canned response where relevant, or advise the user to check the site by searching it for specific information 
 
-Always check the Canned Responses first (a selection of these might have been loaded to Molo).  If you find a relevant response, add into the message format outlined above and reply to the user. If a Canned Response cannot be found, create a message using the outline above and send to the user. 
+Always check the Canned Responses first (a selection of these might have been loaded to Wagtail).  If you find a relevant response, add into the message format outlined above and reply to the user. If a Canned Response cannot be found, create a message using the outline above and send to the user. 
 
 <br />
 
