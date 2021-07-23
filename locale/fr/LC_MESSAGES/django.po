@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-19 17:54+0000\n"
+"POT-Creation-Date: 2021-07-23 10:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -195,7 +195,9 @@ msgstr "FR-Please, confirm your opinion about the comment."
 msgid ""
 "Click on the \"withdraw\" button if you want to withdraw your positive "
 "opinion on this comment."
-msgstr "FR-"
+msgstr ""
+"FR-Click on the \"withdraw\" button if you want to withdraw your positive "
+"opinion on this comment."
 
 #: comments/templates/django_comments_xtd/like.html:69
 msgid "Withdraw"
@@ -384,7 +386,9 @@ msgstr "FR-Local GA Tag Manager"
 msgid ""
 "Local GA Tag Manager tracking code (e.g GTM-XXX) to be used to view "
 "analytics on this site only"
-msgstr "FR-"
+msgstr ""
+"FR-Local GA Tag Manager tracking code (e.g GTM-XXX) to be used to view "
+"analytics on this site only"
 
 #: home/models.py:485
 msgid "Global GA Tag Manager"
@@ -394,7 +398,9 @@ msgstr "FR-Global GA Tag Manager"
 msgid ""
 "Global GA Tag Manager tracking code (e.g GTM-XXX) to be used to view "
 "analytics on more than one site globally"
-msgstr "FR-"
+msgstr ""
+"FR-Global GA Tag Manager tracking code (e.g GTM-XXX) to be used to view "
+"analytics on more than one site globally"
 
 #: home/models.py:494
 msgid "Local GA Tracking Code"
@@ -413,7 +419,9 @@ msgstr "FR-Global GA Tracking Code"
 msgid ""
 "Global GA tracking code to be used to view analytics on more than one site "
 "globally"
-msgstr "FR-"
+msgstr ""
+"FR-Global GA tracking code to be used to view analytics on more than one site "
+"globally"
 
 #: home/models.py:519
 msgid ""
@@ -757,7 +765,9 @@ msgstr "FR-Password Reset"
 msgid ""
 "Forgotten your password? Enter your e-mail address below, and we'll send you "
 "an e-mail allowing you to reset it."
-msgstr "FR-"
+msgstr ""
+"FR-Forgotten your password? Enter your e-mail address below, and we'll send you "
+"an e-mail allowing you to reset it."
 
 #: iogt/templates/account/password_reset.html:20
 msgid "Reset My Password"
@@ -771,7 +781,9 @@ msgstr "FR-Please contact us if you have any trouble resetting your password."
 msgid ""
 "We have sent you an e-mail. Please contact us if you do not receive it "
 "within a few minutes."
-msgstr "FR-"
+msgstr ""
+"FR-We have sent you an e-mail. Please contact us if you do not receive it "
+"within a few minutes."
 
 #: iogt/templates/account/password_reset_from_key.html:7
 msgid "Bad Token"
@@ -874,6 +886,30 @@ msgstr "FR-Inactive"
 msgid "%(time_period)s ago"
 msgstr "FR-%(time_period)s ago"
 
+#: iogt_users/forms.py:15
+msgid "I accept the terms & conditions"
+msgstr "FR-I accept the terms & conditions"
+
+#: iogt_users/forms.py:28 iogt_users/forms.py:36
+msgid "4-digit PIN"
+msgstr "FR-4-digit PIN"
+
+#: iogt_users/forms.py:32
+msgid "Enter Your Name"
+msgstr "FR-Enter Your Name"
+
+#: iogt_users/forms.py:46
+msgid "Old 4-digit PIN"
+msgstr "FR-Old 4-digit PIN"
+
+#: iogt_users/forms.py:47
+msgid "New 4-digit PIN"
+msgstr "FR-New 4-digit PIN"
+
+#: iogt_users/forms.py:48
+msgid "Confirm new 4-digit PIN"
+msgstr "FR-Confirm new 4-digit PIN"
+
 #: iogt_users/templates/modeladmin/iogt_users/user/index.html:34
 msgid "Upload Users"
 msgstr "FR-Upload Users"
@@ -953,15 +989,11 @@ msgstr ""
 "FR-                Hey, %(username)s\n"
 "            "
 
-#: iogt_users/templates/profile.html:32
-msgid "Notifications"
-msgstr "FR-Notifications"
-
-#: iogt_users/templates/profile.html:38
+#: iogt_users/templates/profile.html:39
 msgid "Change Digital Pin"
 msgstr "FR-Change Digital Pin"
 
-#: iogt_users/templates/profile.html:45
+#: iogt_users/templates/profile.html:46
 msgid "Log out"
 msgstr "FR-Log out"
 
@@ -1288,10 +1320,8 @@ msgstr "FR-It seems we can’t find any results based on your search."
 msgid "See results"
 msgstr "FR-See results"
 
-#~ msgid ""
-#~ "A quia quas et atque eos vero temporibus quis ullam. Recusandae "
-#~ "recusandae omnis aspernatur quisquam at dolorem aspernatur quod non."
-#~ msgstr "FR-"
+#~ msgid "Notifications"
+#~ msgstr "FR-Notifications"
 
 #~ msgid "Thank you for your response!"
 #~ msgstr "FR-Thank you for your response!"
