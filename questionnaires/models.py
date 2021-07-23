@@ -25,7 +25,7 @@ from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 from wagtail.images.blocks import ImageChooserBlock
 
-from questionnaires.blocks import SkipLogicField, SkipState, VALID_SKIP_SELECTORS
+from questionnaires.blocks import SkipLogicField, SkipState
 from questionnaires.forms import SurveyForm, QuizForm
 from questionnaires.utils import SkipLogicPaginator
 
