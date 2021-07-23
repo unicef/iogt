@@ -1,12 +1,23 @@
 from collections import defaultdict
 
 from django.core.exceptions import ValidationError
+from django import forms
 from django.forms.utils import ErrorList
 from django.utils.translation import gettext_lazy as _
 
 from wagtail.admin.forms import WagtailAdminPageForm
+from wagtail.contrib.forms.forms import FormBuilder
 
 from questionnaires.blocks import VALID_SKIP_SELECTORS, SkipState, VALID_SKIP_LOGIC
+
+
+class CustomFormBuilder(FormBuilder):
+    def create_positivenumber_field(self, field, options):
+        options.update({
+            'min_value': 0,
+        })
+
+        return forms.IntegerField(**options)
 
 
 class SurveyForm(WagtailAdminPageForm):
