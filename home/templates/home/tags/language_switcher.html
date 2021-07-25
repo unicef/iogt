@@ -1,0 +1,9 @@
+{% load wagtailcore_tags i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<select id="language_select">
+    {% for translation in translations %}
+        {% get_language_info for translation.locale.language_code as lang %}
+        <option value="{{ lang.name_local }}" {% if lang.code == LANGUAGE_CODE %}selected{% endif %}>
+            {{ lang.name_local }}</option>
+    {% endfor %}
+</select>
