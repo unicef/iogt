@@ -1,13 +1,23 @@
 {% extends "base.html" %}
 
-{% load i18n %}
+{% load i18n wagtailimages_tags %}
 
 {% block content %}
-    <div>
+    <div align="center">
+        {% image settings.home.SiteSettings.logo fill-102x40 as logo %}
+        {# This sentence should be a blocktranslate, but I don't know how to embed the image in that. #}
+        <p>{% translate "You are leaving" %}</p>
+        {% if logo %}
+            <img src="{{ logo.url }}" alt="{% translate 'Internet of Good Things' %}"/>
+        {% else %}
+            <p>{% translate 'Internet of Good Things' %}</p>
+        {% endif %}
+        <p>{% translate "to visit an external website and standard data charges by your network provider might apply" %}</p>
         <p>
-            <a href="{{ next }}" target="_blank">{% translate "go to external link" %}</a>
+            <a href="{{ next }}" target="_blank">{% translate "Continue to external site" %}</a>
+        </p>
         <p>
-            <a href="{{ prev }}">{% translate "back to previous page" %}</a>
+            <a href="{{ prev }}">{% translate "Go back to previous page" %}</a>
         </p>
     </div>
 {% endblock content %}

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-25 21:43+0000\n"
+"POT-Creation-Date: 2021-07-25 22:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -336,47 +336,47 @@ msgstr "FR-Home Page Banners"
 msgid "Featured Content"
 msgstr "FR-Featured Content"
 
-#: home/models.py:240
+#: home/models.py:247
 msgid "section"
 msgstr "FR-section"
 
-#: home/models.py:241
+#: home/models.py:248
 msgid "sections"
 msgstr "FR-sections"
 
-#: home/models.py:310
+#: home/models.py:317
 msgid "Recommended Articles"
 msgstr "FR-Recommended Articles"
 
-#: home/models.py:373
+#: home/models.py:380
 msgid "article"
 msgstr "FR-article"
 
-#: home/models.py:374
+#: home/models.py:381
 msgid "articles"
 msgstr "FR-articleS"
 
-#: home/models.py:394
+#: home/models.py:401
 msgid "Image to display as the banner"
 msgstr "FR-Image to display as the banner"
 
-#: home/models.py:401
+#: home/models.py:408
 msgid "Background image"
 msgstr "FR-Background image"
 
-#: home/models.py:407
+#: home/models.py:414
 msgid "Optional page to which the banner will link to"
 msgstr "FR-Optional page to which the banner will link to"
 
-#: home/models.py:412
+#: home/models.py:419
 msgid "The title for a button"
 msgstr "FR-The title for a button"
 
-#: home/models.py:419
+#: home/models.py:426
 msgid "Icon Button"
 msgstr "FR-Icon Button"
 
-#: home/models.py:464
+#: home/models.py:471
 msgid ""
 "When selecting this option, untranslated pages will not be visible to the "
 "front end user when viewing a child language of the site"
@@ -384,19 +384,19 @@ msgstr ""
 "FR-When selecting this option, untranslated pages will not be visible to the "
 "front end user when viewing a child language of the site"
 
-#: home/models.py:469
+#: home/models.py:476
 msgid "Facebook Analytics App ID"
 msgstr "FR-Facebook Analytics App ID"
 
-#: home/models.py:474
+#: home/models.py:481
 msgid "The tracking ID to be used to view Facebook Analytics"
 msgstr "FR-The tracking ID to be used to view Facebook Analytics"
 
-#: home/models.py:477
+#: home/models.py:484
 msgid "Local GA Tag Manager"
 msgstr "FR-Local GA Tag Manager"
 
-#: home/models.py:482
+#: home/models.py:489
 msgid ""
 "Local GA Tag Manager tracking code (e.g GTM-XXX) to be used to view "
 "analytics on this site only"
@@ -404,11 +404,11 @@ msgstr ""
 "FR-Local GA Tag Manager tracking code (e.g GTM-XXX) to be used to view "
 "analytics on this site only"
 
-#: home/models.py:486
+#: home/models.py:493
 msgid "Global GA Tag Manager"
 msgstr "FR-Global GA Tag Manager"
 
-#: home/models.py:491
+#: home/models.py:498
 msgid ""
 "Global GA Tag Manager tracking code (e.g GTM-XXX) to be used to view "
 "analytics on more than one site globally"
@@ -416,20 +416,20 @@ msgstr ""
 "FR-Global GA Tag Manager tracking code (e.g GTM-XXX) to be used to view "
 "analytics on more than one site globally"
 
-#: home/models.py:495
+#: home/models.py:502
 msgid "Local GA Tracking Code"
 msgstr "FR-Local GA Tracking Code"
 
-#: home/models.py:500
+#: home/models.py:507
 msgid "Local GA tracking code to be used to view analytics on this site only"
 msgstr ""
 "FR-Local GA tracking code to be used to view analytics on this site only"
 
-#: home/models.py:504
+#: home/models.py:511
 msgid "Global GA Tracking Code"
 msgstr "FR-Global GA Tracking Code"
 
-#: home/models.py:509
+#: home/models.py:516
 msgid ""
 "Global GA tracking code to be used to view analytics on more than one site "
 "globally"
@@ -437,7 +437,7 @@ msgstr ""
 "FR-Global GA tracking code to be used to view analytics on more than one "
 "site globally"
 
-#: home/models.py:520
+#: home/models.py:527
 msgid ""
 "Show warning if uploaded media file size is greater than this in bytes. "
 "Default is 9 MB"
@@ -445,112 +445,112 @@ msgstr ""
 "FR-Show warning if uploaded media file size is greater than this in bytes. "
 "Default is 9 MB"
 
-#: home/models.py:601 home/models.py:602
+#: home/models.py:608 home/models.py:609
 msgid "Site Settings"
 msgstr "FR-Site Settings"
 
-#: home/models.py:609
+#: home/models.py:616
 msgid "Prompt users to download?"
 msgstr "FR-Prompt users to download?"
 
-#: home/models.py:611
+#: home/models.py:618
 msgid "check to prompt first time users to download the website as an app"
 msgstr "FR-check to prompt first time users to download the website as an app"
 
-#: home/models.py:690 iogt/templates/wagtailusers/users/list.html:19
+#: home/models.py:697 iogt/templates/wagtailusers/users/list.html:19
 #: iogt/templates/wagtailusers/users/list.html:23
 msgid "Name"
 msgstr "FR-Name"
 
-#: home/models.py:691
+#: home/models.py:698
 msgid "Provide name"
 msgstr "FR-Provide name"
 
-#: home/models.py:695
+#: home/models.py:702
 msgid "Short name"
 msgstr "FR-Short name"
 
-#: home/models.py:696
+#: home/models.py:703
 msgid "Provide short name"
 msgstr "FR-Provide short name"
 
-#: home/models.py:700
+#: home/models.py:707
 msgid "Scope"
 msgstr "FR-Scope"
 
-#: home/models.py:701
+#: home/models.py:708
 msgid "Provide scope"
 msgstr "FR-Provide scope"
 
-#: home/models.py:705
+#: home/models.py:712
 msgid "Start URL"
 msgstr "FR-Start URL"
 
-#: home/models.py:706
+#: home/models.py:713
 msgid "Provide start URL"
 msgstr "FR-Provide start URL"
 
-#: home/models.py:716
+#: home/models.py:723
 msgid "Browser UI"
 msgstr "FR-Browser UI"
 
-#: home/models.py:717
+#: home/models.py:724
 msgid "Provide browser UI"
 msgstr "FR-Provide browser UI"
 
-#: home/models.py:721
+#: home/models.py:728
 msgid "Background color"
 msgstr "FR-Background color"
 
-#: home/models.py:722
+#: home/models.py:729
 msgid "Provide background color (example: #FFF)"
 msgstr "FR-Provide background color (example: #FFF)"
 
-#: home/models.py:726
+#: home/models.py:733
 msgid "Theme color"
 msgstr "FR-Theme color"
 
-#: home/models.py:727
+#: home/models.py:734
 msgid "Provide theme color(example: #493174)"
 msgstr "FR-Provide theme color(example: #493174)"
 
-#: home/models.py:731
+#: home/models.py:738
 msgid "Description"
 msgstr "FR-Description"
 
-#: home/models.py:732
+#: home/models.py:739
 msgid "Provide description"
 msgstr "FR-Provide description"
 
-#: home/models.py:738
+#: home/models.py:745
 msgid "Language"
 msgstr "FR-Language"
 
-#: home/models.py:739
+#: home/models.py:746
 msgid "Choose language"
 msgstr "FR-Choose language"
 
-#: home/models.py:746
+#: home/models.py:753
 msgid "Icon 96x96"
 msgstr "FR-Icon 96x96"
 
-#: home/models.py:747
+#: home/models.py:754
 msgid "Add PNG icon 96x96 px"
 msgstr "FR-Add PNG icon 96x96 px"
 
-#: home/models.py:755
+#: home/models.py:762
 msgid "Icon 512x512"
 msgstr "FR-Icon 512x512"
 
-#: home/models.py:756
+#: home/models.py:763
 msgid "Add PNG icon 512x512 px"
 msgstr "FR-Add PNG icon 512x512 px"
 
-#: home/models.py:764
+#: home/models.py:771
 msgid "Icon 196x196 (maskable)"
 msgstr "FR-Icon 196x196 (maskable)"
 
-#: home/models.py:766
+#: home/models.py:773
 msgid ""
 "Add PNG icon 196x196 px (maskable image can be created using https://"
 "maskable.app/)"
@@ -850,13 +850,30 @@ msgstr "FR-Search here"
 msgid "© The Internet of Good Things"
 msgstr "FR-© The Internet of Good Things"
 
-#: iogt/templates/transition-page.html:8
-msgid "go to external link"
-msgstr "FR-go to external link"
+#: iogt/templates/transition-page.html:9
+msgid "You are leaving"
+msgstr "FR-You are leaving"
 
-#: iogt/templates/transition-page.html:10
-msgid "back to previous page"
-msgstr "FR-back to previous page"
+#: iogt/templates/transition-page.html:11
+#: iogt/templates/transition-page.html:13
+msgid "Internet of Good Things"
+msgstr "FR-Internet of Good Things"
+
+#: iogt/templates/transition-page.html:15
+msgid ""
+"to visit an external website and standard data charges by your network "
+"provider might apply"
+msgstr ""
+"FR-to visit an external website and standard data charges by your network "
+"provider might apply"
+
+#: iogt/templates/transition-page.html:17
+msgid "Continue to external site"
+msgstr "FR-Continue to external site"
+
+#: iogt/templates/transition-page.html:20
+msgid "Go back to previous page"
+msgstr "FR-Go back to previous page"
 
 #: iogt/templates/wagtailusers/users/list.html:8
 #: iogt/templates/wagtailusers/users/list.html:12
@@ -1210,7 +1227,6 @@ msgstr ""
 "FR-Comma separated list of choices. Only applicable in checkboxes, radio, "
 "dropdown and multiselect."
 
-
 #: questionnaires/models.py:535
 msgid "Feedback"
 msgstr "FR-Feedback"
@@ -1243,11 +1259,11 @@ msgstr "FR-Your answer"
 msgid "Check if apply"
 msgstr "FR-Check if apply"
 
-#: questionnaires/templates/questionnaires/tags/polls_list.html:6
+#: questionnaires/templates/questionnaires/tags/polls_list.html:11
 msgid "POLL"
 msgstr "FR-POLL"
 
-#: questionnaires/templates/questionnaires/tags/quizzes_list.html:6
+#: questionnaires/templates/questionnaires/tags/quizzes_list.html:11
 msgid "QUIZ"
 msgstr "FR-QUIZ"
 
@@ -1255,7 +1271,7 @@ msgstr "FR-QUIZ"
 msgid "Next step"
 msgstr "FR-Next step"
 
-#: questionnaires/templates/questionnaires/tags/surveys_list.html:6
+#: questionnaires/templates/questionnaires/tags/surveys_list.html:11
 msgid "SURVEY"
 msgstr "FR-SURVEY"
 
