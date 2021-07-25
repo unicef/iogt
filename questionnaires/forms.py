@@ -30,7 +30,7 @@ class SurveyForm(WagtailAdminPageForm):
                         self.add_form_field_error(
                             'field_type',
                             _('Checkbox type questions must have 2 Answer '
-                              'Options: a True and False'),
+                              'Options: a on and off'),
                         )
                 elif data['field_type'] in VALID_SKIP_LOGIC:
                     for i, logic in enumerate(data['skip_logic']):
@@ -124,7 +124,7 @@ class QuizForm(WagtailAdminPageForm):
                         self.add_form_field_error(
                             'field_type',
                             _('Checkbox type questions must have 2 Answer '
-                              'Options: a True and False'),
+                              'Options: a on and off'),
                         )
                 elif data['field_type'] in VALID_SKIP_LOGIC:
                     for i, logic in enumerate(data['skip_logic']):

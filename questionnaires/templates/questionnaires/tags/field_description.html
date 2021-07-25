@@ -4,10 +4,12 @@
     <span>
         {% if not field.field.required %}
             {% translate "Optional" %}
-        {% elif field.field.widget.input_type  == "radio" or "/select" in field.field.widget.template_name %}
+        {% elif field.widget_type == "radioselect" or field.widget_type == "select" %}
             {% translate "Select one" %}
-        {% elif  field.field.widget.input_type  == "checkbox" %}
+        {% elif  field.widget_type == "checkboxselectmultiple" or field.widget_type == "selectmultiple" %}
             {% translate "Check all that apply" %}
+        {% elif  field.widget_type == "checkbox" %}
+            {% translate "Check if apply" %}
         {% endif %}
     </span>
 </p>
