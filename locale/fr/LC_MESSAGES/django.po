@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-25 20:08+0000\n"
+"POT-Creation-Date: 2021-07-25 21:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -155,6 +155,7 @@ msgstr "FR-This is a reported comment"
 
 #. Translators: Count refers to the number of people that reported a comment.
 #: comments/templates/django_comments_xtd/comment_tree.html:53
+#, python-format
 msgid ""
 "\n"
 "                                Reported by %(count)s user\n"
@@ -841,11 +842,11 @@ msgstr "FR-Would you like to download it?"
 msgid "Download"
 msgstr "FR-Download"
 
-#: iogt/templates/footer.html:33 search/templates/search/search.html:106
+#: iogt/templates/footer.html:31 search/templates/search/search.html:106
 msgid "Search here"
 msgstr "FR-Search here"
 
-#: iogt/templates/footer.html:38
+#: iogt/templates/footer.html:36
 msgid "© The Internet of Good Things"
 msgstr "FR-© The Internet of Good Things"
 
@@ -1042,6 +1043,7 @@ msgid "Delete"
 msgstr "FR-Delete"
 
 #: messaging/templates/messaging/thread_detail.html:6
+#: questionnaires/templates/quizzes/quiz_landing.html:46
 msgid "Back"
 msgstr "FR-Back"
 
@@ -1070,9 +1072,8 @@ msgid "Another question"
 msgstr "FR-Another question"
 
 #: questionnaires/forms.py:32 questionnaires/forms.py:126
-msgid "Checkbox type questions must have 2 Answer Options: a True and False"
-msgstr ""
-"FR-Checkbox type questions must have 2 Answer Options: a True and False"
+msgid "Checkbox type questions must have 2 Answer Options: a on and off"
+msgstr "FR-Checkbox type questions must have 2 Answer Options: a on and off"
 
 #: questionnaires/forms.py:41 questionnaires/forms.py:135
 msgid "This field is required."
@@ -1197,13 +1198,18 @@ msgstr "FR-poll"
 msgid "polls"
 msgstr "FR-polls"
 
-#: questionnaires/models.py:532
+#: questionnaires/models.py:533
 msgid "correct_answer"
 msgstr "FR-correct_answer"
 
 #: questionnaires/models.py:534
-msgid "Please provide correct answer for this question"
-msgstr "FR-Please provide correct answer for this question"
+msgid ""
+"Comma separated list of choices. Only applicable in checkboxes, radio, "
+"dropdown and multiselect."
+msgstr ""
+"FR-Comma separated list of choices. Only applicable in checkboxes, radio, "
+"dropdown and multiselect."
+
 
 #: questionnaires/models.py:535
 msgid "Feedback"
@@ -1221,17 +1227,21 @@ msgstr "FR-General settings for quiz"
 msgid "Description at quiz page"
 msgstr "FR-Description at quiz page"
 
-#: questionnaires/models.py:695
+#: questionnaires/models.py:699
 msgid "quiz"
 msgstr "FR-quiz"
 
-#: questionnaires/models.py:696
+#: questionnaires/models.py:700
 msgid "quizzes"
 msgstr "FR-quizzes"
 
 #: questionnaires/templates/poll/poll_landing.html:27
 msgid "Your answer"
 msgstr "FR-Your answer"
+
+#: questionnaires/templates/questionnaires/tags/field_description.html:12
+msgid "Check if apply"
+msgstr "FR-Check if apply"
 
 #: questionnaires/templates/questionnaires/tags/polls_list.html:6
 msgid "POLL"
@@ -1273,16 +1283,12 @@ msgstr "FR-Correct"
 msgid "Incorrect"
 msgstr "FR-Incorrect"
 
-#: questionnaires/templates/quizzes/quiz_landing.html:46
-msgid "Back to article"
-msgstr "FR-Back to article"
-
 #: questionnaires/templates/quizzes/quiz_landing.html:69
 msgid "Replay Quiz"
 msgstr "FR-Replay Quiz"
 
 #: questionnaires/templates/quizzes/quiz_landing.html:99
-#: questionnaires/templates/quizzes/quiz_landing.html:135
+#: questionnaires/templates/quizzes/quiz_landing.html:136
 msgid "Correct answer"
 msgstr "FR-Correct answer"
 
@@ -1324,6 +1330,12 @@ msgstr "FR-It seems we can’t find any results based on your search."
 #: search/templates/search/search.html:110
 msgid "See results"
 msgstr "FR-See results"
+
+#~ msgid "Please provide correct answer for this question"
+#~ msgstr "FR-Please provide correct answer for this question"
+
+#~ msgid "Back to article"
+#~ msgstr "FR-Back to article"
 
 #~ msgid "Reported by %(count)s"
 #~ msgstr "FR-Reported by %(count)s"
