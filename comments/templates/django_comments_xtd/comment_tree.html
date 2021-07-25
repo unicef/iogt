@@ -48,14 +48,13 @@
               {% endif %}
                    {% if perms.comments.can_moderate %}
                        {% if item.flagged_count %}
-                           {# Translators: Count refers to the number of people that reported a comment. #}
-                           <span class="report-comment">{% blocktranslate with item.flagged_count as count %}Reported by
-                               {{ count }}{% endblocktranslate %}
-                                {% if count > 1 %}
-                                    {% translate 'users' %}
-                                {% else %}
-                                    {% translate 'user' %}
-                                {% endif %}
+                           <span class="report-comment">
+                                {# Translators: Count refers to the number of people that reported a comment. #}
+                                {% blocktranslate count count=item.flagged_count %}
+                                Reported by {{ count }} user
+                                {% plural %}
+                                Reported by {{ count }} users
+                                {% endblocktranslate %}
                            </span>
                        {% endif %}
                    {% endif %}

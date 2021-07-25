@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-23 10:54+0000\n"
+"POT-Creation-Date: 2021-07-25 20:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -154,12 +154,25 @@ msgid "This is a reported comment"
 msgstr "FR-This is a reported comment"
 
 #. Translators: Count refers to the number of people that reported a comment.
-#: comments/templates/django_comments_xtd/comment_tree.html:52
-#, python-format
-msgid "Reported by %(count)s"
-msgstr "FR-Reported by %(count)s"
+#: comments/templates/django_comments_xtd/comment_tree.html:53
+msgid ""
+"\n"
+"                                Reported by %(count)s user\n"
+"                                "
+msgid_plural ""
+"\n"
+"                                Reported by %(count)s users\n"
+"                                "
+msgstr[0] ""
+"\n"
+"                                FR-Reported by %(count)s user\n"
+"                                "
+msgstr[1] ""
+"\n"
+"                                FR-Reported by %(count)s users\n"
+"                                "
 
-#: comments/templates/django_comments_xtd/comment_tree.html:57
+#: comments/templates/django_comments_xtd/comment_tree.html:63
 msgid "remove comment"
 msgstr "FR-remove comment"
 
@@ -362,7 +375,7 @@ msgstr "FR-The title for a button"
 msgid "Icon Button"
 msgstr "FR-Icon Button"
 
-#: home/models.py:463
+#: home/models.py:464
 msgid ""
 "When selecting this option, untranslated pages will not be visible to the "
 "front end user when viewing a child language of the site"
@@ -370,19 +383,19 @@ msgstr ""
 "FR-When selecting this option, untranslated pages will not be visible to the "
 "front end user when viewing a child language of the site"
 
-#: home/models.py:468
+#: home/models.py:469
 msgid "Facebook Analytics App ID"
 msgstr "FR-Facebook Analytics App ID"
 
-#: home/models.py:473
+#: home/models.py:474
 msgid "The tracking ID to be used to view Facebook Analytics"
 msgstr "FR-The tracking ID to be used to view Facebook Analytics"
 
-#: home/models.py:476
+#: home/models.py:477
 msgid "Local GA Tag Manager"
 msgstr "FR-Local GA Tag Manager"
 
-#: home/models.py:481
+#: home/models.py:482
 msgid ""
 "Local GA Tag Manager tracking code (e.g GTM-XXX) to be used to view "
 "analytics on this site only"
@@ -390,11 +403,11 @@ msgstr ""
 "FR-Local GA Tag Manager tracking code (e.g GTM-XXX) to be used to view "
 "analytics on this site only"
 
-#: home/models.py:485
+#: home/models.py:486
 msgid "Global GA Tag Manager"
 msgstr "FR-Global GA Tag Manager"
 
-#: home/models.py:490
+#: home/models.py:491
 msgid ""
 "Global GA Tag Manager tracking code (e.g GTM-XXX) to be used to view "
 "analytics on more than one site globally"
@@ -402,28 +415,28 @@ msgstr ""
 "FR-Global GA Tag Manager tracking code (e.g GTM-XXX) to be used to view "
 "analytics on more than one site globally"
 
-#: home/models.py:494
+#: home/models.py:495
 msgid "Local GA Tracking Code"
 msgstr "FR-Local GA Tracking Code"
 
-#: home/models.py:499
+#: home/models.py:500
 msgid "Local GA tracking code to be used to view analytics on this site only"
 msgstr ""
 "FR-Local GA tracking code to be used to view analytics on this site only"
 
-#: home/models.py:503
+#: home/models.py:504
 msgid "Global GA Tracking Code"
 msgstr "FR-Global GA Tracking Code"
 
-#: home/models.py:508
+#: home/models.py:509
 msgid ""
 "Global GA tracking code to be used to view analytics on more than one site "
 "globally"
 msgstr ""
-"FR-Global GA tracking code to be used to view analytics on more than one site "
-"globally"
+"FR-Global GA tracking code to be used to view analytics on more than one "
+"site globally"
 
-#: home/models.py:519
+#: home/models.py:520
 msgid ""
 "Show warning if uploaded media file size is greater than this in bytes. "
 "Default is 9 MB"
@@ -431,112 +444,112 @@ msgstr ""
 "FR-Show warning if uploaded media file size is greater than this in bytes. "
 "Default is 9 MB"
 
-#: home/models.py:600 home/models.py:601
+#: home/models.py:601 home/models.py:602
 msgid "Site Settings"
 msgstr "FR-Site Settings"
 
-#: home/models.py:608
+#: home/models.py:609
 msgid "Prompt users to download?"
 msgstr "FR-Prompt users to download?"
 
-#: home/models.py:610
+#: home/models.py:611
 msgid "check to prompt first time users to download the website as an app"
 msgstr "FR-check to prompt first time users to download the website as an app"
 
-#: home/models.py:689 iogt/templates/wagtailusers/users/list.html:19
+#: home/models.py:690 iogt/templates/wagtailusers/users/list.html:19
 #: iogt/templates/wagtailusers/users/list.html:23
 msgid "Name"
 msgstr "FR-Name"
 
-#: home/models.py:690
+#: home/models.py:691
 msgid "Provide name"
 msgstr "FR-Provide name"
 
-#: home/models.py:694
+#: home/models.py:695
 msgid "Short name"
 msgstr "FR-Short name"
 
-#: home/models.py:695
+#: home/models.py:696
 msgid "Provide short name"
 msgstr "FR-Provide short name"
 
-#: home/models.py:699
+#: home/models.py:700
 msgid "Scope"
 msgstr "FR-Scope"
 
-#: home/models.py:700
+#: home/models.py:701
 msgid "Provide scope"
 msgstr "FR-Provide scope"
 
-#: home/models.py:704
+#: home/models.py:705
 msgid "Start URL"
 msgstr "FR-Start URL"
 
-#: home/models.py:705
+#: home/models.py:706
 msgid "Provide start URL"
 msgstr "FR-Provide start URL"
 
-#: home/models.py:715
+#: home/models.py:716
 msgid "Browser UI"
 msgstr "FR-Browser UI"
 
-#: home/models.py:716
+#: home/models.py:717
 msgid "Provide browser UI"
 msgstr "FR-Provide browser UI"
 
-#: home/models.py:720
+#: home/models.py:721
 msgid "Background color"
 msgstr "FR-Background color"
 
-#: home/models.py:721
+#: home/models.py:722
 msgid "Provide background color (example: #FFF)"
 msgstr "FR-Provide background color (example: #FFF)"
 
-#: home/models.py:725
+#: home/models.py:726
 msgid "Theme color"
 msgstr "FR-Theme color"
 
-#: home/models.py:726
+#: home/models.py:727
 msgid "Provide theme color(example: #493174)"
 msgstr "FR-Provide theme color(example: #493174)"
 
-#: home/models.py:730
+#: home/models.py:731
 msgid "Description"
 msgstr "FR-Description"
 
-#: home/models.py:731
+#: home/models.py:732
 msgid "Provide description"
 msgstr "FR-Provide description"
 
-#: home/models.py:737
+#: home/models.py:738
 msgid "Language"
 msgstr "FR-Language"
 
-#: home/models.py:738
+#: home/models.py:739
 msgid "Choose language"
 msgstr "FR-Choose language"
 
-#: home/models.py:745
+#: home/models.py:746
 msgid "Icon 96x96"
 msgstr "FR-Icon 96x96"
 
-#: home/models.py:746
+#: home/models.py:747
 msgid "Add PNG icon 96x96 px"
 msgstr "FR-Add PNG icon 96x96 px"
 
-#: home/models.py:754
+#: home/models.py:755
 msgid "Icon 512x512"
 msgstr "FR-Icon 512x512"
 
-#: home/models.py:755
+#: home/models.py:756
 msgid "Add PNG icon 512x512 px"
 msgstr "FR-Add PNG icon 512x512 px"
 
-#: home/models.py:763
+#: home/models.py:764
 msgid "Icon 196x196 (maskable)"
 msgstr "FR-Icon 196x196 (maskable)"
 
-#: home/models.py:765
+#: home/models.py:766
 msgid ""
 "Add PNG icon 196x196 px (maskable image can be created using https://"
 "maskable.app/)"
@@ -726,10 +739,6 @@ msgstr "FR-Log In"
 msgid "Create your account"
 msgstr "FR-Create your account"
 
-#: iogt/templates/account/login.html:27
-msgid "Placeholder text below Create your account button."
-msgstr "FR-Placeholder text below Create your account button."
-
 #: iogt/templates/account/logout.html:5 iogt/templates/account/logout.html:8
 #: iogt/templates/account/logout.html:17
 msgid "Sign Out"
@@ -766,8 +775,8 @@ msgid ""
 "Forgotten your password? Enter your e-mail address below, and we'll send you "
 "an e-mail allowing you to reset it."
 msgstr ""
-"FR-Forgotten your password? Enter your e-mail address below, and we'll send you "
-"an e-mail allowing you to reset it."
+"FR-Forgotten your password? Enter your e-mail address below, and we'll send "
+"you an e-mail allowing you to reset it."
 
 #: iogt/templates/account/password_reset.html:20
 msgid "Reset My Password"
@@ -810,10 +819,6 @@ msgstr "FR-Your password is now changed."
 #: iogt/templates/account/password_set.html:13
 msgid "Set Password"
 msgstr "FR-Set Password"
-
-#: iogt/templates/account/signup.html:29
-msgid "Placeholder text below Login button."
-msgstr "FR-Placeholder text below Login button."
 
 #: iogt/templates/back_button.html:14
 msgid "BACK"
@@ -1319,6 +1324,15 @@ msgstr "FR-It seems we can’t find any results based on your search."
 #: search/templates/search/search.html:110
 msgid "See results"
 msgstr "FR-See results"
+
+#~ msgid "Reported by %(count)s"
+#~ msgstr "FR-Reported by %(count)s"
+
+#~ msgid "Placeholder text below Create your account button."
+#~ msgstr "FR-Placeholder text below Create your account button."
+
+#~ msgid "Placeholder text below Login button."
+#~ msgstr "FR-Placeholder text below Login button."
 
 #~ msgid "Notifications"
 #~ msgstr "FR-Notifications"
