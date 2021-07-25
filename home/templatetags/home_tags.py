@@ -1,10 +1,17 @@
 from django import template
-from wagtail.core.models import Locale
 
 from home.models import FooterPage, SectionIndexPage
 from iogt.settings.base import LANGUAGES
 
 register = template.Library()
+
+
+@register.inclusion_tag('home/tags/language_switcher.html')
+def language_switcher(page):
+    return {
+        'translations': page.get_translations(inclusive=True).all(),
+
+    }
 
 
 @register.inclusion_tag('home/tags/footer.html', takes_context=True)

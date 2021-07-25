@@ -25,11 +25,9 @@
         <img src="{{ logo.url }}" />
     </a>
     <div class="sm-home-header__options">
-        <select>
-            {% for language in languages %}
-                <option value="{{ language.name_local }}" {% if language.code == LANGUAGE_CODE %}selected{% endif %}>{{ language.name_local }}</option>
-            {% endfor %}
-        </select>  
+        {% if page %}
+            {% language_switcher page %}
+        {% endif %}
         <a class="js-search-btn" href="{% url "search" %}">
             <img src="{% static "icons/search.svg" %}" alt="Search" class='sm-home-header__search'>
         </a>

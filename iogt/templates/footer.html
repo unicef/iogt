@@ -15,11 +15,7 @@
             <img src="{{ logo.url }}" />
         </a>
         <div class="sm-home-header__options">
-            <select>
-                {% for language in languages %}
-                    <option value="{{ language.name_local }}" {% if language.code == LANGUAGE_CODE %}selected{% endif %}>{{ language.name_local }}</option>
-                {% endfor %}
-            </select>
+            {% language_switcher page %}
         </div>
     </div>  
     <form class='footer__form' action="{% url 'search' %}">
