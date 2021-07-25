@@ -15,7 +15,9 @@
             <img src="{{ logo.url }}" />
         </a>
         <div class="sm-home-header__options">
-            {% language_switcher page %}
+            {% if page %}
+                {% language_switcher page %}
+            {% endif %}
         </div>
     </div>  
     <form class='footer__form' action="{% url 'search' %}">
