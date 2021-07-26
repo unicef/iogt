@@ -108,8 +108,6 @@ class Command(BaseCommand):
 
     def create_home_page(self, root):
         sql = 'select * from core_main main join wagtailcore_page page on main.page_ptr_id = page.id'
-        if self.skip_locales:
-            sql += " where slug not like '%translation-of%'"
         cur = self.db_query(sql)
         main = cur.fetchone()
         cur.close()
@@ -203,10 +201,14 @@ class Command(BaseCommand):
         return tags
 
     def migrate_sections(self, section_index_page):
-        sql = 'select * from core_sectionpage csp join wagtailcore_page wcp on csp.page_ptr_id = wcp.id'
+        sql = "select * " \
+              "from core_sectionpage csp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              "where csp.page_ptr_id = wcp.id " \
+              "and wcp.id = clr.page_id " \
+              "and clr.language_id = csl.id "
         if self.skip_locales:
-            sql += " where slug not like '%translation-of%'"
-        sql += ' order by wcp.path'
+            sql += " and locale = 'en' "
+        sql += 'order by wcp.path'
         cur = self.db_query(sql)
         for row in cur:
             self.create_section(section_index_page, row)
@@ -228,10 +230,14 @@ class Command(BaseCommand):
         self.stdout.write(f"saved section, title={section.title}")
 
     def migrate_articles(self, section_index_page):
-        sql = "select * from core_articlepage cap join wagtailcore_page wcp on cap.page_ptr_id = wcp.id where wcp.path like '000100010002%'"
+        sql = "select * " \
+              "from core_articlepage cap, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              "where cap.page_ptr_id = wcp.id " \
+              "and wcp.id = clr.page_id " \
+              "and clr.language_id = csl.id "
         if self.skip_locales:
-            sql += " and slug not like '%translation-of%'"
-        sql += ' order by wcp.path'
+            sql += "and locale = 'en' "
+        sql += " and wcp.path like '000100010002%'order by wcp.path"
         cur = self.db_query(sql)
         for row in cur:
             self.create_article(section_index_page, row)
@@ -249,7 +255,11 @@ class Command(BaseCommand):
             live=row['live'],
             body=self.map_article_body(row['body']),
         )
-        article.save()
+        try:
+            article.save()
+        except Page.DoesNotExist:
+            self.stdout.write(f"Skipping page with missing parent: title={row['title']}")
+            return
         self.stdout.write(f"saved article, title={article.title}")
 
     def map_article_body(self, v1_body):
@@ -260,9 +270,13 @@ class Command(BaseCommand):
         return json.dumps(v2_body)
 
     def migrate_banners(self, banner_index_page):
-        sql = "select * from core_bannerpage cbp join wagtailcore_page wcp on cbp.page_ptr_id = wcp.id"
+        sql = "select * " \
+              "from core_bannerpage cbp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              "where cbp.page_ptr_id = wcp.id " \
+              "and wcp.id = clr.page_id " \
+              "and clr.language_id = csl.id "
         if self.skip_locales:
-            sql += " where slug not like '%translation-of%'"
+            sql += " and locale = 'en' "
         sql += ' order by wcp.path'
         cur = self.db_query(sql)
         for row in cur:
@@ -284,9 +298,14 @@ class Command(BaseCommand):
         self.stdout.write(f"saved banner, title={banner.title}")
 
     def migrate_footers(self, footer_index_page):
-        sql = "select * from core_footerpage cfp join core_articlepage cap on cfp.articlepage_ptr_id = cap.page_ptr_id join wagtailcore_page wcp on cap.page_ptr_id = wcp.id"
+        sql = "select * " \
+              "from core_footerpage cfp, core_articlepage cap, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              "where cfp.articlepage_ptr_id = cap.page_ptr_id " \
+              "and cap.page_ptr_id = wcp.id " \
+              "and wcp.id = clr.page_id " \
+              "and clr.language_id = csl.id "
         if self.skip_locales:
-            sql += " where slug not like '%translation-of%'"
+            sql += " and locale = 'en' "
         sql += ' order by wcp.path'
         cur = self.db_query(sql)
         for row in cur:
