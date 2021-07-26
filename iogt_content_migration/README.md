@@ -22,7 +22,7 @@ docker-compose -f docker-compose-legacy-db.yml up
 ```
 Execute the migration command:
 ```
-./manage.py load_v1_db --password iogt --media-dir <path to media dir backup>
+./manage.py load_v1_db --password iogt --media-dir <path to media dir backup> --skip-locales
 ```
 Run with the help flag to see more options:
 ```
