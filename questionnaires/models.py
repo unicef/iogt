@@ -26,8 +26,26 @@ from wagtail.core.models import Page
 from wagtail.images.blocks import ImageChooserBlock
 
 from questionnaires.blocks import SkipState, SkipLogicBlock
-from questionnaires.forms import SurveyForm, QuizForm
+from questionnaires.forms import CustomFormBuilder, SurveyForm, QuizForm
 from questionnaires.utils import SkipLogicPaginator
+
+
+FORM_FIELD_CHOICES = (
+    ('checkbox', _('Checkbox')),
+    ('checkboxes', _('Checkboxes')),
+    ('date', _('Date')),
+    ('datetime', _('Date/time')),
+    ('dropdown', _('Drop down')),
+    ('email', _('Email')),
+    ('hidden', _('Hidden field')),
+    ('singleline', _('Single line text')),
+    ('multiline', _('Multi-line text')),
+    ('multiselect', _('Multiple select')),
+    ('number', _('Number')),
+    ('positivenumber', _('Positive number')),
+    ('radio', _('Radio buttons')),
+    ('url', _('URL')),
+)
 
 
 class QuestionnairePage(Page, PageUtilsMixin):
@@ -192,6 +210,11 @@ class QuestionnairePage(Page, PageUtilsMixin):
 class SurveyFormField(AbstractFormField):
     page = ParentalKey("Survey", on_delete=models.CASCADE, related_name="survey_form_fields")
     required = models.BooleanField(verbose_name=_('required'), default=False)
+    field_type = models.CharField(
+        verbose_name=_('field type'),
+        max_length=16,
+        choices=FORM_FIELD_CHOICES
+    )
     admin_label = models.CharField(
         verbose_name=_('admin_label'),
         max_length=256,
@@ -253,6 +276,7 @@ class SurveyFormField(AbstractFormField):
 
 class Survey(QuestionnairePage, AbstractForm):
     base_form_class = SurveyForm
+    form_builder = CustomFormBuilder
 
     parent_page_types = ["home.HomePage", "home.Section", "home.Article"]
     template = "survey/survey.html"
@@ -518,6 +542,11 @@ class Poll(QuestionnairePage, AbstractForm):
 class QuizFormField(AbstractFormField):
     page = ParentalKey("Quiz", on_delete=models.CASCADE, related_name="quiz_form_fields")
     required = models.BooleanField(verbose_name=_('required'), default=True)
+    field_type = models.CharField(
+        verbose_name=_('field type'),
+        max_length=16,
+        choices=FORM_FIELD_CHOICES
+    )
     admin_label = models.CharField(
         verbose_name=_('admin_label'),
         max_length=256,
@@ -591,6 +620,7 @@ class QuizFormField(AbstractFormField):
 
 class Quiz(QuestionnairePage, AbstractForm):
     base_form_class = QuizForm
+    form_builder = CustomFormBuilder
 
     parent_page_types = ["home.HomePage", "home.Section", "home.Article"]
     template = "quizzes/quiz.html"
