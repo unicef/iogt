@@ -129,6 +129,14 @@ $ bundle exec jekyll serve --watch -o
 #   Server running... press ctrl-c to stop.
 ```
 
+## Helpful Documentation
+
+- [Jekyll Installation](https://jekyllrb.com/docs/installation/)
+- [Official Liquid Docs](https://shopify.github.io/liquid/)
+- [Jekyll-specifc Liquid Filters](https://jekyllrb.com/docs/liquid/filters/)
+- [Jekyll-specfifc Liquid Tags](https://jekyllrb.com/docs/liquid/tags/)
+- [Jekyll CLI Docs](https://jekyllrb.com/docs/usage/)
+
 ## Project Structure
 
 The project is organized into several folders:
