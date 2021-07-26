@@ -1,4 +1,15 @@
-# goodinternet.org
+## Table of Contents
+
+- [Table of Contents](#table-of-contents)
+- [goodinternet.org](#goodinternetorg)
+- [Development](#development)
+  - [Install Ruby, RubyGems, GCC, and Make](#install-ruby-rubygems-gcc-and-make)
+  - [Install Bundler and Jekyll](#install-bundler-and-jekyll)
+  - [Clone this repository](#clone-this-repository)
+- [Helpful Documentation](#helpful-documentation)
+- [Project Structure](#project-structure)
+
+## goodinternet.org
 
 This branch (`gh-pages`) contains the documentation site and CMS Manual for the IoGT project. This site is built using [Jekyll](https://jekyllrb.com), a static site generator. GitHub Pages supports Jekyll sites out-of-the-box, with no special configuration necessary. Read more about GitHub Pages [here](https://pages.github.com).
 
@@ -11,7 +22,7 @@ There are a couple steps required to set up a local development environment:
 3. Clone this repository
 4. Launch a development server
 
-### [Install Ruby, RubyGems, GCC, and Make](https://jekyllrb.com/docs/installation/#guides)
+### Install Ruby, RubyGems, GCC, and Make
 
 **A note on Windows**: Ruby has first-class support for all Unix-like operating systems, including macOS, Ubuntu, and other Linux distributions. Ruby and Jekyll does not officially support Windows, however there are a couple workarounds to get Ruby and Jekyll to work on Windows. See the Windows Guide on [this](https://jekyllrb.com/docs/installation/#guides) page for more information.
 
