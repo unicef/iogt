@@ -133,7 +133,7 @@ $ bundle exec jekyll serve --watch -o
 
 The project is organized into several folders:
 
-- `data/` - Contains structured data that is presented throughout the site
+- `_data/` - Contains structured data that is presented throughout the site
 - `_includes` - HTML snippets that can be included modularly throughout the site
 - `_layouts` - HTML page templates
 - `_pages` - Where non-blog posts are stored. The CMS Manual is stored here
