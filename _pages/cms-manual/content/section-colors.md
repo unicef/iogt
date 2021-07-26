@@ -15,8 +15,10 @@ On the Section editing page, make sure you are on the `Content` tab. You can che
 
 Finally, navigate back to Wagtail and paste the hex code into the `Color` field on the Section editing page. Capitalize all letters. For example, the color in the image above (`#92c92a`) should be pasted into Wagtail as `92C92A`.
 
-Below are some examples of IoGT color palettes used in the v1.0 global site for your reference.
+Below are some examples of IoGT color palettes used in the v1.0 global site for your reference. Additonally, there is a table where you can easily copy and paste the hex color codes from.
 
 {% include figure.html src="/assets/img/docs/color-palette-1.png" alt="Color palette 1" caption="Color palette 1." %}
 
 {% include figure.html src="/assets/img/docs/color-palette-2.png" alt="Color palette 2" caption="Color palette 2."%}
+
+{% include color-table.html %}

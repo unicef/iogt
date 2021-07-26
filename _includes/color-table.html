@@ -1,0 +1,20 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th>Hex</th>
+            <th>RGB</th>
+            <th>CMYK</th>
+            <th>Section</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for color in site.data.color_palette %}
+            <tr style="background-color: {{ color.hex | raw }}; color: white;">
+                <th scope="row">{{ color.hex | raw }}</th>
+                <td>{{ color.rgb }}</td>
+                <td>{{ color.cmyk }}</td>
+                <td>{{ color.section }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
