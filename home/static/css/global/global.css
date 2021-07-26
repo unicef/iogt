@@ -662,4 +662,7 @@
     width: 29%;
     max-width: 400px;
   }
+  .link-login {
+    display: none;
+  }
 }
