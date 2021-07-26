@@ -92,7 +92,7 @@ Optionally, create the main menu automatically as well.
 You can choose to set up the project locally using Docker Compose. This setup is recommended if you 
 want to replicate the production environment
 
-###Steps
+### Steps
 
 Clone the repository
 
@@ -128,6 +128,9 @@ Optionally, create the main menu automatically as well.
 docker-compose run django python manage.py autopopulate_main_menus
 ```
 
+## Migrating content from IoGT v1
+Follow instructions [here](iogt_content_migration/README.md)
+
 ## Running Tests
 Run the following command:
 ```
@@ -136,6 +139,21 @@ make test
 
 ## Configuring the Chatbot
 Follow instructions [here](messaging/README.md)
+
+## Configuring wagtail-transfer
+It is possible to pull articles from other deployments assuming we know the secret key for that deployment.
+In `iogt/settings/local.py`, define [parameters from wagtail-transfer](https://github.com/wagtail/wagtail-transfer/blob/master/docs/settings.md) as appropriate, e.g.:
+```
+WAGTAILTRANSFER_SECRET_KEY = 'fake_secret_key'
+WAGTAILTRANSFER_SOURCES = {
+   'iogt_global': {
+      'BASE_URL': 'http://fake-iogt-url.org',
+      'SECRET_KEY': 'fake_secret_key_2',
+   },
+}
+```
+Note: the names of transfer sources may only contain letters, numbers and underscores.
+
 
 [1]: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment
 [2]: https://www.unicef.org/innovation/IoGT
