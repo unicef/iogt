@@ -2,14 +2,14 @@
 {% load i18n %}
 {% load comments_xtd %}
 
-{% block title %}{% trans "Remove comment" %}{% endblock %}
+{% block title %}{% translate "Remove comment" %}{% endblock %}
 
 {% block comment_content %}
 <div class="mb-4">
-  <h3 class="text-center">{% trans "Remove this comment?" %}</h3>
+  <h3 class="text-center">{% translate "Remove this comment?" %}</h3>
   <hr/>
 </div>
-<p class="lead text-center">{% trans "As a moderator you can delete comments. Deleting a comment does not remove it from the site, only prevents your website from showing the text. Click on the remove button to delete the following comment:" %}</p>
+<p class="lead text-center">{% translate "As a moderator you can delete comments. Deleting a comment does not remove it from the site, only prevents your website from showing the text. Click on the remove button to delete the following comment:" %}</p>
 <div class="row">
   <div class="offset-md-1 col-md-10">
     <div class="card mb-4">
@@ -42,7 +42,7 @@
       <input type="hidden" name="next" value="{{ comment.get_absolute_url }}"/>
         <div class="form-group">
           <div class="text-center">
-            <input type="submit" name="submit" class="btn btn-danger" value="{% trans "Remove" %}"/>
+            <input type="submit" name="submit" class="btn btn-danger" value="{% translate "Remove" %}"/>
             <a class="btn btn-secondary" href="{{ comment.get_absolute_url }}">cancel</a>
           </div>
         </div>

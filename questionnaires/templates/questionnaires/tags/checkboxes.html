@@ -12,7 +12,7 @@
                        value="{{ ckeckbox.choice_label }}">
                 <div class="cust-check__title">
                     {#                <span class="cust-check__check"></span>#}
-                    <span>{% trans ckeckbox.choice_label %}</span>
+                    <span>{{ ckeckbox.choice_label }}</span>
                 </div>
             </label>
         </div>
@@ -25,7 +25,7 @@
                name="{{ field.name }}">
         <div class="cust-check__title">
             {#                <span class="cust-check__check"></span>#}
-            <span>{% trans field.label %}</span>
+            <span>{{ field.label }}</span>
         </div>
     </label>
 {% endif %}

@@ -1,0 +1,22 @@
+{% load questionnaires_tags i18n %}
+
+{% if field.field.widget.input_type == "radio" %}
+    {% if not type == "poll" %}
+        {% render_radios field %}
+    {% else %}
+        {% render_polls_radios field %}
+    {% endif %}
+{% elif field.field.widget.input_type == "checkbox" %}
+    {% render_checkboxes field %}
+{% elif "textar" in field.field.widget.template_name %}
+    {% render_textarea field %}
+{% elif field.widget_type == 'select' %}
+    {% render_select field %}
+{% elif field.widget_type == 'selectmultiple' %}
+    {% render_select field True %}
+{% else %}
+    {% render_text_field field %}
+{% endif %}
+{% for err in  field.errors %}
+    <p class="cust-input__error">{% translate err %}</p>
+{% endfor %}

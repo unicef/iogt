@@ -9,64 +9,31 @@
     {% include 'back_button.html' with back_url=back_url %}
     <div class="quiz-page">
         <div class="container">
-            <h1 class="title quiz-page__title">{% trans page.title %}</h1>
-            {% if page.description %}<div class="quiz-page__description">{{ page.description }}</div>{% endif %}
-            <form action="{% pageurl page %}{% if self.multi_step or self.has_page_breaks %}?p={{ fields_step.number|add:"1" }}&back_url={{ request.path }}{% else %}?back_url={{ request.path }}{% endif %}&form_length={% if form_length != None %}{% if form.errors %}{{ form.fields | length }}{% else %}{{ form.fields | length | add:form_length }}{% endif %}{% else %}{{ form.fields | length }}{% endif %}"
-                  method="POST" class="quiz-page__content">
+            <h1 class="title quiz-page__title">{{ page.title }}</h1>
+            {% if page.description %}
+                <div class="quiz-page__description">{{ page.description }}</div>{% endif %}
+            <form action="{% get_action_url page self fields_step request form %} " method="POST" class="quiz-page__content">
                 {% csrf_token %}
                 {% for field in form %}
                     <div class="quest-item">
                         <div class="quest-item__header">
-                            <p class="quest-item__number">
-                                {% if form_length != None %}
-                                        {% if form.errors %}
-                                            {{ forloop.counter }}{% else %}
-                                            {{ forloop.counter |add:form_length }}{% endif %}
-                                    {% else %}
-                                        {{ forloop.counter }}{% endif %}
-                                    of
-                                    {% if self.multi_step or self.has_page_breaks %}
-                                        {{ fields_step.paginator.count }}{% else %}
-                                        {{ form.fields | length }}{% endif %}
-                                    questions</p>
-                            <p class="quest-item__step-desc">
-                                <span>
-                                    {% if not field.field.required %}
-                                        {% trans "Optional" %}
-                                    {% elif field.field.widget.input_type  == "radio" or "/select" in field.field.widget.template_name %}
-                                        {% trans "Select one" %}
-                                    {% elif  field.field.widget.input_type  == "checkbox" %}
-                                        {% trans "Check all that apply" %}
-                                    {% endif %}
-                                </span>
-                            </p>
+                            {% field_counter field form forloop form_length fields_step self %}
+                            {% field_description field %}
                         </div>
-                        <div class="quest-item__desc">
-                            <p>{% trans field.label %}</p>
-                        </div>
+                        {% if field.field.widget.input_type == "checkbox" and  field|length == 1 %}{% else %}
+                            <div class="quest-item__desc">
+                                <p>{{ field.label }}</p>
+                            </div>
+                        {% endif %}
                         <div class="quest-item__content" tabindex="0">
-                            {% if field.field.widget.input_type == "radio" %}
-                                {% render_radios field %}
-                            {% elif field.field.widget.input_type == "checkbox" %}
-                                {% render_checkboxes field %}
-                            {% elif "/select" in field.field.widget.template_name %}
-                                {% render_select field %}
-                            {% endif %}
-                            {% for err in  field.errors %}
-                                <p class="cust-input__error">{{ err }}</p>
-                            {% endfor %}
+                            {% render_fields field "quiz" %}
                         </div>
                     </div>
                 {% endfor %}
                 <div class="survey-page__btns">
-                    <button type="submit"
-                            class="cust-btn cust-btn--dark survey-page__btn">
-                        <span>{% if fields_step.paginator.num_pages == fields_step.number %}
-                            {% trans page.submit_button_text %}{% else %}
-                            {% trans "Next step" %}{% endif %}</span>
-                    </button>
+                   {% render_submit_button fields_step page %}
                     <a href="/"
-                       class="cust-btn cust-btn--clear survey-page__btn"><span>{% trans "Go to homepage" %}</span></a>
+                       class="cust-btn cust-btn--clear survey-page__btn"><span>{% translate "Go to homepage" %}</span></a>
                 </div>
             </form>
         </div>

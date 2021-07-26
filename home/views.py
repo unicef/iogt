@@ -5,16 +5,6 @@ from django.views.generic import TemplateView
 
 from .models import ManifestSettings
 
-
-class TestView(TemplateView):
-    template_name = "home/test.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data()
-        context["id"] = "lorem ipsum"
-        return context
-
-
 class ServiceWorkerView(TemplateView):
     template_name = "sw.js"
     content_type = "application/javascript"

@@ -1,0 +1,9 @@
+{% load i18n %}
+
+<button type="submit" class="cust-btn cust-btn--dark survey-page__btn">
+    <span>{% if fields_step.paginator.num_pages == fields_step.number %}
+        {{ page.submit_button_text }}
+    {% else %}
+        {% translate "Next step" %}{% endif %}
+    </span>
+</button>

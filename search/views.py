@@ -3,7 +3,7 @@ from django.template.response import TemplateResponse
 from home.models import Article, Section
 from iogt.settings.base import SEARCH_RESULTS_PER_PAGE
 from wagtail.search.models import Query
-
+from django.core.exceptions import FieldDoesNotExist
 from questionnaires.models import Poll, Quiz, Survey
 
 
@@ -36,7 +36,7 @@ def search(request):
             search_results = paginator.page(paginator.num_pages)
 
         if search_results:
-            results["search_groups"][search_group.__name__] = {
+            results["search_groups"][search_group._meta.verbose_name] = {
                 "search_results": search_results,
                 "search_results_count": search_results_count,
             }

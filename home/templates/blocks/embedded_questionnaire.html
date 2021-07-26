@@ -6,7 +6,7 @@
 {% endblock %}
 
 <div class="questionnaire-container container">
-    <h1 class="title {% if type == "Survey" %}survey-page__title{% else %}polls-widget__title{% endif %}">{% trans object.title %}</h1>
+    <h1 class="title {% if type == "Survey" %}survey-page__title{% else %}polls-widget__title{% endif %}">{{ object.title }}</h1>
     <form action="{% pageurl object %}?back_url={{ request.path }}"
           method="POST">
         {% csrf_token %}
@@ -15,23 +15,23 @@
                 {% if type == "Survey" %}
                     <div class="quest-item">
                         <div class="quest-item__header">
-                            <p class="quest-item__number">{{ forloop.counter }}
-                                of {{ form.fields | length }}
-                                questions</p>
+                            <p class="quest-item__number">
+                                {% blocktranslate with counter=forloop.counter count total=form.fields|length %}{{ counter }} of 1 question{% plural %}{{ counter }} of {{ total }} questions{% endblocktranslate %}
+                            </p>
                             <p class="quest-item__step-desc">
                                     <span>
                                          {% if not field.field.required %}
-                                             {% trans "Optional" %}
+                                             {% translate "Optional" %}
                                          {% elif field.field.widget.input_type  == "radio" or "/select" in field.field.widget.template_name %}
-                                             {% trans "Select one" %}
+                                             {% translate "Select one" %}
                                          {% elif  field.field.widget.input_type  == "checkbox" %}
-                                             {% trans "Check all that apply" %}
+                                             {% translate "Check all that apply" %}
                                          {% endif %}
                                     </span>
                             </p>
                         </div>
                         <div class="quest-item__desc">
-                            <p>{% trans field.label %}</p>
+                            <p>{{ field.label }}</p>
                         </div>
                         {% if field.field.widget.input_type == "radio" %}
                             {% render_radios field %}
@@ -45,7 +45,7 @@
                             {% render_select field %}
                         {% endif %}
                         {% for err in  field.errors %}
-                            <p class="cust-input__error">{% trans err %}</p>
+                            <p class="cust-input__error">{% translate err %}</p>
                         {% endfor %}
                     </div>
                 {% else %}
@@ -66,11 +66,11 @@
                                   stroke-linejoin="round"/>
                         </svg>
                         {% if field.field.widget.input_type  == "radio" or "select" in field.field.widget.template_name %}
-                            {% trans "Select one" %}
+                            {% translate "Select one" %}
                         {% elif  field.field.widget.input_type  == "checkbox" %}
-                            {% trans "Check all that apply" %}
+                            {% translate "Check all that apply" %}
                         {% else %}
-                            {% trans "Optional" %}
+                            {% translate "Optional" %}
                         {% endif %}
                     </h4>
                     {% if field.field.widget.input_type == "radio" %}
@@ -79,14 +79,14 @@
                         {% render_select field %}
                     {% endif %}
                     {% for err in  field.errors %}
-                        <p class="cust-input__error">{% trans err %}</p>
+                        <p class="cust-input__error">{% translate err %}</p>
                     {% endfor %}
                 {% endif %}
             {% endfor %}
         </div>
         <button type="submit"
                 class="cust-btn cust-btn--dark {% if type == "Survey" %}survey-page__btn{% else %}polls-widget__submit{% endif %}">
-            <span>{% trans object.submit_button_text %}</span>
+            <span>{{ object.submit_button_text }}</span>
         </button>
     </form>
 </div>

@@ -31,15 +31,15 @@
                             </div>
                         {% endif %}
                          <div class="actionbutton" style="display:inline-block; margin-left: 20px">
-                                <a disabled="true" class="button button--icon">{% icon name="group" wrapped=1 %}{% trans 'Upload Users' %}</a>
+                                <a disabled="true" class="button button--icon">{% icon name="group" wrapped=1 %}{% translate 'Upload Users' %}</a>
 
                             </div>
                         {% if view.list_export %}
                             <div class="dropdown dropdown-button match-width col">
-                                <a href="?export=xlsx&{{ request.GET.urlencode }}" class="button bicolor button--icon">{% icon name="download" wrapped=1 %}{% trans 'Download XLSX' %}</a>
+                                <a href="?export=xlsx&{{ request.GET.urlencode }}" class="button bicolor button--icon">{% icon name="download" wrapped=1 %}{% translate 'Download XLSX' %}</a>
                                 <div class="dropdown-toggle">{% icon name="arrow-down" %}</div>
                                 <ul>
-                                    <li><a  class="button bicolor button--icon" href="?export=csv&{{ request.GET.urlencode }}">{% icon name="download" wrapped=1 %}{% trans 'Download CSV' %}</a></li>
+                                    <li><a  class="button bicolor button--icon" href="?export=csv&{{ request.GET.urlencode }}">{% icon name="download" wrapped=1 %}{% translate 'Download CSV' %}</a></li>
                                 </ul>
                             </div>
                         {% endif %}
@@ -60,7 +60,7 @@
                     {% block filters %}
                         {% if view.has_filters and all_count %}
                         <div class="changelist-filter col3">
-                            <h2>{% trans 'Filter' %}</h2>
+                            <h2>{% translate 'Filter' %}</h2>
                             {% for spec in view.filter_specs %}{% admin_list_filter view spec %}{% endfor %}
                         </div>
                         {% endif %}
@@ -71,16 +71,16 @@
                             {% if not all_count %}
                                 <div class="nice-padding" style="margin-top:30px;">
                                     {% if no_valid_parents %}
-                                        <p>{% blocktrans with view.verbose_name_plural as name %}No {{ name }} have been created yet. One of the following must be created before you can add any {{ name }}:{% endblocktrans %}</p>
+                                        <p>{% blocktranslate with view.verbose_name_plural as name %}No {{ name }} have been created yet. One of the following must be created before you can add any {{ name }}:{% endblocktranslate %}</p>
                                         <ul>
                                             {% for type in required_parent_types %}<li><b>{{ type|title }}</b></li>{% endfor %}
                                         </ul>
                                     {% else %}
-                                        <p>{% blocktrans with view.verbose_name_plural as name %}No {{ name }} have been created yet.{% endblocktrans %}
+                                        <p>{% blocktranslate with view.verbose_name_plural as name %}No {{ name }} have been created yet.{% endblocktranslate %}
                                         {% if user_can_create %}
-                                            {% blocktrans with view.create_url as url %}
+                                            {% blocktranslate with view.create_url as url %}
                                                 Why not <a href="{{ url }}">add one</a>?
-                                            {% endblocktrans %}
+                                            {% endblocktranslate %}
                                         {% endif %}</p>
                                     {% endif %}
                                 </div>
@@ -91,8 +91,8 @@
                     </div>
 
                     {% block pagination %}
-                        <nav class="pagination {% if view.has_filters and all_count %}col9{% else %}col12{% endif %}" aria-label="{% trans 'Pagination' %}">
-                            <p>{% blocktrans with page_obj.number as current_page and paginator.num_pages as num_pages %}Page {{ current_page }} of {{ num_pages }}.{% endblocktrans %}</p>
+                        <nav class="pagination {% if view.has_filters and all_count %}col9{% else %}col12{% endif %}" aria-label="{% translate 'Pagination' %}">
+                            <p>{% blocktranslate with page_obj.number as current_page and paginator.num_pages as num_pages %}Page {{ current_page }} of {{ num_pages }}.{% endblocktranslate %}</p>
                             {% if paginator.num_pages > 1 %}
                                 <ul>
                                     {% pagination_link_previous page_obj view %}

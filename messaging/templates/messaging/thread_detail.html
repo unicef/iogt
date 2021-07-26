@@ -1,9 +1,9 @@
 {% extends "messaging/base.html" %}
-{% load messaging_tags humanize i18n %}
+{% load messaging_tags humanize i18n static wagtailimages_tags %}
 
 {% block content %}
     <div class="chat">
-        <a href="{% url 'messaging:inbox' %}" class="btn-back">Back</a>
+        <a href="{% url 'messaging:inbox' %}" class="btn-back">{% translate "Back" %}</a>
         <h1> {{ thread.subject }} </h1>
         <div class="load-more-button">
             <a href="{% url 'messaging:thread' thread_id=thread.id %}?num_results={{ load_more_num_results }}">{% translate 'Load more' %}</a>
@@ -18,6 +18,19 @@
             <time class="message-time">{{ message.sent_at|naturaltime }}</time>
             <div class="message-box">
                 {{ message.text|urlize|linebreaks }}
+                <div class="attachment-box">
+                    {% for attachment in message.attachments.all %}
+                        <div class="attachment-line">
+                            {% if attachment.image is not None %}
+                                {% image attachment.image fill-50x50 %}
+                                <a href="{% get_media_prefix %}{{ attachment.image.file }}" download>{% translate "Download" %}</a>
+                            {% endif %}
+                            {% if attachment.file is not None %}
+                                <a href="{% get_media_prefix %}{{ attachment.file }}" download> {{ attachment.file }}</a>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
             {% if message.id == most_recent_message_id %}
                 <div class="quick-replies">

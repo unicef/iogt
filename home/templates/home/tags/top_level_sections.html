@@ -4,7 +4,7 @@
         {% for section in top_level_sections %}
         <div class='top-level__section' style="background-color:{{ section.specific.background_color }}; color: {{section.specific.font_color }}">
             <img src="{{ section.specific.icon.url }}"/>
-            <a href="{% pageurl section %}">{% translate section.specific.title %}</a>
+            <a href="{% pageurl section %}">{{ section.specific.title }}</a>
         </div>
         {% endfor %}
     </nav>

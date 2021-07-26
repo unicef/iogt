@@ -38,6 +38,10 @@ form label {
     display: none;
 }
 
+.edit-profile label {
+    display: block;
+}
+
 form label[for='id_terms_accepted'], form label[for='id_remember'] {
     display: inline-block;
     font-size: 10px;

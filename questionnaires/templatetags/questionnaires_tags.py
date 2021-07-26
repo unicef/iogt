@@ -39,13 +39,62 @@ def render_text_field(field):
 
 
 @register.inclusion_tag("questionnaires/tags/select.html")
-def render_select(field):
-    return {"field": field}
+def render_select(field, is_multiselect=False):
+    return {"field": field, "is_multiselect": is_multiselect}
 
 
 @register.inclusion_tag('questionnaires/tags/polls_radios.html')
 def render_polls_radios(field):
     return {"field": field}
+
+
+@register.inclusion_tag('questionnaires/tags/field_description.html')
+def field_description(field):
+    return {"field": field}
+
+
+@register.inclusion_tag('questionnaires/tags/render_fields.html')
+def render_fields(field, type):
+    return {'field': field, "type": type}
+
+
+@register.inclusion_tag('questionnaires/tags/field_counter.html')
+def field_counter(field, form, forloop, form_length, fields_step, questionnaire):
+    if form_length != None:
+        if form.errors:
+            counter = forloop.get("counter")
+        else:
+            counter = forloop.get("counter") + int(form_length)
+    else:
+        counter = forloop.get("counter")
+
+    if hasattr(questionnaire, "multi_step") and questionnaire.multi_step or questionnaire.has_page_breaks:
+        total = fields_step.paginator.count
+    else:
+        total = len(form.fields)
+
+    return {"counter": counter, "total": total}
+
+
+@register.inclusion_tag('questionnaires/tags/submit_button.html')
+def render_submit_button(fields_step, page):
+    return {"fields_step": fields_step, "page": page}
+
+
+@register.inclusion_tag('questionnaires/tags/action_url.html')
+def get_action_url(page, self, fields_step, request, form):
+    return {"page": page, "self": self, "fields_step": fields_step,
+            "request": request, "form": form}
+
+
+@register.inclusion_tag('blocks/embedded_questionnaire.html')
+def render_questionnaire_form(questionnaire):
+    context = {
+        'object': questionnaire,
+        'type': questionnaire.__class__.__name__,
+        'form': questionnaire.get_form(),
+    }
+    return context
 
 
 @register.filter
@@ -63,7 +112,8 @@ def get_value_from_querydict(querydict, key):
 
 @register.simple_tag
 def snake_case(text):
-    return text.lower().replace(" ", "_").replace("__", "_").replace('?', '')
+    return text.lower().replace(" ", "_").replace("__", "_").replace('?',
+                                                                     '')
 
 
 @register.simple_tag

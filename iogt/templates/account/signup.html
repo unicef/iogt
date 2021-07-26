@@ -2,10 +2,10 @@
 
 {% load i18n %}
 
-{% block title %}{% trans "Create your account" %}{% endblock %}
+{% block title %}{% translate "Create your account" %}{% endblock %}
 
 {% block allauth_content %}
-    <h1 class="title profile__title">{% trans "Create your account" %}</h1>
+    <h1 class="title profile__title">{% translate "Create your account" %}</h1>
     <form class="signup" id="signup_form" method="post"
           action="{% url 'account_signup' %}">
         {% csrf_token %}
@@ -19,15 +19,10 @@
         <div class="profile-form__btns">
             <button type="submit"
                     class="cust-btn cust-btn--dark profile-form__btn">
-                <span>{% trans "Create your account" %}</span>
+                <span>{% translate "Create your account" %}</span>
             </button>
             <a href="{{ login_url }}"
-               class="cust-btn profile-form__btn"><span>{% trans "Log in" %}</span></a>
-        </div>
-        <div class="text profile-form__desc">
-            <p>
-                {% trans "A quia quas et atque eos vero temporibus quis ullam. Recusandae recusandae omnis aspernatur quisquam at dolorem aspernatur quod non." %}
-            </p>
+               class="cust-btn profile-form__btn"><span>{% translate "Log in" %}</span></a>
         </div>
     </form>
 

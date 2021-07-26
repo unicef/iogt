@@ -14,12 +14,10 @@
                 </a>
             </div>
             <div class="language__select">
-                <select>
-                    {% for language in languages %}
-                        <option value="{{ language.name_local }}" {% if language.code == LANGUAGE_CODE %}selected{% endif %}>{{ language.name_local }}</option>
-                    {% endfor %}
-                </select>
-            </div>  
+                {% if page %}
+                    {% language_switcher page %}
+                {% endif %}
+            </div>
         </div>
         <div class="form-holder">
             <a class="js-search-btn" href="{% url "search" %}">
@@ -39,7 +37,7 @@
         </div>
         <div class="btn-holder">
             <div class="nav-bar__item">
-                <a href="#">
+                <a href="{% url 'account_login' %}">
                     <span class="nav-bar__item__icon">
                          <img src="/static/icons/login.svg">
                     </span>
@@ -48,4 +46,4 @@
             </div>
         </div>
     </div>
-</header>
+</header>  

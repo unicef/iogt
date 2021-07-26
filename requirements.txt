@@ -1,3 +1,4 @@
+django-extensions
 elasticsearch>=7.0.0,<8.0.0
 psycopg2==2.8.*
 wagtail-markdown==0.6

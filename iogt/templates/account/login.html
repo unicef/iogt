@@ -3,11 +3,11 @@
 {% load i18n %}
 {% load account socialaccount %}
 
-{% block title %}{% trans "Log In" %}{% endblock %}
+{% block title %}{% translate "Log In" %}{% endblock %}
 
 {% block allauth_content %}
 
-    <h1>{% trans "Log In" %}</h1>
+    <h1>{% translate "Log In" %}</h1>
 
     {% get_providers as socialaccount_providers %}
 
@@ -19,12 +19,11 @@
         <div class="profile-form__btns">
             <button type="submit"
                     class="cust-btn cust-btn--dark profile-form__btn">
-                <span>{% trans "Log in" %}</span>
+                <span>{% translate "Log in" %}</span>
             </button>
             <a href="{% url 'account_signup' %}"
-               class="cust-btn profile-form__btn"><span>{% trans "Create your account" %}</span></a>
+               class="cust-btn profile-form__btn"><span>{% translate "Create your account" %}</span></a>
         </div>
-        <p class="text profile-form__desc">{% trans "Placeholder text below Create your account button." %}</p>
     </form>
 
 {% endblock %}

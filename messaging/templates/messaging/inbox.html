@@ -1,9 +1,9 @@
 {% extends "messaging/base.html" %}
-{% load messaging_tags %}
+{% load messaging_tags i18n %}
 
 {% block content %}
     <div class="chat">
-        <h1>Chat</h1>
+        <h1>{% translate "Chat" %}</h1>
         <ul class="chat-links">
             {% for user_thread in user_threads %}
                 <li {% if not user_thread.is_read %}class="active"{% endif %}>

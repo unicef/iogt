@@ -256,9 +256,9 @@ class Survey(QuestionnairePage, AbstractForm):
     template = "survey/survey.html"
     multi_step = models.BooleanField(
         default=False,
-        verbose_name="Multi-step",
-        help_text="Whether to display the survey questions to the user one at"
-        " a time, instead of all at once.",
+        verbose_name=_("Multi-step"),
+        help_text=_("Whether to display the survey questions to the user one at"
+        " a time, instead of all at once."),
     )
 
     content_panels = Page.content_panels + [
@@ -345,8 +345,8 @@ class Survey(QuestionnairePage, AbstractForm):
         return data_fields
 
     class Meta:
-        verbose_name = "survey"
-        verbose_name_plural = "surveys"
+        verbose_name = _("survey")
+        verbose_name_plural = _("surveys")
 
 
 class UserSubmission(AbstractFormSubmission):
@@ -374,7 +374,7 @@ class PollFormField(AbstractFormField):
         ('radio', _('Radio buttons')),
     )
     field_type = models.CharField(
-        verbose_name='field type',
+        verbose_name=_('field type'),
         max_length=16,
         choices=CHOICES
     )
@@ -435,8 +435,8 @@ class Poll(QuestionnairePage, AbstractForm):
     ]
 
     class Meta:
-        verbose_name = "Poll"
-        verbose_name_plural = "Polls"
+        verbose_name = _("poll")
+        verbose_name_plural = _("polls")
 
     def get_form_fields(self):
         return self.poll_form_fields.all()
@@ -529,9 +529,9 @@ class QuizFormField(AbstractFormField):
             'Inserts a page break which puts the next question onto a new page'
         )
     )
-    correct_answer = models.CharField(verbose_name=_('correct_answer'),
-                                      max_length=256,
-                                      help_text=_('Please provide correct answer for this question'))
+    correct_answer = models.CharField(
+        verbose_name=_('correct_answer'), max_length=256,
+        help_text=_('Comma separated list of choices. Only applicable in checkboxes, radio, dropdown and multiselect.'))
     feedback = models.CharField(verbose_name=_('Feedback'),
                                 max_length=255,
                                 help_text=_('Feedback message for user answer.'),
@@ -591,7 +591,7 @@ class Quiz(QuestionnairePage, AbstractForm):
 
     multi_step = models.BooleanField(
         default=False,
-        verbose_name="Multi-step",
+        verbose_name=_("Multi-step"),
         help_text="Whether to display the survey questions to the user one at"
         " a time, instead of all at once.",
     )
@@ -663,16 +663,20 @@ class Quiz(QuestionnairePage, AbstractForm):
             form_class = self.get_form_class()
             form = form_class(data=request.POST, page=self, user=request.user)
 
-            for k, v in form.fields.items():
-                form.fields[k].widget.attrs['readonly'] = True
-
             fields_info = {}
 
             total = 0
             total_correct = 0
+            form_data = dict(form.data)
             for field in self.get_form_fields():
-                # TODO: handle multi-value case
-                is_correct = form.data.get(field.clean_name) == field.correct_answer
+                correct_answer = field.correct_answer.split(',')
+
+                if field.field_type == 'checkbox':
+                    answer = form_data.get(field.clean_name, ['off'])
+                else:
+                    answer = form_data.get(field.clean_name, [])
+
+                is_correct = set(answer) == set(correct_answer)
                 if is_correct:
                     total_correct += 1
                 total += 1
@@ -692,5 +696,5 @@ class Quiz(QuestionnairePage, AbstractForm):
         return context
 
     class Meta:
-        verbose_name = "quiz"
-        verbose_name_plural = "quizzes"
+        verbose_name = _("quiz")
+        verbose_name_plural = _("quizzes")

@@ -209,10 +209,17 @@ class Section(Page, PageUtilsMixin):
             self.featured_content.filter(content__live=True)
         ]
         context['sub_sections'] = self.get_children().live().type(Section)
+
         context['articles'] = self.get_children().live().type(Article)
-        context['surveys'] = self.get_children().live().type(Survey)
-        context['polls'] = self.get_children().live().type(Poll)
-        context['quizzes'] = self.get_children().live().type(Quiz)
+
+        survey_page_ids = self.get_children().live().type(Survey).values_list('id', flat=True)
+        context['surveys'] = Survey.objects.filter(pk__in=survey_page_ids)
+
+        poll_page_ids = self.get_children().live().type(Poll).values_list('id', flat=True)
+        context['polls'] = Poll.objects.filter(pk__in=poll_page_ids)
+
+        quiz_page_ids = self.get_children().live().type(Quiz).values_list('id', flat=True)
+        context['quizzes'] = Quiz.objects.filter(pk__in=quiz_page_ids)
 
         context['user_progress'] = self.get_user_progress_dict(request)
 
@@ -235,6 +242,10 @@ class Section(Page, PageUtilsMixin):
         all_descendants = set(flatten(all_descendants))
 
         return Section.objects.exclude(pk__in=all_descendants)
+
+    class Meta:
+        verbose_name = _("section")
+        verbose_name_plural = _("sections")
 
 
 class ArticleRecommendation(Orderable):
@@ -365,6 +376,11 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
                 return block
         return ''
 
+    class Meta:
+        verbose_name = _("article")
+        verbose_name_plural = _("articles")
+
+
 
 class BannerIndexPage(Page):
     parent_page_types = ['home.HomePage']
@@ -447,13 +463,14 @@ class SiteSettings(BaseSetting):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name='+'
+        related_name='+',
+        help_text="Upload an image file (.jpg, .png, .svg). The ideal size is 100px x 40px"
     )
     show_only_translated_pages = models.BooleanField(
         default=False,
-        help_text='When selecting this option, untranslated pages'
+        help_text=_('When selecting this option, untranslated pages'
                   ' will not be visible to the front end user'
-                  ' when viewing a child language of the site')
+                  ' when viewing a child language of the site'))
     # TODO: GA, FB analytics should be global.
     fb_analytics_app_id = models.CharField(
         verbose_name=_('Facebook Analytics App ID'),
@@ -507,7 +524,7 @@ class SiteSettings(BaseSetting):
     ], null=True, blank=True)
     media_file_size_threshold = models.IntegerField(
         default=9437184,
-        help_text='Show warning if uploaded media file size is greater than this in bytes. Default is 9 MB')
+        help_text=_('Show warning if uploaded media file size is greater than this in bytes. Default is 9 MB'))
     allow_anonymous_comment = models.BooleanField(default=False)
     registration_survey = models.ForeignKey('questionnaires.Survey', null=True,
                                             blank=True,
@@ -588,8 +605,8 @@ class SiteSettings(BaseSetting):
         return self.site.site_name
 
     class Meta:
-        verbose_name = 'Site Settings'
-        verbose_name_plural = 'Site Settings'
+        verbose_name = _('Site Settings')
+        verbose_name_plural = _('Site Settings')
 
 
 @register_setting

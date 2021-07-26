@@ -8,7 +8,7 @@
 <div class="container">
     <div class="row my-4">
         <div class="col-lg-12">
-            <h3 class="text-center">{% trans "List of comments" %}</h3>
+            <h3 class="text-center">{% translate "List of comments" %}</h3>
             <hr/>
         </div>
 
@@ -18,7 +18,7 @@
                     {% for comment in object_list %}
                     {% include "django_comments_xtd/comment.html" %}
                     {% empty %}
-                    <p class="text-center">No comments yet.</p>
+                    <p class="text-center">{% translate "No comments yet." %}</p>
                     {% endfor %}
                 </div>
 

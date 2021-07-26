@@ -1,16 +1,16 @@
 {% extends 'account/base.html' %}
 {% load i18n static %}
 
-{% block title %}{% trans "Personal Details" %}{% endblock %}
+{% block title %}{% translate "Personal Details" %}{% endblock %}
 
 {% block allauth_content %}
-    <h1 class="title profile__title">{% trans "Personal Details" %}</h1>
-    <form method="post">
+    <h1 class="title profile__title">{% translate "Personal Details" %}</h1>
+    <form method="post" class="edit-profile">
         {% csrf_token %}
         {{ form.as_p }}
         <div class="profile-form__btns">
             <button type="submit"
-                    class="cust-btn cust-btn--dark profile-form__btn"><span>{% trans "Save changes" %}</span>
+                    class="cust-btn cust-btn--dark profile-form__btn"><span>{% translate "Save changes" %}</span>
             </button>
         </div>
     </form>

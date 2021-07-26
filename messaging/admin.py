@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 
-from .models import ChatbotChannel, Thread, UserThread, Message
+from .models import ChatbotChannel, Thread, UserThread, Message, Attachment
 
 
 @admin.register(ChatbotChannel)
@@ -22,6 +22,10 @@ class UserThreadAdmin(admin.ModelAdmin):
     list_filter = ('is_active', 'is_read')
 
 
+class AttachmentInlineAdmin(admin.TabularInline):
+    model = Message.attachments.through
+
+
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
     list_display = (
@@ -33,4 +37,18 @@ class MessageAdmin(admin.ModelAdmin):
         'thread',
         'sender',
     )
-    list_filter = ('sent_at', )
+    list_filter = ('sent_at',)
+    inlines = (AttachmentInlineAdmin,)
+    exclude = ('attachments', )
+
+
+@admin.register(Attachment)
+class AttachmentAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'created',
+        'modified',
+        'external_link',
+        'file',
+    )
+    list_filter = ('created', 'modified')

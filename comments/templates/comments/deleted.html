@@ -2,13 +2,13 @@
 {% load i18n %}
 {% load comments_xtd %}
 
-{% block title %}{% trans "Comment removed" %}.{% endblock %}
+{% block title %}{% translate "Comment removed" %}.{% endblock %}
 
 {% block header %}
 <a href="{{ comment.content_object.get_absolute_url }}">{{ comment.content_object }}</a>
 {% endblock %}
 
 {% block comment_content %}
-<h4 class="text-center">{% trans "The comment has been removed." %}</h4>
-<p class="text-center">{% trans "Thank you for taking the time to improve the quality of discussion in our site." %}<p>
+<h4 class="text-center">{% translate "The comment has been removed." %}</h4>
+<p class="text-center">{% translate "Thank you for taking the time to improve the quality of discussion in our site." %}<p>
 {% endblock %}

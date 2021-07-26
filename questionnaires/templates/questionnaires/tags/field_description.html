@@ -1,0 +1,15 @@
+{% load i18n %}
+
+<p class="quest-item__step-desc">
+    <span>
+        {% if not field.field.required %}
+            {% translate "Optional" %}
+        {% elif field.widget_type == "radioselect" or field.widget_type == "select" %}
+            {% translate "Select one" %}
+        {% elif  field.widget_type == "checkboxselectmultiple" or field.widget_type == "selectmultiple" %}
+            {% translate "Check all that apply" %}
+        {% elif  field.widget_type == "checkbox" %}
+            {% translate "Check if apply" %}
+        {% endif %}
+    </span>
+</p>
