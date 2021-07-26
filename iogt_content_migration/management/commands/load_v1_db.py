@@ -44,7 +44,7 @@ class Command(BaseCommand):
         parser.add_argument(
             '--skip-locales',
             action='store_true',
-            help='Path to IoGT v1 media directory'
+            help='Skip data of locales other than default language'
         )
 
     def handle(self, *args, **options):
