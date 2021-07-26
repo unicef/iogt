@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-25 22:28+0000\n"
+"POT-Creation-Date: 2021-07-26 11:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -850,28 +850,19 @@ msgstr "FR-Search here"
 msgid "© The Internet of Good Things"
 msgstr "FR-© The Internet of Good Things"
 
-#: iogt/templates/transition-page.html:9
-msgid "You are leaving"
-msgstr "FR-You are leaving"
-
-#: iogt/templates/transition-page.html:11
-#: iogt/templates/transition-page.html:13
-msgid "Internet of Good Things"
-msgstr "FR-Internet of Good Things"
-
-#: iogt/templates/transition-page.html:15
+#: iogt/templates/transition-page.html:10
 msgid ""
-"to visit an external website and standard data charges by your network "
-"provider might apply"
+"You are leaving the <b>Internet of Good Things</b> to visit an external "
+"website and standard data charges by your network provider might apply"
 msgstr ""
-"FR-to visit an external website and standard data charges by your network "
-"provider might apply"
+"FR-You are leaving the <b>Internet of Good Things</b> to visit an external "
+"website and standard data charges by your network provider might apply"
 
-#: iogt/templates/transition-page.html:17
+#: iogt/templates/transition-page.html:13
 msgid "Continue to external site"
 msgstr "FR-Continue to external site"
 
-#: iogt/templates/transition-page.html:20
+#: iogt/templates/transition-page.html:16
 msgid "Go back to previous page"
 msgstr "FR-Go back to previous page"
 
@@ -1346,6 +1337,12 @@ msgstr "FR-It seems we can’t find any results based on your search."
 #: search/templates/search/search.html:110
 msgid "See results"
 msgstr "FR-See results"
+
+#~ msgid "You are leaving"
+#~ msgstr "FR-You are leaving"
+
+#~ msgid "Internet of Good Things"
+#~ msgstr "FR-Internet of Good Things"
 
 #~ msgid "Please provide correct answer for this question"
 #~ msgstr "FR-Please provide correct answer for this question"
