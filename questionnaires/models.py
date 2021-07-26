@@ -665,8 +665,11 @@ class Quiz(QuestionnairePage, AbstractForm):
         context.update({'back_url': request.GET.get('back_url')})
         context.update({'form_length': request.GET.get('form_length')})
 
-        session_key_data = f'form_data-{self.pk}-completed'
-        form_data = request.session.get(session_key_data)
+        if self.multi_step:
+            session_key_data = f'form_data-{self.pk}-completed'
+            form_data = request.session.get(session_key_data)
+        else:
+            form_data = request.POST
         if request.method == 'POST' and form_data:
             form = self.get_form(
                 form_data,
@@ -682,9 +685,13 @@ class Quiz(QuestionnairePage, AbstractForm):
                 correct_answer = field.correct_answer.split(',')
 
                 if field.field_type == 'checkbox':
-                    answer = form_data.get(field.clean_name) or ['off']
+                    answer = form_data.get(field.clean_name) or 'off'
                 else:
-                    answer = form_data.get(field.clean_name) or []
+                    answer = form_data.get(field.clean_name)
+
+                if type(answer) != list:
+                    answer = [answer]
+
                 is_correct = set(answer) == set(correct_answer)
                 if is_correct:
                     total_correct += 1
@@ -702,7 +709,8 @@ class Quiz(QuestionnairePage, AbstractForm):
                 'total_correct': total_correct,
             }
 
-            request.session.pop(session_key_data, None)
+            if self.multi_step:
+                request.session.pop(session_key_data, None)
 
         return context
 
