@@ -1,14 +1,14 @@
 hex,rgb,cmyk,section
-#4D4391,77 67 145,84 87 7 1,IoGT Main Color
-#6EC17F,110 193 127,58 0 67 0,Education
-#00BFC6,0 191 198,71 0 26 0,Facts for Life
-#CB78B3,203 120 179,18 64 0 0,Fair Play
-#E24256,226 66 86,5 89 60 0,Ebola/Emergency
-#FF7E4E,255 126 78,0 63 73 0,
-#FFBE61,255 190 97,0 28 71 0,
-#F38AA5,243 138 165,0 58 13 0,
-#6093CD,96 147 205,63 34 0 0,Internet Safety
-#A4CE55,164 206 85,40 1 86 0,Blogging/Youth Empowerment
-#DF6859,223 104 89,8 73 65 0,HIV/Sexual Health
-#4F946E,79 148 110,72 22 69 5,
-#F05D7F,240 93 127,0 79 29 0,Rights
+#4D4391,"77, 67, 145","84, 87, 7, 1",IoGT Main Color
+#6EC17F,"110, 193, 127","58, 0, 67, 0",Education
+#00BFC6,"0, 191, 198","71, 0, 26, 0",Facts for Life
+#CB78B3,"203, 120, 179","18, 64, 0, 0",Fair Play
+#E24256,"226, 66, 86","5, 89, 60, 0",Ebola/Emergency
+#FF7E4E,"255, 126, 78","0, 63, 73, 0",
+#FFBE61,"255, 190, 97","0, 28, 71, 0",
+#F38AA5,"243, 138, 165","0, 58, 13, 0",
+#6093CD,"96, 147, 205","63, 34, 0, 0",Internet Safety
+#A4CE55,"164, 206, 85","40, 1, 86, 0",Blogging/Youth Empowerment
+#DF6859,"223, 104, 89","8, 73, 65, 0",HIV/Sexual Health
+#4F946E,"79, 148, 110","72, 22, 69, 5",
+#F05D7F,"240, 93, 127","0, 79, 29, 0",Rights
