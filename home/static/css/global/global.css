@@ -476,6 +476,129 @@
   padding-left: 10px;
 }
 
+.language_drop {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.language_drop > a {
+  background: #FDD256;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 5px 12px;
+  border-radius: 8px;
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+  position: relative;
+  min-width: 80px;
+  max-width: 80px;
+  text-decoration: none;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  color: #303030;
+  z-index: 9;
+}
+
+.language_drop > a:after {
+  position: absolute;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #303030;
+  border-radius: 1px;
+  content: "";
+  right: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.language_drop .drop {
+  margin: -13px 0 0;
+  list-style: none;
+  background: white;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  transition: all 0.2s linear;
+  opacity: 0;
+  visibility: hidden;
+  padding: 20px 8px 0 12px;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1), 0px 4px 8px rgba(0, 0, 0, 0.08), 0px 1px 12px rgba(0, 0, 0, 0.04);
+  border-radius: 8px;
+}
+
+.language_drop:hover > a:after,
+.language_drop:active > a:after,
+.language_drop:focus > a:after {
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid #303030;
+  margin: -2px 0 0;
+}
+
+.language_drop:hover .drop,
+.language_drop:active .drop,
+.language_drop:focus .drop {
+  transition: all 0.2s linear;
+  opacity: 1;
+  visibility: visible;
+}
+
+.language_drop .drop a {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 10px;
+  line-height: 14px;
+  color: #303030;
+  text-decoration: none;
+  display: inline-block;
+  vertical-align: top;
+  position: relative;
+}
+
+.language_drop .drop li{
+  width: 100%;
+  margin: 0 0 8px;
+  display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+  display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+  display: -ms-flexbox;      /* TWEENER - IE 10 */
+  display: -webkit-flex;     /* NEW - Chrome */
+  display: flex;             /* NEW, Spec - Opera 12.1, Firefox 20+ */
+}
+
+.language_drop .drop .selected a {
+  padding: 0 12px 0 0;
+}
+
+.language_drop .drop .selected a:after {
+  position: absolute;
+  content: "";
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: url("/static/icons/checked.svg") no-repeat;
+  width: 8px;
+  height: 6px;
+}
+
 #header {
   border: 1px solid #EFEFEF;
   width: 100%;
@@ -591,6 +714,10 @@
     max-width: 74px;
     font-size: 10px;
     background-position: 60px;
+  }
+  .language_drop > a {
+    min-width: 80px;
+    max-width: 80px;
   }
 }
 
