@@ -3,7 +3,7 @@ from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.urls import include, path
 
-from home.views import get_manifest
+from home.views import get_manifest, LogoutRedirectHackView
 from iogt_users import urls as users_urls
 from search import views as search_views
 from wagtail.admin import urls as wagtailadmin_urls
@@ -17,6 +17,7 @@ urlpatterns = [
     path('django-admin/', admin.site.urls),
     path('admin/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),
+    *i18n_patterns(path('logout_hack_view', LogoutRedirectHackView.as_view(), name='logout_redirect')),
     *i18n_patterns(path('search/', search_views.search, name='search')),
     *i18n_patterns(path('users/', include(users_urls), name='users_urls')),
     *i18n_patterns(path('accounts/', include('allauth.urls'), name='allauth-urls')),

@@ -1,9 +1,11 @@
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
+from django.views import View
 from django.views.generic import TemplateView
 
 from .models import ManifestSettings
+
 
 class ServiceWorkerView(TemplateView):
     template_name = "sw.js"
@@ -52,3 +54,8 @@ def get_manifest(request):
     http_response = JsonResponse(response)
     http_response['Content-Disposition'] = 'attachment; filename="manifest.json"'
     return http_response
+
+
+class LogoutRedirectHackView(View):
+    def get(self, request):
+        return redirect(f'/{request.LANGUAGE_CODE}/')

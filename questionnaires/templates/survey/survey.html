@@ -36,7 +36,7 @@
                 </div>
                 <div class="survey-page__btns">
                     {% render_submit_button fields_step page %}
-                    <a href="/"
+                    <a href="{{ request.site.root_url }}"
                        class="cust-btn cust-btn--clear survey-page__btn"><span>{% translate "Go to homepage" %}</span></a>
                 </div>
             </form>
