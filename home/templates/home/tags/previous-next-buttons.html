@@ -5,7 +5,7 @@
         <a href="{% pageurl previous_sibling %}"
            class='article__navigation--previous'>{% translate "Previous" %}</a>
     {% endif %}
-    {% if next_sibling is not None %}
+    {% if next_sibling %}
         <a href="{% pageurl next_sibling %}" class='article__navigation--next'>{% translate "Next" %}</a>
     {% endif %}
 {% endif %}
