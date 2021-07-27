@@ -1,8 +1,11 @@
 from pathlib import Path
+
 from django.core.management.base import BaseCommand
-from wagtail.core.models import Page, Site
+from wagtail.core.models import Page, Site, Locale
 from django.core.files.images import ImageFile
 from wagtail.images.models import Image
+from wagtail_localize.views.submit_translations import TranslationCreator
+
 import home.models as models
 import psycopg2
 import psycopg2.extras
@@ -52,6 +55,10 @@ class Command(BaseCommand):
         self.media_dir = options.get('media_dir')
         self.skip_locales = options.get('skip_locales')
 
+        self.image_map = {}
+        self.page_translation_map = {}
+        self.v1_to_v2_page_map = {}
+
         self.clear()
         self.stdout.write('Existing site structure cleared')
 
@@ -98,6 +105,7 @@ class Command(BaseCommand):
 
     def migrate(self, root):
         self.migrate_images()
+        self.load_page_translation_map()
         home = self.create_home_page(root)
         section_index_page, banner_index_page, footer_index_page = self.create_index_pages(home)
         self.migrate_sections(section_index_page)
@@ -158,7 +166,6 @@ class Command(BaseCommand):
     def migrate_images(self):
         cur = self.db_query('select * from wagtailimages_image')
         content_type = self.find_content_type_id('wagtailimages', 'image')
-        self.image_map = {}
         for row in cur:
             image_file = self.open_image_file(row['file'])
             if image_file:
@@ -210,8 +217,28 @@ class Command(BaseCommand):
             sql += " and locale = 'en' "
         sql += 'order by wcp.path'
         cur = self.db_query(sql)
+        section_page_translations = []
         for row in cur:
-            self.create_section(section_index_page, row)
+            if row['page_ptr_id'] in self.page_translation_map:
+                section_page_translations.append(row)
+            else:
+                self.create_section(section_index_page, row)
+        else:
+            for row in section_page_translations:
+                section = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
+                locale, __ = Locale.objects.get_or_create(language_code=row['locale'])
+
+                self.translate_page(locale=locale, page=section)
+
+                translated_section = section.get_translation_or_none(locale)
+                if translated_section:
+                    translated_section.title = row['title']
+                    translated_section.draft_title = row['draft_title']
+                    translated_section.slug = row['slug']
+                    translated_section.live = row['live']
+                    translated_section.save(update_fields=['title', 'draft_title', 'slug', 'live'])
+
+                self.stdout.write(f"Translated section, title={row['title']}")
         cur.close()
 
     def create_section(self, section_index_page, row):
@@ -227,6 +254,10 @@ class Command(BaseCommand):
             live=row['live'],
         )
         section.save()
+
+        self.v1_to_v2_page_map.update({
+            row['page_ptr_id']: section
+        })
         self.stdout.write(f"saved section, title={section.title}")
 
     def migrate_articles(self, section_index_page):
@@ -239,8 +270,31 @@ class Command(BaseCommand):
             sql += "and locale = 'en' "
         sql += " and wcp.path like '000100010002%'order by wcp.path"
         cur = self.db_query(sql)
+
+        article_page_translations = []
         for row in cur:
-            self.create_article(section_index_page, row)
+            if row['page_ptr_id'] in self.page_translation_map:
+                article_page_translations.append(row)
+            else:
+                self.create_article(section_index_page, row)
+        else:
+            for row in article_page_translations:
+                article = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
+                locale, __ = Locale.objects.get_or_create(language_code=row['locale'])
+
+                self.translate_page(locale=locale, page=article)
+
+                translated_article = article.get_translation_or_none(locale)
+                if translated_article:
+                    translated_article.lead_image = self.image_map.get(row['image_id'])
+                    translated_article.title = row['title']
+                    translated_article.draft_title = row['draft_title']
+                    translated_article.slug = row['slug']
+                    translated_article.live = row['live']
+                    translated_article.body = self.map_article_body(row['body'])
+                    translated_article.save(update_fields=['lead_image', 'title', 'draft_title', 'slug', 'live', 'body'])
+
+                self.stdout.write(f"Translated article, title={row['title']}")
         cur.close()
 
     def create_article(self, section_index_page, row):
@@ -257,6 +311,9 @@ class Command(BaseCommand):
         )
         try:
             article.save()
+            self.v1_to_v2_page_map.update({
+                row['page_ptr_id']: article
+            })
         except Page.DoesNotExist:
             self.stdout.write(f"Skipping page with missing parent: title={row['title']}")
             return
@@ -279,8 +336,32 @@ class Command(BaseCommand):
             sql += " and locale = 'en' "
         sql += ' order by wcp.path'
         cur = self.db_query(sql)
+        banner_page_translations = []
         for row in cur:
-            self.create_banner(banner_index_page, row)
+            if row['page_ptr_id'] in self.page_translation_map:
+                banner_page_translations.append(row)
+            else:
+                self.create_banner(banner_index_page, row)
+        else:
+            for row in banner_page_translations:
+                banner = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
+                locale, __ = Locale.objects.get_or_create(language_code=row['locale'])
+
+                try:
+                    self.translate_page(locale=locale, page=banner)
+                except:
+                    continue
+
+                translated_banner = banner.get_translation_or_none(locale)
+                if translated_banner:
+                    translated_banner.banner_image = self.image_map.get(row['image_id'])
+                    translated_banner.title = row['title']
+                    translated_banner.draft_title = row['draft_title']
+                    translated_banner.slug = row['slug']
+                    translated_banner.live = row['live']
+                    translated_banner.save(update_fields=['banner_image', 'title', 'draft_title', 'slug', 'live'])
+
+                self.stdout.write(f"Translated banner, title={row['title']}")
         cur.close()
 
     def create_banner(self, banner_index_page, row):
@@ -295,6 +376,9 @@ class Command(BaseCommand):
             live=row['live']
         )
         banner.save()
+        self.v1_to_v2_page_map.update({
+            row['page_ptr_id']: banner
+        })
         self.stdout.write(f"saved banner, title={banner.title}")
 
     def migrate_footers(self, footer_index_page):
@@ -308,8 +392,30 @@ class Command(BaseCommand):
             sql += " and locale = 'en' "
         sql += ' order by wcp.path'
         cur = self.db_query(sql)
+        footer_page_translations = []
         for row in cur:
-            self.create_footer(footer_index_page, row)
+            if row['page_ptr_id'] in self.page_translation_map:
+                footer_page_translations.append(row)
+            else:
+                self.create_footer(footer_index_page, row)
+        else:
+            for row in footer_page_translations:
+                footer = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
+                locale, __ = Locale.objects.get_or_create(language_code=row['locale'])
+
+                self.translate_page(locale=locale, page=footer)
+
+                translated_footer = footer.get_translation_or_none(locale)
+                if translated_footer:
+                    translated_footer.lead_image = self.image_map.get(row['image_id'])
+                    translated_footer.title = row['title']
+                    translated_footer.draft_title = row['draft_title']
+                    translated_footer.slug = row['slug']
+                    translated_footer.live = row['live']
+                    translated_footer.body = self.map_article_body(row['body'])
+                    translated_footer.save(update_fields=['lead_image', 'title', 'draft_title', 'slug', 'live', 'body'])
+
+                self.stdout.write(f"Translated footer, title={row['title']}")
         cur.close()
 
     def create_footer(self, footer_index_page, row):
@@ -325,4 +431,22 @@ class Command(BaseCommand):
             body=self.map_article_body(row['body']),
         )
         footer.save()
+        self.v1_to_v2_page_map.update({
+            row['page_ptr_id']: footer
+        })
         self.stdout.write(f"saved footer, title={footer.title}")
+
+    def load_page_translation_map(self):
+        sql = "select * " \
+              "from core_pagetranslation"
+        cur = self.db_query(sql)
+        for row in cur:
+            self.page_translation_map.update({
+                row['translated_page_id']: row['page_id'],
+            })
+        cur.close()
+        self.stdout.write('Page translation map loaded.')
+
+    def translate_page(self, locale, page):
+        translator = TranslationCreator(None, [locale])
+        translator.create_translations(page)
