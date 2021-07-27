@@ -448,5 +448,5 @@ class Command(BaseCommand):
         self.stdout.write('Page translation map loaded.')
 
     def translate_page(self, locale, page):
-        translator = TranslationCreator(None, [locale])
+        translator = TranslationCreator(user=None, target_locales=[locale])
         translator.create_translations(page)
