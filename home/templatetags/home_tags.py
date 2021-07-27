@@ -14,6 +14,14 @@ def language_switcher(page):
     }
 
 
+@register.inclusion_tag('home/tags/previous-next-buttons.html')
+def render_previous_next_buttons(page):
+    return {
+        'next_sibling': page.get_next_siblings().live().first(),
+        'previous_sibling': page.get_prev_siblings().live().first()
+    }
+
+
 @register.inclusion_tag('home/tags/footer.html', takes_context=True)
 def footer(context):
     return {
