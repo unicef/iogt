@@ -60,6 +60,11 @@
                             {% translate "Optional" %}
                         {% endif %}
                     </h4>
+                        {% if field.field.widget.input_type == "checkbox" and  field|length == 1 %}{% else %}
+                            <div class="quest-item__desc">
+                                <p>{{ field.label }}</p>
+                            </div>
+                        {% endif %}
                       {% render_fields field type|lower %}
                 {% endif %}
             {% endfor %}
