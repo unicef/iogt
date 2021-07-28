@@ -1,9 +1,9 @@
 from pathlib import Path
-
 from django.core.management.base import BaseCommand
 from wagtail.core.models import Page, Site, Locale
 from django.core.files.images import ImageFile
 from wagtail.images.models import Image
+from wagtail_localize.models import Translation
 from wagtail_localize.views.submit_translations import TranslationCreator
 
 import home.models as models
@@ -112,6 +112,7 @@ class Command(BaseCommand):
         self.migrate_articles(section_index_page)
         self.migrate_banners(banner_index_page)
         self.migrate_footers(footer_index_page)
+        self.stop_translations()
         Page.fix_tree()
 
     def create_home_page(self, root):
@@ -234,7 +235,6 @@ class Command(BaseCommand):
                 if translated_section:
                     translated_section.title = row['title']
                     translated_section.draft_title = row['draft_title']
-                    translated_section.slug = row['slug']
                     translated_section.live = row['live']
                     translated_section.save(update_fields=['title', 'draft_title', 'slug', 'live'])
 
@@ -289,7 +289,6 @@ class Command(BaseCommand):
                     translated_article.lead_image = self.image_map.get(row['image_id'])
                     translated_article.title = row['title']
                     translated_article.draft_title = row['draft_title']
-                    translated_article.slug = row['slug']
                     translated_article.live = row['live']
                     translated_article.body = self.map_article_body(row['body'])
                     translated_article.save(update_fields=['lead_image', 'title', 'draft_title', 'slug', 'live', 'body'])
@@ -357,7 +356,6 @@ class Command(BaseCommand):
                     translated_banner.banner_image = self.image_map.get(row['image_id'])
                     translated_banner.title = row['title']
                     translated_banner.draft_title = row['draft_title']
-                    translated_banner.slug = row['slug']
                     translated_banner.live = row['live']
                     translated_banner.save(update_fields=['banner_image', 'title', 'draft_title', 'slug', 'live'])
 
@@ -410,7 +408,6 @@ class Command(BaseCommand):
                     translated_footer.lead_image = self.image_map.get(row['image_id'])
                     translated_footer.title = row['title']
                     translated_footer.draft_title = row['draft_title']
-                    translated_footer.slug = row['slug']
                     translated_footer.live = row['live']
                     translated_footer.body = self.map_article_body(row['body'])
                     translated_footer.save(update_fields=['lead_image', 'title', 'draft_title', 'slug', 'live', 'body'])
@@ -450,3 +447,8 @@ class Command(BaseCommand):
     def translate_page(self, locale, page):
         translator = TranslationCreator(user=None, target_locales=[locale])
         translator.create_translations(page)
+
+    def stop_translations(self):
+        Translation.objects.update(enabled=False)
+
+        self.stdout.write('Translations stopped.')
