@@ -40,7 +40,6 @@ FORM_FIELD_CHOICES = (
     ('hidden', _('Hidden field')),
     ('singleline', _('Single line text')),
     ('multiline', _('Multi-line text')),
-    ('multiselect', _('Multiple select')),
     ('number', _('Number')),
     ('positivenumber', _('Positive number')),
     ('radio', _('Radio buttons')),
@@ -396,7 +395,6 @@ class PollFormField(AbstractFormField):
     CHOICES = (
         ('checkbox', _('Checkbox')),
         ('checkboxes', _('Checkboxes')),
-        ('multiselect', _('Multiple select')),
         ('radio', _('Radio buttons')),
     )
     field_type = models.CharField(
