@@ -9,30 +9,13 @@
 <footer class='footer-main'>
  {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
     <div class='footer'>
-    <div class="sm-home-header">
-        <a href="{% translated_home_page_url LANGUAGE_CODE %}" >
-            {% image settings.home.SiteSettings.logo fill-102x40 as logo %}
-            <img src="{{ logo.url }}" />
-        </a>
-        <div class="sm-home-header__options">
-            {% if page %}
-                {% language_switcher page %}
-            {% endif %}
+        <div class="section-container">
+            <div class="footer-head">
+                {% include "header.html" %}
+            </div>
+            {% top_level_sections %}
+            {% footer %}
+            <p class='footer__copyright'>{% translate "© The Internet of Good Things"%}</p>
         </div>
-    </div>  
-    <form class='footer__form' action="{% url 'search' %}">
-        <label >
-            <span >
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M8.08333 15.4167C12.1334 15.4167 15.4167 12.1334 15.4167 8.08333C15.4167 4.03325 12.1334 0.75 8.08333 0.75C4.03325 0.75 0.75 4.03325 0.75 8.08333C0.75 12.1334 4.03325 15.4167 8.08333 15.4167Z" stroke="#9A9A9A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M17.2502 17.25L13.2627 13.2625" stroke="#9A9A9A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </span>
-            <input type="text" name="query" placeholder="{% translate 'Search here' %}" pattern="\S+.*"/>
-        </label>
-    </form>
-    {% top_level_sections %}
-    {% footer %}
-    <p class='footer__copyright'>{% translate "© The Internet of Good Things"%}</p>
     </div>
 </footer>
