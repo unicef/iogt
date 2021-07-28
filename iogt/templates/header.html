@@ -1,12 +1,13 @@
-{% load static menu_tags i18n wagtailimages_tags home_tags %}
+{% load static menu_tags i18n wagtailimages_tags home_tags wagtailcore_tags %}
 
 {% get_current_language as LANGUAGE_CODE %}
 {% get_language_info for LANGUAGE_CODE as lang %}
 {% get_available_languages as LANGUAGES %}
 {% get_language_info_list for LANGUAGES as languages %}
+{% wagtail_site as current_site %}
 
 <header class="xs-home-header">
-    <a href="/" >
+    <a href="{% translated_home_page_url LANGUAGE_CODE %}" >
         {% image settings.home.SiteSettings.logo width-60 class='xs-image' %}
     </a>
         <select class='xs-home-header__select'>
@@ -20,7 +21,7 @@
 </header> 
 
 <header class="sm-home-header">
-    <a href="/" >
+    <a href="{% translated_home_page_url LANGUAGE_CODE %}" >
         {% image settings.home.SiteSettings.logo fill-102x40 as logo %}
         <img src="{{ logo.url }}" />
     </a>

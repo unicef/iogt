@@ -1,4 +1,5 @@
 from django import template
+from wagtail.core.models import Locale, Site
 
 from home.models import FooterPage, SectionIndexPage
 from iogt.settings.base import LANGUAGES
@@ -84,3 +85,11 @@ def locale_set(locale, url):
         code = item[0]
         url = url.replace(f"/{code}/", "")
     return f'/{locale}/{url}'
+
+@register.simple_tag
+def translated_home_page_url(language_code):
+    locale = Locale.objects.get(language_code=language_code)
+    default_home_page = Site.objects.filter(is_default_site=True).first().root_page
+    home_page = default_home_page.get_translation_or_none(locale)
+    page = home_page or default_home_page
+    return page.url
