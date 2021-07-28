@@ -34,6 +34,10 @@
             "title": "Creating Your Content",
             "folderitems": [
                 {
+                    "title": "Intro to Content Creation",
+                    "url": "/cms-manual/content/intro/"
+                },
+                {
                     "title": "Tips for Content Creation",
                     "url": "/cms-manual/content/tips/"
                 },

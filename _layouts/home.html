@@ -3,8 +3,7 @@ layout: default
 ---
 <!-- Splash -->
 <section class="bg-image-kids d-flex flex-row justify-content-center align-items-center">
-    <img src="{{ "/assets/img/IoGT_logo.png" | relative_url }}" alt="Logo of the Internet of Good Things"
-         class="iogt-logo">
+    <img src="{{ " /assets/img/IoGT_logo.png" }}" alt="Logo of the Internet of Good Things" class="iogt-logo">
 </section>
 
 <!-- Intro video-->
@@ -12,10 +11,9 @@ layout: default
     <h2 id="video" class="display-5 text-center">IoGT Introductory Video</h2>
     <p class="lead pt-3 text-center text-secondary">Our mission explained in 2 minutes.</p>
     <div class="ratio ratio-16x9 text-center">
-        <iframe width="844" height="475"
-                src="https://www.youtube.com/embed/0kuZ4mCHwdE"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen></iframe>
+        <iframe width="844" height="475" src="https://www.youtube.com/embed/0kuZ4mCHwdE"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
     </div>
 </section>
 
@@ -25,8 +23,8 @@ layout: default
 
     <div class="row pb-5">
         <div class="col col-lg-8">
-            <img src="{{ "/assets/img/feature_phone1.png" | relative_url }}"
-                 alt="Set of three feature phones demonstrating IoGT appearance" class="img-fluid">
+            <img src="{{ " /assets/img/feature_phone1.png" }}"
+                alt="Set of three feature phones demonstrating IoGT appearance" class="img-fluid">
         </div>
         <div class="col-lg-4 align-self-center">
             <p class="rev-text text-secondary">Internet of Good Things (IoGT) hosts mobile-packaged content designed to
@@ -38,8 +36,8 @@ layout: default
 
     <div class="row pt-5">
         <div class="col col-lg-8">
-            <img src="{{ "/assets/img/feature_phone2.png" | relative_url }}"
-                 alt="Set of three feature phones demonstrating IoGT appearance" class="img-fluid">
+            <img src="{{ " /assets/img/feature_phone2.png" }}"
+                alt="Set of three feature phones demonstrating IoGT appearance" class="img-fluid">
         </div>
         <div class="col-lg-4 align-self-center">
             <p class="rev-text text-secondary">Topics and issues on Internet of Good Things include maternal health,
@@ -55,8 +53,7 @@ layout: default
 <!-- Audience -->
 <section class="d-flex pb-5 pt-5 bg-image-family-candle" id="audience">
     <div class="container d-flex flex-column justify-content-center align-items-center">
-        <img src="{{ "/assets/img/IoGT_icon_transparent.png" | relative_url }}" alt="Transparent IoGT icon"
-             class="img-fluid">
+        <img src="{{ " /assets/img/IoGT_icon_transparent.png" }}" alt="Transparent IoGT icon" class="img-fluid">
         <p class="text-light lead text-center fs-2 fw-normal">By connecting to the Internet of Good Things, children,
             adolescents, mothers, fathers, other family members, health trainers, caregivers, and communities can gain
             access to localized, updated, quality content directly on their mobile phone at anytime for free.</p>
@@ -71,8 +68,8 @@ layout: default
         among others.</p>
     <div class="d-lg-flex align-items-center pb-4 pb-lg-3">
         <div class="flex-shrink-0 me-3">
-            <img src="{{ "/assets/img/women_child.jpg" | relative_url }}" alt="Two women with a child"
-                 class="pb-3 pb-lg-0" width="304">
+            <img src="{{ " /assets/img/women_child.jpg" }}" alt="Two women with a child" class="pb-3 pb-lg-0"
+                width="304">
         </div>
         <div class="flex-grow-1 ms-lg-3">
             <h3>Lack of access to information</h3>
@@ -98,8 +95,8 @@ layout: default
                 exactly what is needed.</p>
         </div>
         <div class="flex-shrink-0 ms-lg-3">
-            <img src="{{ "/assets/img/women_with_phone.jpg" | relative_url }}" alt="Two women using a mobile phone"
-                 class="text-center" width="304">
+            <img src="{{ " /assets/img/women_with_phone.jpg" }}" alt="Two women using a mobile phone"
+                class="text-center" width="304">
         </div>
     </div>
 </section>
@@ -107,8 +104,7 @@ layout: default
 <!-- School children -->
 <section class="d-flex pb-5 pt-5 bg-image-schoolchildren" id="audience">
     <div class="container d-flex flex-column justify-content-center align-items-center">
-        <img src="{{ "/assets/img/IoGT_icon_transparent.png" | relative_url }}" alt="Transparent IoGT icon"
-             class="img-fluid">
+        <img src="{{ " /assets/img/IoGT_icon_transparent.png" }}" alt="Transparent IoGT icon" class="img-fluid">
         <h2 class="text-light text-center">IoGT empowering communities:</h2>
         <p class="text-light lead text-center fs-2 fw-normal">Students can learn skills relevant to future careers;
             mothers can learn skills on how to protect children; adolescents can learn about their rights, citizens
@@ -118,8 +114,8 @@ layout: default
 
 <!-- UX -->
 <section class="container pb-5 pt-5" id="ux">
-    <img src="{{ "/assets/img/android_phones.png" | relative_url }}" alt="Andriod phones showing IoGT content"
-         class="img-fluid text-center pb-5">
+    <img src="{{ " /assets/img/android_phones.png" }}" alt="Andriod phones showing IoGT content"
+        class="img-fluid text-center pb-5">
     <h3 class="text-center pb-2">
         <a href="https://www.internetofgoodthings.org/" class="text-reset">Click here to see it in action!</a>
     </h3>
@@ -131,29 +127,29 @@ layout: default
     <div class="carousel slide carousel-dark" id="carousel" data-bs-ride="carousel">
         <div class="carousel-indicators">
             {% for item in site.data.carousel.slides %}
-                <button type="button" data-bs-target="#carousel" data-bs-slide-to="{{ forloop.index0 }}"
-                        class="{% if forloop.index0 == 0 %} active {% endif %}" aria-current="true"
-                        aria-label="Slide {{ forloop.index0 }}"></button>
+            <button type="button" data-bs-target="#carousel" data-bs-slide-to="{{ forloop.index0 }}"
+                class="{% if forloop.index0 == 0 %} active {% endif %}" aria-current="true"
+                aria-label="Slide {{ forloop.index0 }}"></button>
             {% endfor %}
         </div>
         <div class="carousel-inner">
             {% for item in site.data.carousel.slides %}
-                <div class="carousel-item {% if forloop.index0 == 0 %} active {% endif %}"
-                     style="background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), url({{ item.bg | relative_url }}) repeat repeat 50% 50%; height: 75vh;">
-                    <div class="position-absolute container top-50 start-50 translate-middle">
-                        <div class="row">
-                            <div class="col-lg-7 d-flex flex-column justify-content-left">
-                                <h4 class="display-6 text-light">{{ item.title }}</h4>
-                                <p class="lead fs-6 text-light">{{ item.text }}</p>
-                                {% unless item.button == "none" %}<a href="{{ item.link | relative_url }}"
-                                                                     class="btn btn-dark btn-lg w-50 align-self-center">{{ item.button }}</a>{% endunless %}
-                            </div>
-                            <div class="col-lg-5">
-                                <img src="{{ item.image | relative_url }}" alt="Image" class="img-fluid">
-                            </div>
+            <div class="carousel-item {% if forloop.index0 == 0 %} active {% endif %}"
+                style="background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), url({{ item.bg  }}) repeat repeat 50% 50%; height: 75vh;">
+                <div class="position-absolute container top-50 start-50 translate-middle">
+                    <div class="row">
+                        <div class="col-lg-7 d-flex flex-column justify-content-left">
+                            <h4 class="display-6 text-light">{{ item.title }}</h4>
+                            <p class="lead fs-6 text-light">{{ item.text }}</p>
+                            {% unless item.button == "none" %}<a href="{{ item.link  }}"
+                                class="btn btn-dark btn-lg w-50 align-self-center">{{ item.button }}</a>{% endunless %}
+                        </div>
+                        <div class="col-lg-5">
+                            <img src="{{ item.image  }}" alt="Image" class="img-fluid">
                         </div>
                     </div>
                 </div>
+            </div>
             {% endfor %}
         </div>
 
@@ -177,10 +173,9 @@ layout: default
         age 18, one year before graduating. Today Nwabisa keeps learning by using the Generation 2030 content
         on Internet of Good Things.</p>
     <div class="ratio ratio-16x9 text-center">
-        <iframe width="844" height="475"
-                src="https://www.youtube.com/embed/S1WrDjYSOqg"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen></iframe>
+        <iframe width="844" height="475" src="https://www.youtube.com/embed/S1WrDjYSOqg"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
     </div>
 </section>
 
@@ -192,7 +187,7 @@ layout: default
     <p class="pb-3 fs-5">
         <a href="https://github.com/unicef/molo-iogt" class="fw-bold text-reset">IoGT's Dev Space on GitHub.</a>
         IoGT is a scaffold application for <a href="https://molo.readthedocs.io/" class="text-reset">Molo</a> using <a
-                href="https://wagtail.io/" class="text-reset">Wagtail CMS</a>.
+            href="https://wagtail.io/" class="text-reset">Wagtail CMS</a>.
     </p>
     <p class="pb-3 fs-5">
         <a href="https://www.internetofgoodthings.org/" class="fw-bold text-reset">Sample IoGT Site.</a> This site
@@ -201,13 +196,13 @@ layout: default
     </p>
     <p class="pb-3 fs-5">
         <a href="https://drive.google.com/file/d/1aSLm6UiXzd3P-WO7LbCbBBuXt7kbWjA2/view?usp=sharing"
-           class="fw-bold text-reset">List of IoGT Deployments.</a> Currently, IoGT is only deployed with support from
+            class="fw-bold text-reset">List of IoGT Deployments.</a> Currently, IoGT is only deployed with support from
         UNICEF country offices. As an open source solution, we invite interested third parties to use IoGT's code to
         support their own innovation needs under a BSD 2-Clause license.
     </p>
     <p class="pb-3 fs-5">
         <a href="https://unicef-my.sharepoint.com/:w:/g/personal/lmarkle_unicef_org/EUwlo0ohRP1Hk7fGbYhXCxUBjJPPfI7VGfN5kA2k_R87rA?e=bUOMSv"
-           class="fw-bold text-reset">Deployment / Launch Toolkit.</a> This toolkit was designed for UNICEF country
+            class="fw-bold text-reset">Deployment / Launch Toolkit.</a> This toolkit was designed for UNICEF country
         offices, but can be adapted to support the needs of other implementers to scale IoGT.
     </p>
 </section>
