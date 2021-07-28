@@ -10,7 +10,7 @@
  {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
     <div class='footer'>
     <div class="sm-home-header">
-        <a href="{{ request.site.root_url }}" >
+        <a href="{% translated_home_page_url LANGUAGE_CODE %}" >
             {% image settings.home.SiteSettings.logo fill-102x40 as logo %}
             <img src="{{ logo.url }}" />
         </a>
