@@ -5,17 +5,19 @@ permalink: /cms-manual/content/creating-sections/
 
 Content structure builds the navigation for the end user. Sections, subsections and articles are the terms best used to describe how your content can be structured.
 
-On the IoGT Wagtail CMS, the terms Parent and Child describe the navigational relationship between any higher page (or section) and lower page (or subsection). On the CMS, a Child page becomes a Parent page when an additional navigation level is created below it and populated with additional Child pages. The Article is the last in the lineage.
+On the IoGT Wagtail CMS, Sections and Subsection describe the navigational relationship between any higher page (a Parent Page) and lower page (a Child Page). Additionally, a Section can be both a Parent Page and a Child Page at the same time: it is a Child of its containing Section Page and a Parent Page to any Pages it contains. Sections can be nested as many times as needed. Specfic content Pages, such as an Article, Poll, Quiz, or Survey, are the last Pages in a lineage of Sections/Subsection.
 
-Adding main sections to your site is like creating content 'buckets' for your content. Inside a main section, you can put more 'buckets' (subsections) - and, inside of these, your articles.
+The hierarchy of Sections and Subsections is similar to folders on your computer's operating system. Your desktop folder is comparable to a root Section, with folders on your desktop as Subsection. Files present both on your desktop and within folders are comparable to Pages that appear and the end of a lineage of Sections/Subsections.
+
+A special type of Page, called the Homepage, can be used to group several Sections together. Homepages are best used to group content of the same language together. For example, in a country that serves both English and French content, the site root could contain two Homepages, one for English content and the other for French Content. A Homepage can also have special Child Pages contained within it called Index Pages. Index Pages are a type of Section which only contains content of the same type. For example, a Section Index Page can only contain Sections within it. No Articles, Polls, etc. can be an immediate Child of a Section Index Page. 
+
+_Note: these Sections can include Articles, etc. These Pages would be the "grandchildren" of the Section Index Page, and as such, do not violate the rule that Section Index Pages may only contain Sections as immediate children. Additionally, Index Pages are only available as Child Pages of a Homepage._
 
 If you have a limited amount of content, you may only need to create sections for your articles without adding subsections.
 
 Typically a website has minimum three navigational levels, but it is up to you how many you want:
 
-_Section > Subsection > Article;_ or,
-
-_Parent > Parent (Child of a Parent) > Child._
+_Section > Subsection > Article;_
 
 And in the example below: _Sport > Soccer > Doe Injured._
 
