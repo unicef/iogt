@@ -353,7 +353,8 @@ class Command(BaseCommand):
 
                 translated_banner = banner.get_translation_or_none(locale)
                 if translated_banner:
-                    translated_banner.banner_image = self.image_map.get(row['image_id'])
+                    translated_banner.banner_image = self.image_map.get(row['banner_id'])
+                    translated_banner.banner_link_page = self.v1_to_v2_page_map.get(row['banner_link_page_id'])
                     translated_banner.title = row['title']
                     translated_banner.draft_title = row['draft_title']
                     translated_banner.live = row['live']
@@ -365,13 +366,15 @@ class Command(BaseCommand):
     def create_banner(self, banner_index_page, row):
         banner = models.BannerPage(
             banner_image=self.image_map.get(row['banner_id']),
+            banner_link_page=self.v1_to_v2_page_map.get(row['banner_link_page_id']),
             title=row['title'],
             draft_title=row['draft_title'],
             slug=row['slug'],
             path=banner_index_page.path + row['path'][12:],
             depth=row['depth'],
             numchild=row['numchild'],
-            live=row['live']
+            live=row['live'],
+            banner_description=''
         )
         banner.save()
         self.v1_to_v2_page_map.update({
