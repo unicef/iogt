@@ -33,20 +33,7 @@
                         <div class="quest-item__desc">
                             <p>{{ field.label }}</p>
                         </div>
-                        {% if field.field.widget.input_type == "radio" %}
-                            {% render_radios field %}
-                        {% elif field.field.widget.input_type == "checkbox" %}
-                            {% render_checkboxes field %}
-                        {% elif "textar" in field.field.widget.template_name %}
-                            {% render_textarea field %}
-                        {% elif field.field.widget.input_type == "text" or field.field.widget.input_type == "number" or field.field.widget.input_type == "email" or field.field.widget.input_type == "url" %}
-                            {% render_text_field field %}
-                        {% elif "/select" in field.field.widget.template_name %}
-                            {% render_select field %}
-                        {% endif %}
-                        {% for err in  field.errors %}
-                            <p class="cust-input__error">{% translate err %}</p>
-                        {% endfor %}
+                        {% render_fields field type|lower %}
                     </div>
                 {% else %}
                     <h4 class="polls-widget__form-title">
@@ -73,14 +60,7 @@
                             {% translate "Optional" %}
                         {% endif %}
                     </h4>
-                    {% if field.field.widget.input_type == "radio" %}
-                        {% render_polls_radios field %}
-                    {% elif "select" in field.field.widget.template_name %}
-                        {% render_select field %}
-                    {% endif %}
-                    {% for err in  field.errors %}
-                        <p class="cust-input__error">{% translate err %}</p>
-                    {% endfor %}
+                      {% render_fields field type|lower %}
                 {% endif %}
             {% endfor %}
         </div>
