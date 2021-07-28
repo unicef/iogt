@@ -500,9 +500,6 @@
   align-items: flex-start;
   padding: 5px 12px;
   border-radius: 8px;
-  flex: none;
-  order: 0;
-  align-self: stretch;
   flex-grow: 0;
   position: relative;
   min-width: 80px;
