@@ -226,8 +226,8 @@ COMMENTS_APP = 'django_comments_xtd'
 COMMENTS_XTD_MAX_THREAD_LEVEL = 1
 
 # Miscellaneous
-LOGIN_REDIRECT_URL = "/users/profile/"
-LOGOUT_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "user_profile"
+ACCOUNT_LOGOUT_REDIRECT_URL = "logout_redirect"
 LOGIN_URL = 'account_login'
 WAGTAIL_FRONTEND_LOGIN_URL = LOGIN_URL
 
@@ -357,13 +357,9 @@ RAPIDPRO_BOT_USER_ID = os.getenv('RAPIDPRO_BOT_USER_ID')
 RAPIDPRO_BOT_USER_USERNAME = os.getenv('RAPIDPRO_BOT_USER_USERNAME')
 RAPIDPRO_BOT_USER_PASSWORD = os.getenv('RAPIDPRO_BOT_USER_PASSWORD')
 
-WAGTAILTRANSFER_SOURCES = {
-    'iogt_global': {
-        'BASE_URL': 'http://iogt.org',
-        'SECRET_KEY': 'fake_secret_key_2',
-    }, }
-
-WAGTAILTRANSFER_SECRET_KEY = 'fake_secret_key'
+# Wagtail transfer default values. Override these in local.py
+WAGTAILTRANSFER_SECRET_KEY = os.getenv('WAGTAILTRANSFER_SECRET_KEY')
+WAGTAILTRANSFER_SOURCES = {}
 
 WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME = 'iogt_flat_menu_items'
 

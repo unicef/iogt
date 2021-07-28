@@ -25,9 +25,27 @@ from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 from wagtail.images.blocks import ImageChooserBlock
 
-from questionnaires.blocks import SkipLogicField, SkipState
-from questionnaires.forms import SurveyForm, QuizForm
+from questionnaires.blocks import SkipState, SkipLogicBlock
+from questionnaires.forms import CustomFormBuilder, SurveyForm, QuizForm
 from questionnaires.utils import SkipLogicPaginator
+
+
+FORM_FIELD_CHOICES = (
+    ('checkbox', _('Checkbox')),
+    ('checkboxes', _('Checkboxes')),
+    ('date', _('Date')),
+    ('datetime', _('Date/time')),
+    ('dropdown', _('Drop down')),
+    ('email', _('Email')),
+    ('hidden', _('Hidden field')),
+    ('singleline', _('Single line text')),
+    ('multiline', _('Multi-line text')),
+    ('multiselect', _('Multiple select')),
+    ('number', _('Number')),
+    ('positivenumber', _('Positive number')),
+    ('radio', _('Radio buttons')),
+    ('url', _('URL')),
+)
 
 
 class QuestionnairePage(Page, PageUtilsMixin):
@@ -154,7 +172,7 @@ class QuestionnairePage(Page, PageUtilsMixin):
                         # After successful validation, save data into DB,
                         # and remove from the session.
                         form_submission = self.process_form_submission(form)
-                        request.session.pop(session_key_data, None)
+                        request.session[f'{session_key_data}-completed'] = request.session.pop(session_key_data, None)
                         # render the landing page
                         return self.render_landing_page(
                             request, form_submission, *args, **kwargs
@@ -192,13 +210,20 @@ class QuestionnairePage(Page, PageUtilsMixin):
 class SurveyFormField(AbstractFormField):
     page = ParentalKey("Survey", on_delete=models.CASCADE, related_name="survey_form_fields")
     required = models.BooleanField(verbose_name=_('required'), default=False)
+    field_type = models.CharField(
+        verbose_name=_('field type'),
+        max_length=16,
+        choices=FORM_FIELD_CHOICES
+    )
     admin_label = models.CharField(
         verbose_name=_('admin_label'),
         max_length=256,
         help_text=_('Column header used during CSV export of survey '
                     'responses.'),
     )
-    skip_logic = SkipLogicField()
+    skip_logic = StreamField([
+        ('skip_logic', SkipLogicBlock()),
+    ], blank=True)
     page_break = models.BooleanField(
         default=False,
         help_text=_(
@@ -251,6 +276,7 @@ class SurveyFormField(AbstractFormField):
 
 class Survey(QuestionnairePage, AbstractForm):
     base_form_class = SurveyForm
+    form_builder = CustomFormBuilder
 
     parent_page_types = ["home.HomePage", "home.Section", "home.Article"]
     template = "survey/survey.html"
@@ -516,13 +542,20 @@ class Poll(QuestionnairePage, AbstractForm):
 class QuizFormField(AbstractFormField):
     page = ParentalKey("Quiz", on_delete=models.CASCADE, related_name="quiz_form_fields")
     required = models.BooleanField(verbose_name=_('required'), default=True)
+    field_type = models.CharField(
+        verbose_name=_('field type'),
+        max_length=16,
+        choices=FORM_FIELD_CHOICES
+    )
     admin_label = models.CharField(
         verbose_name=_('admin_label'),
         max_length=256,
         help_text=_('Column header used during CSV export of survey '
                     'responses.'),
     )
-    skip_logic = SkipLogicField()
+    skip_logic = StreamField([
+        ('skip_logic', SkipLogicBlock()),
+    ], blank=True)
     page_break = models.BooleanField(
         default=False,
         help_text=_(
@@ -566,6 +599,8 @@ class QuizFormField(AbstractFormField):
                     return ['on', 'off'].index(choice)
                 except ValueError:
                     return [True, False].index(choice)
+            elif type(choice) == list:
+                choice = choice[-1]
             return self.choices.split(',').index(choice)
         else:
             return False
@@ -585,6 +620,7 @@ class QuizFormField(AbstractFormField):
 
 class Quiz(QuestionnairePage, AbstractForm):
     base_form_class = QuizForm
+    form_builder = CustomFormBuilder
 
     parent_page_types = ["home.HomePage", "home.Section", "home.Article"]
     template = "quizzes/quiz.html"
@@ -659,9 +695,16 @@ class Quiz(QuestionnairePage, AbstractForm):
         context.update({'back_url': request.GET.get('back_url')})
         context.update({'form_length': request.GET.get('form_length')})
 
-        if request.method == 'POST':
-            form_class = self.get_form_class()
-            form = form_class(data=request.POST, page=self, user=request.user)
+        if self.multi_step:
+            session_key_data = f'form_data-{self.pk}-completed'
+            form_data = request.session.get(session_key_data)
+        else:
+            form_data = request.POST
+        if request.method == 'POST' and form_data:
+            form = self.get_form(
+                form_data,
+                page=self, user=request.user
+            )
 
             fields_info = {}
 
@@ -672,9 +715,12 @@ class Quiz(QuestionnairePage, AbstractForm):
                 correct_answer = field.correct_answer.split(',')
 
                 if field.field_type == 'checkbox':
-                    answer = form_data.get(field.clean_name, ['off'])
+                    answer = form_data.get(field.clean_name) or 'off'
                 else:
-                    answer = form_data.get(field.clean_name, [])
+                    answer = form_data.get(field.clean_name)
+
+                if type(answer) != list:
+                    answer = [answer]
 
                 is_correct = set(answer) == set(correct_answer)
                 if is_correct:
@@ -692,6 +738,9 @@ class Quiz(QuestionnairePage, AbstractForm):
                 'total': total,
                 'total_correct': total_correct,
             }
+
+            if self.multi_step:
+                request.session.pop(session_key_data, None)
 
         return context
 

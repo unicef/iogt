@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static wagtailimages_tags i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 
 {% block extra_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/survey.css' %}">
@@ -11,7 +12,7 @@
         <div class="survey-page__btns">
             <a href="{{ page.url }}" class="cust-btn cust-btn--dark survey-page__btn"><span>{% translate "Get Started"%}</span>
             </a>
-            <a href="/" class="cust-btn cust-btn--clear survey-page__btn"><span>{% translate "Go to homepage" %}</span></a>
+            <a href="{% translated_home_page_url LANGUAGE_CODE %}" class="cust-btn cust-btn--clear survey-page__btn"><span>{% translate "Go to homepage" %}</span></a>
         </div>
     </div>
 {% endblock %}

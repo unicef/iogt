@@ -41,10 +41,16 @@ class Command(BaseCommand):
             required=True,
             help='Path to IoGT v1 media directory'
         )
+        parser.add_argument(
+            '--skip-locales',
+            action='store_true',
+            help='Skip data of locales other than default language'
+        )
 
     def handle(self, *args, **options):
         self.db_connect(options)
         self.media_dir = options.get('media_dir')
+        self.skip_locales = options.get('skip_locales')
 
         self.clear()
         self.stdout.write('Existing site structure cleared')
@@ -101,7 +107,8 @@ class Command(BaseCommand):
         Page.fix_tree()
 
     def create_home_page(self, root):
-        cur = self.db_query('select * from core_main main join wagtailcore_page page on main.page_ptr_id = page.id')
+        sql = 'select * from core_main main join wagtailcore_page page on main.page_ptr_id = page.id'
+        cur = self.db_query(sql)
         main = cur.fetchone()
         cur.close()
         home = None
@@ -194,7 +201,15 @@ class Command(BaseCommand):
         return tags
 
     def migrate_sections(self, section_index_page):
-        cur = self.db_query('select * from core_sectionpage csp join wagtailcore_page wcp on csp.page_ptr_id  = wcp.id order by wcp.path')
+        sql = "select * " \
+              "from core_sectionpage csp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              "where csp.page_ptr_id = wcp.id " \
+              "and wcp.id = clr.page_id " \
+              "and clr.language_id = csl.id "
+        if self.skip_locales:
+            sql += " and locale = 'en' "
+        sql += 'order by wcp.path'
+        cur = self.db_query(sql)
         for row in cur:
             self.create_section(section_index_page, row)
         cur.close()
@@ -215,7 +230,15 @@ class Command(BaseCommand):
         self.stdout.write(f"saved section, title={section.title}")
 
     def migrate_articles(self, section_index_page):
-        cur = self.db_query("select * from core_articlepage cap join wagtailcore_page wcp on cap.page_ptr_id  = wcp.id where wcp.path like '000100010002%' order by wcp.path")
+        sql = "select * " \
+              "from core_articlepage cap, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              "where cap.page_ptr_id = wcp.id " \
+              "and wcp.id = clr.page_id " \
+              "and clr.language_id = csl.id "
+        if self.skip_locales:
+            sql += "and locale = 'en' "
+        sql += " and wcp.path like '000100010002%'order by wcp.path"
+        cur = self.db_query(sql)
         for row in cur:
             self.create_article(section_index_page, row)
         cur.close()
@@ -232,7 +255,11 @@ class Command(BaseCommand):
             live=row['live'],
             body=self.map_article_body(row['body']),
         )
-        article.save()
+        try:
+            article.save()
+        except Page.DoesNotExist:
+            self.stdout.write(f"Skipping page with missing parent: title={row['title']}")
+            return
         self.stdout.write(f"saved article, title={article.title}")
 
     def map_article_body(self, v1_body):
@@ -243,7 +270,15 @@ class Command(BaseCommand):
         return json.dumps(v2_body)
 
     def migrate_banners(self, banner_index_page):
-        cur = self.db_query("select * from core_bannerpage cbp join wagtailcore_page wcp on cbp.page_ptr_id  = wcp.id order by wcp.path")
+        sql = "select * " \
+              "from core_bannerpage cbp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              "where cbp.page_ptr_id = wcp.id " \
+              "and wcp.id = clr.page_id " \
+              "and clr.language_id = csl.id "
+        if self.skip_locales:
+            sql += " and locale = 'en' "
+        sql += ' order by wcp.path'
+        cur = self.db_query(sql)
         for row in cur:
             self.create_banner(banner_index_page, row)
         cur.close()
@@ -263,7 +298,16 @@ class Command(BaseCommand):
         self.stdout.write(f"saved banner, title={banner.title}")
 
     def migrate_footers(self, footer_index_page):
-        cur = self.db_query("select * from core_footerpage cfp join core_articlepage cap on cfp.articlepage_ptr_id = cap.page_ptr_id join wagtailcore_page wcp on cap.page_ptr_id = wcp.id order by wcp.path")
+        sql = "select * " \
+              "from core_footerpage cfp, core_articlepage cap, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              "where cfp.articlepage_ptr_id = cap.page_ptr_id " \
+              "and cap.page_ptr_id = wcp.id " \
+              "and wcp.id = clr.page_id " \
+              "and clr.language_id = csl.id "
+        if self.skip_locales:
+            sql += " and locale = 'en' "
+        sql += ' order by wcp.path'
+        cur = self.db_query(sql)
         for row in cur:
             self.create_footer(footer_index_page, row)
         cur.close()

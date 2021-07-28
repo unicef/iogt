@@ -1,13 +1,19 @@
 {% extends "base.html" %}
 
-{% load i18n %}
+{% load i18n wagtailimages_tags %}
 
 {% block content %}
-    <div>
+    <div align="center">
+        {# The logo isn't localized, so we shouldn't use it here. #}
+        {# {% image settings.home.SiteSettings.logo fill-102x40 as logo %} #}
+        {# <img src="{{ logo.url }}" alt="{% translate 'Internet of Good Things' %}"/> #}
+        <p>{% translate "You are leaving the <b>Internet of Good Things</b> to visit an external website and standard data charges by your network provider might apply" %}
+        </p>
         <p>
-            <a href="{{ next }}" target="_blank">{% translate "go to external link" %}</a>
+            <a href="{{ next }}" target="_blank">{% translate "Continue to external site" %}</a>
+        </p>
         <p>
-            <a href="{{ prev }}">{% translate "back to previous page" %}</a>
+            <a href="{{ prev }}">{% translate "Go back to previous page" %}</a>
         </p>
     </div>
 {% endblock content %}

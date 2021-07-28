@@ -1,4 +1,5 @@
 from django import template
+from wagtail.core.models import Locale, Site
 
 from home.models import FooterPage, SectionIndexPage
 from iogt.settings.base import LANGUAGES
@@ -11,6 +12,14 @@ def language_switcher(page):
     return {
         'translations': page.get_translations(inclusive=True).all(),
 
+    }
+
+
+@register.inclusion_tag('home/tags/previous-next-buttons.html')
+def render_previous_next_buttons(page):
+    return {
+        'next_sibling': page.get_next_siblings().live().first(),
+        'previous_sibling': page.get_prev_siblings().live().first()
     }
 
 
@@ -76,3 +85,11 @@ def locale_set(locale, url):
         code = item[0]
         url = url.replace(f"/{code}/", "")
     return f'/{locale}/{url}'
+
+@register.simple_tag
+def translated_home_page_url(language_code):
+    locale = Locale.objects.get(language_code=language_code)
+    default_home_page = Site.objects.filter(is_default_site=True).first().root_page
+    home_page = default_home_page.get_translation_or_none(locale)
+    page = home_page or default_home_page
+    return page.url

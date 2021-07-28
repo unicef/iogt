@@ -20,14 +20,7 @@
       {% render_polls_list polls %} 
       {% render_surveys_list surveys %}
        <section class='article__navigation'>
-            {% if page.get_prev_sibling or page.get_next_sibling %}
-                {% if page.get_prev_sibling %}
-                    <a href="{% pageurl page.get_prev_sibling %}" class='article__navigation--previous'>{% translate "Previous" %}</a>
-                {% endif %}
-                {% if page.get_next_sibling %}
-                    <a href="{% pageurl page.get_next_sibling %}" class='article__navigation--next'>{% translate "Next" %}</a>
-                {% endif %}
-            {% endif %}
+            {% render_previous_next_buttons page %}
        </section> 
  </article>
 
