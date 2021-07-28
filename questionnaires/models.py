@@ -393,8 +393,8 @@ class UserSubmission(AbstractFormSubmission):
 class PollFormField(AbstractFormField):
     page = ParentalKey("Poll", on_delete=models.CASCADE, related_name="poll_form_fields")
     CHOICES = (
-        ('checkbox', _('Checkbox')),
         ('checkboxes', _('Checkboxes')),
+        ('dropdown', _('Dropdown')),
         ('radio', _('Radio buttons')),
     )
     field_type = models.CharField(
