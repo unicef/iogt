@@ -51,6 +51,14 @@ class SurveyForm(WagtailAdminPageForm):
                                 'choice',
                                 _('This field is required.'),
                             )
+                if data['field_type'] in ["checkbox", "checkboxes"]:
+                    for i, logic in enumerate(data['skip_logic']):
+                        if logic.value['skip_logic'] != SkipState.NEXT:
+                            self.add_stream_field_error(
+                                i,
+                                'skip_logic',
+                                _(f'Skipping to {logic.value["skip_logic"]} not allowed for checkbox and checkboxes.'),
+                            )
                 if self.clean_errors:
                     form._errors = self.clean_errors
 
@@ -144,6 +152,14 @@ class QuizForm(WagtailAdminPageForm):
                                 i,
                                 'choice',
                                 _('This field is required.'),
+                            )
+                if data['field_type'] in ["checkbox", "checkboxes"]:
+                    for i, logic in enumerate(data['skip_logic']):
+                        if logic.value['skip_logic'] != SkipState.NEXT:
+                            self.add_stream_field_error(
+                                i,
+                                'skip_logic',
+                                _(f'Skipping to {logic.value["skip_logic"]} not allowed for checkbox, checkboxes.'),
                             )
                 if self.clean_errors:
                     form._errors = self.clean_errors
