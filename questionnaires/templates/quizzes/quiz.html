@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static i18n questionnaires_tags wagtailcore_tags %}
+{% load static i18n home_tags questionnaires_tags wagtailcore_tags %}
 {% get_current_language as LANGUAGE_CODE %}
 
 {% block extra_css %}
@@ -7,7 +7,6 @@
 {% endblock %}
 
 {% block content %}
-    {% include 'back_button.html' with back_url=back_url %}
     <div class="quiz-page">
         <div class="container">
             <h1 class="title quiz-page__title">{{ page.title }}</h1>

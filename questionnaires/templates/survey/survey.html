@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load questionnaires_tags %}
+{% load home_tags questionnaires_tags %}
 {% load static wagtailcore_tags i18n %}
 {% get_current_language as LANGUAGE_CODE %}
 
@@ -11,7 +11,6 @@
 
 {% block content %}
     <div class="survey-page">
-        {% include 'back_button.html' with back_url=back_url %}
         <div class="container">
             <h1 class="title survey-page__title">{{ page.title }}</h1>
             {% if page.description %}
