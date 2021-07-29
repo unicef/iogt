@@ -222,7 +222,9 @@ class SurveyFormField(AbstractFormField):
     )
     skip_logic = StreamField([
         ('skip_logic', SkipLogicBlock()),
-    ], blank=True)
+    ], blank=True, help_text=_('This is used to add choices for field type radio, checkbox, checkboxes, '
+                               'and dropdown only. This can be used to skip questions and skipping is only allowed '
+                               'for radio and dropdown.'))
     page_break = models.BooleanField(
         default=False,
         help_text=_(
@@ -555,7 +557,9 @@ class QuizFormField(AbstractFormField):
     )
     skip_logic = StreamField([
         ('skip_logic', SkipLogicBlock()),
-    ], blank=True)
+    ], blank=True, help_text=_('This is used to add choices for field type radio, checkbox, checkboxes, '
+                               'and dropdown only. This can be used to skip questions and skipping is only allowed '
+                               'for radio and dropdown.'))
     page_break = models.BooleanField(
         default=False,
         help_text=_(
