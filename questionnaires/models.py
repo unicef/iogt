@@ -483,39 +483,41 @@ class Poll(QuestionnairePage, AbstractForm):
         context = super().get_context(request, *args, **kwargs)
         results = dict()
 
-        # Get information about form fields
-        data_fields = [
-            (field.clean_name, field.label)
-            for field in self.get_form_fields()
-        ]
+        if request.method == 'POST':
+            # Get information about form fields
+            data_fields = [
+                (field.clean_name, field.label)
+                for field in self.get_form_fields()
+            ]
 
-        submissions = self.get_submission_class().objects.filter(page=self)
-        for submission in submissions:
-            data = submission.get_data()
+            submissions = self.get_submission_class().objects.filter(page=self)
+            for submission in submissions:
+                data = submission.get_data()
 
-            # Count results for each question
-            for name, label in data_fields:
-                answer = data.get(name)
-                if answer is None:
-                    # Something wrong with data.
-                    # Probably you have changed questions
-                    # and now we are receiving answers for old questions.
-                    # Just skip them.
-                    continue
+                # Count results for each question
+                for name, label in data_fields:
+                    answer = data.get(name)
+                    if answer is None:
+                        # Something wrong with data.
+                        # Probably you have changed questions
+                        # and now we are receiving answers for old questions.
+                        # Just skip them.
+                        continue
 
-                if type(answer) is list:
-                    # Answer is a list if the field type is 'Checkboxes'
-                    answer = u', '.join(answer)
+                    question_stats = results.get(label, {})
+                    if type(answer) != list:
+                        answer = [answer]
 
-                question_stats = results.get(label, {})
-                question_stats[answer] = question_stats.get(answer, 0) + 1
-                results[label] = question_stats
+                    for answer_ in answer:
+                        question_stats[answer_] = question_stats.get(answer_, 0) + 1
 
-        if self.result_as_percentage:
-            total_submissions = len(submissions)
-            for key in results:
-                for k,v in results[key].items():
-                    results[key][k] = round(v/total_submissions, 4) * 100
+                    results[label] = question_stats
+
+            if self.result_as_percentage:
+                total_submissions = len(submissions)
+                for key in results:
+                    for k,v in results[key].items():
+                        results[key][k] = round(v/total_submissions, 4) * 100
 
         context.update({
             'results': results,
