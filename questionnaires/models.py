@@ -562,7 +562,8 @@ class QuizFormField(AbstractFormField):
     )
     correct_answer = models.CharField(
         verbose_name=_('correct_answer'), max_length=256,
-        help_text=_('Comma separated list of choices. Only applicable in checkboxes, radio, dropdown and multiselect.'))
+        help_text=_('The correct answer/choice(s). For checkboxes: a comma separated list of choices. '
+                    'For checkbox: Either "on" or "off".'))
     feedback = models.CharField(verbose_name=_('Feedback'),
                                 max_length=255,
                                 help_text=_('Feedback message for user answer.'),
