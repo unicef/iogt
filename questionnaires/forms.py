@@ -36,6 +36,11 @@ class SurveyForm(WagtailAdminPageForm):
             self._clean_errors = {}
             if form.is_valid():
                 data = form.cleaned_data
+                if self.data.get('multi_step', 'off') == 'off' and data['page_break']:
+                    self.add_form_field_error(
+                        'page_break',
+                        _('Page break is only allowed with multi-step enabled.'),
+                    )
                 if data['field_type'] == 'checkbox':
                     if len(data['skip_logic']) != 2:
                         self.add_form_field_error(
@@ -138,6 +143,11 @@ class QuizForm(WagtailAdminPageForm):
             self._clean_errors = {}
             if form.is_valid():
                 data = form.cleaned_data
+                if self.data.get('multi_step', 'off') == 'off' and data['page_break']:
+                    self.add_form_field_error(
+                        'page_break',
+                        _('Page break is only allowed with multi-step enabled.'),
+                    )
                 if data['field_type'] == 'checkbox':
                     if len(data['skip_logic']) != 2:
                         self.add_form_field_error(
