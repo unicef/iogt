@@ -36,7 +36,7 @@ def search(request):
             search_results = paginator.page(paginator.num_pages)
 
         if search_results:
-            results["search_groups"][search_group._meta.verbose_name] = {
+            results["search_groups"][search_group._meta.verbose_name_plural] = {
                 "search_results": search_results,
                 "search_results_count": search_results_count,
             }

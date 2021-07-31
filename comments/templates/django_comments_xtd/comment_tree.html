@@ -40,7 +40,7 @@
                   <a href="{% url 'comments-flag' item.comment.pk %}" class="report-comment">
                    {% translate "Report" %}
                   </a>
-                  <i title="{% translate 'comment flagged' %}" class='report-comment__disclaimer'>{% translate "This is a reported comment" %} </i>
+                  <i title="{% translate 'Comment flagged' %}" class='report-comment__disclaimer'>{% translate "This is a reported comment" %} </i>
               {% elif allow_flagging and item.comment.user != user %}
               <a href="{% url 'comments-flag' item.comment.pk %}" class="report-comment">
                 {% translate "Report" %}
@@ -60,7 +60,7 @@
                    {% endif %}
               {% if perms.comments.can_moderate %}
                   <a href="{% url 'comments-delete' item.comment.pk %}"><i class="fas fa-trash-alt"
-                                                  title="{% translate 'remove comment' %}"></i></a>
+                                                  title="{% translate 'Remove comment' %}"></i></a>
               {% endif %}
           {% endif %}
         </div>
