@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-26 11:23+0000\n"
+"POT-Creation-Date: 2021-07-31 09:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -156,22 +156,10 @@ msgstr "FR-This is a reported comment"
 #. Translators: Count refers to the number of people that reported a comment.
 #: comments/templates/django_comments_xtd/comment_tree.html:53
 #, python-format
-msgid ""
-"\n"
-"                                Reported by %(count)s user\n"
-"                                "
-msgid_plural ""
-"\n"
-"                                Reported by %(count)s users\n"
-"                                "
-msgstr[0] ""
-"\n"
-"                                FR-Reported by %(count)s user\n"
-"                                "
-msgstr[1] ""
-"\n"
-"                                FR-Reported by %(count)s users\n"
-"                                "
+msgid "Reported by %(count)s user"
+msgid_plural "Reported by %(count)s users"
+msgstr[0] "FR-Reported by %(count)s user"
+msgstr[1] "FR-Reported by %(count)s users"
 
 #: comments/templates/django_comments_xtd/comment_tree.html:63
 msgid "remove comment"
@@ -239,30 +227,18 @@ msgstr "FR-Comment in moderation"
 
 #: comments/templates/django_comments_xtd/moderated.html:14
 msgid ""
-"\n"
-"            Your comment is in moderation.<br/>\n"
-"            It has to be reviewed before being published.<br/>\n"
-"            Thank you for your patience and understanding.\n"
-"            "
+"Your comment is in moderation.<br/> It has to be reviewed before being "
+"published.<br/> Thank you for your patience and understanding."
 msgstr ""
-"\n"
-"FR-            Your comment is in moderation.<br/>\n"
-"            It has to be reviewed before being published.<br/>\n"
-"            Thank you for your patience and understanding.\n"
-"            "
+"FR-Your comment is in moderation.<br/> It has to be reviewed before being "
+"published.<br/> Thank you for your patience and understanding."
 
 #: comments/templates/django_comments_xtd/moderated.html:22
 #, python-format
 msgid ""
-"\n"
-"            Go back to: <a href=\"%(content_object_url)s\">"
-"%(content_object_str)s</a>\n"
-"            "
+"Go back to: <a href=\"%(content_object_url)s\">%(content_object_str)s</a>"
 msgstr ""
-"\n"
-"FR-            Go back to: <a href=\"%(content_object_url)s\">"
-"%(content_object_str)s</a>\n"
-"            "
+"FR-Go back to: <a href=\"%(content_object_url)s\">%(content_object_str)s</a>"
 
 #: comments/templates/django_comments_xtd/muted.html:4
 msgid "Comment thread muted"
@@ -568,48 +544,40 @@ msgstr[0] "FR-%(counter)s of 1 question"
 msgstr[1] "FR-%(counter)s of %(total)s questions"
 
 #: home/templates/blocks/embedded_questionnaire.html:24
-#: home/templates/blocks/embedded_questionnaire.html:73
+#: home/templates/blocks/embedded_questionnaire.html:60
 #: questionnaires/templates/questionnaires/tags/field_description.html:6
 msgid "Optional"
 msgstr "FR-Optional"
 
 #: home/templates/blocks/embedded_questionnaire.html:26
-#: home/templates/blocks/embedded_questionnaire.html:69
+#: home/templates/blocks/embedded_questionnaire.html:56
 #: questionnaires/templates/questionnaires/tags/field_description.html:8
 msgid "Select one"
 msgstr "FR-Select one"
 
 #: home/templates/blocks/embedded_questionnaire.html:28
-#: home/templates/blocks/embedded_questionnaire.html:71
+#: home/templates/blocks/embedded_questionnaire.html:58
 #: questionnaires/templates/questionnaires/tags/field_description.html:10
 msgid "Check all that apply"
 msgstr "FR-Check all that apply"
 
-#: home/templates/home/article.html:25
-msgid "Previous"
-msgstr "FR-Previous"
-
-#: home/templates/home/article.html:28
-msgid "Next"
-msgstr "FR-Next"
-
-#: home/templates/home/article.html:38
+#: home/templates/home/article.html:31
 msgid "Comments"
 msgstr "FR-Comments"
 
-#: home/templates/home/article.html:46
+#: home/templates/home/article.html:39
 msgid "Please log in or create your account"
 msgstr "FR-Please log in or create your account"
 
-#: home/templates/home/article.html:49
+#: home/templates/home/article.html:42
 msgid "Log in/Create account"
 msgstr "FR-Log in/Create account"
 
-#: home/templates/home/article.html:56
+#: home/templates/home/article.html:49
 msgid "New comments have been disabled for this page."
 msgstr "FR-New comments have been disabled for this page."
 
-#: home/templates/home/article.html:69
+#: home/templates/home/article.html:62
 msgid "Related Articles"
 msgstr "FR-Related Articles"
 
@@ -617,6 +585,14 @@ msgstr "FR-Related Articles"
 #: iogt/templates/account/signup.html:25
 msgid "Log in"
 msgstr "FR-Log in"
+
+#: home/templates/home/tags/previous-next-buttons.html:6
+msgid "Previous"
+msgstr "FR-Previous"
+
+#: home/templates/home/tags/previous-next-buttons.html:9
+msgid "Next"
+msgstr "FR-Next"
 
 #: home/wagtail_hooks.py:58
 msgid "Form Data"
@@ -825,6 +801,10 @@ msgstr "FR-Set Password"
 msgid "BACK"
 msgstr "FR-BACK"
 
+#: iogt/templates/base.html:65 iogt/templates/footer.html:18
+msgid "© The Internet of Good Things"
+msgstr "FR-© The Internet of Good Things"
+
 #: iogt/templates/cache_banner.html:9
 msgid ""
 "This appears to be your first visit here. Our website is also available as a "
@@ -842,13 +822,13 @@ msgstr "FR-Would you like to download it?"
 msgid "Download"
 msgstr "FR-Download"
 
-#: iogt/templates/footer.html:31 search/templates/search/search.html:106
+#: iogt/templates/header.html:34 search/templates/search/search.html:106
 msgid "Search here"
 msgstr "FR-Search here"
 
-#: iogt/templates/footer.html:36
-msgid "© The Internet of Good Things"
-msgstr "FR-© The Internet of Good Things"
+#: iogt/templates/header.html:44
+msgid "Sign in / Sign up"
+msgstr "FR-Sign in / Sign up"
 
 #: iogt/templates/transition-page.html:10
 msgid ""
@@ -900,7 +880,7 @@ msgstr "FR-Inactive"
 msgid "%(time_period)s ago"
 msgstr "FR-%(time_period)s ago"
 
-#: iogt_users/forms.py:15
+#: iogt_users/forms.py:15 iogt_users/forms.py:67 iogt_users/forms.py:75
 msgid "I accept the terms & conditions"
 msgstr "FR-I accept the terms & conditions"
 
@@ -956,16 +936,8 @@ msgstr "FR-No %(name)s have been created yet."
 
 #: iogt_users/templates/modeladmin/iogt_users/user/index.html:81
 #, python-format
-msgid ""
-"\n"
-"                                                Why not <a href=\"%(url)s"
-"\">add one</a>?\n"
-"                                            "
-msgstr ""
-"\n"
-"FR-                                                Why not <a href=\"%(url)s"
-"\">add one</a>?\n"
-"                                            "
+msgid "Why not <a href=\"%(url)s\">add one</a>?"
+msgstr "FR-Why not <a href=\"%(url)s\">add one</a>?"
 
 #: iogt_users/templates/modeladmin/iogt_users/user/index.html:94
 msgid "Pagination"
@@ -994,14 +966,8 @@ msgstr "FR-Edit my profile"
 
 #: iogt_users/templates/profile.html:15
 #, python-format
-msgid ""
-"\n"
-"                Hey, %(username)s\n"
-"            "
-msgstr ""
-"\n"
-"FR-                Hey, %(username)s\n"
-"            "
+msgid "Hey, %(username)s"
+msgstr "FR-Hey, %(username)s"
 
 #: iogt_users/templates/profile.html:39
 msgid "Change Digital Pin"
@@ -1079,48 +1045,130 @@ msgstr "FR-End of survey"
 msgid "Another question"
 msgstr "FR-Another question"
 
-#: questionnaires/forms.py:32 questionnaires/forms.py:126
+#: questionnaires/forms.py:42 questionnaires/forms.py:149
+msgid "Page break is only allowed with multi-step enabled."
+msgstr "FR-Page break is only allowed with multi-step enabled."
+
+#: questionnaires/forms.py:48 questionnaires/forms.py:155
 msgid "Checkbox type questions must have 2 Answer Options: a on and off"
 msgstr "FR-Checkbox type questions must have 2 Answer Options: a on and off"
 
-#: questionnaires/forms.py:41 questionnaires/forms.py:135
+#: questionnaires/forms.py:57 questionnaires/forms.py:164
 msgid "This field is required."
 msgstr "FR-This field is required."
 
-#: questionnaires/models.py:58
+#: questionnaires/forms.py:65
+msgid ""
+"Skipping to {logic.value[\"skip_logic\"]} not allowed for checkbox and "
+"checkboxes."
+msgstr ""
+"FR-Skipping to {logic.value[\"skip_logic\"]} not allowed for checkbox and "
+"checkboxes."
+
+#: questionnaires/forms.py:172
+msgid ""
+"Skipping to {logic.value[\"skip_logic\"]} not allowed for checkbox, "
+"checkboxes."
+msgstr ""
+
+#: questionnaires/models.py:34
+msgid "Checkbox"
+msgstr "FR-Checkbox"
+
+#: questionnaires/models.py:35 questionnaires/models.py:398
+msgid "Checkboxes"
+msgstr "FR-Checkboxes"
+
+#: questionnaires/models.py:36
+msgid "Date"
+msgstr ""
+
+#: questionnaires/models.py:37
+msgid "Date/time"
+msgstr ""
+
+#: questionnaires/models.py:38
+msgid "Drop down"
+msgstr ""
+
+#: questionnaires/models.py:39
+msgid "Email"
+msgstr ""
+
+#: questionnaires/models.py:40
+msgid "Hidden field"
+msgstr ""
+
+#: questionnaires/models.py:41
+msgid "Single line text"
+msgstr ""
+
+#: questionnaires/models.py:42
+msgid "Multi-line text"
+msgstr "FR-Multi-line text"
+
+#: questionnaires/models.py:43
+msgid "Number"
+msgstr ""
+
+#: questionnaires/models.py:44
+msgid "Positive number"
+msgstr ""
+
+#: questionnaires/models.py:45 questionnaires/models.py:400
+msgid "Radio buttons"
+msgstr "FR-Radio buttons"
+
+#: questionnaires/models.py:46
+msgid "URL"
+msgstr ""
+
+#: questionnaires/models.py:75
 msgid "Check this to allow users who are NOT logged in to complete surveys."
 msgstr ""
 "FR-Check this to allow users who are NOT logged in to complete surveys."
 
-#: questionnaires/models.py:64
+#: questionnaires/models.py:81
 msgid "Check this to allow multiple form submissions for users"
 msgstr "FR-Check this to allow multiple form submissions for users"
 
-#: questionnaires/models.py:67
+#: questionnaires/models.py:84
 msgid "Submit button text"
 msgstr "FR-Submit button text"
 
-#: questionnaires/models.py:194 questionnaires/models.py:518
+#: questionnaires/models.py:211 questionnaires/models.py:546
 msgid "required"
 msgstr "FR-required"
 
-#: questionnaires/models.py:196 questionnaires/models.py:520
+#: questionnaires/models.py:213 questionnaires/models.py:403
+#: questionnaires/models.py:548
+msgid "field type"
+msgstr "FR-field type"
+
+#: questionnaires/models.py:218 questionnaires/models.py:553
 msgid "admin_label"
 msgstr "FR-admin_label"
 
-#: questionnaires/models.py:198 questionnaires/models.py:522
+#: questionnaires/models.py:220 questionnaires/models.py:555
 msgid "Column header used during CSV export of survey responses."
 msgstr "FR-Column header used during CSV export of survey responses."
 
-#: questionnaires/models.py:205 questionnaires/models.py:529
+#: questionnaires/models.py:225 questionnaires/models.py:560
+msgid ""
+"This is used to add choices for field type radio, checkbox, checkboxes, and "
+"dropdown only. This can be used to skip questions and skipping is only "
+"allowed for radio and dropdown."
+msgstr ""
+
+#: questionnaires/models.py:231 questionnaires/models.py:566
 msgid "Inserts a page break which puts the next question onto a new page"
 msgstr "FR-Inserts a page break which puts the next question onto a new page"
 
-#: questionnaires/models.py:259 questionnaires/models.py:594
+#: questionnaires/models.py:286 questionnaires/models.py:635
 msgid "Multi-step"
 msgstr "FR-multi-step"
 
-#: questionnaires/models.py:260
+#: questionnaires/models.py:287
 msgid ""
 "Whether to display the survey questions to the user one at a time, instead "
 "of all at once."
@@ -1128,117 +1176,99 @@ msgstr ""
 "FR-Whether to display the survey questions to the user one at a time, "
 "instead of all at once."
 
-#: questionnaires/models.py:274
+#: questionnaires/models.py:301
 msgid "General settings for survey"
 msgstr "FR-General settings for survey"
 
-#: questionnaires/models.py:282
+#: questionnaires/models.py:309
 msgid "Description at survey page"
 msgstr "FR-Description at survey page"
 
-#: questionnaires/models.py:337 questionnaires/models.py:505
-#: questionnaires/models.py:647
+#: questionnaires/models.py:364 questionnaires/models.py:533
+#: questionnaires/models.py:688
 msgid "User"
 msgstr "FR-User"
 
-#: questionnaires/models.py:338 questionnaires/models.py:506
-#: questionnaires/models.py:648
+#: questionnaires/models.py:365 questionnaires/models.py:534
+#: questionnaires/models.py:689
 msgid "Submission Date"
 msgstr "FR-Submission Date"
 
-#: questionnaires/models.py:339 questionnaires/models.py:507
-#: questionnaires/models.py:649
+#: questionnaires/models.py:366 questionnaires/models.py:535
+#: questionnaires/models.py:690
 msgid "Page URL"
 msgstr "FR-Page URL"
 
-#: questionnaires/models.py:348
+#: questionnaires/models.py:375
 msgid "survey"
 msgstr "FR-survey"
 
-#: questionnaires/models.py:349
+#: questionnaires/models.py:376
 msgid "surveys"
 msgstr "FR-surveys"
 
-#: questionnaires/models.py:371
-msgid "Checkbox"
-msgstr "FR-Checkbox"
+#: questionnaires/models.py:399
+msgid "Dropdown"
+msgstr ""
 
-#: questionnaires/models.py:372
-msgid "Checkboxes"
-msgstr "FR-Checkboxes"
-
-#: questionnaires/models.py:373
-msgid "Multiple select"
-msgstr "FR-Multiple select"
-
-#: questionnaires/models.py:374
-msgid "Radio buttons"
-msgstr "FR-Radio buttons"
-
-#: questionnaires/models.py:377
-msgid "field type"
-msgstr "FR-field type"
-
-#: questionnaires/models.py:388
+#: questionnaires/models.py:414
 msgid "This option allows the users to see the results."
 msgstr "FR-This option allows the users to see the results."
 
-#: questionnaires/models.py:393
+#: questionnaires/models.py:419
 msgid ""
 "If not checked, the results will be shown as a total instead of a percentage."
 msgstr ""
 "FR-If not checked, the results will be shown as a total instead of a "
 "percentage."
 
-#: questionnaires/models.py:417
+#: questionnaires/models.py:443
 msgid "General settings for poll"
 msgstr "FR-General settings for poll"
 
-#: questionnaires/models.py:425
+#: questionnaires/models.py:451
 msgid "Description at poll page"
 msgstr "FR-Description at poll page"
 
-#: questionnaires/models.py:438
+#: questionnaires/models.py:464
 msgid "poll"
 msgstr "FR-poll"
 
-#: questionnaires/models.py:439
+#: questionnaires/models.py:465
 msgid "polls"
 msgstr "FR-polls"
 
-#: questionnaires/models.py:533
+#: questionnaires/models.py:570
 msgid "correct_answer"
 msgstr "FR-correct_answer"
 
-#: questionnaires/models.py:534
+#: questionnaires/models.py:571
 msgid ""
-"Comma separated list of choices. Only applicable in checkboxes, radio, "
-"dropdown and multiselect."
+"The correct answer/choice(s). For checkboxes: a comma separated list of "
+"choices. For checkbox: Either \"on\" or \"off\"."
 msgstr ""
-"FR-Comma separated list of choices. Only applicable in checkboxes, radio, "
-"dropdown and multiselect."
 
-#: questionnaires/models.py:535
+#: questionnaires/models.py:573
 msgid "Feedback"
 msgstr "FR-Feedback"
 
-#: questionnaires/models.py:537
+#: questionnaires/models.py:575
 msgid "Feedback message for user answer."
 msgstr "FR-Feedback message for user answer."
 
-#: questionnaires/models.py:609
+#: questionnaires/models.py:650
 msgid "General settings for quiz"
 msgstr "FR-General settings for quiz"
 
-#: questionnaires/models.py:617
+#: questionnaires/models.py:658
 msgid "Description at quiz page"
 msgstr "FR-Description at quiz page"
 
-#: questionnaires/models.py:699
+#: questionnaires/models.py:753
 msgid "quiz"
 msgstr "FR-quiz"
 
-#: questionnaires/models.py:700
+#: questionnaires/models.py:754
 msgid "quizzes"
 msgstr "FR-quizzes"
 
@@ -1272,7 +1302,7 @@ msgstr "FR-No limit"
 
 #: questionnaires/templates/quizzes/quiz.html:36
 #: questionnaires/templates/survey/survey.html:40
-#: questionnaires/templates/survey/survey_landing.html:14
+#: questionnaires/templates/survey/survey_landing.html:15
 msgid "Go to homepage"
 msgstr "FR-Go to homepage"
 
@@ -1299,7 +1329,7 @@ msgstr "FR-Replay Quiz"
 msgid "Correct answer"
 msgstr "FR-Correct answer"
 
-#: questionnaires/templates/survey/survey_landing.html:12
+#: questionnaires/templates/survey/survey_landing.html:13
 msgid "Get Started"
 msgstr "FR-Get Started"
 
@@ -1313,18 +1343,10 @@ msgstr "FR-Searching results for"
 
 #: search/templates/search/search.html:38
 #, python-format
-msgid ""
-" 1 result\n"
-"                    "
-msgid_plural ""
-" %(counter)s results\n"
-"                    "
-msgstr[0] ""
-" FR-1 result\n"
-"                    "
-msgstr[1] ""
-" FR-%(counter)s results\n"
-"                    "
+msgid "1 result"
+msgid_plural "%(counter)s results"
+msgstr[0] "FR-1 result"
+msgstr[1] "FR-%(counter)s results"
 
 #: search/templates/search/search.html:80
 msgid "No results found"
@@ -1349,9 +1371,6 @@ msgstr "FR-See results"
 
 #~ msgid "Back to article"
 #~ msgstr "FR-Back to article"
-
-#~ msgid "Reported by %(count)s"
-#~ msgstr "FR-Reported by %(count)s"
 
 #~ msgid "Placeholder text below Create your account button."
 #~ msgstr "FR-Placeholder text below Create your account button."

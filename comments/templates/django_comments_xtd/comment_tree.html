@@ -50,7 +50,7 @@
                        {% if item.flagged_count %}
                            <span class="report-comment">
                                 {# Translators: Count refers to the number of people that reported a comment. #}
-                                {% blocktranslate count count=item.flagged_count %}
+                                {% blocktranslate trimmed count count=item.flagged_count %}
                                 Reported by {{ count }} user
                                 {% plural %}
                                 Reported by {{ count }} users
