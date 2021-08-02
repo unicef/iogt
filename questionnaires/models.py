@@ -752,3 +752,18 @@ class Quiz(QuestionnairePage, AbstractForm):
     class Meta:
         verbose_name = _("quiz")
         verbose_name_plural = _("quizzes")
+
+
+class PollIndexPage(Page):
+    parent_page_types = ['home.HomePage']
+    subpage_types = ['questionnaires.Poll']
+
+
+class SurveyIndexPage(Page):
+    parent_page_types = ['home.HomePage']
+    subpage_types = ['questionnaires.Survey']
+
+
+class QuizIndexPage(Page):
+    parent_page_types = ['home.HomePage']
+    subpage_types = ['questionnaires.Quiz']

@@ -7,9 +7,13 @@ from wagtail_localize.models import Translation
 from wagtail_localize.views.submit_translations import TranslationCreator
 
 import home.models as models
+from questionnaires.models import Poll, PollFormField
 import psycopg2
 import psycopg2.extras
 import json
+
+from questionnaires.models import PollIndexPage, SurveyIndexPage, QuizIndexPage
+
 
 class Command(BaseCommand):
 
@@ -66,6 +70,8 @@ class Command(BaseCommand):
         self.migrate(root)
 
     def clear(self):
+        PollFormField.objects.all().delete()
+        Poll.objects.all().delete()
         models.FooterPage.objects.all().delete()
         models.FooterIndexPage.objects.all().delete()
         models.BannerPage.objects.all().delete()
@@ -107,11 +113,12 @@ class Command(BaseCommand):
         self.migrate_images()
         self.load_page_translation_map()
         home = self.create_home_page(root)
-        section_index_page, banner_index_page, footer_index_page = self.create_index_pages(home)
+        section_index_page, banner_index_page, footer_index_page, poll_index_page, survey_index_page, quiz_index_page = self.create_index_pages(home)
         self.migrate_sections(section_index_page)
         self.migrate_articles(section_index_page)
         self.migrate_banners(banner_index_page)
         self.migrate_footers(footer_index_page)
+        self.migrate_polls(poll_index_page)
         self.stop_translations()
         Page.fix_tree()
 
@@ -162,7 +169,16 @@ class Command(BaseCommand):
         footer_footer_page = models.FooterIndexPage(title='Footers')
         homepage.add_child(instance=footer_footer_page)
 
-        return section_index_page, banner_index_page, footer_footer_page
+        poll_index_page = PollIndexPage(title='Polls')
+        homepage.add_child(instance=poll_index_page)
+
+        survey_index_page = SurveyIndexPage(title='Survey')
+        homepage.add_child(instance=survey_index_page)
+
+        quiz_footer_page = QuizIndexPage(title='Quizzes')
+        homepage.add_child(instance=quiz_footer_page)
+
+        return section_index_page, banner_index_page, footer_footer_page, poll_index_page, survey_index_page, quiz_footer_page
 
     def migrate_images(self):
         cur = self.db_query('select * from wagtailimages_image')
@@ -455,3 +471,92 @@ class Command(BaseCommand):
         Translation.objects.update(enabled=False)
 
         self.stdout.write('Translations stopped.')
+
+    def migrate_polls(self, poll_index_page):
+        sql = "select * " \
+              "from polls_question pq, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              "where pq.page_ptr_id = wcp.id " \
+              "and wcp.id = clr.page_id " \
+              "and clr.language_id = csl.id "
+        if self.skip_locales:
+            sql += " and locale = 'en' "
+        sql += 'order by wcp.path'
+        cur = self.db_query(sql)
+        poll_page_translations = []
+        for row in cur:
+            if row['page_ptr_id'] in self.page_translation_map:
+                poll_page_translations.append(row)
+            else:
+                self.create_poll(poll_index_page, row)
+        else:
+            for row in poll_page_translations:
+                poll = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
+                locale, __ = Locale.objects.get_or_create(language_code=row['locale'])
+
+                self.translate_page(locale=locale, page=poll)
+
+                translated_poll = poll.get_translation_or_none(locale)
+                if translated_poll:
+                    translated_poll.title = row['title']
+                    translated_poll.draft_title = row['draft_title']
+                    translated_poll.live = row['live']
+                    translated_poll.save(update_fields=['title', 'draft_title', 'slug', 'live'])
+
+                    row['path'] = row['path'][:-4]
+                    self.migrate_poll_questions(translated_poll, row)
+
+                self.stdout.write(f"Translated poll, title={row['title']}")
+        cur.close()
+
+    def create_poll(self, poll_index_page, row):
+        poll = Poll(
+            title=row['title'],
+            draft_title=row['draft_title'],
+            show_in_menus=True,
+            slug=row['slug'],
+            live=row['live'],
+            result_as_percentage=row['result_as_percentage'],
+        )
+        poll_index_page.add_child(instance=poll)
+
+        self.migrate_poll_questions(poll, row)
+
+        self.v1_to_v2_page_map.update({
+            row['page_ptr_id']: poll
+        })
+        self.stdout.write(f"saved poll, title={poll.title}")
+
+    def migrate_poll_questions(self, poll, poll_row):
+        sql = f'select * ' \
+              f'from polls_choice pc, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl ' \
+              f'where pc.page_ptr_id = wcp.id ' \
+              f'and wcp.path like \'{poll_row["path"]}%\' ' \
+              f'and wcp.id = clr.page_id ' \
+              f'and clr.language_id = csl.id ' \
+              f'and csl.locale = \'{poll_row["locale"]}\''
+        cur = self.db_query(sql)
+        self.create_poll_question(poll, poll_row, cur)
+        cur.close()
+
+    def create_poll_question(self, poll, poll_row, cur):
+        PollFormField.objects.filter(page=poll).delete()
+        choices = []
+        for row in cur:
+            choices.append(row['title'])
+
+        choices_length = len(choices)
+
+        if choices_length == 2:
+            field_type = 'radio'
+        elif choices_length > 2:
+            if poll_row['allow_multiple_choice']:
+                field_type = 'checkboxes'
+            else:
+                field_type = 'dropdown'
+        else:
+            return
+
+        choices = ','.join(choices)
+
+        PollFormField.objects.create(page=poll, label=poll.title, field_type=field_type, choices=choices)
+        self.stdout.write(f"saved poll question, title={poll.title}")
