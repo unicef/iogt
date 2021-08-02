@@ -1,6 +1,6 @@
 {% load i18n %}
 
-{% comment %} {% if allow_feedback %}
+{% if allow_feedback %}
     <span class="small">
     {% if show_feedback and item.likedit_users %}
         <a class="badge badge-primary text-white cfb-counter" data-toggle="tooltip"
@@ -11,7 +11,11 @@
         <form action="{% url 'comments-xtd-like' item.comment.pk %}" method="post" class="like-form">
         {% csrf_token %}
         <input type="hidden" name="next" value="{% url 'comments-xtd-sent' %}"/>
-        <button type="submit">{% translate "Like" %}</button>
+            {% if not request.user.is_anonymous and request.user.username in item.likedit_users %}
+                <button type="submit">{% translate "Unlike" %}</button>
+            {% else %}
+            <button type="submit">{% translate "Like" %}</button>
+                {% endif %}
     </form>
 </span>
-{% endif %} {% endcomment %}
+{% endif %}
