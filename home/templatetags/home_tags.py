@@ -7,12 +7,15 @@ from iogt.settings.base import LANGUAGES
 register = template.Library()
 
 
-@register.inclusion_tag('home/tags/language_switcher.html')
-def language_switcher(page):
-    return {
-        'translations': page.get_translations(inclusive=True).all(),
+@register.inclusion_tag('home/tags/language_switcher.html', takes_context=True)
+def language_switcher(context, page):
+    if page:
+        context.update({
+            'translations': page.get_translations(inclusive=True).all(),
+        })
+    context.update({'default_locales': Locale.objects.all()})
 
-    }
+    return context
 
 
 @register.inclusion_tag('home/tags/previous-next-buttons.html')
