@@ -7,7 +7,7 @@ from wagtail_localize.models import Translation
 from wagtail_localize.views.submit_translations import TranslationCreator
 
 import home.models as models
-from questionnaires.models import Poll, PollFormField
+from questionnaires.models import Poll, PollFormField, Survey, SurveyFormField, Quiz, QuizFormField
 import psycopg2
 import psycopg2.extras
 import json
@@ -72,6 +72,10 @@ class Command(BaseCommand):
     def clear(self):
         PollFormField.objects.all().delete()
         Poll.objects.all().delete()
+        SurveyFormField.objects.all().delete()
+        Survey.objects.all().delete()
+        QuizFormField.objects.all().delete()
+        Quiz.objects.all().delete()
         models.FooterPage.objects.all().delete()
         models.FooterIndexPage.objects.all().delete()
         models.BannerPage.objects.all().delete()
@@ -119,6 +123,7 @@ class Command(BaseCommand):
         self.migrate_banners(banner_index_page)
         self.migrate_footers(footer_index_page)
         self.migrate_polls(poll_index_page)
+        self.migrate_surveys(survey_index_page)
         self.stop_translations()
         Page.fix_tree()
 
@@ -500,7 +505,8 @@ class Command(BaseCommand):
                     translated_poll.title = row['title']
                     translated_poll.draft_title = row['draft_title']
                     translated_poll.live = row['live']
-                    translated_poll.save(update_fields=['title', 'draft_title', 'slug', 'live'])
+                    translated_poll.result_as_percentage = row['result_as_percentage']
+                    translated_poll.save(update_fields=['title', 'draft_title', 'live', 'result_as_percentage'])
 
                     row['path'] = row['path'][:-4]
                     self.migrate_poll_questions(translated_poll, row)
@@ -559,4 +565,116 @@ class Command(BaseCommand):
         choices = ','.join(choices)
 
         PollFormField.objects.create(page=poll, label=poll.title, field_type=field_type, choices=choices)
-        self.stdout.write(f"saved poll question, title={poll.title}")
+        self.stdout.write(f"saved poll question, label={poll.title}")
+
+    def migrate_surveys(self, survey_index_page):
+        sql = "select * " \
+              "from surveys_molosurveypage smsp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              "where smsp.page_ptr_id = wcp.id " \
+              "and wcp.id = clr.page_id " \
+              "and clr.language_id = csl.id "
+        if self.skip_locales:
+            sql += "and locale = 'en' "
+        sql += 'order by wcp.path'
+        cur = self.db_query(sql)
+        survey_page_translations = []
+        for row in cur:
+            if row['page_ptr_id'] in self.page_translation_map:
+                survey_page_translations.append(row)
+            else:
+                self.create_survey(survey_index_page, row)
+        else:
+            for row in survey_page_translations:
+                survey = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
+                locale, __ = Locale.objects.get_or_create(language_code=row['locale'])
+
+                self.translate_page(locale=locale, page=survey)
+
+                translated_survey = survey.get_translation_or_none(locale)
+                if translated_survey:
+                    translated_survey.title = row['title']
+                    translated_survey.draft_title = row['draft_title']
+                    translated_survey.live = row['live']
+                    translated_survey.description = self.map_survey_description(row['description'])
+                    translated_survey.thank_you_text = self.map_survey_thank_you_text(row)
+                    translated_survey.allow_anonymous_submissions = row['allow_anonymous_submissions']
+                    translated_survey.allow_multiple_submissions = row['allow_multiple_submissions_per_user']
+                    translated_survey.submit_button_text = row['submit_text'] or 'Submit'
+                    translated_survey.direct_display = row['display_survey_directly']
+                    translated_survey.multi_step = row['multi_step']
+                    translated_survey.save(
+                        update_fields=[
+                            'title', 'draft_title', 'live', 'description', 'thank_you_text',
+                            'allow_anonymous_submissions', 'allow_multiple_submissions', 'submit_button_text',
+                            'direct_display', 'multi_step',
+                        ]
+                    )
+
+                    self.migrate_survey_questions(translated_survey, row)
+
+                self.stdout.write(f"Translated survey, title={row['title']}")
+        cur.close()
+
+    def create_survey(self, survey_index_page, row):
+        survey = Survey(
+            title=row['title'],
+            draft_title=row['draft_title'],
+            show_in_menus=True,
+            live=row['live'],
+            description=self.map_survey_description(row['description']),
+            thank_you_text=self.map_survey_thank_you_text(row),
+            allow_anonymous_submissions=row['allow_anonymous_submissions'],
+            allow_multiple_submissions=row['allow_multiple_submissions_per_user'],
+            submit_button_text=row['submit_text'] or 'Submit',
+            direct_display=row['display_survey_directly'],
+            multi_step=row['multi_step'],
+        )
+        survey_index_page.add_child(instance=survey)
+
+        self.migrate_survey_questions(survey, row)
+
+        self.v1_to_v2_page_map.update({
+            row['page_ptr_id']: survey
+        })
+        self.stdout.write(f"saved survey, title={survey.title}")
+
+    def map_survey_description(self, v1_survey_description):
+        v1_survey_description = json.loads(v1_survey_description)
+        v2_survey_description = []
+        for block in v1_survey_description:
+            if block['type'] in ['paragraph', 'image']:
+                v2_survey_description.append(block)
+        return json.dumps(v2_survey_description)
+
+    def map_survey_thank_you_text(self, row):
+        return json.dumps([
+            {'type': 'paragraph', 'value': row['thank_you_text']},
+            {'type': 'image', 'value': self.image_map.get(row['image_id'])}
+        ])
+
+    def migrate_survey_questions(self, survey, survey_row):
+        sql = f'select * ' \
+              f'from surveys_molosurveyformfield smsff, surveys_molosurveypage smsp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl ' \
+              f'where smsff.page_id = smsp.page_ptr_id ' \
+              f'and smsp.page_ptr_id = wcp.id ' \
+              f'and wcp.id = clr.page_id ' \
+              f'and clr.language_id = csl.id ' \
+              f'and wcp.id = {survey_row["page_ptr_id"]} '
+        if self.skip_locales:
+            sql += "and locale = 'en' "
+        sql += 'order by wcp.path'
+        cur = self.db_query(sql)
+        self.create_survey_question(survey, survey_row, cur)
+        cur.close()
+
+    def create_survey_question(self, survey, survey_row, cur):
+        SurveyFormField.objects.filter(page=survey).delete()
+
+        for row in cur:
+            SurveyFormField.objects.create(
+                page=survey, sort_order=row['sort_order'], label=row['label'], required=row['required'],
+                default_value=row['default_value'], help_text=row['help_text'], field_type=row['field_type'],
+                admin_label=row['admin_label'], page_break=row['page_break'], choices=row['choices'],
+                skip_logic=row['skip_logic']
+            )
+            self.stdout.write(f"saved survey question, label={row['label']}")
