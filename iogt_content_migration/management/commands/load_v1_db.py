@@ -117,13 +117,13 @@ class Command(BaseCommand):
         self.migrate_images()
         self.load_page_translation_map()
         home = self.create_home_page(root)
-        section_index_page, banner_index_page, footer_index_page, poll_index_page, survey_index_page, quiz_index_page = self.create_index_pages(home)
-        self.migrate_sections(section_index_page)
-        self.migrate_articles(section_index_page)
-        self.migrate_banners(banner_index_page)
-        self.migrate_footers(footer_index_page)
-        self.migrate_polls(poll_index_page)
-        self.migrate_surveys(survey_index_page)
+        index_pages = self.create_index_pages(home)
+        self.migrate_sections(index_pages['section_index_page'])
+        self.migrate_articles(index_pages['section_index_page'])
+        self.migrate_banners(index_pages['banner_index_page'])
+        self.migrate_footers(index_pages['footer_index_page'])
+        self.migrate_polls(index_pages['poll_index_page'])
+        self.migrate_surveys(index_pages['survey_index_page'])
         self.stop_translations()
         Page.fix_tree()
 
@@ -183,7 +183,14 @@ class Command(BaseCommand):
         quiz_footer_page = QuizIndexPage(title='Quizzes')
         homepage.add_child(instance=quiz_footer_page)
 
-        return section_index_page, banner_index_page, footer_footer_page, poll_index_page, survey_index_page, quiz_footer_page
+        return {
+            'section_index_page': section_index_page,
+            'banner_index_page': banner_index_page,
+            'footer_footer_page': footer_footer_page,
+            'poll_index_page': poll_index_page,
+            'survey_index_page': survey_index_page,
+            'quiz_footer_page': quiz_footer_page,
+        }
 
     def migrate_images(self):
         cur = self.db_query('select * from wagtailimages_image')
@@ -257,7 +264,7 @@ class Command(BaseCommand):
                     translated_section.title = row['title']
                     translated_section.draft_title = row['draft_title']
                     translated_section.live = row['live']
-                    translated_section.save(update_fields=['title', 'draft_title', 'slug', 'live'])
+                    translated_section.save()
 
                 self.stdout.write(f"Translated section, title={row['title']}")
         cur.close()
@@ -312,7 +319,7 @@ class Command(BaseCommand):
                     translated_article.draft_title = row['draft_title']
                     translated_article.live = row['live']
                     translated_article.body = self.map_article_body(row['body'])
-                    translated_article.save(update_fields=['lead_image', 'title', 'draft_title', 'slug', 'live', 'body'])
+                    translated_article.save()
 
                 self.stdout.write(f"Translated article, title={row['title']}")
         cur.close()
@@ -379,7 +386,7 @@ class Command(BaseCommand):
                     translated_banner.title = row['title']
                     translated_banner.draft_title = row['draft_title']
                     translated_banner.live = row['live']
-                    translated_banner.save(update_fields=['banner_image', 'title', 'draft_title', 'slug', 'live'])
+                    translated_banner.save()
 
                 self.stdout.write(f"Translated banner, title={row['title']}")
         cur.close()
@@ -434,7 +441,7 @@ class Command(BaseCommand):
                     translated_footer.draft_title = row['draft_title']
                     translated_footer.live = row['live']
                     translated_footer.body = self.map_article_body(row['body'])
-                    translated_footer.save(update_fields=['lead_image', 'title', 'draft_title', 'slug', 'live', 'body'])
+                    translated_footer.save()
 
                 self.stdout.write(f"Translated footer, title={row['title']}")
         cur.close()
@@ -506,7 +513,7 @@ class Command(BaseCommand):
                     translated_poll.draft_title = row['draft_title']
                     translated_poll.live = row['live']
                     translated_poll.result_as_percentage = row['result_as_percentage']
-                    translated_poll.save(update_fields=['title', 'draft_title', 'live', 'result_as_percentage'])
+                    translated_poll.save()
 
                     row['path'] = row['path'][:-4]
                     self.migrate_poll_questions(translated_poll, row)
@@ -560,6 +567,7 @@ class Command(BaseCommand):
             else:
                 field_type = 'dropdown'
         else:
+            self.stdout.write(f'Unable to determine filed type for poll={poll_row["title"]}')
             return
 
         choices = ','.join(choices)
@@ -602,13 +610,7 @@ class Command(BaseCommand):
                     translated_survey.submit_button_text = row['submit_text'] or 'Submit'
                     translated_survey.direct_display = row['display_survey_directly']
                     translated_survey.multi_step = row['multi_step']
-                    translated_survey.save(
-                        update_fields=[
-                            'title', 'draft_title', 'live', 'description', 'thank_you_text',
-                            'allow_anonymous_submissions', 'allow_multiple_submissions', 'submit_button_text',
-                            'direct_display', 'multi_step',
-                        ]
-                    )
+                    translated_survey.save()
 
                     self.migrate_survey_questions(translated_survey, row)
 
