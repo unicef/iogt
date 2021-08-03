@@ -279,7 +279,7 @@ class Survey(QuestionnairePage, AbstractForm):
     base_form_class = SurveyForm
     form_builder = CustomFormBuilder
 
-    parent_page_types = ["home.HomePage", "home.Section", "home.Article"]
+    parent_page_types = ["home.HomePage", "home.Section", "home.Article", "questionnaires.SurveyIndexPage"]
     template = "survey/survey.html"
     multi_step = models.BooleanField(
         default=False,
@@ -408,7 +408,7 @@ class PollFormField(AbstractFormField):
 
 class Poll(QuestionnairePage, AbstractForm):
     template = "poll/poll.html"
-    parent_page_types = ["home.HomePage", "home.Section", "home.Article"]
+    parent_page_types = ["home.HomePage", "home.Section", "home.Article", "questionnaires.PollIndexPage"]
 
     show_results = models.BooleanField(
         default=True, help_text=_("This option allows the users to see the results.")
@@ -627,7 +627,7 @@ class Quiz(QuestionnairePage, AbstractForm):
     base_form_class = QuizForm
     form_builder = CustomFormBuilder
 
-    parent_page_types = ["home.HomePage", "home.Section", "home.Article"]
+    parent_page_types = ["home.HomePage", "home.Section", "home.Article", "questionnaires.QuizIndexPage"]
     template = "quizzes/quiz.html"
 
     multi_step = models.BooleanField(
