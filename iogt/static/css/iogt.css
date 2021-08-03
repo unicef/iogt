@@ -420,6 +420,10 @@ textarea:focus ~ .cust-input__length-text {
     background-color: #303030
 }
 
+.profile-form__btn.cust-btn:hover span {
+    color: white;
+}
+
 .cust-btn--secondary {
     border: none;
     border-radius: 8px
