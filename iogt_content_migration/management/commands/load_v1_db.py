@@ -118,10 +118,10 @@ class Command(BaseCommand):
         self.load_page_translation_map()
         home = self.create_home_page(root)
         index_pages = self.create_index_pages(home)
-        # self.migrate_sections(index_pages['section_index_page'])
-        # self.migrate_articles(index_pages['section_index_page'])
-        # self.migrate_banners(index_pages['banner_index_page'])
-        # self.migrate_footers(index_pages['footer_index_page'])
+        self.migrate_sections(index_pages['section_index_page'])
+        self.migrate_articles(index_pages['section_index_page'])
+        self.migrate_banners(index_pages['banner_index_page'])
+        self.migrate_footers(index_pages['footer_index_page'])
         self.migrate_polls(index_pages['poll_index_page'])
         self.migrate_surveys(index_pages['survey_index_page'])
         self.stop_translations()
@@ -644,7 +644,6 @@ class Command(BaseCommand):
         v1_survey_description = json.loads(v1_survey_description)
         v2_survey_description = []
         for block in v1_survey_description:
-            breakpoint()
             if block['type'] == 'paragraph':
                 v2_survey_description.append(block)
             elif block['type'] == 'image':
