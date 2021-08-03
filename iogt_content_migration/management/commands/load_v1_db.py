@@ -171,8 +171,8 @@ class Command(BaseCommand):
         banner_index_page = models.BannerIndexPage(title='Banners')
         homepage.add_child(instance=banner_index_page)
 
-        footer_footer_page = models.FooterIndexPage(title='Footers')
-        homepage.add_child(instance=footer_footer_page)
+        footer_index_page = models.FooterIndexPage(title='Footers')
+        homepage.add_child(instance=footer_index_page)
 
         poll_index_page = PollIndexPage(title='Polls')
         homepage.add_child(instance=poll_index_page)
@@ -180,16 +180,16 @@ class Command(BaseCommand):
         survey_index_page = SurveyIndexPage(title='Survey')
         homepage.add_child(instance=survey_index_page)
 
-        quiz_footer_page = QuizIndexPage(title='Quizzes')
-        homepage.add_child(instance=quiz_footer_page)
+        quiz_index_page = QuizIndexPage(title='Quizzes')
+        homepage.add_child(instance=quiz_index_page)
 
         return {
             'section_index_page': section_index_page,
             'banner_index_page': banner_index_page,
-            'footer_footer_page': footer_footer_page,
+            'footer_index_page': footer_index_page,
             'poll_index_page': poll_index_page,
             'survey_index_page': survey_index_page,
-            'quiz_footer_page': quiz_footer_page,
+            'quiz_index_page': quiz_index_page,
         }
 
     def migrate_images(self):
