@@ -177,7 +177,7 @@ class Command(BaseCommand):
         poll_index_page = PollIndexPage(title='Polls')
         homepage.add_child(instance=poll_index_page)
 
-        survey_index_page = SurveyIndexPage(title='Survey')
+        survey_index_page = SurveyIndexPage(title='Surveys')
         homepage.add_child(instance=survey_index_page)
 
         quiz_index_page = QuizIndexPage(title='Quizzes')
