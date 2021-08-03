@@ -118,10 +118,10 @@ class Command(BaseCommand):
         self.load_page_translation_map()
         home = self.create_home_page(root)
         index_pages = self.create_index_pages(home)
-        self.migrate_sections(index_pages['section_index_page'])
-        self.migrate_articles(index_pages['section_index_page'])
-        self.migrate_banners(index_pages['banner_index_page'])
-        self.migrate_footers(index_pages['footer_index_page'])
+        # self.migrate_sections(index_pages['section_index_page'])
+        # self.migrate_articles(index_pages['section_index_page'])
+        # self.migrate_banners(index_pages['banner_index_page'])
+        # self.migrate_footers(index_pages['footer_index_page'])
         self.migrate_polls(index_pages['poll_index_page'])
         self.migrate_surveys(index_pages['survey_index_page'])
         self.stop_translations()
@@ -644,15 +644,25 @@ class Command(BaseCommand):
         v1_survey_description = json.loads(v1_survey_description)
         v2_survey_description = []
         for block in v1_survey_description:
-            if block['type'] in ['paragraph', 'image']:
+            breakpoint()
+            if block['type'] == 'paragraph':
                 v2_survey_description.append(block)
+            elif block['type'] == 'image':
+                image = self.image_map.get(block.value['image'])
+                if image:
+                    v2_survey_description.append({'type': 'image', 'value': image.id})
         return json.dumps(v2_survey_description)
 
     def map_survey_thank_you_text(self, row):
-        return json.dumps([
-            {'type': 'paragraph', 'value': row['thank_you_text']},
-            {'type': 'image', 'value': self.image_map.get(row['image_id'])}
-        ])
+        image = self.image_map.get(row['image_id'])
+        v2_thank_you_text = []
+
+        if row['thank_you_text']:
+            v2_thank_you_text.append({'type': 'paragraph', 'value': row['thank_you_text']})
+        if image:
+            v2_thank_you_text.append({'type': 'image', 'value': image.id})
+
+        return json.dumps(v2_thank_you_text)
 
     def migrate_survey_questions(self, survey, survey_row):
         sql = f'select * ' \
