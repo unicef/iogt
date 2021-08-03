@@ -7,9 +7,13 @@ from wagtail_localize.models import Translation
 from wagtail_localize.views.submit_translations import TranslationCreator
 
 import home.models as models
+from questionnaires.models import Poll, PollFormField, Survey, SurveyFormField, Quiz, QuizFormField
 import psycopg2
 import psycopg2.extras
 import json
+
+from questionnaires.models import PollIndexPage, SurveyIndexPage, QuizIndexPage
+
 
 class Command(BaseCommand):
 
@@ -66,6 +70,12 @@ class Command(BaseCommand):
         self.migrate(root)
 
     def clear(self):
+        PollFormField.objects.all().delete()
+        Poll.objects.all().delete()
+        SurveyFormField.objects.all().delete()
+        Survey.objects.all().delete()
+        QuizFormField.objects.all().delete()
+        Quiz.objects.all().delete()
         models.FooterPage.objects.all().delete()
         models.FooterIndexPage.objects.all().delete()
         models.BannerPage.objects.all().delete()
@@ -107,11 +117,13 @@ class Command(BaseCommand):
         self.migrate_images()
         self.load_page_translation_map()
         home = self.create_home_page(root)
-        section_index_page, banner_index_page, footer_index_page = self.create_index_pages(home)
-        self.migrate_sections(section_index_page)
-        self.migrate_articles(section_index_page)
-        self.migrate_banners(banner_index_page)
-        self.migrate_footers(footer_index_page)
+        index_pages = self.create_index_pages(home)
+        self.migrate_sections(index_pages['section_index_page'])
+        self.migrate_articles(index_pages['section_index_page'])
+        self.migrate_banners(index_pages['banner_index_page'])
+        self.migrate_footers(index_pages['footer_index_page'])
+        self.migrate_polls(index_pages['poll_index_page'])
+        self.migrate_surveys(index_pages['survey_index_page'])
         self.stop_translations()
         Page.fix_tree()
 
@@ -162,7 +174,23 @@ class Command(BaseCommand):
         footer_footer_page = models.FooterIndexPage(title='Footers')
         homepage.add_child(instance=footer_footer_page)
 
-        return section_index_page, banner_index_page, footer_footer_page
+        poll_index_page = PollIndexPage(title='Polls')
+        homepage.add_child(instance=poll_index_page)
+
+        survey_index_page = SurveyIndexPage(title='Survey')
+        homepage.add_child(instance=survey_index_page)
+
+        quiz_footer_page = QuizIndexPage(title='Quizzes')
+        homepage.add_child(instance=quiz_footer_page)
+
+        return {
+            'section_index_page': section_index_page,
+            'banner_index_page': banner_index_page,
+            'footer_footer_page': footer_footer_page,
+            'poll_index_page': poll_index_page,
+            'survey_index_page': survey_index_page,
+            'quiz_footer_page': quiz_footer_page,
+        }
 
     def migrate_images(self):
         cur = self.db_query('select * from wagtailimages_image')
@@ -236,7 +264,7 @@ class Command(BaseCommand):
                     translated_section.title = row['title']
                     translated_section.draft_title = row['draft_title']
                     translated_section.live = row['live']
-                    translated_section.save(update_fields=['title', 'draft_title', 'slug', 'live'])
+                    translated_section.save()
 
                 self.stdout.write(f"Translated section, title={row['title']}")
         cur.close()
@@ -291,7 +319,7 @@ class Command(BaseCommand):
                     translated_article.draft_title = row['draft_title']
                     translated_article.live = row['live']
                     translated_article.body = self.map_article_body(row['body'])
-                    translated_article.save(update_fields=['lead_image', 'title', 'draft_title', 'slug', 'live', 'body'])
+                    translated_article.save()
 
                 self.stdout.write(f"Translated article, title={row['title']}")
         cur.close()
@@ -358,7 +386,7 @@ class Command(BaseCommand):
                     translated_banner.title = row['title']
                     translated_banner.draft_title = row['draft_title']
                     translated_banner.live = row['live']
-                    translated_banner.save(update_fields=['banner_image', 'title', 'draft_title', 'slug', 'live'])
+                    translated_banner.save()
 
                 self.stdout.write(f"Translated banner, title={row['title']}")
         cur.close()
@@ -413,7 +441,7 @@ class Command(BaseCommand):
                     translated_footer.draft_title = row['draft_title']
                     translated_footer.live = row['live']
                     translated_footer.body = self.map_article_body(row['body'])
-                    translated_footer.save(update_fields=['lead_image', 'title', 'draft_title', 'slug', 'live', 'body'])
+                    translated_footer.save()
 
                 self.stdout.write(f"Translated footer, title={row['title']}")
         cur.close()
@@ -455,3 +483,200 @@ class Command(BaseCommand):
         Translation.objects.update(enabled=False)
 
         self.stdout.write('Translations stopped.')
+
+    def migrate_polls(self, poll_index_page):
+        sql = "select * " \
+              "from polls_question pq, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              "where pq.page_ptr_id = wcp.id " \
+              "and wcp.id = clr.page_id " \
+              "and clr.language_id = csl.id "
+        if self.skip_locales:
+            sql += " and locale = 'en' "
+        sql += 'order by wcp.path'
+        cur = self.db_query(sql)
+        poll_page_translations = []
+        for row in cur:
+            if row['page_ptr_id'] in self.page_translation_map:
+                poll_page_translations.append(row)
+            else:
+                self.create_poll(poll_index_page, row)
+        else:
+            for row in poll_page_translations:
+                poll = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
+                locale, __ = Locale.objects.get_or_create(language_code=row['locale'])
+
+                self.translate_page(locale=locale, page=poll)
+
+                translated_poll = poll.get_translation_or_none(locale)
+                if translated_poll:
+                    translated_poll.title = row['title']
+                    translated_poll.draft_title = row['draft_title']
+                    translated_poll.live = row['live']
+                    translated_poll.result_as_percentage = row['result_as_percentage']
+                    translated_poll.save()
+
+                    row['path'] = row['path'][:-4]
+                    self.migrate_poll_questions(translated_poll, row)
+
+                self.stdout.write(f"Translated poll, title={row['title']}")
+        cur.close()
+
+    def create_poll(self, poll_index_page, row):
+        poll = Poll(
+            title=row['title'],
+            draft_title=row['draft_title'],
+            show_in_menus=True,
+            slug=row['slug'],
+            live=row['live'],
+            result_as_percentage=row['result_as_percentage'],
+        )
+        poll_index_page.add_child(instance=poll)
+
+        self.migrate_poll_questions(poll, row)
+
+        self.v1_to_v2_page_map.update({
+            row['page_ptr_id']: poll
+        })
+        self.stdout.write(f"saved poll, title={poll.title}")
+
+    def migrate_poll_questions(self, poll, poll_row):
+        sql = f'select * ' \
+              f'from polls_choice pc, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl ' \
+              f'where pc.page_ptr_id = wcp.id ' \
+              f'and wcp.path like \'{poll_row["path"]}%\' ' \
+              f'and wcp.id = clr.page_id ' \
+              f'and clr.language_id = csl.id ' \
+              f'and csl.locale = \'{poll_row["locale"]}\''
+        cur = self.db_query(sql)
+        self.create_poll_question(poll, poll_row, cur)
+        cur.close()
+
+    def create_poll_question(self, poll, poll_row, cur):
+        PollFormField.objects.filter(page=poll).delete()
+        choices = []
+        for row in cur:
+            choices.append(row['title'])
+
+        choices_length = len(choices)
+
+        if choices_length == 2:
+            field_type = 'radio'
+        elif choices_length > 2:
+            if poll_row['allow_multiple_choice']:
+                field_type = 'checkboxes'
+            else:
+                field_type = 'dropdown'
+        else:
+            self.stdout.write(f'Unable to determine filed type for poll={poll_row["title"]}')
+            return
+
+        choices = ','.join(choices)
+
+        PollFormField.objects.create(page=poll, label=poll.title, field_type=field_type, choices=choices)
+        self.stdout.write(f"saved poll question, label={poll.title}")
+
+    def migrate_surveys(self, survey_index_page):
+        sql = "select * " \
+              "from surveys_molosurveypage smsp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              "where smsp.page_ptr_id = wcp.id " \
+              "and wcp.id = clr.page_id " \
+              "and clr.language_id = csl.id "
+        if self.skip_locales:
+            sql += "and locale = 'en' "
+        sql += 'order by wcp.path'
+        cur = self.db_query(sql)
+        survey_page_translations = []
+        for row in cur:
+            if row['page_ptr_id'] in self.page_translation_map:
+                survey_page_translations.append(row)
+            else:
+                self.create_survey(survey_index_page, row)
+        else:
+            for row in survey_page_translations:
+                survey = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
+                locale, __ = Locale.objects.get_or_create(language_code=row['locale'])
+
+                self.translate_page(locale=locale, page=survey)
+
+                translated_survey = survey.get_translation_or_none(locale)
+                if translated_survey:
+                    translated_survey.title = row['title']
+                    translated_survey.draft_title = row['draft_title']
+                    translated_survey.live = row['live']
+                    translated_survey.description = self.map_survey_description(row['description'])
+                    translated_survey.thank_you_text = self.map_survey_thank_you_text(row)
+                    translated_survey.allow_anonymous_submissions = row['allow_anonymous_submissions']
+                    translated_survey.allow_multiple_submissions = row['allow_multiple_submissions_per_user']
+                    translated_survey.submit_button_text = row['submit_text'] or 'Submit'
+                    translated_survey.direct_display = row['display_survey_directly']
+                    translated_survey.multi_step = row['multi_step']
+                    translated_survey.save()
+
+                    self.migrate_survey_questions(translated_survey, row)
+
+                self.stdout.write(f"Translated survey, title={row['title']}")
+        cur.close()
+
+    def create_survey(self, survey_index_page, row):
+        survey = Survey(
+            title=row['title'],
+            draft_title=row['draft_title'],
+            show_in_menus=True,
+            live=row['live'],
+            description=self.map_survey_description(row['description']),
+            thank_you_text=self.map_survey_thank_you_text(row),
+            allow_anonymous_submissions=row['allow_anonymous_submissions'],
+            allow_multiple_submissions=row['allow_multiple_submissions_per_user'],
+            submit_button_text=row['submit_text'] or 'Submit',
+            direct_display=row['display_survey_directly'],
+            multi_step=row['multi_step'],
+        )
+        survey_index_page.add_child(instance=survey)
+
+        self.migrate_survey_questions(survey, row)
+
+        self.v1_to_v2_page_map.update({
+            row['page_ptr_id']: survey
+        })
+        self.stdout.write(f"saved survey, title={survey.title}")
+
+    def map_survey_description(self, v1_survey_description):
+        v1_survey_description = json.loads(v1_survey_description)
+        v2_survey_description = []
+        for block in v1_survey_description:
+            if block['type'] in ['paragraph', 'image']:
+                v2_survey_description.append(block)
+        return json.dumps(v2_survey_description)
+
+    def map_survey_thank_you_text(self, row):
+        return json.dumps([
+            {'type': 'paragraph', 'value': row['thank_you_text']},
+            {'type': 'image', 'value': self.image_map.get(row['image_id'])}
+        ])
+
+    def migrate_survey_questions(self, survey, survey_row):
+        sql = f'select * ' \
+              f'from surveys_molosurveyformfield smsff, surveys_molosurveypage smsp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl ' \
+              f'where smsff.page_id = smsp.page_ptr_id ' \
+              f'and smsp.page_ptr_id = wcp.id ' \
+              f'and wcp.id = clr.page_id ' \
+              f'and clr.language_id = csl.id ' \
+              f'and wcp.id = {survey_row["page_ptr_id"]} '
+        if self.skip_locales:
+            sql += "and locale = 'en' "
+        sql += 'order by wcp.path'
+        cur = self.db_query(sql)
+        self.create_survey_question(survey, survey_row, cur)
+        cur.close()
+
+    def create_survey_question(self, survey, survey_row, cur):
+        SurveyFormField.objects.filter(page=survey).delete()
+
+        for row in cur:
+            SurveyFormField.objects.create(
+                page=survey, sort_order=row['sort_order'], label=row['label'], required=row['required'],
+                default_value=row['default_value'], help_text=row['help_text'], field_type=row['field_type'],
+                admin_label=row['admin_label'], page_break=row['page_break'], choices=row['choices'],
+                skip_logic=row['skip_logic']
+            )
+            self.stdout.write(f"saved survey question, label={row['label']}")
