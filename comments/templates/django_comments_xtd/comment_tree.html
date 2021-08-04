@@ -3,77 +3,79 @@
 {% load comments_xtd %}
 {% load humanize %}
 
-{% for item in comments reversed %}
-    <div class="individual-comment">
-        <a name="c{{ item.comment.id }}"></a>
-        <div>
-            <div class='individual-comment__data'>
-                <span>
-                    <p>{{ item.comment.user.username.0|capfirst }}</p>
-                    <p>{{ item.comment.user.username }}</p>
-                </span>
-                <p class='individual-comment__date'>{{ item.comment.submit_date|naturaltime }}</p>
-            </div>
-            {% if item.comment.url and not item.comment.is_removed %}
-                <a href="{{ item.comment.url }}" target="_new">
-            {% endif %}
-            {% if item.comment.url %}</a>{% endif %}
-            {% if item.comment.user and item.comment.user|has_permission:"django_comments.can_moderate" %}
-                &nbsp;<span class='individual-comment__moderator'>{% translate "moderator" %}</span>{% endif %}&nbsp;&nbsp;
-            <span>
-        </span>
-            {% if item.comment.is_removed %}
-                <p class="text-muted{% if not allow_feedback and not item.comment.allow_thread %} pb-3{% endif %}">
-                    <em>{% translate "This comment has been removed." %}</em></p>
-            {% else %}
-                <div class="content{% if not allow_feedback and not item.comment.allow_thread %} pb-3{% endif %}">
-                    {% include "includes/django_comments_xtd/comment_content.html" with content=item.comment.comment %}
+<div class="comments-holder">
+    {% for item in comments reversed %}
+        <div class="individual-comment">
+            <a name="c{{ item.comment.id }}"></a>
+            <div>
+                <div class='individual-comment__data'>
+                    <span>
+                        <p>{{ item.comment.user.username.0|capfirst }}</p>
+                        <p>{{ item.comment.user.username }}</p>
+                    </span>
+                    <p class='individual-comment__date'>{{ item.comment.submit_date|naturaltime }}</p>
                 </div>
-            {% endif %}
-            {% if allow_feedback %}
-              {% include "django_comments_xtd/user_feedback.html" %}
-            {% endif %}
-
-
-            {% if not item.comment.is_removed %}
-                {% if allow_flagging and item.flagged and item.comment.user != user %}
-                    <a href="{% url 'comments-flag' item.comment.pk %}" class="report-comment">
-                        {% translate "Report" %}
-                    </a>
-                    <i title="{% translate 'comment flagged' %}"
-                       class='report-comment__disclaimer'>{% translate "This is a reported comment" %} </i>
-                {% elif allow_flagging and item.comment.user != user %}
-                    <a href="{% url 'comments-flag' item.comment.pk %}" class="report-comment">
-                        {% translate "Report" %}
-                    </a>
+                {% if item.comment.url and not item.comment.is_removed %}
+                    <a href="{{ item.comment.url }}" target="_new">
                 {% endif %}
-                {% if perms.comments.can_moderate %}
-                    {% if item.flagged_count %}
-                        <span class="report-comment">
-                                {# Translators: Count refers to the number of people that reported a comment. #}
-                            {% blocktranslate count count=item.flagged_count %}
-                                Reported by {{ count }} user
-                                {% plural %}
-                                Reported by {{ count }} users
-                            {% endblocktranslate %}
-                           </span>
+                {% if item.comment.url %}</a>{% endif %}
+                {% if item.comment.user and item.comment.user|has_permission:"django_comments.can_moderate" %}
+                    &nbsp;<span class='individual-comment__moderator'>{% translate "moderator" %}</span>{% endif %}&nbsp;&nbsp;
+                <span>
+            </span>
+                {% if item.comment.is_removed %}
+                    <p class="text-muted{% if not allow_feedback and not item.comment.allow_thread %} pb-3{% endif %}">
+                        <em>{% translate "This comment has been removed." %}</em></p>
+                {% else %}
+                    <div class="content{% if not allow_feedback and not item.comment.allow_thread %} pb-3{% endif %}">
+                        {% include "includes/django_comments_xtd/comment_content.html" with content=item.comment.comment %}
+                    </div>
+                {% endif %}
+                {% if allow_feedback %}
+                {% include "django_comments_xtd/user_feedback.html" %}
+                {% endif %}
+
+
+                {% if not item.comment.is_removed %}
+                    {% if allow_flagging and item.flagged and item.comment.user != user %}
+                        <a href="{% url 'comments-flag' item.comment.pk %}" class="report-comment">
+                            {% translate "Report" %}
+                        </a>
+                        <i title="{% translate 'comment flagged' %}"
+                        class='report-comment__disclaimer'>{% translate "This is a reported comment" %} </i>
+                    {% elif allow_flagging and item.comment.user != user %}
+                        <a href="{% url 'comments-flag' item.comment.pk %}" class="report-comment">
+                            {% translate "Report" %}
+                        </a>
                     {% endif %}
+                    {% if perms.comments.can_moderate %}
+                        {% if item.flagged_count %}
+                            <span class="report-comment">
+                                    {# Translators: Count refers to the number of people that reported a comment. #}
+                                {% blocktranslate count count=item.flagged_count %}
+                                    Reported by {{ count }} user
+                                    {% plural %}
+                                    Reported by {{ count }} users
+                                {% endblocktranslate %}
+                            </span>
+                        {% endif %}
+                    {% endif %}
+                    {% if perms.comments.can_moderate %}
+                        <a href="{% url 'comments-delete' item.comment.pk %}"><i class="fas fa-trash-alt"
+                                                                                title="{% translate 'remove comment' %}"></i></a>
+                    {% endif %}
+                    {% if item.comment.allow_thread and not item.comment.is_removed %}
+                    <a class="small mutedlink reply-link" href="{{ item.comment.get_reply_url }}">{% trans "Reply" %}</a>
                 {% endif %}
-                {% if perms.comments.can_moderate %}
-                    <a href="{% url 'comments-delete' item.comment.pk %}"><i class="fas fa-trash-alt"
-                                                                             title="{% translate 'remove comment' %}"></i></a>
-                {% endif %}
-                {% if item.comment.allow_thread and not item.comment.is_removed %}
-                <a class="small mutedlink" href="{{ item.comment.get_reply_url }}">{% trans "Reply" %}</a>
-            {% endif %}
 
 
-                <div class="comment__children">
-                {% if not item.comment.is_removed and item.children %}
-                    {% render_xtdcomment_tree with comments=item.children %}
+                    <div class="comment__children">
+                    {% if not item.comment.is_removed and item.children %}
+                        {% render_xtdcomment_tree with comments=item.children %}
+                    {% endif %}
+                </div>
                 {% endif %}
             </div>
-            {% endif %}
         </div>
-    </div>
-{% endfor %}
+    {% endfor %}
+</div>
