@@ -269,7 +269,6 @@ class Command(BaseCommand):
             title=row['title'],
             draft_title=row['draft_title'],
             show_in_menus=True,
-            font_color='1CABE2',
             slug=row['slug'],
             path=self.section_index_page.path + row['path'][12:],
             depth=row['depth'],
