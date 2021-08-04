@@ -1,4 +1,5 @@
 from django import template
+from django.urls import translate_url
 from wagtail.core.models import Locale, Site
 
 from home.models import FooterPage, SectionIndexPage
@@ -96,3 +97,9 @@ def translated_home_page_url(language_code):
     home_page = default_home_page.get_translation_or_none(locale)
     page = home_page or default_home_page
     return page.url
+
+
+@register.simple_tag(takes_context=True)
+def change_lang(context, lang=None, *args, **kwargs):
+    path = context['request'].path
+    return translate_url(path, lang)
