@@ -263,7 +263,7 @@ textarea:focus ~ .cust-input__length-text {
 }
 
 .quest-item__label--single {
-    align-items: flex-start;
+    align-items: center;
     background: none;
     border: none;
     -webkit-border-radius: 0;
@@ -281,10 +281,10 @@ textarea:focus ~ .cust-input__length-text {
 }
 
 .quest-item__label .cust-check__title {
-    font-size: 10px;
+    font-size: 16px;
     font-weight: 700;
     letter-spacing: .01em;
-    line-height: 14px;
+    line-height: 20px;
 }
 
 .quest-item__input .cust-check__title {
@@ -467,13 +467,17 @@ textarea:focus ~ .cust-input__length-text {
 .cust-select {
     display: block;
     width: 100%;
-    padding: 5px 10px;
+    padding: 15px 10px;
     position: relative;
     border: none;
     background: #f7f7f9;
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;
     border-radius: 8px;
+}
+
+.cust-select[multiple] {
+    padding: 5px 10px;
 }
 
 .cust-select input:not(:checked) ~ #text {
@@ -1449,7 +1453,7 @@ textarea:focus ~ .cust-input__length-text {
 
     .cust-check__title {
         letter-spacing: .01em;
-        padding: 12px 12px 12px 16px
+        padding: 6px 12px 6px 16px
     }
 
     .cust-check--2 input {
