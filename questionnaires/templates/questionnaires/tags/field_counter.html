@@ -1,4 +1,4 @@
 {% load i18n %}
 <p class="quest-item__number">
-    {% blocktranslate trimmed count total=total %}{{ counter }} of 1 question{% plural %}{{ counter }} of {{ total }} questions{% endblocktranslate %}
+    {% blocktranslate %}{{ counter }} of {{ total }} questions{% endblocktranslate %}
 </p>

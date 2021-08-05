@@ -6,7 +6,7 @@
         <a href="{% url 'messaging:inbox' %}" class="btn-back">{% translate "Back" %}</a>
         <h1> {{ thread.subject }} </h1>
         <div class="load-more-button">
-            <a href="{% url 'messaging:thread' thread_id=thread.id %}?num_results={{ load_more_num_results }}">{% translate 'Load more' %}</a>
+            <a href="{% url 'messaging:thread' thread_id=thread.id %}?num_results={{ load_more_num_results }}">{% translate 'More' %}</a>
         </div>
         <div class="messages">
             {% for message in thread_messages %}
@@ -48,8 +48,8 @@
                     <input type="hidden" name="thread" value="{{ thread.pk }}"/>
                     <input type="hidden" name="user" value="{{ user.pk }}"/>
                     <div class="search-box">
-                        <input type="text" name="text" placeholder="{% translate 'Reply here...' %}" class="search-box">
-                        <button type="submit" class="btn-search add">{% translate 'Send' %}</button>
+                        <input type="text" name="text" class="search-box">
+                        <button type="submit" class="btn-search add">{% translate 'Reply' %}</button>
                     </div>
                 </form>
             </div>

@@ -19,7 +19,7 @@ class AccountSignupForm(SignupForm):
         ),
         required=False,
     )
-    terms_accepted = forms.BooleanField(label=_('I accept the terms & conditions'))
+    terms_accepted = forms.BooleanField(label=_('I accept the Terms and Conditions.'))
 
     field_order = [
         "username",
@@ -79,7 +79,7 @@ class WagtailAdminUserCreateForm(WagtailUserCreationForm):
     display_name = forms.CharField(required=False, label='Display Name')
     first_name = forms.CharField(required=False, label='First Name')
     last_name = forms.CharField(required=False, label='Last Name')
-    terms_accepted = forms.BooleanField(label=_('I accept the terms & conditions'))
+    terms_accepted = forms.BooleanField(label=_('I accept the Terms and Conditions.'))
 
     def clean_username(self):
         username = self.cleaned_data['username']
@@ -100,4 +100,4 @@ class WagtailAdminUserEditForm(WagtailUserEditForm):
     first_name = forms.CharField(required=False, label='First Name')
     last_name = forms.CharField(required=False, label='Last Name')
 
-    terms_accepted = forms.BooleanField(label=_('I accept the terms & conditions'))
+    terms_accepted = forms.BooleanField(label=_('I accept the Terms and Conditions.'))
