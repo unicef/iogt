@@ -1,6 +1,9 @@
 from __future__ import unicode_literals
 
+import json
+
 from django.core.paginator import Page, Paginator
+from django.core.serializers.json import DjangoJSONEncoder
 
 from .blocks import SkipState
 
@@ -178,3 +181,30 @@ class SkipLogicPage(Page):
 
     def previous_page_number(self):
         return self.paginator.previous_page
+
+
+class FormHelper:
+    def __init__(self, pk, request):
+        self.request = request
+        self.session_data_key = f'form_data-{pk}'
+        self.complete_session_data_key = f'form_data-{pk}-completed'
+        step_number = request.GET.get('p')
+
+        if step_number is None:
+            self.remove_session_data()
+
+    def remove_session_data(self):
+        self.request.session.pop(self.session_data_key, None)
+        self.request.session.pop(self.complete_session_data_key, None)
+
+    def get_form_data(self):
+        return json.loads(self.request.session.get(self.session_data_key, '{}'))
+
+    def set_form_data(self, form_data):
+        self.request.session[self.session_data_key] = json.dumps(form_data, cls=DjangoJSONEncoder)
+
+    def set_full_form_data(self):
+        self.request.session[self.complete_session_data_key] = self.request.session.pop(self.session_data_key, None)
+
+    def get_full_form_data(self):
+        return json.loads(self.request.session.get(self.complete_session_data_key, '{}'))
