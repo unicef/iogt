@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load comments %}
 
-<form method="POST" action="{% comment_form_target %}" onsubmit="post.disabled = true; return true;">
+<form method="POST" class="reply-form" action="{% comment_form_target %}" onsubmit="post.disabled = true; return true;">
     {% csrf_token %}
     <fieldset class='comments__holder'>
         <input type="hidden" name="next" value="{% spaceless %}{% if form.is_admin %}{% url 'comment_reply_view' comment_pk=comment.pk %}{% else %}{% url 'comments-xtd-sent' %}{% endif %}{% endspaceless %}"/>
@@ -79,7 +79,7 @@
 
     <div class='comments__input-holder'>
         <div class="comments__submit">
-            <input type="submit" name="post" value="{% translate 'Leave comment' %}" />
+            <input type="submit" class="reply-comment" name="post" value="{% translate 'Leave comment' %}" />
         </div>
     </div>
 </form>
