@@ -132,7 +132,7 @@ class QuestionnairePage(Page, PageUtilsMixin):
             # Edge case - submission of the last step
             try:
                 prev_step = (
-                    step if is_last_step else paginator.page(step.previous_page_number())
+                    step if is_last_step else paginator.page(int(step_number) - 1)
                 )
             except EmptyPage:
                 prev_step = step
