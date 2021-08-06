@@ -112,6 +112,7 @@ TEMPLATES = [
                 'wagtail.contrib.settings.context_processors.settings',
                 "home.processors.show_welcome_banner",
                 'django.template.context_processors.i18n',
+                'home.processors.commit_hash'
             ],
         },
     },
@@ -375,5 +376,8 @@ WAGTAIL_RICH_TEXT_FIELD_FEATURES = [
 
 # Search results
 SEARCH_RESULTS_PER_PAGE = 10
+
+
+COMMIT_HASH = os.getenv('COMMIT_HASH')
 
 from .profanity_settings import *
