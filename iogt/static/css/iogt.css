@@ -1681,6 +1681,35 @@ textarea:focus ~ .cust-input__length-text {
     top: 15px;
 }
 
+.load-more {
+    background: #F7F7F9;
+    padding: 20px;
+    border-top: 1px solid white;
+}
+
+.load-more button {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 600;
+    border-radius: 24px;
+    padding: 12px 16px;
+    border: 1px solid #303030;
+    color: #303030;
+    display: block;
+    text-align: center;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.2s linear;
+}
+
+.load-more button:hover,
+.load-more button:active,
+.load-more button:focus {
+    background: #303030;
+    color: white;
+    transition: all 0.2s linear;
+}
+
 
 @media only screen and (min-width: 360px) {
     .reply-link {
@@ -1711,5 +1740,10 @@ textarea:focus ~ .cust-input__length-text {
         top: 25px;
         width: 12px;
         height: 12px;
+    }
+
+    .load-more button {
+        font-size: 16px;
+        line-height: 22px;
     }
 }
