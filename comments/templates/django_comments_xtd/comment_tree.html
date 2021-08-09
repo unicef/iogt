@@ -44,7 +44,7 @@
                     </a>
                     {% if item.comment.allow_thread and not item.comment.is_removed %}
                         <a class="small mutedlink reply-link"
-                           href="{{ item.comment.get_reply_url }}">{% trans "Reply" %}</a>
+                           href="{{ item.comment.get_reply_url }}">{% translate "Reply" %}</a>
                     {% endif %}
 
                     {% if allow_flagging and item.flagged and item.comment.user != user %}
@@ -89,7 +89,7 @@
     {% if comments and comments.0.comment.level == 0 %}
         <div class="load-more">
             <button type="button">
-                {% trans 'View more comments'%}
+                {% translate 'View more comments'%}
             </button>
         </div>
     {% endif %}
