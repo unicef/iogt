@@ -1589,3 +1589,9 @@ textarea:focus ~ .cust-input__length-text {
     font-size: 24px;
     line-height: 28px;
 }
+
+.section-img .image-overlay__text.alt {
+    position: static;
+    color: #303030;
+    padding: 10px 0 15px;
+}
