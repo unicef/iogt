@@ -27,8 +27,7 @@ from wagtail.images.blocks import ImageChooserBlock
 
 from questionnaires.blocks import SkipState, SkipLogicBlock
 from questionnaires.forms import CustomFormBuilder, SurveyForm, QuizForm
-from questionnaires.utils import SkipLogicPaginator
-
+from questionnaires.utils import SkipLogicPaginator, FormHelper
 
 FORM_FIELD_CHOICES = (
     ('checkbox', _('Checkbox')),
@@ -107,14 +106,11 @@ class QuestionnairePage(Page, PageUtilsMixin):
         return super().serve(request, *args, **kwargs)
 
     def serve_questions_separately(self, request, *args, **kwargs):
-        session_key_data = "form_data-%s" % self.pk
+        form_helper = FormHelper(pk=self.pk, request=request)
         is_last_step = False
         step_number = request.GET.get("p", 1)
 
-        if step_number == 1:
-            request.session.pop(session_key_data, None)
-
-        form_data = request.session.get(session_key_data, {})
+        form_data = form_helper.get_form_data()
 
         paginator = SkipLogicPaginator(
             self.get_form_fields(),
@@ -136,7 +132,7 @@ class QuestionnairePage(Page, PageUtilsMixin):
             # Edge case - submission of the last step
             try:
                 prev_step = (
-                    step if is_last_step else paginator.page(step.previous_page_number())
+                    step if is_last_step else paginator.page(int(step_number) - 1)
                 )
             except EmptyPage:
                 prev_step = step
@@ -151,9 +147,9 @@ class QuestionnairePage(Page, PageUtilsMixin):
             )
             if prev_form.is_valid():
                 # If data for step is valid, update the session
-                form_data = request.session.get(session_key_data, {})
+                form_data = form_helper.get_form_data()
                 form_data.update(prev_form.cleaned_data)
-                request.session[session_key_data] = form_data
+                form_helper.set_form_data(form_data)
 
                 if prev_step.has_next():
                     # Create a new form for a following step, if the following step is present
@@ -162,7 +158,7 @@ class QuestionnairePage(Page, PageUtilsMixin):
                 else:
                     # If there is no next step, create form for all fields
                     form = self.get_form(
-                        request.session[session_key_data],
+                        form_helper.get_form_data(),
                         page=self, user=request.user
                     )
 
@@ -171,7 +167,7 @@ class QuestionnairePage(Page, PageUtilsMixin):
                         # After successful validation, save data into DB,
                         # and remove from the session.
                         form_submission = self.process_form_submission(form)
-                        request.session[f'{session_key_data}-completed'] = request.session.pop(session_key_data, None)
+                        form_helper.set_full_form_data()
                         # render the landing page
                         return self.render_landing_page(
                             request, form_submission, *args, **kwargs
@@ -279,7 +275,7 @@ class Survey(QuestionnairePage, AbstractForm):
     base_form_class = SurveyForm
     form_builder = CustomFormBuilder
 
-    parent_page_types = ["home.HomePage", "home.Section", "home.Article"]
+    parent_page_types = ["home.HomePage", "home.Section", "home.Article", "questionnaires.SurveyIndexPage"]
     template = "survey/survey.html"
     multi_step = models.BooleanField(
         default=False,
@@ -408,7 +404,7 @@ class PollFormField(AbstractFormField):
 
 class Poll(QuestionnairePage, AbstractForm):
     template = "poll/poll.html"
-    parent_page_types = ["home.HomePage", "home.Section", "home.Article"]
+    parent_page_types = ["home.HomePage", "home.Section", "home.Article", "questionnaires.PollIndexPage"]
 
     show_results = models.BooleanField(
         default=True, help_text=_("This option allows the users to see the results.")
@@ -627,7 +623,7 @@ class Quiz(QuestionnairePage, AbstractForm):
     base_form_class = QuizForm
     form_builder = CustomFormBuilder
 
-    parent_page_types = ["home.HomePage", "home.Section", "home.Article"]
+    parent_page_types = ["home.HomePage", "home.Section", "home.Article", "questionnaires.QuizIndexPage"]
     template = "quizzes/quiz.html"
 
     multi_step = models.BooleanField(
@@ -700,9 +696,9 @@ class Quiz(QuestionnairePage, AbstractForm):
         context.update({'back_url': request.GET.get('back_url')})
         context.update({'form_length': request.GET.get('form_length')})
 
+        form_helper = FormHelper(pk=self.pk, request=request)
         if self.multi_step:
-            session_key_data = f'form_data-{self.pk}-completed'
-            form_data = request.session.get(session_key_data)
+            form_data = form_helper.get_full_form_data()
         else:
             form_data = request.POST
         if request.method == 'POST' and form_data:
@@ -725,7 +721,7 @@ class Quiz(QuestionnairePage, AbstractForm):
                     answer = form_data.get(field.clean_name)
 
                 if type(answer) != list:
-                    answer = [answer]
+                    answer = [str(answer)]
 
                 is_correct = set(answer) == set(correct_answer)
                 if is_correct:
@@ -745,10 +741,25 @@ class Quiz(QuestionnairePage, AbstractForm):
             }
 
             if self.multi_step:
-                request.session.pop(session_key_data, None)
+                form_helper.remove_session_data()
 
         return context
 
     class Meta:
         verbose_name = _("quiz")
         verbose_name_plural = _("quizzes")
+
+
+class PollIndexPage(Page):
+    parent_page_types = ['home.HomePage']
+    subpage_types = ['questionnaires.Poll']
+
+
+class SurveyIndexPage(Page):
+    parent_page_types = ['home.HomePage']
+    subpage_types = ['questionnaires.Survey']
+
+
+class QuizIndexPage(Page):
+    parent_page_types = ['home.HomePage']
+    subpage_types = ['questionnaires.Quiz']

@@ -78,7 +78,7 @@
                                 {% if fields_info|get_item:field.name|get_item:'is_correct' %}
                                     {% translate "Correct" %}{% else %}
                                     {% translate "Incorrect" %}{% endif %}</p>
-                            <p class="quest-item__number">{% blocktranslate with counter=forloop.counter count total=form.fields|length %}{{ counter }} of 1 question{% plural %}{{ counter }} of {{ total }} questions{% endblocktranslate %}
+                            <p class="quest-item__number">{% blocktranslate trimmed with counter=forloop.counter count total=form.fields|length %}{{ counter }} of 1 question{% plural %}{{ counter }} of {{ total }} questions{% endblocktranslate %}
                             </p>
                         </div>
                         <div class="quest-item__desc">

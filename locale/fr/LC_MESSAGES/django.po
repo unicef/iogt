@@ -1,1369 +1,1060 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
 msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-26 11:23+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2021-07-31 09:38+0000\n"
+"PO-Revision-Date: 2021-07-31 09:38+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language: French\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"FR-Project-Id-Version: PACKAGE VERSION\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: comments/templates/comment_reply.html:22
 msgid "Canned Responses"
-msgstr "FR-Canned Responses"
+msgstr "([BE]-Canned Responses)"
 
-#: comments/templates/comment_reply.html:35
-msgid "Reply"
-msgstr "FR-Reply"
+msgid "Bad Token"
+msgstr "([not-needed]-Bad Token)"
 
-#: comments/templates/comments/delete.html:5
-msgid "Remove comment"
-msgstr "FR-Remove comment"
-
-#: comments/templates/comments/delete.html:9
-msgid "Remove this comment?"
-msgstr "FR-Remove this comment?"
-
-#: comments/templates/comments/delete.html:12
-msgid ""
-"As a moderator you can delete comments. Deleting a comment does not remove "
-"it from the site, only prevents your website from showing the text. Click on "
-"the remove button to delete the following comment:"
-msgstr ""
-"FR-As a moderator you can delete comments. Deleting a comment does not "
-"remove it from the site, only prevents your website from showing the text. "
-"Click on the remove button to delete the following comment:"
-
-#: comments/templates/comments/delete.html:45
-msgid "Remove"
-msgstr "FR-Remove"
-
-#: comments/templates/comments/deleted.html:5
-msgid "Comment removed"
-msgstr "FR-Comment removed"
-
-#: comments/templates/comments/deleted.html:12
-msgid "The comment has been removed."
-msgstr "FR-The comment has been removed."
-
-#: comments/templates/comments/deleted.html:13
-#: comments/templates/comments/flagged.html:13
-msgid ""
-"Thank you for taking the time to improve the quality of discussion in our "
-"site."
-msgstr ""
-"FR-Thank you for taking the time to improve the quality of discussion in our "
-"site."
-
-#: comments/templates/comments/flag.html:4
-msgid "Flag comment"
-msgstr "FR-Flag comment"
-
-#: comments/templates/comments/flag.html:14
-msgid "Flag this comment?"
-msgstr "FR-Flag this comment?"
-
-#: comments/templates/comments/flag.html:15
-msgid ""
-"Click on the flag button to mark the following comment as inappropriate."
-msgstr ""
-"FR-Click on the flag button to mark the following comment as inappropriate."
-
-#: comments/templates/comments/flag.html:20
-#: comments/templates/django_comments_xtd/comment.html:11
-#: comments/templates/django_comments_xtd/like.html:47
-msgid "Posted to "
-msgstr "FR-Posted to "
-
-#: comments/templates/comments/flag.html:26
-msgid "Flag"
-msgstr "FR-Flag"
-
-#: comments/templates/comments/flag.html:27
-#: comments/templates/django_comments_xtd/like.html:73
-msgid "cancel"
-msgstr "FR-cancel"
-
-#: comments/templates/comments/flagged.html:5
-msgid "Comment flagged"
-msgstr "FR-Comment flagged"
-
-#: comments/templates/comments/flagged.html:12
-msgid "The comment has been flagged."
-msgstr "FR-The comment has been flagged."
-
-#: comments/templates/comments/form.html:82
-msgid "Leave comment"
-msgstr "FR-Leave comment"
-
-#: comments/templates/comments/preview.html:5
-#: comments/templates/comments/preview.html:11
-msgid "Preview your comment"
-msgstr "FR-Preview your comment"
-
-#: comments/templates/comments/preview.html:15
-msgid "Preview of your comment for:"
-msgstr "FR-Preview of your comment for:"
-
-#: comments/templates/comments/preview.html:22
-msgid "Empty comment."
-msgstr "FR-Empty comment."
-
-#: comments/templates/comments/preview.html:49
-#: comments/templates/django_comments_xtd/reply.html:32
-msgid "Post your comment"
-msgstr "FR-Post your comment"
-
-#: comments/templates/django_comments_xtd/comment.html:15
-#: comments/templates/django_comments_xtd/comment_tree.html:27
-msgid "This comment has been removed."
-msgstr "FR-This comment has been removed."
-
-#: comments/templates/django_comments_xtd/comment_list.html:11
-msgid "List of comments"
-msgstr "FR-List of comments"
-
-#: comments/templates/django_comments_xtd/comment_list.html:21
-msgid "No comments yet."
-msgstr "FR-No comments yet."
-
-#: comments/templates/django_comments_xtd/comment_tree.html:22
-msgid "moderator"
-msgstr "FR-moderator"
-
-#: comments/templates/django_comments_xtd/comment_tree.html:41
-#: comments/templates/django_comments_xtd/comment_tree.html:46
-msgid "Report"
-msgstr "FR-Report"
-
-#: comments/templates/django_comments_xtd/comment_tree.html:43
-msgid "comment flagged"
-msgstr "FR-comment flagged"
-
-#: comments/templates/django_comments_xtd/comment_tree.html:43
-msgid "This is a reported comment"
-msgstr "FR-This is a reported comment"
-
-#. Translators: Count refers to the number of people that reported a comment.
-#: comments/templates/django_comments_xtd/comment_tree.html:53
-#, python-format
-msgid ""
-"\n"
-"                                Reported by %(count)s user\n"
-"                                "
-msgid_plural ""
-"\n"
-"                                Reported by %(count)s users\n"
-"                                "
-msgstr[0] ""
-"\n"
-"                                FR-Reported by %(count)s user\n"
-"                                "
-msgstr[1] ""
-"\n"
-"                                FR-Reported by %(count)s users\n"
-"                                "
-
-#: comments/templates/django_comments_xtd/comment_tree.html:63
-msgid "remove comment"
-msgstr "FR-remove comment"
-
-#: comments/templates/django_comments_xtd/discarded.html:4
-msgid "Comment discarded"
-msgstr "FR-Comment discarded"
-
-#: comments/templates/django_comments_xtd/discarded.html:7
-msgid "Comment automatically discarded"
-msgstr "FR-Comment automatically discarded"
-
-#: comments/templates/django_comments_xtd/discarded.html:8
-msgid "Sorry, your comment has been automatically discarded"
-msgstr "FR-Sorry, your comment has been automatically discarded"
-
-#: comments/templates/django_comments_xtd/like.html:5
-msgid "Confirm your opinion"
-msgstr "FR-Confirm your opinion"
-
-#: comments/templates/django_comments_xtd/like.html:15
-msgid "You liked this comment, do you want to change it?"
-msgstr "FR-You liked this comment, do you want to change it?"
-
-#: comments/templates/django_comments_xtd/like.html:17
-msgid "Do you like this comment?"
-msgstr "FR-Do you like this comment?"
-
-#: comments/templates/django_comments_xtd/like.html:22
-msgid "Please, confirm your opinion about the comment."
-msgstr "FR-Please, confirm your opinion about the comment."
-
-#: comments/templates/django_comments_xtd/like.html:60
-msgid ""
-"Click on the \"withdraw\" button if you want to withdraw your positive "
-"opinion on this comment."
-msgstr ""
-"FR-Click on the \"withdraw\" button if you want to withdraw your positive "
-"opinion on this comment."
-
-#: comments/templates/django_comments_xtd/like.html:69
-msgid "Withdraw"
-msgstr "FR-Withdraw"
-
-#: comments/templates/django_comments_xtd/like.html:71
-msgid "I like it"
-msgstr "FR-I like it"
-
-#: comments/templates/django_comments_xtd/liked.html:4
-msgid "Your opinion is appreciated"
-msgstr "FR-Your opinion is appreciated"
-
-#: comments/templates/django_comments_xtd/liked.html:7
-msgid "Thanks for taking the time to participate."
-msgstr "FR-Thanks for taking the time to participate."
-
-#: comments/templates/django_comments_xtd/moderated.html:4
-msgid "Comment requires approval"
-msgstr "FR-Comment requires approval"
-
-#: comments/templates/django_comments_xtd/moderated.html:8
-msgid "Comment in moderation"
-msgstr "FR-Comment in moderation"
-
-#: comments/templates/django_comments_xtd/moderated.html:14
-msgid ""
-"\n"
-"            Your comment is in moderation.<br/>\n"
-"            It has to be reviewed before being published.<br/>\n"
-"            Thank you for your patience and understanding.\n"
-"            "
-msgstr ""
-"\n"
-"FR-            Your comment is in moderation.<br/>\n"
-"            It has to be reviewed before being published.<br/>\n"
-"            Thank you for your patience and understanding.\n"
-"            "
-
-#: comments/templates/django_comments_xtd/moderated.html:22
-#, python-format
-msgid ""
-"\n"
-"            Go back to: <a href=\"%(content_object_url)s\">"
-"%(content_object_str)s</a>\n"
-"            "
-msgstr ""
-"\n"
-"FR-            Go back to: <a href=\"%(content_object_url)s\">"
-"%(content_object_str)s</a>\n"
-"            "
-
-#: comments/templates/django_comments_xtd/muted.html:4
-msgid "Comment thread muted"
-msgstr "FR-Comment thread muted"
-
-#: comments/templates/django_comments_xtd/muted.html:7
-msgid "Comment thread has been muted"
-msgstr "FR-Comment thread has been muted"
-
-#: comments/templates/django_comments_xtd/muted.html:9
-msgid "You will no longer receive email notifications for comments sent to"
-msgstr "FR-You will no longer receive email notifications for comments sent to"
-
-#: comments/templates/django_comments_xtd/only_users_can_post.html:5
-msgid "Only registered users can post comments."
-msgstr "FR-Only registered users can post comments."
-
-#: comments/templates/django_comments_xtd/reply.html:6
-msgid "Comment reply"
-msgstr "FR-Comment reply"
-
-#: comments/templates/django_comments_xtd/reply.html:11
-msgid "Reply to comment"
-msgstr "FR-Reply to comment"
-
-#: comments/views.py:38
-msgid "The comment has been updated successfully!"
-msgstr "FR-The comment has been updated successfully!"
-
-#: comments/views.py:68
-msgid "Sent Reply successfully"
-msgstr "FR-Sent Reply successfully"
-
-#: home/blocks.py:17
-msgid "Your browser does not support the video tag."
-msgstr "FR-Your browser does not support the video tag."
-
-#: home/blocks.py:18
-msgid "Your browser does not support the audio element."
-msgstr "FR-Your browser does not support the audio element."
-
-#. Translators: Part of this message (between %(start_link)s and %(end_link)s ) is a clickable download link
-#: home/blocks.py:20
-#, python-format
-msgid ""
-"If you cannot view the above video, perhaps would you like to %(start_link)s "
-"download it? %(end_link)s."
-msgstr ""
-"FR-If you cannot view the above video, perhaps would you like to "
-"%(start_link)s download it? %(end_link)s."
-
-#. Translators: Part of this message (between %(start_link)s and %(end_link)s ) is a clickable download link
-#: home/blocks.py:26
-#, python-format
-msgid ""
-"If you cannot listen to the above audio, perhaps would you like to "
-"%(start_link)s download it? %(end_link)s."
-msgstr ""
-"FR-If you cannot listen to the above audio, perhaps would you like to "
-"%(start_link)s download it? %(end_link)s."
-
-#: home/models.py:71
 msgid "Home Page Banner"
-msgstr "FR-Home Page Banner"
+msgstr "([BE]-Home Page Banner)"
 
-#: home/models.py:72
 msgid "Home Page Banners"
-msgstr "FR-Home Page Banners"
+msgstr "([BE]-Home Page Banners)"
 
-#: home/models.py:177 home/models.py:178
-msgid "Featured Content"
-msgstr "FR-Featured Content"
+msgid "Username"
+msgstr "([has translation]-Username)"
 
-#: home/models.py:247
-msgid "section"
-msgstr "FR-section"
+msgid "Level"
+msgstr "([BE]-Level)"
 
-#: home/models.py:248
-msgid "sections"
-msgstr "FR-sections"
+msgid "Status"
+msgstr "([BE]-Status)"
 
-#: home/models.py:317
-msgid "Recommended Articles"
-msgstr "FR-Recommended Articles"
+msgid "Last Login"
+msgstr "([BE]-Last Login)"
 
-#: home/models.py:380
-msgid "article"
-msgstr "FR-article"
+msgid "Admin"
+msgstr "([BE]-Admin)"
 
-#: home/models.py:381
-msgid "articles"
-msgstr "FR-articleS"
+msgid "Active"
+msgstr "([BE]-Active)"
 
-#: home/models.py:401
+msgid "Inactive"
+msgstr "([BE]-Inactive)"
+
 msgid "Image to display as the banner"
-msgstr "FR-Image to display as the banner"
+msgstr "([BE]-Image to display as the banner)"
 
-#: home/models.py:408
 msgid "Background image"
-msgstr "FR-Background image"
+msgstr "([BE]-Background image)"
 
-#: home/models.py:414
 msgid "Optional page to which the banner will link to"
-msgstr "FR-Optional page to which the banner will link to"
+msgstr "([BE]-Optional page to which the banner will link to)"
 
-#: home/models.py:419
 msgid "The title for a button"
-msgstr "FR-The title for a button"
+msgstr "([BE]-The title for a button)"
 
-#: home/models.py:426
 msgid "Icon Button"
-msgstr "FR-Icon Button"
+msgstr "([BE]-Icon Button)"
 
-#: home/models.py:471
 msgid ""
 "When selecting this option, untranslated pages will not be visible to the "
 "front end user when viewing a child language of the site"
 msgstr ""
-"FR-When selecting this option, untranslated pages will not be visible to the "
-"front end user when viewing a child language of the site"
+"([BE]-When selecting this option, untranslated pages will not be visible to "
+"the front end user when viewing a child language of the site)"
 
-#: home/models.py:476
 msgid "Facebook Analytics App ID"
-msgstr "FR-Facebook Analytics App ID"
+msgstr "([BE]-Facebook Analytics App ID)"
 
-#: home/models.py:481
 msgid "The tracking ID to be used to view Facebook Analytics"
-msgstr "FR-The tracking ID to be used to view Facebook Analytics"
+msgstr "([BE]-The tracking ID to be used to view Facebook Analytics)"
 
-#: home/models.py:484
 msgid "Local GA Tag Manager"
-msgstr "FR-Local GA Tag Manager"
+msgstr "([BE]-Local GA Tag Manager)"
 
-#: home/models.py:489
 msgid ""
 "Local GA Tag Manager tracking code (e.g GTM-XXX) to be used to view "
 "analytics on this site only"
 msgstr ""
-"FR-Local GA Tag Manager tracking code (e.g GTM-XXX) to be used to view "
-"analytics on this site only"
+"([BE]-Local GA Tag Manager tracking code (e.g GTM-XXX) to be used to view "
+"analytics on this site only)"
 
-#: home/models.py:493
 msgid "Global GA Tag Manager"
-msgstr "FR-Global GA Tag Manager"
+msgstr "([BE]-Global GA Tag Manager)"
 
-#: home/models.py:498
 msgid ""
 "Global GA Tag Manager tracking code (e.g GTM-XXX) to be used to view "
 "analytics on more than one site globally"
 msgstr ""
-"FR-Global GA Tag Manager tracking code (e.g GTM-XXX) to be used to view "
-"analytics on more than one site globally"
+"([BE]-Global GA Tag Manager tracking code (e.g GTM-XXX) to be used to view "
+"analytics on more than one site globally)"
 
-#: home/models.py:502
 msgid "Local GA Tracking Code"
-msgstr "FR-Local GA Tracking Code"
+msgstr "([BE]-Local GA Tracking Code)"
 
-#: home/models.py:507
 msgid "Local GA tracking code to be used to view analytics on this site only"
 msgstr ""
-"FR-Local GA tracking code to be used to view analytics on this site only"
+"([BE]-Local GA tracking code to be used to view analytics on this site only)"
 
-#: home/models.py:511
 msgid "Global GA Tracking Code"
-msgstr "FR-Global GA Tracking Code"
+msgstr "([BE]-Global GA Tracking Code)"
 
-#: home/models.py:516
 msgid ""
 "Global GA tracking code to be used to view analytics on more than one site "
 "globally"
 msgstr ""
-"FR-Global GA tracking code to be used to view analytics on more than one "
-"site globally"
+"([BE]-Global GA tracking code to be used to view analytics on more than one "
+"site globally)"
 
-#: home/models.py:527
 msgid ""
 "Show warning if uploaded media file size is greater than this in bytes. "
 "Default is 9 MB"
 msgstr ""
-"FR-Show warning if uploaded media file size is greater than this in bytes. "
-"Default is 9 MB"
+"([BE]-Show warning if uploaded media file size is greater than this in "
+"bytes. Default is 9 MB)"
 
-#: home/models.py:608 home/models.py:609
 msgid "Site Settings"
-msgstr "FR-Site Settings"
+msgstr "([BE]-Site Settings)"
 
-#: home/models.py:616
 msgid "Prompt users to download?"
-msgstr "FR-Prompt users to download?"
+msgstr "([BE]-Prompt users to download?)"
 
-#: home/models.py:618
 msgid "check to prompt first time users to download the website as an app"
-msgstr "FR-check to prompt first time users to download the website as an app"
+msgstr ""
+"([BE]-check to prompt first time users to download the website as an app)"
 
-#: home/models.py:697 iogt/templates/wagtailusers/users/list.html:19
-#: iogt/templates/wagtailusers/users/list.html:23
 msgid "Name"
-msgstr "FR-Name"
+msgstr "([BE]-Name)"
 
-#: home/models.py:698
 msgid "Provide name"
-msgstr "FR-Provide name"
+msgstr "([BE]-Provide name)"
 
-#: home/models.py:702
 msgid "Short name"
-msgstr "FR-Short name"
+msgstr "([BE]-Short name)"
 
-#: home/models.py:703
 msgid "Provide short name"
-msgstr "FR-Provide short name"
+msgstr "([BE]-Provide short name)"
 
-#: home/models.py:707
 msgid "Scope"
-msgstr "FR-Scope"
+msgstr "([BE]-Scope)"
 
-#: home/models.py:708
 msgid "Provide scope"
-msgstr "FR-Provide scope"
+msgstr "([BE]-Provide scope)"
 
-#: home/models.py:712
 msgid "Start URL"
-msgstr "FR-Start URL"
+msgstr "([BE]-Start URL)"
 
-#: home/models.py:713
 msgid "Provide start URL"
-msgstr "FR-Provide start URL"
+msgstr "([BE]-Provide start URL)"
 
-#: home/models.py:723
 msgid "Browser UI"
-msgstr "FR-Browser UI"
+msgstr "([BE]-Browser UI)"
 
-#: home/models.py:724
 msgid "Provide browser UI"
-msgstr "FR-Provide browser UI"
+msgstr "([BE]-Provide browser UI)"
 
-#: home/models.py:728
 msgid "Background color"
-msgstr "FR-Background color"
+msgstr "([BE]-Background color)"
 
-#: home/models.py:729
 msgid "Provide background color (example: #FFF)"
-msgstr "FR-Provide background color (example: #FFF)"
+msgstr "([BE]-Provide background color (example: #FFF))"
 
-#: home/models.py:733
 msgid "Theme color"
-msgstr "FR-Theme color"
+msgstr "([BE]-Theme color)"
 
-#: home/models.py:734
 msgid "Provide theme color(example: #493174)"
-msgstr "FR-Provide theme color(example: #493174)"
+msgstr "([BE]-Provide theme color(example: #493174))"
 
-#: home/models.py:738
 msgid "Description"
-msgstr "FR-Description"
+msgstr "([BE]-Description)"
 
-#: home/models.py:739
 msgid "Provide description"
-msgstr "FR-Provide description"
+msgstr "([BE]-Provide description)"
 
-#: home/models.py:745
 msgid "Language"
-msgstr "FR-Language"
+msgstr "([BE]-Language)"
 
-#: home/models.py:746
 msgid "Choose language"
-msgstr "FR-Choose language"
+msgstr "([BE]-Choose language)"
 
-#: home/models.py:753
 msgid "Icon 96x96"
-msgstr "FR-Icon 96x96"
+msgstr "([BE]-Icon 96x96)"
 
-#: home/models.py:754
 msgid "Add PNG icon 96x96 px"
-msgstr "FR-Add PNG icon 96x96 px"
+msgstr "([BE]-Add PNG icon 96x96 px)"
 
-#: home/models.py:762
 msgid "Icon 512x512"
-msgstr "FR-Icon 512x512"
+msgstr "([BE]-Icon 512x512)"
 
-#: home/models.py:763
 msgid "Add PNG icon 512x512 px"
-msgstr "FR-Add PNG icon 512x512 px"
+msgstr "([BE]-Add PNG icon 512x512 px)"
 
-#: home/models.py:771
 msgid "Icon 196x196 (maskable)"
-msgstr "FR-Icon 196x196 (maskable)"
+msgstr "([BE]-Icon 196x196 (maskable))"
 
-#: home/models.py:773
 msgid ""
-"Add PNG icon 196x196 px (maskable image can be created using https://"
-"maskable.app/)"
+"Add PNG icon 196x196 px (maskable image can be created using "
+"https://maskable.app/)"
 msgstr ""
-"FR-Add PNG icon 196x196 px (maskable image can be created using https://"
-"maskable.app/)"
+"([BE]-Add PNG icon 196x196 px (maskable image can be created using "
+"https://maskable.app/))"
 
-#: home/templates/blocks/embedded_questionnaire.html:19
-#: questionnaires/templates/questionnaires/tags/field_counter.html:3
-#: questionnaires/templates/quizzes/quiz_landing.html:81
-#, python-format
-msgid "%(counter)s of 1 question"
-msgid_plural "%(counter)s of %(total)s questions"
-msgstr[0] "FR-%(counter)s of 1 question"
-msgstr[1] "FR-%(counter)s of %(total)s questions"
-
-#: home/templates/blocks/embedded_questionnaire.html:24
-#: home/templates/blocks/embedded_questionnaire.html:73
-#: questionnaires/templates/questionnaires/tags/field_description.html:6
-msgid "Optional"
-msgstr "FR-Optional"
-
-#: home/templates/blocks/embedded_questionnaire.html:26
-#: home/templates/blocks/embedded_questionnaire.html:69
-#: questionnaires/templates/questionnaires/tags/field_description.html:8
-msgid "Select one"
-msgstr "FR-Select one"
-
-#: home/templates/blocks/embedded_questionnaire.html:28
-#: home/templates/blocks/embedded_questionnaire.html:71
-#: questionnaires/templates/questionnaires/tags/field_description.html:10
-msgid "Check all that apply"
-msgstr "FR-Check all that apply"
-
-#: home/templates/home/article.html:25
-msgid "Previous"
-msgstr "FR-Previous"
-
-#: home/templates/home/article.html:28
-msgid "Next"
-msgstr "FR-Next"
-
-#: home/templates/home/article.html:38
-msgid "Comments"
-msgstr "FR-Comments"
-
-#: home/templates/home/article.html:46
-msgid "Please log in or create your account"
-msgstr "FR-Please log in or create your account"
-
-#: home/templates/home/article.html:49
-msgid "Log in/Create account"
-msgstr "FR-Log in/Create account"
-
-#: home/templates/home/article.html:56
-msgid "New comments have been disabled for this page."
-msgstr "FR-New comments have been disabled for this page."
-
-#: home/templates/home/article.html:69
-msgid "Related Articles"
-msgstr "FR-Related Articles"
-
-#: home/templates/home/tags/footer.html:6 iogt/templates/account/login.html:22
-#: iogt/templates/account/signup.html:25
-msgid "Log in"
-msgstr "FR-Log in"
-
-#: home/wagtail_hooks.py:58
 msgid "Form Data"
-msgstr "FR-Form Data"
+msgstr "([BE]-Form Data)"
 
-#: iogt/settings/base.py:262
-msgid "Arabic"
-msgstr "FR-Arabic"
-
-#: iogt/settings/base.py:263
-msgid "Chichewa"
-msgstr "FR-Chichewa"
-
-#: iogt/settings/base.py:264
-msgid "English"
-msgstr "FR-English"
-
-#: iogt/settings/base.py:265
-msgid "French"
-msgstr "FR-French"
-
-#: iogt/settings/base.py:266
-msgid "Khmer"
-msgstr "FR-Khmer"
-
-#: iogt/settings/base.py:267
-msgid "Kinyarwanda"
-msgstr "FR-Kinyarwanda"
-
-#: iogt/settings/base.py:269
-msgid "Kurdish"
-msgstr "FR-Kurdish"
-
-#: iogt/settings/base.py:270
-msgid "Malagasy"
-msgstr "FR-Malagasy"
-
-#: iogt/settings/base.py:271
-msgid "Nepali"
-msgstr "FR-Nepali"
-
-#: iogt/settings/base.py:272
-msgid "Ndebele"
-msgstr "FR-Ndebele"
-
-#: iogt/settings/base.py:273
-msgid "Portuguese"
-msgstr "FR-Portuguese"
-
-#: iogt/settings/base.py:274
-msgid "Quechua"
-msgstr "FR-Quechua"
-
-#: iogt/settings/base.py:275
-msgid "Russian"
-msgstr "FR-Russian"
-
-#: iogt/settings/base.py:276
-msgid "Shona"
-msgstr "FR-Shona"
-
-#: iogt/settings/base.py:277
-msgid "Spanish"
-msgstr "FR-Spanish"
-
-#: iogt/settings/base.py:278
-msgid "Swahili"
-msgstr "FR-Swahili"
-
-#: iogt/settings/base.py:279
-msgid "Tajik"
-msgstr "FR-Tajik"
-
-#: iogt/settings/base.py:280
-msgid "Tigrinya"
-msgstr "FR-Tigrinya"
-
-#: iogt/settings/base.py:281
-msgid "Urdu"
-msgstr "FR-Urdu"
-
-#: iogt/settings/base.py:282
-msgid "Uzbek"
-msgstr "FR-Uzbek"
-
-#: iogt/settings/base.py:283
-msgid "Zulu"
-msgstr "FR-Zulu"
-
-#: iogt/templates/404.html:8
-msgid "Page not found"
-msgstr "FR-Page not found"
-
-#: iogt/templates/404.html:10
-msgid "Sorry, this page could not be found."
-msgstr "FR-Sorry, this page could not be found."
-
-#: iogt/templates/500.html:7 iogt/templates/500.html:11
-msgid "Internal server error"
-msgstr "FR-Internal server error"
-
-#: iogt/templates/500.html:13
-msgid "Sorry, there seems to be an error. Please try again soon."
-msgstr "FR-Sorry, there seems to be an error. Please try again soon."
-
-#: iogt/templates/account/account_inactive.html:5
-#: iogt/templates/account/account_inactive.html:8
-msgid "Account Inactive"
-msgstr "FR-Account Inactive"
-
-#: iogt/templates/account/account_inactive.html:10
-msgid "This account is inactive."
-msgstr "FR-This account is inactive."
-
-#: iogt/templates/account/login.html:6 iogt/templates/account/login.html:10
-msgid "Log In"
-msgstr "FR-Log In"
-
-#: iogt/templates/account/login.html:25 iogt/templates/account/signup.html:5
-#: iogt/templates/account/signup.html:8 iogt/templates/account/signup.html:22
-msgid "Create your account"
-msgstr "FR-Create your account"
-
-#: iogt/templates/account/logout.html:5 iogt/templates/account/logout.html:8
-#: iogt/templates/account/logout.html:17
-msgid "Sign Out"
-msgstr "FR-Sign Out"
-
-#: iogt/templates/account/logout.html:10
-msgid "Are you sure you want to sign out?"
-msgstr "FR-Are you sure you want to sign out?"
-
-#: iogt/templates/account/password_change.html:5
-#: iogt/templates/account/password_change.html:8
-#: iogt/templates/account/password_change.html:13
-#: iogt/templates/account/password_reset_from_key.html:4
-#: iogt/templates/account/password_reset_from_key.html:7
-#: iogt/templates/account/password_reset_from_key.html:17
-#: iogt/templates/account/password_reset_from_key_done.html:4
-#: iogt/templates/account/password_reset_from_key_done.html:7
-msgid "Change Password"
-msgstr "FR-Change Password"
-
-#: iogt/templates/account/password_change.html:14
-msgid "Forgot Password?"
-msgstr "FR-Forgot Password?"
-
-#: iogt/templates/account/password_reset.html:6
-#: iogt/templates/account/password_reset.html:10
-#: iogt/templates/account/password_reset_done.html:6
-#: iogt/templates/account/password_reset_done.html:9
-msgid "Password Reset"
-msgstr "FR-Password Reset"
-
-#: iogt/templates/account/password_reset.html:15
-msgid ""
-"Forgotten your password? Enter your e-mail address below, and we'll send you "
-"an e-mail allowing you to reset it."
-msgstr ""
-"FR-Forgotten your password? Enter your e-mail address below, and we'll send "
-"you an e-mail allowing you to reset it."
-
-#: iogt/templates/account/password_reset.html:20
-msgid "Reset My Password"
-msgstr "FR-Reset My Password"
-
-#: iogt/templates/account/password_reset.html:23
-msgid "Please contact us if you have any trouble resetting your password."
-msgstr "FR-Please contact us if you have any trouble resetting your password."
-
-#: iogt/templates/account/password_reset_done.html:15
-msgid ""
-"We have sent you an e-mail. Please contact us if you do not receive it "
-"within a few minutes."
-msgstr ""
-"FR-We have sent you an e-mail. Please contact us if you do not receive it "
-"within a few minutes."
-
-#: iogt/templates/account/password_reset_from_key.html:7
-msgid "Bad Token"
-msgstr "FR-Bad Token"
-
-#: iogt/templates/account/password_reset_from_key.html:11
-#, python-format
-msgid ""
-"The password reset link was invalid, possibly because it has already been "
-"used.  Please request a <a href=\"%(passwd_reset_url)s\">new password reset</"
-"a>."
-msgstr ""
-"FR-The password reset link was invalid, possibly because it has already been "
-"used.  Please request a <a href=\"%(passwd_reset_url)s\">new password reset</"
-"a>."
-
-#: iogt/templates/account/password_reset_from_key.html:20
-#: iogt/templates/account/password_reset_from_key_done.html:8
-msgid "Your password is now changed."
-msgstr "FR-Your password is now changed."
-
-#: iogt/templates/account/password_set.html:5
-#: iogt/templates/account/password_set.html:8
-#: iogt/templates/account/password_set.html:13
-msgid "Set Password"
-msgstr "FR-Set Password"
-
-#: iogt/templates/back_button.html:14
-msgid "BACK"
-msgstr "FR-BACK"
-
-#: iogt/templates/cache_banner.html:9
-msgid ""
-"This appears to be your first visit here. Our website is also available as a "
-"downloadable app."
-msgstr ""
-"FR-This appears to be your first visit here. Our website is also available "
-"as a downloadable app."
-
-#: iogt/templates/cache_banner.html:10
-msgid "Would you like to download it?"
-msgstr "FR-Would you like to download it?"
-
-#: iogt/templates/cache_banner.html:12
-#: messaging/templates/messaging/thread_detail.html:26
-msgid "Download"
-msgstr "FR-Download"
-
-#: iogt/templates/footer.html:31 search/templates/search/search.html:106
-msgid "Search here"
-msgstr "FR-Search here"
-
-#: iogt/templates/footer.html:36
-msgid "© The Internet of Good Things"
-msgstr "FR-© The Internet of Good Things"
-
-#: iogt/templates/transition-page.html:10
-msgid ""
-"You are leaving the <b>Internet of Good Things</b> to visit an external "
-"website and standard data charges by your network provider might apply"
-msgstr ""
-"FR-You are leaving the <b>Internet of Good Things</b> to visit an external "
-"website and standard data charges by your network provider might apply"
-
-#: iogt/templates/transition-page.html:13
-msgid "Continue to external site"
-msgstr "FR-Continue to external site"
-
-#: iogt/templates/transition-page.html:16
-msgid "Go back to previous page"
-msgstr "FR-Go back to previous page"
-
-#: iogt/templates/wagtailusers/users/list.html:8
-#: iogt/templates/wagtailusers/users/list.html:12
-msgid "Username"
-msgstr "FR-Username"
-
-#: iogt/templates/wagtailusers/users/list.html:27
-msgid "Level"
-msgstr "FR-Level"
-
-#: iogt/templates/wagtailusers/users/list.html:28
-msgid "Status"
-msgstr "FR-Status"
-
-#: iogt/templates/wagtailusers/users/list.html:29
-msgid "Last Login"
-msgstr "FR-Last Login"
-
-#: iogt/templates/wagtailusers/users/list.html:45
-msgid "Admin"
-msgstr "FR-Admin"
-
-#: iogt/templates/wagtailusers/users/list.html:46
-msgid "Active"
-msgstr "FR-Active"
-
-#: iogt/templates/wagtailusers/users/list.html:46
-msgid "Inactive"
-msgstr "FR-Inactive"
-
-#: iogt/templates/wagtailusers/users/list.html:47
-#, python-format
-msgid "%(time_period)s ago"
-msgstr "FR-%(time_period)s ago"
-
-#: iogt_users/forms.py:15
-msgid "I accept the terms & conditions"
-msgstr "FR-I accept the terms & conditions"
-
-#: iogt_users/forms.py:28 iogt_users/forms.py:36
-msgid "4-digit PIN"
-msgstr "FR-4-digit PIN"
-
-#: iogt_users/forms.py:32
-msgid "Enter Your Name"
-msgstr "FR-Enter Your Name"
-
-#: iogt_users/forms.py:46
-msgid "Old 4-digit PIN"
-msgstr "FR-Old 4-digit PIN"
-
-#: iogt_users/forms.py:47
-msgid "New 4-digit PIN"
-msgstr "FR-New 4-digit PIN"
-
-#: iogt_users/forms.py:48
-msgid "Confirm new 4-digit PIN"
-msgstr "FR-Confirm new 4-digit PIN"
-
-#: iogt_users/templates/modeladmin/iogt_users/user/index.html:34
 msgid "Upload Users"
-msgstr "FR-Upload Users"
+msgstr "([BE]-Upload Users)"
 
-#: iogt_users/templates/modeladmin/iogt_users/user/index.html:39
 msgid "Download XLSX"
-msgstr "FR-Download XLSX"
+msgstr "([BE]-Download XLSX)"
 
-#: iogt_users/templates/modeladmin/iogt_users/user/index.html:42
 msgid "Download CSV"
-msgstr "FR-Download CSV"
+msgstr "([BE]-Download CSV)"
 
-#: iogt_users/templates/modeladmin/iogt_users/user/index.html:63
 msgid "Filter"
-msgstr "FR-Filter"
+msgstr "([BE]-Filter)"
 
-#: iogt_users/templates/modeladmin/iogt_users/user/index.html:74
-#, python-format
 msgid ""
 "No %(name)s have been created yet. One of the following must be created "
 "before you can add any %(name)s:"
 msgstr ""
-"FR-No %(name)s have been created yet. One of the following must be created "
-"before you can add any %(name)s:"
+"([BE]-No %(name)s have been created yet. One of the following must be "
+"created before you can add any %(name)s:)"
 
-#: iogt_users/templates/modeladmin/iogt_users/user/index.html:79
-#, python-format
 msgid "No %(name)s have been created yet."
-msgstr "FR-No %(name)s have been created yet."
+msgstr "([BE]-No %(name)s have been created yet.)"
 
-#: iogt_users/templates/modeladmin/iogt_users/user/index.html:81
-#, python-format
-msgid ""
-"\n"
-"                                                Why not <a href=\"%(url)s"
-"\">add one</a>?\n"
-"                                            "
-msgstr ""
-"\n"
-"FR-                                                Why not <a href=\"%(url)s"
-"\">add one</a>?\n"
-"                                            "
+msgid "Why not <a href=\"%(url)s\">add one</a>?"
+msgstr "([BE]-Why not <a href=\"%(url)s\">add one</a>?)"
 
-#: iogt_users/templates/modeladmin/iogt_users/user/index.html:94
 msgid "Pagination"
-msgstr "FR-Pagination"
+msgstr "([BE]-Pagination)"
 
-#: iogt_users/templates/modeladmin/iogt_users/user/index.html:95
-#, python-format
-msgid "Page %(current_page)s of %(num_pages)s."
-msgstr "FR-Page %(current_page)s of %(num_pages)s."
-
-#: iogt_users/templates/post_registration_survey.html:5
-msgid "Post Registration Survey"
-msgstr "FR-Post Registration Survey"
-
-#: iogt_users/templates/post_registration_survey.html:6
-msgid "Please fill this survey to keep using Internet of Good Things"
-msgstr "FR-Please fill this survey to keep using Internet of Good Things"
-
-#: iogt_users/templates/post_registration_survey.html:10
-msgid "Simulate form completion"
-msgstr "FR-Simulate form completion"
-
-#: iogt_users/templates/profile.html:4 iogt_users/templates/profile.html:26
-msgid "Edit my profile"
-msgstr "FR-Edit my profile"
-
-#: iogt_users/templates/profile.html:15
-#, python-format
-msgid ""
-"\n"
-"                Hey, %(username)s\n"
-"            "
-msgstr ""
-"\n"
-"FR-                Hey, %(username)s\n"
-"            "
-
-#: iogt_users/templates/profile.html:39
-msgid "Change Digital Pin"
-msgstr "FR-Change Digital Pin"
-
-#: iogt_users/templates/profile.html:46
-msgid "Log out"
-msgstr "FR-Log out"
-
-#: iogt_users/templates/profile_edit.html:4
-#: iogt_users/templates/profile_edit.html:7
-msgid "Personal Details"
-msgstr "FR-Personal Details"
-
-#: iogt_users/templates/profile_edit.html:13
-msgid "Save changes"
-msgstr "FR-Save changes"
-
-#: messaging/templates/messaging/inbox.html:6
-msgid "Chat"
-msgstr "FR-Chat"
-
-#: messaging/templates/messaging/thread.html:10
-msgid "Delete Thread"
-msgstr "FR-Delete Thread"
-
-#: messaging/templates/messaging/thread.html:36
-#: messaging/templates/messaging/thread_confirm_delete.html:20
-msgid "Cancel"
-msgstr "FR-Cancel"
-
-#: messaging/templates/messaging/thread.html:37
-#: messaging/templates/messaging/thread_detail.html:52
-msgid "Send"
-msgstr "FR-Send"
-
-#: messaging/templates/messaging/thread_confirm_delete.html:7
-msgid "Confirm Delete:"
-msgstr "FR-Confirm Delete:"
-
-#: messaging/templates/messaging/thread_confirm_delete.html:14
-msgid "Are you sure you want to delete this thread?"
-msgstr "FR-Are you sure you want to delete this thread?"
-
-#: messaging/templates/messaging/thread_confirm_delete.html:21
-msgid "Delete"
-msgstr "FR-Delete"
-
-#: messaging/templates/messaging/thread_detail.html:6
-#: questionnaires/templates/quizzes/quiz_landing.html:46
-msgid "Back"
-msgstr "FR-Back"
-
-#: messaging/templates/messaging/thread_detail.html:9
-msgid "Load more"
-msgstr "FR-Load more"
-
-#: messaging/templates/messaging/thread_detail.html:51
-msgid "Reply here..."
-msgstr "FR-Reply here..."
-
-#: questionnaires/blocks.py:22
 msgid "Answer options"
-msgstr "FR-Answer options"
+msgstr "([BE]-Answer options)"
 
-#: questionnaires/blocks.py:33
 msgid "Next default question"
-msgstr "FR-Next default question"
+msgstr "([BE]-Next default question)"
 
-#: questionnaires/blocks.py:34
-msgid "End of survey"
-msgstr "FR-End of survey"
+msgid "Page break is only allowed with multi-step enabled."
+msgstr "([BE]-Page break is only allowed with multi-step enabled.)"
 
-#: questionnaires/blocks.py:35
-msgid "Another question"
-msgstr "FR-Another question"
-
-#: questionnaires/forms.py:32 questionnaires/forms.py:126
 msgid "Checkbox type questions must have 2 Answer Options: a on and off"
-msgstr "FR-Checkbox type questions must have 2 Answer Options: a on and off"
+msgstr ""
+"([BE]-Checkbox type questions must have 2 Answer Options: a on and off)"
 
-#: questionnaires/forms.py:41 questionnaires/forms.py:135
 msgid "This field is required."
-msgstr "FR-This field is required."
+msgstr "([BE]-This field is required.)"
 
-#: questionnaires/models.py:58
+msgid ""
+"Skipping to {logic.value[\"skip_logic\"]} not allowed for checkbox and "
+"checkboxes."
+msgstr ""
+"([BE]-Skipping to {logic.value[\"skip_logic\"]} not allowed for checkbox and"
+" checkboxes.)"
+
+msgid ""
+"Skipping to {logic.value[\"skip_logic\"]} not allowed for checkbox, "
+"checkboxes."
+msgstr ""
+"([BE]-Skipping to {logic.value[\"skip_logic\"]} not allowed for checkbox, "
+"checkboxes.)"
+
+msgid "Checkbox"
+msgstr "([BE]-Checkbox)"
+
+msgid "Checkboxes"
+msgstr "([BE]-Checkboxes)"
+
+msgid "Date"
+msgstr "([BE]-Date)"
+
+msgid "Date/time"
+msgstr "([BE]-Date/time)"
+
+msgid "Drop down"
+msgstr "([BE]-Drop down)"
+
+msgid "Email"
+msgstr "([BE]-Email)"
+
+msgid "Hidden field"
+msgstr "([BE]-Hidden field)"
+
+msgid "Single line text"
+msgstr "([BE]-Single line text)"
+
+msgid "Multi-line text"
+msgstr "([BE]-Multi-line text)"
+
+msgid "Number"
+msgstr "([BE]-Number)"
+
+msgid "Positive number"
+msgstr "([BE]-Positive number)"
+
+msgid "Radio buttons"
+msgstr "([BE]-Radio buttons)"
+
+msgid "URL"
+msgstr "([BE]-URL)"
+
 msgid "Check this to allow users who are NOT logged in to complete surveys."
 msgstr ""
-"FR-Check this to allow users who are NOT logged in to complete surveys."
+"([BE]-Check this to allow users who are NOT logged in to complete surveys.)"
 
-#: questionnaires/models.py:64
 msgid "Check this to allow multiple form submissions for users"
-msgstr "FR-Check this to allow multiple form submissions for users"
+msgstr "([BE]-Check this to allow multiple form submissions for users)"
 
-#: questionnaires/models.py:67
 msgid "Submit button text"
-msgstr "FR-Submit button text"
+msgstr "([BE]-Submit button text)"
 
-#: questionnaires/models.py:194 questionnaires/models.py:518
 msgid "required"
-msgstr "FR-required"
+msgstr "([BE]-required)"
 
-#: questionnaires/models.py:196 questionnaires/models.py:520
+msgid "field type"
+msgstr "([BE]-field type)"
+
 msgid "admin_label"
-msgstr "FR-admin_label"
+msgstr "([BE]-admin_label)"
 
-#: questionnaires/models.py:198 questionnaires/models.py:522
 msgid "Column header used during CSV export of survey responses."
-msgstr "FR-Column header used during CSV export of survey responses."
+msgstr "([BE]-Column header used during CSV export of survey responses.)"
 
-#: questionnaires/models.py:205 questionnaires/models.py:529
+msgid ""
+"This is used to add choices for field type radio, checkbox, checkboxes, and "
+"dropdown only. This can be used to skip questions and skipping is only "
+msgstr ""
+"([BE]-This is used to add choices for field type radio, checkbox, "
+"checkboxes, and dropdown only. This can be used to skip questions and "
+"skipping is only )"
+
 msgid "Inserts a page break which puts the next question onto a new page"
-msgstr "FR-Inserts a page break which puts the next question onto a new page"
+msgstr ""
+"([BE]-Inserts a page break which puts the next question onto a new page)"
 
-#: questionnaires/models.py:259 questionnaires/models.py:594
 msgid "Multi-step"
-msgstr "FR-multi-step"
+msgstr "([BE]-Multi-step)"
 
-#: questionnaires/models.py:260
 msgid ""
 "Whether to display the survey questions to the user one at a time, instead "
 "of all at once."
 msgstr ""
-"FR-Whether to display the survey questions to the user one at a time, "
-"instead of all at once."
+"([BE]-Whether to display the survey questions to the user one at a time, "
+"instead of all at once.)"
 
-#: questionnaires/models.py:274
 msgid "General settings for survey"
-msgstr "FR-General settings for survey"
+msgstr "([BE]-General settings for survey)"
 
-#: questionnaires/models.py:282
 msgid "Description at survey page"
-msgstr "FR-Description at survey page"
+msgstr "([BE]-Description at survey page)"
 
-#: questionnaires/models.py:337 questionnaires/models.py:505
-#: questionnaires/models.py:647
 msgid "User"
-msgstr "FR-User"
+msgstr "([BE]-User)"
 
-#: questionnaires/models.py:338 questionnaires/models.py:506
-#: questionnaires/models.py:648
 msgid "Submission Date"
-msgstr "FR-Submission Date"
+msgstr "([BE]-Submission Date)"
 
-#: questionnaires/models.py:339 questionnaires/models.py:507
-#: questionnaires/models.py:649
 msgid "Page URL"
-msgstr "FR-Page URL"
+msgstr "([BE]-Page URL)"
 
-#: questionnaires/models.py:348
 msgid "survey"
-msgstr "FR-survey"
+msgstr "([BE]-survey)"
 
-#: questionnaires/models.py:349
 msgid "surveys"
-msgstr "FR-surveys"
+msgstr "([BE]-surveys)"
 
-#: questionnaires/models.py:371
-msgid "Checkbox"
-msgstr "FR-Checkbox"
+msgid "Dropdown"
+msgstr "([BE]-Dropdown)"
 
-#: questionnaires/models.py:372
-msgid "Checkboxes"
-msgstr "FR-Checkboxes"
-
-#: questionnaires/models.py:373
-msgid "Multiple select"
-msgstr "FR-Multiple select"
-
-#: questionnaires/models.py:374
-msgid "Radio buttons"
-msgstr "FR-Radio buttons"
-
-#: questionnaires/models.py:377
-msgid "field type"
-msgstr "FR-field type"
-
-#: questionnaires/models.py:388
 msgid "This option allows the users to see the results."
-msgstr "FR-This option allows the users to see the results."
+msgstr "([BE]-This option allows the users to see the results.)"
 
-#: questionnaires/models.py:393
 msgid ""
-"If not checked, the results will be shown as a total instead of a percentage."
-msgstr ""
-"FR-If not checked, the results will be shown as a total instead of a "
+"If not checked, the results will be shown as a total instead of a "
 "percentage."
-
-#: questionnaires/models.py:417
-msgid "General settings for poll"
-msgstr "FR-General settings for poll"
-
-#: questionnaires/models.py:425
-msgid "Description at poll page"
-msgstr "FR-Description at poll page"
-
-#: questionnaires/models.py:438
-msgid "poll"
-msgstr "FR-poll"
-
-#: questionnaires/models.py:439
-msgid "polls"
-msgstr "FR-polls"
-
-#: questionnaires/models.py:533
-msgid "correct_answer"
-msgstr "FR-correct_answer"
-
-#: questionnaires/models.py:534
-msgid ""
-"Comma separated list of choices. Only applicable in checkboxes, radio, "
-"dropdown and multiselect."
 msgstr ""
-"FR-Comma separated list of choices. Only applicable in checkboxes, radio, "
-"dropdown and multiselect."
+"([BE]-If not checked, the results will be shown as a total instead of a "
+"percentage.)"
 
-#: questionnaires/models.py:535
-msgid "Feedback"
-msgstr "FR-Feedback"
+msgid "General settings for poll"
+msgstr "([BE]-General settings for poll)"
 
-#: questionnaires/models.py:537
-msgid "Feedback message for user answer."
-msgstr "FR-Feedback message for user answer."
+msgid "Description at poll page"
+msgstr "([BE]-Description at poll page)"
 
-#: questionnaires/models.py:609
-msgid "General settings for quiz"
-msgstr "FR-General settings for quiz"
+msgid "poll"
+msgstr "([BE]-poll)"
 
-#: questionnaires/models.py:617
-msgid "Description at quiz page"
-msgstr "FR-Description at quiz page"
+msgid "polls"
+msgstr "([BE]-polls)"
 
-#: questionnaires/models.py:699
-msgid "quiz"
-msgstr "FR-quiz"
+msgid "correct_answer"
+msgstr "([BE]-correct_answer)"
 
-#: questionnaires/models.py:700
-msgid "quizzes"
-msgstr "FR-quizzes"
-
-#: questionnaires/templates/poll/poll_landing.html:27
-msgid "Your answer"
-msgstr "FR-Your answer"
-
-#: questionnaires/templates/questionnaires/tags/field_description.html:12
-msgid "Check if apply"
-msgstr "FR-Check if apply"
-
-#: questionnaires/templates/questionnaires/tags/polls_list.html:11
-msgid "POLL"
-msgstr "FR-POLL"
-
-#: questionnaires/templates/questionnaires/tags/quizzes_list.html:11
-msgid "QUIZ"
-msgstr "FR-QUIZ"
-
-#: questionnaires/templates/questionnaires/tags/submit_button.html:7
-msgid "Next step"
-msgstr "FR-Next step"
-
-#: questionnaires/templates/questionnaires/tags/surveys_list.html:11
-msgid "SURVEY"
-msgstr "FR-SURVEY"
-
-#: questionnaires/templates/questionnaires/tags/textarea.html:6
-msgid "No limit"
-msgstr "FR-No limit"
-
-#: questionnaires/templates/quizzes/quiz.html:36
-#: questionnaires/templates/survey/survey.html:40
-#: questionnaires/templates/survey/survey_landing.html:14
-msgid "Go to homepage"
-msgstr "FR-Go to homepage"
-
-#: questionnaires/templates/quizzes/quiz_landing.html:17
-msgid "Your results!"
-msgstr "FR-Your results!"
-
-#: questionnaires/templates/quizzes/quiz_landing.html:21
-#: questionnaires/templates/quizzes/quiz_landing.html:79
-msgid "Correct"
-msgstr "FR-Correct"
-
-#: questionnaires/templates/quizzes/quiz_landing.html:24
-#: questionnaires/templates/quizzes/quiz_landing.html:80
-msgid "Incorrect"
-msgstr "FR-Incorrect"
-
-#: questionnaires/templates/quizzes/quiz_landing.html:69
-msgid "Replay Quiz"
-msgstr "FR-Replay Quiz"
-
-#: questionnaires/templates/quizzes/quiz_landing.html:99
-#: questionnaires/templates/quizzes/quiz_landing.html:136
-msgid "Correct answer"
-msgstr "FR-Correct answer"
-
-#: questionnaires/templates/survey/survey_landing.html:12
-msgid "Get Started"
-msgstr "FR-Get Started"
-
-#: search/templates/search/search.html:13
-msgid "Search results for"
-msgstr "FR-Search results for"
-
-#: search/templates/search/search.html:18
-msgid "Searching results for"
-msgstr "FR-Searching results for"
-
-#: search/templates/search/search.html:38
-#, python-format
 msgid ""
-" 1 result\n"
-"                    "
-msgid_plural ""
-" %(counter)s results\n"
-"                    "
-msgstr[0] ""
-" FR-1 result\n"
-"                    "
-msgstr[1] ""
-" FR-%(counter)s results\n"
-"                    "
+"The correct answer/choice(s). For checkboxes: a comma separated list of "
+"choices. For checkbox: Either \"on\" or \"off\"."
+msgstr ""
+"([BE]-The correct answer/choice(s). For checkboxes: a comma separated list "
+"of choices. For checkbox: Either \"on\" or \"off\".)"
 
-#: search/templates/search/search.html:80
+msgid "Feedback"
+msgstr "([BE]-Feedback)"
+
+msgid "Feedback message for user answer."
+msgstr "([BE]-Feedback message for user answer.)"
+
+msgid "General settings for quiz"
+msgstr "([BE]-General settings for quiz)"
+
+msgid "Description at quiz page"
+msgstr "([BE]-Description at quiz page)"
+
+msgid "End of survey"
+msgstr "([BE]-End of survey)"
+
+msgid "Another question"
+msgstr "([BE]-Another question)"
+
+msgid "Account Inactive"
+msgstr "([BE]-Account Inactive)"
+
+msgid "This account is inactive."
+msgstr "([BE]-This account is inactive.)"
+
+msgid "Featured Content"
+msgstr "([BE]-Featured Content)"
+
+msgid "Recommended Articles"
+msgstr "([BE]-Recommended Articles)"
+
+msgid "Chat"
+msgstr "([has translation]-Chat)"
+
+msgid "Delete Thread"
+msgstr "([needs translation]-Delete Thread)"
+
+msgid "Cancel"
+msgstr "([has translation]-Cancel)"
+
+msgid "Send"
+msgstr "([has improv translation]-Send)"
+
+msgid "Confirm Delete:"
+msgstr "([not-needed]-Confirm Delete:)"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "([needs translation]-Are you sure you want to delete this thread?)"
+
+msgid "Delete"
+msgstr "([needs translation]-Delete)"
+
+msgid "Load more"
+msgstr "([needs translation]-Load more)"
+
+msgid "Reply here..."
+msgstr "([remove]-Reply here...)"
+
+msgid "Reply"
+msgstr "([has translation]-Reply)"
+
+msgid "Remove comment"
+msgstr "([not-needed]-Remove comment)"
+
+msgid "Remove this comment?"
+msgstr "([needs translation]-Remove this comment?)"
+
+msgid "Remove"
+msgstr "([needs translation]-Remove)"
+
+msgid "Comment removed"
+msgstr "([not-needed]-Comment removed)"
+
+msgid "The comment has been removed."
+msgstr "([not-needed]-The comment has been removed.)"
+
+msgid ""
+"Thank you for taking the time to improve the quality of discussion in our "
+"site."
+msgstr ""
+"([not-needed]-Thank you for taking the time to improve the quality of "
+"discussion in our site.)"
+
+msgid "Flag comment"
+msgstr "([not-needed]-Flag comment)"
+
+msgid "Flag this comment?"
+msgstr "([not-needed]-Flag this comment?)"
+
+msgid ""
+"Click on the flag button to mark the following comment as inappropriate."
+msgstr ""
+"([needs translation]-Click on the flag button to mark the following comment "
+"as inappropriate.)"
+
+msgid "Posted to "
+msgstr "([remove]-Posted to )"
+
+msgid "Flag"
+msgstr "([not-needed]-Flag)"
+
+msgid "Comment flagged"
+msgstr "([not-needed]-Comment flagged)"
+
+msgid "The comment has been flagged."
+msgstr "([not-needed]-The comment has been flagged.)"
+
+msgid "Leave comment"
+msgstr "([has translation]-Leave comment)"
+
+msgid "Preview your comment"
+msgstr "([not-needed]-Preview your comment)"
+
+msgid "Preview of your comment for:"
+msgstr "([not-needed]-Preview of your comment for:)"
+
+msgid "Empty comment."
+msgstr "([not-needed]-Empty comment.)"
+
+msgid "Post your comment"
+msgstr "([remove]-Post your comment)"
+
+msgid "This comment has been removed."
+msgstr "([needs translation]-This comment has been removed.)"
+
+msgid "List of comments"
+msgstr "([not-needed]-List of comments)"
+
+msgid "No comments yet."
+msgstr "([not-needed]-No comments yet.)"
+
+msgid "moderator"
+msgstr "([needs translation]-moderator)"
+
+msgid "Report"
+msgstr "([has translation]-Report)"
+
+msgid "This is a reported comment"
+msgstr "([has translation]-This is a reported comment)"
+
+msgid "Comment discarded"
+msgstr "([not-needed]-Comment discarded)"
+
+msgid "Comment automatically discarded"
+msgstr "([not-needed]-Comment automatically discarded)"
+
+msgid "Sorry, your comment has been automatically discarded"
+msgstr "([not-needed]-Sorry, your comment has been automatically discarded)"
+
+msgid "Confirm your opinion"
+msgstr "([not-needed]-Confirm your opinion)"
+
+msgid "You liked this comment, do you want to change it?"
+msgstr "([not-needed]-You liked this comment, do you want to change it?)"
+
+msgid "Do you like this comment?"
+msgstr "([not-needed]-Do you like this comment?)"
+
+msgid "Please, confirm your opinion about the comment."
+msgstr "([not-needed]-Please, confirm your opinion about the comment.)"
+
+msgid ""
+"Click on the \"withdraw\" button if you want to withdraw your positive "
+"opinion on this comment."
+msgstr ""
+"([not-needed]-Click on the \"withdraw\" button if you want to withdraw your "
+"positive opinion on this comment.)"
+
+msgid "Withdraw"
+msgstr "([not-needed]-Withdraw)"
+
+msgid "I like it"
+msgstr "([not-needed]-I like it)"
+
+msgid "Your opinion is appreciated"
+msgstr "([not-needed]-Your opinion is appreciated)"
+
+msgid "Thanks for taking the time to participate."
+msgstr "([not-needed]-Thanks for taking the time to participate.)"
+
+msgid "Comment requires approval"
+msgstr "([not-needed]-Comment requires approval)"
+
+msgid "Comment in moderation"
+msgstr "([not-needed]-Comment in moderation)"
+
+msgid ""
+"Your comment is in moderation.<br/> It has to be reviewed before being "
+"published.<br/> Thank you for your patience and understanding."
+msgstr ""
+"([needs translation]-Your comment is in moderation.<br/> It has to be "
+"reviewed before being published.<br/> Thank you for your patience and "
+"understanding.)"
+
+msgid "Go back to: <a href=\"%(content_object_url)s\">%(content_object_str)s</a>"
+msgstr ""
+"([not-needed]-Go back to: <a "
+"href=\"%(content_object_url)s\">%(content_object_str)s</a>)"
+
+msgid "Comment thread muted"
+msgstr "([not-needed]-Comment thread muted)"
+
+msgid "Comment thread has been muted"
+msgstr "([not-needed]-Comment thread has been muted)"
+
+msgid "You will no longer receive email notifications for comments sent to"
+msgstr ""
+"([not-needed]-You will no longer receive email notifications for comments "
+"sent to)"
+
+msgid "Only registered users can post comments."
+msgstr "([not-needed]-Only registered users can post comments.)"
+
+msgid "Comment reply"
+msgstr "([not-needed]-Comment reply)"
+
+msgid "Reply to comment"
+msgstr "([not-needed]-Reply to comment)"
+
+msgid "The comment has been updated successfully!"
+msgstr "([not-needed]-The comment has been updated successfully!)"
+
+msgid "Sent Reply successfully"
+msgstr "([not-needed]-Sent Reply successfully)"
+
+msgid "Your browser does not support the video tag."
+msgstr "([remove]-Your browser does not support the video tag.)"
+
+msgid "Your browser does not support the audio element."
+msgstr "([remove]-Your browser does not support the audio element.)"
+
+msgid ""
+"If you cannot view the above video, perhaps would you like to %(start_link)s"
+" download it? %(end_link)s."
+msgstr ""
+"([needs translation]-If you cannot view the above video, perhaps would you "
+"like to %(start_link)s download it? %(end_link)s.)"
+
+msgid ""
+"If you cannot listen to the above audio, perhaps would you like to "
+"%(start_link)s download it? %(end_link)s."
+msgstr ""
+"([needs translation]-If you cannot listen to the above audio, perhaps would "
+"you like to %(start_link)s download it? %(end_link)s.)"
+
+msgid "[This page is not available in English]"
+msgstr "([needs translation]-[This page is not available in English])"
+
+msgid "sections"
+msgstr "([needs translation]-sections)"
+
+msgid "articles"
+msgstr "([has translation]-articles)"
+
+msgid "%(counter)s of 1 question"
+msgid_plural "%(counter)s of %(total)s questions"
+msgstr[0] "([has translation]-%(counter)s of 1 question)"
+msgstr[1] "([has translation]-%(counter)s of %(total)s questions)"
+
+msgid "Optional"
+msgstr "([has translation]-Optional)"
+
+msgid "Select one"
+msgstr "([has translation]-Select one)"
+
+msgid "Check all that apply"
+msgstr "([has translation]-Check all that apply)"
+
+msgid "Check if apply"
+msgstr "([needs translation]-Check if apply)"
+
+msgid "Comments"
+msgstr "([has translation]-Comments)"
+
+msgid "Please log in or create your account"
+msgstr "([has translation]-Please log in or create your account)"
+
+msgid "New comments have been disabled for this page."
+msgstr "([needs translation]-New comments have been disabled for this page.)"
+
+msgid "Related articles"
+msgstr "([has translation]-Related articles)"
+
+msgid "Log in"
+msgstr "([has translation]-Log in)"
+
+msgid "Previous"
+msgstr "([has translation]-Previous)"
+
+msgid "Next"
+msgstr "([has translation]-Next)"
+
+msgid "Page not found"
+msgstr "([has translation]-Page not found)"
+
+msgid "Sorry, this page could not be found."
+msgstr "([has translation]-Sorry, this page could not be found.)"
+
+msgid "Internal server error"
+msgstr "([has translation]-Internal server error)"
+
+msgid "Sorry, there seems to be an error. Please try again soon."
+msgstr ""
+"([has translation]-Sorry, there seems to be an error. Please try again "
+"soon.)"
+
+msgid "Create your account"
+msgstr "([has translation]-Create your account)"
+
+msgid "Sign Out"
+msgstr "([needs translation]-Sign Out)"
+
+msgid "Are you sure you want to sign out?"
+msgstr "([needs translation]-Are you sure you want to sign out?)"
+
+msgid "Change Password"
+msgstr "([has translation]-Change Password)"
+
+msgid "Forgot Password?"
+msgstr "([remove]-Forgot Password?)"
+
+msgid "Password Reset"
+msgstr "([has translation]-Password Reset)"
+
+msgid ""
+"Forgotten your password? Enter your e-mail address below, and we'll send you"
+" an e-mail allowing you to reset it."
+msgstr ""
+"([remove]-Forgotten your password? Enter your e-mail address below, and "
+"we'll send you an e-mail allowing you to reset it.)"
+
+msgid "Reset My Password"
+msgstr "([has translation]-Reset My Password)"
+
+msgid "Please contact us if you have any trouble resetting your password."
+msgstr ""
+"([remove]-Please contact us if you have any trouble resetting your "
+"password.)"
+
+msgid ""
+"If you don't receive an email, please make sure you've entered the address "
+"you registered with, and check your spam folder."
+msgstr ""
+"([has translation]-If you don't receive an email, please make sure you've "
+"entered the address you registered with, and check your spam folder.)"
+
+msgid "quiz"
+msgstr "([has improv translation]-quiz)"
+
+msgid "quizzes"
+msgstr "([has translation]-quizzes)"
+
+msgid "Your answer"
+msgstr "([has translation]-Your answer)"
+
+msgid "POLL"
+msgstr "([has improv translation]-POLL)"
+
+msgid "QUIZ"
+msgstr "([has improv translation]-QUIZ)"
+
+msgid "SURVEY"
+msgstr "([has improv translation]-SURVEY)"
+
+msgid "No limit"
+msgstr "([has translation]-No limit)"
+
+msgid "Go to homepage"
+msgstr "([has translation]-Go to homepage)"
+
+msgid "Your results!"
+msgstr "([has translation]-Your results!)"
+
+msgid "Correct"
+msgstr "([has translation]-Correct)"
+
+msgid "Incorrect"
+msgstr "([has translation]-Incorrect)"
+
+msgid "Replay Quiz"
+msgstr "([has translation]-Replay Quiz)"
+
+msgid "Correct answer"
+msgstr "([has improv translation]-Correct answer)"
+
+msgid "Get Started"
+msgstr "([has translation]-Get Started)"
+
+msgid "Search results for: "
+msgstr "([has translation]-Search results for: )"
+
+msgid "1 result"
+msgid_plural "%(counter)s results"
+msgstr[0] "([has translation]-1 result)"
+msgstr[1] "([has translation]-%(counter)s results)"
+
 msgid "No results found"
-msgstr "FR-No results found"
+msgstr "([has translation]-No results found)"
 
-#: search/templates/search/search.html:82
 msgid "It seems we can’t find any results based on your search."
-msgstr "FR-It seems we can’t find any results based on your search."
+msgstr "([remove]-It seems we can’t find any results based on your search.)"
 
-#: search/templates/search/search.html:110
 msgid "See results"
-msgstr "FR-See results"
+msgstr "([has translation]-See results)"
 
-#~ msgid "You are leaving"
-#~ msgstr "FR-You are leaving"
+msgid "Search the site…"
+msgstr "([has translation]-Search the site…)"
 
-#~ msgid "Internet of Good Things"
-#~ msgstr "FR-Internet of Good Things"
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used. <a href=\"%(passwd_reset_url)s\">Please request a new password "
+"reset</a>."
+msgstr ""
+"([has translation]-The password reset link was invalid, possibly because it "
+"has already been used. <a href=\"%(passwd_reset_url)s\">Please request a new"
+" password reset</a>.)"
 
-#~ msgid "Please provide correct answer for this question"
-#~ msgstr "FR-Please provide correct answer for this question"
+msgid "Your password is now changed."
+msgstr "([has translation]-Your password is now changed.)"
 
-#~ msgid "Back to article"
-#~ msgstr "FR-Back to article"
+msgid "Set Password"
+msgstr "([not-needed]-Set Password)"
 
-#~ msgid "Reported by %(count)s"
-#~ msgstr "FR-Reported by %(count)s"
+msgid "BACK"
+msgstr "([has translation]-BACK)"
 
-#~ msgid "Placeholder text below Create your account button."
-#~ msgstr "FR-Placeholder text below Create your account button."
+msgid "© The Internet of Good Things"
+msgstr "([has translation]-© The Internet of Good Things)"
 
-#~ msgid "Placeholder text below Login button."
-#~ msgstr "FR-Placeholder text below Login button."
+msgid ""
+"This appears to be your first visit here. Our website is also available as a"
+" downloadable app."
+msgstr ""
+"([needs translation]-This appears to be your first visit here. Our website "
+"is also available as a downloadable app.)"
 
-#~ msgid "Notifications"
-#~ msgstr "FR-Notifications"
+msgid "Would you like to download it?"
+msgstr "([needs translation]-Would you like to download it?)"
 
-#~ msgid "Thank you for your response!"
-#~ msgstr "FR-Thank you for your response!"
+msgid "Download"
+msgstr "([needs translation]-Download)"
 
-#~ msgid "Thank you for your input!"
-#~ msgstr "FR-Thank you for your input!"
+msgid "Log in / Create account"
+msgstr "([has translation]-Log in / Create account)"
+
+msgid ""
+"You are leaving the <b>Internet of Good Things</b> to visit an external "
+"website and standard data charges by your network provider might apply"
+msgstr ""
+"([needs translation]-You are leaving the <b>Internet of Good Things</b> to "
+"visit an external website and standard data charges by your network provider"
+" might apply)"
+
+msgid "Continue to external site"
+msgstr "([needs translation]-Continue to external site)"
+
+msgid "Go back to previous page"
+msgstr "([has translation]-Go back to previous page)"
+
+msgid "I accept the terms & conditions"
+msgstr "([has translation]-I accept the terms & conditions)"
+
+msgid "4-digit PIN"
+msgstr "([has improv translation]-4-digit PIN)"
+
+msgid "Enter Your Name"
+msgstr "([remove]-Enter Your Name)"
+
+msgid "Old 4-digit PIN"
+msgstr "([has improv translation]-Old 4-digit PIN)"
+
+msgid "New 4-digit PIN"
+msgstr "([has improv translation]-New 4-digit PIN)"
+
+msgid "Confirm new 4-digit PIN"
+msgstr "([has improv translation]-Confirm new 4-digit PIN)"
+
+msgid "Page %(current_page)s of %(num_pages)s."
+msgstr "([needs translation]-Page %(current_page)s of %(num_pages)s.)"
+
+msgid "Post Registration Survey"
+msgstr "([remove]-Post Registration Survey)"
+
+msgid "Please fill this survey to keep using Internet of Good Things"
+msgstr ""
+"([remove]-Please fill this survey to keep using Internet of Good Things)"
+
+msgid "Edit my profile"
+msgstr "([has translation]-Edit my profile)"
+
+msgid "Hey, %(username)s"
+msgstr "([has translation]-Hey, %(username)s)"
+
+msgid "Change Digital Pin"
+msgstr "([has translation]-Change Digital Pin)"
+
+msgid "Log out"
+msgstr "([needs translation]-Log out)"
+
+msgid "Personal Details"
+msgstr "([has translation]-Personal Details)"
+
+msgid "Save changes"
+msgstr "([has translation]-Save changes)"
+
+msgid "Back"
+msgstr "([has translation]-Back)"
+
+msgid ""
+"As a moderator you can delete comments. Deleting a comment does not remove "
+"it from the site, only prevents your website from showing the text. Click on"
+" the remove button to delete the following comment:"
+msgstr ""
+"([needs translation]-As a moderator you can delete comments. Deleting a "
+"comment does not remove it from the site, only prevents your website from "
+"showing the text. Click on the remove button to delete the following "
+"comment:)"
+
+msgid "Reported by %(count)s user"
+msgid_plural "Reported by %(count)s users"
+msgstr[0] "([needs translation]-Reported by %(count)s user)"
+msgstr[1] "([needs translation]-Reported by %(count)s users)"
+
+msgid "Arabic"
+msgstr "([not-needed]-Arabic)"
+
+msgid "Chichewa"
+msgstr "([not-needed]-Chichewa)"
+
+msgid "English"
+msgstr "([not-needed]-English)"
+
+msgid "French"
+msgstr "([not-needed]-French)"
+
+msgid "Khmer"
+msgstr "([not-needed]-Khmer)"
+
+msgid "Kinyarwanda"
+msgstr "([not-needed]-Kinyarwanda)"
+
+msgid "Kurdish"
+msgstr "([not-needed]-Kurdish)"
+
+msgid "Malagasy"
+msgstr "([not-needed]-Malagasy)"
+
+msgid "Nepali"
+msgstr "([not-needed]-Nepali)"
+
+msgid "Ndebele"
+msgstr "([not-needed]-Ndebele)"
+
+msgid "Portuguese"
+msgstr "([not-needed]-Portuguese)"
+
+msgid "Quechua"
+msgstr "([not-needed]-Quechua)"
+
+msgid "Russian"
+msgstr "([not-needed]-Russian)"
+
+msgid "Shona"
+msgstr "([not-needed]-Shona)"
+
+msgid "Spanish"
+msgstr "([not-needed]-Spanish)"
+
+msgid "Swahili"
+msgstr "([not-needed]-Swahili)"
+
+msgid "Tajik"
+msgstr "([not-needed]-Tajik)"
+
+msgid "Tigrinya"
+msgstr "([not-needed]-Tigrinya)"
+
+msgid "Urdu"
+msgstr "([not-needed]-Urdu)"
+
+msgid "Uzbek"
+msgstr "([not-needed]-Uzbek)"
+
+msgid "Zulu"
+msgstr "([not-needed]-Zulu)"
+
+msgid "Simulate form completion"
+msgstr "([not-needed]-Simulate form completion)"
+
+msgid "section"
+msgstr "([needs translation]-section)"
+
+msgid "article"
+msgstr "([needs translation]-article)"
+
+msgid ""
+"Something went wrong. Can you try refreshing the page, and clicking the "
+"download website button?"
+msgstr ""
+"([needs translation]-Something went wrong. Can you try refreshing the page, "
+"and clicking the download website button?)"
+
+msgid ""
+"Your app is now ready to install. If you are using a iOS device, you can "
+"install it by clicking 'Share', scrolling down and tapping 'Add to Home "
+"Screen. If using Android choose 'Add to home screen' and you should be all "
+"set!"
+msgstr ""
+"([needs translation]-Your app is now ready to install. If you are using a "
+"iOS device, you can install it by clicking 'Share', scrolling down and "
+"tapping 'Add to Home Screen. If using Android choose 'Add to home screen' "
+"and you should be all set!)"
+
+msgid "Install this website as an app on your device?"
+msgstr "([needs translation]-Install this website as an app on your device?)"
+
+msgid "Yes"
+msgstr "([needs translation]-Yes)"
+
+msgid "No"
+msgstr "([needs translation]-No)"
+
+msgid ""
+"Skip to end of survey with in-between required questions isn't allowed."
+msgstr ""
+"([BE]-Skip to end of survey with in-between required questions isn't "
+"allowed.)"
+
+msgid "Indonesian"
+msgstr "([BE]-Indonesian)"
+
+msgid "Kirundi"
+msgstr "([not-needed]-Kirundi)"
+
+msgid "Karakalpak"
+msgstr "([not-needed]-Karakalpak)"
+
+msgid "Testing"
+msgstr "([not-needed]-Testing)"
+
+msgid ""
+"This is used to add choices for field type radio, checkbox, checkboxes, and "
+"dropdown only. This can be used to skip questions and skipping is only "
+"allowed for radio and dropdown."
+msgstr ""
+"([BE]-This is used to add choices for field type radio, checkbox, "
+"checkboxes, and dropdown only. This can be used to skip questions and "
+"skipping is only allowed for radio and dropdown.)"
+
+msgid ""
+"Skip to question "
+"{question_data[last_question_number].cleaned_data[\"label\"]} "
+msgstr ""
+"([BE]-Skip to question "
+"{question_data[last_question_number].cleaned_data[\"label\"]} )"

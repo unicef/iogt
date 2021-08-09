@@ -3,7 +3,7 @@ from allauth.utils import set_form_field_order
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.forms import TextInput, Field
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 from wagtail.users.forms import UserEditForm as WagtailUserEditForm, \
     UserCreationForm as WagtailUserCreationForm
 
@@ -64,7 +64,7 @@ class WagtailAdminUserCreateForm(WagtailUserCreationForm):
     email = forms.EmailField(required=False, label='Email')
     first_name = forms.CharField(required=False, label='First Name')
     last_name = forms.CharField(required=False, label='Last Name')
-    terms_accepted = forms.BooleanField(label='I accept the terms & conditions')
+    terms_accepted = forms.BooleanField(label=_('I accept the terms & conditions'))
 
 
 class WagtailAdminUserEditForm(WagtailUserEditForm):
@@ -72,4 +72,4 @@ class WagtailAdminUserEditForm(WagtailUserEditForm):
     first_name = forms.CharField(required=False, label='First Name')
     last_name = forms.CharField(required=False, label='Last Name')
 
-    terms_accepted = forms.BooleanField(label='I accept the terms & conditions')
+    terms_accepted = forms.BooleanField(label=_('I accept the terms & conditions'))

@@ -24,7 +24,7 @@
   <form action="." method="post">{% csrf_token %}
     <input type="hidden" name="next" value="{{ comment.get_absolute_url }}"/>
     <input type="submit" name="submit" class='report-page__submit'  value="{% translate "Flag" %}"/>
-    <a href="{{ comment.get_absolute_url }}">{% translate "cancel" %}</a>
+    <a href="{{ comment.get_absolute_url }}">{% translate "Cancel" %}</a>
   </form>
 </section>
 {% endblock %}

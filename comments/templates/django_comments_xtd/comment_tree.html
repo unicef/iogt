@@ -50,18 +50,16 @@
                     {% if allow_flagging and item.flagged and item.comment.user != user %}
 
 
-                        <i title="{% translate 'comment flagged' %}"
+                        <i title="{% translate 'Comment flagged' %}"
                            class='report-comment__disclaimer'>{% translate "This is a reported comment" %} </i>
 
                     {% endif %}
-
-
 
                     {% if perms.comments.can_moderate %}
                         {% if item.flagged_count %}
                             <span class="report-comment">
                                     {# Translators: Count refers to the number of people that reported a comment. #}
-                                {% blocktranslate count count=item.flagged_count %}
+                                {% blocktranslate trimmed count count=item.flagged_count %}
                                     Reported by {{ count }} user
                                     {% plural %}
                                     Reported by {{ count }} users
@@ -71,7 +69,7 @@
                     {% endif %}
                     {% if perms.comments.can_moderate %}
                         <a href="{% url 'comments-delete' item.comment.pk %}"><i class="fas fa-trash-alt"
-                                                                                 title="{% translate 'remove comment' %}"></i></a>
+                                                                                 title="{% translate 'Remove comment' %}"></i></a>
                     {% endif %}
 
 
@@ -85,12 +83,3 @@
             </div>
         </div>
     {% endfor %}
-
-    {% if comments and comments.0.comment.level == 0 %}
-        <div class="load-more">
-            <button type="button">
-                {% translate 'View more comments'%}
-            </button>
-        </div>
-    {% endif %}
-</div>

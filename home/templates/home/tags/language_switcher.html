@@ -1,16 +1,31 @@
-{% load wagtailcore_tags i18n %}
+{% load wagtailcore_tags i18n home_tags %}
 {% get_current_language as LANGUAGE_CODE %}
 {% get_language_info for LANGUAGE_CODE as current_language %}
 <div class="language_drop">
     <a href="#">{{ current_language.name_local }}</a>
     <ul class="drop">
-        {% for translation in translations %}
-            {% get_language_info for translation.locale.language_code as lang %}
-            <li class="{% if lang.code == LANGUAGE_CODE %}selected{% endif %}">
-                <a href="{% pageurl translation %}" rel="alternate" hreflang="{{ language_code }}">
-                    {{ lang.name_local }}
-                </a>
-            </li>
-        {% endfor %}
+        {% if translations %}
+            {% for translation in translations %}
+                {% get_language_info for translation.locale.language_code as lang %}
+                <li class="{% if lang.code == LANGUAGE_CODE %}selected{% endif %}">
+                    <a href="{% pageurl translation %}" rel="alternate" hreflang="{{ language_code }}">
+                        {{ lang.name_local }}
+                    </a>
+                </li>
+            {% endfor %}
+
+        {% else %}
+            {% for locale in default_locales %}
+                {% get_language_info for locale.language_code as lang %}
+                {% language lang.code %}
+                    <li class="{% if lang.code == LANGUAGE_CODE %}selected{% endif %}">
+                    <a href="{% change_lang lang.code %}" rel="alternate" hreflang="{{ lang.code }}">
+                        {{ lang.name_local }}
+                    </a>
+                    </li>
+                {% endlanguage %}
+            {% endfor %}
+    {% endif %}
+
     </ul>
 </div>
