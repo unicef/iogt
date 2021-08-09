@@ -72,8 +72,6 @@
                                                                                  title="{% translate 'Remove comment' %}"></i></a>
                     {% endif %}
 
-
-
                     <div class="comment__children">
                         {% if not item.comment.is_removed and item.children %}
                             {% render_xtdcomment_tree with comments=item.children %}
@@ -83,3 +81,12 @@
             </div>
         </div>
     {% endfor %}
+
+{#    {% if comments and comments.0.comment.level == 0 %}#}
+{#        <div class="load-more">#}
+{#            <button type="button">#}
+{#                View more comment#}
+{#            </button>#}
+{#        </div>#}
+{#    {% endif %}#}
+</div>
