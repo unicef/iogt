@@ -85,9 +85,12 @@
             </div>
         </div>
     {% endfor %}
-    <div class="load-more">
-        <button type="button">
-            View more comment
-        </button>
-    </div>
+
+    {% if comments and comments.0.comment.level == 0 %}
+        <div class="load-more">
+            <button type="button">
+                {% trans 'View more comments'%}
+            </button>
+        </div>
+    {% endif %}
 </div>
