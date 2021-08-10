@@ -26,7 +26,10 @@ class XtdCommentAdmin(ModelAdmin):
     form_fields_exclude = ('thread_id', 'parent_id', 'level', 'order', 'followup', 'nested_count',
                            'content_type', 'object_id', 'user_email', 'user_url')
     search_fields = ('comment',)
-    list_export = ('comment', 'user', 'is_removed', 'is_public', 'num_flags', 'num_replies', 'status', 'submit_date')
+    list_export = (
+        'comment', 'user', 'is_removed', 'is_public', 'num_flags', 'num_replies', 'status', 'submit_date', 'article',
+        'article_url', 'article_language_code',
+    )
     button_helper_class = XtdCommentAdminButtonHelper
     menu_order = 601
 
@@ -47,6 +50,16 @@ class XtdCommentAdmin(ModelAdmin):
 
     def num_flags(self, obj):
         return obj.flags.count()
+
+    def article(self, obj):
+        return getattr(obj.content_object, 'title', 'N/A')
+
+    def article_url(self, obj):
+        return getattr(obj.content_object, 'url', 'N/A')
+
+    def article_language_code(self, obj):
+        locale = getattr(obj.content_object, 'locale', object)
+        return getattr(locale, 'language_code', 'N/A')
 
 
 class CannedResponseAdmin(ModelAdmin):
