@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.utils import timezone
 from django.utils.html import format_html
 from django_comments_xtd.models import XtdComment
 from wagtail.contrib.modeladmin.options import ModelAdminGroup, ModelAdmin, modeladmin_register
@@ -60,6 +62,7 @@ class XtdCommentAdmin(ModelAdmin):
     def article_language_code(self, obj):
         locale = getattr(obj.content_object, 'locale', object)
         return getattr(locale, 'language_code', 'N/A')
+
     def view_live(self, obj):
         content_object = obj.content_object
         url = getattr(content_object, 'url', None)
@@ -69,6 +72,10 @@ class XtdCommentAdmin(ModelAdmin):
         return 'N/A'
 
     view_live.allow_tags = True
+
+    @property
+    def export_filename(self):
+        return f'comments_{timezone.now().strftime(settings.EXPORT_FILENAME_TIMESTAMP_FORMAT)}'
 
 
 class CannedResponseAdmin(ModelAdmin):
