@@ -2,6 +2,7 @@ import json
 
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
+from django.utils import timezone
 from django.utils.functional import cached_property
 
 from django.core.paginator import EmptyPage, PageNotAnInteger
@@ -28,6 +29,8 @@ from wagtail.images.blocks import ImageChooserBlock
 from questionnaires.blocks import SkipState, SkipLogicBlock
 from questionnaires.forms import CustomFormBuilder, SurveyForm, QuizForm
 from questionnaires.utils import SkipLogicPaginator, FormHelper
+from questionnaires.views import CustomSubmissionsListView
+
 
 FORM_FIELD_CHOICES = (
     ('checkbox', _('Checkbox')),
@@ -197,6 +200,9 @@ class QuestionnairePage(Page, PageUtilsMixin):
             page=self,
             user=None if user.is_anonymous else user,
         )
+
+    def get_submissions_list_view_class(self):
+        return CustomSubmissionsListView
 
     class Meta:
         abstract = True

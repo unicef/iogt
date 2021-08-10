@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.utils.html import format_html
 from django_comments_xtd.models import XtdComment
 from wagtail.contrib.modeladmin.options import ModelAdminGroup, ModelAdmin, modeladmin_register
@@ -47,6 +48,20 @@ class XtdCommentAdmin(ModelAdmin):
 
     def num_flags(self, obj):
         return obj.flags.count()
+
+    def view_live(self, obj):
+        content_object = obj.content_object
+        url = getattr(content_object, 'url', None)
+        if url:
+            return f'<a href="{url}" target="_blank">{content_object.title}</a>'
+
+        return 'N/A'
+
+    view_live.allow_tags = True
+
+    @property
+    def export_filename(self):
+        return f'comments_{timezone.now().strftime("%Y-%m-%dT%H%M%S")}'
 
 
 class CannedResponseAdmin(ModelAdmin):

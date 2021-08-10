@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 
 from home.models import SiteSettings
@@ -24,6 +25,10 @@ class UsersExportAdmin(ModelAdmin):
         user_submission = obj.usersubmission_set.filter(
             page__pk=site_settings.registration_survey.pk).order_by('-submit_time').first()
         return user_submission.form_data if user_submission else ''
+
+    @property
+    def export_filename(self):
+        return f'users_{timezone.now().strftime("%Y-%m-%dT%H%M%S")}'
 
 
 modeladmin_register(UsersExportAdmin)
