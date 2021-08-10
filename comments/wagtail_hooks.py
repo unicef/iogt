@@ -52,13 +52,14 @@ class XtdCommentAdmin(ModelAdmin):
         return obj.flags.count()
 
     def article(self, obj):
-        return obj.content_object.title
+        return getattr(obj.content_object, 'title', 'N/A')
 
     def article_url(self, obj):
-        return obj.content_object.url
+        return getattr(obj.content_object, 'url', 'N/A')
 
     def article_language_code(self, obj):
-        return obj.content_object.locale.language_code
+        locale = getattr(obj.content_object, 'locale', object)
+        return getattr(locale, 'language_code', 'N/A')
 
 
 class CannedResponseAdmin(ModelAdmin):
