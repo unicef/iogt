@@ -6,6 +6,7 @@ from django.urls import resolve
 from django.urls import reverse
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
+from wagtail.contrib.redirects.models import Redirect
 from wagtail.core import hooks
 from wagtail.core.models import Page
 from wagtail.core.models import PageViewRestriction
@@ -82,3 +83,8 @@ def limit_page_chooser(pages, request):
         pages = Page.objects.get(id=page_id).get_children()
 
     return pages
+
+
+Redirect._meta.get_field("old_path").help_text = _(
+    'A relative path to redirect from e.g. /en/youth. '
+    'See https://docs.wagtail.io/en/stable/editor_manual/managing_redirects.html for more details')
