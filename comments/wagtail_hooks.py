@@ -21,7 +21,7 @@ class XtdCommentAdmin(ModelAdmin):
     model = XtdComment
     menu_label = 'All Comments'
     menu_icon = 'edit'
-    list_display = ('comment', 'user', 'status', 'num_flags', 'num_replies', 'submit_date')
+    list_display = ('comment', 'user', 'status', 'num_flags', 'num_replies', 'submit_date', 'view_live')
     list_filter = (FlaggedFilter, 'is_removed', 'is_public', 'submit_date',)
     form_fields_exclude = ('thread_id', 'parent_id', 'level', 'order', 'followup', 'nested_count',
                            'content_type', 'object_id', 'user_email', 'user_url')
@@ -60,6 +60,15 @@ class XtdCommentAdmin(ModelAdmin):
     def article_language_code(self, obj):
         locale = getattr(obj.content_object, 'locale', object)
         return getattr(locale, 'language_code', 'N/A')
+    def view_live(self, obj):
+        content_object = obj.content_object
+        url = getattr(content_object, 'url', None)
+        if url:
+            return f'<a href="{url}" target="_blank">{content_object.title}</a>'
+
+        return 'N/A'
+
+    view_live.allow_tags = True
 
 
 class CannedResponseAdmin(ModelAdmin):
