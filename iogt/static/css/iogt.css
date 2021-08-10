@@ -1751,3 +1751,25 @@ textarea:focus ~ .cust-input__length-text {
         line-height: 22px;
     }
 }
+
+.section-img {
+    position: relative;
+}
+
+.section-img .image-overlay__text {
+    position: absolute;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    color: white;
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 28px;
+}
+
+.section-img .image-overlay__text.alt {
+    position: static;
+    color: #303030;
+    padding: 10px 0 15px;
+
+}
