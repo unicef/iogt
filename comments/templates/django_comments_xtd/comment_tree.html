@@ -30,11 +30,7 @@
                         {% include "includes/django_comments_xtd/comment_content.html" with content=item.comment.comment %}
                     </div>
                 {% endif %}
-            <div >
-                {% if not item.comment.is_removed and item.children %}
-                    {% render_xtdcomment_tree with comments=item.children %}
-                {% endif %}
-            </div>
+
                {% if not item.comment.is_removed %}
               {% if allow_flagging and item.flagged and item.comment.user != user %}
                   <a href="{% url 'comments-flag' item.comment.pk %}" class="report-comment">
@@ -63,6 +59,11 @@
                                                   title="{% translate 'Remove comment' %}"></i></a>
               {% endif %}
           {% endif %}
+            <div>
+                {% if not item.comment.is_removed and item.children %}
+                    {% render_xtdcomment_tree with comments=item.children %}
+                {% endif %}
+            </div>
         </div>
     </div>
 {% endfor %}
