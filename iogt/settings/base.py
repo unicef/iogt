@@ -381,3 +381,5 @@ SEARCH_RESULTS_PER_PAGE = 10
 COMMIT_HASH = os.getenv('COMMIT_HASH')
 
 from .profanity_settings import *
+
+EXPORT_FILENAME_TIMESTAMP_FORMAT = '%Y-%m-%dT%H%M%S'

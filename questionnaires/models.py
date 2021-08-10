@@ -1,5 +1,6 @@
 import json
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.utils import timezone
@@ -203,6 +204,13 @@ class QuestionnairePage(Page, PageUtilsMixin):
 
     def get_submissions_list_view_class(self):
         return CustomSubmissionsListView
+
+    def get_export_filename(self):
+        object_type = self.__class__.__name__.lower()
+        title = self.title
+        timestamp = timezone.now().strftime(settings.EXPORT_FILENAME_TIMESTAMP_FORMAT)
+
+        return f'{object_type}-{title}_{timestamp}'
 
     class Meta:
         abstract = True

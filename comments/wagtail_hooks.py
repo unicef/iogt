@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.utils import timezone
 from django.utils.html import format_html
 from django_comments_xtd.models import XtdComment
@@ -61,7 +62,7 @@ class XtdCommentAdmin(ModelAdmin):
 
     @property
     def export_filename(self):
-        return f'comments_{timezone.now().strftime("%Y-%m-%dT%H%M%S")}'
+        return f'comments_{timezone.now().strftime(settings.EXPORT_FILENAME_TIMESTAMP_FORMAT)}'
 
 
 class CannedResponseAdmin(ModelAdmin):

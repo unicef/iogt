@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
@@ -28,7 +29,7 @@ class UsersExportAdmin(ModelAdmin):
 
     @property
     def export_filename(self):
-        return f'users_{timezone.now().strftime("%Y-%m-%dT%H%M%S")}'
+        return f'users_{timezone.now().strftime(settings.EXPORT_FILENAME_TIMESTAMP_FORMAT)}'
 
 
 modeladmin_register(UsersExportAdmin)
