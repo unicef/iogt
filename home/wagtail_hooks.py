@@ -1,5 +1,5 @@
 from abc import ABC
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlencode
 
 from django.core.exceptions import PermissionDenied
 from django.urls import resolve
@@ -22,7 +22,7 @@ class ExternalLinkHandler(LinkHandler, ABC):
     def expand_db_attributes(cls, attrs):
         next_page = escape(attrs["href"])
         external_link_page = reverse("external-link")
-        return f'<a href="{external_link_page}?next={next_page}">'
+        return f'<a href="{external_link_page}?{urlencode({"next": next_page})}">'
 
 
 @hooks.register("register_rich_text_features")
