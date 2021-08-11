@@ -91,7 +91,7 @@ class SurveyForm(WagtailAdminPageForm):
             if field_type in VALID_SKIP_SELECTORS:
                 choices_values = []
                 for skip_logic in form.instance.skip_logic:
-                    choices_values.append(skip_logic.value['choice'])
+                    choices_values.append(skip_logic.value['choice'].replace(',', u'\u201A'))
                 form.instance.choices = ",".join(choices_values)
 
             if field_type not in VALID_SKIP_SELECTORS:
@@ -212,7 +212,7 @@ class QuizForm(WagtailAdminPageForm):
             if field_type in VALID_SKIP_SELECTORS:
                 choices_values = []
                 for skip_logic in form.instance.skip_logic:
-                    choices_values.append(skip_logic.value['choice'])
+                    choices_values.append(skip_logic.value['choice'].replace(',', u'\u201A'))
                 form.instance.choices = ",".join(choices_values)
 
             if field_type not in VALID_SKIP_SELECTORS:
