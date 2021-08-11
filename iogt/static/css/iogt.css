@@ -1666,9 +1666,9 @@ textarea:focus ~ .cust-input__length-text {
     cursor: pointer;
 }
 
-.reply-form .reply-comment:hover {
+/* .reply-form .reply-comment:hover {
     background-color: #0094F4;
-}
+} */
 
 .comment__children .individual-comment {
     position: relative;
