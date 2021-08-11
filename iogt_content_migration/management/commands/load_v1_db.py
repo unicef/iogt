@@ -66,6 +66,7 @@ class Command(BaseCommand):
         self.db_connect(options)
         self.media_dir = options.get('media_dir')
         self.skip_locales = options.get('skip_locales')
+        self.delete_users = options.get('delete_users')
 
         self.image_map = {}
         self.page_translation_map = {}
@@ -94,6 +95,9 @@ class Command(BaseCommand):
         models.HomePage.objects.all().delete()
         Site.objects.all().delete()
         Image.objects.all().delete()
+
+        if self.delete_users:
+            get_user_model().objects.all().delete()
 
     def db_connect(self, options):
         connection_string = self.create_connection_string(options)
@@ -772,6 +776,7 @@ class Command(BaseCommand):
 
     def migrate_users(self):
         self.stdout.write(self.style.SUCCESS('Starting User Migration'))
+
         sql = f'select * from auth_user'
         cur = self.db_query(sql)
 
