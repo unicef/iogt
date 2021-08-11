@@ -12,12 +12,8 @@
 
 {% block content %}
    <div class="section-img">
-   {% if page.lead_image %}
-      {% image page.lead_image width-320 class='lead-img' %}
-      <div class="image-overlay__text">{{ page.title }}</div>
-   {% else %}
-    <div class="image-overlay__text alt">{{ page.title }}</div>
-   {% endif %}
+     {% image page.lead_image width-320 class='lead-img' %}
+     <div class="image-overlay__text">{{ page.title }}</div>
    </div>
     {% if featured_content %}
    <section class='featured-content' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
