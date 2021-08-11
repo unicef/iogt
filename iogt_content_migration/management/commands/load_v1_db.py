@@ -1,4 +1,6 @@
 from pathlib import Path
+
+from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from wagtail.core.models import Page, Site, Locale
 from django.core.files.images import ImageFile
@@ -52,6 +54,12 @@ class Command(BaseCommand):
             '--skip-locales',
             action='store_true',
             help='Skip data of locales other than default language'
+        )
+
+        parser.add_argument(
+            '--delete-users',
+            action='store_true',
+            help='Delete existing Users and their associated data. Use carefully'
         )
 
     def handle(self, *args, **options):
@@ -114,18 +122,20 @@ class Command(BaseCommand):
         return cur
 
     def migrate(self, root):
-        self.migrate_images()
-        self.load_page_translation_map()
-        home = self.create_home_page(root)
-        self.create_index_pages(home)
-        self.migrate_sections()
-        self.migrate_articles()
-        self.migrate_banners()
-        self.migrate_footers()
-        self.migrate_polls()
-        self.migrate_surveys()
-        self.stop_translations()
-        Page.fix_tree()
+        # self.migrate_images()
+        # self.load_page_translation_map()
+        # home = self.create_home_page(root)
+        # self.create_index_pages(home)
+        # self.migrate_sections()
+        # self.migrate_articles()
+        # self.migrate_banners()
+        # self.migrate_footers()
+        # self.migrate_polls()
+        # self.migrate_surveys()
+        # self.stop_translations()
+        # Page.fix_tree()
+
+        self.migrate_users()
 
     def create_home_page(self, root):
         sql = 'select * from core_main main join wagtailcore_page page on main.page_ptr_id = page.id'
@@ -759,3 +769,14 @@ class Command(BaseCommand):
                 skip_logic=row['skip_logic']
             )
             self.stdout.write(f"saved survey question, label={row['label']}")
+
+    def migrate_users(self):
+        self.stdout.write(self.style.SUCCESS('Starting User Migration'))
+        sql = f'select * from auth_user'
+        cur = self.db_query(sql)
+
+        for row in cur:
+            row.pop('id')
+            get_user_model().objects.create(**row)
+
+        self.stdout.write(self.style.SUCCESS('Completed User Migration'))

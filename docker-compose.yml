@@ -39,6 +39,16 @@ services:
       - ./initdb.d:/docker-entrypoint-initdb.d
     ports:
       - 5432:5432
+  legacy-db:
+    image: postgres:alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: iogt
+    volumes:
+      - /var/lib/postgresql/data
+      - ./legacy-initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - 54321:5432
 
 volumes:
   es-data01:
