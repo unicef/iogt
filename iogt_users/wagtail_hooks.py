@@ -23,8 +23,11 @@ class UsersExportAdmin(ModelAdmin):
 
     def registration_survey_response(self, obj):
         site_settings = SiteSettings.get_for_default_site()
-        user_submission = obj.usersubmission_set.filter(
-            page__pk=site_settings.registration_survey.pk).order_by('-submit_time').first()
+        user_submission = None
+        if site_settings.registration_survey:
+            user_submission = obj.usersubmission_set.filter(
+                page__pk=site_settings.registration_survey.pk).order_by('-submit_time').first()
+
         return user_submission.form_data if user_submission else ''
 
     @property
