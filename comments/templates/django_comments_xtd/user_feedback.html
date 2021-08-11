@@ -1,17 +1,35 @@
 {% load i18n %}
 
-{% comment %} {% if allow_feedback %}
-    <span class="small">
-    {% if show_feedback and item.likedit_users %}
-        <a class="badge badge-primary text-white cfb-counter" data-toggle="tooltip"
-           title="{{ item.likedit_users|join:'<br/>' }}">
-        {{ item.likedit_users|length }}</a>
-    {% endif %}
-
-        <form action="{% url 'comments-xtd-like' item.comment.pk %}" method="post" class="like-form">
+{% if allow_feedback %}
+    <span class="small like-holder">
+    <form action="{% url 'comments-xtd-like' item.comment.pk %}" method="post" class="like-form">
         {% csrf_token %}
         <input type="hidden" name="next" value="{% url 'comments-xtd-sent' %}"/>
-        <button type="submit">{% translate "Like" %}</button>
+        {% if not request.user.is_anonymous and request.user.username in item.likedit_users %}
+            <button type="submit" class="liked">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10.9969 0.20311C10.5776 0.0624111 10.1366 0.000111769 9.69491 0.000111769C8.72192 -0.00688816 7.77763 0.315108 6.99994 0.909402C6.93694 0.861103 6.85994 0.818403 6.78994 0.777104C6.71994 0.734404 6.59394 0.630105 6.48894 0.574106L6.22295 0.455107C6.08295 0.378108 5.93665 0.322108 5.78195 0.272409C5.76795 0.259109 5.74695 0.244409 5.71895 0.231109H5.67765C5.26396 0.0904108 4.83696 0.0134116 4.39597 0.000111769H4.31897C4.12297 0.000111769 3.92767 0.0134116 3.73097 0.0421113H3.64697C3.43698 0.069411 3.22768 0.118411 3.02468 0.18841C0.413007 1.0431 -0.517983 3.87807 0.273009 6.35605C0.721004 7.62233 1.4427 8.77102 2.38069 9.71531C3.74497 11.0313 5.23666 12.1933 6.83894 13.1873L7.02094 13.3L7.19594 13.1943C8.79262 12.1933 10.2759 11.0313 11.6276 9.72231C12.5719 8.77802 13.2929 7.62233 13.7339 6.35605C14.5116 3.87807 13.5806 1.0431 10.9969 0.20311Z"
+                          fill="#303030"/>
+                </svg>
+            </button>
+        {% else %}
+            <button type="submit">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10.9969 0.20311C10.5776 0.0624111 10.1366 0.000111769 9.69491 0.000111769C8.72192 -0.00688816 7.77763 0.315108 6.99994 0.909402C6.93694 0.861103 6.85994 0.818403 6.78994 0.777104C6.71994 0.734404 6.59394 0.630105 6.48894 0.574106L6.22295 0.455107C6.08295 0.378108 5.93665 0.322108 5.78195 0.272409C5.76795 0.259109 5.74695 0.244409 5.71895 0.231109H5.67765C5.26396 0.0904108 4.83696 0.0134116 4.39597 0.000111769H4.31897C4.12297 0.000111769 3.92767 0.0134116 3.73097 0.0421113H3.64697C3.43698 0.069411 3.22768 0.118411 3.02468 0.18841C0.413007 1.0431 -0.517983 3.87807 0.273009 6.35605C0.721004 7.62233 1.4427 8.77102 2.38069 9.71531C3.74497 11.0313 5.23666 12.1933 6.83894 13.1873L7.02094 13.3L7.19594 13.1943C8.79262 12.1933 10.2759 11.0313 11.6276 9.72231C12.5719 8.77802 13.2929 7.62233 13.7339 6.35605C14.5116 3.87807 13.5806 1.0431 10.9969 0.20311Z"
+                          fill="#303030"/>
+                </svg>                    
+            </button>
+        {% endif %}
     </form>
+        {% if show_feedback %}
+            <a class="badge badge-primary text-white cfb-counter" data-toggle="tooltip"
+               title="{{ item.likedit_users|join:'<br/>' }}">
+           {% if item.likedit_users %}
+               {{ item.likedit_users|length }}
+           {% else %}
+               0
+           {% endif %}
+        </a>
+        {% endif %}
 </span>
-{% endif %} {% endcomment %}
+{% endif %}

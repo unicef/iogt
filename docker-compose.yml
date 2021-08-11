@@ -12,6 +12,7 @@ services:
       DB_HOST: db
       DB_PORT: 5432
       DJANGO_SETTINGS_MODULE: iogt.settings.docker_compose_dev
+      COMMIT_HASH: asdfghjkl
     command: bash -c "python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./:/app/

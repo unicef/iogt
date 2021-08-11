@@ -263,7 +263,7 @@ textarea:focus ~ .cust-input__length-text {
 }
 
 .quest-item__label--single {
-    align-items: flex-start;
+    align-items: center;
     background: none;
     border: none;
     -webkit-border-radius: 0;
@@ -281,10 +281,10 @@ textarea:focus ~ .cust-input__length-text {
 }
 
 .quest-item__label .cust-check__title {
-    font-size: 10px;
+    font-size: 16px;
     font-weight: 700;
     letter-spacing: .01em;
-    line-height: 14px;
+    line-height: 20px;
 }
 
 .quest-item__input .cust-check__title {
@@ -471,13 +471,17 @@ textarea:focus ~ .cust-input__length-text {
 .cust-select {
     display: block;
     width: 100%;
-    padding: 5px 10px;
+    padding: 15px 10px;
     position: relative;
     border: none;
     background: #f7f7f9;
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;
     border-radius: 8px;
+}
+
+.cust-select[multiple] {
+    padding: 5px 10px;
 }
 
 .cust-select input:not(:checked) ~ #text {
@@ -1453,7 +1457,7 @@ textarea:focus ~ .cust-input__length-text {
 
     .cust-check__title {
         letter-spacing: .01em;
-        padding: 12px 12px 12px 16px
+        padding: 6px 12px 6px 16px
     }
 
     .cust-check--2 input {
@@ -1575,6 +1579,179 @@ textarea:focus ~ .cust-input__length-text {
     }
 }
 
+/* Comments Section Styles */
+.like-holder {
+    display: inline-block !important;
+    vertical-align: middle;
+    margin-right: 12px;
+}
+
+.like-holder .like-form {
+    float: left;
+}
+
+.like-holder button {
+    font-size: 0;
+    line-height: 0;
+    color: #303030;
+    padding: 0;
+    border: 0;
+    float: left;
+    cursor: pointer;
+}
+
+.like-holder button.liked svg path{
+    fill: #EE3851;
+}
+
+.like-holder .badge {
+    float: left;
+    font-weight: 600;
+    line-height: 14px;
+    margin-left: 5px;
+}
+
+.reply-link {
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 16px;
+    color: #303030;
+    text-decoration: none;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 12px;
+}
+
+.reply-form .comments__holder,
+.reply-form .comments__input-holder {
+    background: #F7F7F9;
+    padding: 12px;
+    border: none;
+}
+
+.reply-form .comments__input-holder {
+    padding-top: 0;
+}
+
+.reply-form .comments__holder textarea {
+    background-color: #FFFFFF;
+    width: 100%;
+    min-height: 160px;
+    border: 1px solid #EFEFEF;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-style: normal;
+    font-size: 10px;
+    line-height: 16px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: #9a9a9a;
+}
+
+.reply-form .reply-comment {
+    text-decoration: none;
+    background-color: #303030;
+    color: white;
+    border: none;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    color: #FFFFFF;
+    display: block;
+    border-radius: 24px;
+    padding: 12px 16px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.reply-form .reply-comment:hover {
+    background-color: #0094F4;
+}
+
+.comment__children .individual-comment {
+    position: relative;
+}
+
+.comment__children .individual-comment:before {
+    position: absolute;
+    content: "";
+    width: 9px;
+    height: 9px;
+    background: url("/static/images/reply.svg") no-repeat;
+    background-size: cover;
+    left: 0;
+    top: 15px;
+}
+
+.load-more {
+    background: #F7F7F9;
+    padding: 20px;
+    border-top: 1px solid white;
+}
+
+.load-more button {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 600;
+    border-radius: 24px;
+    padding: 12px 16px;
+    border: 1px solid #303030;
+    color: #303030;
+    display: block;
+    text-align: center;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.2s linear;
+}
+
+.load-more button:hover,
+.load-more button:active,
+.load-more button:focus {
+    background: #303030;
+    color: white;
+    transition: all 0.2s linear;
+}
+
+
+@media only screen and (min-width: 360px) {
+    .reply-link {
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .reply-form .comments__holder,
+    .reply-form .comments__input-holder {
+        padding: 20px;
+    }
+
+    .reply-form .comments__input-holder {
+        padding-top: 0;
+    }
+
+    .reply-form .comments__holder textarea {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .reply-form .reply-comment {
+        font-size: 16px;
+        line-height: 22px;
+    }
+
+    .comment__children .individual-comment:before {
+        top: 25px;
+        width: 12px;
+        height: 12px;
+    }
+
+    .load-more button {
+        font-size: 16px;
+        line-height: 22px;
+    }
+}
+
 .section-img {
     position: relative;
 }
@@ -1584,5 +1761,6 @@ textarea:focus ~ .cust-input__length-text {
     font-size: 24px;
     line-height: 28px;
     color: #303030;
-    padding: 10px 0;
+    padding: 10px 0 15px;
 }
+

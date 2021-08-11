@@ -1,7 +1,9 @@
 import json
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
+from django.utils import timezone
 from django.utils.functional import cached_property
 
 from django.core.paginator import EmptyPage, PageNotAnInteger
@@ -27,7 +29,8 @@ from wagtail.images.blocks import ImageChooserBlock
 
 from questionnaires.blocks import SkipState, SkipLogicBlock
 from questionnaires.forms import CustomFormBuilder, SurveyForm, QuizForm
-from questionnaires.utils import SkipLogicPaginator
+from questionnaires.utils import SkipLogicPaginator, FormHelper
+from questionnaires.views import CustomSubmissionsListView
 
 
 FORM_FIELD_CHOICES = (
@@ -107,14 +110,11 @@ class QuestionnairePage(Page, PageUtilsMixin):
         return super().serve(request, *args, **kwargs)
 
     def serve_questions_separately(self, request, *args, **kwargs):
-        session_key_data = "form_data-%s" % self.pk
+        form_helper = FormHelper(pk=self.pk, request=request)
         is_last_step = False
         step_number = request.GET.get("p", 1)
 
-        if step_number == 1:
-            request.session.pop(session_key_data, None)
-
-        form_data = request.session.get(session_key_data, {})
+        form_data = form_helper.get_form_data()
 
         paginator = SkipLogicPaginator(
             self.get_form_fields(),
@@ -136,7 +136,7 @@ class QuestionnairePage(Page, PageUtilsMixin):
             # Edge case - submission of the last step
             try:
                 prev_step = (
-                    step if is_last_step else paginator.page(step.previous_page_number())
+                    step if is_last_step else paginator.page(int(step_number) - 1)
                 )
             except EmptyPage:
                 prev_step = step
@@ -151,9 +151,9 @@ class QuestionnairePage(Page, PageUtilsMixin):
             )
             if prev_form.is_valid():
                 # If data for step is valid, update the session
-                form_data = request.session.get(session_key_data, {})
+                form_data = form_helper.get_form_data()
                 form_data.update(prev_form.cleaned_data)
-                request.session[session_key_data] = form_data
+                form_helper.set_form_data(form_data)
 
                 if prev_step.has_next():
                     # Create a new form for a following step, if the following step is present
@@ -162,7 +162,7 @@ class QuestionnairePage(Page, PageUtilsMixin):
                 else:
                     # If there is no next step, create form for all fields
                     form = self.get_form(
-                        request.session[session_key_data],
+                        form_helper.get_form_data(),
                         page=self, user=request.user
                     )
 
@@ -171,7 +171,7 @@ class QuestionnairePage(Page, PageUtilsMixin):
                         # After successful validation, save data into DB,
                         # and remove from the session.
                         form_submission = self.process_form_submission(form)
-                        request.session[f'{session_key_data}-completed'] = request.session.pop(session_key_data, None)
+                        form_helper.set_full_form_data()
                         # render the landing page
                         return self.render_landing_page(
                             request, form_submission, *args, **kwargs
@@ -201,6 +201,16 @@ class QuestionnairePage(Page, PageUtilsMixin):
             page=self,
             user=None if user.is_anonymous else user,
         )
+
+    def get_submissions_list_view_class(self):
+        return CustomSubmissionsListView
+
+    def get_export_filename(self):
+        object_type = self.__class__.__name__.lower()
+        title = self.title
+        timestamp = timezone.now().strftime(settings.EXPORT_FILENAME_TIMESTAMP_FORMAT)
+
+        return f'{object_type}-{title}_{timestamp}'
 
     class Meta:
         abstract = True
@@ -700,9 +710,9 @@ class Quiz(QuestionnairePage, AbstractForm):
         context.update({'back_url': request.GET.get('back_url')})
         context.update({'form_length': request.GET.get('form_length')})
 
+        form_helper = FormHelper(pk=self.pk, request=request)
         if self.multi_step:
-            session_key_data = f'form_data-{self.pk}-completed'
-            form_data = request.session.get(session_key_data)
+            form_data = form_helper.get_full_form_data()
         else:
             form_data = request.POST
         if request.method == 'POST' and form_data:
@@ -725,7 +735,7 @@ class Quiz(QuestionnairePage, AbstractForm):
                     answer = form_data.get(field.clean_name)
 
                 if type(answer) != list:
-                    answer = [answer]
+                    answer = [str(answer)]
 
                 is_correct = set(answer) == set(correct_answer)
                 if is_correct:
@@ -745,7 +755,7 @@ class Quiz(QuestionnairePage, AbstractForm):
             }
 
             if self.multi_step:
-                request.session.pop(session_key_data, None)
+                form_helper.remove_session_data()
 
         return context
 
