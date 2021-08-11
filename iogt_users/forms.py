@@ -19,18 +19,12 @@ class AccountSignupForm(SignupForm):
         "password1",
         "password2",
         "terms_accepted",
-        "display_name"
     ]
 
     def __init__(self, *args, **kwargs):
         super(AccountSignupForm, self).__init__(*args, **kwargs)
         self.fields.pop('email')
         self.fields["password1"] = IogtPasswordField(label=_("4-digit PIN"), autocomplete="new-password")
-
-        self.fields["display_name"] = Field(
-            widget=TextInput(
-                attrs={'type': 'text', "placeholder": _("Enter Your Name")})
-        )
 
         if 'password2' in self.fields:
             self.fields["password2"] = IogtPasswordField(label=_("4-digit PIN"), autocomplete="new-password")
