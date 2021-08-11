@@ -1,5 +1,9 @@
 from abc import ABC
+<<<<<<< HEAD
 from urllib.parse import urlparse, urlunparse
+=======
+from urllib.parse import urlparse, urlencode
+>>>>>>> fix/url-with-anchors
 
 from django.core.exceptions import PermissionDenied
 from django.urls import resolve, Resolver404
@@ -28,8 +32,7 @@ class ExternalLinkHandler(LinkHandler, ABC):
             return f'<a href="{unparsed_url}">'
         except Resolver404:
             external_link_page = reverse("external-link")
-            return f'<a href="{external_link_page}?next={next_page}">'
-
+            return f'<a href="{external_link_page}?{urlencode({"next": next_page})}">'
 
 @hooks.register("register_rich_text_features")
 def register_external_link(features):
