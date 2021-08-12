@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load comments %}
 {% load comments_xtd %}
+{% load humanize %}
 
 {% block title %}{% translate "Comment reply" %}{% endblock %}
 
@@ -17,10 +18,10 @@
         <div class="media-body">
           <div class="comment pb-3">
             <h6 class="mb-1 small">
-              {{ comment.submit_date|date:"N j, Y, P" }}&nbsp;-&nbsp;
+              {{ comment.submit_date|naturaltime }}&nbsp;-&nbsp;
               {% if comment.user_url %}
               <a href="{{ comment.user_url }}" target="_new">{% endif %}
-                {{ comment.user_name }}{% if comment.user_url %}</a>{% endif %}
+                {{ comment.user.username }}{% if comment.user_url %}</a>{% endif %}
             </h6>
             <p>{{ comment.comment }}</p>
           </div>
