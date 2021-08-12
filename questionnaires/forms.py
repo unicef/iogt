@@ -207,6 +207,7 @@ class QuizForm(WagtailAdminPageForm):
     def save(self, commit):
         # Tidy up the skip logic when field cant have skip logic
         for form in self.formsets[self.form_field_name]:
+            form.instance.correct_answer = form.instance.correct_answer.replace(',', u'\u201A')
             field_type = form.instance.field_type
             # Copy choices values from skip logic to main choices property
             if field_type in VALID_SKIP_SELECTORS:
