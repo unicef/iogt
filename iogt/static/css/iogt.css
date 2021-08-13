@@ -1713,3 +1713,29 @@ textarea:focus ~ .cust-input__length-text {
         height: 12px;
     }
 }
+
+.content .quest-item__step-desc,
+.content .quest-item__number,
+.content .quest-item__desc {
+    font-size: 14px;
+    line-height: 16px;
+}
+
+.content .quest-item__step-desc:before {
+    background: url("/static/icons/info.svg") no-repeat;
+    background-size: cover;
+    content: "";
+    display: block;
+    height: 14px;
+    margin-right: 4px;
+    width: 14px
+}
+
+@media screen and (min-width: 360px) {
+    .content .quest-item__step-desc,
+    .content .quest-item__number,
+    .content .quest-item__desc {
+        font-size: 16px;
+        line-height: 20px;
+    }
+}
