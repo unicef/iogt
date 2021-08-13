@@ -12,11 +12,6 @@ class ServiceWorkerView(TemplateView):
     content_type = "application/javascript"
     name = "sw.js"
 
-    def get_context_data(self, **kwargs):
-        return {
-            "test_url": reverse("test"),
-        }
-
 
 def get_manifest(request):
     language = request.LANGUAGE_CODE

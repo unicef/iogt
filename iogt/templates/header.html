@@ -14,9 +14,7 @@
                 </a>
             </div>
             <div class="language__select">
-                {% if page %}
                     {% language_switcher page %}
-                {% endif %}
             </div>
         </div>
         <div class="form-holder">
@@ -31,7 +29,7 @@
                             <path d="M17.2502 17.25L13.2627 13.2625" stroke="#9A9A9A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </span>
-                    <input type="text" name="query" placeholder="Search here" pattern="\S+.*"/>
+                    <input type="text" name="query" placeholder="{% translate 'Search the site…' %}" pattern="\S+.*"/>
                 </label>
             </form>
         </div>
@@ -41,7 +39,7 @@
                     <span class="nav-bar__item__icon">
                          <img src="/static/icons/login.svg">
                     </span>
-                    <span class="nav-bar__item__title">Sign in / Sign up</span>
+                    <span class="nav-bar__item__title">{% translate "Log in / Create account" %}</span>
                 </a>
             </div>
         </div>

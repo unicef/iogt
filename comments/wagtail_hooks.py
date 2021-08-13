@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.utils import timezone
 from django.utils.html import format_html
 from django_comments_xtd.models import XtdComment
 from wagtail.contrib.modeladmin.options import ModelAdminGroup, ModelAdmin, modeladmin_register
@@ -21,12 +23,15 @@ class XtdCommentAdmin(ModelAdmin):
     model = XtdComment
     menu_label = 'All Comments'
     menu_icon = 'edit'
-    list_display = ('comment', 'user', 'status', 'num_flags', 'num_replies', 'submit_date')
+    list_display = ('comment', 'user', 'status', 'num_flags', 'num_replies', 'submit_date', 'view_live')
     list_filter = (FlaggedFilter, 'is_removed', 'is_public', 'submit_date',)
     form_fields_exclude = ('thread_id', 'parent_id', 'level', 'order', 'followup', 'nested_count',
                            'content_type', 'object_id', 'user_email', 'user_url')
     search_fields = ('comment',)
-    list_export = ('comment', 'user', 'is_removed', 'is_public', 'num_flags', 'num_replies', 'status', 'submit_date')
+    list_export = (
+        'comment', 'user', 'is_removed', 'is_public', 'num_flags', 'num_replies', 'status', 'submit_date', 'article',
+        'article_url', 'article_language_code',
+    )
     button_helper_class = XtdCommentAdminButtonHelper
     menu_order = 601
 
@@ -47,6 +52,30 @@ class XtdCommentAdmin(ModelAdmin):
 
     def num_flags(self, obj):
         return obj.flags.count()
+
+    def article(self, obj):
+        return getattr(obj.content_object, 'title', 'N/A')
+
+    def article_url(self, obj):
+        return getattr(obj.content_object, 'url', 'N/A')
+
+    def article_language_code(self, obj):
+        locale = getattr(obj.content_object, 'locale', object)
+        return getattr(locale, 'language_code', 'N/A')
+
+    def view_live(self, obj):
+        content_object = obj.content_object
+        url = getattr(content_object, 'url', None)
+        if url:
+            return f'<a href="{url}" target="_blank">{content_object.title}</a>'
+
+        return 'N/A'
+
+    view_live.allow_tags = True
+
+    @property
+    def export_filename(self):
+        return f'comments_{timezone.now().strftime(settings.EXPORT_FILENAME_TIMESTAMP_FORMAT)}'
 
 
 class CannedResponseAdmin(ModelAdmin):

@@ -44,7 +44,7 @@
                 <td class="username" valign="top">{{ user.username|default_if_none:'-' }}</td>
                 <td class="level" valign="top">{% if user.is_superuser %}{% translate "Admin" %}{% endif %}</td>
                 <td class="status" valign="top"><div class="status-tag {% if user.is_active %}primary{% endif %}">{% if user.is_active %}{% translate "Active" %}{% else %}{% translate "Inactive" %}{% endif %}</div></td>
-                <td {% if user.last_login %} class="human-readable-date" title="{{ user.last_login|date:"d M Y H:i" }}"{% endif %}>{% if user.last_login %}{% blocktranslate with time_period=user.last_login|timesince %}{{ time_period }} ago{% endblocktranslate %}{% endif %}</td>
+                <td {% if user.last_login %} class="human-readable-date" title="{{ user.last_login|date:"d M Y H:i" }}"{% endif %}>{% if user.last_login %}{% blocktranslate trimmed with time_period=user.last_login|timesince %}{{ time_period }} ago{% endblocktranslate %}{% endif %}</td>
             </tr>
         {% endfor %}
     </tbody>

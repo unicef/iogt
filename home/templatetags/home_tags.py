@@ -1,18 +1,22 @@
 from django import template
+from django.urls import translate_url
 from wagtail.core.models import Locale, Site
 
-from home.models import FooterPage, SectionIndexPage
+from home.models import FooterPage, SectionIndexPage, Section
 from iogt.settings.base import LANGUAGES
 
 register = template.Library()
 
 
-@register.inclusion_tag('home/tags/language_switcher.html')
-def language_switcher(page):
-    return {
-        'translations': page.get_translations(inclusive=True).all(),
+@register.inclusion_tag('home/tags/language_switcher.html', takes_context=True)
+def language_switcher(context, page):
+    if page:
+        context.update({
+            'translations': page.get_translations(inclusive=True).all(),
+        })
+    context.update({'default_locales': Locale.objects.all()})
 
-    }
+    return context
 
 
 @register.inclusion_tag('home/tags/previous-next-buttons.html')
@@ -93,3 +97,19 @@ def translated_home_page_url(language_code):
     home_page = default_home_page.get_translation_or_none(locale)
     page = home_page or default_home_page
     return page.url
+
+
+@register.simple_tag(takes_context=True)
+def change_lang(context, lang=None, *args, **kwargs):
+    path = context['request'].path
+    return translate_url(path, lang)
+
+
+@register.simple_tag
+def get_menu_icon(menu_item):
+    if hasattr(menu_item.icon, 'url'):
+        return menu_item.icon.url
+    elif hasattr(menu_item, 'link_page') and isinstance(menu_item.link_page, Section) and hasattr(menu_item.link_page.icon, 'url'):
+        return menu_item.link_page.specific.icon.url
+
+    return ''

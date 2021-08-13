@@ -10,12 +10,12 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/search.css' %}">
 {% endblock extra_css %}
 
-{% block title %}{% translate "Search results for" %}: {{ search_query }}{% endblock %}
+{% block title %}{% translate "Search results for: " %} {{ search_query }}{% endblock %}
 
 {% block content %}
     <div class="search-container">
     <h2>
-        {% translate "Searching results for" %}: "{{ search_query }}"
+        {% translate "Search results for: " %} "{{ search_query }}"
     </h2>
 
     <!--<div class="container btn-back-container">
@@ -34,8 +34,8 @@
             {% for group, results in search_groups.items %}
             <div class="search-results__header">
                 <div class="container search-results__header-container">
-                    <p class="title search-results__title">{{ group | title }} | 
-                    {% blocktranslate count counter=results.search_results_count %} 1 result
+                    <p class="title search-results__title">{{ group | title }} |
+                    {% blocktranslate trimmed count counter=results.search_results_count %} 1 result
                     {% plural %} {{ counter }} results
                     {% endblocktranslate %}</p>
                     <!--  <button class="search-results__text search-results__view">All {{ value.search_results_count }} result</button> -->
@@ -87,7 +87,7 @@
             <div class="search-page">
                 <div class="container search-page__container">
                     <form class="footer__search search-page-form"
-                          action="/search">
+                          action="{% url 'search' %}">
                         <label class="cust-input cust-input--icon profile-form__input">
                             <span class="cust-input__icon">
                                 <svg width="16" height="16" viewBox="0 0 16 16"
@@ -103,7 +103,7 @@
                                 </svg>
                             </span>
                                 <input type="text" name="query"
-                                       placeholder="{% translate 'Search here' %}" pattern="\S+.*"/>
+                                       placeholder="{% translate 'Search the site…' %}" pattern="\S+.*"/>
                         </label>
                         <button type="submit"
                                 class="cust-btn cust-btn--dark polls-widget__submit">
@@ -114,4 +114,5 @@
             </div>
         {% endif %}
     </div>
+</div>
 {% endblock %}

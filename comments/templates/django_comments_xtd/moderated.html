@@ -11,7 +11,7 @@
 <div class="row">
     <div class="col-md-12">
         <p class="lead text-center">
-            {% blocktranslate %}
+            {% blocktranslate trimmed %}
             Your comment is in moderation.<br/>
             It has to be reviewed before being published.<br/>
             Thank you for your patience and understanding.
@@ -19,7 +19,7 @@
         </p>
         <p class="pt-5 text-center">
             {% with content_object_url=comment.content_object.get_absolute_url content_object_str=comment.content_object %}
-            {% blocktranslate %}
+            {% blocktranslate trimmed %}
             Go back to: <a href="{{ content_object_url }}">{{ content_object_str }}</a>
             {% endblocktranslate %}
             {% endwith %}

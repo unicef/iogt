@@ -1,7 +1,7 @@
 {% extends 'account/base.html' %}
 {% load i18n static %}
 
-{% block title %}{% translate "Edit my profile" %}{% endblock %}
+{% block title %}{% translate "My Profile" %}{% endblock %}
 
 {% block extra_css %}
     {{ block.super }}
@@ -12,19 +12,21 @@
 {% block allauth_content %}
     {% if user.username %}
         <h1 class="title profile__title">
-            {% blocktranslate with username=user.username %}
+            {% blocktranslate trimmed with username=user.username %}
                 Hey, {{ username }}
             {% endblocktranslate %}
             <span class="profile__icon">{{ user.username | first | upper }}</span>
         </h1>
     {% endif %}
     <div class="profile__btns">
-        <a href="{% url "user_profile_edit" %}" class="icon-btn profile__btn">
-            <span class="icon-btn__icon">
-                <img src="{% static "icons/pencil.png" %}" alt="Pencil icon">
-            </span>
-            <span class="icon-btn__title">{% translate "Edit my profile" %}</span>
-        </a>
+{#          Commenting user profile edit - See https://github.com/unicef/iogt/issues/409 is resolved #}
+
+{#        <a href="{% url "user_profile_edit" %}" class="icon-btn profile__btn">#}
+{#            <span class="icon-btn__icon">#}
+{#                <img src="{% static "icons/pencil.png" %}" alt="Pencil icon">#}
+{#            </span>#}
+{#            <span class="icon-btn__title">{% translate "Edit my profile" %}</span>#}
+{#        </a>#}
 {#        Commenting the notifications section until functionality is added #}
 {#        <a href="#" class="icon-btn profile__btn">#}
 {#            <span class="icon-btn__icon">#}

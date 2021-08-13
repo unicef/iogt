@@ -206,7 +206,7 @@ class Section(Page, PageUtilsMixin):
         context = super().get_context(request)
         context['featured_content'] = [
             featured_content.content for featured_content in
-            self.featured_content.filter(content__live=True)
+            self.featured_content.all() if featured_content.content.live
         ]
         context['sub_sections'] = self.get_children().live().type(Section)
 
@@ -643,6 +643,8 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
+        help_text=_('If Page link is a section page and icon is blank then the section icon will be used. '
+                    'Specify an icon here to override this.')
     )
 
     color = models.CharField(

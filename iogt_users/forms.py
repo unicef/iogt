@@ -3,7 +3,7 @@ from allauth.utils import set_form_field_order
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.forms import TextInput, Field
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 from wagtail.users.forms import UserEditForm as WagtailUserEditForm, \
     UserCreationForm as WagtailUserCreationForm
 
@@ -19,18 +19,12 @@ class AccountSignupForm(SignupForm):
         "password1",
         "password2",
         "terms_accepted",
-        "display_name"
     ]
 
     def __init__(self, *args, **kwargs):
         super(AccountSignupForm, self).__init__(*args, **kwargs)
         self.fields.pop('email')
         self.fields["password1"] = IogtPasswordField(label=_("4-digit PIN"), autocomplete="new-password")
-
-        self.fields["display_name"] = Field(
-            widget=TextInput(
-                attrs={'type': 'text', "placeholder": _("Enter Your Name")})
-        )
 
         if 'password2' in self.fields:
             self.fields["password2"] = IogtPasswordField(label=_("4-digit PIN"), autocomplete="new-password")
@@ -64,7 +58,7 @@ class WagtailAdminUserCreateForm(WagtailUserCreationForm):
     email = forms.EmailField(required=False, label='Email')
     first_name = forms.CharField(required=False, label='First Name')
     last_name = forms.CharField(required=False, label='Last Name')
-    terms_accepted = forms.BooleanField(label='I accept the terms & conditions')
+    terms_accepted = forms.BooleanField(label=_('I accept the terms & conditions'))
 
 
 class WagtailAdminUserEditForm(WagtailUserEditForm):
@@ -72,4 +66,4 @@ class WagtailAdminUserEditForm(WagtailUserEditForm):
     first_name = forms.CharField(required=False, label='First Name')
     last_name = forms.CharField(required=False, label='Last Name')
 
-    terms_accepted = forms.BooleanField(label='I accept the terms & conditions')
+    terms_accepted = forms.BooleanField(label=_('I accept the terms & conditions'))
