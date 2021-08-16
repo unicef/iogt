@@ -491,17 +491,6 @@ class Poll(QuestionnairePage, AbstractForm):
     def get_submission_class(self):
         return UserSubmission
 
-    def serve(self, request, *args, **kwargs):
-        if (
-            not self.allow_multiple_submissions
-            and self.get_submission_class()
-            .objects.filter(page=self, user__pk=request.user.pk)
-            .exists()
-        ):
-            return render(request, self.template, self.get_context(request))
-
-        return super().serve(request, *args, **kwargs)
-
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         results = dict()
