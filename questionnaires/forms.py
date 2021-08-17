@@ -19,6 +19,34 @@ class CustomFormBuilder(FormBuilder):
 
         return forms.IntegerField(**options)
 
+    def create_dropdown_field(self, field, options):
+        options['choices'] = map(
+            lambda x: (x.strip(), x.strip()),
+            field.choices.split('|')
+        )
+        return forms.ChoiceField(**options)
+
+    def create_multiselect_field(self, field, options):
+        options['choices'] = map(
+            lambda x: (x.strip(), x.strip()),
+            field.choices.split('|')
+        )
+        return forms.MultipleChoiceField(**options)
+
+    def create_radio_field(self, field, options):
+        options['choices'] = map(
+            lambda x: (x.strip(), x.strip()),
+            field.choices.split('|')
+        )
+        return forms.ChoiceField(widget=forms.RadioSelect, **options)
+
+    def create_checkboxes_field(self, field, options):
+        options['choices'] = [(x.strip(), x.strip()) for x in field.choices.split('|')]
+        options['initial'] = [x.strip() for x in field.default_value.split('|')]
+        return forms.MultipleChoiceField(
+            widget=forms.CheckboxSelectMultiple, **options
+        )
+
 
 class SurveyForm(WagtailAdminPageForm):
     form_field_name = 'survey_form_fields'
@@ -91,8 +119,8 @@ class SurveyForm(WagtailAdminPageForm):
             if field_type in VALID_SKIP_SELECTORS:
                 choices_values = []
                 for skip_logic in form.instance.skip_logic:
-                    choices_values.append(skip_logic.value['choice'].replace(',', u'\u201A'))
-                form.instance.choices = ",".join(choices_values)
+                    choices_values.append(skip_logic.value['choice'])
+                form.instance.choices = "|".join(choices_values)
 
             if field_type not in VALID_SKIP_SELECTORS:
                 if field_type != 'checkboxes':
@@ -207,14 +235,13 @@ class QuizForm(WagtailAdminPageForm):
     def save(self, commit):
         # Tidy up the skip logic when field cant have skip logic
         for form in self.formsets[self.form_field_name]:
-            form.instance.correct_answer = form.instance.correct_answer.replace(',', u'\u201A')
             field_type = form.instance.field_type
             # Copy choices values from skip logic to main choices property
             if field_type in VALID_SKIP_SELECTORS:
                 choices_values = []
                 for skip_logic in form.instance.skip_logic:
-                    choices_values.append(skip_logic.value['choice'].replace(',', u'\u201A'))
-                form.instance.choices = ",".join(choices_values)
+                    choices_values.append(skip_logic.value['choice'])
+                form.instance.choices = "|".join(choices_values)
 
             if field_type not in VALID_SKIP_SELECTORS:
                 if field_type != 'checkboxes':

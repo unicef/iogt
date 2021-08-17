@@ -417,6 +417,7 @@ class PollFormField(AbstractFormField):
 
 
 class Poll(QuestionnairePage, AbstractForm):
+    form_builder = CustomFormBuilder
     template = "poll/poll.html"
     parent_page_types = ["home.HomePage", "home.Section", "home.Article", "questionnaires.PollIndexPage"]
 
@@ -578,7 +579,7 @@ class QuizFormField(AbstractFormField):
     )
     correct_answer = models.CharField(
         verbose_name=_('correct_answer'), max_length=256,
-        help_text=_('The correct answer/choice(s). For checkboxes: a comma separated list of choices. '
+        help_text=_('The correct answer/choice(s). For checkboxes: a pipe (|) separated list of choices. '
                     'For checkbox: Either "on" or "off".'))
     feedback = models.CharField(verbose_name=_('Feedback'),
                                 max_length=255,
@@ -727,7 +728,7 @@ class Quiz(QuestionnairePage, AbstractForm):
             total_correct = 0
             form_data = dict(form.data)
             for field in self.get_form_fields():
-                correct_answer = field.correct_answer.split(',')
+                correct_answer = field.correct_answer.split('|')
 
                 if field.field_type == 'checkbox':
                     answer = form_data.get(field.clean_name) or 'off'
