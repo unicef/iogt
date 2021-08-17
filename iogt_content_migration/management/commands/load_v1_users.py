@@ -1,11 +1,16 @@
+import json
+
 import psycopg2
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import MultipleObjectsReturned
 from django.core.management import BaseCommand
+from django.core.serializers.json import DjangoJSONEncoder
 from django_comments_xtd.models import XtdComment
 
 from home.models import Article, SectionIndexPage
+from questionnaires.models import Survey, UserSubmission, SurveyIndexPage
 
 
 class Command(BaseCommand):
@@ -56,6 +61,7 @@ class Command(BaseCommand):
         self.content_type_map = dict()
         self.comments_map = dict()
         self.articles_map = dict()
+        self.surveys_map = dict()
 
         self.clear()
         self.stdout.write('Existing site structure cleared')
@@ -96,10 +102,44 @@ class Command(BaseCommand):
     def migrate(self):
         self.populate_content_type_map()
         self.populate_articles_map()
+        self.populate_surveys_map()
 
         self.migrate_user_groups()
         self.migrate_user_accounts()
         self.migrate_user_comments()
+        self.migrate_user_submissions()
+
+    def get_mapping_from_title(self, klass, title):
+        return klass.objects.get(title=title)
+
+    def get_mapping_from_path(self, klass, path, title):
+        section_index_pages = SectionIndexPage.objects.all()
+        survey_index_pages = SurveyIndexPage.objects.all()
+        all_parents = list(section_index_pages) + list(survey_index_pages)
+
+        possible_paths = [f'{parent.path}{path}' for parent in all_parents]
+
+        return klass.objects.filter(title=title, path__in=possible_paths).first()
+
+    def populate_surveys_map(self):
+        sql = f'select * from surveys_molosurveypage msp inner join wagtailcore_page wp on msp.page_ptr_id = wp.id'
+        cur = self.db_query(sql)
+
+        for row in cur:
+            try:
+                survey = self.get_mapping_from_title(Survey, row['title'])
+            except MultipleObjectsReturned:
+                survey = self.get_mapping_from_path(Survey, row['path'][12:], row['title'])
+
+            if survey:
+                self.surveys_map.update({
+                    row['id']: survey
+                })
+                print(f'SURVEY | ({row["id"]}) {row["title"]} -> ({survey.page_ptr_id}) {survey.title}')
+            else:
+                self.stdout.write(self.style.ERROR(f'Found no match for ({row["id"]}) - {row["title"]}'))
+
+        cur.close()
 
     def populate_articles_map(self):
         sql = f'select * from core_articlepage cap inner join wagtailcore_page wp on cap.page_ptr_id = wp.id'
@@ -117,7 +157,7 @@ class Command(BaseCommand):
                     self.articles_map.update({
                         str(row['id']): article
                     })
-                    print(f'({row["id"]}) {row["title"]} -> ({article.page_ptr_id}) {article.title}')
+                    print(f'ARTICLE | ({row["id"]}) {row["title"]} -> ({article.page_ptr_id}) {article.title}')
 
     def populate_content_type_map(self):
         sql = f'select * from django_content_type'
@@ -210,3 +250,35 @@ class Command(BaseCommand):
                 order=1, followup=0, nested_count=0, site_id=1)
 
         self.stdout.write(self.style.SUCCESS('Completing Comment migration'))
+
+    def migrate_user_submissions(self):
+        UserSubmission.objects.all().delete()
+        self.stdout.write(self.style.SUCCESS('Started Survey Migration'))
+
+        sql = 'select * from surveys_molosurveysubmission mss ' \
+              'inner join surveys_molosurveypage msp on mss.page_id = msp.page_ptr_id'
+        cur = self.db_query(sql)
+
+        for row in cur:
+            try:
+                new_survey = self.surveys_map[row['page_id']]
+            except KeyError:
+                self.stdout.write(self.style.ERROR(f'Skipping Page: {row["page_id"]}'))
+                continue
+
+            form_data = json.loads(row['form_data'])
+            altered_form_data = dict()
+
+            for key, value in form_data.items():
+                new_key = key.replace('-', '_')
+                altered_form_data.update({
+                    new_key: value
+                })
+
+            UserSubmission.objects.create(
+                form_data=json.dumps(altered_form_data, cls=DjangoJSONEncoder),
+                page=new_survey,
+                user=None,
+            )
+
+        self.stdout.write(self.style.SUCCESS('Completed Survey Migration'))
