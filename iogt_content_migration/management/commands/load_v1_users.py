@@ -62,6 +62,7 @@ class Command(BaseCommand):
         self.comments_map = dict()
         self.articles_map = dict()
         self.surveys_map = dict()
+        self.users_map = dict()
 
         self.clear()
         self.stdout.write('Existing site structure cleared')
@@ -106,6 +107,8 @@ class Command(BaseCommand):
 
         self.migrate_user_groups()
         self.migrate_user_accounts()
+        self.populate_users_map()
+
         self.migrate_user_comments()
         self.migrate_user_submissions()
 
@@ -138,6 +141,17 @@ class Command(BaseCommand):
                 print(f'SURVEY | ({row["id"]}) {row["title"]} -> ({survey.page_ptr_id}) {survey.title}')
             else:
                 self.stdout.write(self.style.ERROR(f'Found no match for ({row["id"]}) - {row["title"]}'))
+
+        cur.close()
+
+    def populate_users_map(self):
+        sql = 'select * from auth_user'
+        cur = self.db_query(sql)
+
+        for row in cur:
+            self.users_map.update({
+                row["id"]: get_user_model().objects.get(username=row['username'])
+            })
 
         cur.close()
 
@@ -247,12 +261,11 @@ class Command(BaseCommand):
                 content_type_id=content_type.id, object_pk=new_article.pk, user_name=row['user_name'],
                 user_email=row['user_email'], submit_date=row['submit_date'],
                 comment=row['comment'], is_public=True, is_removed=False, thread_id=max_thread_id + 1,
-                order=1, followup=0, nested_count=0, site_id=1)
+                user=self.users_map[row['user_id']], order=1, followup=0, nested_count=0, site_id=1)
 
         self.stdout.write(self.style.SUCCESS('Completing Comment migration'))
 
     def migrate_user_submissions(self):
-        UserSubmission.objects.all().delete()
         self.stdout.write(self.style.SUCCESS('Started Survey Migration'))
 
         sql = 'select * from surveys_molosurveysubmission mss ' \
@@ -278,7 +291,7 @@ class Command(BaseCommand):
             UserSubmission.objects.create(
                 form_data=json.dumps(altered_form_data, cls=DjangoJSONEncoder),
                 page=new_survey,
-                user=None,
+                user=self.users_map[row['user_id']] if row['user_id'] else None,
             )
 
         self.stdout.write(self.style.SUCCESS('Completed Survey Migration'))
