@@ -1,9 +1,8 @@
 import psycopg2
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
 from django.core.management import BaseCommand
-from django.utils import timezone
-from django_comments.models import Comment
 from django_comments_xtd.models import XtdComment
 
 from home.models import Article, SectionIndexPage
@@ -97,6 +96,9 @@ class Command(BaseCommand):
     def migrate(self):
         self.populate_content_type_map()
         self.populate_articles_map()
+
+        self.migrate_user_groups()
+        self.migrate_user_accounts()
         self.migrate_user_comments()
 
     def populate_articles_map(self):
@@ -143,14 +145,39 @@ class Command(BaseCommand):
         cur = self.db_query(sql)
 
         for row in cur:
-            row.pop('id')
-            get_user_model().objects.create(**row)
+            v1_user_id = row.pop('id')
+
+            user = get_user_model().objects.filter(username=row['username']).first()
+            if not user:
+                user = get_user_model().objects.create(**row)
+
+            user_groups_sql = f'select * from auth_user_groups aug ' \
+                              f'inner join auth_group ag on aug.group_id = ag.id ' \
+                              f'where user_id={v1_user_id}'
+
+            user_groups_cursor = self.db_query(user_groups_sql)
+
+            user.groups.through.objects.all().delete()
+            for row_ in user_groups_cursor:
+                group = Group.objects.get(name=row_['name'])
+                user.groups.add(group)
+
+            user_groups_cursor.close()
 
         self.stdout.write(self.style.SUCCESS('Completed User Migration'))
 
-    def migrate_user_comments(self):
-        XtdComment.objects.all().delete()
+    def migrate_user_groups(self):
+        self.stdout.write(self.style.SUCCESS('Starting User Groups Migration'))
 
+        sql = f'select * from auth_group'
+        cur = self.db_query(sql)
+
+        for row in cur:
+            Group.objects.get_or_create(name=row['name'])
+
+        self.stdout.write(self.style.SUCCESS('Completed User Groups Migration'))
+
+    def migrate_user_comments(self):
         self.stdout.write(self.style.SUCCESS('Starting Comment migration'))
 
         sql = f'select * from django_comments dc inner join django_content_type dct on dc.content_type_id = dct.id'
@@ -169,9 +196,8 @@ class Command(BaseCommand):
             except KeyError:
                 new_article
 
-
-            max_thread_id_comment = XtdComment.objects.filter(content_type_id=content_type.id, object_pk=new_article.pk)\
-                .order_by('-thread_id').first()
+            max_thread_id_comment = XtdComment.objects.filter(
+                content_type_id=content_type.id, object_pk=new_article.pk).order_by('-thread_id').first()
 
             max_thread_id = 0
             if max_thread_id_comment:
@@ -180,9 +206,7 @@ class Command(BaseCommand):
             XtdComment.objects.create(
                 content_type_id=content_type.id, object_pk=new_article.pk, user_name=row['user_name'],
                 user_email=row['user_email'], submit_date=row['submit_date'],
-                comment=row['comment'], is_public=True, is_removed=False, thread_id=max_thread_id+1,
-                order=1,
-                followup=0, nested_count=0, site_id=1)
+                comment=row['comment'], is_public=True, is_removed=False, thread_id=max_thread_id + 1,
+                order=1, followup=0, nested_count=0, site_id=1)
 
         self.stdout.write(self.style.SUCCESS('Completing Comment migration'))
-
