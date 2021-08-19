@@ -56,16 +56,24 @@
             {% include "cache_banner.html" %}
         {% endif %}
         {% include "header.html" %}
-        <div class="content-holder">
-            <div class="other-links">
-                {% footer %}
+        <div class="main-wrapper">
+            <div class="content-holder">
+                <div class="other-links">
+                    {% footer %}
+                </div>
+                <div class="content">
+                    <a href="/" class="btn-primary">
+                        <span class="icon-holder">
+                            <img src="/" alt="Icon">
+                        </span>
+                        Primary Button
+                    </a>
+                    {% include "messages.html" %} 
+                    {% block content %}{% endblock %}
+                    <p class='footer__copyright'>{% translate "© The Internet of Good Things"%}</p>
+                </div>
+                {% include "footer.html" %}
             </div>
-            <div class="content">
-                {% include "messages.html" %} 
-                {% block content %}{% endblock %}
-                <p class='footer__copyright'>{% translate "© The Internet of Good Things"%}</p>
-            </div>
-            {% include "footer.html" %}
         </div>
     </div>
 </main>
