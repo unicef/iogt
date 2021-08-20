@@ -25,7 +25,7 @@ class UsersExportAdmin(ModelAdmin):
         registration_survey = SiteSettings.get_for_default_site().registration_survey
         user_submission = None
         if registration_survey:
-            ids = [registration_survey.id] + list(registration_survey.get_translations().values_list('id', flat=True))
+            ids = registration_survey.get_translations(inclusive=True).values_list('id', flat=True)
             user_submission = obj.usersubmission_set.filter(page__pk__in=ids).order_by('submit_time').first()
 
         return user_submission.form_data if user_submission else ''
