@@ -66,7 +66,6 @@ class Command(BaseCommand):
         self.db_connect(options)
         self.media_dir = options.get('media_dir')
         self.skip_locales = options.get('skip_locales')
-        self.delete_users = options.get('delete_users')
 
         self.image_map = {}
         self.page_translation_map = {}
@@ -95,9 +94,6 @@ class Command(BaseCommand):
         models.HomePage.objects.all().delete()
         Site.objects.all().delete()
         Image.objects.all().delete()
-
-        if self.delete_users:
-            get_user_model().objects.all().delete()
 
     def db_connect(self, options):
         connection_string = self.create_connection_string(options)
@@ -138,8 +134,6 @@ class Command(BaseCommand):
         self.migrate_surveys()
         self.stop_translations()
         Page.fix_tree()
-
-        # self.migrate_users()
 
     def create_home_page(self, root):
         sql = 'select * from core_main main join wagtailcore_page page on main.page_ptr_id = page.id'
@@ -773,4 +767,3 @@ class Command(BaseCommand):
                 skip_logic=row['skip_logic']
             )
             self.stdout.write(f"saved survey question, label={row['label']}")
-

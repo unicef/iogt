@@ -61,10 +61,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.db_connect(options)
-        self.delete_users = options.get('delete_users')
 
         self.registration_survey_mandatory_group_ids = self.request_registration_survey_mandatory_groups()
-        print(self.registration_survey_mandatory_group_ids)
 
         self.content_type_map = dict()
         self.comments_map = dict()
@@ -72,6 +70,8 @@ class Command(BaseCommand):
         self.surveys_map = dict()
         self.polls_map = dict()
         self.users_map = dict()
+
+        self.delete_users = options.get('delete_users')
 
         self.clear()
         self.stdout.write('Existing site structure cleared')
@@ -115,13 +115,15 @@ class Command(BaseCommand):
 
         self.stdout.write('\n Please mention the groups for which you want to mark the registration survey'
                           'mandatory?')
-        group_ids = raw_input('(Use comma separated ids, leave blank to make it optional)').split(',')
+        group_ids = raw_input('(Use comma separated ids, leave blank to make it optional)')
 
         if group_ids:
+            group_ids = group_ids.split(',')
             self.stdout.write(f'\n The script will mark registration survey mandatory for all'
                               f' users of group_ids: {group_ids}')
         else:
             self.stdout.write(f'\n The script will mark registration survey optional for all users')
+            group_ids = []
 
         sleep(5)
         return group_ids
@@ -146,6 +148,7 @@ class Command(BaseCommand):
 
         self.migrate_user_groups()
         self.migrate_user_accounts()
+        self.mark_user_registration_survey_required()
         self.populate_users_map()
         #
         self.migrate_user_comments()
@@ -248,9 +251,13 @@ class Command(BaseCommand):
         for row in self.with_progress(sql, cur, 'User Migration in progress'):
             v1_user_id = row.pop('id')
 
+            user_data = dict(row)
+            user_data.update({'has_filled_registration_survey': True})
+
+            get_user_model().objects.update_or_create(username=row['username'], defaults=user_data)
             user = get_user_model().objects.filter(username=row['username']).first()
             if not user:
-                user = get_user_model().objects.create(**row)
+                user = get_user_model().objects.create(has_filled_registration_survey=True, **row)
 
             user_groups_sql = f'select * from auth_user_groups aug ' \
                               f'inner join auth_group ag on aug.group_id = ag.id ' \
@@ -258,10 +265,10 @@ class Command(BaseCommand):
 
             user_groups_cursor = self.db_query(user_groups_sql)
 
-            user.groups.through.objects.all().delete()
+            user.groups.clear()
             for row_ in user_groups_cursor:
                 group = Group.objects.get(name=row_['name'])
-                user.groups.add(group)
+                group.user_set.add(user)
 
             user_groups_cursor.close()
 
@@ -275,6 +282,10 @@ class Command(BaseCommand):
             Group.objects.get_or_create(name=row['name'])
 
         self.stdout.write(self.style.SUCCESS('Completed User Groups Migration'))
+
+    def mark_user_registration_survey_required(self):
+        users = get_user_model().objects.filter(groups__id__in=self.registration_survey_mandatory_group_ids)
+        users.update(has_filled_registration_survey=False)
 
     def migrate_user_comments(self):
         self.stdout.write(self.style.SUCCESS('Starting Comment migration'))
@@ -308,7 +319,6 @@ class Command(BaseCommand):
                 comment=row['comment'], is_public=True, is_removed=False, thread_id=max_thread_id + 1,
                 user=self.users_map[row['user_id']], order=1, followup=0, nested_count=0, site_id=1)
 
-
     def migrate_user_submissions(self):
         sql = 'select * from surveys_molosurveysubmission mss ' \
               'inner join surveys_molosurveypage msp on mss.page_id = msp.page_ptr_id'
@@ -335,7 +345,6 @@ class Command(BaseCommand):
                 page=new_survey,
                 user=self.users_map[row['user_id']] if row['user_id'] else None,
             )
-
 
     def migrate_user_poll_submissions(self):
         sql = 'select  pcv.user_id, pcv.question_id, wcp_question.title, wcp_question.path \
