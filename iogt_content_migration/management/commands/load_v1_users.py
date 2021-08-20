@@ -150,7 +150,7 @@ class Command(BaseCommand):
         self.migrate_user_accounts()
         self.mark_user_registration_survey_required()
         self.populate_users_map()
-        #
+
         self.migrate_user_comments()
         self.migrate_user_submissions()
         self.migrate_user_poll_submissions()
@@ -177,9 +177,6 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR(f'{klass}: {title} -> No mapping found'))
 
         return obj
-
-    def populate_polls_map(self):
-        pass
 
     def populate_surveys_map(self):
         sql = f'select * from surveys_molosurveypage msp inner join wagtailcore_page wp on msp.page_ptr_id = wp.id'
@@ -224,7 +221,6 @@ class Command(BaseCommand):
                     self.articles_map.update({
                         str(row['id']): article
                     })
-                    # print(f'ARTICLE | ({row["id"]}) {row["title"]} -> ({article.page_ptr_id}) {article.title}')
 
     def populate_content_type_map(self):
         sql = f'select * from django_content_type'
