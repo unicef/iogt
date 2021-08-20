@@ -6,8 +6,8 @@
 {% endblock %}
 
 <div class="questionnaire-container container">
-    <h1 class="title {% if type == "Survey" %}survey-page__title{% else %}polls-widget__title{% endif %}">{{ object.title }}</h1>
-    <form action="{% pageurl object %}?back_url={{ request.path }}"
+    <h1 class="title {% if type == "Survey" %}survey-page__title{% else %}polls-widget__title{% endif %}">{{ page.title }}</h1>
+    <form action="{% get_action_url page page fields_step request form %}"
           method="POST">
         {% csrf_token %}
         <div {% if type == "Survey" %}class="survey-page__content"{% endif %}>
@@ -73,7 +73,7 @@
         </div>
         <button type="submit"
                 class="cust-btn cust-btn--dark {% if type == "Survey" %}survey-page__btn{% else %}polls-widget__submit{% endif %}">
-            <span>{{ object.submit_button_text }}</span>
+            <span>{{ page.submit_button_text }}</span>
         </button>
     </form>
 </div>

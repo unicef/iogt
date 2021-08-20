@@ -8,6 +8,8 @@ from wagtail.core.blocks import PageChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtailmedia.blocks import AbstractMediaChooserBlock
 
+from questionnaires.utils import SkipLogicPaginator
+
 
 class MediaBlock(AbstractMediaChooserBlock):
     def render_basic(self, value, context=None):
@@ -77,10 +79,20 @@ class SocialMediaShareButtonBlock(blocks.StructBlock):
 class EmbeddedQuestionnaireChooserBlock(blocks.PageChooserBlock):
 
     def render_basic(self, value, context=None):
+        paginator = SkipLogicPaginator(value.get_form_fields(), {}, {})
+        step = paginator.page(1)
+        if hasattr(value, 'multi_step') and value.multi_step:
+            form_class = value.get_form_class_for_step(step)
+        else:
+            form_class = value.get_form_class()
+
+        form = form_class(page=value, user=context['request'].user)
+
         context.update({
-            'object': value,
             'type': value.__class__.__name__,
-            'form': value.get_form(),
+            'form': form,
+            'fields_step': step,
+            'page': value
         })
         return render_to_string('blocks/embedded_questionnaire.html', context)
 
