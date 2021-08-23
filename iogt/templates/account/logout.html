@@ -2,12 +2,12 @@
 
 {% load i18n %}
 
-{% block title %}{% translate "Sign Out" %}{% endblock %}
+{% block title %}{% translate "Log Out" %}{% endblock %}
 
 {% block allauth_content %}
-<h1>{% translate "Sign Out" %}</h1>
+<h1>{% translate "Log Out" %}</h1>
 
-<p>{% translate 'Are you sure you want to sign out?' %}</p>
+<p>{% translate 'Are you sure you want to log out?' %}</p>
 
 <form method="post" action="{% url 'account_logout' %}">
   {% csrf_token %}
@@ -15,7 +15,7 @@
   <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
   {% endif %}
   <button class="cust-btn cust-btn--dark profile-form__btn" type="submit">
-    <span>{% translate 'Sign Out' %}</span>
+    <span>{% translate 'Log Out' %}</span>
   </button>
 </form>
 
