@@ -268,7 +268,7 @@ class SurveyFormField(AbstractFormField):
                     return ['on', 'off'].index(choice)
                 except ValueError:
                     return [True, False].index(choice)
-            return self.choices.split(',').index(choice)
+            return self.choices.split('|').index(choice)
         else:
             return False
 
@@ -617,7 +617,7 @@ class QuizFormField(AbstractFormField):
                     return [True, False].index(choice)
             elif type(choice) == list:
                 choice = choice[-1]
-            return self.choices.split(',').index(choice)
+            return self.choices.split('|').index(choice)
         else:
             return False
 
