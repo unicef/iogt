@@ -608,7 +608,7 @@ class Command(BaseCommand):
             self.stdout.write(f'Unable to determine field type for poll={poll_row["title"]}')
             return
 
-        choices = ','.join(choices)
+        choices = '|'.join(choices)
 
         PollFormField.objects.create(page=poll, label=poll.title, field_type=field_type, choices=choices)
         self.stdout.write(f"saved poll question, label={poll.title}")
@@ -755,7 +755,7 @@ class Command(BaseCommand):
             SurveyFormField.objects.create(
                 page=survey, sort_order=row['sort_order'], label=row['label'], required=row['required'],
                 default_value=row['default_value'], help_text=row['help_text'], field_type=row['field_type'],
-                admin_label=row['admin_label'], page_break=row['page_break'], choices=row['choices'],
+                admin_label=row['admin_label'], page_break=row['page_break'], choices='|'.join(row['choices'].split(',')),
                 skip_logic=row['skip_logic']
             )
             self.stdout.write(f"saved survey question, label={row['label']}")
