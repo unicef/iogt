@@ -838,7 +838,7 @@ class ThemeSettings(BaseSetting):
         max_length=8, default='#FDD256')
     language_picker_font_color = models.CharField(
         null=True, blank=True, help_text='The font color of the language picker button as a HEX code',
-        max_length=8, default='#FDD256')
+        max_length=8, default='#303030')
 
     section_listing_questionnaire_background_color = models.CharField(
         null=True, blank=True, help_text='The background color of the Questionnaire in section listing as a HEX code',

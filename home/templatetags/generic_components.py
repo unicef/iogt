@@ -45,3 +45,10 @@ def section_questionnaire_style(section):
     background_color = section.background_color or theme_settings.section_listing_questionnaire_background_color
 
     return f"color:{font_color};background-color:{background_color}"
+
+
+@register.simple_tag
+def language_picker_style():
+    theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
+    return f"font-color:{theme_settings.language_picker_font_color};background-color:" \
+           f"{theme_settings.language_picker_background_color}"
