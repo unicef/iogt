@@ -570,17 +570,17 @@ class QuizFormField(AbstractFormField):
         max_length=16,
         choices=FORM_FIELD_CHOICES
     )
+    choices = models.TextField(
+        verbose_name=_('choices'),
+        blank=True,
+        help_text=_('Pipe (|) separated list of choices.')
+    )
     admin_label = models.CharField(
         verbose_name=_('admin_label'),
         max_length=256,
         help_text=_('Column header used during CSV export of survey '
                     'responses.'),
     )
-    skip_logic = StreamField([
-        ('skip_logic', SkipLogicBlock()),
-    ], blank=True, help_text=_('This is used to add choices for field type radio, checkbox, checkboxes, '
-                               'and dropdown only. This can be used to skip questions and skipping is only allowed '
-                               'for radio and dropdown.'))
     page_break = models.BooleanField(
         default=False,
         help_text=_(
@@ -602,7 +602,7 @@ class QuizFormField(AbstractFormField):
         FieldPanel('help_text'),
         FieldPanel('required'),
         FieldPanel('field_type', classname="formbuilder-type"),
-        StreamFieldPanel('skip_logic'),
+        FieldPanel('choices', classname="formbuilder-choices"),
         FieldPanel('default_value', classname="formbuilder-default"),
         FieldPanel('correct_answer'),
         FieldPanel('feedback'),
@@ -612,10 +612,7 @@ class QuizFormField(AbstractFormField):
 
     @property
     def has_skipping(self):
-        return any(
-            logic.value['skip_logic'] != SkipState.NEXT
-            for logic in self.skip_logic
-        )
+        return None
 
     def choice_index(self, choice):
         if choice:
