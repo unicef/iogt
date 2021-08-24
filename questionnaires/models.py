@@ -275,7 +275,7 @@ class SurveyFormField(AbstractFormField):
             if self.field_type == 'checkbox':
                 # clean checkboxes have True/False
                 try:
-                    return ['on', 'off'].index(choice)
+                    return ['true', 'false'].index(choice)
                 except ValueError:
                     return [True, False].index(choice)
             return self.choices.split('|').index(choice)
@@ -591,7 +591,7 @@ class QuizFormField(AbstractFormField):
     correct_answer = models.CharField(
         verbose_name=_('correct_answer'), max_length=256,
         help_text=_('The correct answer/choice(s). For checkboxes: a pipe (|) separated list of choices. '
-                    'For checkbox: Either "on" or "off".'))
+                    'For checkbox: Either "true" or "false".'))
     feedback = models.CharField(verbose_name=_('Feedback'),
                                 max_length=255,
                                 help_text=_('Feedback message for user answer.'),
@@ -620,7 +620,7 @@ class QuizFormField(AbstractFormField):
             if self.field_type == 'checkbox':
                 # clean checkboxes have True/False
                 try:
-                    return ['on', 'off'].index(choice)
+                    return ['true', 'false'].index(choice)
                 except ValueError:
                     return [True, False].index(choice)
             elif type(choice) == list:
@@ -739,7 +739,7 @@ class Quiz(QuestionnairePage, AbstractForm):
                 correct_answer = field.correct_answer.split('|')
 
                 if field.field_type == 'checkbox':
-                    answer = form_data.get(field.clean_name) or 'off'
+                    answer = form_data.get(field.clean_name) or 'false'
                 else:
                     answer = form_data.get(field.clean_name)
 
