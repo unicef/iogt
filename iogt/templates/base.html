@@ -1,4 +1,4 @@
-{% load static wagtailuserbar home_tags sass_tags wagtailsettings_tags menu_tags i18n%}
+{% load static wagtailuserbar home_tags sass_tags wagtailsettings_tags menu_tags generic_components i18n%}
 {% get_settings %}
 
 <!--  Commit Hash: {{commit_hash}} -->
@@ -62,14 +62,7 @@
                     {% footer %}
                 </div>
                 <div class="content">
-                    <a href="/" class="btn-primary" style="color: #fff; background: #000;">
-                        <!-- render this block if we have SVG -->
-                        <span class="icon-holder">
-                            <img src="/" alt="Icon">
-                        </span>
-                        Primary Button
-                    </a>
-                    {% include "messages.html" %} 
+                    {% include "messages.html" %}
                     {% block content %}{% endblock %}
                     <p class='footer__copyright'>{% translate "© The Internet of Good Things"%}</p>
                 </div>

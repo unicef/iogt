@@ -38,7 +38,6 @@ from wagtailmenus.models import AbstractFlatMenuItem, BooleanField
 from wagtailsvg.models import Svg
 from wagtailsvg.edit_handlers import SvgChooserPanel
 
-
 from messaging.blocks import ChatBotButtonBlock
 from comments.models import CommentableMixin
 from iogt.views import check_user_session
@@ -381,7 +380,6 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         verbose_name_plural = _("articles")
 
 
-
 class BannerIndexPage(Page):
     parent_page_types = ['home.HomePage']
     subpage_types = ['home.BannerPage']
@@ -430,11 +428,11 @@ class BannerPage(Page):
     content_panels = Page.content_panels + [
         FieldPanel('banner_description'),
         ImageChooserPanel('banner_image'),
-        #ImageChooserPanel('banner_background_image'),
+        # ImageChooserPanel('banner_background_image'),
         PageChooserPanel('banner_link_page'),
-        #FieldPanel('banner_button_text'),
-        #ImageChooserPanel('banner_icon_button'),
-        #FieldPanel('align_center')
+        # FieldPanel('banner_button_text'),
+        # ImageChooserPanel('banner_icon_button'),
+        # FieldPanel('align_center')
     ]
 
 
@@ -469,8 +467,8 @@ class SiteSettings(BaseSetting):
     show_only_translated_pages = models.BooleanField(
         default=False,
         help_text=_('When selecting this option, untranslated pages'
-                  ' will not be visible to the front end user'
-                  ' when viewing a child language of the site'))
+                    ' will not be visible to the front end user'
+                    ' when viewing a child language of the site'))
     # TODO: GA, FB analytics should be global.
     fb_analytics_app_id = models.CharField(
         verbose_name=_('Facebook Analytics App ID'),
@@ -822,3 +820,44 @@ class ManifestSettings(models.Model):
         )
         verbose_name = "Manifest settings"
         verbose_name_plural = "Manifests settings"
+
+
+@register_setting
+class ThemeSettings(BaseSetting):
+
+    global_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the website',
+        max_length=8, default='#FFFFFF')
+
+    header_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the header background as a HEX code', max_length=8,
+        default='#FFFFFF')
+
+    language_picker_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the language picker button as a HEX code',
+        max_length=8, default='#FDD256')
+    language_picker_font_color = models.CharField(
+        null=True, blank=True, help_text='The font color of the language picker button as a HEX code',
+        max_length=8, default='#FDD256')
+
+    section_listing_questionnaire_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the Questionnaire in section listing as a HEX code',
+        max_length=8, default='#f0f0f0')
+    section_listing_questionnaire_font_color = models.CharField(
+        null=True, blank=True, help_text='The font color of the Questionnaire in section listing as a HEX code',
+        max_length=8, default='#444')
+
+    article_card_font_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the Quiz in section listing as a HEX code',
+        max_length=8, default='#444')
+    article_card_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the Quiz in section listing as a HEX code',
+        max_length=8, default='#ffffff')
+
+    primary_button_font_color = models.CharField(
+        null=True, blank=True, help_text='The font/icon color of the primary button as a HEX code', max_length=8,
+        default='#444')
+    primary_button_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the primary button as a HEX code', max_length=8,
+        default='#f0f0f0')
+

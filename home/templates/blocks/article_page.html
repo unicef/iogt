@@ -1,7 +1,3 @@
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load generic_components %}
 
-<a href="{% pageurl value %}">
-    <p>{{ value.title }}</p>
-    {% image value.specific.lead_image width-75 class='related-articles__img--xs' %}
-    {% image value.specific.lead_image original class='related-articles__img--sm' %}
-</a>
+{% article_card article=value %}
