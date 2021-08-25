@@ -6,11 +6,7 @@ $(document).ready(() => {
             choicesField.css('display', 'none');
         }
         fieldType.change(e => {
-            if (['hidden', ''].includes(fieldType.val())) {
-                choicesField.css('display', 'none');
-            } else {
-                choicesField.css('display', 'block');
-            }
+            ['hidden', ''].includes(fieldType.val()) ? choicesField.css('display', 'none') : choicesField.css('display', 'block');
             if (e.target.value === 'checkbox') {
                 question.find('[id$=-choices]').first().val('true|false');
             }
@@ -33,11 +29,7 @@ $(document).ready(() => {
             skipLogicField.css('display', 'none');
         }
         fieldType.change(e => {
-            if (['hidden', ''].includes(fieldType.val())) {
-                skipLogicField.css('display', 'none');
-            } else {
-                skipLogicField.css('display', 'block');
-            }
+            ['hidden', ''].includes(fieldType.val()) ? skipLogicField.css('display', 'none') : skipLogicField.css('display', 'block');
             if (e.target.value === 'checkbox') {
                 const addChoiceButton = question.find('.action-add-block-skip_logic').last();
                 let choices = question.find('[id$=value-choice]');
