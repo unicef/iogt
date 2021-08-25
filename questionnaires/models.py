@@ -278,12 +278,18 @@ class SurveyFormField(AbstractFormField):
                     return ['on', 'off'].index(choice)
                 except ValueError:
                     return [True, False].index(choice)
-            return self.choices.split('|').index(choice)
-        else:
-            return False
+            try:
+                return self.choices.split('|').index(choice)
+            except ValueError:
+                pass
+
+        return False
 
     def next_action(self, choice):
-        return self.skip_logic[self.choice_index(choice)].value['skip_logic']
+        choice_index = self.choice_index(choice)
+        if choice_index is False:
+            return SkipState.NEXT
+        return self.skip_logic[choice_index].value['skip_logic']
 
     def is_next_action(self, choice, *actions):
         if self.has_skipping:
