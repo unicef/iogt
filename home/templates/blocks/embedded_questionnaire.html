@@ -6,8 +6,8 @@
 {% endblock %}
 
 <div class="questionnaire-container container">
-    <h1 class="title {% if type == "Survey" %}survey-page__title{% else %}polls-widget__title{% endif %}">{{ object.title }}</h1>
-    <form action="{% pageurl object %}?back_url={{ request.path }}"
+    <h1 class="title {% if type == "Survey" %}survey-page__title{% else %}polls-widget__title{% endif %}">{{ page.title }}</h1>
+    <form action="{% get_action_url page page fields_step request form %}"
           method="POST">
         {% csrf_token %}
         <div {% if type == "Survey" %}class="survey-page__content"{% endif %}>
@@ -39,7 +39,7 @@
                     </div>
                 {% else %}
                     <h4 class="polls-widget__form-title">
-                        <svg width="10" height="10" viewBox="0 0 10 10"
+                        <svg width="14" height="14" viewBox="0 0 10 10"
                              fill="none"
                              xmlns="http://www.w3.org/2000/svg">
                             <path d="M5.00004 9.16646C7.30123 9.16646 9.16671 7.30098 9.16671 4.9998C9.16671 2.69861 7.30123 0.83313 5.00004 0.83313C2.69885 0.83313 0.833374 2.69861 0.833374 4.9998C0.833374 7.30098 2.69885 9.16646 5.00004 9.16646Z"
@@ -73,7 +73,7 @@
         </div>
         <button type="submit"
                 class="cust-btn cust-btn--dark {% if type == "Survey" %}survey-page__btn{% else %}polls-widget__submit{% endif %}">
-            <span>{{ object.submit_button_text }}</span>
+            <span>{{ page.submit_button_text }}</span>
         </button>
     </form>
 </div>

@@ -2,7 +2,7 @@ from django import template
 from django.urls import translate_url
 from wagtail.core.models import Locale, Site
 
-from home.models import FooterPage, SectionIndexPage
+from home.models import FooterPage, SectionIndexPage, Section
 from iogt.settings.base import LANGUAGES
 
 register = template.Library()
@@ -103,3 +103,13 @@ def translated_home_page_url(language_code):
 def change_lang(context, lang=None, *args, **kwargs):
     path = context['request'].path
     return translate_url(path, lang)
+
+
+@register.simple_tag
+def get_menu_icon(menu_item):
+    if hasattr(menu_item.icon, 'url'):
+        return menu_item.icon.url
+    elif hasattr(menu_item, 'link_page') and isinstance(menu_item.link_page, Section) and hasattr(menu_item.link_page.icon, 'url'):
+        return menu_item.link_page.specific.icon.url
+
+    return ''

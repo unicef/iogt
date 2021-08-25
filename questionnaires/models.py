@@ -3,6 +3,7 @@ import json
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
+from django.db.models import Q
 from django.utils import timezone
 from django.utils.functional import cached_property
 
@@ -97,13 +98,21 @@ class QuestionnairePage(Page, PageUtilsMixin):
         return self.title
 
     def serve(self, request, *args, **kwargs):
-        if (
+        if request.session.session_key is None:
+            request.session.save()
+        self.session = request.session
+
+        multiple_submission_filter = (
+            Q(session_key=request.session.session_key) if request.user.is_anonymous else Q(user__pk=request.user.pk)
+        )
+        multiple_submission_check = (
             not self.allow_multiple_submissions
-            and self.get_submission_class()
-            .objects.filter(page=self, user__pk=request.user.pk)
-            .exists()
-        ):
+            and self.get_submission_class().objects.filter(multiple_submission_filter, page=self).exists()
+        )
+        anonymous_user_submission_check = request.user.is_anonymous and not self.allow_anonymous_submissions
+        if multiple_submission_check or anonymous_user_submission_check:
             return render(request, self.template, self.get_context(request))
+
         if hasattr(self, "multi_step") and self.multi_step:
             return self.serve_questions_separately(request)
 
@@ -200,6 +209,7 @@ class QuestionnairePage(Page, PageUtilsMixin):
             form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder),
             page=self,
             user=None if user.is_anonymous else user,
+            session_key=self.session.session_key,
         )
 
     def get_submissions_list_view_class(self):
@@ -358,7 +368,7 @@ class Survey(QuestionnairePage, AbstractForm):
         super().process_form_submission(form)
 
         site_settings = SiteSettings.get_for_default_site()
-        if site_settings.registration_survey and site_settings.registration_survey.pk == self.pk:
+        if site_settings.registration_survey and site_settings.registration_survey.localized.pk == self.pk:
             user = form.user
             user.has_filled_registration_survey = True
             user.save(update_fields=['has_filled_registration_survey'])
@@ -390,6 +400,7 @@ class UserSubmission(AbstractFormSubmission):
     user = models.ForeignKey(
         get_user_model(), on_delete=models.CASCADE, blank=True, null=True
     )
+    session_key = models.CharField(max_length=255, null=True, blank=True)
 
     def get_data(self):
         form_data = super().get_data()
@@ -485,17 +496,6 @@ class Poll(QuestionnairePage, AbstractForm):
 
     def get_submission_class(self):
         return UserSubmission
-
-    def serve(self, request, *args, **kwargs):
-        if (
-            not self.allow_multiple_submissions
-            and self.get_submission_class()
-            .objects.filter(page=self, user__pk=request.user.pk)
-            .exists()
-        ):
-            return render(request, self.template, self.get_context(request))
-
-        return super().serve(request, *args, **kwargs)
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)

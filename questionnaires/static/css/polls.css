@@ -17,12 +17,19 @@
     color: #9a9a9a;
     display: -webkit-flex;
     display: flex;
-    font-size: 8px;
+    font-size: 14px;
     font-weight: 500;
     letter-spacing: .1em;
-    line-height: 12px;
+    line-height: 16px;
     text-transform: uppercase;
     margin: 0;
+}
+
+@media screen and (min-width: 360px) {
+    .polls-widget__form-title {
+        font-size: 16px;
+        line-height: 20px;
+    }
 }
 
 .polls-widget__form-title svg {
@@ -72,19 +79,27 @@
     color: #9a9a9a;
     display: -webkit-flex;
     display: flex;
-    font-size: 8px;
+    font-size: 14px;
     font-weight: 500;
     letter-spacing: .1em;
-    line-height: 12px;
+    line-height: 16px;
     padding-left: 8px;
     text-transform: uppercase
 }
 
+@media screen and (min-width: 360px) {
+    .quest-item__step-desc {
+        font-size: 16px;
+        line-height: 20px;
+    }
+}
+
 .quest-item__step-desc:before {
-    background-image: url("/static/icons/info.svg");
+    background: url("/static/icons/info.svg") no-repeat;
+    background-size: cover;
     content: "";
     display: block;
-    height: 10px;
+    height: 14px;
     margin-right: 4px;
-    width: 10px
+    width: 14px
 }

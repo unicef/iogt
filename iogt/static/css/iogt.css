@@ -1666,9 +1666,9 @@ textarea:focus ~ .cust-input__length-text {
     cursor: pointer;
 }
 
-.reply-form .reply-comment:hover {
+/* .reply-form .reply-comment:hover {
     background-color: #0094F4;
-}
+} */
 
 .comment__children .individual-comment {
     position: relative;
@@ -1745,7 +1745,32 @@ textarea:focus ~ .cust-input__length-text {
         width: 12px;
         height: 12px;
     }
+}
 
+.content .quest-item__step-desc,
+.content .quest-item__number,
+.content .quest-item__desc {
+    font-size: 14px;
+    line-height: 16px;
+}
+
+.content .quest-item__step-desc:before {
+    background: url("/static/icons/info.svg") no-repeat;
+    background-size: cover;
+    content: "";
+    display: block;
+    height: 14px;
+    margin-right: 4px;
+    width: 14px
+}
+
+@media screen and (min-width: 360px) {
+    .content .quest-item__step-desc,
+    .content .quest-item__number,
+    .content .quest-item__desc {
+        font-size: 16px;
+        line-height: 20px;
+    }
     .load-more button {
         font-size: 16px;
         line-height: 22px;
@@ -1757,19 +1782,9 @@ textarea:focus ~ .cust-input__length-text {
 }
 
 .section-img .image-overlay__text {
-    position: absolute;
-    left: 20px;
-    right: 20px;
-    bottom: 20px;
-    color: white;
     font-weight: 800;
     font-size: 24px;
     line-height: 28px;
-}
-
-.section-img .image-overlay__text.alt {
-    position: static;
     color: #303030;
-    padding: 10px 0 15px;
-
+    padding: 10px 0;
 }

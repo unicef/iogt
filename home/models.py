@@ -643,6 +643,8 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
+        help_text=_('If Page link is a section page and icon is blank then the section icon will be used. '
+                    'Specify an icon here to override this.')
     )
 
     color = models.CharField(
