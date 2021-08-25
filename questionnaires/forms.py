@@ -113,17 +113,8 @@ class SurveyForm(WagtailAdminPageForm):
                 for skip_logic in form.instance.skip_logic:
                     choices_values.append(skip_logic.value['choice'])
                 form.instance.choices = "|".join(choices_values)
-
-            if field_type not in VALID_SKIP_SELECTORS:
-                if field_type != 'checkboxes':
-                    form.instance.skip_logic = []
-                else:
-                    for skip_logic in form.instance.skip_logic:
-                        skip_logic.value['skip_logic'] = SkipState.NEXT
-                        skip_logic.value['question'] = None
-            elif field_type == 'checkbox':
-                for skip_logic in form.instance.skip_logic:
-                    skip_logic.value['choice'] = ''
+            else:
+                form.instance.skip_logic = []
 
         return super().save(commit)
 

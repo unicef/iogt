@@ -11,7 +11,8 @@ class SkipState:
 
 
 VALID_SKIP_SELECTORS = [
-    'checkbox', 'checkboxes', 'date', 'datetime', 'email', 'singleline', 'multiline', 'positivenumber', 'radio', 'url',
+    'checkbox', 'checkboxes', 'date', 'datetime', 'dropdown', 'email', 'singleline', 'multiline', 'number',
+    'positivenumber', 'radio', 'url',
 ]
 VALID_SKIP_LOGIC = VALID_SKIP_SELECTORS
 
