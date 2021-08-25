@@ -271,17 +271,12 @@ class SurveyFormField(AbstractFormField):
         )
 
     def choice_index(self, choice):
-        if choice:
-            if self.field_type == 'checkbox':
-                # clean checkboxes have True/False
-                try:
-                    return ['true', 'false'].index(choice)
-                except ValueError:
-                    return [True, False].index(choice)
-            try:
-                return self.choices.split('|').index(choice)
-            except ValueError:
-                pass
+        if self.field_type == 'checkbox':
+            choice = 'true' if choice == 'on' else 'false'
+        try:
+            return self.choices.split('|').index(choice)
+        except ValueError:
+            pass
 
         return False
 
@@ -739,7 +734,7 @@ class Quiz(QuestionnairePage, AbstractForm):
                 correct_answer = field.correct_answer.split('|')
 
                 if field.field_type == 'checkbox':
-                    answer = form_data.get(field.clean_name) or 'false'
+                    answer = 'true' if form_data.get(field.clean_name) else 'false'
                 else:
                     answer = form_data.get(field.clean_name)
 
