@@ -46,14 +46,10 @@ $(document).ready(() => {
                 if (choices.length === 0) {
                     addChoiceButton.click();
                     addChoiceButton.click();
+                    choices = question.find('[id$=value-choice]');
+                    choices.first().val('true');
+                    choices.last().val('false');
                 }
-                choices = question.find('[id$=value-choice]');
-                choices.first().val('true');
-                choices.last().val('false');
-            } else {
-                question.find('[id$=value-choice]').each((index, choice) => {
-                    $(choice).val('');
-                });
             }
         });
     };
