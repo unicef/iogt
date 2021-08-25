@@ -13,8 +13,6 @@ $(document).ready(() => {
             }
             if (e.target.value === 'checkbox') {
                 question.find('[id$=-choices]').first().val('true|false');
-            } else {
-                question.find('[id$=-choices]').first().val('');
             }
         });
     };
