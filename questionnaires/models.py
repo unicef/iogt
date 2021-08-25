@@ -278,12 +278,18 @@ class SurveyFormField(AbstractFormField):
                     return ['true', 'false'].index(choice)
                 except ValueError:
                     return [True, False].index(choice)
-            return self.choices.split('|').index(choice)
-        else:
-            return False
+            try:
+                return self.choices.split('|').index(choice)
+            except ValueError:
+                pass
+
+        return False
 
     def next_action(self, choice):
-        return self.skip_logic[self.choice_index(choice)].value['skip_logic']
+        choice_index = self.choice_index(choice)
+        if choice_index is False:
+            return SkipState.NEXT
+        return self.skip_logic[choice_index].value['skip_logic']
 
     def is_next_action(self, choice, *actions):
         if self.has_skipping:
@@ -425,6 +431,11 @@ class PollFormField(AbstractFormField):
         max_length=16,
         choices=CHOICES
     )
+    choices = models.TextField(
+        verbose_name=_('choices'),
+        blank=True,
+        help_text=_('Pipe (|) separated list of choices.')
+    )
 
 
 class Poll(QuestionnairePage, AbstractForm):
@@ -491,17 +502,6 @@ class Poll(QuestionnairePage, AbstractForm):
 
     def get_submission_class(self):
         return UserSubmission
-
-    def serve(self, request, *args, **kwargs):
-        if (
-            not self.allow_multiple_submissions
-            and self.get_submission_class()
-            .objects.filter(page=self, user__pk=request.user.pk)
-            .exists()
-        ):
-            return render(request, self.template, self.get_context(request))
-
-        return super().serve(request, *args, **kwargs)
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
@@ -588,9 +588,9 @@ class QuizFormField(AbstractFormField):
             'Inserts a page break which puts the next question onto a new page'
         )
     )
-    correct_answer = models.CharField(
-        verbose_name=_('correct_answer'), max_length=256,
-        help_text=_('The correct answer/choice(s). For checkboxes: a pipe (|) separated list of choices. '
+    correct_answer = models.TextField(
+        verbose_name=_('correct_answer'),
+        help_text=_('The correct answer/choice(s). Pipe (|) separated list of choices. '
                     'For checkbox: Either "true" or "false".'))
     feedback = models.CharField(verbose_name=_('Feedback'),
                                 max_length=255,
