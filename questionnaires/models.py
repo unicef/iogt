@@ -414,6 +414,11 @@ class PollFormField(AbstractFormField):
         max_length=16,
         choices=CHOICES
     )
+    choices = models.TextField(
+        verbose_name=_('choices'),
+        blank=True,
+        help_text=_('Pipe (|) separated list of choices.')
+    )
 
 
 class Poll(QuestionnairePage, AbstractForm):
@@ -577,10 +582,10 @@ class QuizFormField(AbstractFormField):
             'Inserts a page break which puts the next question onto a new page'
         )
     )
-    correct_answer = models.CharField(
-        verbose_name=_('correct_answer'), max_length=256,
-        help_text=_('The correct answer/choice(s). For checkboxes: a pipe (|) separated list of choices. '
-                    'For checkbox: Either "on" or "off".'))
+    correct_answer = models.TextField(
+        verbose_name=_('correct_answer'),
+        help_text=_('The correct answer/choice(s). Pipe (|) separated list of choices. '
+                    'For checkbox: Either "true" or "false".'))
     feedback = models.CharField(verbose_name=_('Feedback'),
                                 max_length=255,
                                 help_text=_('Feedback message for user answer.'),
