@@ -737,7 +737,11 @@ class Quiz(QuestionnairePage, AbstractForm):
                 if type(answer) != list:
                     answer = [str(answer)]
 
-                is_correct = set(answer) == set(correct_answer)
+                if field.field_type == 'radio':
+                    is_correct = set(answer).issubset(set(correct_answer))
+                else:
+                    is_correct = set(answer) == set(correct_answer)
+
                 if is_correct:
                     total_correct += 1
                 total += 1
