@@ -383,3 +383,7 @@ COMMIT_HASH = os.getenv('COMMIT_HASH')
 from .profanity_settings import *
 
 EXPORT_FILENAME_TIMESTAMP_FORMAT = '%Y-%m-%dT%H%M%S'
+
+WAGTAILMARKDOWN = {
+    'allowed_tags': ['i', 'b'],
+}
