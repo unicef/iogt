@@ -41,7 +41,6 @@ FORM_FIELD_CHOICES = (
     ('datetime', _('Date/time')),
     ('dropdown', _('Drop down')),
     ('email', _('Email')),
-    ('hidden', _('Hidden field')),
     ('singleline', _('Single line text')),
     ('multiline', _('Multi-line text')),
     ('number', _('Number')),
