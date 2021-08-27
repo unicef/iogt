@@ -24,16 +24,7 @@
                         {% subtract result|get_item:'total' result|get_item:'total_correct' %} {% translate "Incorrect" %}</div>
                 </div>
                 <div class="quiz-answer-banner__btns">
-                    <a href="
-
-
-
-
-
-
-
-
-                            {% if back_url != None %}{{ back_url }}{% else %}/{% endif %}"
+                    <a href="{% if back_url != None %}{{ back_url }}{% else %}/{% endif %}"
                        class="icon-btn icon-btn--md icon-btn--white icon-btn--rounded quiz-answer-banner__btn">
                         <span class="icon-btn__icon">
                             <svg width="4" height="8" viewBox="0 0 8 14"
@@ -112,9 +103,9 @@
                                     <div class="quest-item__content"
                                          tabindex="0">
                                         <label class="cust-check cust-check--2 quest-item__input
-                                          {% if field_option.choice_label in fields_info|get_item:field.name|get_item:'correct_answer' and field_option.data|get_item:'selected' %} success{% endif %}
-                                          {% if field_option.choice_label in fields_info|get_item:field.name|get_item:'correct_answer' and not field_option.data|get_item:'selected' %} error{% endif %}
-                                          {% if field_option.choice_label not in fields_info|get_item:field.name|get_item:'correct_answer' and field_option.data|get_item:'selected' %} error{% endif %} tabindex="0">
+                                          {% if field_option.choice_label in fields_info|get_item:field.name|get_item:'correct_answer_list' and field_option.data|get_item:'selected' %} success{% endif %}
+                                          {% if field_option.choice_label in fields_info|get_item:field.name|get_item:'correct_answer_list' and not field_option.data|get_item:'selected' %} error{% endif %}
+                                          {% if field_option.choice_label not in fields_info|get_item:field.name|get_item:'correct_answer_list' and field_option.data|get_item:'selected' %} error{% endif %} tabindex="0">
                                             <div class="cust-check__title">
                                                 <span class="cust-check__check"></span>
                                                 <span>{{ field_option.choice_label }}</span>

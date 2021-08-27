@@ -19,6 +19,34 @@ class CustomFormBuilder(FormBuilder):
 
         return forms.IntegerField(**options)
 
+    def create_dropdown_field(self, field, options):
+        options['choices'] = map(
+            lambda x: (x.strip(), x.strip()),
+            field.choices.split('|')
+        )
+        return forms.ChoiceField(**options)
+
+    def create_multiselect_field(self, field, options):
+        options['choices'] = map(
+            lambda x: (x.strip(), x.strip()),
+            field.choices.split('|')
+        )
+        return forms.MultipleChoiceField(**options)
+
+    def create_radio_field(self, field, options):
+        options['choices'] = map(
+            lambda x: (x.strip(), x.strip()),
+            field.choices.split('|')
+        )
+        return forms.ChoiceField(widget=forms.RadioSelect, **options)
+
+    def create_checkboxes_field(self, field, options):
+        options['choices'] = [(x.strip(), x.strip()) for x in field.choices.split('|')]
+        options['initial'] = [x.strip() for x in field.default_value.split('|')]
+        return forms.MultipleChoiceField(
+            widget=forms.CheckboxSelectMultiple, **options
+        )
+
 
 class SurveyForm(WagtailAdminPageForm):
     form_field_name = 'survey_form_fields'
@@ -92,7 +120,7 @@ class SurveyForm(WagtailAdminPageForm):
                 choices_values = []
                 for skip_logic in form.instance.skip_logic:
                     choices_values.append(skip_logic.value['choice'])
-                form.instance.choices = ",".join(choices_values)
+                form.instance.choices = "|".join(choices_values)
 
             if field_type not in VALID_SKIP_SELECTORS:
                 if field_type != 'checkboxes':
@@ -213,7 +241,7 @@ class QuizForm(WagtailAdminPageForm):
                 choices_values = []
                 for skip_logic in form.instance.skip_logic:
                     choices_values.append(skip_logic.value['choice'])
-                form.instance.choices = ",".join(choices_values)
+                form.instance.choices = "|".join(choices_values)
 
             if field_type not in VALID_SKIP_SELECTORS:
                 if field_type != 'checkboxes':

@@ -278,7 +278,7 @@ class SurveyFormField(AbstractFormField):
                     return ['on', 'off'].index(choice)
                 except ValueError:
                     return [True, False].index(choice)
-            return self.choices.split(',').index(choice)
+            return self.choices.split('|').index(choice)
         else:
             return False
 
@@ -425,9 +425,15 @@ class PollFormField(AbstractFormField):
         max_length=16,
         choices=CHOICES
     )
+    choices = models.TextField(
+        verbose_name=_('choices'),
+        blank=True,
+        help_text=_('Pipe (|) separated list of choices.')
+    )
 
 
 class Poll(QuestionnairePage, AbstractForm):
+    form_builder = CustomFormBuilder
     template = "poll/poll.html"
     parent_page_types = ["home.HomePage", "home.Section", "home.Article", "questionnaires.PollIndexPage"]
 
@@ -576,10 +582,11 @@ class QuizFormField(AbstractFormField):
             'Inserts a page break which puts the next question onto a new page'
         )
     )
-    correct_answer = models.CharField(
-        verbose_name=_('correct_answer'), max_length=256,
-        help_text=_('The correct answer/choice(s). For checkboxes: a comma separated list of choices. '
-                    'For checkbox: Either "on" or "off".'))
+    correct_answer = models.TextField(
+        verbose_name=_('correct_answer'),
+        help_text=_('The correct answer/choice(s). '
+                    'If multiple choices are correct, separate choices with a pipe (|) symbol. '
+                    'For checkbox: Either "true" or "false".'))
     feedback = models.CharField(verbose_name=_('Feedback'),
                                 max_length=255,
                                 help_text=_('Feedback message for user answer.'),
@@ -616,7 +623,7 @@ class QuizFormField(AbstractFormField):
                     return [True, False].index(choice)
             elif type(choice) == list:
                 choice = choice[-1]
-            return self.choices.split(',').index(choice)
+            return self.choices.split('|').index(choice)
         else:
             return False
 
@@ -727,7 +734,7 @@ class Quiz(QuestionnairePage, AbstractForm):
             total_correct = 0
             form_data = dict(form.data)
             for field in self.get_form_fields():
-                correct_answer = field.correct_answer.split(',')
+                correct_answer = field.correct_answer.split('|')
 
                 if field.field_type == 'checkbox':
                     answer = form_data.get(field.clean_name) or 'off'
@@ -748,6 +755,7 @@ class Quiz(QuestionnairePage, AbstractForm):
                 fields_info[field.clean_name] = {
                     'feedback': field.feedback,
                     'correct_answer': field.correct_answer,
+                    'correct_answer_list': correct_answer,
                     'is_correct': is_correct,
                 }
 
