@@ -565,7 +565,7 @@ class QuizFormField(AbstractFormField):
     choices = models.TextField(
         verbose_name=_('choices'),
         blank=True,
-        help_text=_('Pipe (|) separated list of choices.')
+        help_text=_('For checkboxes, dropdown and radio: Pipe (|) separated list of choices.')
     )
     admin_label = models.CharField(
         verbose_name=_('admin_label'),
