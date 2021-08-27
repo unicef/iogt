@@ -374,6 +374,10 @@
   }
 }
 
+.content .footer-main {
+  width: 100%;
+  max-width: inherit;
+}
 
 .search__form {
   background: #F7F7F9;
@@ -824,5 +828,20 @@
       font-size: 16px;
       line-height: 22px;
       padding: 12px 16px;
+
+    
+.block-heading {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 20px;
+  margin: 16px 0;
+}
+
+@media screen and (min-width: 360px) {
+  .block-heading {
+    font-size: 24px;
+    line-height: 28px;
+    margin: 24px 0;
   }
 }
