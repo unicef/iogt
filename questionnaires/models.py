@@ -28,7 +28,7 @@ from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 from wagtail.images.blocks import ImageChooserBlock
 
-from questionnaires.blocks import SkipState, SkipLogicBlock
+from questionnaires.blocks import SkipState, SkipLogicField
 from questionnaires.forms import CustomFormBuilder, SurveyForm, QuizForm
 from questionnaires.utils import SkipLogicPaginator, FormHelper
 from questionnaires.views import CustomSubmissionsListView
@@ -240,11 +240,7 @@ class SurveyFormField(AbstractFormField):
         help_text=_('Column header used during CSV export of survey '
                     'responses.'),
     )
-    skip_logic = StreamField([
-        ('skip_logic', SkipLogicBlock()),
-    ], blank=True, help_text=_('This is used to add choices for field type radio, checkbox, checkboxes, '
-                               'and dropdown only. This can be used to skip questions and skipping is only allowed '
-                               'for radio and dropdown.'))
+    skip_logic = SkipLogicField(null=True, blank=True)
     page_break = models.BooleanField(
         default=False,
         help_text=_(
@@ -256,7 +252,7 @@ class SurveyFormField(AbstractFormField):
         FieldPanel('help_text'),
         FieldPanel('required'),
         FieldPanel('field_type', classname="formbuilder-type"),
-        StreamFieldPanel('skip_logic'),
+        StreamFieldPanel('skip_logic', classname='skip-logic'),
         FieldPanel('default_value', classname="formbuilder-default"),
         FieldPanel('admin_label'),
         FieldPanel('page_break'),
