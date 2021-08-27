@@ -1,0 +1,7 @@
+li.sequence-member .sequence-member-inner {
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+}
+li.sequence-member .struct-block .fields {
+    width: 100%;
+}

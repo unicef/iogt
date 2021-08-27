@@ -28,7 +28,7 @@ from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 from wagtail.images.blocks import ImageChooserBlock
 
-from questionnaires.blocks import SkipState, SkipLogicBlock
+from questionnaires.blocks import SkipState, SkipLogicField
 from questionnaires.forms import CustomFormBuilder, SurveyForm, QuizForm
 from questionnaires.utils import SkipLogicPaginator, FormHelper
 from questionnaires.views import CustomSubmissionsListView
@@ -240,11 +240,7 @@ class SurveyFormField(AbstractFormField):
         help_text=_('Column header used during CSV export of survey '
                     'responses.'),
     )
-    skip_logic = StreamField([
-        ('skip_logic', SkipLogicBlock()),
-    ], blank=True, help_text=_('This is used to add choices for field type radio, checkbox, checkboxes, '
-                               'and dropdown only. This can be used to skip questions and skipping is only allowed '
-                               'for radio and dropdown.'))
+    skip_logic = SkipLogicField(null=True, blank=True)
     page_break = models.BooleanField(
         default=False,
         help_text=_(
@@ -256,7 +252,7 @@ class SurveyFormField(AbstractFormField):
         FieldPanel('help_text'),
         FieldPanel('required'),
         FieldPanel('field_type', classname="formbuilder-type"),
-        StreamFieldPanel('skip_logic'),
+        StreamFieldPanel('skip_logic', classname='skip-logic'),
         FieldPanel('default_value', classname="formbuilder-default"),
         FieldPanel('admin_label'),
         FieldPanel('page_break'),
@@ -271,17 +267,12 @@ class SurveyFormField(AbstractFormField):
         )
 
     def choice_index(self, choice):
-        if choice:
-            if self.field_type == 'checkbox':
-                # clean checkboxes have True/False
-                try:
-                    return ['on', 'off'].index(choice)
-                except ValueError:
-                    return [True, False].index(choice)
-            try:
-                return self.choices.split('|').index(choice)
-            except ValueError:
-                pass
+        if self.field_type == 'checkbox':
+            choice = 'true' if choice == 'on' else 'false'
+        try:
+            return self.choices.split('|').index(choice)
+        except ValueError:
+            pass
 
         return None
 
@@ -621,7 +612,7 @@ class QuizFormField(AbstractFormField):
             if self.field_type == 'checkbox':
                 # clean checkboxes have True/False
                 try:
-                    return ['on', 'off'].index(choice)
+                    return ['true', 'false'].index(choice)
                 except ValueError:
                     return [True, False].index(choice)
             try:
@@ -744,7 +735,7 @@ class Quiz(QuestionnairePage, AbstractForm):
                 correct_answer = field.correct_answer.split('|')
 
                 if field.field_type == 'checkbox':
-                    answer = form_data.get(field.clean_name) or 'off'
+                    answer = 'true' if form_data.get(field.clean_name) else 'false'
                 else:
                     answer = form_data.get(field.clean_name)
 
