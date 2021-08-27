@@ -1,5 +1,7 @@
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.template.response import TemplateResponse
+from wagtail.core.models import Locale
+
 from home.models import Article, Section
 from iogt.settings.base import SEARCH_RESULTS_PER_PAGE
 from wagtail.search.models import Query
@@ -19,7 +21,8 @@ def search(request):
     for search_group in search_groups:
         search_results_count = 0
         if search_query:
-            search_results = search_group.objects.live().search(search_query)
+            search_results = search_group.objects.live().\
+                filter(locale=Locale.objects.get(language_code=request.LANGUAGE_CODE)).search(search_query)
             search_results_count = search_results.count()
             query = Query.get(search_query)
 
