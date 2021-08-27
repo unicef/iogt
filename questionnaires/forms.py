@@ -98,13 +98,13 @@ class SurveyForm(WagtailAdminPageForm):
                             if skip_to_question['required']:
                                 self.add_stream_field_error(j, 'question', msg)
                                 break
-                if data['field_type'] in ["checkbox", "checkboxes"]:
+                if data['field_type'] == "checkboxes":
                     for i, logic in enumerate(data['skip_logic']):
                         if logic.value['skip_logic'] != SkipState.NEXT:
                             self.add_stream_field_error(
                                 i,
                                 'skip_logic',
-                                _(f'Skipping to {logic.value["skip_logic"]} not allowed for checkbox and checkboxes.'),
+                                _(f'Skipping to {logic.value["skip_logic"]} not allowed for checkboxes.'),
                             )
                 if self.clean_errors:
                     form._errors = self.clean_errors
