@@ -29,6 +29,7 @@ class Command(BaseCommand):
         quiz_form_field_list = []
         for quiz_form_field in quiz_form_fields:
             quiz_form_field.choices = '|'.join(quiz_form_field.choices.split(','))
+            quiz_form_field.correct_answer = '|'.join(quiz_form_field.correct_answer.split(','))
             quiz_form_field_list.append(quiz_form_field)
 
         QuizFormField.objects.bulk_update(quiz_form_field_list, ['choices'], batch_size=1000)

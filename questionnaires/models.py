@@ -584,8 +584,7 @@ class QuizFormField(AbstractFormField):
     )
     correct_answer = models.TextField(
         verbose_name=_('correct_answer'),
-        help_text=_('The correct answer/choice(s). Pipe (|) separated list of choices. '
-                    'For checkbox: Either "true" or "false".'))
+        help_text=_('If multiple choices are correct, separate choices with a pipe (|) symbol.'))
     feedback = models.CharField(verbose_name=_('Feedback'),
                                 max_length=255,
                                 help_text=_('Feedback message for user answer.'),
