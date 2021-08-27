@@ -10,7 +10,10 @@ class SkipState:
     QUESTION = "question"
 
 
-VALID_SKIP_SELECTORS = ["radio", "checkbox", "dropdown", "checkboxes"]
+VALID_SKIP_SELECTORS = [
+    'checkbox', 'checkboxes', 'date', 'datetime', 'dropdown', 'email', 'singleline', 'multiline', 'number',
+    'positivenumber', 'radio', 'url',
+]
 VALID_SKIP_LOGIC = VALID_SKIP_SELECTORS
 
 

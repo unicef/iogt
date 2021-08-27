@@ -98,14 +98,6 @@ class SurveyForm(WagtailAdminPageForm):
                             if skip_to_question['required']:
                                 self.add_stream_field_error(j, 'question', msg)
                                 break
-                if data['field_type'] in ["checkbox", "checkboxes"]:
-                    for i, logic in enumerate(data['skip_logic']):
-                        if logic.value['skip_logic'] != SkipState.NEXT:
-                            self.add_stream_field_error(
-                                i,
-                                'skip_logic',
-                                _(f'Skipping to {logic.value["skip_logic"]} not allowed for checkbox and checkboxes.'),
-                            )
                 if self.clean_errors:
                     form._errors = self.clean_errors
 
@@ -121,17 +113,8 @@ class SurveyForm(WagtailAdminPageForm):
                 for skip_logic in form.instance.skip_logic:
                     choices_values.append(skip_logic.value['choice'])
                 form.instance.choices = "|".join(choices_values)
-
-            if field_type not in VALID_SKIP_SELECTORS:
-                if field_type != 'checkboxes':
-                    form.instance.skip_logic = []
-                else:
-                    for skip_logic in form.instance.skip_logic:
-                        skip_logic.value['skip_logic'] = SkipState.NEXT
-                        skip_logic.value['question'] = None
-            elif field_type == 'checkbox':
-                for skip_logic in form.instance.skip_logic:
-                    skip_logic.value['choice'] = ''
+            else:
+                form.instance.skip_logic = []
 
         return super().save(commit)
 
@@ -190,76 +173,10 @@ class QuizForm(WagtailAdminPageForm):
                         'page_break',
                         _('Page break is only allowed with multi-step enabled.'),
                     )
-                if data['field_type'] == 'checkbox':
-                    if len(data['skip_logic']) != 2:
-                        self.add_form_field_error(
-                            'field_type',
-                            _('Checkbox type questions must have 2 Answer '
-                              'Options: a on and off'),
-                        )
-                elif data['field_type'] in VALID_SKIP_LOGIC:
-                    for j, logic in enumerate(data['skip_logic']):
-                        if not logic.value['choice']:
-                            self.add_stream_field_error(
-                                j,
-                                'choice',
-                                _('This field is required.'),
-                            )
-                        if logic.value['skip_logic'] == SkipState.QUESTION and logic.value['question']:
-                            last_question_number = logic.value['question']
-                            msg = _(f'Skip to question {question_data[last_question_number].cleaned_data["label"]} '
-                                    f'with in-between required questions isn\'t allowed.')
-                        elif logic.value['skip_logic'] == SkipState.END:
-                            last_question_number = len(question_data)
-                            msg = _(f'Skip to end of survey with in-between required questions isn\'t allowed.')
-                        else:
-                            continue
-                        for k in range(i + 1, last_question_number + 1):
-                            skip_to_question = question_data[k].cleaned_data
-                            if skip_to_question['required']:
-                                self.add_stream_field_error(j, 'question', msg)
-                                break
-                if data['field_type'] in ["checkbox", "checkboxes"]:
-                    for i, logic in enumerate(data['skip_logic']):
-                        if logic.value['skip_logic'] != SkipState.NEXT:
-                            self.add_stream_field_error(
-                                i,
-                                'skip_logic',
-                                _(f'Skipping to {logic.value["skip_logic"]} not allowed for checkbox, checkboxes.'),
-                            )
                 if self.clean_errors:
                     form._errors = self.clean_errors
 
         return cleaned_data
-
-    def save(self, commit):
-        # Tidy up the skip logic when field cant have skip logic
-        for form in self.formsets[self.form_field_name]:
-            field_type = form.instance.field_type
-            # Copy choices values from skip logic to main choices property
-            if field_type in VALID_SKIP_SELECTORS:
-                choices_values = []
-                for skip_logic in form.instance.skip_logic:
-                    choices_values.append(skip_logic.value['choice'])
-                form.instance.choices = "|".join(choices_values)
-
-            if field_type not in VALID_SKIP_SELECTORS:
-                if field_type != 'checkboxes':
-                    form.instance.skip_logic = []
-                else:
-                    for skip_logic in form.instance.skip_logic:
-                        skip_logic.value['skip_logic'] = SkipState.NEXT
-                        skip_logic.value['question'] = None
-            elif field_type == 'checkbox':
-                for skip_logic in form.instance.skip_logic:
-                    skip_logic.value['choice'] = ''
-
-        return super().save(commit)
-
-    def add_stream_field_error(self, position, field, message):
-        if position not in self._clean_errors:
-            self._clean_errors[position] = defaultdict(list)
-        self._clean_errors[position][field].append(message)
 
     @property
     def clean_errors(self):

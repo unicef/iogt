@@ -278,12 +278,18 @@ class SurveyFormField(AbstractFormField):
                     return ['on', 'off'].index(choice)
                 except ValueError:
                     return [True, False].index(choice)
-            return self.choices.split('|').index(choice)
-        else:
-            return False
+            try:
+                return self.choices.split('|').index(choice)
+            except ValueError:
+                pass
+
+        return None
 
     def next_action(self, choice):
-        return self.skip_logic[self.choice_index(choice)].value['skip_logic']
+        choice_index = self.choice_index(choice)
+        if choice_index is None:
+            return SkipState.NEXT
+        return self.skip_logic[choice_index].value['skip_logic']
 
     def is_next_action(self, choice, *actions):
         if self.has_skipping:
@@ -565,17 +571,17 @@ class QuizFormField(AbstractFormField):
         max_length=16,
         choices=FORM_FIELD_CHOICES
     )
+    choices = models.TextField(
+        verbose_name=_('choices'),
+        blank=True,
+        help_text=_('Pipe (|) separated list of choices.')
+    )
     admin_label = models.CharField(
         verbose_name=_('admin_label'),
         max_length=256,
         help_text=_('Column header used during CSV export of survey '
                     'responses.'),
     )
-    skip_logic = StreamField([
-        ('skip_logic', SkipLogicBlock()),
-    ], blank=True, help_text=_('This is used to add choices for field type radio, checkbox, checkboxes, '
-                               'and dropdown only. This can be used to skip questions and skipping is only allowed '
-                               'for radio and dropdown.'))
     page_break = models.BooleanField(
         default=False,
         help_text=_(
@@ -598,7 +604,7 @@ class QuizFormField(AbstractFormField):
         FieldPanel('help_text'),
         FieldPanel('required'),
         FieldPanel('field_type', classname="formbuilder-type"),
-        StreamFieldPanel('skip_logic'),
+        FieldPanel('choices', classname="formbuilder-choices"),
         FieldPanel('default_value', classname="formbuilder-default"),
         FieldPanel('correct_answer'),
         FieldPanel('feedback'),
@@ -608,10 +614,7 @@ class QuizFormField(AbstractFormField):
 
     @property
     def has_skipping(self):
-        return any(
-            logic.value['skip_logic'] != SkipState.NEXT
-            for logic in self.skip_logic
-        )
+        return None
 
     def choice_index(self, choice):
         if choice:
@@ -621,14 +624,18 @@ class QuizFormField(AbstractFormField):
                     return ['on', 'off'].index(choice)
                 except ValueError:
                     return [True, False].index(choice)
-            elif type(choice) == list:
-                choice = choice[-1]
-            return self.choices.split('|').index(choice)
-        else:
-            return False
+            try:
+                return self.choices.split('|').index(choice)
+            except ValueError:
+                pass
+
+        return None
 
     def next_action(self, choice):
-        return self.skip_logic[self.choice_index(choice)].value['skip_logic']
+        choice_index = self.choice_index(choice)
+        if choice_index is None:
+            return SkipState.NEXT
+        return self.skip_logic[choice_index].value['skip_logic']
 
     def is_next_action(self, choice, *actions):
         if self.has_skipping:
