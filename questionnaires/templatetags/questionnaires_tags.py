@@ -24,8 +24,8 @@ def render_quizzes_list(context, quizzes):
     return context
 
 
-@register.inclusion_tag('questionnaires/tags/radios.html')
-def render_radios(field):
+@register.inclusion_tag('questionnaires/tags/checkbox.html')
+def render_checkbox(field):
     return {'field': field}
 
 
@@ -34,24 +34,24 @@ def render_checkboxes(field):
     return {'field': field}
 
 
+@register.inclusion_tag("questionnaires/tags/select.html")
+def render_select(field, is_multiselect=False):
+    return {"field": field, "is_multiselect": is_multiselect}
+
+
 @register.inclusion_tag('questionnaires/tags/textarea.html')
 def render_textarea(field):
+    return {'field': field}
+
+
+@register.inclusion_tag('questionnaires/tags/radios.html')
+def render_radios(field):
     return {'field': field}
 
 
 @register.inclusion_tag('questionnaires/tags/text_field.html')
 def render_text_field(field):
     return {'field': field}
-
-
-@register.inclusion_tag("questionnaires/tags/select.html")
-def render_select(field, is_multiselect=False):
-    return {"field": field, "is_multiselect": is_multiselect}
-
-
-@register.inclusion_tag('questionnaires/tags/polls_radios.html')
-def render_polls_radios(field):
-    return {"field": field}
 
 
 @register.inclusion_tag('questionnaires/tags/field_description.html')

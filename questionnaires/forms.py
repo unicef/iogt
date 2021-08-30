@@ -12,6 +12,20 @@ from questionnaires.blocks import VALID_SKIP_SELECTORS, SkipState, VALID_SKIP_LO
 
 
 class CustomFormBuilder(FormBuilder):
+    def create_date_field(self, field, options):
+        options.update({
+            'widget': forms.DateInput(attrs={'type': 'date'}),
+        })
+
+        return forms.DateField(**options)
+
+    def create_datetime_field(self, field, options):
+        options.update({
+            'widget': forms.DateInput(attrs={'type': 'datetime-local'}),
+        })
+
+        return forms.DateTimeField(**options)
+
     def create_positivenumber_field(self, field, options):
         options.update({
             'min_value': 0,

@@ -75,7 +75,7 @@
                         <div class="quest-item__desc">
                             <p>{{ field.label }}</p>
                         </div>
-                        {% if "textar" in field.field.widget.template_name or field.field.widget.input_type == "text" or field.field.widget.input_type == "number" or field.field.widget.input_type == "email" or field.field.widget.input_type == "url" %}
+                        {% if field.widget_type in 'date,datetime,email,text,textarea,number,url' %}
                             <div class="quest-item__content" tabindex="0">
                                 <label class="cust-check cust-check--2 quest-item__input{% if fields_info|get_item:field.name|get_item:'is_correct' %} success{% else %} error{% endif %}"
                                        tabindex="0">
@@ -119,6 +119,7 @@
                                        tabindex="0">
                                     <div class="cust-check__title">
                                         <span class="cust-check__check"></span>
+                                        <span>{{ field.value|lower }}</span>
                                     </div>
                                     {% if not fields_info|get_item:field.name|get_item:'is_correct' %}
                                         <div class="quest-item__header">

@@ -1,22 +1,14 @@
 {% load i18n %}
 {% load static wagtailcore_tags wagtailimages_tags %}
 
-{% if field|length > 1 %}
-    {% for checkbox in field %}
-        <div class="quest-item__content">
-            <label class="quest-item__label quest-item__input--visible" for="{{ checkbox.id_for_label }}">
-                {{ checkbox.tag }}
-                <div class="cust-check__title">
-                    <span>{{ checkbox.choice_label }}</span>
-                </div>
-            </label>
-        </div>
-    {% endfor %}
-{% else %}
-    <label class="quest-item__label quest-item__label--single quest-item__input--visible" for="{{ field.id_for_label }}">
-        {{ field }}
-        <div class="cust-check__title">
-            <span>{{ field.label }}</span>
-        </div>
-    </label>
-{% endif %}
+
+{% for checkbox in field %}
+    <div class="quest-item__content">
+        <label class="quest-item__label quest-item__input--visible" for="{{ checkbox.id_for_label }}">
+            {{ checkbox.tag }}
+            <div class="cust-check__title">
+                <span>{{ checkbox.choice_label }}</span>
+            </div>
+        </label>
+    </div>
+{% endfor %}

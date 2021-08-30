@@ -1,0 +1,10 @@
+{% load i18n %}
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+
+<label class="quest-item__label quest-item__label--single quest-item__input--visible" for="{{ field.id_for_label }}">
+    {{ field }}
+    <div class="cust-check__title">
+        <span>{{ field.label }}</span>
+    </div>
+</label>
