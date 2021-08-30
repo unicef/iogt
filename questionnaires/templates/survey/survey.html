@@ -22,7 +22,7 @@
                     {% for field in form %}
                         <div class="quest-item" tabindex="0">
                             <div class="quest-item__header">
-                                {% field_counter field form forloop form_length fields_step self %}
+                                {% field_counter form forloop form_length fields_step page %}
                                 {% field_description field %}
                             </div>
                             <div class="quest-item__desc">
@@ -30,7 +30,7 @@
                                     <p>{{ field.label }}</p>
                                 {% endif %}
                             </div>
-                            {% render_fields field "survey" %}
+                            {% render_field field %}
                         </div>
                     {% endfor %}
                 </div>

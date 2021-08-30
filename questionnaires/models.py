@@ -221,6 +221,10 @@ class QuestionnairePage(Page, PageUtilsMixin):
 
         return f'{object_type}-{title}_{timestamp}'
 
+    @property
+    def get_type(self):
+        return self.__class__.__name__.lower()
+
     class Meta:
         abstract = True
 

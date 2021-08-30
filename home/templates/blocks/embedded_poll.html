@@ -1,0 +1,19 @@
+{% load static wagtailcore_tags i18n questionnaires_tags %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/questionnaires.css' %}">
+{% endblock %}
+
+<div class="questionnaire-container container">
+    <h1 class="title polls-widget__title">{{ page.title }}</h1>
+    <form action="{% pageurl page %}?back_url={{ request.path }}" method="POST">
+        {% csrf_token %}
+            {% for field in form %}
+                {% field_description field %}
+                {% render_field field %}
+            {% endfor %}
+        <button type="submit" class="cust-btn cust-btn--dark polls-widget__submit">
+            <span>{{ page.submit_button_text }}</span>
+        </button>
+    </form>
+</div>
