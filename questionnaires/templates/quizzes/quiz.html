@@ -20,7 +20,7 @@
                             {% field_counter field form forloop form_length fields_step self %}
                             {% field_description field %}
                         </div>
-                        {% if field.field.widget.input_type == "checkbox" and  field|length == 1 %}{% else %}
+                        {% if field.widget_type != "checkbox" %}
                             <div class="quest-item__desc">
                                 <p>{{ field.label }}</p>
                             </div>
