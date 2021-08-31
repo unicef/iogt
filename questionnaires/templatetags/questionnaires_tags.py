@@ -75,7 +75,7 @@ def field_counter(form, forloop, form_length, fields_step, questionnaire):
     else:
         counter = forloop.get("counter")
 
-    if hasattr(questionnaire, "multi_step") and questionnaire.multi_step or questionnaire.has_page_breaks:
+    if hasattr(questionnaire, "multi_step") and (questionnaire.multi_step or questionnaire.has_page_breaks):
         total = fields_step.paginator.count
     else:
         total = len(form.fields)
