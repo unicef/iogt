@@ -98,6 +98,12 @@ class SurveyForm(WagtailAdminPageForm):
                                 'choice',
                                 _('This field is required.'),
                             )
+                        if '|' in logic.value['choice']:
+                            self.add_stream_field_error(
+                                j,
+                                'choice',
+                                _('Pipe (|) symbol not allowed.'),
+                            )
                         if logic.value['skip_logic'] == SkipState.QUESTION and logic.value['question']:
                             last_question_number = logic.value['question']
                             msg = _(f'Skip to question {question_data[last_question_number].cleaned_data["label"]} '
