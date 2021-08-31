@@ -414,6 +414,7 @@ class PollFormField(AbstractFormField):
     CHOICES = (
         ('checkboxes', _('Checkboxes')),
         ('dropdown', _('Dropdown')),
+        ('multiline', _('Multi-line text')),
         ('radio', _('Radio buttons')),
     )
     field_type = models.CharField(
@@ -423,6 +424,7 @@ class PollFormField(AbstractFormField):
     )
     choices = models.TextField(
         verbose_name=_('choices'),
+        null=True,
         blank=True,
         help_text=_('Pipe (|) separated list of choices.')
     )

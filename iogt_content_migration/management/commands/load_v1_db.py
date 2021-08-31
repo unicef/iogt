@@ -605,7 +605,8 @@ class Command(BaseCommand):
             else:
                 field_type = 'dropdown'
         else:
-            self.stdout.write(f'Unable to determine field type for poll={poll_row["title"]}')
+            self.stdout.write(f'Unable to determine field type for poll={poll_row["title"]}, so creating a multiline field.')
+            PollFormField.objects.create(page=poll, label=poll.title, field_type='multiline')
             return
 
         choices = '|'.join(choices)
