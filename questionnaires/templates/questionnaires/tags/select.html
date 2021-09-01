@@ -2,22 +2,9 @@
 {% load static wagtailcore_tags wagtailimages_tags %}
 
 <div class="quest-item__content">
-    {#    <label for="cust-select-{{ field.name }}" class="quest-item__input cust-select">#}
-    {#        <input type="radio" name="{{ field.name }}" value="not_changed"#}
-    {#               id="cust-select-{{ field.name }}">#}
-    {#        <div class="cust-select__items">#}
-    {#            {% for option in field %}#}
-    {#                <input type="radio" name="{{ field.name }}"#}
-    {#                       value="{{ option.choice_label }}"#}
-    {#                       id="{{ field.name }}[{{ forloop.counter0 }}]">#}
-    {#                <label for="{{ field.name }}[{{ forloop.counter0 }}]">{{ option.choice_label }}</label>#}
-    {#            {% endfor %}#}
-    {#            <span id="text">{{ field.label }}</span>#}
-    {#        </div>#}
-    {#    </label>#}
     <select name="{{ field.name }}" class="quest-item__input cust-select" {% if is_multiselect %}multiple{% endif %}>
         {% for option in field %}
-            <option value="{{ option.choice_label }}">{{ option.choice_label }}</option>
+            {{ option }}
         {% endfor %}
     </select>
 </div>

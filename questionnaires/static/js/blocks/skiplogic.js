@@ -47,17 +47,19 @@
             };
 
             var updateChoiceLogicDisplay = function() {
-                var shouldShowSkipLogic = validSkipSelectors.indexOf(thisQuestion.fieldSelect().val()) >= 0;
+                var fieldType = thisQuestion.fieldSelect().val();
+                var shouldShowSkipLogic = validSkipSelectors.indexOf(fieldType) >= 0;
                 if (!shouldShowSkipLogic) {
                     hideElement(skipLogicSelect);
                     showElement(skipLogicChoice);
-                } else if (thisQuestion.fieldSelect().val() == 'checkbox') {
+                } else if (fieldType === 'checkbox') {
                     showElement(skipLogicSelect);
                     hideElement(skipLogicChoice);
                 } else {
                     showElement(skipLogicChoice);
                     showElement(skipLogicSelect);
                 }
+                thisQuestion.updateAnswerOptionLabel();
                 updateQuestionSurveyDisplay();
             };
 

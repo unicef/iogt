@@ -79,22 +79,29 @@ class SocialMediaShareButtonBlock(blocks.StructBlock):
 class EmbeddedQuestionnaireChooserBlock(blocks.PageChooserBlock):
 
     def render_basic(self, value, context=None):
-        paginator = SkipLogicPaginator(value.get_form_fields(), {}, {})
-        step = paginator.page(1)
-        if hasattr(value, 'multi_step') and value.multi_step:
-            form_class = value.get_form_class_for_step(step)
+        from questionnaires.models import Poll
+
+        form_class = value.get_form_class()
+
+        if isinstance(value, Poll):
+            template = 'blocks/embedded_poll.html'
         else:
-            form_class = value.get_form_class()
+            template = 'blocks/embedded_questionnaire.html'
+            paginator = SkipLogicPaginator(value.get_form_fields(), {}, {})
+            step = paginator.page(1)
+            if hasattr(value, 'multi_step') and value.multi_step:
+                form_class = value.get_form_class_for_step(step)
+            context.update({
+                'fields_step': step,
+            })
 
         form = form_class(page=value, user=context['request'].user)
 
         context.update({
-            'type': value.__class__.__name__,
+            'page': value,
             'form': form,
-            'fields_step': step,
-            'page': value
         })
-        return render_to_string('blocks/embedded_questionnaire.html', context)
+        return render_to_string(template, context)
 
     class Meta:
         icon = 'form'

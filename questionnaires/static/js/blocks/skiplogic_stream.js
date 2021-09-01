@@ -21,6 +21,19 @@
             } );
         };
         question.setAddBlockLabel = newLabel => question.addBlockLabel().text(newLabel);
+        question.setAnswerLabel = (newAnswerOptionLabel, newAnswerChoiceLabel) => {
+            question.choices().find('label').first().html(newAnswerOptionLabel);
+            question.choices().find('.struct-block').each((index, element) => {
+                $(element).find('label').first().html(newAnswerChoiceLabel)
+            })
+        }
+        question.updateAnswerOptionLabel = () => {
+            if (['checkboxes', 'dropdown', 'radio'].includes(question.fieldSelect().val())) {
+                question.setAnswerLabel('Answer Options', 'Choice')
+            } else {
+                question.setAnswerLabel('Skip Logic Options', 'Skip Value')
+            }
+        };
         return question;
     };
 
@@ -70,6 +83,7 @@
                 } else {
                     thisQuestion.answerHelpText().hide();
                 }
+                thisQuestion.updateAnswerOptionLabel();
             };
 
             var shouldHide = function () {

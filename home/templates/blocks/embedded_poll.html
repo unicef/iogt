@@ -5,10 +5,9 @@
 {% endblock %}
 
 <div class="questionnaire-container container">
-    <h1 class="title {{ page.get_type }}-page__title">{{ page.title }}</h1>
-    <form action="{% get_action_url page page fields_step request form %}" method="POST">
+    <h1 class="title polls-widget__title">{{ page.title }}</h1>
+    <form action="{% pageurl page %}?back_url={{ request.path }}" method="POST">
         {% csrf_token %}
-        <div class="{{ page.get_type }}-page__content">
             {% for field in form %}
                 <div class="quest-item">
                     <div class="quest-item__header">
@@ -25,8 +24,7 @@
                     {% render_field field %}
                 </div>
             {% endfor %}
-        </div>
-        <button type="submit" class="cust-btn cust-btn--dark {{ page.get_type }}-page__btn">
+        <button type="submit" class="cust-btn cust-btn--dark polls-widget__submit">
             <span>{{ page.submit_button_text }}</span>
         </button>
     </form>

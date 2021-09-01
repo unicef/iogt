@@ -221,6 +221,10 @@ class QuestionnairePage(Page, PageUtilsMixin):
 
         return f'{object_type}-{title}_{timestamp}'
 
+    @property
+    def get_type(self):
+        return self.__class__.__name__.lower()
+
     class Meta:
         abstract = True
 
@@ -240,6 +244,11 @@ class SurveyFormField(AbstractFormField):
                     'responses.'),
     )
     skip_logic = SkipLogicField(null=True, blank=True)
+    default_value = models.TextField(
+        verbose_name=_('default value'),
+        blank=True,
+        help_text=_('Default value. Pipe (|) separated values supported for checkboxes.')
+    )
     page_break = models.BooleanField(
         default=False,
         help_text=_(
@@ -426,6 +435,11 @@ class PollFormField(AbstractFormField):
         blank=True,
         help_text=_('Pipe (|) separated list of choices.')
     )
+    default_value = models.TextField(
+        verbose_name=_('default value'),
+        blank=True,
+        help_text=_('Default value. Pipe (|) separated values supported for checkboxes.')
+    )
 
 
 class Poll(QuestionnairePage, AbstractForm):
@@ -571,6 +585,11 @@ class QuizFormField(AbstractFormField):
         max_length=256,
         help_text=_('Column header used during CSV export of survey '
                     'responses.'),
+    )
+    default_value = models.TextField(
+        verbose_name=_('default value'),
+        blank=True,
+        help_text=_('Default value. Pipe (|) separated values supported for checkboxes.')
     )
     page_break = models.BooleanField(
         default=False,
