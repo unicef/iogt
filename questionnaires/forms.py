@@ -83,7 +83,7 @@ class SurveyForm(WagtailAdminPageForm):
                         'page_break',
                         _('Page break is only allowed with multi-step enabled.'),
                     )
-                if data['skip_logic'] and not data['required']:
+                if data['field_type'] in VALID_SKIP_LOGIC and not data['required']:
                     self.add_form_field_error(
                         'required',
                         _('Questions with skip logic must be required.'),
