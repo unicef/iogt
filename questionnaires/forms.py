@@ -84,24 +84,26 @@ class SurveyForm(WagtailAdminPageForm):
                         _('Page break is only allowed with multi-step enabled.'),
                     )
                 if data['field_type'] in VALID_SKIP_LOGIC and not data['required']:
-                    self.add_form_field_error(
-                        'required',
-                        _('Questions with skip logic must be required.'),
-                    )
+                    for logic in data['skip_logic']:
+                        if logic.value['skip_logic'] in [SkipState.QUESTION, SkipState.END]:
+                            self.add_form_field_error(
+                                'required',
+                                _('Questions with non-trivial skip logic must be required.'),
+                            )
+                            break
                 if data['field_type'] == 'checkbox':
                     if (len(data['skip_logic']) != 2 or
                             [logic.value['choice'] for logic in data['skip_logic']] != ['true', 'false']):
                         self.add_form_field_error(
                             'field_type',
-                            _('Checkbox must include exactly 2 Skip Logic Options. true and false, in that order.'),
+                            _('Checkbox must include exactly 2 Skip Logic Options: true and false, in that order.'),
                         )
-                elif data['field_type'] in VALID_SKIP_LOGIC:
-                    if data['field_type'] in ['checkboxes', 'dropdown', 'radio']:
-                        if len(data['skip_logic']) < 2:
-                            self.add_form_field_error(
-                                'field_type',
-                                _(f'{data["field_type"]} must include at least 2 Answer Options.'),
-                            )
+                elif data['field_type'] in ['checkboxes', 'dropdown', 'radio']:
+                    if len(data['skip_logic']) < 2:
+                        self.add_form_field_error(
+                            'field_type',
+                            _(f'{data["field_type"]} must include at least 2 Answer Options.'),
+                        )
 
                 for j, logic in enumerate(data['skip_logic']):
                     if not logic.value['choice']:
@@ -121,7 +123,7 @@ class SurveyForm(WagtailAdminPageForm):
                         msg = _(f'Skip to question {question_data[last_question_number].cleaned_data["label"]} '
                                 f'with in-between required questions isn\'t allowed.')
                     elif logic.value['skip_logic'] == SkipState.END:
-                        last_question_number = len(question_data)
+                        last_question_number = len(question_data) + 1
                         msg = _(f'Skip to end of survey with in-between required questions isn\'t allowed.')
                     else:
                         continue

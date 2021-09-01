@@ -31,7 +31,7 @@ class SkipLogicField(StreamField):
             # wrapped in a <div id="<field-type>-helptext"> for the frontend
             'help_text': mark_safe(
                 '<strong>{}</strong>'.format(
-                    _('Checkbox must include exactly 2 Answer Options. '
+                    _('Checkbox must include exactly 2 Skip Logic Options: '
                       'true and false, in that order.')
                 )
             )
