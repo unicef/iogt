@@ -2,6 +2,7 @@
 {% load comments %}
 {% load comments_xtd %}
 {% load humanize %}
+{% load comment_tags %}
 
 <div class="comments-holder">
     {% for item in comments reversed %}
@@ -38,10 +39,12 @@
 
 
                 {% if not item.comment.is_removed %}
-
-                    <a href="{% url 'comments-flag' item.comment.pk %}" class="report-comment">
-                        {% translate "Report" %}
-                    </a>
+                    {% user_can_report item.comment user as can_report %}
+                    {% if can_report %}
+                        <a href="{% url 'comments-flag' item.comment.pk %}" class="report-comment">
+                            {% translate "Report" %}
+                        </a>
+                    {% endif %}
                     {% if item.comment.allow_thread and not item.comment.is_removed %}
                         <a class="small mutedlink reply-link"
                            href="{{ item.comment.get_reply_url }}">{% translate "Reply" %}</a>
