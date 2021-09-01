@@ -89,40 +89,48 @@ class SurveyForm(WagtailAdminPageForm):
                         _('Questions with skip logic must be required.'),
                     )
                 if data['field_type'] == 'checkbox':
-                    if len(data['skip_logic']) != 2:
+                    if (len(data['skip_logic']) != 2 or
+                            [logic.value['choice'] for logic in data['skip_logic']] != ['true', 'false']):
                         self.add_form_field_error(
                             'field_type',
-                            _('Checkbox type questions must have 2 Answer '
-                              'Options: a true and false'),
+                            _('Checkbox must include exactly 2 Skip Logic Options. true and false, in that order.'),
                         )
                 elif data['field_type'] in VALID_SKIP_LOGIC:
-                    for j, logic in enumerate(data['skip_logic']):
-                        if not logic.value['choice']:
-                            self.add_stream_field_error(
-                                j,
-                                'choice',
-                                _('This field is required.'),
+                    if data['field_type'] in ['checkboxes', 'dropdown', 'radio']:
+                        if len(data['skip_logic']) < 2:
+                            self.add_form_field_error(
+                                'field_type',
+                                _(f'{data["field_type"]} must include at least 2 Answer Options.'),
                             )
-                        if '|' in logic.value['choice']:
-                            self.add_stream_field_error(
-                                j,
-                                'choice',
-                                _('Pipe (|) symbol not allowed.'),
-                            )
-                        if logic.value['skip_logic'] == SkipState.QUESTION and logic.value['question']:
-                            last_question_number = logic.value['question']
-                            msg = _(f'Skip to question {question_data[last_question_number].cleaned_data["label"]} '
-                                    f'with in-between required questions isn\'t allowed.')
-                        elif logic.value['skip_logic'] == SkipState.END:
-                            last_question_number = len(question_data)
-                            msg = _(f'Skip to end of survey with in-between required questions isn\'t allowed.')
-                        else:
-                            continue
-                        for k in range(i + 1, last_question_number + 1):
-                            skip_to_question = question_data[k].cleaned_data
-                            if skip_to_question['required']:
-                                self.add_stream_field_error(j, 'skip_logic', msg)
-                                break
+
+                for j, logic in enumerate(data['skip_logic']):
+                    if not logic.value['choice']:
+                        self.add_stream_field_error(
+                            j,
+                            'choice',
+                            _('This field is required.'),
+                        )
+                    if '|' in logic.value['choice']:
+                        self.add_stream_field_error(
+                            j,
+                            'choice',
+                            _('Pipe (|) symbol not allowed.'),
+                        )
+                    if logic.value['skip_logic'] == SkipState.QUESTION and logic.value['question']:
+                        last_question_number = logic.value['question']
+                        msg = _(f'Skip to question {question_data[last_question_number].cleaned_data["label"]} '
+                                f'with in-between required questions isn\'t allowed.')
+                    elif logic.value['skip_logic'] == SkipState.END:
+                        last_question_number = len(question_data)
+                        msg = _(f'Skip to end of survey with in-between required questions isn\'t allowed.')
+                    else:
+                        continue
+                    for k in range(i + 1, last_question_number):
+                        skip_to_question = question_data[k].cleaned_data
+                        if skip_to_question['required']:
+                            self.add_stream_field_error(j, 'skip_logic', msg)
+                            break
+
                 if data['field_type'] == "checkboxes":
                     for i, logic in enumerate(data['skip_logic']):
                         if logic.value['skip_logic'] != SkipState.NEXT:
