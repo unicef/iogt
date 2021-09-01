@@ -83,6 +83,11 @@ class SurveyForm(WagtailAdminPageForm):
                         'page_break',
                         _('Page break is only allowed with multi-step enabled.'),
                     )
+                if data['skip_logic'] and not data['required']:
+                    self.add_form_field_error(
+                        'required',
+                        _('Questions with skip logic must be required.'),
+                    )
                 if data['field_type'] == 'checkbox':
                     if len(data['skip_logic']) != 2:
                         self.add_form_field_error(
@@ -116,7 +121,7 @@ class SurveyForm(WagtailAdminPageForm):
                         for k in range(i + 1, last_question_number + 1):
                             skip_to_question = question_data[k].cleaned_data
                             if skip_to_question['required']:
-                                self.add_stream_field_error(j, 'question', msg)
+                                self.add_stream_field_error(j, 'skip_logic', msg)
                                 break
                 if data['field_type'] == "checkboxes":
                     for i, logic in enumerate(data['skip_logic']):
