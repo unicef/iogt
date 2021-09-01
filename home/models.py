@@ -323,12 +323,9 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
     ]
 
-    search_fields = [
+    search_fields = Page.search_fields + [
         index.SearchField('get_heading_values', partial_match=True, boost=1),
         index.SearchField('get_paragraph_values', partial_match=True),
-        index.SearchField('title', partial_match=True, boost=2),
-
-        index.FilterField('live')
     ]
 
     edit_handler = TabbedInterface([
