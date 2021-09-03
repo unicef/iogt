@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'rest_framework',
     'sass_processor',
+    'translation_manager',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -402,3 +403,5 @@ EXPORT_FILENAME_TIMESTAMP_FORMAT = '%Y-%m-%dT%H%M%S'
 WAGTAILMARKDOWN = {
     'allowed_tags': ['i', 'b'],
 }
+
+TRANSLATIONS_PROJECT_BASE_DIR = BASE_DIR

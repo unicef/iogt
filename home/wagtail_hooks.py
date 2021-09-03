@@ -6,6 +6,8 @@ from django.urls import resolve, Resolver404
 from django.urls import reverse
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
+from translation_manager.models import TranslationEntry
+from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from wagtail.contrib.redirects.models import Redirect
 from wagtail.core import hooks
 from wagtail.core.models import Page
@@ -93,3 +95,16 @@ def limit_page_chooser(pages, request):
 Redirect._meta.get_field("old_path").help_text = _(
     'A relative path to redirect from e.g. /en/youth. '
     'See https://docs.wagtail.io/en/stable/editor_manual/managing_redirects.html for more details')
+
+
+class TranslationEntryAdmin(ModelAdmin):
+    model = TranslationEntry
+    menu_label = 'Translations'
+    menu_icon = 'edit'
+    list_display = ('original', 'language', 'translation',)
+    list_filter = ('language',)
+    search_fields = ('original', 'translation',)
+    menu_order = 601
+
+
+modeladmin_register(TranslationEntryAdmin)
