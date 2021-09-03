@@ -718,7 +718,7 @@ class Command(BaseCommand):
             if block['type'] == 'paragraph':
                 v2_survey_description.append(block)
             elif block['type'] == 'image':
-                image = self.image_map.get(block.value['image'])
+                image = self.image_map.get(block['value'])
                 if image:
                     v2_survey_description.append({'type': 'image', 'value': image.id})
         return json.dumps(v2_survey_description)
