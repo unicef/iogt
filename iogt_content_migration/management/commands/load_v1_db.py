@@ -246,8 +246,7 @@ class Command(BaseCommand):
         else:
             for row in section_page_translations:
                 section = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
-                locale, __ = Locale.objects.get_or_create(language_code=row['locale'])
-                locale = self._get_iso_locale(locale)
+                locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
 
                 self.translate_page(locale=locale, page=section)
 
@@ -303,8 +302,7 @@ class Command(BaseCommand):
         else:
             for row in article_page_translations:
                 article = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
-                locale, __ = Locale.objects.get_or_create(language_code=row['locale'])
-                locale = self._get_iso_locale(locale)
+                locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
 
                 self.translate_page(locale=locale, page=article)
 
@@ -372,8 +370,7 @@ class Command(BaseCommand):
         else:
             for row in banner_page_translations:
                 banner = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
-                locale, __ = Locale.objects.get_or_create(language_code=row['locale'])
-                locale = self._get_iso_locale(locale)
+                locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
 
                 try:
                     self.translate_page(locale=locale, page=banner)
@@ -435,8 +432,7 @@ class Command(BaseCommand):
         else:
             for row in footer_page_translations:
                 footer = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
-                locale, __ = Locale.objects.get_or_create(language_code=row['locale'])
-                locale = self._get_iso_locale(locale)
+                locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
 
                 self.translate_page(locale=locale, page=footer)
 
@@ -529,8 +525,7 @@ class Command(BaseCommand):
         else:
             for row in poll_page_translations:
                 poll = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
-                locale, __ = Locale.objects.get_or_create(language_code=row['locale'])
-                locale = self._get_iso_locale(locale)
+                locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
 
                 try:
                     self.translate_page(locale=locale, page=poll)
@@ -654,8 +649,7 @@ class Command(BaseCommand):
         else:
             for row in survey_page_translations:
                 survey = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
-                locale, __ = Locale.objects.get_or_create(language_code=row['locale'])
-                locale = self._get_iso_locale(locale)
+                locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
 
                 try:
                     self.translate_page(locale=locale, page=survey)
