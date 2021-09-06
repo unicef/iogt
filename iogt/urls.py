@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views.i18n import JavaScriptCatalog
 
-from home.views import get_manifest, LogoutRedirectHackView
+from home.views import get_manifest, LogoutRedirectHackView, LoadTranslationsFromPOFiles
 from iogt_users import urls as users_urls
 from search import views as search_views
 from wagtail.admin import urls as wagtailadmin_urls
@@ -33,6 +33,7 @@ urlpatterns = [
     path('wagtail-transfer/', include(wagtailtransfer_urls)),
     path('sitemap/', SitemapAPIView.as_view(), name='sitemap'),
     path("manifest.webmanifest", get_manifest, name="manifest"),
+    path('load-translations/', LoadTranslationsFromPOFiles.as_view(), name='load_translations'),
     *i18n_patterns(path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog')),
 ]
 

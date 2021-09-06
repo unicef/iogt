@@ -1,8 +1,12 @@
+from django.conf import settings
+from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import TemplateView
+from translation_manager.manager import Manager
+from wagtail.contrib.modeladmin.views import EditView
 
 from .models import ManifestSettings
 
@@ -54,3 +58,26 @@ def get_manifest(request):
 class LogoutRedirectHackView(View):
     def get(self, request):
         return redirect(f'/{request.LANGUAGE_CODE}/')
+
+
+class TranslationEditView(EditView):
+    def get_success_message(self, instance):
+        success_message = super().get_success_message(instance)
+
+        manager = Manager()
+        for language, language_name in settings.LANGUAGES:
+            manager.update_po_from_db(lang=language)
+
+        return success_message
+
+
+class LoadTranslationsFromPOFiles(View):
+    def get(self, request):
+        from .wagtail_hooks import TranslationEntryAdmin
+
+        manager = Manager()
+        manager.load_data_from_po()
+
+        messages.success(request, _('The translations have been loaded successfully!'))
+
+        return redirect(TranslationEntryAdmin().url_helper.get_action_url('index'))

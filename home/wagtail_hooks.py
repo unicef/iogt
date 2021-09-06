@@ -16,6 +16,7 @@ from wagtail.core.rich_text import LinkHandler
 
 from home.models import FooterIndexPage, BannerIndexPage, Section, \
     SectionIndexPage
+from home.views import TranslationEditView
 
 
 class ExternalLinkHandler(LinkHandler, ABC):
@@ -104,6 +105,8 @@ class TranslationEntryAdmin(ModelAdmin):
     list_display = ('original', 'language', 'translation',)
     list_filter = ('language',)
     search_fields = ('original', 'translation',)
+    edit_view_class = TranslationEditView
+    index_template_name = 'modeladmin/translation_manager/translationentry/index.html'
     menu_order = 601
 
 
