@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
+import allauth
+from django.contrib import auth
 from django.utils.translation import gettext_lazy as _
 
 import django.conf.locale
@@ -367,6 +369,9 @@ django.conf.locale.LANG_INFO.update(EXTRA_LANG_INFO)
 
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, "locale"),
+    os.path.dirname(django.conf.locale.__file__),
+    os.path.join(os.path.dirname(allauth.__file__), 'locale'),
+    os.path.join(os.path.dirname(auth.__file__), 'locale'),
 ]
 
 # ========= Rapid Pro =================
