@@ -119,3 +119,4 @@ legacy-initdb.d/
 
 # Translations
 *.mo
+cypress_tests/node_modules/
