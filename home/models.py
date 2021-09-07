@@ -3,6 +3,8 @@ import os
 from django.conf import settings
 from django.contrib.admin.utils import flatten
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.core.files.images import get_image_dimensions
 from django.db import models
@@ -819,3 +821,18 @@ class ManifestSettings(models.Model):
         )
         verbose_name = "Manifest settings"
         verbose_name_plural = "Manifests settings"
+
+
+class V1ToV2ObjectMap(models.Model):
+    v1_object_id = models.PositiveIntegerField()
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+
+    def __str__(self):
+        return f'{self.v1_object_id} -> {self.object_id}'
+
+    @classmethod
+    def create_map(cls, content_object, v1_object_id):
+        v1_to_v2_object_map = cls(content_object=content_object, v1_object_id=v1_object_id)
+        v1_to_v2_object_map.save()
