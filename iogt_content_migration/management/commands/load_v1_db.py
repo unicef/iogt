@@ -759,6 +759,9 @@ class Command(BaseCommand):
                 admin_label=row['admin_label'], page_break=row['page_break'], choices='|'.join(row['choices'].split(',')),
                 skip_logic=row['skip_logic']
             )
+            skip_logic_next_actions = [logic['value']['skip_logic'] for logic in json.loads(row['skip_logic'])]
+            if not survey_row['multi_step'] and ('end' in skip_logic_next_actions or 'question' in skip_logic_next_actions):
+                self.stdout.write(f'skip logic without multi step')
             self.stdout.write(f"saved survey question, label={row['label']}")
 
     def _get_iso_locale(self, locale):
