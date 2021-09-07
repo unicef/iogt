@@ -777,6 +777,9 @@ class Command(BaseCommand):
                 skip_logic=row['skip_logic']
             )
             V1ToV2ObjectMap.create_map(content_object=survey_form_field, v1_object_id=row['page_ptr_id'])
+            skip_logic_next_actions = [logic['value']['skip_logic'] for logic in json.loads(row['skip_logic'])]
+            if not survey_row['multi_step'] and ('end' in skip_logic_next_actions or 'question' in skip_logic_next_actions):
+                self.stdout.write(f'skip logic without multi step')
             self.stdout.write(f"saved survey question, label={row['label']}")
 
     def _get_iso_locale(self, locale):
