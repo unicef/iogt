@@ -2,7 +2,6 @@
 
 <div class="quest-item__content">
     <label class="cust-input quest-item__input">
-        <input type="{{ field.field.widget.input_type }}"
-               name="{{ field.name }}" {% if field.field.min_value is not None %} min={{ field.field.min_value }} {% endif %}>
+        {{ field }}
     </label>
 </div>

@@ -3,6 +3,7 @@
 {% get_current_language as LANGUAGE_CODE %}
 
 {% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/questionnaire.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/quiz.css' %}">
 {% endblock %}
 
@@ -12,21 +13,22 @@
             <h1 class="title quiz-page__title">{{ page.title }}</h1>
             {% if page.description %}
                 <div class="quiz-page__description">{{ page.description }}</div>{% endif %}
-            <form action="{% get_action_url page self fields_step request form %} " method="POST" class="quiz-page__content">
+            <form action="{% get_action_url page self fields_step request form %}"
+                  method="POST" class="quiz-page__content">
                 {% csrf_token %}
                 {% for field in form %}
                     <div class="quest-item">
                         <div class="quest-item__header">
-                            {% field_counter field form forloop form_length fields_step self %}
+                            {% field_counter form forloop form_length fields_step page %}
                             {% field_description field %}
                         </div>
-                        {% if field.field.widget.input_type == "checkbox" and  field|length == 1 %}{% else %}
+                        {% if field.widget_type != "checkbox" %}
                             <div class="quest-item__desc">
                                 <p>{{ field.label }}</p>
                             </div>
                         {% endif %}
                         <div class="quest-item__content" tabindex="0">
-                            {% render_fields field "quiz" %}
+                            {% render_field field %}
                         </div>
                     </div>
                 {% endfor %}

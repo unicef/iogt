@@ -121,3 +121,4 @@ legacy-initdb.d/
 *.mo
 
 v1-media-backup/
+cypress_tests/node_modules/

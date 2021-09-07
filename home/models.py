@@ -323,12 +323,9 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
     ]
 
-    search_fields = [
+    search_fields = Page.search_fields + [
         index.SearchField('get_heading_values', partial_match=True, boost=1),
         index.SearchField('get_paragraph_values', partial_match=True),
-        index.SearchField('title', partial_match=True, boost=2),
-
-        index.FilterField('live')
     ]
 
     edit_handler = TabbedInterface([
@@ -643,6 +640,8 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
+        help_text=_('If Page link is a section page and icon is blank then the section icon will be used. '
+                    'Specify an icon here to override this.')
     )
 
     color = models.CharField(

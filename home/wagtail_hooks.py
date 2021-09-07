@@ -1,8 +1,8 @@
 from abc import ABC
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlunparse, urlencode
 
 from django.core.exceptions import PermissionDenied
-from django.urls import resolve
+from django.urls import resolve, Resolver404
 from django.urls import reverse
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
@@ -22,9 +22,14 @@ class ExternalLinkHandler(LinkHandler, ABC):
     @classmethod
     def expand_db_attributes(cls, attrs):
         next_page = escape(attrs["href"])
-        external_link_page = reverse("external-link")
-        return f'<a href="{external_link_page}?next={next_page}">'
-
+        parsed_url = urlparse(next_page)
+        try:
+            resolve(parsed_url.path)
+            unparsed_url = urlunparse(('', '', parsed_url.path, parsed_url.params, parsed_url.query, parsed_url.fragment))
+            return f'<a href="{unparsed_url}">'
+        except Resolver404:
+            external_link_page = reverse("external-link")
+            return f'<a href="{external_link_page}?{urlencode({"next": next_page})}">'
 
 @hooks.register("register_rich_text_features")
 def register_external_link(features):

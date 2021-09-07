@@ -6,6 +6,7 @@
 {% block title %}{{ page.title }}{% endblock %}
 
 {% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/questionnaire.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/survey.css' %}">
 {% endblock %}
 
@@ -22,15 +23,15 @@
                     {% for field in form %}
                         <div class="quest-item" tabindex="0">
                             <div class="quest-item__header">
-                                {% field_counter field form forloop form_length fields_step self %}
+                                {% field_counter form forloop form_length fields_step page %}
                                 {% field_description field %}
                             </div>
                             <div class="quest-item__desc">
-                                {% if field.field.widget.input_type == "checkbox" and  field|length == 1 %}{% else %}
+                                {% if field.widget_type != "checkbox" %}
                                     <p>{{ field.label }}</p>
                                 {% endif %}
                             </div>
-                            {% render_fields field "survey" %}
+                            {% render_field field %}
                         </div>
                     {% endfor %}
                 </div>

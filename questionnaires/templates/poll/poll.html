@@ -2,6 +2,7 @@
 {% load static i18n wagtailcore_tags questionnaires_tags %}
 
 {% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/questionnaire.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/polls.css' %}">
 {% endblock %}
 
@@ -18,8 +19,18 @@
                           method="POST">
                         {% csrf_token %}
                         {% for field in form %}
-                            {% field_description field %}
-                            {% render_fields field "poll"%}
+                            <div class="quest-item" tabindex="0">
+                                <div class="quest-item__header">
+                                    {% field_counter form forloop form_length fields_step page %}
+                                    {% field_description field %}
+                                </div>
+                                <div class="quest-item__desc">
+                                    {% if field.widget_type != "checkbox" %}
+                                        <p>{{ field.label }}</p>
+                                    {% endif %}
+                                </div>
+                                {% render_field field %}
+                          </div>
                         {% endfor %}
                        {% render_submit_button fields_step page %}
                     </form>

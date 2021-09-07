@@ -3,6 +3,7 @@ import json
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
+from django.db.models import Q
 from django.utils import timezone
 from django.utils.functional import cached_property
 
@@ -27,7 +28,7 @@ from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 from wagtail.images.blocks import ImageChooserBlock
 
-from questionnaires.blocks import SkipState, SkipLogicBlock
+from questionnaires.blocks import SkipState, SkipLogicField
 from questionnaires.forms import CustomFormBuilder, SurveyForm, QuizForm
 from questionnaires.utils import SkipLogicPaginator, FormHelper
 from questionnaires.views import CustomSubmissionsListView
@@ -40,7 +41,6 @@ FORM_FIELD_CHOICES = (
     ('datetime', _('Date/time')),
     ('dropdown', _('Drop down')),
     ('email', _('Email')),
-    ('hidden', _('Hidden field')),
     ('singleline', _('Single line text')),
     ('multiline', _('Multi-line text')),
     ('number', _('Number')),
@@ -97,13 +97,21 @@ class QuestionnairePage(Page, PageUtilsMixin):
         return self.title
 
     def serve(self, request, *args, **kwargs):
-        if (
+        if request.session.session_key is None:
+            request.session.save()
+        self.session = request.session
+
+        multiple_submission_filter = (
+            Q(session_key=request.session.session_key) if request.user.is_anonymous else Q(user__pk=request.user.pk)
+        )
+        multiple_submission_check = (
             not self.allow_multiple_submissions
-            and self.get_submission_class()
-            .objects.filter(page=self, user__pk=request.user.pk)
-            .exists()
-        ):
+            and self.get_submission_class().objects.filter(multiple_submission_filter, page=self).exists()
+        )
+        anonymous_user_submission_check = request.user.is_anonymous and not self.allow_anonymous_submissions
+        if multiple_submission_check or anonymous_user_submission_check:
             return render(request, self.template, self.get_context(request))
+
         if hasattr(self, "multi_step") and self.multi_step:
             return self.serve_questions_separately(request)
 
@@ -200,6 +208,7 @@ class QuestionnairePage(Page, PageUtilsMixin):
             form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder),
             page=self,
             user=None if user.is_anonymous else user,
+            session_key=self.session.session_key,
         )
 
     def get_submissions_list_view_class(self):
@@ -211,6 +220,10 @@ class QuestionnairePage(Page, PageUtilsMixin):
         timestamp = timezone.now().strftime(settings.EXPORT_FILENAME_TIMESTAMP_FORMAT)
 
         return f'{object_type}-{title}_{timestamp}'
+
+    @property
+    def get_type(self):
+        return self.__class__.__name__.lower()
 
     class Meta:
         abstract = True
@@ -230,11 +243,12 @@ class SurveyFormField(AbstractFormField):
         help_text=_('Column header used during CSV export of survey '
                     'responses.'),
     )
-    skip_logic = StreamField([
-        ('skip_logic', SkipLogicBlock()),
-    ], blank=True, help_text=_('This is used to add choices for field type radio, checkbox, checkboxes, '
-                               'and dropdown only. This can be used to skip questions and skipping is only allowed '
-                               'for radio and dropdown.'))
+    skip_logic = SkipLogicField(null=True, blank=True)
+    default_value = models.TextField(
+        verbose_name=_('default value'),
+        blank=True,
+        help_text=_('Default value. Pipe (|) separated values supported for checkboxes.')
+    )
     page_break = models.BooleanField(
         default=False,
         help_text=_(
@@ -246,7 +260,7 @@ class SurveyFormField(AbstractFormField):
         FieldPanel('help_text'),
         FieldPanel('required'),
         FieldPanel('field_type', classname="formbuilder-type"),
-        StreamFieldPanel('skip_logic'),
+        StreamFieldPanel('skip_logic', classname='skip-logic'),
         FieldPanel('default_value', classname="formbuilder-default"),
         FieldPanel('admin_label'),
         FieldPanel('page_break'),
@@ -261,19 +275,20 @@ class SurveyFormField(AbstractFormField):
         )
 
     def choice_index(self, choice):
-        if choice:
-            if self.field_type == 'checkbox':
-                # clean checkboxes have True/False
-                try:
-                    return ['on', 'off'].index(choice)
-                except ValueError:
-                    return [True, False].index(choice)
-            return self.choices.split(',').index(choice)
-        else:
-            return False
+        if self.field_type == 'checkbox':
+            choice = 'true' if choice == 'on' else 'false'
+        try:
+            return self.choices.split('|').index(choice)
+        except ValueError:
+            pass
+
+        return None
 
     def next_action(self, choice):
-        return self.skip_logic[self.choice_index(choice)].value['skip_logic']
+        choice_index = self.choice_index(choice)
+        if choice_index is None:
+            return SkipState.NEXT
+        return self.skip_logic[choice_index].value['skip_logic']
 
     def is_next_action(self, choice, *actions):
         if self.has_skipping:
@@ -358,7 +373,7 @@ class Survey(QuestionnairePage, AbstractForm):
         super().process_form_submission(form)
 
         site_settings = SiteSettings.get_for_default_site()
-        if site_settings.registration_survey and site_settings.registration_survey.pk == self.pk:
+        if site_settings.registration_survey and site_settings.registration_survey.localized.pk == self.pk:
             user = form.user
             user.has_filled_registration_survey = True
             user.save(update_fields=['has_filled_registration_survey'])
@@ -390,6 +405,7 @@ class UserSubmission(AbstractFormSubmission):
     user = models.ForeignKey(
         get_user_model(), on_delete=models.CASCADE, blank=True, null=True
     )
+    session_key = models.CharField(max_length=255, null=True, blank=True)
 
     def get_data(self):
         form_data = super().get_data()
@@ -407,6 +423,7 @@ class PollFormField(AbstractFormField):
     CHOICES = (
         ('checkboxes', _('Checkboxes')),
         ('dropdown', _('Dropdown')),
+        ('multiline', _('Multi-line text')),
         ('radio', _('Radio buttons')),
     )
     field_type = models.CharField(
@@ -414,9 +431,21 @@ class PollFormField(AbstractFormField):
         max_length=16,
         choices=CHOICES
     )
+    choices = models.TextField(
+        verbose_name=_('choices'),
+        null=True,
+        blank=True,
+        help_text=_('For checkboxes, dropdown and radio: Pipe (|) separated list of choices.')
+    )
+    default_value = models.TextField(
+        verbose_name=_('default value'),
+        blank=True,
+        help_text=_('Default value. Pipe (|) separated values supported for checkboxes.')
+    )
 
 
 class Poll(QuestionnairePage, AbstractForm):
+    form_builder = CustomFormBuilder
     template = "poll/poll.html"
     parent_page_types = ["home.HomePage", "home.Section", "home.Article", "questionnaires.PollIndexPage"]
 
@@ -479,17 +508,6 @@ class Poll(QuestionnairePage, AbstractForm):
 
     def get_submission_class(self):
         return UserSubmission
-
-    def serve(self, request, *args, **kwargs):
-        if (
-            not self.allow_multiple_submissions
-            and self.get_submission_class()
-            .objects.filter(page=self, user__pk=request.user.pk)
-            .exists()
-        ):
-            return render(request, self.template, self.get_context(request))
-
-        return super().serve(request, *args, **kwargs)
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
@@ -559,27 +577,33 @@ class QuizFormField(AbstractFormField):
         max_length=16,
         choices=FORM_FIELD_CHOICES
     )
+    choices = models.TextField(
+        verbose_name=_('choices'),
+        blank=True,
+        help_text=_('For checkboxes, dropdown and radio: Pipe (|) separated list of choices.')
+    )
     admin_label = models.CharField(
         verbose_name=_('admin_label'),
         max_length=256,
         help_text=_('Column header used during CSV export of survey '
                     'responses.'),
     )
-    skip_logic = StreamField([
-        ('skip_logic', SkipLogicBlock()),
-    ], blank=True, help_text=_('This is used to add choices for field type radio, checkbox, checkboxes, '
-                               'and dropdown only. This can be used to skip questions and skipping is only allowed '
-                               'for radio and dropdown.'))
+    default_value = models.TextField(
+        verbose_name=_('default value'),
+        blank=True,
+        help_text=_('Default value. Pipe (|) separated values supported for checkboxes.')
+    )
     page_break = models.BooleanField(
         default=False,
         help_text=_(
             'Inserts a page break which puts the next question onto a new page'
         )
     )
-    correct_answer = models.CharField(
-        verbose_name=_('correct_answer'), max_length=256,
-        help_text=_('The correct answer/choice(s). For checkboxes: a comma separated list of choices. '
-                    'For checkbox: Either "on" or "off".'))
+    correct_answer = models.TextField(
+        verbose_name=_('correct_answer'),
+        help_text=_('The correct answer/choice(s). '
+                    'If multiple choices are correct, separate choices with a pipe (|) symbol. '
+                    'For checkbox: Either "true" or "false".'))
     feedback = models.CharField(verbose_name=_('Feedback'),
                                 max_length=255,
                                 help_text=_('Feedback message for user answer.'),
@@ -591,7 +615,7 @@ class QuizFormField(AbstractFormField):
         FieldPanel('help_text'),
         FieldPanel('required'),
         FieldPanel('field_type', classname="formbuilder-type"),
-        StreamFieldPanel('skip_logic'),
+        FieldPanel('choices', classname="formbuilder-choices"),
         FieldPanel('default_value', classname="formbuilder-default"),
         FieldPanel('correct_answer'),
         FieldPanel('feedback'),
@@ -601,27 +625,28 @@ class QuizFormField(AbstractFormField):
 
     @property
     def has_skipping(self):
-        return any(
-            logic.value['skip_logic'] != SkipState.NEXT
-            for logic in self.skip_logic
-        )
+        return None
 
     def choice_index(self, choice):
         if choice:
             if self.field_type == 'checkbox':
                 # clean checkboxes have True/False
                 try:
-                    return ['on', 'off'].index(choice)
+                    return ['true', 'false'].index(choice)
                 except ValueError:
                     return [True, False].index(choice)
-            elif type(choice) == list:
-                choice = choice[-1]
-            return self.choices.split(',').index(choice)
-        else:
-            return False
+            try:
+                return self.choices.split('|').index(choice)
+            except ValueError:
+                pass
+
+        return None
 
     def next_action(self, choice):
-        return self.skip_logic[self.choice_index(choice)].value['skip_logic']
+        choice_index = self.choice_index(choice)
+        if choice_index is None:
+            return SkipState.NEXT
+        return self.skip_logic[choice_index].value['skip_logic']
 
     def is_next_action(self, choice, *actions):
         if self.has_skipping:
@@ -727,23 +752,28 @@ class Quiz(QuestionnairePage, AbstractForm):
             total_correct = 0
             form_data = dict(form.data)
             for field in self.get_form_fields():
-                correct_answer = field.correct_answer.split(',')
+                correct_answer = field.correct_answer.split('|')
 
                 if field.field_type == 'checkbox':
-                    answer = form_data.get(field.clean_name) or 'off'
+                    answer = 'true' if form_data.get(field.clean_name) else 'false'
                 else:
                     answer = form_data.get(field.clean_name)
 
                 if type(answer) != list:
                     answer = [str(answer)]
 
-                is_correct = set(answer) == set(correct_answer)
+                if field.field_type in ['radio', 'dropdown']:
+                    is_correct = set(answer).issubset(set(correct_answer))
+                else:
+                    is_correct = set(answer) == set(correct_answer)
+
                 if is_correct:
                     total_correct += 1
                 total += 1
                 fields_info[field.clean_name] = {
                     'feedback': field.feedback,
                     'correct_answer': field.correct_answer,
+                    'correct_answer_list': correct_answer,
                     'is_correct': is_correct,
                 }
 

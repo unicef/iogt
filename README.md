@@ -161,3 +161,11 @@ Note: the names of transfer sources may only contain letters, numbers and unders
 [4]: https://www.djangoproject.com/
 [5]: https://wagtail.io/
 [6]: https://github.com/wagtail/wagtail/wiki/Release-schedule
+
+## Cypress Tests
+```
+make cypress
+cd cypress_tests/
+npm install
+node_modules/.bin/cypress open
+```

@@ -261,12 +261,14 @@ WAGTAIL_I18N_ENABLED = True
 
 WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('ar', _('Arabic')),
-    ('ch', _('Chichewa')),
+    ('ny', _('Chichewa')), # previously 'ch'
     ('en', _('English')),
     ('fr', _('French')),
+    ('id', _('Indonesian')),
+    ('kaa', _('Karakalpak')),
     ('km', _('Khmer')),
     ('rw', _('Kinyarwanda')),
-    ('rn', 'Kirundi'),
+    ('rn', _('Kirundi')),
     ('ku', _('Kurdish')),
     ('mg', _('Malagasy')),
     ('ne', _('Nepali')),
@@ -274,28 +276,29 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('pt', _('Portuguese')),
     ('qu', _('Quechua')),
     ('ru', _('Russian')),
-    ('sho', _("Shona")),
+    ('sn', _('Shona')), # previously 'sho'
     ('es', _('Spanish')),
     ('sw', _('Swahili')),
     ('tg', _('Tajik')),
     ('ti', _('Tigrinya')),
     ('ur', _('Urdu')),
     ('uz', _('Uzbek')),
-    ('zu', _('Zulu'))
+    ('zu', _('Zulu')),
+    ('xy', _('Testing')),
 ]
 
 EXTRA_LANG_INFO = {
-    'ch': {
-        'bidi': False,
-        'code': 'ch',
-        'name': 'Chichewa',
-        'name_local': 'Chichewa',
-    },
     'ku': {
         'bidi': False,
         'code': 'ku',
         'name': 'Kurdish',
         'name_local': 'Kurdish'
+    },
+    'kaa': {
+        'bidi': False,
+        'code': 'kaa',
+        'name': 'Karakalpak',
+        'name_local': 'Karakalpak'
     },
     'mg': {
         'bidi': False,
@@ -308,6 +311,12 @@ EXTRA_LANG_INFO = {
         'code': 'nr',
         'name': 'Ndebele',
         'name_local': 'Ndebele',
+    },
+    'ny': {
+        'bidi': False,
+        'code': 'ny',
+        'name': 'Chichewa',
+        'name_local': 'Chichewa',
     },
     'qu': {
         'bidi': False,
@@ -327,9 +336,9 @@ EXTRA_LANG_INFO = {
         'name': 'Kinyarwanda',
         'name_local': 'Kinyarwanda',
     },
-    'sho': {
+    'sn': {
         'bidi': False,
-        'code': 'sho',
+        'code': 'sn',
         'name': 'Shona',
         'name_local': 'Shona',
     },
@@ -344,6 +353,12 @@ EXTRA_LANG_INFO = {
         'code': 'zu',
         'name': 'Zulu',
         'name_local': 'Zulu',
+    },
+    'xy': {
+        'bidi': False,
+        'code': 'xy',
+        'name': 'Testing',
+        'name_local': 'Testing',
     },
 }
 
@@ -383,3 +398,7 @@ COMMIT_HASH = os.getenv('COMMIT_HASH')
 from .profanity_settings import *
 
 EXPORT_FILENAME_TIMESTAMP_FORMAT = '%Y-%m-%dT%H%M%S'
+
+WAGTAILMARKDOWN = {
+    'allowed_tags': ['i', 'b'],
+}
