@@ -120,5 +120,5 @@ legacy-initdb.d/
 # Translations
 *.mo
 
-v1-media-backup/
+iogt_content_migration/content/
 cypress_tests/node_modules/
