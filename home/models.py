@@ -853,5 +853,5 @@ class V1ToV2ObjectMap(models.Model):
     def create_map(cls, content_object, v1_object_id, extra=None):
         content_type = ContentType.objects.get_for_model(type(content_object))
         obj, __ = cls.objects.get_or_create(content_type=content_type, object_id=content_object.pk,
-                                            v1_object_id=v1_object_id, defaults={'extra': extra})
+                                            v1_object_id=v1_object_id, extra=extra)
         return obj

@@ -5,7 +5,6 @@ import psycopg2
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import MultipleObjectsReturned
 from django.core.management import BaseCommand
 from django.core.serializers.json import DjangoJSONEncoder
 from django_comments_xtd.models import XtdComment
@@ -60,16 +59,24 @@ class Command(BaseCommand):
             help='Delete existing Users and their associated data. Use carefully'
         )
 
+        parser.add_argument(
+            '--group-ids',
+            nargs='+',
+            type=int,
+            help='Groups IDs to mark registration survey mandatory'
+        )
+
     def handle(self, *args, **options):
         self.db_connect(options)
 
-        self.registration_survey_mandatory_group_ids = self.request_registration_survey_mandatory_groups()
-        self.content_type_map = dict()
+        mandatory_survey_group_ids = options.get('group_ids')
 
+        self.registration_survey_mandatory_group_ids = mandatory_survey_group_ids or \
+                                                       self.request_registration_survey_mandatory_groups()
+        self.content_type_map = dict()
         self.delete_users = options.get('delete_users')
 
         self.clear()
-        self.stdout.write('Existing site structure cleared')
 
         self.migrate()
 
@@ -146,6 +153,7 @@ class Command(BaseCommand):
         self.migrate_user_comments()
         self.migrate_user_survey_submissions()
         self.migrate_user_poll_submissions()
+        self.migrate_user_freetext_poll_submissions()
 
     def populate_content_type_map(self):
         sql = f'select * from django_content_type'
@@ -237,7 +245,8 @@ class Command(BaseCommand):
                     content_type_id=content_type.id, object_pk=new_article.pk, user_name=row['user_name'],
                     user_email=row['user_email'], submit_date=row['submit_date'],
                     comment=row['comment'], is_public=True, is_removed=False, thread_id=max_thread_id + 1,
-                    user=V1ToV2ObjectMap.get_v2_obj(get_user_model(), row['user_id']), order=1, followup=0, nested_count=0,
+                    user=V1ToV2ObjectMap.get_v2_obj(get_user_model(), row['user_id']), order=1, followup=0,
+                    nested_count=0,
                     site_id=1)
                 V1ToV2ObjectMap.create_map(comment, comment_id)
 
@@ -290,7 +299,7 @@ class Command(BaseCommand):
             title = unique_submission['title']
             page_id = unique_submission['id']
 
-            user_submissions_sql = f'select wcp.id, wcp.title as answer_title, pccv.choicevote_id, pcv.*, wcp_question.title \
+            user_submissions_sql = f'select wcp.id as id, wcp.title as answer_title, pccv.choicevote_id, pcv.*, wcp_question.title \
                                     from polls_choice pc \
                                         inner join wagtailcore_page wcp on pc.page_ptr_id = wcp.id \
                                     inner join polls_choice_choice_votes pccv on pc.page_ptr_id = pccv.choice_id \
@@ -322,3 +331,35 @@ class Command(BaseCommand):
                 )
                 V1ToV2ObjectMap.create_map(submission, row['id'], extra='poll')
 
+    def migrate_user_freetext_poll_submissions(self):
+        sql = f'select wcp.id, wcp.title, pftv.answer, pftv.id as submission_id, pftv.user_id ' \
+              f'from polls_freetextquestion pftq ' \
+              f'inner join wagtailcore_page wcp on pftq.question_ptr_id = wcp.id ' \
+              f'inner join polls_freetextvote pftv on pftv.question_id = wcp.id'
+
+        cur = self.db_query(sql)
+
+        for freetext_submission in self.with_progress(sql, cur, 'User freetext poll submissions migration in progress'):
+            title = freetext_submission['title']
+            answer = freetext_submission['answer']
+            submission_id = freetext_submission['submission_id']
+
+            form_title = get_field_clean_name(title)
+            form_data = {
+                form_title: answer
+            }
+
+            migrated_submission = V1ToV2ObjectMap.get_v2_obj(UserSubmission, freetext_submission['id'],
+                                                             extra='freetext_poll')
+
+            v2_poll = V1ToV2ObjectMap.get_v2_obj(Poll, freetext_submission['id'])
+            v2_poll_page = Page.objects.get(pk=v2_poll.id)
+
+            if not migrated_submission:
+                submission = UserSubmission.objects.create(
+                    form_data=json.dumps(form_data, cls=DjangoJSONEncoder),
+                    page=v2_poll_page,
+                    user=V1ToV2ObjectMap.get_v2_obj(get_user_model(), freetext_submission['user_id']) if
+                    freetext_submission['user_id'] else None,
+                )
+                V1ToV2ObjectMap.create_map(submission, submission_id, extra='freetext_poll')
