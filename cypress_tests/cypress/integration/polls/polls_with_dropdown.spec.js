@@ -1,18 +1,19 @@
-describe("Polls with radio tests", () => {
-    it("Visits poll with radio", () => {
-        cy.visit("/en/sections/questionnaire-testing/poll-with-radio");
-        cy.url().should("include", "/en/sections/questionnaire-testing/poll-with-radio");
+describe("Polls with dropdown tests", () => {
+
+    it("Visits poll with dropdown", () => {
+        cy.visit("/en/sections/questionnaire-testing/sample-poll/");
+        cy.url().should("include", "/en/sections/questionnaire-testing/sample-poll/");
     });
 
     it("Checks for title text", () => {
-        cy.get("h1.polls-widget__title")
-            .contains("Poll with Radio")
-            .should("be.visible");
+        cy.get(".title.polls-widget__title")
+            .contains("Poll with Dropdown")
+            .should("be.visible")
     });
 
     it("Checks for description text", () => {
         cy.get(".polls-widget__description>div>p")
-            .contains("Make your choice.")
+            .contains("Poll description")
             .should("be.visible");
     });
 
@@ -23,35 +24,35 @@ describe("Polls with radio tests", () => {
     });
 
     it("Checks for empty submission", () => {
-        cy.get("[name=poll_radio]").each($el => {
+        cy.get("select").each($el => {
             if ($el.hasOwnProperty("required")) {
                 cy.get(".survey-page__btn")
                     .contains("Submit")
                     .should("be.visible").click()
 
                 cy.url()
-                    .should("include", "/en/sections/questionnaire-testing/poll-with-radio")
+                    .should("include", "/en/sections/questionnaire-testing/sample-poll/")
             }
         });
+
     });
 
-    it("Selects the check box for option 1 submission", () => {
-        cy.get("[id=id_poll_radio_0]").check();
-    });
-
-    it("Submits the poll", () => {
-        cy.get(".survey-page__btn")
+    it("Selects the option and submits it", () => {
+        cy.get(".quest-item__content>select").select('2');
+        cy.get(".survey-page__btn>span")
             .contains("Submit")
             .should("be.visible")
             .click();
+    });
 
+    it("Checks for successful redirection", () => {
         cy.url()
-            .should("include", "/?back_url=/en/sections/questionnaire-testing/poll-with-radio/");
-    })
+            .should("include", "/?back_url=/en/sections/questionnaire-testing/sample-poll/");
+    });
 
-    it("Checks for thank you text", () => {
-        cy.get(".block-paragraph > p")
-            .contains("Thank you.")
+    it("Checks thanks text", () => {
+        cy.get(".polls-widget__form-title")
+            .contains("Poll Thank you text")
             .should("be.visible");
     });
 
@@ -59,8 +60,8 @@ describe("Polls with radio tests", () => {
         cy.get(".cust-check__percent")
             .each(($el) => {
                 cy.wrap($el)
-                    .should("be.visible")
                     .contains(/\\d+(?:d+)?|%/)
+                    .should("be.visible");
             });
     });
 });
