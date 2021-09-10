@@ -410,3 +410,5 @@ WAGTAILMARKDOWN = {
 }
 
 TRANSLATIONS_PROJECT_BASE_DIR = BASE_DIR
+
+from iogt.patch import *
