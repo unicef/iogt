@@ -11,7 +11,7 @@ describe("Survey with required checkbox tests", () => {
             .should("be.visible");
     });
 
-    it("It checks for the description test", () => {
+    it("It checks for the description text", () => {
         cy.get(".survey-page__description>.block-paragraph>p")
             .contains("intro")
             .should("be.visible");
