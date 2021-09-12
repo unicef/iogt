@@ -1,6 +1,6 @@
 describe("Polls for logged in users tests", () => {
 
-    beforeEach("Login the user", () => {
+    before("Login the user", () => {
         cy.login("saqlain", "saqlain");
         cy.visit("/en/sections/questionnaire-testing/poll-only-for-logged-in-users/")
     });
