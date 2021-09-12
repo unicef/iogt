@@ -1,7 +1,10 @@
 describe("Polls with radio tests", () => {
     it("Visits poll with radio", () => {
         cy.visit("/en/sections/questionnaire-testing/poll-with-radio");
-        cy.url().should("include", "/en/sections/questionnaire-testing/poll-with-radio");
+        cy.url().should(
+            "include",
+            "/en/sections/questionnaire-testing/poll-with-radio"
+        );
     });
 
     it("Checks for title text", () => {
@@ -29,8 +32,10 @@ describe("Polls with radio tests", () => {
                     .contains("Submit")
                     .should("be.visible").click()
 
-                cy.url()
-                    .should("include", "/en/sections/questionnaire-testing/poll-with-radio")
+                cy.url().should(
+                    "include",
+                    "/en/sections/questionnaire-testing/poll-with-radio"
+                );
             }
         });
     });
@@ -46,7 +51,10 @@ describe("Polls with radio tests", () => {
             .click();
 
         cy.url()
-            .should("include", "/?back_url=/en/sections/questionnaire-testing/poll-with-radio/");
+            .should(
+                "include",
+                "/?back_url=/en/sections/questionnaire-testing/poll-with-radio/"
+            );
     })
 
     it("Checks for thank you text", () => {

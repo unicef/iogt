@@ -2,7 +2,10 @@ describe("2 pages survey tests", () => {
 
     it("Visits the survey page", () => {
         cy.visit("/en/sections/questionnaire-testing/2-page-survey/");
-        cy.url().should("include", "/en/sections/questionnaire-testing/2-page-survey/");
+        cy.url().should(
+            "include",
+            "/en/sections/questionnaire-testing/2-page-survey/"
+        );
     });
 
     it("Checks for the title text", () => {
@@ -37,8 +40,10 @@ describe("2 pages survey tests", () => {
     });
 
     it("Checks for successful redirection", () => {
-        cy.url()
-            .should("include", "/?p=2&back_url=/en/sections/questionnaire-testing/2-page-survey/&form_length=1");
+        cy.url().should(
+            "include",
+            "/?p=2&back_url=/en/sections/questionnaire-testing/2-page-survey/&form_length=1"
+        );
     });
 
     it("Checks for question no on page 2", () => {
@@ -59,8 +64,10 @@ describe("2 pages survey tests", () => {
             .should("be.visible")
             .click();
 
-        cy.url()
-            .should("include", "/?p=3&back_url=/en/sections/questionnaire-testing/2-page-survey/&form_length=1");
+        cy.url().should(
+            "include",
+            "/?p=3&back_url=/en/sections/questionnaire-testing/2-page-survey/&form_length=1"
+        );
 
         cy.get(".block-paragraph")
             .contains("end txt")

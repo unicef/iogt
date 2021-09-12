@@ -2,7 +2,10 @@ describe("Survey with text field tests", () => {
 
     it("Visits the survey page", () => {
         cy.visit("/en/sections/questionnaire-testing/survey-with-text-fields/");
-        cy.url().should("include", "/en/sections/questionnaire-testing/survey-with-text-fields/");
+        cy.url().should(
+            "include",
+            "/en/sections/questionnaire-testing/survey-with-text-fields/"
+        );
     });
 
     it("Checks for the title text", () => {
@@ -60,8 +63,10 @@ describe("Survey with text field tests", () => {
     });
 
     it("Checks for successful redirection", () => {
-        cy.url()
-            .should("include", "/?back_url=/en/sections/questionnaire-testing/survey-with-text-fields/&form_length=9");
+        cy.url().should(
+            "include",
+            "/?back_url=/en/sections/questionnaire-testing/survey-with-text-fields/&form_length=9"
+        );
 
         cy.get(".block-paragraph")
             .contains("thank you")

@@ -2,7 +2,10 @@ describe("Polls with dropdown tests", () => {
 
     it("Visits poll with dropdown", () => {
         cy.visit("/en/sections/questionnaire-testing/sample-poll/");
-        cy.url().should("include", "/en/sections/questionnaire-testing/sample-poll/");
+        cy.url().should(
+            "include",
+            "/en/sections/questionnaire-testing/sample-poll/"
+        );
     });
 
     it("Checks for title text", () => {
@@ -30,8 +33,10 @@ describe("Polls with dropdown tests", () => {
                     .contains("Submit")
                     .should("be.visible").click()
 
-                cy.url()
-                    .should("include", "/en/sections/questionnaire-testing/sample-poll/")
+                cy.url().should(
+                    "include",
+                    "/en/sections/questionnaire-testing/sample-poll/"
+                );
             }
         });
 
@@ -46,8 +51,10 @@ describe("Polls with dropdown tests", () => {
     });
 
     it("Checks for successful redirection", () => {
-        cy.url()
-            .should("include", "/?back_url=/en/sections/questionnaire-testing/sample-poll/");
+        cy.url().should(
+            "include",
+            "/?back_url=/en/sections/questionnaire-testing/sample-poll/"
+        );
     });
 
     it("Checks thanks text", () => {

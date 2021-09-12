@@ -7,8 +7,10 @@ describe("Polls for logged in users tests", () => {
 
     it("Visits the polls for logged in users page", () => {
         cy.visit("/en/sections/questionnaire-testing/poll-only-for-logged-in-users/");
-        cy.url()
-            .should("include", "/en/sections/questionnaire-testing/poll-only-for-logged-in-users/");
+        cy.url().should(
+            "include",
+            "/en/sections/questionnaire-testing/poll-only-for-logged-in-users/"
+        );
     });
 
     it("Checks for title text", () => {
@@ -36,8 +38,10 @@ describe("Polls for logged in users tests", () => {
             .contains("Submit")
             .should("be.visible")
             .click();
-        cy.url()
-            .should("include", "/?back_url=/en/sections/questionnaire-testing/poll-only-for-logged-in-users/");
+        cy.url().should(
+            "include",
+            "/?back_url=/en/sections/questionnaire-testing/poll-only-for-logged-in-users/"
+        );
     });
 
 });

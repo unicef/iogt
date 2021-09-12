@@ -1,7 +1,10 @@
 describe("Polls with total rather than percentage tests", () => {
     it("Visits the polls page", () => {
         cy.visit("/en/sections/questionnaire-testing/poll-with-results-as-totals-rather-than-percentage/");
-        cy.url().should("include", "/en/sections/questionnaire-testing/poll-with-results-as-totals-rather-than-percentage/");
+        cy.url().should(
+            "include",
+            "/en/sections/questionnaire-testing/poll-with-results-as-totals-rather-than-percentage/"
+        );
     });
 
     it("Checks for title text", () => {
@@ -28,8 +31,10 @@ describe("Polls with total rather than percentage tests", () => {
             .should("be.visible")
             .click();
 
-        cy.url()
-            .should("include", "/?back_url=/en/sections/questionnaire-testing/poll-with-results-as-totals-rather-than-percentage/");
+        cy.url().should(
+            "include",
+            "/?back_url=/en/sections/questionnaire-testing/poll-with-results-as-totals-rather-than-percentage/"
+        );
     });
 
     it("Checks for thank you text", () => {

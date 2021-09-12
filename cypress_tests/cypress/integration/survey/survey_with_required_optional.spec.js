@@ -2,7 +2,10 @@ describe("Survey with required and optional", () => {
 
     it("Visits the survey page", () => {
         cy.visit("/en/sections/questionnaire-testing/survey-with-requiredoptional/");
-        cy.url().should("include", "/en/sections/questionnaire-testing/survey-with-requiredoptional/")
+        cy.url().should(
+            "include",
+            "/en/sections/questionnaire-testing/survey-with-requiredoptional/"
+        );
     });
 
     it("Checks for the title text", () => {
@@ -35,7 +38,10 @@ describe("Survey with required and optional", () => {
             .should("be.visible")
             .click();
 
-        cy.url().should("include", "/en/sections/questionnaire-testing/survey-with-requiredoptional/")
+        cy.url().should(
+            "include",
+            "/en/sections/questionnaire-testing/survey-with-requiredoptional/"
+        );
     });
 
     it("Checks for the input types and fills them", () => {
@@ -79,8 +85,10 @@ describe("Survey with required and optional", () => {
     });
 
     it("Checks for successful redirection", () => {
-        cy.url()
-            .should("include", "/?back_url=/en/sections/questionnaire-testing/survey-with-requiredoptional/&form_length=8");
+        cy.url().should(
+            "include",
+            "/?back_url=/en/sections/questionnaire-testing/survey-with-requiredoptional/&form_length=8"
+        );
 
         cy.get(".block-paragraph")
             .contains("thanks")

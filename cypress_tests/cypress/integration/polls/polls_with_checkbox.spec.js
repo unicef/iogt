@@ -2,7 +2,10 @@ describe("Poll with checkbox tests", () => {
 
     it("Visits the poll with checkbox page", () => {
         cy.visit("/en/sections/questionnaire-testing/poll-with-checkbox/");
-        cy.url().should("include", "/en/sections/questionnaire-testing/poll-with-checkbox/");
+        cy.url().should(
+            "include",
+            "/en/sections/questionnaire-testing/poll-with-checkbox/"
+        );
     });
 
     it("Checks for title text", () => {
@@ -24,8 +27,10 @@ describe("Poll with checkbox tests", () => {
                     .contains("Submit")
                     .should("be.visible").click();
 
-                cy.url()
-                    .should("include", "/en/sections/questionnaire-testing/poll-with-checkbox/");
+                cy.url().should(
+                    "include",
+                    "/en/sections/questionnaire-testing/poll-with-checkbox/"
+                );
             }
         });
     });
@@ -55,7 +60,10 @@ describe("Poll with checkbox tests", () => {
 
     it("Checks for successful redirection after submit", () => {
         cy.url()
-            .should("include", "/?back_url=/en/sections/questionnaire-testing/poll-with-checkbox/");
+            .should(
+                "include",
+                "/?back_url=/en/sections/questionnaire-testing/poll-with-checkbox/"
+            );
     });
 
     it("Checks thanks text", () => {

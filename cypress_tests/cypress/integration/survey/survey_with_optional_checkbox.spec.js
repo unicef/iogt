@@ -2,7 +2,10 @@ describe("Survey with optional checkbox tests", () => {
 
     it("Visits the survey page", () => {
         cy.visit("/en/sections/questionnaire-testing/survey-with-checkbox/");
-        cy.url().should("include", "/en/sections/questionnaire-testing/survey-with-checkbox/");
+        cy.url().should(
+            "include",
+            "/en/sections/questionnaire-testing/survey-with-checkbox/"
+        );
     });
 
     it("Checks for the title text", () => {
@@ -47,8 +50,10 @@ describe("Survey with optional checkbox tests", () => {
     });
 
     it("Checks for successful redirection", () => {
-        cy.url()
-            .should("include", "/?back_url=/en/sections/questionnaire-testing/survey-with-checkbox/&form_length=1");
+        cy.url().should(
+            "include",
+            "/?back_url=/en/sections/questionnaire-testing/survey-with-checkbox/&form_length=1"
+        );
 
         cy.get(".block-paragraph")
             .contains("thanks")

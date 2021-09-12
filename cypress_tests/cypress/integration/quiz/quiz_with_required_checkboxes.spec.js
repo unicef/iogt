@@ -2,7 +2,10 @@ describe("Quiz with required checkbox tests", () => {
 
     it("Visits the quiz page", () => {
         cy.visit("/en/sections/questionnaire-testing/quiz-with-checkbox/");
-        cy.url().should("include", "/en/sections/questionnaire-testing/quiz-with-checkbox/");
+        cy.url().should(
+            "include",
+            "/en/sections/questionnaire-testing/quiz-with-checkbox/"
+        );
     });
 
     it("Checks for title, description, help text", () => {
@@ -25,7 +28,10 @@ describe("Quiz with required checkbox tests", () => {
             .should("be.visible")
             .click();
 
-        cy.url().should("include", "/en/sections/questionnaire-testing/quiz-with-checkbox/");
+        cy.url().should(
+            "include",
+            "/en/sections/questionnaire-testing/quiz-with-checkbox/"
+        );
     });
 
     it("Checks the checkbox", () => {
@@ -40,7 +46,10 @@ describe("Quiz with required checkbox tests", () => {
     })
 
     it("Checks for successful redirection", () => {
-        cy.url().should("include", "/?back_url=/en/sections/questionnaire-testing/quiz-with-checkbox/&form_length=1");
+        cy.url().should(
+            "include",
+            "/?back_url=/en/sections/questionnaire-testing/quiz-with-checkbox/&form_length=1"
+        );
     });
 
     it("Expects the result to be correct", () => {

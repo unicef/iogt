@@ -2,7 +2,10 @@ describe("Survey with required checkbox tests", () => {
 
     it("Visits the survey page", () => {
         cy.visit("/en/sections/questionnaire-testing/survey-with-checkbox-req/");
-        cy.url().should("include", "/en/sections/questionnaire-testing/survey-with-checkbox-req/");
+        cy.url().should(
+            "include",
+            "/en/sections/questionnaire-testing/survey-with-checkbox-req/"
+        );
     });
 
     it("Checks for the title text", () => {
@@ -36,12 +39,15 @@ describe("Survey with required checkbox tests", () => {
     });
 
     it("submits unchecked form", () => {
-          cy.get(".survey-page__btn>span")
+        cy.get(".survey-page__btn>span")
             .contains("Submit")
             .should("be.visible")
             .click();
 
-          cy.url().should("include", "/en/sections/questionnaire-testing/survey-with-checkbox-req/")
+        cy.url().should(
+            "include",
+            "/en/sections/questionnaire-testing/survey-with-checkbox-req/"
+        );
     });
 
 
@@ -57,8 +63,10 @@ describe("Survey with required checkbox tests", () => {
     });
 
     it("Checks for successful redirection", () => {
-        cy.url()
-            .should("include", "/?back_url=/en/sections/questionnaire-testing/survey-with-checkbox-req/&form_length=1");
+        cy.url().should(
+            "include",
+            "/?back_url=/en/sections/questionnaire-testing/survey-with-checkbox-req/&form_length=1"
+        );
 
         cy.get(".block-paragraph")
             .contains("thanks")

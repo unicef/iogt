@@ -2,8 +2,12 @@ describe("Survey with multiple options tests", () => {
 
     it("Visits the survey page", () => {
         cy.visit("/en/sections/questionnaire-testing/sample-survey/");
-        cy.url().should("include", "/en/sections/questionnaire-testing/sample-survey/");
+        cy.url().should(
+            "include",
+            "/en/sections/questionnaire-testing/sample-survey/"
+        );
     });
+
 
     it("Checks for the title text", () => {
         cy.get(".survey-page__title")
@@ -54,8 +58,10 @@ describe("Survey with multiple options tests", () => {
     });
 
     it("Checks for successful redirection", () => {
-        cy.url()
-            .should("include", "/?back_url=/en/sections/questionnaire-testing/sample-survey/&form_length=3");
+        cy.url().should(
+            "include",
+            "/?back_url=/en/sections/questionnaire-testing/sample-survey/&form_length=3"
+        );
 
         cy.get(".block-paragraph")
             .contains("thanks text")

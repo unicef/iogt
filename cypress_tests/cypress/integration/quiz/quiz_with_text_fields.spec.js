@@ -2,7 +2,10 @@ describe("Quiz with text fields tests", () => {
 
     it("Visits the quiz page", () => {
         cy.visit("/en/sections/questionnaire-testing/quiz-with-text-fields/");
-        cy.url().should("include", "/en/sections/questionnaire-testing/quiz-with-text-fields/");
+        cy.url().should(
+            "include",
+            "/en/sections/questionnaire-testing/quiz-with-text-fields/"
+        );
     });
 
     it("Checks for the title text", () => {
@@ -60,8 +63,10 @@ describe("Quiz with text fields tests", () => {
     });
 
     it("Checks for successful redirection", () => {
-        cy.url()
-            .should("include", "/?back_url=/en/sections/questionnaire-testing/quiz-with-text-fields/&form_length=5");
+        cy.url().should(
+                "include",
+                "/?back_url=/en/sections/questionnaire-testing/quiz-with-text-fields/&form_length=5"
+            );
 
         cy.get(".block-paragraph")
             .contains("thank you text")
