@@ -1,23 +1,23 @@
 ## To run cypress tests
-Run cypress container
+1. Run cypress container
 ```
 make cypress
 ```
 
-Go to cypress_test directory
+2. Go to cypress_test directory
 ```
 cd ./cypress_tests
 ```
-Install dependencies
+3. Install dependencies
 
 ```
 npm install
 ```
-Run Cypress in the interactive GUI.
+4. Run Cypress in the interactive GUI.
 ```
 cypress open
 ```
-Runs Cypress tests from the CLI without the GUI
+5. Runs Cypress tests from the CLI without the GUI
 ```
 cypress run
 ```
