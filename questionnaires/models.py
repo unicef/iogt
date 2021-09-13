@@ -544,7 +544,7 @@ class Poll(QuestionnairePage, AbstractForm):
         if self.result_as_percentage:
             total_submissions = len(submissions)
             for key in results:
-                for k,v in results[key].items():
+                for k, v in results[key].items():
                     results[key][k] = round(v/total_submissions, 4) * 100
 
         context.update({
