@@ -1,24 +1,22 @@
 describe("Survey with multiple options tests", () => {
+    const url = "/en/sections/questionnaire-testing/sample-survey/";
 
     it("Visits the survey page", () => {
-        cy.visit("/en/sections/questionnaire-testing/sample-survey/");
-        cy.url().should(
-            "include",
-            "/en/sections/questionnaire-testing/sample-survey/"
+        cy.visitUrl(url)
+    });
+
+    it("Checks for the title text", () => {
+        cy.testTitle(
+            "Survey with multiple choice options",
+            ".survey-page__title"
         );
     });
 
-
-    it("Checks for the title text", () => {
-        cy.get(".survey-page__title")
-            .contains("Survey with multiple choice options")
-            .should("be.visible");
-    });
-
     it("It checks for the description text", () => {
-        cy.get(".survey-page__description>.block-paragraph>p")
-            .contains("intro text")
-            .should("be.visible");
+        cy.testDescription(
+            "intro text",
+            ".survey-page__description>.block-paragraph>p"
+        );
     });
 
     it("Checks for the question number text", () => {
@@ -51,24 +49,17 @@ describe("Survey with multiple options tests", () => {
     });
 
     it("Submits the answers", () => {
-        cy.get(".survey-page__btn>span")
-            .contains("Submit")
-            .should("be.visible")
-            .click();
+        cy.submit(".survey-page__btn>span", "Submit");
     });
 
     it("Checks for successful redirection", () => {
         cy.url().should(
             "include",
-            "/?back_url=/en/sections/questionnaire-testing/sample-survey/&form_length=3"
+            `/?back_url=${url}&form_length=3`
         );
 
-        cy.get(".block-paragraph")
-            .contains("thanks text")
-            .should("be.visible");
+        cy.thanksText(".block-paragraph", "thanks text");
 
-        cy.get(".survey-page__btn>span")
-            .contains("Back")
-            .should("be.visible");
+        cy.submit(".survey-page__btn>span", "Back");
     });
 });

@@ -1,23 +1,19 @@
 describe("Survey with text field tests", () => {
+    const url = "/en/sections/questionnaire-testing/survey-with-text-fields/";
 
     it("Visits the survey page", () => {
-        cy.visit("/en/sections/questionnaire-testing/survey-with-text-fields/");
-        cy.url().should(
-            "include",
-            "/en/sections/questionnaire-testing/survey-with-text-fields/"
-        );
+        cy.visitUrl(url);
     });
 
     it("Checks for the title text", () => {
-        cy.get(".survey-page__title")
-            .contains("Survey with text fields")
-            .should("be.visible");
+        cy.testTitle("Survey with text fields", ".survey-page__title");
     });
 
     it("It checks for the description test", () => {
-        cy.get(".survey-page__description>.block-paragraph>p")
-            .contains("intro")
-            .should("be.visible");
+        cy.testDescription(
+            "intro",
+            ".survey-page__description>.block-paragraph>p"
+        );
     });
 
     it("Checks for the question number text", () => {
@@ -56,25 +52,17 @@ describe("Survey with text field tests", () => {
     });
 
     it("Submits the form", () => {
-        cy.get(".survey-page__btn>span")
-            .contains("Submit")
-            .should("be.visible")
-            .click();
+        cy.submit(".survey-page__btn>span", "Submit");
     });
 
     it("Checks for successful redirection", () => {
         cy.url().should(
             "include",
-            "/?back_url=/en/sections/questionnaire-testing/survey-with-text-fields/&form_length=9"
+            `/?back_url=${url}&form_length=9`
         );
 
-        cy.get(".block-paragraph")
-            .contains("thank you")
-            .should("be.visible");
-
-        cy.get(".survey-page__btn>span")
-            .contains("Back")
-            .should("be.visible");
+        cy.thanksText(".block-paragraph", "thank you");
+        cy.submit(".survey-page__btn>span", "Back");
     });
 
 });

@@ -16,6 +16,36 @@ Cypress.Commands.add('login', (username, password) => {
     cy.get('.profile-form__btn>span').contains("Log in").click();
     cy.url().should('contain', '/en/users/profile/');
 });
+
+Cypress.Commands.add("visitUrl", (url) => {
+    cy.visit(url);
+    cy.url().should("include", url);
+});
+
+Cypress.Commands.add("testTitle", (text, selector) => {
+    cy.get(selector)
+        .contains(text)
+        .should("be.visible");
+});
+
+Cypress.Commands.add("testDescription", (text, selector) => {
+    cy.get(selector)
+        .contains(text)
+        .should("be.visible");
+});
+
+Cypress.Commands.add("submit", (selector, text) => {
+    cy.get(selector)
+        .contains(text)
+        .should("be.visible")
+        .click();
+});
+
+Cypress.Commands.add("thanksText", (selector, text) => {
+    cy.get(selector)
+        .contains(text)
+        .should("be.visible");
+});
 //
 //
 // -- This is a child command --

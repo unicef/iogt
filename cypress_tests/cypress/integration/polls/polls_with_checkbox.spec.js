@@ -1,23 +1,22 @@
 describe("Poll with checkbox tests", () => {
+    const url = "/en/sections/questionnaire-testing/poll-with-checkbox/";
 
     it("Visits the poll with checkbox page", () => {
-        cy.visit("/en/sections/questionnaire-testing/poll-with-checkbox/");
-        cy.url().should(
-            "include",
-            "/en/sections/questionnaire-testing/poll-with-checkbox/"
-        );
+        cy.visitUrl(url);
     });
 
     it("Checks for title text", () => {
-        cy.get(".title.polls-widget__title")
-            .contains("Poll with checkbox")
-            .should("be.visible")
+        cy.testTitle(
+            "Poll with checkbox",
+            ".title.polls-widget__title"
+        );
     });
 
     it("Checks for description text", () => {
-        cy.get(".polls-widget__description>div>p")
-            .contains("Make your choice.")
-            .should("be.visible");
+        cy.testDescription(
+            "Make your choice.",
+            ".polls-widget__description>div>p"
+        );
     });
 
     it("Checks for empty submission", () => {
@@ -27,10 +26,7 @@ describe("Poll with checkbox tests", () => {
                     .contains("Submit")
                     .should("be.visible").click();
 
-                cy.url().should(
-                    "include",
-                    "/en/sections/questionnaire-testing/poll-with-checkbox/"
-                );
+                cy.url().should("include", url);
             }
         });
     });
@@ -52,24 +48,18 @@ describe("Poll with checkbox tests", () => {
     });
 
     it("Checks for submit text and button", () => {
-        cy.get(".survey-page__btn>span")
-            .contains("Submit")
-            .should("be.visible")
-            .click();
+        cy.submit(".survey-page__btn>span","Submit");
     });
 
     it("Checks for successful redirection after submit", () => {
-        cy.url()
-            .should(
-                "include",
-                "/?back_url=/en/sections/questionnaire-testing/poll-with-checkbox/"
-            );
+        cy.url().should(
+            "include",
+            `/?back_url=${url}`
+        );
     });
 
     it("Checks thanks text", () => {
-        cy.get(".polls-widget__form-title")
-            .contains("thanks")
-            .should("be.visible");
+        cy.thanksText(".polls-widget__form-title", "thanks");
     });
 
     it("Checks the result text", () => {

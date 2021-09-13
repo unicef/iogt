@@ -1,21 +1,16 @@
 describe("Quiz with required checkbox tests", () => {
+    const url = "/en/sections/questionnaire-testing/quiz-with-checkbox/";
 
     it("Visits the quiz page", () => {
-        cy.visit("/en/sections/questionnaire-testing/quiz-with-checkbox/");
-        cy.url().should(
-            "include",
-            "/en/sections/questionnaire-testing/quiz-with-checkbox/"
-        );
+        cy.visitUrl(url);
     });
 
     it("Checks for title, description, help text", () => {
-        cy.get(".quiz-page__title")
-            .contains("Quiz with checkbox")
-            .should("be.visible");
-
-        cy.get(".quiz-page__description>.block-paragraph>p")
-            .contains("quiz intro")
-            .should("be.visible");
+        cy.testTitle("Quiz with checkbox", ".quiz-page__title");
+        cy.testDescription(
+            "quiz intro",
+            ".quiz-page__description>.block-paragraph>p"
+        );
 
         cy.get(".quest-item__step-desc>span")
             .contains("Check if apply")
@@ -23,10 +18,7 @@ describe("Quiz with required checkbox tests", () => {
     });
 
     it("Submits the empty forum", () => {
-        cy.get(".survey-page__btn>span")
-            .contains("Submit")
-            .should("be.visible")
-            .click();
+        cy.submit(".survey-page__btn>span", "Submit");
 
         cy.url().should(
             "include",
@@ -39,16 +31,13 @@ describe("Quiz with required checkbox tests", () => {
     });
 
     it("Submits the form with required field", () => {
-        cy.get(".survey-page__btn>span")
-            .contains("Submit")
-            .should("be.visible")
-            .click();
+        cy.submit(".survey-page__btn>span", "Submit");
     })
 
     it("Checks for successful redirection", () => {
         cy.url().should(
             "include",
-            "/?back_url=/en/sections/questionnaire-testing/quiz-with-checkbox/&form_length=1"
+            `/?back_url=${url}&form_length=1`
         );
     });
 

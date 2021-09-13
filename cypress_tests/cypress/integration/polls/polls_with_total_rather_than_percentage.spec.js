@@ -1,22 +1,22 @@
 describe("Polls with total rather than percentage tests", () => {
+    const url = "/en/sections/questionnaire-testing/poll-with-results-as-totals-rather-than-percentage/";
+
     it("Visits the polls page", () => {
-        cy.visit("/en/sections/questionnaire-testing/poll-with-results-as-totals-rather-than-percentage/");
-        cy.url().should(
-            "include",
-            "/en/sections/questionnaire-testing/poll-with-results-as-totals-rather-than-percentage/"
-        );
+        cy.visitUrl(url);
     });
 
     it("Checks for title text", () => {
-        cy.get("h1.polls-widget__title")
-            .contains("Poll with results as totals rather than percentage")
-            .should("be.visible");
+        cy.testTitle(
+            "Poll with results as totals rather than percentage",
+            "h1.polls-widget__title"
+        );
     });
 
     it("Checks for description text", () => {
-        cy.get(".polls-widget__description>div>p")
-            .contains("Make your choice.")
-            .should("be.visible");
+        cy.testDescription(
+            "Make your choice.",
+            ".polls-widget__description>div>p"
+        );
     });
 
     it("Checks for the questions number", () => {
@@ -26,21 +26,16 @@ describe("Polls with total rather than percentage tests", () => {
     });
 
     it("Submits the poll", () => {
-        cy.get(".survey-page__btn")
-            .contains("Submit")
-            .should("be.visible")
-            .click();
+        cy.submit(".survey-page__btn", "Submit");
 
         cy.url().should(
             "include",
-            "/?back_url=/en/sections/questionnaire-testing/poll-with-results-as-totals-rather-than-percentage/"
+            `/?back_url=${url}`
         );
     });
 
     it("Checks for thank you text", () => {
-        cy.get(".block-paragraph > p")
-            .contains("thanks")
-            .should("be.visible");
+        cy.thanksText(".block-paragraph > p", "thanks");
     });
 
     it("Checks the result text", () => {

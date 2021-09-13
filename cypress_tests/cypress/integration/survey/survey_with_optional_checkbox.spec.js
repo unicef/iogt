@@ -1,27 +1,26 @@
 describe("Survey with optional checkbox tests", () => {
+    const url = "/en/sections/questionnaire-testing/survey-with-checkbox/";
 
     before("Login", () => {
         cy.login("saqlain", "saqlain");
     })
 
     it("Visits the survey page", () => {
-        cy.visit("/en/sections/questionnaire-testing/survey-with-checkbox/");
-        cy.url().should(
-            "include",
-            "/en/sections/questionnaire-testing/survey-with-checkbox/"
-        );
+        cy.visitUrl(url)
     });
 
     it("Checks for the title text", () => {
-        cy.get(".survey-page__title")
-            .contains("Survey with optional checkbox")
-            .should("be.visible");
+        cy.testTitle(
+            "Survey with optional checkbox",
+            ".survey-page__title"
+        );
     });
 
     it("It checks for the description text", () => {
-        cy.get(".survey-page__description>.block-paragraph>p")
-            .contains("intro")
-            .should("be.visible");
+        cy.testDescription(
+            "intro",
+            ".survey-page__description>.block-paragraph>p"
+        );
     });
 
     it("Checks for the question number text", () => {
@@ -47,16 +46,13 @@ describe("Survey with optional checkbox tests", () => {
     })
 
     it("Submits the form", () => {
-        cy.get(".survey-page__btn>span")
-            .contains("Submit")
-            .should("be.visible")
-            .click();
+        cy.submit(".survey-page__btn>span", "Submit");
     });
 
     it("Checks for successful redirection", () => {
         cy.url().should(
             "include",
-            "/?back_url=/en/sections/questionnaire-testing/survey-with-checkbox/&form_length=1"
+            `/?back_url=${url}&form_length=1`
         );
     });
 

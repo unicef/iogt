@@ -1,23 +1,22 @@
 describe("Poll with checkboxes test", () => {
+    const url = "/en/sections/questionnaire-testing/poll-with-checkboxes/";
 
     it("Visits poll with checkboxes", () => {
-        cy.visit("/en/sections/questionnaire-testing/poll-with-checkboxes/");
-        cy.url().should(
-            "include",
-            "/en/sections/questionnaire-testing/poll-with-checkboxes/"
-        );
+        cy.visitUrl(url);
     });
 
     it("Checks for title text", () => {
-        cy.get(".title.polls-widget__title")
-            .contains("Poll with checkboxes")
-            .should("be.visible")
+        cy.testTitle(
+            "Poll with checkboxes",
+            ".title.polls-widget__title"
+        );
     });
 
     it("Checks for description text", () => {
-        cy.get(".polls-widget__description>div>p")
-            .contains("Make your choice.")
-            .should("be.visible");
+        cy.testDescription(
+            "Make your choice.",
+            ".polls-widget__description>div>p"
+        );
     });
 
     it("Checks for the questions number", () => {
@@ -29,14 +28,8 @@ describe("Poll with checkboxes test", () => {
     it("Checks for empty submission", () => {
         cy.get("[name=poll_checkboxes]").each($el => {
             if ($el.hasOwnProperty("required")) {
-                cy.get(".survey-page__btn")
-                    .contains("Submit")
-                    .should("be.visible").click();
-
-                cy.url().should(
-                    "include",
-                    "/en/sections/questionnaire-testing/poll-with-checkboxes/"
-                );
+                cy.submit(".survey-page__btn", "Submit");
+                cy.url().should("include", url);
             }
         });
     });
@@ -51,16 +44,13 @@ describe("Poll with checkboxes test", () => {
     });
 
     it("Checks for submit text and button", () => {
-        cy.get(".survey-page__btn>span")
-            .contains("Submit")
-            .should("be.visible")
-            .click();
+        cy.submit(".survey-page__btn>span", "Submit");
     });
 
     it("Checks for successful submission", () => {
         cy.url().should(
             "include",
-            "/?back_url=/en/sections/questionnaire-testing/poll-with-checkboxes/"
+            `/?back_url=${url}`
         );
     })
 

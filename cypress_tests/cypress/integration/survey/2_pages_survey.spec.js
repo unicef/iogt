@@ -1,23 +1,19 @@
 describe("2 pages survey tests", () => {
+    const url = "/en/sections/questionnaire-testing/2-page-survey/";
 
     it("Visits the survey page", () => {
-        cy.visit("/en/sections/questionnaire-testing/2-page-survey/");
-        cy.url().should(
-            "include",
-            "/en/sections/questionnaire-testing/2-page-survey/"
-        );
+        cy.visitUrl(url)
     });
 
     it("Checks for the title text", () => {
-        cy.get(".survey-page__title")
-            .contains("Survey (2-pages)")
-            .should("be.visible");
+        cy.testTitle("Survey (2-pages)", ".survey-page__title");
     });
 
     it("It checks for the description text", () => {
-        cy.get(".survey-page__description>.block-paragraph>p")
-            .contains("intro txt")
-            .should("be.visible");
+        cy.testDescription(
+            "intro txt",
+            ".survey-page__description>.block-paragraph>p"
+        );
     });
 
     it("Checks for the question numbers", () => {
@@ -42,7 +38,7 @@ describe("2 pages survey tests", () => {
     it("Checks for successful redirection", () => {
         cy.url().should(
             "include",
-            "/?p=2&back_url=/en/sections/questionnaire-testing/2-page-survey/&form_length=1"
+            `/?p=2&back_url=${url}&form_length=1`
         );
     });
 
@@ -59,23 +55,14 @@ describe("2 pages survey tests", () => {
     });
 
     it("Submits the form and checks for successful redirection", () => {
-        cy.get(".survey-page__btn>span")
-            .contains("Submit")
-            .should("be.visible")
-            .click();
+        cy.submit(".survey-page__btn>span", "Submit");
 
         cy.url().should(
             "include",
-            "/?p=3&back_url=/en/sections/questionnaire-testing/2-page-survey/&form_length=1"
+            `/?p=3&back_url=${url}&form_length=1`
         );
 
-        cy.get(".block-paragraph")
-            .contains("end txt")
-            .should("be.visible");
-
-        cy.get(".survey-page__btn>span")
-            .contains("Back")
-            .should("be.visible");
-
+        cy.thanksText(".block-paragraph", "end txt");
+        cy.submit(".survey-page__btn>span", "Back")
     });
 });

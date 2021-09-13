@@ -1,34 +1,29 @@
 describe("Quiz with optional checkbox", () => {
+    const url = "/en/sections/questionnaire-testing/quiz-with-optional-checkbox/";
 
     it("Visits the quiz page", () => {
-        cy.visit("/en/sections/questionnaire-testing/quiz-with-optional-checkbox/");
-        cy.url().should(
-            "include",
-            "/en/sections/questionnaire-testing/quiz-with-optional-checkbox/"
-        );
+        cy.visitUrl(url);
     });
 
     it("Checks for title and description text", () => {
-        cy.get(".quiz-page__title")
-            .contains("Quiz with optional checkbox")
-            .should("be.visible");
-
-        cy.get(".quiz-page__description>.block-paragraph>p")
-            .contains("quiz text")
-            .should("be.visible");
+        cy.testTitle(
+            "Quiz with optional checkbox",
+            ".quiz-page__title"
+        );
+        cy.testDescription(
+            "quiz text",
+            ".quiz-page__description>.block-paragraph>p"
+        );
     });
 
     it("Submits the form with out filling out", () => {
-        cy.get(".survey-page__btn>span")
-            .contains("Submit")
-            .should("be.visible")
-            .click();
+        cy.submit(".survey-page__btn>span", "Submit");
     });
 
     it("Checks for successful redirection", () => {
         cy.url().should(
             "include",
-            "/?back_url=/en/sections/questionnaire-testing/quiz-with-optional-checkbox/&form_length=2"
+            `/?back_url=${url}&form_length=2`
         );
     });
 
