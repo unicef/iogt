@@ -15,25 +15,30 @@ from comments.models import CannedResponse
 def update(request, comment_pk, action):
     get_comment_with_children_filter = Q(parent_id=comment_pk) | Q(pk=comment_pk)
     comments = XtdComment.objects.filter(get_comment_with_children_filter)
-
+    verb = ''
     if action == 'unpublish':
         for comment in comments:
             comment.is_public = False
+        verb = 'unpublished'
     elif action == 'publish':
         for comment in comments:
             comment.is_public = True
+        verb = 'published'
     elif action == 'hide':
         for comment in comments:
             comment.is_removed = True
+        verb = 'removed'
     elif action == 'show':
         for comment in comments:
             comment.is_removed = False
+        verb = 'shown'
     elif action == 'clear_flags':
         comment = XtdComment.objects.get(pk=comment_pk)
         comment.flags.all().delete()
+        verb = 'cleared'
     XtdComment.objects.bulk_update(comments, ['is_public', 'is_removed'])
 
-    messages.success(request, _("The comment has been updated successfully!"))
+    messages.success(request, _(f'The comment has been {verb} successfully!'))
 
     return redirect(request.META.get('HTTP_REFERER'))
 
