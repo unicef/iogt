@@ -49,6 +49,10 @@
                         <a class="small mutedlink reply-link"
                            href="{{ item.comment.get_reply_url }}">{% translate "Reply" %}</a>
                     {% endif %}
+                    {% if perms.django_comments_xtd.delete_xtdcomment %}
+                        <a class="small mutedlink reply-link text-danger"
+                           href="{% url 'wagtail_comments_xtd_publication' item.comment.pk 'hide' %}">Remove</a>
+                    {% endif %}
 
                     {% if allow_flagging and item.flagged and item.comment.user != user %}
 
@@ -56,10 +60,6 @@
                         <i title="{% translate 'Comment flagged' %}"
                            class='report-comment__disclaimer'>{% translate "This is a reported comment" %} </i>
 
-                    {% endif %}
-                    {% if perms.django_comments_xtd.delete_xtdcomment %}
-
-                        <a class="small mutedlink reply-link" href="{% url 'wagtail_comments_xtd_publication' item.comment.pk 'hide' %}">Remove Comment</a>
                     {% endif %}
 
                     <div class="comment__children">
@@ -72,11 +72,11 @@
         </div>
     {% endfor %}
 
-{#    {% if comments and comments.0.comment.level == 0 %}#}
-{#        <div class="load-more">#}
-{#            <button type="button">#}
-{#                View more comment#}
-{#            </button>#}
-{#        </div>#}
-{#    {% endif %}#}
+    {#    {% if comments and comments.0.comment.level == 0 %}#}
+    {#        <div class="load-more">#}
+    {#            <button type="button">#}
+    {#                View more comment#}
+    {#            </button>#}
+    {#        </div>#}
+    {#    {% endif %}#}
 </div>
