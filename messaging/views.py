@@ -54,7 +54,7 @@ class ThreadDetailView(View):
         }
 
     def get(self, request, thread_id):
-        thread = get_object_or_404(Thread, pk=thread_id)
+        thread = get_object_or_404(Thread, pk=thread_id, users__in=[request.user])
         thread.mark_read(request.user)
         return render(request, 'messaging/thread_detail.html', context=self.get_context(thread))
 
