@@ -22,6 +22,7 @@ RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-r
     libjpeg62-turbo-dev \
     zlib1g-dev \
     libwebp-dev \
+    gettext \
  && rm -rf /var/lib/apt/lists/*
 
 # Install the application server.
@@ -48,6 +49,9 @@ USER wagtail
 # Collect static files.
 RUN python manage.py collectstatic --noinput --clear
 
+# Compile .po files to .mo
+RUN python manage.py compilemessages
+
 # Runtime command that executes when "docker run" is called, it does the
 # following:
 #   1. Migrate the database.
@@ -58,4 +62,4 @@ RUN python manage.py collectstatic --noinput --clear
 #   PRACTICE. The database should be migrated manually or using the release
 #   phase facilities of your hosting platform. This is used only so the
 #   Wagtail instance can be started with a simple "docker run" command.
-CMD set -xe; python manage.py migrate --noinput; python manage.py compilemessages; gunicorn iogt.wsgi:application
+CMD set -xe; python manage.py migrate --noinput; gunicorn iogt.wsgi:application
