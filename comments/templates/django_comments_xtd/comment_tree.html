@@ -57,22 +57,9 @@
                            class='report-comment__disclaimer'>{% translate "This is a reported comment" %} </i>
 
                     {% endif %}
+                    {% if perms.django_comments_xtd.delete_xtdcomment %}
 
-                    {% if perms.comments.can_moderate %}
-                        {% if item.flagged_count %}
-                            <span class="report-comment">
-                                    {# Translators: Count refers to the number of people that reported a comment. #}
-                                {% blocktranslate trimmed count count=item.flagged_count %}
-                                    Reported by {{ count }} user
-                                    {% plural %}
-                                    Reported by {{ count }} users
-                                {% endblocktranslate %}
-                            </span>
-                        {% endif %}
-                    {% endif %}
-                    {% if perms.comments.can_moderate %}
-                        <a href="{% url 'comments-delete' item.comment.pk %}"><i class="fas fa-trash-alt"
-                                                                                 title="{% translate 'Remove comment' %}"></i></a>
+                        <a class="small mutedlink reply-link" href="{% url 'wagtail_comments_xtd_publication' item.comment.pk 'hide' %}">Remove Comment</a>
                     {% endif %}
 
                     <div class="comment__children">

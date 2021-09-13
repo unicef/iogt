@@ -1,16 +1,14 @@
 from django.db.models import Q
 from django.contrib import messages
 from django.shortcuts import redirect
-from django.views import View
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_POST
-from django.views.generic import FormView, TemplateView
+from django.views.generic import TemplateView
 from django_comments.views.comments import post_comment
-from django_comments_xtd import get_form
 from django_comments_xtd.models import XtdComment
 from django.utils.translation import ugettext as _
 
-from comments.forms import CommentForm, AdminCommentForm
+from comments.forms import AdminCommentForm
 from comments.models import CannedResponse
 
 

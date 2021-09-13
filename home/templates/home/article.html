@@ -30,20 +30,20 @@
     <section class='comments'>
         <h2>{% translate "Comments" %} <span class='comments__count'>{{ comment_count }}</span></h2>
         {% if page.allow_comments %}
-            {% if user.is_authenticated %}
+{#            {% if user.is_authenticated %}#}
                 <div class='comments__form'>
                     {% render_comment_form for page %}
                 </div>
-            {% else %}
-            <div class='comments__login'>
-              <p >{% translate "Please log in or create your account" %}</p>
-             <div class='comments__input-holder'>
-                <div class="comments__submit">
-                    <a href="{% url 'account_login' %}?next={{ page.get_absolute_url }}">{% translate "Log in / Create account" %}</a>.
-                </div>
-             </div>
-            </div>
-        {% endif %}
+{#            {% else %}#}
+{#            <div class='comments__login'>#}
+{#              <p >{% translate "Please log in or create your account" %}</p>#}
+{#             <div class='comments__input-holder'>#}
+{#                <div class="comments__submit">#}
+{#                    <a href="{% url 'account_login' %}?next={{ page.get_absolute_url }}">{% translate "Log in / Create account" %}</a>.#}
+{#                </div>#}
+{#             </div>#}
+{#            </div>#}
+{#        {% endif %}#}
         {% else %}
             <p >
                 {% translate "New comments have been disabled for this page." %}"
