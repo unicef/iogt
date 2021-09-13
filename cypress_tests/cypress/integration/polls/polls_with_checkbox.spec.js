@@ -22,10 +22,7 @@ describe("Poll with checkbox tests", () => {
     it("Checks for empty submission", () => {
         cy.get("[name=poll_checkbox]").each($el => {
             if ($el.hasOwnProperty("required")) {
-                cy.get(".survey-page__btn")
-                    .contains("Submit")
-                    .should("be.visible").click();
-
+                cy.submit(".survey-page__btn","Submit");
                 cy.url().should("include", url);
             }
         });
