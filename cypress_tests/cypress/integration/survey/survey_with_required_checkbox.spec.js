@@ -3,25 +3,15 @@ describe("Survey with required checkbox tests", () => {
 
     it("Visits the survey page", () => {
         cy.visitUrl(url);
-    });
-
-    it("Checks for the title text", () => {
         cy.testTitle(
-            "Survey with required checkbox",
-            ".survey-page__title"
+            "Survey with required checkbox", ".survey-page__title"
         );
-    });
-
-    it("It checks for the description text", () => {
         cy.testDescription(
-            "intro",
-            ".survey-page__description>.block-paragraph>p"
+            "intro", ".survey-page__description>.block-paragraph>p"
         );
-    });
 
-    it("Checks for the question number text", () => {
         let questionNumbers = []
-        cy.get(".quest-item__number").each(($el, index) => {
+        cy.get(".quest-item__number").each(($el) => {
             questionNumbers.push($el)
         });
         cy.get(".quest-item__number").each(($el, index) => {
@@ -29,9 +19,7 @@ describe("Survey with required checkbox tests", () => {
                 .should("be.visible")
                 .contains(`${index + 1} of ${questionNumbers.length} question`);
         });
-    });
 
-    it("Checks for help text", () => {
         cy.get(".quest-item__step-desc span")
             .contains("Check if apply")
             .should("be.visible");
@@ -42,20 +30,13 @@ describe("Survey with required checkbox tests", () => {
             .contains("Submit")
             .should("be.visible")
             .click();
-
         cy.url().should("include", url);
     });
 
 
-    it("Checks the checkbox", () => {
+    it("Fills the form and submits it", () => {
         cy.get("[name=checkbox]").check();
-    })
-
-    it("Submits the form", () => {
         cy.submit(".survey-page__btn>span", "Submit");
-    });
-
-    it("Checks for successful redirection", () => {
         cy.url().should(
             "include",
             `/?back_url=${url}&form_length=1`
@@ -64,5 +45,4 @@ describe("Survey with required checkbox tests", () => {
         cy.thanksText(".block-paragraph", "thanks");
         cy.submit(".survey-page__btn>span", "Back");
     });
-
 });

@@ -3,23 +3,8 @@ describe("Polls with radio tests", () => {
 
     it("Visits poll with radio", () => {
         cy.visitUrl(url);
-    });
-
-    it("Checks for title text", () => {
-        cy.testTitle(
-            "Poll with Radio",
-            "h1.polls-widget__title"
-        );
-    });
-
-    it("Checks for description text", () => {
-        cy.testDescription(
-            "Make your choice.",
-            ".polls-widget__description>div>p"
-        );
-    });
-
-    it("Checks for the questions number", () => {
+        cy.testTitle("Poll with Radio", "h1.polls-widget__title");
+        cy.testDescription("Make your choice.", ".polls-widget__description>div>p");
         cy.get(".quest-item__header .quest-item__number")
             .contains("1 of 1 question")
             .should("be.visible");
@@ -34,23 +19,13 @@ describe("Polls with radio tests", () => {
         });
     });
 
-    it("Selects the check box for option 1 submission", () => {
-        cy.get("[id=id_poll_radio_0]").check();
-    });
+    it("Selects the radio for option 1 submission", () => {
+        cy.get("[id=id_poll_radio_0]").click();
 
-    it("Submits the poll", () => {
         cy.submit(".survey-page__btn", "Submit");
-        cy.url().should(
-            "include",
-            `/?back_url=${url}`
-        );
-    })
+        cy.url().should("include", `/?back_url=${url}`);
 
-    it("Checks for thank you text", () => {
         cy.thanksText(".block-paragraph > p", "Thank you.");
-    });
-
-    it("Checks the result text", () => {
         cy.get(".cust-check__percent")
             .each(($el) => {
                 cy.wrap($el)

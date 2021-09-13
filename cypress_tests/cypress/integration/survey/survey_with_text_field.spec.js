@@ -3,20 +3,11 @@ describe("Survey with text field tests", () => {
 
     it("Visits the survey page", () => {
         cy.visitUrl(url);
-    });
-
-    it("Checks for the title text", () => {
         cy.testTitle("Survey with text fields", ".survey-page__title");
-    });
-
-    it("It checks for the description test", () => {
         cy.testDescription(
-            "intro",
-            ".survey-page__description>.block-paragraph>p"
+            "intro", ".survey-page__description>.block-paragraph>p"
         );
-    });
 
-    it("Checks for the question number text", () => {
         let questionNumbers = []
         cy.get(".quest-item__number").each(($el, index) => {
             questionNumbers.push($el)
@@ -35,7 +26,6 @@ describe("Survey with text field tests", () => {
         cy.get("[name=url]").should("be.visible");
         cy.get("[name=date]").should("be.visible");
         cy.get("[name=datetime]").should("be.visible");
-        cy.get("[name=hidden]").should("not.be.visible");
         cy.get("[name=nume]").should("be.visible");
         cy.get("[name=positive_num]").should("be.visible");
     });
@@ -53,16 +43,11 @@ describe("Survey with text field tests", () => {
 
     it("Submits the form", () => {
         cy.submit(".survey-page__btn>span", "Submit");
-    });
-
-    it("Checks for successful redirection", () => {
         cy.url().should(
             "include",
             `/?back_url=${url}&form_length=9`
         );
-
         cy.thanksText(".block-paragraph", "thank you");
         cy.submit(".survey-page__btn>span", "Back");
     });
-
 });

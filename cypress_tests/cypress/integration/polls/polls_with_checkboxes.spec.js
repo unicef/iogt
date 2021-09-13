@@ -3,23 +3,11 @@ describe("Poll with checkboxes test", () => {
 
     it("Visits poll with checkboxes", () => {
         cy.visitUrl(url);
-    });
-
-    it("Checks for title text", () => {
-        cy.testTitle(
-            "Poll with checkboxes",
-            ".title.polls-widget__title"
-        );
-    });
-
-    it("Checks for description text", () => {
+        cy.testTitle("Poll with checkboxes", ".title.polls-widget__title");
         cy.testDescription(
             "Make your choice.",
             ".polls-widget__description>div>p"
         );
-    });
-
-    it("Checks for the questions number", () => {
         cy.get(".quest-item__header .quest-item__number")
             .contains("1 of 1 question")
             .should("be.visible");
@@ -34,33 +22,21 @@ describe("Poll with checkboxes test", () => {
         });
     });
 
-    it("Selects the multiple checkboxes and checks the text", () => {
+    it("Selects the multiple checkboxes and submits it", () => {
         cy.get("[name=poll_checkboxes]")
             .each($element => {
                 cy.wrap($element).should("be.visible").click()
                 cy.get(".quest-item__label")
                     .should("be.visible");
             });
-    });
 
-    it("Checks for submit text and button", () => {
         cy.submit(".survey-page__btn>span", "Submit");
+        cy.url().should("include", `/?back_url=${url}`);
+
+        cy.get(".cust-check__percent").each(($el) => {
+            cy.wrap($el)
+                .should("be.visible")
+                .contains(/\\d+(?:d+)?|%/)
+        });
     });
-
-    it("Checks for successful submission", () => {
-        cy.url().should(
-            "include",
-            `/?back_url=${url}`
-        );
-    })
-
-    it("Checks the result text", () => {
-        cy.get(".cust-check__percent")
-            .each(($el) => {
-                cy.wrap($el)
-                    .should("be.visible")
-                    .contains(/\\d+(?:d+)?|%/)
-            });
-    });
-
 });
