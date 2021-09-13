@@ -5,7 +5,9 @@
 {% load comment_tags %}
 
 <div class="comments-holder">
-    {% for item in comments reversed %}
+    {# Remove the line below to enable showing removed comments https://github.com/unicef/iogt/issues/531 #}
+    {% filter_removed_comments comments as filtered_comments %}
+    {% for item in filtered_comments reversed %}
         <div class="individual-comment">
             <a name="c{{ item.comment.id }}"></a>
             <div>
