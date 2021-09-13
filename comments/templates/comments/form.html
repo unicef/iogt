@@ -4,8 +4,7 @@
 <form method="POST" class="reply-form" action="{% comment_form_target %}" onsubmit="post.disabled = true; return true;">
     {% csrf_token %}
     <fieldset class='comments__holder'>
-        <input type="hidden" name="next" value="
-                {% spaceless %}{% if form.is_admin %}{% url 'comment_reply_view' comment_pk=comment.pk %}{% else %}{% url 'comments-xtd-sent' %}{% endif %}{% endspaceless %}"/>
+        <input type="hidden" name="next" value="{% spaceless %}{% if form.is_admin %}{% url 'comment_reply_view' comment_pk=comment.pk %}{% else %}{% url 'comments-xtd-sent' %}{% endif %}{% endspaceless %}"/>
 
         <div class="alert alert-danger" data-comment-element="errors" hidden>
         </div>
