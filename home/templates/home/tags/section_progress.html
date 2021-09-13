@@ -1,7 +1,9 @@
+{% load i18n %}
+
 {% if total %}
     <div class="user-progress-container">
-        <div>
-            User Progress: {{ read }}/{{ total }} completed
-        </div>
+        {% blocktranslate %}
+            You have read {{ read }} out of {{ total }}
+        {% endblocktranslate %}
     </div>
 {% endif %}
