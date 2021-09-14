@@ -465,6 +465,14 @@ class SiteSettings(BaseSetting):
         related_name='+',
         help_text="Upload an image file (.jpg, .png, .svg). The ideal size is 100px x 40px"
     )
+    favicon = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text="Upload an image file (.jpg, .png, .svg). The ideal size is 40px x 40px"
+    )
     show_only_translated_pages = models.BooleanField(
         default=False,
         help_text=_('When selecting this option, untranslated pages'
@@ -531,6 +539,7 @@ class SiteSettings(BaseSetting):
 
     panels = [
         ImageChooserPanel('logo'),
+        ImageChooserPanel('favicon'),
         MultiFieldPanel(
             [
                 FieldPanel('show_only_translated_pages'),
