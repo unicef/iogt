@@ -78,9 +78,20 @@ def render_user_progress(user_progress):
     return user_progress
 
 
-@register.inclusion_tag('home/tags/sub_sections.html')
-def render_sub_sections_list(sub_sections):
-    return {'sub_sections': sub_sections}
+@register.inclusion_tag('home/tags/is_completed.html', takes_context=True)
+def render_is_completed(context, section):
+    context.update({
+        'is_completed': section.specific.is_completed(context['request'])
+    })
+    return context
+
+
+@register.inclusion_tag('home/tags/sub_sections.html', takes_context=True)
+def render_sub_sections_list(context, sub_sections):
+    context.update({
+        'sub_sections': sub_sections,
+    })
+    return context
 
 
 @register.simple_tag

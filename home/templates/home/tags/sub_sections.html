@@ -1,8 +1,12 @@
+{% load home_tags %}
 {% load static wagtailcore_tags wagtailimages_tags sass_tags %}
 
 {% for sub_section in sub_sections %}
     <a href="{% pageurl sub_section %}" class='sub-section'>
-        {{ sub_section.title }} 
+        {{ sub_section.title }}
+        {% if user_progress %}
+            {% render_is_completed sub_section %}
+        {% endif %}
         <img src="{% static 'icons/arrow-right.svg' %}" alt='arrow-right'>
     </a>
 {% endfor %}

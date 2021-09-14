@@ -196,12 +196,15 @@ class Section(Page, PageUtilsMixin):
 
     def get_user_progress_dict(self, request):
         progress_manager = ProgressManager(request)
-        read_article_count, total_article_count = progress_manager.get_progress(
-            self)
+        read_article_count, total_article_count = progress_manager.get_progress(self)
         return {
             'read': read_article_count,
             'total': total_article_count
         }
+
+    def is_completed(self, request):
+        progress_manager = ProgressManager(request)
+        return progress_manager.is_completed(self)
 
     def get_context(self, request):
         check_user_session(request)
