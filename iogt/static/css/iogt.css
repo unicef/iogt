@@ -1711,9 +1711,9 @@ textarea:focus ~ .cust-input__length-text {
     text-decoration: none;
 }
 
-.load-more button:hover,
-.load-more button:active,
-.load-more button:focus {
+.load-more a, button:hover,
+.load-more a, button:active,
+.load-more a. button:focus {
     background: #303030;
     color: white;
     transition: all 0.2s linear;

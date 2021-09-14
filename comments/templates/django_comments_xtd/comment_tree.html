@@ -54,7 +54,8 @@
                     {% endif %}
                     {% if perms.django_comments_xtd.delete_xtdcomment %}
                         <a class="small mutedlink reply-link text-danger"
-                           href="{% url 'wagtail_comments_xtd_publication' item.comment.pk 'hide' %}">Remove</a>
+                           href="{% url 'wagtail_comments_xtd_publication' item.comment.pk 'hide' %}">
+                            {% translate 'Remove' %}</a>
                     {% endif %}
 
                     {% if allow_flagging and item.flagged and item.comment.user != user %}
