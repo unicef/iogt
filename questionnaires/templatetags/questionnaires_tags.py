@@ -103,6 +103,9 @@ def render_questionnaire_form(context, questionnaire):
 
     if isinstance(questionnaire, Poll):
         template = 'blocks/embedded_poll.html'
+        context.update({
+            'results': questionnaire.specific.get_results(),
+        })
     else:
         template = 'blocks/embedded_questionnaire.html'
         paginator = SkipLogicPaginator(questionnaire.get_form_fields(), {}, {})

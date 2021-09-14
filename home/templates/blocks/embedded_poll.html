@@ -2,6 +2,7 @@
 
 {% block extra_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/questionnaires.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/polls.css' %}">
 {% endblock %}
 
 <div class="questionnaire-container container">
@@ -32,6 +33,25 @@
             </form>
         {% else %}
             {% include 'questionnaires/already_completed.html' %}
+            {% if page.show_results %}
+                {% for question, answers in results.items %}
+                    {% snake_case question as current_answer %}
+                    {% for answer, count in answers.items %}
+                        <div class="cust-check cust-check--white polls-widget__item">
+                            <div class="cust-check__title">
+                                <div class="cust-check__title-left">
+                                    <span>{{ answer }}</span>
+                                </div>
+                                <div class="cust-check__title-right">
+                                    <span class="cust-check__percent">{{ count|floatformat:"0" }}{% if result_as_percentage %}%{% endif %}</span>
+                                </div>
+                                <div class="cust-check__percent-item"
+                                     style="width: {{ count |floatformat:"0" }}%"></div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
         {% endif %}
     {% else %}
         {% include 'questionnaires/login_to_participate.html' %}

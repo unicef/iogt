@@ -95,6 +95,9 @@ class EmbeddedQuestionnaireChooserBlock(blocks.PageChooserBlock):
 
         if isinstance(value, Poll):
             template = 'blocks/embedded_poll.html'
+            context.update({
+                'results': value.get_results(),
+            })
         else:
             template = 'blocks/embedded_questionnaire.html'
             paginator = SkipLogicPaginator(value.get_form_fields(), {}, {})

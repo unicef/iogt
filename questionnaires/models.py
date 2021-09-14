@@ -509,15 +509,12 @@ class Poll(QuestionnairePage, AbstractForm):
     def get_submission_class(self):
         return UserSubmission
 
-    def get_context(self, request, *args, **kwargs):
-        context = super().get_context(request, *args, **kwargs)
+    def get_results(self):
         results = dict()
-
         data_fields = [
             (field.clean_name, field.label)
             for field in self.get_form_fields()
         ]
-
         submissions = self.get_submission_class().objects.filter(page=self)
         for submission in submissions:
             data = submission.get_data()
@@ -546,6 +543,12 @@ class Poll(QuestionnairePage, AbstractForm):
             for key in results:
                 for k, v in results[key].items():
                     results[key][k] = round(v/total_submissions, 4) * 100
+
+        return results
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        results = self.get_results()
 
         context.update({
             'results': results,
