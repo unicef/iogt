@@ -97,6 +97,7 @@ class EmbeddedQuestionnaireChooserBlock(blocks.PageChooserBlock):
             template = 'blocks/embedded_poll.html'
             context.update({
                 'results': value.get_results(),
+                'result_as_percentage': value.result_as_percentage,
             })
         else:
             template = 'blocks/embedded_questionnaire.html'

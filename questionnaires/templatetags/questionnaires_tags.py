@@ -105,6 +105,7 @@ def render_questionnaire_form(context, questionnaire):
         template = 'blocks/embedded_poll.html'
         context.update({
             'results': questionnaire.specific.get_results(),
+            'result_as_percentage': questionnaire.specific.result_as_percentage,
         })
     else:
         template = 'blocks/embedded_questionnaire.html'
