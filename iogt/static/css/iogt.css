@@ -1695,7 +1695,7 @@ textarea:focus ~ .cust-input__length-text {
     border-top: 1px solid white;
 }
 
-.load-more button {
+.load-more a, button{
     font-size: 14px;
     line-height: 20px;
     font-weight: 600;
@@ -1708,6 +1708,7 @@ textarea:focus ~ .cust-input__length-text {
     width: 100%;
     cursor: pointer;
     transition: all 0.2s linear;
+    text-decoration: none;
 }
 
 .load-more button:hover,
