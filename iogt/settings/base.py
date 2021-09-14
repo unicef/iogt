@@ -87,6 +87,7 @@ MIDDLEWARE = [
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
     'iogt_users.middlewares.RegistrationSurveyRedirectMiddleware',
     'external_links.middleware.RewriteExternalLinksMiddleware',
+    'iogt.middleware.CacheControlMiddleware',
 ]
 
 # Prevent Wagtail's built in menu from showing in Admin > Settings

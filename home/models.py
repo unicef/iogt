@@ -528,6 +528,7 @@ class SiteSettings(BaseSetting):
     registration_survey = models.ForeignKey('questionnaires.Survey', null=True,
                                             blank=True,
                                             on_delete=models.SET_NULL)
+    opt_in_to_google_web_light = models.BooleanField(default=False)
 
     panels = [
         ImageChooserPanel('logo'),
@@ -592,6 +593,12 @@ class SiteSettings(BaseSetting):
                 PageChooserPanel('registration_survey'),
             ],
             heading="Registration Settings",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('opt_in_to_google_web_light'),
+            ],
+            heading="Opt in to Google web light",
         ),
     ]
 
