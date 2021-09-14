@@ -42,16 +42,12 @@
                         </div>
                     </form>
                 {% else %}
-                    <p class="survey-page__already-completed">{% trans 'You have already completed this survey.' %}</p>
+                    {% include 'questionnaires/already_completed.html' %}
                 {% endif %}
             {% else %}
-                <a href="{% url 'account_login' %}?next={{request.path}}" class="cust-btn cust-btn--clear survey-page__btn">
-                    <span>{% translate "Log in to participate" %}</span>
-                </a>
+                {% include 'questionnaires/login_to_participate.html' %}
             {% endif %}
-            <a href="{% translated_home_page_url LANGUAGE_CODE %}" class="cust-btn cust-btn--clear survey-page__btn">
-                <span>{% translate "Go to homepage" %}</span>
-            </a>
+            {% include 'questionnaires/go_to_homepage.html' %}
         </div>
     </div>
 {% endblock content %}

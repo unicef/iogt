@@ -39,6 +39,7 @@
                                {% render_submit_button fields_step page %}
                             </form>
                         {% else %}
+                            {% include 'questionnaires/already_completed.html' %}
                             {% if page.show_results %}
                                 {% for question, answers in results.items %}
                                     {% snake_case question as current_answer %}
@@ -60,14 +61,10 @@
                             {% endif %}
                         {% endif %}
                     {% else %}
-                        <a href="{% url 'account_login' %}?next={{request.path}}" class="cust-btn cust-btn--clear survey-page__btn">
-                            <span>{% translate "Log in to participate" %}</span>
-                        </a>
+                        {% include 'questionnaires/login_to_participate.html' %}
                     {% endif %}
                 </div>
-                <a href="{% translated_home_page_url LANGUAGE_CODE %}" class="cust-btn cust-btn--clear survey-page__btn">
-                    <span>{% translate "Go to homepage" %}</span>
-                </a>
+                {% include 'questionnaires/go_to_homepage.html' %}
             </div>
         </div>
     </div>

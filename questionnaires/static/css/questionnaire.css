@@ -48,3 +48,7 @@
     line-height: 18px;
     margin: 8px 0 16px
 }
+
+.survey-page__already-completed {
+    color: #FF0000;
+}
