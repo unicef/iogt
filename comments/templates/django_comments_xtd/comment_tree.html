@@ -64,6 +64,19 @@
 
                     {% endif %}
 
+                    {% if perms.comments.can_moderate %}
+                        {% if item.flagged_count %}
+                            <span class="report-comment">
+                                    {# Translators: Count refers to the number of people that reported a comment. #}
+                                {% blocktranslate trimmed count count=item.flagged_count %}
+                                    Reported by {{ count }} user
+                                    {% plural %}
+                                    Reported by {{ count }} users
+                                {% endblocktranslate %}
+                            </span>
+                        {% endif %}
+                    {% endif %}
+
                     <div class="comment__children">
                         {% if not item.comment.is_removed and item.children %}
                             {% render_xtdcomment_tree with comments=item.children %}
