@@ -7,7 +7,8 @@
 <div class="comments-holder">
     {# Remove the line below to enable showing removed comments https://github.com/unicef/iogt/issues/531 #}
     {% filter_removed_comments comments as filtered_comments %}
-    {% for item in filtered_comments reversed %}
+    {% get_comments_page filtered_comments request as comments_page %}
+    {% for item in comments_page %}
         <div class="individual-comment">
             <a name="c{{ item.comment.id }}"></a>
             <div>
@@ -53,7 +54,8 @@
                     {% endif %}
                     {% if perms.django_comments_xtd.delete_xtdcomment %}
                         <a class="small mutedlink reply-link text-danger"
-                           href="{% url 'wagtail_comments_xtd_publication' item.comment.pk 'hide' %}">Remove</a>
+                           href="{% url 'wagtail_comments_xtd_publication' item.comment.pk 'hide' %}">
+                            {% translate 'Remove' %}</a>
                     {% endif %}
 
                     {% if allow_flagging and item.flagged and item.comment.user != user %}
@@ -94,11 +96,11 @@
         </div>
     {% endfor %}
 
-    {#    {% if comments and comments.0.comment.level == 0 %}#}
-    {#        <div class="load-more">#}
-    {#            <button type="button">#}
-    {#                View more comment#}
-    {#            </button>#}
-    {#        </div>#}
-    {#    {% endif %}#}
+    {% has_more_comments comments request as should_render_load_more %}
+    {% if should_render_load_more %}
+        <div class="load-more">
+            {% get_next_num_records request as next_num_records %}
+            <a href="{{ request.path }}?num_records={{ next_num_records }}">Load More comments</a>
+        </div>
+    {% endif %}
 </div>
