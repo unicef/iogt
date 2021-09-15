@@ -3,14 +3,7 @@ describe("Polls with radio tests", () => {
 
     it("Visits poll with radio", () => {
         cy.visitUrl(url);
-        cy.testTitle("Poll with Radio", "h1.polls-widget__title");
-        cy.testDescription("Make your choice.", ".polls-widget__description>div>p");
-        cy.get(".quest-item__header .quest-item__number")
-            .contains("1 of 1 question")
-            .should("be.visible");
-    });
 
-    it("Checks for empty submission", () => {
         cy.get("[name=poll_radio]").each($el => {
             if ($el.hasOwnProperty("required")) {
                 cy.submit(".polls-page__btn", "Submit");
@@ -19,7 +12,7 @@ describe("Polls with radio tests", () => {
         });
     });
 
-    it("Selects the radio for option 1 submission", () => {
+    it("Selects the radio for option 1 and submits it", () => {
         cy.get("[id=id_poll_radio_0]").click();
 
         cy.submit(".survey-page__btn", "Submit");
@@ -33,4 +26,10 @@ describe("Polls with radio tests", () => {
                     .contains(/\\d+(?:d+)?|%/)
             });
     });
+
+    it("Checks for multiple allowed submission", () => {
+        cy.submit(".btn-back__title", "BACK");
+        cy.get("[id=id_poll_radio_1]").click();
+        cy.submit(".survey-page__btn", "Submit");
+    })
 });

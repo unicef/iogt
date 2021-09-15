@@ -7,14 +7,6 @@ describe("", () => {
 
     it("Visits the quiz page", () => {
         cy.visitUrl(url);
-        cy.testTitle("Quiz with logged in user", ".quiz-page__title");
-        cy.testDescription(
-            "quiz intro text",
-            ".quiz-page__description>.block-paragraph>p"
-        );
-
-        cy.get(".quest-item__number").contains("1 of 2 questions");
-        cy.get(".quest-item__number").contains("2 of 2 questions");
         cy.get(".quest-item__step-desc>span").contains("Select one");
         cy.get(".quest-item__step-desc>span").contains("Select one");
     });

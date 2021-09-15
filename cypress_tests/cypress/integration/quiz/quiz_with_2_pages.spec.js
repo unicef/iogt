@@ -4,12 +4,6 @@ describe("2 pages quizes tests", () => {
     it("Visits the quiz page", () => {
         cy.visitUrl(url);
         cy.testTitle("Quiz (2 pages)", ".quiz-page__title");
-        cy.testDescription(
-            "intro",
-            ".quiz-page__description>.block-paragraph>p"
-        );
-
-        cy.get(".quest-item__number").contains("1 of 2 questions");
         cy.get(".quest-item__step-desc>span").contains("Select one");
     });
 
@@ -22,8 +16,6 @@ describe("2 pages quizes tests", () => {
         cy.get("#id_q1_c1_ends_the_quiz_c2_is_correct_0").click();
         cy.get("button[type=submit]>span").contains("Next").click();
         cy.url().should("include", `/?p=2&back_url=${url}&form_length=1`);
-
-        cy.get(".quest-item__number").contains("2 of 2 questions");
         cy.get(".quest-item__step-desc>span").contains("Select one");
 
         cy.get("[name=q2_c2_is_correct]").select("c2");

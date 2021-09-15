@@ -46,6 +46,21 @@ Cypress.Commands.add("thanksText", (selector, text) => {
         .contains(text)
         .should("be.visible");
 });
+
+Cypress.Commands.add("testQuestions", (selector) => {
+    let questionNumbers = []
+
+    cy.get(selector).each(($el, index) => {
+        questionNumbers.push($el)
+    });
+    cy.get(selector).each(($el, index) => {
+        cy.wrap($el)
+            .should("be.visible")
+            .contains(
+                `${index + 1} of ${questionNumbers.length} ${questionNumbers.length === 1 ? "question" : "questions"}`
+            )
+    });
+});
 //
 //
 // -- This is a child command --
