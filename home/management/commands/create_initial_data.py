@@ -3,6 +3,7 @@ from io import BytesIO
 
 import requests
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core import management
 from django.core.files.images import ImageFile
@@ -95,7 +96,7 @@ class Command(BaseCommand):
 
         # Create RapidPro Bot User
         management.call_command('sync_rapidpro_bot_user')
-        
+
         footer_index_page = models.FooterIndexPage(title='Footers')
         home.add_child(instance=footer_index_page)
 
@@ -107,6 +108,15 @@ class Command(BaseCommand):
             first_published_at=datetime.now(timezone.utc)
         )
         footer_index_page.add_child(instance=footer)
+
+    def populate_group_permissions(self):
+        self.stdout.write('Adding group permissions')
+
+        permissions = Permission.objects.filter(codename__in=['can_moderate', 'delete_xtdcomment'])
+
+        group = Group.objects.get(name='Moderators')
+        for permission in permissions:
+            group.permissions.add(permission)
 
     def handle(self, *args, **options):
         self.clear()
@@ -121,5 +131,7 @@ class Command(BaseCommand):
             self.create(owner, home)
         else:
             self.stdout.write('No home page found. Quitting.')
+
+        self.populate_group_permissions()
 
         management.call_command('create_default_site')

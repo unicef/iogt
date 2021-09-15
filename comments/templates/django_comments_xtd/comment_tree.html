@@ -5,7 +5,9 @@
 {% load comment_tags %}
 
 <div class="comments-holder">
-    {% for item in comments reversed %}
+    {# Remove the line below to enable showing removed comments https://github.com/unicef/iogt/issues/531 #}
+    {% filter_removed_comments comments as filtered_comments %}
+    {% for item in filtered_comments reversed %}
         <div class="individual-comment">
             <a name="c{{ item.comment.id }}"></a>
             <div>
@@ -20,7 +22,7 @@
                     <a href="{{ item.comment.url }}" target="_new">
                 {% endif %}
                 {% if item.comment.url %}</a>{% endif %}
-                {% if item.comment.user and item.comment.user|has_permission:"django_comments.can_moderate" %}
+                {% if item.comment.user and item.comment.user|has_permission:"django_comments_xtd.can_moderate" %}
                     &nbsp;<span class='individual-comment__moderator'>{% translate "moderator" %}</span>{% endif %}
                 &nbsp;&nbsp;
                 <span>
@@ -49,6 +51,10 @@
                         <a class="small mutedlink reply-link"
                            href="{{ item.comment.get_reply_url }}">{% translate "Reply" %}</a>
                     {% endif %}
+                    {% if perms.django_comments_xtd.delete_xtdcomment %}
+                        <a class="small mutedlink reply-link text-danger"
+                           href="{% url 'wagtail_comments_xtd_publication' item.comment.pk 'hide' %}">Remove</a>
+                    {% endif %}
 
                     {% if allow_flagging and item.flagged and item.comment.user != user %}
 
@@ -58,21 +64,24 @@
 
                     {% endif %}
 
-                    {% if perms.comments.can_moderate %}
-                        {% if item.flagged_count %}
+                    {% if perms.django_comments_xtd.can_moderate %}
+                        {% comment %}
+                        Had to replace items.flagged_count with item.comment.flags.count because django_comments_xtd
+                        uses the django_comments.can_moderate permission to populate flags. This is a hack for
+                        the original bug because we'd rather not fork it
+                        {% endcomment %}
+                        {% with flagged_count=item.comment.flags.count %}
+                        {% if flagged_count %}
                             <span class="report-comment">
                                     {# Translators: Count refers to the number of people that reported a comment. #}
-                                {% blocktranslate trimmed count count=item.flagged_count %}
+                                {% blocktranslate trimmed count count=flagged_count %}
                                     Reported by {{ count }} user
                                     {% plural %}
                                     Reported by {{ count }} users
                                 {% endblocktranslate %}
                             </span>
                         {% endif %}
-                    {% endif %}
-                    {% if perms.comments.can_moderate %}
-                        <a href="{% url 'comments-delete' item.comment.pk %}"><i class="fas fa-trash-alt"
-                                                                                 title="{% translate 'Remove comment' %}"></i></a>
+                        {% endwith %}
                     {% endif %}
 
                     <div class="comment__children">
@@ -85,11 +94,11 @@
         </div>
     {% endfor %}
 
-{#    {% if comments and comments.0.comment.level == 0 %}#}
-{#        <div class="load-more">#}
-{#            <button type="button">#}
-{#                View more comment#}
-{#            </button>#}
-{#        </div>#}
-{#    {% endif %}#}
+    {#    {% if comments and comments.0.comment.level == 0 %}#}
+    {#        <div class="load-more">#}
+    {#            <button type="button">#}
+    {#                View more comment#}
+    {#            </button>#}
+    {#        </div>#}
+    {#    {% endif %}#}
 </div>

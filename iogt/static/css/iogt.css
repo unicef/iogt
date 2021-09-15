@@ -1622,6 +1622,10 @@ textarea:focus ~ .cust-input__length-text {
     margin-left: 12px;
 }
 
+.text-danger {
+    color: darkred;
+}
+
 .reply-form .comments__holder,
 .reply-form .comments__input-holder {
     background: #F7F7F9;
