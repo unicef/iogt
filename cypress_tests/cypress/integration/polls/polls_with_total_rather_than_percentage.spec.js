@@ -7,7 +7,6 @@ describe("Polls with total rather than percentage tests", () => {
         cy.submit(".survey-page__btn", "Submit");
         cy.url().should("include", `/?back_url=${url}`);
 
-        cy.thanksText(".block-paragraph > p", "thanks");
         cy.get(".cust-check__percent")
             .each(($el) => {
                 cy.wrap($el)
