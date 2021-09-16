@@ -33,9 +33,6 @@ describe("Direct display tests for all types", () => {
 
         cy.get(".quiz-page__content>div>label>input").check();
         cy.submit(".quiz-page__btn>span", "Submit");
-        cy.visitUrl(url);
-
-
     });
 
 });

@@ -15,9 +15,9 @@ npm install
 ```
 4. Run Cypress in the interactive GUI.
 ```
-cypress open
+npx cypress open
 ```
 5. Runs Cypress tests from the CLI without the GUI
 ```
-cypress run
+npx cypress run
 ```
