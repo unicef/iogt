@@ -1,4 +1,4 @@
-describe("", () => {
+describe("Quiz with logged in user tests", () => {
     const url = "/en/sections/questionnaire-testing/sample-quiz/";
 
     before("Login", () => {
