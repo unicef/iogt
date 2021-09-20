@@ -69,7 +69,7 @@ class ThreadDetailView(View):
 
             return redirect(reverse('messaging:thread', kwargs={'thread_id': thread.pk}))
         else:
-            return render(request, 'messaging/thread_detail.html', context=self.get_context(thread, form))
+            return render(request, 'messaging/thread_detail.html', context=self.get_context(thread))
 
 
 @method_decorator(login_required, name='dispatch')
