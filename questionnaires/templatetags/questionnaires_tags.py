@@ -132,6 +132,9 @@ def render_questionnaire_form(context, questionnaire):
     )
     anonymous_user_submission_check = request.user.is_anonymous and not questionnaire.allow_anonymous_submissions
     if multiple_submission_check or anonymous_user_submission_check:
+        context.update({
+            'form': None,
+        })
         return context
 
     form = form_class(page=questionnaire, user=context['request'].user)

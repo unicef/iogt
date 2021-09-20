@@ -118,6 +118,9 @@ class EmbeddedQuestionnaireChooserBlock(blocks.PageChooserBlock):
         )
         anonymous_user_submission_check = request.user.is_anonymous and not value.allow_anonymous_submissions
         if multiple_submission_check or anonymous_user_submission_check:
+            context.update({
+                'form': None,
+            })
             return render_to_string(template, context)
 
         form = form_class(page=value, user=request.user)
