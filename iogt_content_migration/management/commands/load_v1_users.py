@@ -15,6 +15,7 @@ from wagtail.contrib.forms.utils import get_field_clean_name
 from tqdm import tqdm
 from wagtail.core.models import Page
 
+from comments.models import CannedResponse
 from home.models import Article, V1ToV2ObjectMap
 from questionnaires.models import Survey, UserSubmission, Poll
 
@@ -153,6 +154,8 @@ class Command(BaseCommand):
 
         self.migrate_user_comments()
         self.migrate_comment_flags()
+        self.migrate_canned_responses()
+
         self.migrate_user_survey_submissions()
         self.migrate_user_poll_submissions()
         self.migrate_user_freetext_poll_submissions()
@@ -217,22 +220,6 @@ class Command(BaseCommand):
         users = get_user_model().objects.filter(groups__id__in=self.registration_survey_mandatory_group_ids)
         users.update(has_filled_registration_survey=False)
 
-    def migrate_comment_flags(self):
-        sql = f'select * from django_comment_flags'
-        cur = self.db_query(sql)
-
-        for row in cur:
-            migrated_comment = V1ToV2ObjectMap.get_v2_obj(XtdComment, row['comment_id'])
-            migrated_user = V1ToV2ObjectMap.get_v2_obj(get_user_model(), row['user_id'])
-
-            migrated_comment_flag = V1ToV2ObjectMap.get_v2_obj(CommentFlag, row['id'])
-
-            if not migrated_comment_flag:
-                comment_flag = CommentFlag.objects.create(
-                    flag=row['flag'], flag_date=row['flag_date'], comment_id=migrated_comment.id,
-                    user_id=migrated_user.id)
-                V1ToV2ObjectMap.create_map(comment_flag, row['id'])
-
     def migrate_user_comments(self):
         self.stdout.write(self.style.SUCCESS('Starting Comment migration'))
 
@@ -268,6 +255,32 @@ class Command(BaseCommand):
                     nested_count=0, ip_address=row['ip_address'],
                     site_id=1)
                 V1ToV2ObjectMap.create_map(comment, comment_id)
+
+    def migrate_comment_flags(self):
+        sql = f'select * from django_comment_flags'
+        cur = self.db_query(sql)
+
+        for row in cur:
+            migrated_comment = V1ToV2ObjectMap.get_v2_obj(XtdComment, row['comment_id'])
+            migrated_user = V1ToV2ObjectMap.get_v2_obj(get_user_model(), row['user_id'])
+
+            migrated_comment_flag = V1ToV2ObjectMap.get_v2_obj(CommentFlag, row['id'])
+
+            if not migrated_comment_flag:
+                comment_flag = CommentFlag.objects.create(
+                    flag=row['flag'], flag_date=row['flag_date'], comment_id=migrated_comment.id,
+                    user_id=migrated_user.id)
+                V1ToV2ObjectMap.create_map(comment_flag, row['id'])
+
+    def migrate_canned_responses(self):
+        sql = f'select * from commenting_cannedresponse'
+        cur = self.db_query(sql)
+
+        for row in cur:
+            migrated_canned_response = V1ToV2ObjectMap.get_v2_obj(CannedResponse, row['id'])
+            if not migrated_canned_response:
+                canned_response = CannedResponse.objects.create(header=row['response_header'], text=row['response'])
+                V1ToV2ObjectMap.create_map(canned_response, row['id'])
 
     def migrate_user_survey_submissions(self):
         sql = 'select * from surveys_molosurveysubmission mss ' \
