@@ -1,7 +1,9 @@
 from abc import ABC
 from urllib.parse import urlparse, urlunparse, urlencode
 
+from django.contrib.admin import SimpleListFilter
 from django.core.exceptions import PermissionDenied
+from django.db.models import Q
 from django.urls import resolve, Resolver404
 from django.urls import reverse
 from django.utils.html import escape
@@ -98,12 +100,58 @@ Redirect._meta.get_field("old_path").help_text = _(
     'See https://docs.wagtail.io/en/stable/editor_manual/managing_redirects.html for more details')
 
 
+class LimitedTranslatableStringsFilter(SimpleListFilter):
+    title = _('limited translatable strings')
+    parameter_name = 'limited'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('yes', 'Yes'),
+            ('no', 'No'),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() in ['yes', None]:
+            translatable_strings = [
+                'Are you sure you want to report this comment as inappropriate?',
+                'moderator',
+                'If you cannot view the above video, perhaps would you like to %(start_link)s download it? %(end_link)s.',
+                "Sorry, '%(page_title)s' is not available in [language]. If you want to keep browsing in [language] you can click  <a href=\"%(url)s\">here</a> to return the homepage.",
+                'Sections',
+                'This appears to be your first visit here. Our website is also available as a downloadable app.',
+                'Would you like to download it?',
+                'Download',
+                "Your app is now ready to install. If you are using a iOS device, you can install it by clicking 'Share', scrolling down and tapping 'Add to Home Screen. If using Android choose 'Add to home screen' and you should be all set!",
+                'Install this website as an app on your device?',
+                'Are you sure you want to delete this conversation?',
+                'Are you sure you want to delete this comment?',
+                'Delete',
+                'You are leaving the <b>Internet of Good Things</b> to visit an external website and standard data charges by your network provider might apply',
+                'Continue to external site',
+                'Check if apply',
+                'Required',
+                'Log Out',
+                'This field is required.',
+                'Enter a valid username. This value may contain only letters, numbers, and @/./+/-/_ characters.',
+                'This password is too short. It must contain at least %(min_length)d character.',
+                'This password is too short. It must contain at least %(min_length)d characters.',
+                'Remember me',
+                'You have signed out.',
+            ]
+            translatable_string_filter = Q()
+            for translatable_string in translatable_strings:
+                translatable_string_filter |= Q(original__iexact=translatable_string)
+            queryset = queryset.filter(translatable_string_filter)
+
+        return queryset
+
+
 class TranslationEntryAdmin(ModelAdmin):
     model = TranslationEntry
     menu_label = 'Translations'
     menu_icon = 'edit'
     list_display = ('original', 'language', 'translation',)
-    list_filter = ('language',)
+    list_filter = ('language', LimitedTranslatableStringsFilter)
     search_fields = ('original', 'translation',)
     edit_view_class = TranslationEditView
     index_template_name = 'modeladmin/translation_manager/translationentry/index.html'
