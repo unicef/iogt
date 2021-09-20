@@ -7,6 +7,7 @@ from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
 from django.core.management import BaseCommand
 from django.core.serializers.json import DjangoJSONEncoder
+from django_comments.models import CommentFlag
 from django_comments_xtd.models import XtdComment
 from pip._vendor.distlib.compat import raw_input
 from wagtail.contrib.forms.utils import get_field_clean_name
@@ -151,6 +152,7 @@ class Command(BaseCommand):
         self.mark_user_registration_survey_required()
 
         self.migrate_user_comments()
+        self.migrate_comment_flags()
         self.migrate_user_survey_submissions()
         self.migrate_user_poll_submissions()
         self.migrate_user_freetext_poll_submissions()
@@ -215,14 +217,31 @@ class Command(BaseCommand):
         users = get_user_model().objects.filter(groups__id__in=self.registration_survey_mandatory_group_ids)
         users.update(has_filled_registration_survey=False)
 
+    def migrate_comment_flags(self):
+        sql = f'select * from django_comment_flags'
+        cur = self.db_query(sql)
+
+        for row in cur:
+            migrated_comment = V1ToV2ObjectMap.get_v2_obj(XtdComment, row['comment_id'])
+            migrated_user = V1ToV2ObjectMap.get_v2_obj(get_user_model(), row['user_id'])
+
+            migrated_comment_flag = V1ToV2ObjectMap.get_v2_obj(CommentFlag, row['id'])
+
+            if not migrated_comment_flag:
+                comment_flag = CommentFlag.objects.create(
+                    flag=row['flag'], flag_date=row['flag_date'], comment_id=migrated_comment.id,
+                    user_id=migrated_user.id)
+                V1ToV2ObjectMap.create_map(comment_flag, row['id'])
+
     def migrate_user_comments(self):
         self.stdout.write(self.style.SUCCESS('Starting Comment migration'))
 
-        sql = f'select * from django_comments dc inner join django_content_type dct on dc.content_type_id = dct.id'
+        sql = f'select dc.id as comment_id, * ' \
+              f'from django_comments dc inner join django_content_type dct on dc.content_type_id = dct.id'
         cur = self.db_query(sql)
 
         for row in self.with_progress(sql, cur, 'User comments migration in progress...'):
-            comment_id = row.pop('id')
+            comment_id = row.pop('comment_id')
             content_type = self.content_type_map[row['model']]
 
             if not content_type:
