@@ -265,7 +265,7 @@ class Command(BaseCommand):
                     user_email=row['user_email'], submit_date=row['submit_date'],
                     comment=row['comment'], is_public=True, is_removed=False, thread_id=max_thread_id + 1,
                     user=V1ToV2ObjectMap.get_v2_obj(get_user_model(), row['user_id']), order=1, followup=0,
-                    nested_count=0,
+                    nested_count=0, ip_address=row['ip_address'],
                     site_id=1)
                 V1ToV2ObjectMap.create_map(comment, comment_id)
 
