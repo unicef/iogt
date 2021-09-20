@@ -6,28 +6,36 @@
 
 <div class="questionnaire-container container">
     <h1 class="title {{ page.get_type }}-page__title">{{ page.title }}</h1>
-    <form action="{% get_action_url page page fields_step request form %}" method="POST">
-        {% csrf_token %}
-        <div class="{{ page.get_type }}-page__content">
-            {% for field in form %}
-                <div class="quest-item">
-                    <div class="quest-item__header">
-                        <div class="quest-item__header">
-                            {% field_counter form forloop form_length fields_step page %}
-                            {% field_description field %}
+    {% if user.is_authenticated or request.is_preview or page.allow_anonymous_submissions %}
+        {% if form %}
+            <form action="{% get_action_url page page fields_step request form %}" method="POST">
+                {% csrf_token %}
+                <div class="{{ page.get_type }}-page__content">
+                    {% for field in form %}
+                        <div class="quest-item">
+                            <div class="quest-item__header">
+                                <div class="quest-item__header">
+                                    {% field_counter form forloop form_length fields_step page %}
+                                    {% field_description field %}
+                                </div>
+                            </div>
+                            <div class="quest-item__desc">
+                                {% if field.widget_type != "checkbox" %}
+                                    <p>{{ field.label }}</p>
+                                {% endif %}
+                            </div>
+                            {% render_field field %}
                         </div>
-                    </div>
-                    <div class="quest-item__desc">
-                        {% if field.widget_type != "checkbox" %}
-                            <p>{{ field.label }}</p>
-                        {% endif %}
-                    </div>
-                    {% render_field field %}
+                    {% endfor %}
                 </div>
-            {% endfor %}
-        </div>
-        <button type="submit" class="cust-btn cust-btn--dark {{ page.get_type }}-page__btn">
-            <span>{{ page.submit_button_text }}</span>
-        </button>
-    </form>
+                <button type="submit" class="cust-btn cust-btn--dark {{ page.get_type }}-page__btn">
+                    <span>{{ page.submit_button_text }}</span>
+                </button>
+            </form>
+        {% else %}
+            {% include 'questionnaires/already_completed.html' %}
+        {% endif %}
+    {% else %}
+        {% include 'questionnaires/login_to_participate.html' %}
+    {% endif %}
 </div>
