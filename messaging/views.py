@@ -83,10 +83,10 @@ class MessageCreateView(View):
         if form.is_valid():
             user = request.user
             data = form.cleaned_data
-            ChatManager.initiate_thread(
+            thread = ChatManager.initiate_thread(
                 sender=user, recipients=[], chatbot=data['chatbot'], subject=data['subject'], text=data['text'])
 
-            return redirect('messaging:inbox')
+            return redirect(reverse('messaging:thread', kwargs={'thread_id': thread.pk}))
 
         messages.add_message(request, messages.ERROR, 'Can\'t connect with bot.')
         return redirect(request.META.get('HTTP_REFERER'))
