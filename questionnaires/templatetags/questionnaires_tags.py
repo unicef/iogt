@@ -1,4 +1,5 @@
 from django import template
+from django.db.models import Q
 from wagtail.core.models import Page
 
 from questionnaires.models import Poll
@@ -96,10 +97,16 @@ def get_action_url(page, self, fields_step, request, form):
 
 @register.inclusion_tag('blocks/embedded_questionnaires_wrapper.html', takes_context=True)
 def render_questionnaire_form(context, questionnaire):
+    request = context['request']
+
     form_class = questionnaire.get_form_class()
 
     if isinstance(questionnaire, Poll):
         template = 'blocks/embedded_poll.html'
+        context.update({
+            'results': questionnaire.specific.get_results(),
+            'result_as_percentage': questionnaire.specific.result_as_percentage,
+        })
     else:
         template = 'blocks/embedded_questionnaire.html'
         paginator = SkipLogicPaginator(questionnaire.get_form_fields(), {}, {})
@@ -110,11 +117,29 @@ def render_questionnaire_form(context, questionnaire):
             'fields_step': step,
         })
 
-    form = form_class(page=questionnaire, user=context['request'].user)
-
     context.update({
         'template': template,
         'page': questionnaire,
+    })
+
+    multiple_submission_filter = (
+        Q(session_key=request.session.session_key) if request.user.is_anonymous else Q(user__pk=request.user.pk)
+    )
+    multiple_submission_check = (
+            not questionnaire.allow_multiple_submissions
+            and questionnaire.get_submission_class().objects.filter(multiple_submission_filter,
+                                                                    page=questionnaire).exists()
+    )
+    anonymous_user_submission_check = request.user.is_anonymous and not questionnaire.allow_anonymous_submissions
+    if multiple_submission_check or anonymous_user_submission_check:
+        context.update({
+            'form': None,
+        })
+        return context
+
+    form = form_class(page=questionnaire, user=context['request'].user)
+
+    context.update({
         'form': form,
     })
 
