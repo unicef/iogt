@@ -146,12 +146,31 @@ class LimitedTranslatableStringsFilter(SimpleListFilter):
         return queryset
 
 
+class MissingTranslationsFilter(SimpleListFilter):
+    title = _('missing translations')
+    parameter_name = 'missing'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('yes', 'Yes'),
+            ('no', 'No'),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'yes':
+            queryset = queryset.filter(translation='')
+        if self.value() == 'no':
+            queryset = queryset.exclude(translation='')
+
+        return queryset
+
+
 class TranslationEntryAdmin(ModelAdmin):
     model = TranslationEntry
     menu_label = 'Translations'
     menu_icon = 'edit'
     list_display = ('original', 'language', 'translation',)
-    list_filter = ('language', LimitedTranslatableStringsFilter)
+    list_filter = ('language', LimitedTranslatableStringsFilter, MissingTranslationsFilter)
     search_fields = ('original', 'translation',)
     edit_view_class = TranslationEditView
     index_template_name = 'modeladmin/translation_manager/translationentry/index.html'
