@@ -1,6 +1,6 @@
 from pathlib import Path
 from django.core.management.base import BaseCommand
-from wagtail.core.models import Page, Site, Locale
+from wagtail.core.models import Page, Site, Locale, Collection
 from django.core.files.images import ImageFile
 from wagtail.images.models import Image
 from wagtail_localize.models import Translation
@@ -60,6 +60,7 @@ class Command(BaseCommand):
         self.media_dir = options.get('media_dir')
         self.skip_locales = options.get('skip_locales')
 
+        self.collection_map = {}
         self.image_map = {}
         self.page_translation_map = {}
         self.v1_to_v2_page_map = {}
@@ -116,6 +117,7 @@ class Command(BaseCommand):
         return cur
 
     def migrate(self, root):
+        self.migrate_collections()
         self.migrate_images()
         self.load_page_translation_map()
         home = self.create_home_page(root)
@@ -139,12 +141,16 @@ class Command(BaseCommand):
             home = models.HomePage(
                 title=main['title'],
                 draft_title=main['draft_title'],
-                seo_title=main['seo_title'],
                 slug=main['slug'],
                 live=main['live'],
-                latest_revision_created_at=main['latest_revision_created_at'],
+                locked=main['locked'],
+                go_live_at=main['go_live_at'],
+                expire_at=main['expire_at'],
                 first_published_at=main['first_published_at'],
                 last_published_at=main['last_published_at'],
+                has_unpublished_changes=main['has_unpublished_changes'],
+                search_description=main['search_description'],
+                seo_title=main['seo_title'],
             )
             root.add_child(instance=home)
             V1ToV2ObjectMap.create_map(content_object=home, v1_object_id=main['page_ptr_id'])
@@ -186,6 +192,24 @@ class Command(BaseCommand):
         self.quiz_index_page = QuizIndexPage(title='Quizzes')
         homepage.add_child(instance=self.quiz_index_page)
 
+    def migrate_collections(self):
+        cur = self.db_query('select * from wagtailcore_collection')
+        for row in cur:
+            collection, _ = Collection.objects.get_or_create(
+                name=row['name'],
+                defaults={
+                    'path': row['path'],
+                    'depth': row['depth'],
+                    'numchild': row['numchild'],
+                }
+            )
+            collection.save()
+            self.collection_map.update({row['id']: collection})
+            V1ToV2ObjectMap.create_map(content_object=collection, v1_object_id=row['id'])
+
+        cur.close()
+        self.stdout.write('Collections migrated')
+
     def migrate_images(self):
         cur = self.db_query('select * from wagtailimages_image')
         content_type = self.find_content_type_id('wagtailimages', 'image')
@@ -199,8 +223,10 @@ class Command(BaseCommand):
                     focal_point_y=row['focal_point_y'],
                     focal_point_width=row['focal_point_width'],
                     focal_point_height=row['focal_point_height'],
-                    # uploaded_by_user='',
+                    created_at=row['created_at'],
+                    collection=self.collection_map.get(row['collection_id']),
                 )
+                V1ToV2ObjectMap.create_map(content_object=image, v1_object_id=row['id'])
                 image.get_file_size()
                 image.get_file_hash()
                 tags = self.find_tags(content_type, row['id'])
@@ -255,10 +281,23 @@ class Command(BaseCommand):
 
                 translated_section = section.get_translation_or_none(locale)
                 if translated_section:
+                    translated_section.lead_image = self.image_map.get(row['image_id'])
                     translated_section.title = row['title']
                     translated_section.draft_title = row['draft_title']
                     translated_section.live = row['live']
+                    translated_section.locked = row['locked']
+                    translated_section.go_live_at = row['go_live_at']
+                    translated_section.expire_at = row['expire_at']
+                    translated_section.first_published_at = row['first_published_at']
+                    translated_section.last_published_at = row['last_published_at']
+                    translated_section.has_unpublished_changes = row['has_unpublished_changes']
+                    translated_section.search_description = row['search_description']
+                    translated_section.seo_title = row['seo_title']
                     translated_section.save()
+                    content_type = self.find_content_type_id('core', 'sectionpage')
+                    tags = self.find_tags(content_type, row['id'])
+                    if tags:
+                        translated_section.tags.add(*tags)
                     V1ToV2ObjectMap.create_map(content_object=translated_section, v1_object_id=row['page_ptr_id'])
 
                     self.v1_to_v2_page_map.update({
@@ -270,6 +309,7 @@ class Command(BaseCommand):
 
     def create_section(self, row):
         section = models.Section(
+            lead_image=self.image_map.get(row['image_id']),
             title=row['title'],
             draft_title=row['draft_title'],
             show_in_menus=True,
@@ -278,8 +318,20 @@ class Command(BaseCommand):
             depth=row['depth'],
             numchild=row['numchild'],
             live=row['live'],
+            locked=row['locked'],
+            go_live_at=row['go_live_at'],
+            expire_at=row['expire_at'],
+            first_published_at=row['first_published_at'],
+            last_published_at=row['last_published_at'],
+            has_unpublished_changes=row['has_unpublished_changes'],
+            search_description=row['search_description'],
+            seo_title=row['seo_title'],
         )
         section.save()
+        content_type = self.find_content_type_id('core', 'sectionpage')
+        tags = self.find_tags(content_type, row['id'])
+        if tags:
+            section.tags.add(*tags)
         V1ToV2ObjectMap.create_map(content_object=section, v1_object_id=row['page_ptr_id'])
 
         self.v1_to_v2_page_map.update({
@@ -317,8 +369,20 @@ class Command(BaseCommand):
                     translated_article.title = row['title']
                     translated_article.draft_title = row['draft_title']
                     translated_article.live = row['live']
-                    translated_article.body = self.map_article_body(row['body'])
+                    translated_article.body = self.map_article_body(row)
+                    translated_article.locked = row['locked']
+                    translated_article.go_live_at = row['go_live_at']
+                    translated_article.expire_at = row['expire_at']
+                    translated_article.first_published_at = row['first_published_at']
+                    translated_article.last_published_at = row['last_published_at']
+                    translated_article.has_unpublished_changes = row['has_unpublished_changes']
+                    translated_article.search_description = row['search_description']
+                    translated_article.seo_title = row['seo_title']
                     translated_article.save()
+                    content_type = self.find_content_type_id('core', 'articlepage')
+                    tags = self.find_tags(content_type, row['id'])
+                    if tags:
+                        translated_article.tags.add(*tags)
                     V1ToV2ObjectMap.create_map(content_object=translated_article, v1_object_id=row['page_ptr_id'])
 
                     self.v1_to_v2_page_map.update({
@@ -338,10 +402,23 @@ class Command(BaseCommand):
             depth=row['depth'],
             numchild=row['numchild'],
             live=row['live'],
-            body=self.map_article_body(row['body']),
+            body=self.map_article_body(row),
+            locked=row['locked'],
+            go_live_at=row['go_live_at'],
+            expire_at=row['expire_at'],
+            first_published_at=row['first_published_at'],
+            last_published_at=row['last_published_at'],
+            has_unpublished_changes=row['has_unpublished_changes'],
+            allow_comments=True if row['commenting_state'] == 'O' else False,
+            search_description=row['search_description'],
+            seo_title=row['seo_title'],
         )
         try:
             article.save()
+            content_type = self.find_content_type_id('core', 'articlepage')
+            tags = self.find_tags(content_type, row['id'])
+            if tags:
+                article.tags.add(*tags)
             V1ToV2ObjectMap.create_map(content_object=article, v1_object_id=row['page_ptr_id'])
             self.v1_to_v2_page_map.update({
                 row['page_ptr_id']: article
@@ -351,11 +428,16 @@ class Command(BaseCommand):
             return
         self.stdout.write(f"saved article, title={article.title}")
 
-    def map_article_body(self, v1_body):
-        v2_body = json.loads(v1_body)
+    def map_article_body(self, row):
+        v2_body = json.loads(row['body'])
         for block in v2_body:
             if block['type'] == 'paragraph':
                 block['type'] = 'markdown'
+
+        v2_body = [{
+            'type': 'paragraph',
+            'value': row['subtitle'],
+        }] + v2_body
         return json.dumps(v2_body)
 
     def migrate_banners(self):
@@ -391,6 +473,14 @@ class Command(BaseCommand):
                     translated_banner.title = row['title']
                     translated_banner.draft_title = row['draft_title']
                     translated_banner.live = row['live']
+                    translated_banner.locked = row['locked']
+                    translated_banner.go_live_at = row['go_live_at']
+                    translated_banner.expire_at = row['expire_at']
+                    translated_banner.first_published_at = row['first_published_at']
+                    translated_banner.last_published_at = row['last_published_at']
+                    translated_banner.has_unpublished_changes = row['has_unpublished_changes']
+                    translated_banner.search_description = row['search_description']
+                    translated_banner.seo_title = row['seo_title']
                     translated_banner.save()
                     V1ToV2ObjectMap.create_map(content_object=translated_banner, v1_object_id=row['page_ptr_id'])
 
@@ -412,7 +502,15 @@ class Command(BaseCommand):
             depth=row['depth'],
             numchild=row['numchild'],
             live=row['live'],
-            banner_description=''
+            banner_description='',
+            locked=row['locked'],
+            go_live_at=row['go_live_at'],
+            expire_at=row['expire_at'],
+            first_published_at=row['first_published_at'],
+            last_published_at=row['last_published_at'],
+            has_unpublished_changes=row['has_unpublished_changes'],
+            search_description=row['search_description'],
+            seo_title=row['seo_title'],
         )
         banner.save()
         V1ToV2ObjectMap.create_map(content_object=banner, v1_object_id=row['page_ptr_id'])
@@ -451,7 +549,15 @@ class Command(BaseCommand):
                     translated_footer.title = row['title']
                     translated_footer.draft_title = row['draft_title']
                     translated_footer.live = row['live']
-                    translated_footer.body = self.map_article_body(row['body'])
+                    translated_footer.body = self.map_article_body(row)
+                    translated_footer.locked = row['locked']
+                    translated_footer.go_live_at = row['go_live_at']
+                    translated_footer.expire_at = row['expire_at']
+                    translated_footer.first_published_at = row['first_published_at']
+                    translated_footer.last_published_at = row['last_published_at']
+                    translated_footer.has_unpublished_changes = row['has_unpublished_changes']
+                    translated_footer.search_description = row['search_description']
+                    translated_footer.seo_title = row['seo_title']
                     translated_footer.save()
                     V1ToV2ObjectMap.create_map(content_object=translated_footer, v1_object_id=row['page_ptr_id'])
 
@@ -472,7 +578,15 @@ class Command(BaseCommand):
             depth=row['depth'],
             numchild=row['numchild'],
             live=row['live'],
-            body=self.map_article_body(row['body']),
+            body=self.map_article_body(row),
+            locked=row['locked'],
+            go_live_at=row['go_live_at'],
+            expire_at=row['expire_at'],
+            first_published_at=row['first_published_at'],
+            last_published_at=row['last_published_at'],
+            has_unpublished_changes=row['has_unpublished_changes'],
+            search_description=row['search_description'],
+            seo_title=row['seo_title'],
         )
         footer.save()
         V1ToV2ObjectMap.create_map(content_object=footer, v1_object_id=row['page_ptr_id'])
@@ -550,6 +664,18 @@ class Command(BaseCommand):
                     translated_poll.draft_title = row['draft_title']
                     translated_poll.live = row['live']
                     translated_poll.result_as_percentage = row['result_as_percentage']
+                    translated_poll.show_results = row['show_results']
+                    translated_poll.locked = row['locked']
+                    translated_poll.go_live_at = row['go_live_at']
+                    translated_poll.expire_at = row['expire_at']
+                    translated_poll.first_published_at = row['first_published_at']
+                    translated_poll.last_published_at = row['last_published_at']
+                    translated_poll.has_unpublished_changes = row['has_unpublished_changes']
+                    translated_poll.search_description = row['search_description']
+                    translated_poll.seo_title = row['seo_title']
+                    translated_poll.randomise_options = row['randomise_options']
+                    translated_poll.allow_anonymous_submissions = False
+                    translated_poll.allow_multiple_submissions = False
                     translated_poll.save()
                     V1ToV2ObjectMap.create_map(content_object=translated_poll, v1_object_id=row['page_ptr_id'])
 
@@ -573,7 +699,19 @@ class Command(BaseCommand):
             depth=row['depth'],
             numchild=row['numchild'],
             live=row['live'],
+            show_results=row['show_results'],
             result_as_percentage=row['result_as_percentage'],
+            locked=row['locked'],
+            go_live_at=row['go_live_at'],
+            expire_at=row['expire_at'],
+            first_published_at=row['first_published_at'],
+            last_published_at=row['last_published_at'],
+            has_unpublished_changes=row['has_unpublished_changes'],
+            search_description=row['search_description'],
+            seo_title=row['seo_title'],
+            randomise_options=row['randomise_options'],
+            allow_anonymous_submissions=False,
+            allow_multiple_submissions=False,
         )
         try:
             poll.save()
@@ -610,21 +748,21 @@ class Command(BaseCommand):
 
         choices_length = len(choices)
 
-        if choices_length == 2:
-            field_type = 'radio'
-        elif choices_length > 2:
+        if choices_length == 0:
+            field_type = 'multiline'
+        elif choices_length > 1:
             if poll_row['allow_multiple_choice']:
                 field_type = 'checkboxes'
             else:
-                field_type = 'dropdown'
+                field_type = 'radio'
         else:
-            self.stdout.write(f'Unable to determine field type for poll={poll_row["title"]}, so creating a multiline field.')
-            PollFormField.objects.create(page=poll, label=poll.title, field_type='multiline')
+            self.stdout.write(f'Unable to determine field type for poll={poll_row["title"]}.')
             return
 
         choices = '|'.join(choices)
 
-        poll_form_field = PollFormField.objects.create(page=poll, label=poll.title, field_type=field_type, choices=choices)
+        poll_form_field = PollFormField.objects.create(
+            page=poll, label=poll.title, field_type=field_type, choices=choices, admin_label=poll_row['short_name'])
         for row in cur:
             V1ToV2ObjectMap.create_map(content_object=poll_form_field, v1_object_id=row['page_ptr_id'])
         self.stdout.write(f"saved poll question, label={poll.title}")
@@ -670,6 +808,7 @@ class Command(BaseCommand):
                     self.translate_page(locale=locale, page=survey)
                 except Exception as e:
                     self.stdout.write(f"Unable to translate survey, title={row['title']}")
+                    continue
 
                 translated_survey = survey.get_translation_or_none(locale)
                 if translated_survey:
@@ -680,9 +819,17 @@ class Command(BaseCommand):
                     translated_survey.thank_you_text = self.map_survey_thank_you_text(row)
                     translated_survey.allow_anonymous_submissions = row['allow_anonymous_submissions']
                     translated_survey.allow_multiple_submissions = row['allow_multiple_submissions_per_user']
-                    translated_survey.submit_button_text = row['submit_text'] or 'Submit'
+                    translated_survey.submit_button_text = row['submit_text'][:40] if row['submit_text'] else 'Submit'
                     translated_survey.direct_display = row['display_survey_directly']
                     translated_survey.multi_step = row['multi_step']
+                    translated_survey.locked = row['locked']
+                    translated_survey.go_live_at = row['go_live_at']
+                    translated_survey.expire_at = row['expire_at']
+                    translated_survey.first_published_at = row['first_published_at']
+                    translated_survey.last_published_at = row['last_published_at']
+                    translated_survey.has_unpublished_changes = row['has_unpublished_changes']
+                    translated_survey.search_description = row['search_description']
+                    translated_survey.seo_title = row['seo_title']
                     translated_survey.save()
                     V1ToV2ObjectMap.create_map(content_object=translated_survey, v1_object_id=row['page_ptr_id'])
 
@@ -709,13 +856,23 @@ class Command(BaseCommand):
             thank_you_text=self.map_survey_thank_you_text(row),
             allow_anonymous_submissions=row['allow_anonymous_submissions'],
             allow_multiple_submissions=row['allow_multiple_submissions_per_user'],
-            submit_button_text=row['submit_text'] or 'Submit',
+            submit_button_text=row['submit_text'][:40] if row['submit_text'] else 'Submit',
             direct_display=row['display_survey_directly'],
             multi_step=row['multi_step'],
+            locked=row['locked'],
+            go_live_at=row['go_live_at'],
+            expire_at=row['expire_at'],
+            first_published_at=row['first_published_at'],
+            last_published_at=row['last_published_at'],
+            has_unpublished_changes=row['has_unpublished_changes'],
+            search_description=row['search_description'],
+            seo_title=row['seo_title'],
         )
 
         try:
             survey.save()
+            if row['submit_text'] and row['submit_text'] > 40:
+                self.stdout.write(f"Truncated survey submit button text, title={row['title']}")
             V1ToV2ObjectMap.create_map(content_object=survey, v1_object_id=row['page_ptr_id'])
         except Exception as e:
             self.stdout.write(f"Unable to save survey, title={row['title']}")

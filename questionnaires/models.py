@@ -442,6 +442,12 @@ class PollFormField(AbstractFormField):
         blank=True,
         help_text=_('Default value. Pipe (|) separated values supported for checkboxes.')
     )
+    admin_label = models.CharField(
+        verbose_name=_('admin_label'),
+        max_length=256,
+        help_text=_('Column header used during CSV export of poll responses.'),
+        null=True
+    )
 
 
 class Poll(QuestionnairePage, AbstractForm):
@@ -459,14 +465,13 @@ class Poll(QuestionnairePage, AbstractForm):
         ),
     )
 
-    # TODO allow randomising option ?
-    # randomise_options = models.BooleanField(
-    #     default=False,
-    #     help_text=_(
-    #         "Randomising the options allows the options to be shown in a different "
-    #         "order each time the page is displayed."
-    #     ),
-    # )
+    randomise_options = models.BooleanField(
+        default=False,
+        help_text=_(
+            "Randomising the options allows the options to be shown in a different "
+            "order each time the page is displayed."
+        ),
+    )
 
     content_panels = Page.content_panels + [
         FormSubmissionsPanel(),
