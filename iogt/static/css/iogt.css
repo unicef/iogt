@@ -1764,6 +1764,18 @@ textarea:focus ~ .cust-input__length-text {
     width: 14px
 }
 
+.section-img {
+    position: relative;
+}
+
+.section-img .image-overlay__text {
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 28px;
+    color: #303030;
+    padding: 10px 15px;
+}
+
 @media screen and (min-width: 360px) {
     .content .quest-item__step-desc,
     .content .quest-item__number,
@@ -1775,16 +1787,13 @@ textarea:focus ~ .cust-input__length-text {
         font-size: 16px;
         line-height: 22px;
     }
+    .section-img .image-overlay__text {
+        padding: 10px 20px;
+    }
 }
 
-.section-img {
-    position: relative;
-}
-
-.section-img .image-overlay__text {
-    font-weight: 800;
-    font-size: 24px;
-    line-height: 28px;
-    color: #303030;
-    padding: 10px 0;
+@media screen and (min-width: 768px) {
+    .section-img .image-overlay__text {
+        padding: 10px 0px;
+    }
 }
