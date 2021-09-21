@@ -1,4 +1,4 @@
-{% load static wagtailuserbar home_tags sass_tags wagtailsettings_tags menu_tags i18n%}
+{% load static wagtailuserbar home_tags sass_tags wagtailsettings_tags menu_tags i18n wagtailimages_tags%}
 {% get_settings %}
 
 <!--  Commit Hash: {{commit_hash}} -->
@@ -27,6 +27,8 @@
             {% endwith %}
         {% endblock %}
     </title>
+{% image settings.home.SiteSettings.favicon width-60 as favicon_img %}
+    <link rel="shortcut icon" type="image/jpg" href="{{ favicon_img.url }}"/>
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="theme-color" content="#493174">

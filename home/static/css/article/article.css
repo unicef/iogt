@@ -464,7 +464,6 @@
 .form-control {
   background-color: #FFFFFF;
   width: 100%;
-  min-height: 160px;
   border: 1px solid #EFEFEF;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
@@ -476,6 +475,10 @@
   font-weight: 500;
   letter-spacing: 0.01em;
   color: #9a9a9a;
+}
+
+.form-control textarea {
+  min-height: 160px;
 }
 
 @media only screen and (min-width: 360px) {

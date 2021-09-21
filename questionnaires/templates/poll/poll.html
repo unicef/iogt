@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load home_tags %}
 {% load static i18n wagtailcore_tags questionnaires_tags %}
 
 {% block extra_css %}
@@ -13,28 +14,57 @@
                 <div class="polls-widget__wrap">
                     <h1 class="title polls-widget__title">{{ page.title }}</h1>
                     {% if page.description %}
-                        <div class="polls-widget__description">{{ page.description }}</div>{% endif %}
-                    <form class="polls-widget__form"
-                          action="{% pageurl page %}?back_url={{ request.path }}"
-                          method="POST">
-                        {% csrf_token %}
-                        {% for field in form %}
-                            <div class="quest-item" tabindex="0">
-                                <div class="quest-item__header">
-                                    {% field_counter form forloop form_length fields_step page %}
-                                    {% field_description field %}
-                                </div>
-                                <div class="quest-item__desc">
-                                    {% if field.widget_type != "checkbox" %}
-                                        <p>{{ field.label }}</p>
-                                    {% endif %}
-                                </div>
-                                {% render_field field %}
-                          </div>
-                        {% endfor %}
-                       {% render_submit_button fields_step page %}
-                    </form>
+                        <div class="polls-widget__description">{{ page.description }}</div>
+                    {% endif %}
+                    {% if user.is_authenticated or request.is_preview or page.allow_anonymous_submissions %}
+                        {% if form %}
+                            <form class="polls-widget__form"
+                                  action="{% pageurl page %}?back_url={{ request.path }}"
+                                  method="POST">
+                                {% csrf_token %}
+                                {% for field in form %}
+                                    <div class="quest-item" tabindex="0">
+                                        <div class="quest-item__header">
+                                            {% field_counter form forloop form_length fields_step page %}
+                                            {% field_description field %}
+                                        </div>
+                                        <div class="quest-item__desc">
+                                            {% if field.widget_type != "checkbox" %}
+                                                <p>{{ field.label }}</p>
+                                            {% endif %}
+                                        </div>
+                                        {% render_field field %}
+                                  </div>
+                                {% endfor %}
+                               {% render_submit_button fields_step page %}
+                            </form>
+                        {% else %}
+                            {% include 'questionnaires/already_completed.html' %}
+                            {% if page.show_results %}
+                                {% for question, answers in results.items %}
+                                    {% snake_case question as current_answer %}
+                                    {% for answer, count in answers.items %}
+                                        <div class="cust-check cust-check--white polls-widget__item">
+                                            <div class="cust-check__title">
+                                                <div class="cust-check__title-left">
+                                                    <span>{{ answer }}</span>
+                                                </div>
+                                                <div class="cust-check__title-right">
+                                                    <span class="cust-check__percent">{{ count|floatformat:"0" }}{% if result_as_percentage %}%{% endif %}</span>
+                                                </div>
+                                                <div class="cust-check__percent-item"
+                                                     style="width: {{ count |floatformat:"0" }}%"></div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                        {% include 'questionnaires/login_to_participate.html' %}
+                    {% endif %}
                 </div>
+                {% include 'questionnaires/go_to_homepage.html' %}
             </div>
         </div>
     </div>

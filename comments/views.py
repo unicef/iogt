@@ -1,41 +1,44 @@
 from django.db.models import Q
 from django.contrib import messages
 from django.shortcuts import redirect
-from django.views import View
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_POST
-from django.views.generic import FormView, TemplateView
+from django.views.generic import TemplateView
 from django_comments.views.comments import post_comment
-from django_comments_xtd import get_form
 from django_comments_xtd.models import XtdComment
 from django.utils.translation import ugettext as _
 
-from comments.forms import CommentForm, AdminCommentForm
+from comments.forms import AdminCommentForm
 from comments.models import CannedResponse
 
 
 def update(request, comment_pk, action):
     get_comment_with_children_filter = Q(parent_id=comment_pk) | Q(pk=comment_pk)
     comments = XtdComment.objects.filter(get_comment_with_children_filter)
-
+    verb = ''
     if action == 'unpublish':
         for comment in comments:
             comment.is_public = False
+        verb = 'unpublished'
     elif action == 'publish':
         for comment in comments:
             comment.is_public = True
+        verb = 'published'
     elif action == 'hide':
         for comment in comments:
             comment.is_removed = True
+        verb = 'removed'
     elif action == 'show':
         for comment in comments:
             comment.is_removed = False
+        verb = 'shown'
     elif action == 'clear_flags':
         comment = XtdComment.objects.get(pk=comment_pk)
         comment.flags.all().delete()
+        verb = 'cleared'
     XtdComment.objects.bulk_update(comments, ['is_public', 'is_removed'])
 
-    messages.success(request, _("The comment has been updated successfully!"))
+    messages.success(request, _(f'The comment has been {verb} successfully!'))
 
     return redirect(request.META.get('HTTP_REFERER'))
 
