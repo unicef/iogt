@@ -1,6 +1,5 @@
 from pathlib import Path
 
-from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from wagtail.core.models import Page, Site, Locale, Collection
 from django.core.files.images import ImageFile
@@ -86,6 +85,8 @@ class Command(BaseCommand):
         Survey.objects.all().delete()
         QuizFormField.objects.all().delete()
         Quiz.objects.all().delete()
+        models.FeaturedContent.objects.all().delete()
+        models.ArticleRecommendation.objects.all().delete()
         models.FooterPage.objects.all().delete()
         models.FooterIndexPage.objects.all().delete()
         models.BannerPage.objects.all().delete()
@@ -136,8 +137,12 @@ class Command(BaseCommand):
         self.migrate_footers()
         self.migrate_polls()
         self.migrate_surveys()
-        self.stop_translations()
+        self.translate_home_pages()
         Page.fix_tree()
+        self.migrate_recommended_articles_for_article()
+        self.migrate_featured_articles_for_section()
+        self.migrate_featured_articles_for_homepage()
+        self.stop_translations()
 
     def create_home_page(self, root):
         sql = 'select * from core_main main join wagtailcore_page page on main.page_ptr_id = page.id'
@@ -954,3 +959,58 @@ class Command(BaseCommand):
         }
 
         return iso_locales_map.get(locale, locale)
+
+    def translate_home_pages(self):
+        eng_home_page = models.HomePage.objects.get(locale__language_code='en')
+        locales = Locale.objects.exclude(language_code='en')
+        for locale in locales:
+            self.translate_page(locale=locale, page=eng_home_page)
+
+    def migrate_recommended_articles_for_article(self):
+        article_cur = self.db_query(f'select DISTINCT page_id from core_articlepagerecommendedsections')
+        for article_row in article_cur:
+            v1_article_id = article_row['page_id']
+            v2_article = self.v1_to_v2_page_map.get(v1_article_id)
+            if v2_article:
+                cur = self.db_query(f'select * from core_articlepagerecommendedsections where page_id = {v1_article_id} and recommended_article_id is not null')
+                for row in cur:
+                    v2_recommended_article = self.v1_to_v2_page_map.get(row['recommended_article_id'])
+                    if v2_recommended_article:
+                        models.ArticleRecommendation.objects.create(
+                            sort_order=row['sort_order'],
+                            article=v2_recommended_article,
+                            source=v2_article
+                        )
+                cur.close()
+        article_cur.close()
+        self.stdout.write('Recommended articles migrated')
+
+    def migrate_featured_articles_for_section(self):
+        cur = self.db_query(f'select * from core_articlepage where featured_in_section = true')
+        for row in cur:
+            v2_article = self.v1_to_v2_page_map.get(row['page_ptr_id'])
+            if v2_article:
+                section = v2_article.get_parent()
+                if isinstance(section.specific, models.Section):
+                    models.FeaturedContent.objects.create(source=section, content=v2_article)
+        cur.close()
+        self.stdout.write('Articles featured in sections migrated')
+
+    def migrate_featured_articles_for_homepage(self):
+        cur = self.db_query(f'select * from core_articlepage where featured_in_homepage = true')
+        for row in cur:
+            v2_article = self.v1_to_v2_page_map.get(row['page_ptr_id'])
+            if v2_article:
+                home_page = v2_article.get_ancestors().exact_type(models.HomePage).first().specific
+                home_featured_content = []
+                for hfc in home_page.home_featured_content:
+                    home_featured_content.append({
+                        'type': 'article',
+                        'value': hfc.value.id,
+                    })
+                home_featured_content.append({'type': 'article', 'value': v2_article.id})
+                home_page.home_featured_content = json.dumps(home_featured_content)
+                home_page.save()
+                print(row['page_ptr_id'], v2_article.id, home_page.id)
+        cur.close()
+        self.stdout.write('Articles featured in home page migrated')
