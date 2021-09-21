@@ -1,4 +1,6 @@
 from pathlib import Path
+
+from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from wagtail.core.models import Page, Site, Locale, Collection
 from django.core.files.images import ImageFile
@@ -53,6 +55,12 @@ class Command(BaseCommand):
             '--skip-locales',
             action='store_true',
             help='Skip data of locales other than default language'
+        )
+
+        parser.add_argument(
+            '--delete-users',
+            action='store_true',
+            help='Delete existing Users and their associated data. Use carefully'
         )
 
     def handle(self, *args, **options):
@@ -764,7 +772,7 @@ class Command(BaseCommand):
         poll_form_field = PollFormField.objects.create(
             page=poll, label=poll.title, field_type=field_type, choices=choices, admin_label=poll_row['short_name'])
         for row in cur:
-            V1ToV2ObjectMap.create_map(content_object=poll_form_field, v1_object_id=row['page_ptr_id'])
+            V1ToV2ObjectMap.create_map(content_object=poll, v1_object_id=row['page_ptr_id'])
         self.stdout.write(f"saved poll question, label={poll.title}")
 
     def migrate_surveys(self):
