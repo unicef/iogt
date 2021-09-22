@@ -360,10 +360,12 @@ class Command(BaseCommand):
                     page=v2_poll_page,
                     user=V1ToV2ObjectMap.get_v2_obj(get_user_model(), row['user_id']) if row['user_id'] else None,
                 )
+                submission.submit_time = row['submission_date']
+                submission.save()
                 V1ToV2ObjectMap.create_map(submission, row['id'], extra='poll')
 
     def migrate_user_freetext_poll_submissions(self):
-        sql = f'select wcp.id, wcp.title, pftv.answer, pftv.id as submission_id, pftv.user_id ' \
+        sql = f'select wcp.id, wcp.title, pftv.answer, pftv.id as submission_id, pftv.user_id, pftv.submission_date ' \
               f'from polls_freetextquestion pftq ' \
               f'inner join wagtailcore_page wcp on pftq.question_ptr_id = wcp.id ' \
               f'inner join polls_freetextvote pftv on pftv.question_id = wcp.id'
@@ -391,6 +393,8 @@ class Command(BaseCommand):
                     form_data=json.dumps(form_data, cls=DjangoJSONEncoder),
                     page=v2_poll_page,
                     user=V1ToV2ObjectMap.get_v2_obj(get_user_model(), freetext_submission['user_id']) if
-                    freetext_submission['user_id'] else None,
+                    freetext_submission['user_id'] else None
                 )
+                submission.submit_time = freetext_submission['submission_date']
+                submission.save()
                 V1ToV2ObjectMap.create_map(submission, submission_id, extra='freetext_poll')
