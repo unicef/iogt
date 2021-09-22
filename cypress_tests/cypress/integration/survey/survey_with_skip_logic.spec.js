@@ -28,7 +28,7 @@ describe("Survey skip logic tests", () => {
         cy.submit(".survey-page__btn>span", "Next");
         cy.get("[id=id_checkboxes_0]").check();
 
-        it.skip("Skips bug question numbering bug",() => {
+        it.skip("Skips bug question numbering bug", () => {
             cy.get(".quest-item__number").contains("3 of 5 questions");
         });
 
@@ -38,7 +38,7 @@ describe("Survey skip logic tests", () => {
         cy.submit(".survey-page__btn>span", "Next");
         cy.get("[name=multiline]").type("test");
 
-        it.skip("Skips question numbering but",() => {
+        it.skip("Skips question numbering but", () => {
             cy.get(".quest-item__number").contains("5 of 5 questions");
         });
 
@@ -53,7 +53,7 @@ describe("Survey skip logic tests", () => {
         cy.url().should("include", `/?p=2&back_url=${url}&form_length=1`);
 
         it.skip("Skips the question numbering bug", () => {
-              cy.get(".quest-item__number").contains("3 of 5 questions");
+            cy.get(".quest-item__number").contains("3 of 5 questions");
         });
 
         cy.get(".quest-item__desc").contains("checkboxes_3");
