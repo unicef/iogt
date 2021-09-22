@@ -1622,6 +1622,10 @@ textarea:focus ~ .cust-input__length-text {
     margin-left: 12px;
 }
 
+.text-danger {
+    color: darkred;
+}
+
 .reply-form .comments__holder,
 .reply-form .comments__input-holder {
     background: #F7F7F9;
@@ -1691,7 +1695,7 @@ textarea:focus ~ .cust-input__length-text {
     border-top: 1px solid white;
 }
 
-.load-more button {
+.load-more a, button{
     font-size: 14px;
     line-height: 20px;
     font-weight: 600;
@@ -1704,11 +1708,12 @@ textarea:focus ~ .cust-input__length-text {
     width: 100%;
     cursor: pointer;
     transition: all 0.2s linear;
+    text-decoration: none;
 }
 
-.load-more button:hover,
-.load-more button:active,
-.load-more button:focus {
+.load-more a, button:hover,
+.load-more a, button:active,
+.load-more a. button:focus {
     background: #303030;
     color: white;
     transition: all 0.2s linear;

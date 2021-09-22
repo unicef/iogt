@@ -35,12 +35,22 @@
         </div>
         <div class="btn-holder">
             <div class="nav-bar__item">
-                <a href="{% url 'account_login' %}">
-                    <span class="nav-bar__item__icon">
-                         <img src="/static/icons/login.svg">
-                    </span>
-                    <span class="nav-bar__item__title">{% translate "Log in / Create account" %}</span>
-                </a>
+                {% if request.user.is_anonymous %}
+                    <a href="{% url 'account_login' %}">
+                        <span class="nav-bar__item__icon">
+                             <img src="{% static 'icons/login.svg' %}">
+                        </span>
+                        <span class="nav-bar__item__title">{% translate "Log in / Create account" %}</span>
+                    </a>
+                {% else %}
+                    <a href="{% url 'user_profile' %}">
+                        <span class="nav-bar__item__icon">
+                             <img src="{% static 'icons/profile.svg' %}">
+                        </span>
+                        <span class="nav-bar__item__title">{% translate "Profile" %}</span>
+                    </a>
+                {% endif %}
+
             </div>
         </div>
     </div>
