@@ -10,11 +10,9 @@
 //
 //
 Cypress.Commands.add('login', (username, password) => {
-    cy.visit('/en/accounts/login/');
     cy.get('[name=login]').type(username);
     cy.get('[name=password]').type(password);
     cy.get('.profile-form__btn>span').contains("Log in").click();
-    cy.url().should('contain', '/en/users/profile/');
 });
 
 Cypress.Commands.add("visitUrl", (url) => {
