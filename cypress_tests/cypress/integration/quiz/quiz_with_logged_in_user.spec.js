@@ -1,12 +1,13 @@
 describe("Quiz with logged in user tests", () => {
     const url = "/en/sections/questionnaire-testing/sample-quiz/";
 
-    before("Login", () => {
+    it("Checks for the login button and login's the user", () => {
+        cy.visitUrl(url);
+        cy.submit(".survey-page__btn", "Log in to participate");
         cy.login("saqlain", "saqlain");
     });
 
-    it("Visits the quiz page", () => {
-        cy.visitUrl(url);
+    it("visits the quiz page", () => {
         cy.get(".quest-item__step-desc>span").contains("Select one");
         cy.get(".quest-item__step-desc>span").contains("Select one");
     });

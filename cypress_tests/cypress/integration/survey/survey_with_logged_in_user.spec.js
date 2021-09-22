@@ -1,12 +1,13 @@
 describe("Survey with optional checkbox tests", () => {
     const url = "/en/sections/questionnaire-testing/survey-with-checkbox/";
 
-    before("Login", () => {
+    it("Checks for the login button and login's the user", () => {
+        cy.visitUrl(url);
+        cy.submit(".survey-page__btn", "Log in to participate");
         cy.login("saqlain", "saqlain");
-    })
+    });
 
     it("Visits the survey page", () => {
-        cy.visitUrl(url)
         cy.get(".quest-item__step-desc span")
             .contains("Optional")
             .should("be.visible");
