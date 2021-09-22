@@ -1,7 +1,7 @@
 describe("Quiz with logged in user tests", () => {
     const url = "/en/sections/questionnaire-testing/sample-quiz/";
 
-    it("Checks for the login button and login's the user", () => {
+    it("Checks for the login button and logs in the user", () => {
         cy.visitUrl(url);
         cy.submit(".survey-page__btn", "Log in to participate");
         cy.login("saqlain", "saqlain");

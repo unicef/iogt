@@ -27,7 +27,7 @@ describe("Direct display tests for all types", () => {
         cy.submit(".polls-widget__submit", "Submit");
         cy.submit(".btn-back__title", "BACK");
 
-        cy.get("[id=id_checkbxoes_0]").check();
+        cy.get("[name=text_field]").type("test");
         cy.submit(".survey-page__btn>span", "Submit");
         cy.visitUrl(url);
 
