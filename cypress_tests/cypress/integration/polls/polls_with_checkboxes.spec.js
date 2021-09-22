@@ -14,15 +14,15 @@ describe("Poll with checkboxes test", () => {
         cy.submit(".survey-page__btn>span", "Submit");
         cy.url().should("include", `/?back_url=${url}`);
 
-        cy.get(".cust-check__percent").each(($el) => {
-            cy.wrap($el)
-                .should("be.visible")
-                .contains(/\\d+(?:d+)?|%/)
-        });
+        cy.checkPollResults(".cust-check__percent");
 
         cy.submit(".btn-back__title", "BACK");
         cy.wait(500);
-        cy.submit(".survey-page__btn>span", "Submit");
-        cy.url().should("include", `/?back_url=${url}`)
+        cy.get(".survey-page__already-completed")
+            .contains("You have already completed this survey.").should("be.visible");
+
+        cy.checkPollResults(".cust-check__percent");
+
+        cy.url().should("include", url)
     })
 });

@@ -59,6 +59,14 @@ Cypress.Commands.add("testQuestions", (selector) => {
             )
     });
 });
+
+Cypress.Commands.add("checkPollResults", ($selector) => {
+    cy.get($selector).each(($el) => {
+        cy.wrap($el)
+            .should("be.visible")
+            .contains(/\\d+(?:d+)?|%/);
+    });
+})
 //
 //
 // -- This is a child command --

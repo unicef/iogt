@@ -17,7 +17,7 @@ describe("Survey with text field tests", () => {
         cy.get("[name=checkbox]").should("have.attr", "type", "checkbox");
         cy.get("[name=checkboxes]").each($el => {
             cy.wrap($el).should("have.attr", "type", "checkbox");
-        })
+        });
         cy.get("[name=dropdown]").should("be.visible");
     });
 
@@ -38,7 +38,7 @@ describe("Survey with text field tests", () => {
 
         cy.submit(".survey-page__btn>span", "Back");
         cy.wait(500);
-        cy.submit(".survey-page__btn>span", "Submit");
-        cy.url().should("include", `/?back_url=${url}&form_length=0`)
+        cy.get(".survey-page__already-completed").contains('You have already completed this survey.').should("be.visible")
+        cy.url().should("include", url);
     });
 });

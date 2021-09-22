@@ -39,14 +39,17 @@ describe("Quiz with text fields tests", () => {
     it("Submits the form and check for not allowed multiple submission", () => {
         cy.submit(".survey-page__btn>span", "Submit");
         cy.url().should("include", `/?back_url=${url}&form_length=12`);
-        
+
         cy.get(".quiz-answer-banner__counter").contains("7 / 12");
         cy.get(".quest-item__status").each($el => {
             cy.wrap($el).contains(/Correct|Incorrect/).should("be.visible");
         });
         cy.submit(".icon-btn__title", "Replay Quiz");
-        cy.submit(".survey-page__btn>span", "Submit");
-        cy.url().should("include", `/?back_url=${url}&form_length=0`)
+
+        cy.get(".survey-page__already-completed")
+            .contains("You have already completed this survey.").should("be.visible");
+
+        cy.url().should("include", url)
 
     });
 

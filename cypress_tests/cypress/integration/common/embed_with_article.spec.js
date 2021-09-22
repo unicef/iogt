@@ -9,6 +9,8 @@ describe("Tests for embedded poll, survey, and quiz", () => {
         cy.submit(".polls-widget__submit", "Submit");
         cy.submit(".btn-back__title", "BACK")
 
+        cy.submit(".survey-page__btn", "Log in to participate");
+        cy.login("saqlain", "saqlain");
         cy.get(".survey-page__content>div>label>input").check();
         cy.submit(".survey-page__btn", "Submit")
         cy.visitUrl(url);
