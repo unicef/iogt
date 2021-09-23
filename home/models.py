@@ -852,3 +852,25 @@ class V1ToV2ObjectMap(models.Model):
     def create_map(cls, content_object, v1_object_id):
         v1_to_v2_object_map = cls(content_object=content_object, v1_object_id=v1_object_id)
         v1_to_v2_object_map.save()
+
+
+class SVGToPNGMap(models.Model):
+    svg_path = models.TextField()
+    color = models.TextField()
+    png_image_file = models.ImageField(upload_to='svg-to-png-maps/')
+
+    @classmethod
+    def get_png_image(cls, svg_path, color):
+        try:
+            obj = cls.objects.get(svg_path=svg_path, color=color)
+            obj.png_image_file
+        except cls.DoesNotExist:
+            png_image = None
+            # png_image = get_png_file(svg_path, color)
+            return cls.objects.create(svg_path=svg_path, color=color, png_image_file=png_image)
+
+    def __str__(self):
+        return f'{self.svg_path} ({self.color}) -> {self.png_image_file}'
+
+    class Meta:
+        unique_together = ('svg_path', 'color')
