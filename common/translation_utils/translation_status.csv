@@ -1,7 +1,7 @@
-Text,context,django,context,status,Replacement quality,Replacement strings (separated by |),Comment
+Text,context,tag,django,status,Replacement quality,Replacement strings (separated by |),Comment
 Canned Responses,BE,not needed,,not needed,,,For comment replies?
 Bad Token,,not needed,,not needed,,,Can occur during password reset?
-%(time_period)s ago,FE,translate,,needs translation,ok,Use ISO format/dates for locales that are not in django,"Internally used by django, available for https://github.com/django/django/tree/main/django/contrib/humanize/locale/"
+%(time_period)s ago,FE,translate,,unused,ok,Use ISO format/dates for locales that are not in django,"Internally used by django, available for https://github.com/django/django/tree/main/django/contrib/humanize/locale/"
 Home Page Banner,BE,not needed,,not needed,,,
 Home Page Banners,BE,not needed,,not needed,,,
 Username,FE,translate,,has translation,,,
@@ -68,7 +68,7 @@ Answer options,BE,not needed,,not needed,,,
 Next default question,BE,not needed,,not needed,,,
 Page break is only allowed with multi-step enabled.,BE,not needed,,not needed,,,
 Checkbox type questions must have 2 Answer Options: a on and off,BE,not needed,,not needed,,,
-This field is required.,FE,translate,django,needs translation,,,Maybe use: You didn't select a choice
+This field is required.,FE,translate,django,needs translation (partial),,,Maybe use: You didn't select a choice
 "Skipping to {logic.value[""skip_logic""]} not allowed for checkbox and checkboxes.",BE,not needed,,not needed,,,
 "Skipping to {logic.value[""skip_logic""]} not allowed for checkbox, checkboxes.",BE,not needed,,not needed,,,
 Checkbox,BE,not needed,,not needed,,,
@@ -91,7 +91,7 @@ required,BE,not needed,,not needed,,,
 field type,BE,not needed,,not needed,,,
 admin_label,BE,not needed,,not needed,,,
 Column header used during CSV export of survey responses.,BE,not needed,,not needed,,,
-"This is used to add choices for field type radio, checkbox, checkboxes, and dropdown only. This can be used to skip questions and skipping is only ",BE,not needed,,unused,,,
+"This is used to add choices for field type radio, checkbox, checkboxes, and dropdown only. This can be used to skip questions and skipping is only ",BE,not needed,,not needed,,,
 Inserts a page break which puts the next question onto a new page,BE,not needed,,not needed,,,
 Multi-step,BE,not needed,,not needed,,,
 "Whether to display the survey questions to the user one at a time, instead of all at once.",BE,not needed,,not needed,,,
@@ -128,7 +128,7 @@ Send,Chatbot,translate,,TODO,ok,Reply|Submit,
 Confirm Delete:,Chatbot,not needed,,not needed,,,
 Are you sure you want to delete this thread?,Chatbot,translate,,needs translation,,,not urgent
 Delete,Chatbot,translate,,needs translation,,,not urgent
-Load more,Chatbot,translate,,needs translation,ok,More,not urgent
+Load more,Chatbot,translate,,TODO,ok,More,not urgent
 Reply here...,Comment,remove,,TODO,ok,Reply,not urgent (Chatbot)
 Reply,Comment,translate,,has translation,,,
 Remove comment,Comment,not needed,,not needed,,,
@@ -183,10 +183,10 @@ Your browser does not support the video tag.,,remove,,TODO,,,redundant?
 Your browser does not support the audio element.,,remove,,TODO,,,redundant?
 "If you cannot view the above video, perhaps would you like to %(start_link)s download it? %(end_link)s.",FE,translate,,needs translation,,,rephrase?
 "If you cannot listen to the above audio, perhaps would you like to %(start_link)s download it? %(end_link)s.",FE,translate,,needs translation,,,rephrase?
-[This page is not available in English],FE,translate,,unused,,,"v1 has: That page is not translatable (missing: mg, ru, zu, ti, tg, uz, kaa)"
+[This page is not available in English],FE,translate,,needs translation,,,"v1 has: That page is not translatable (missing: mg, ru, zu, ti, tg, uz, kaa)"
 sections,FE,translate,,needs translation,,,
 articles,FE,translate,,has translation,,,
-%(counter)s of 1 question,,remove,,unused,,%(counter)s of %(total)s questions,
+%(counter)s of 1 question,,remove,,TODO,,%(counter)s of %(total)s questions,
 %(counter)s of %(total)s questions,FE,translate,,has translation,,,
 Optional,FE,translate,,has translation,,,obsoleted if hints become custom
 Select one,FE,translate,,has translation,,,obsoleted if hints become custom
@@ -195,7 +195,7 @@ Check if apply,FE,translate,,needs translation,,,obsoleted if hints become custo
 Comments,FE,translate,,has translation,,,
 Please log in or create your account,FE,translate,,has translation,,,"rephrease ""please log in to comment"""
 New comments have been disabled for this page.,Comment,translate,,needs translation,,,--> Comments have been disabled for this page.
-Related Articles,FE,translate,,has translation,,,
+Related Articles,FE,translate,,unused,,,
 Log in,FE,translate,,has translation,,,
 Previous,FE,translate,,has translation,,,
 Page not found,FE,translate,,has translation,,,
@@ -205,37 +205,37 @@ Internal server error,FE,translate,,has translation,,,
 Create your account,FE,translate,,has translation,,,
 Sign Out,FE,translate,,needs translation,,,"Comes with wagtail, but not for all languages"
 Are you sure you want to sign out?,FE,translate,,needs translation,,,"Comes with wagtail, but not for all languages"
-Change Password,FE,translate,,unused,,Change Digital Pin,
-Forgot Password?,,remove,,unused,,Forgot PIN,
-Password Reset,FE,translate,,unused,,Reset PIN,
-"Forgotten your password? Enter your e-mail address below, and we'll send you an e-mail allowing you to reset it.",,remove,,unused,,"Forgot PIN|Enter your email address below, and we'll email instructions for setting a new one. ",This shouldn't be on the sites. There is no password reset.
-Reset My Password,FE,translate,,unused,,Reset PIN,
+Change Password,FE,translate,,TODO,,Change Digital Pin,
+Forgot Password?,,remove,,TODO,,Forgot PIN,
+Password Reset,FE,translate,,TODO,,Reset PIN,
+"Forgotten your password? Enter your e-mail address below, and we'll send you an e-mail allowing you to reset it.",,remove,,TODO,,"Forgot PIN|Enter your email address below, and we'll email instructions for setting a new one. ",This shouldn't be on the sites. There is no password reset.
+Reset My Password,FE,translate,,TODO,,Reset PIN,
 Please contact us if you have any trouble resetting your password.,,remove,,TODO,,,We don’t really want to get contacted?
 "If you don’t receive an email, please make sure you've entered the address you registered with, and check your spam folder. ",FE,translate,,unused,,"If you don’t receive an email, please make sure you've entered the address you registered with, and check your spam folder. ",
-quiz,FE,translate,,TODO,,Quizzes,
+quiz,FE,translate,,has translation (improvised),,Quizzes,
 quizzes,FE,translate,,has translation,,,
 Your answer,FE,translate,,has translation,,,
-POLL,FE,translate,,TODO,ok,Polls,
-QUIZ,FE,translate,,TODO,ok,Quizzes,
+POLL,FE,translate,,has translation (improvised),ok,Polls,
+QUIZ,FE,translate,,has translation (improvised),ok,Quizzes,
 Next,FE,translate,,has translation,,,
-SURVEY,FE,translate,,TODO,ok,Surveys,
+SURVEY,FE,translate,,has translation (improvised),ok,Surveys,
 No limit,FE,translate,,has translation,,,
 Go to homepage,FE,translate,,has translation,,,
 Your results!,FE,translate,,has translation,,,
 Correct,FE,translate,,has translation,,,
 Incorrect,FE,translate,,has translation,,,
 Replay Quiz,FE,translate,,has translation,,,
-Correct answer,FE,translate,,TODO,ok,Correct,
-Get Started,FE,translate,,unused,,,
+Correct answer,FE,translate,,has translation (improvised),ok,Correct,
+Get Started,FE,translate,,needs translation,,,
 Search results for: ,FE,translate,,has translation,,,"formerly ""Searching results for"""
-1 result,FE,translate,,TODO,good,All %(counter)s results,
-"msgid_plural ""%(counter)s results""",FE,translate,,unused,good,All %(counter)s results,
-No results found,FE,translate,,unused,good,No search results were found for,"Comes with wagtail, but not for all languages"
-No search results were found for,FE,translate,,has translation,,,
-It seems we can’t find any results based on your search.,,remove,,unused,,No search results were found for,
-See results,FE,translate,,unused,good,Search the site…,"(appears when no results found) - v1 has: Search (missing: mg, ru, zu, ti, tg, uz, kaa)"
+1 result,FE,translate,,has translation (improvised),good,All %(counter)s results,
+%(counter)s results,FE,translate,,unused,good,All %(counter)s results,
+No results found,FE,translate,,TODO,good,No search results were found for,"Comes with wagtail, but not for all languages"
+No search results were found for,FE,translate,,unused,,,
+It seems we can’t find any results based on your search.,,remove,,TODO,,No search results were found for,
+See results,FE,translate,,TODO,good,Search the site…,"(appears when no results found) - v1 has: Search (missing: mg, ru, zu, ti, tg, uz, kaa)"
 "The password reset link was invalid, possibly because it has already been used. <a href=""%(passwd_reset_url)s"">Please request a new password reset</a>.",FE,translate,,needs translation,,,
-Your password is now changed.,FE,translate,,unused,good,Your PIN has been changed successfully. ,
+Your password is now changed.,FE,translate,,TODO,good,Your PIN has been changed successfully.,
 Set Password,,not needed,,not needed,,Create 4 digit pin,
 BACK,FE,translate,,has translation,,,
 © The Internet of Good Things,FE,translate,,has translation,,,
@@ -246,17 +246,17 @@ Search the site…,FE,translate,,has translation,,,
 Log in / Create account,FE,translate,,has translation,,,
 You are leaving the <b>Internet of Good Things</b> to visit an external website and standard data charges by your network provider might apply,FE,translate,,needs translation,,,
 Continue to external site,FE,translate,,needs translation,,,
-Go back to previous page,FE,translate,,unused,good,Back,
-I accept the terms & conditions,FE,translate,,unused,good,I accept the Terms and Conditions.,
-4-digit PIN,FE,translate,,TODO,ok,Create 4 digit pin,"v1 has: 4-digit PIN (missing: mg, ru, zu, ti, tg, uz, kaa)"
-Enter Your Name,,remove,,unused,,,relic?
-Old 4-digit PIN,FE,translate,,TODO,ok,Old Password,
-New 4-digit PIN,FE,translate,,TODO,ok,Create 4 digit pin,New PIN
-Confirm new 4-digit PIN,FE,translate,,TODO,ok,Confirm PIN,
+Go back to previous page,FE,translate,,TODO,good,Back,
+I accept the terms & conditions,FE,translate,,TODO,good,I accept the Terms and Conditions.,
+4-digit PIN,FE,translate,,has translation (improvised),ok,Create 4 digit pin,"v1 has: 4-digit PIN (missing: mg, ru, zu, ti, tg, uz, kaa)"
+Enter Your Name,,remove,,TODO,,,relic?
+Old 4-digit PIN,FE,translate,,has translation (improvised),ok,Old Password,
+New 4-digit PIN,FE,translate,,has translation (improvised),ok,Create 4 digit pin,New PIN
+Confirm new 4-digit PIN,FE,translate,,has translation (improvised),ok,Confirm PIN,
 Page %(current_page)s of %(num_pages)s.,FE,translate,,TODO,bad,You have read %(counter)s out of %(total)s,future for comment pagination
 Post Registration Survey,,remove,,TODO,,,
 Please fill this survey to keep using Internet of Good Things,,remove,,TODO,,,relic?
-Edit my profile,FE,translate,,unused,,,
+Edit my profile,FE,translate,,has translation,,,
 "Hey, %(username)s",FE,translate,,has translation,,,
 Change Digital Pin,FE,translate,,has translation,,,
 Log out,FE,translate,,needs translation,,,
@@ -290,11 +290,11 @@ Zulu,,not needed,,not needed,,,
 Simulate form completion,,not needed,,not needed,,,
 section,FE,translate,,needs translation,,,might be useful in the future?
 article,FE,translate,,needs translation,,,might be useful in the future?
-"Something went wrong. Can you try refreshing the page, and clicking the download website button?",FE,translate,,unused,ok,"Sorry, there seems to be an error. Please try again soon. ",
-"Your app is now ready to install. If you are using a iOS device, you can install it by clicking 'Share', scrolling down and tapping 'Add to Home Screen. If using Android choose 'Add to home screen' and you should be all set!",FE,translate,,unused,,,rephrase?
-Install this website as an app on your device?,FE,translate,,unused,,,
-Yes,FE,translate,,unused,,,might be useful in the future?
-No,FE,translate,,unused,,,might be useful in the future?
+"Something went wrong. Can you try refreshing the page, and clicking the download website button?",FE,translate,,TODO,ok,"Sorry, there seems to be an error. Please try again soon. ",
+"Your app is now ready to install. If you are using a iOS device, you can install it by clicking 'Share', scrolling down and tapping 'Add to Home Screen. If using Android choose 'Add to home screen' and you should be all set!",FE,translate,,needs translation,,,rephrase?
+Install this website as an app on your device?,FE,translate,,needs translation,,,
+Yes,FE,translate,,needs translation,,,might be useful in the future?
+No,FE,translate,,needs translation,,,might be useful in the future?
 Skip to end of survey with in-between required questions isn't allowed.,BE,not needed,,not needed,,,
 Indonesian,BE,not needed,,not needed,,,
 Kirundi,,not needed,,not needed,,,
@@ -302,26 +302,27 @@ Karakalpak,,not needed,,not needed,,,
 Testing,,not needed,,not needed,,,
 "This is used to add choices for field type radio, checkbox, checkboxes, and dropdown only. This can be used to skip questions and skipping is only allowed for radio and dropdown.",BE,not needed,,not needed,,,
 "Skip to question {question_data[last_question_number].cleaned_data[""label""]} ",BE,not needed,,not needed,,,
-Remember me,,,django,nn,,,"Comes with wagtail, but not for all languages"
-You have signed out.,,,django,nn,,,"Comes with wagtail, but not for all languages"
-"Enter a valid username. This value may contain only letters, numbers, and @/./+/-/_ characters.",,,django,i,ok,"This value must contain only letters, numbers and underscores","Comes with wagtail, but not for all languages"
-You must type the same password each time.,,,django,yy,good,The two PINs that you entered do not match. Please try again.|New passwords do not match.,"Comes with wagtail, but not for all languages"
-This password is too short. It must contain at least 4 characters.,,,django,i,ok,Ensure this value has at least 4 characters,"Comes with wagtail, but not for all languages"
-Please type your current password.,,,django,i,ok,The old password is incorrect.,"Comes with wagtail, but not for all languages"
-Password successfully changed.,,,django,yy,good,Your PIN has been changed successfully. ,"Comes with wagtail, but not for all languages"
-Enter a valid date/time.,,,django,n,,,"Comes with wagtail, but not for all languages"
-Enter a valid date.,,,django,n,,,"Comes with wagtail, but not for all languages"
-Enter a valid URL.,,,django,n,,,"Comes with wagtail, but not for all languages"
-Enter a valid email address.,,,django,n,,,"Comes with wagtail, but not for all languages"
-Enter a valid integer.,,,django,n,,,"Comes with wagtail, but not for all languages"
-Ensure this value is greater than or equal to %(limit_value)s.,,,django,n,,,"Comes with wagtail, but not for all languages"
-If Page link is a section page and icon is blank then the section icon will be used. Specify an icon here to override this.,BE,not needed,,needs translation,,,
-A relative path to redirect from e.g. /en/youth. See https://docs.wagtail.io/en/stable/editor_manual/managing_redirects.html for more details,BE,not needed,,needs translation,,,
-Reset PIN,,,,has translation,,,
-Forgot PIN,,,,has translation,,,
-"Enter your email address below, and we'll email instructions for setting a new one.",,,,has translation,,,
+Remember me,,translate,django,needs translation (partial),,,"Comes with wagtail, but not for all languages"
+You have signed out.,,translate,django,needs translation (partial),,,"Comes with wagtail, but not for all languages"
+"Enter a valid username. This value may contain only letters, numbers, and @/./+/-/_ characters.",,translate,django,TODO,ok,"This value must contain only letters, numbers and underscores","Comes with wagtail, but not for all languages"
+You must type the same password each time.,,translate,django,TODO,good,The two PINs that you entered do not match. Please try again.|New passwords do not match.,"Comes with wagtail, but not for all languages"
+This password is too short. It must contain at least 4 characters.,,translate,django,TODO,ok,Ensure this value has at least 4 characters,"Comes with wagtail, but not for all languages"
+Please type your current password.,,translate,django,TODO,ok,The old password is incorrect.,"Comes with wagtail, but not for all languages"
+Password successfully changed.,,translate,django,TODO,good,Your PIN has been changed successfully.,"Comes with wagtail, but not for all languages"
+Enter a valid date/time.,,translate,django,needs translation (partial),,,"Comes with wagtail, but not for all languages"
+Enter a valid date.,,translate,django,needs translation (partial),,,"Comes with wagtail, but not for all languages"
+Enter a valid URL.,,translate,django,needs translation (partial),,,"Comes with wagtail, but not for all languages"
+Enter a valid email address.,,translate,django,needs translation (partial),,,"Comes with wagtail, but not for all languages"
+Enter a valid integer.,,translate,django,needs translation (partial),,,"Comes with wagtail, but not for all languages"
+Ensure this value is greater than or equal to %(limit_value)s.,,translate,django,needs translation (partial),,,"Comes with wagtail, but not for all languages"
+If Page link is a section page and icon is blank then the section icon will be used. Specify an icon here to override this.,BE,not needed,,unused,,,
+A relative path to redirect from e.g. /en/youth. See https://docs.wagtail.io/en/stable/editor_manual/managing_redirects.html for more details,BE,not needed,,unused,,,
+Reset PIN,,,,unused,,,
+Forgot PIN,,,,unused,,,
+"Enter your email address below, and we'll email instructions for setting a new one.",,,,unused,,,
 "If you don't receive an email, please make sure you've entered the address you registered with, and check your spam folder.",FE,translate,,needs translation,,,
-Your PIN has been changed successfully.,,,,has translation,,,
-I accept the Terms and Conditions.,,,,has translation,,,
-My Profile,FE,translate,,needs translation,good,Profile,
-%(counter)s results,FE,translate,,has improv-translation,,,
+Your PIN has been changed successfully.,,,,unused,,,
+I accept the Terms and Conditions.,,,,unused,,,
+My Profile,FE,translate,,unused,good,Profile,
+%(counter)s results,FE,translate,,has translation (improvised),,,
+Related articles,,translate,,has translation,,,

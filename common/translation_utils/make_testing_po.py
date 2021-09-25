@@ -26,10 +26,8 @@ reader = csv.reader(sheet)
 
 sheet2 = open("translations.csv", newline='')
 data = list(csv.reader(sheet2))
-phrases = set(r[1] for r in data)
+all_phrases = {r[3] : r for r in data}
 processed_phrases = set()
-
-# TODO: Log out -> Sign Out
 
 entries = []
 for i, row in enumerate(reader):
@@ -44,39 +42,10 @@ for i, row in enumerate(reader):
     if phrase in processed_phrases:
         continue
     processed_phrases.add(phrase)
-    if phrase[:12] == "msgid_plural":
-        phrase = phrase[14:-1]
+    if phrase in all_phrases and all_phrases[phrase][0] == 'pl':
         plural = True
-    context = row[1]
-    if context == "BE":
-        trans = f"([BE]-{phrase})"
-    elif context == "remove":
-        trans = f"([remove]-{phrase})"
-    elif context == "not needed":
-        trans = f"([not-needed]-{phrase})"
-    else:
-        status = row[2]
-        if status == 'i' or status == 'yy':
-            alt = row[3]
-            if alt in phrases:
-                if status == 'i':
-                    trans = f"([has improv translation]-{phrase})"
-                if status == 'yy':
-                    trans = f"([has translation]-{phrase})"
-            else:
-                print("i or yy phrase not in sheet: ", row)
-                continue
-        elif status == 'y':
-            if phrase in phrases:
-                trans = f"([has translation]-{phrase})"
-            else:
-                print("y phrase not in sheet: ", row)
-                continue
-        elif status == 'n' or status == 'nn':
-            trans = f"([needs translation]-{phrase})"
-        # elif status == '?':
-        else:
-            print("Weird status: ", row)
+    tag = row[4].replace(' ', '-')
+    trans = f"([{tag}]-{phrase})"
 
     if plural:
         entry = entries[-1]
@@ -98,4 +67,5 @@ for entry in entries:
 
 sheet.close()
 
-po.save("test-out.po")
+os.makedirs("locale/xy/LC_MESSAGES/", exist_ok=True)
+po.save("locale/xy/LC_MESSAGES/django.po")
