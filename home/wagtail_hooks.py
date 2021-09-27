@@ -62,13 +62,6 @@ def sort_page_listing_by_path(parent_page, pages, request):
     return pages
 
 
-@hooks.register('construct_main_menu')
-def rename_forms_menu_item(request, menu_items):
-    for item in menu_items:
-        if item.name == "forms":
-            item.label = _("Form Data")
-
-
 @hooks.register('construct_page_chooser_queryset')
 def limit_page_chooser(pages, request):
     """
@@ -178,3 +171,12 @@ class TranslationEntryAdmin(ModelAdmin):
 
 
 modeladmin_register(TranslationEntryAdmin)
+
+
+@hooks.register('construct_main_menu')
+def rename_forms_menu_item(request, menu_items):
+    for item in menu_items:
+        if item.name == "forms":
+            item.label = _("Form Data")
+        if item.name == 'translations':
+            item.url = f'{TranslationEntryAdmin().url_helper.get_action_url("index")}?limited=yes'
