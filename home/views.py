@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib import messages
+from django.core.management import call_command
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import gettext_lazy as _
@@ -73,11 +74,8 @@ class TranslationEditView(EditView):
 
 class LoadTranslationsFromPOFiles(View):
     def get(self, request):
-        from .wagtail_hooks import TranslationEntryAdmin
-
-        manager = Manager()
-        manager.load_data_from_po()
+        call_command('load_po_files')
 
         messages.success(request, _('The translations have been loaded successfully!'))
 
-        return redirect(TranslationEntryAdmin().url_helper.get_action_url('index'))
+        return redirect(request.META['HTTP_REFERER'])
