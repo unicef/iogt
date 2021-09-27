@@ -13,7 +13,7 @@ from pip._vendor.distlib.compat import raw_input
 from wagtail.contrib.forms.utils import get_field_clean_name
 
 from tqdm import tqdm
-from wagtail.core.models import Page
+from wagtail.core.models import Page, PageViewRestriction
 
 from comments.models import CannedResponse
 from home.models import Article, V1ToV2ObjectMap
@@ -159,6 +159,8 @@ class Command(BaseCommand):
         self.migrate_user_survey_submissions()
         self.migrate_user_poll_submissions()
         self.migrate_user_freetext_poll_submissions()
+
+        self.migrate_page_view_restrictions()
 
     def populate_content_type_map(self):
         sql = f'select * from django_content_type'
@@ -398,3 +400,22 @@ class Command(BaseCommand):
                 submission.submit_time = freetext_submission['submission_date']
                 submission.save()
                 V1ToV2ObjectMap.create_map(submission, submission_id, extra='freetext_poll')
+
+    def migrate_page_view_restrictions(self):
+        sql = f'select * from wagtailcore_pageviewrestriction'
+        cur = self.db_query(sql)
+
+        for row in self.with_progress(sql, cur, 'User Page View Restrictions migration in progress'):
+            if not V1ToV2ObjectMap.get_v2_obj(PageViewRestriction, row['id']):
+                migrated_page = V1ToV2ObjectMap.get_v2_obj(Page, row['page_id'])
+                print(migrated_page)
+                pvr = PageViewRestriction.objects.create(
+                    page=migrated_page, restriction_type=row['restriction_type'], password=row['password'])
+                V1ToV2ObjectMap.create_map(pvr, row['id'])
+
+                pvr_groups_sql = f'select * from wagtailcore_pageviewrestriction_groups where pageviewrestriction_id={row["id"]}'
+                pvr_groups_cur = self.db_query(pvr_groups_sql)
+
+                for pvr_group in pvr_groups_cur:
+                    migrated_group = V1ToV2ObjectMap.get_v2_obj(Group, pvr_group['group_id'])
+                    PageViewRestriction.groups.add(migrated_group)
