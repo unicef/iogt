@@ -1,4 +1,4 @@
-{% load static wagtailcore_tags wagtailimages_tags i18n %}
+{% load static wagtailcore_tags wagtailimages_tags i18n generic_components %}
 
 <footer class="bottom-level">
     <nav>
@@ -12,11 +12,7 @@
             {% endif %}
         </div>
          {% for footer_page in footer_pages %}
-            <div class='bottom-level__section'>
-                <img src="{{ footer_page.specific.icon.url }}" />
                 {% primary_button title=footer_page.specific.title href=footer_page_url icon_path=footer_page.specific.icon.url %}
-{#                <a href="{% pageurl footer_page %}">{{ footer_page.specific.title }}</a>#}
-            </div>
          {% endfor %}
     </nav>
 </footer>
