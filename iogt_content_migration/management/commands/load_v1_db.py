@@ -915,6 +915,7 @@ class Command(BaseCommand):
                     translated_survey.seo_title = row['seo_title']
                     translated_survey.index_page_description = row['homepage_introduction']
                     translated_survey.index_page_description_line_2 = row['homepage_button_text']
+                    translated_survey.terms_and_conditions = self.map_survey_terms_and_conditions(row)
                     translated_survey.save()
 
                     if row['submit_text'] and len(row['submit_text']) > 40:
@@ -958,6 +959,7 @@ class Command(BaseCommand):
             seo_title=row['seo_title'],
             index_page_description=row['homepage_introduction'],
             index_page_description_line_2=row['homepage_button_text'],
+            terms_and_conditions=self.map_survey_terms_and_conditions(row),
         )
 
         try:
@@ -1005,6 +1007,30 @@ class Command(BaseCommand):
             v2_thank_you_text.append({'type': 'paragraph', 'value': row['thank_you_text']})
 
         return json.dumps(v2_thank_you_text)
+
+    def map_survey_terms_and_conditions(self, row):
+        sql = f'select * ' \
+              f'from surveys_surveytermsconditions stc, surveys_molosurveypage msp, wagtailcore_page wcp ' \
+              f'where stc.page_id = msp.page_ptr_id ' \
+              f'and stc.terms_and_conditions_id = wcp.id ' \
+              f'and stc.page_id = {row["page_ptr_id"]}'
+
+        cur = self.db_query(sql)
+        v1_term_and_condition = cur.fetchone()
+        cur.close()
+        if v1_term_and_condition:
+            return json.dumps([
+                {
+                    "type": "page_button",
+                    "value": {
+                        "page": self.v1_to_v2_page_map[v1_term_and_condition["terms_and_conditions_id"]].id,
+                    },
+                },
+                {
+                    "type": "paragraph",
+                    "value": v1_term_and_condition["title"],
+                },
+            ])
 
     def migrate_survey_questions(self, survey, survey_row):
         sql = f'select * ' \

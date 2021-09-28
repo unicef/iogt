@@ -14,7 +14,7 @@ from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from wagtail_localize.fields import TranslatableField
 
-from home.blocks import MediaBlock
+from home.blocks import MediaBlock, PageButtonBlock
 from home.mixins import PageUtilsMixin
 from iogt_users.models import User
 from modelcluster.fields import ParentalKey
@@ -91,6 +91,15 @@ class QuestionnairePage(Page, PageUtilsMixin):
 
     index_page_description = models.TextField(null=True, blank=True)
     index_page_description_line_2 = models.TextField(null=True, blank=True)
+
+    terms_and_conditions = StreamField(
+        [
+            ("paragraph", blocks.RichTextBlock()),
+            ('page_button', PageButtonBlock()),
+        ],
+        null=True,
+        blank=True,
+    )
 
     settings_panels = Page.settings_panels + [
         FieldPanel('direct_display')
@@ -345,6 +354,12 @@ class Survey(QuestionnairePage, AbstractForm):
         ),
         FieldPanel('index_page_description'),
         FieldPanel('index_page_description_line_2'),
+        MultiFieldPanel(
+            [
+                StreamFieldPanel("terms_and_conditions"),
+            ],
+            heading="Terms and conditions",
+        ),
         InlinePanel("survey_form_fields", label="Form fields"),
     ]
 
@@ -508,6 +523,12 @@ class Poll(QuestionnairePage, AbstractForm):
         ),
         FieldPanel('index_page_description'),
         FieldPanel('index_page_description_line_2'),
+        MultiFieldPanel(
+            [
+                StreamFieldPanel("terms_and_conditions"),
+            ],
+            heading="Terms and conditions",
+        ),
         InlinePanel("poll_form_fields", label="Poll Form fields", min_num=1, max_num=1),
     ]
 
@@ -714,6 +735,12 @@ class Quiz(QuestionnairePage, AbstractForm):
         ),
         FieldPanel('index_page_description'),
         FieldPanel('index_page_description_line_2'),
+        MultiFieldPanel(
+            [
+                StreamFieldPanel("terms_and_conditions"),
+            ],
+            heading="Terms and conditions",
+        ),
         InlinePanel("quiz_form_fields", label="Form fields"),
     ]
 

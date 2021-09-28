@@ -36,6 +36,7 @@
                                         {% render_field field %}
                                   </div>
                                 {% endfor %}
+                               {% include 'questionnaires/terms_and_conditions.html' %}
                                {% render_submit_button fields_step page %}
                             </form>
                         {% else %}
