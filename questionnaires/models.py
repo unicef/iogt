@@ -89,6 +89,9 @@ class QuestionnairePage(Page, PageUtilsMixin):
 
     direct_display = models.BooleanField(default=False)
 
+    index_page_description = models.TextField(null=True, blank=True)
+    index_page_description_line_2 = models.TextField(null=True, blank=True)
+
     settings_panels = Page.settings_panels + [
         FieldPanel('direct_display')
     ]
@@ -340,6 +343,8 @@ class Survey(QuestionnairePage, AbstractForm):
             ],
             heading="Description at thank you page",
         ),
+        FieldPanel('index_page_description'),
+        FieldPanel('index_page_description_line_2'),
         InlinePanel("survey_form_fields", label="Form fields"),
     ]
 
@@ -501,6 +506,8 @@ class Poll(QuestionnairePage, AbstractForm):
             ],
             heading="Description at thank you page",
         ),
+        FieldPanel('index_page_description'),
+        FieldPanel('index_page_description_line_2'),
         InlinePanel("poll_form_fields", label="Poll Form fields", min_num=1, max_num=1),
     ]
 
@@ -705,6 +712,8 @@ class Quiz(QuestionnairePage, AbstractForm):
             ],
             heading="Description at thank you page",
         ),
+        FieldPanel('index_page_description'),
+        FieldPanel('index_page_description_line_2'),
         InlinePanel("quiz_form_fields", label="Form fields"),
     ]
 

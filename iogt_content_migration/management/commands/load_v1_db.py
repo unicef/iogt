@@ -458,6 +458,7 @@ class Command(BaseCommand):
                     translated_article.has_unpublished_changes = row['has_unpublished_changes']
                     translated_article.search_description = row['search_description']
                     translated_article.seo_title = row['seo_title']
+                    translated_article.index_page_description = row['subtitle']
                     translated_article.save()
                     content_type = self.find_content_type_id('core', 'articlepage')
                     tags = self.find_tags(content_type, row['id'])
@@ -492,6 +493,7 @@ class Command(BaseCommand):
             allow_comments=True if row['commenting_state'] == 'O' else False,
             search_description=row['search_description'],
             seo_title=row['seo_title'],
+            index_page_description=row['subtitle'],
         )
         try:
             article.save()
@@ -514,10 +516,11 @@ class Command(BaseCommand):
             if block['type'] == 'paragraph':
                 block['type'] = 'markdown'
 
-        v2_body = [{
-            'type': 'paragraph',
-            'value': row['subtitle'],
-        }] + v2_body
+        if row['subtitle']:
+            v2_body = [{
+                'type': 'paragraph',
+                'value': row['subtitle'],
+            }] + v2_body
         return json.dumps(v2_body)
 
     def migrate_banners(self):
@@ -895,7 +898,7 @@ class Command(BaseCommand):
                     translated_survey.title = row['title']
                     translated_survey.draft_title = row['draft_title']
                     translated_survey.live = row['live']
-                    translated_survey.description = self.map_survey_description(row['description'])
+                    translated_survey.description = self.map_survey_description(row)
                     translated_survey.thank_you_text = self.map_survey_thank_you_text(row)
                     translated_survey.allow_anonymous_submissions = row['allow_anonymous_submissions']
                     translated_survey.allow_multiple_submissions = row['allow_multiple_submissions_per_user']
@@ -910,7 +913,13 @@ class Command(BaseCommand):
                     translated_survey.has_unpublished_changes = row['has_unpublished_changes']
                     translated_survey.search_description = row['search_description']
                     translated_survey.seo_title = row['seo_title']
+                    translated_survey.index_page_description = row['homepage_introduction']
+                    translated_survey.index_page_description_line_2 = row['homepage_button_text']
                     translated_survey.save()
+
+                    if row['submit_text'] and len(row['submit_text']) > 40:
+                        self.stdout.write(f"Truncated survey submit button text, title={row['title']}")
+
                     V1ToV2ObjectMap.create_map(content_object=translated_survey, v1_object_id=row['page_ptr_id'])
 
                     self.v1_to_v2_page_map.update({
@@ -932,7 +941,7 @@ class Command(BaseCommand):
             depth=row['depth'],
             numchild=row['numchild'],
             live=row['live'],
-            description=self.map_survey_description(row['description']),
+            description=self.map_survey_description(row),
             thank_you_text=self.map_survey_thank_you_text(row),
             allow_anonymous_submissions=row['allow_anonymous_submissions'],
             allow_multiple_submissions=row['allow_multiple_submissions_per_user'],
@@ -947,11 +956,13 @@ class Command(BaseCommand):
             has_unpublished_changes=row['has_unpublished_changes'],
             search_description=row['search_description'],
             seo_title=row['seo_title'],
+            index_page_description=row['homepage_introduction'],
+            index_page_description_line_2=row['homepage_button_text'],
         )
 
         try:
             survey.save()
-            if row['submit_text'] and row['submit_text'] > 40:
+            if row['submit_text'] and len(row['submit_text']) > 40:
                 self.stdout.write(f"Truncated survey submit button text, title={row['title']}")
             V1ToV2ObjectMap.create_map(content_object=survey, v1_object_id=row['page_ptr_id'])
         except Exception as e:
@@ -965,9 +976,18 @@ class Command(BaseCommand):
         })
         self.stdout.write(f"saved survey, title={survey.title}")
 
-    def map_survey_description(self, v1_survey_description):
-        v1_survey_description = json.loads(v1_survey_description)
+    def map_survey_description(self, row):
         v2_survey_description = []
+
+        v2_image = self.image_map.get(row['image_id'])
+        if v2_image:
+            v2_survey_description.append({'type': 'image', 'value': v2_image.id})
+
+        v1_introduction = row['introduction']
+        if v1_introduction:
+            v2_survey_description.append({'type': 'paragraph', 'value': v1_introduction})
+
+        v1_survey_description = json.loads(row['description'])
         for block in v1_survey_description:
             if block['type'] == 'paragraph':
                 v2_survey_description.append(block)
@@ -975,16 +995,14 @@ class Command(BaseCommand):
                 image = self.image_map.get(block['value'])
                 if image:
                     v2_survey_description.append({'type': 'image', 'value': image.id})
+
         return json.dumps(v2_survey_description)
 
     def map_survey_thank_you_text(self, row):
-        image = self.image_map.get(row['image_id'])
         v2_thank_you_text = []
 
         if row['thank_you_text']:
             v2_thank_you_text.append({'type': 'paragraph', 'value': row['thank_you_text']})
-        if image:
-            v2_thank_you_text.append({'type': 'image', 'value': image.id})
 
         return json.dumps(v2_thank_you_text)
 
