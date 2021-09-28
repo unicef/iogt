@@ -28,6 +28,7 @@ class CommentableMixin(models.Model):
 
 
 class CannedResponse(models.Model):
+    header = models.TextField(null=True)
     text = models.TextField(null=True)
 
     def __str__(self):
