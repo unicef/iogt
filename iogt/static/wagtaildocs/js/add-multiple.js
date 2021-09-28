@@ -24,11 +24,7 @@ $(function() {
             data.context = li;
 
             data.process(function() {
-                const DOCUMENT_FILE_WARNING_SIZE = 200 * 1024;
-                const showWarning = data.files.some((file, i) => file.size > DOCUMENT_FILE_WARNING_SIZE);
-                if (showWarning) {
-                    alert(`File size exceeds facebook free basics limit (${DOCUMENT_FILE_WARNING_SIZE / 1024}KB).`);
-                }
+                alert('Documents aren\'t support in facebook free basics.');
                 return $this.fileupload('process', data);
             }).always(function() {
                 data.context.removeClass('processing');

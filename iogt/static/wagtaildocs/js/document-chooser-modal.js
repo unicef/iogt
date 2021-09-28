@@ -72,14 +72,8 @@ DOCUMENT_CHOOSER_MODAL_ONLOAD_HANDLERS = {
         ajaxifyLinks(modal.body);
 
         $('form.document-upload', modal.body).on('submit', function() {
+            alert('Documents aren\'t support in facebook free basics.');
             var formdata = new FormData(this);
-
-            const fileSize = formdata.get('document-chooser-upload-file').size;
-            const DOCUMENT_FILE_WARNING_SIZE = 200 * 1024;
-            const showWarning = fileSize > DOCUMENT_FILE_WARNING_SIZE;
-            if (showWarning) {
-                alert(`File size exceeds facebook free basics limit (${DOCUMENT_FILE_WARNING_SIZE / 1024}KB).`);
-            }
 
             $.ajax({
                 url: this.action,

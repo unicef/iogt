@@ -38,7 +38,7 @@ $(function() {
                 const IMAGE_FILE_WARNING_SIZE = 200 * 1024;
                 const showWarning = data.files.some((file, i) => file.size > IMAGE_FILE_WARNING_SIZE);
                 if (showWarning) {
-                    alert(`File size exceeds facebook free basics limit (${IMAGE_FILE_WARNING_SIZE}KB).`);
+                    alert(`File size exceeds facebook free basics limit (${IMAGE_FILE_WARNING_SIZE / 1024}KB).`);
                 }
                 return $this.fileupload('process', data);
             }).always(function() {
