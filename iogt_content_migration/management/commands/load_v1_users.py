@@ -239,6 +239,10 @@ class Command(BaseCommand):
 
             new_article = V1ToV2ObjectMap.get_v2_obj(Article, row['object_pk'])
 
+            if not new_article:
+                self.stdout.write(self.style.ERROR(f'New Article for object_pk:{row["object_pk"]} not found.'))
+                continue
+
             max_thread_id_comment = XtdComment.objects.filter(
                 content_type_id=content_type.id, object_pk=new_article.pk).order_by('-thread_id').first()
 
@@ -292,7 +296,7 @@ class Command(BaseCommand):
             try:
                 new_survey = V1ToV2ObjectMap.get_v2_obj(Survey, row['page_id'])
                 new_survey_page = Page.objects.get(pk=new_survey.id)
-            except KeyError:
+            except (KeyError, AttributeError):
                 self.stdout.write(self.style.ERROR(f'Skipping Page: {row["page_id"]}'))
                 continue
 
