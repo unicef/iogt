@@ -1,11 +1,14 @@
 from pathlib import Path
 
+from django.core.files import File
 from django.core.management.base import BaseCommand
 from wagtail.core.models import Page, Site, Locale, Collection
 from django.core.files.images import ImageFile
+from wagtail.documents.models import Document
 from wagtail.images.models import Image
 from wagtail_localize.models import Translation
 from wagtail_localize.views.submit_translations import TranslationCreator
+from wagtailmedia.models import Media
 
 import home.models as models
 from home.models import V1ToV2ObjectMap
@@ -68,6 +71,8 @@ class Command(BaseCommand):
         self.skip_locales = options.get('skip_locales')
 
         self.collection_map = {}
+        self.document_map = {}
+        self.media_map = {}
         self.image_map = {}
         self.page_translation_map = {}
         self.v1_to_v2_page_map = {}
@@ -97,6 +102,8 @@ class Command(BaseCommand):
         models.HomePage.objects.all().delete()
         Site.objects.all().delete()
         Image.objects.all().delete()
+        Document.objects.all().delete()
+        Media.objects.all().delete()
         V1ToV2ObjectMap.objects.all().delete()
 
     def db_connect(self, options):
@@ -127,6 +134,8 @@ class Command(BaseCommand):
 
     def migrate(self, root):
         self.migrate_collections()
+        self.migrate_documents()
+        self.migrate_media()
         self.migrate_images()
         self.load_page_translation_map()
         home = self.create_home_page(root)
@@ -223,12 +232,69 @@ class Command(BaseCommand):
         cur.close()
         self.stdout.write('Collections migrated')
 
+    def migrate_documents(self):
+        cur = self.db_query('select * from wagtaildocs_document')
+        content_type = self.find_content_type_id('wagtaildocs', 'document')
+        for row in cur:
+            if not row['file']:
+                self.stdout.write(f'Document file path not found, id={row["id"]}')
+                continue
+
+            file = self.open_file(row['file'])
+            if file:
+                document = Document.objects.create(
+                    title=row['title'],
+                    file=File(file),
+                    created_at=row['created_at'],
+                    collection=self.collection_map.get(row['collection_id']),
+                )
+                V1ToV2ObjectMap.create_map(content_object=document, v1_object_id=row['id'])
+                tags = self.find_tags(content_type, row['id'])
+                if tags:
+                    document.tags.add(*tags)
+                self.document_map.update({ row['id']: document })
+        cur.close()
+        self.stdout.write('Documents migrated')
+
+    def migrate_media(self):
+        cur = self.db_query('select * from wagtailmedia_media')
+        content_type = self.find_content_type_id('wagtailmedia', 'media')
+        for row in cur:
+            if not row['file']:
+                self.stdout.write(f'Media file path not found, id={row["id"]}')
+                continue
+
+            file = self.open_file(row['file'])
+            if file:
+                thumbnail = self.open_file(row['thumbnail'])
+                media = Media.objects.create(
+                    title=row['title'],
+                    file=File(file),
+                    type=row['type'],
+                    duration=row['duration'],
+                    thumbnail=File(thumbnail) if thumbnail else None,
+                    created_at=row['created_at'],
+                    collection=self.collection_map.get(row['collection_id']),
+                )
+                V1ToV2ObjectMap.create_map(content_object=media, v1_object_id=row['id'])
+                tags = self.find_tags(content_type, row['id'])
+                if tags:
+                    media.tags.add(*tags)
+                self.media_map.update({ row['id']: media })
+        cur.close()
+        self.stdout.write('Media migrated')
+
     def migrate_images(self):
         cur = self.db_query('select * from wagtailimages_image')
         content_type = self.find_content_type_id('wagtailimages', 'image')
         for row in cur:
-            image_file = self.open_image_file(row['file'])
+            if not row['file']:
+                self.stdout.write(f'Image file path not found, id={row["id"]}')
+                continue
+
+            image_file = self.open_file(row['file'])
             if image_file:
+                Document.objects.create()
                 image = Image.objects.create(
                     title=row['title'],
                     file=ImageFile(image_file, name=row['file'].split('/')[-1]),
@@ -255,12 +321,12 @@ class Command(BaseCommand):
         cur.close()
         return content_type.get('id')
 
-    def open_image_file(self, file):
+    def open_file(self, file):
         file_path = Path(self.media_dir) / file
         try:
             return open(file_path, 'rb')
         except:
-            self.stdout.write(f"Image file not found: {file_path}")
+            self.stdout.write(f"File not found: {file_path}")
 
     def find_tags(self, content_type, object_id):
         tags_query = 'select t.name from taggit_tag t join taggit_taggeditem ti on t.id = ti.tag_id where ti.content_type_id = {} and ti.object_id = {}'
@@ -1011,6 +1077,5 @@ class Command(BaseCommand):
                 home_featured_content.append({'type': 'article', 'value': v2_article.id})
                 home_page.home_featured_content = json.dumps(home_featured_content)
                 home_page.save()
-                print(row['page_ptr_id'], v2_article.id, home_page.id)
         cur.close()
         self.stdout.write('Articles featured in home page migrated')
