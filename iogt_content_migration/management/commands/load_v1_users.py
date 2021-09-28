@@ -407,8 +407,11 @@ class Command(BaseCommand):
 
         for row in self.with_progress(sql, cur, 'User Page View Restrictions migration in progress'):
             if not V1ToV2ObjectMap.get_v2_obj(PageViewRestriction, row['id']):
-                migrated_page = V1ToV2ObjectMap.get_v2_obj(Page, row['page_id'])
-                print(migrated_page)
+                for klass in [Page, Article, Survey, Poll]:
+                    migrated_page = V1ToV2ObjectMap.get_v2_obj(klass, row['page_id'])
+                    if migrated_page:
+                        break
+
                 pvr = PageViewRestriction.objects.create(
                     page=migrated_page, restriction_type=row['restriction_type'], password=row['password'])
                 V1ToV2ObjectMap.create_map(pvr, row['id'])
