@@ -405,6 +405,7 @@ class Command(BaseCommand):
             has_unpublished_changes=row['has_unpublished_changes'],
             search_description=row['search_description'],
             seo_title=row['seo_title'],
+            background_color=self.get_color_hex(row['extra_style_hints'])
         )
         section.save()
         content_type = self.find_content_type_id('core', 'sectionpage')
@@ -1079,3 +1080,56 @@ class Command(BaseCommand):
                 home_page.save()
         cur.close()
         self.stdout.write('Articles featured in home page migrated')
+
+    def get_color_hex(self, color_name):
+        return {
+            '--tiber': '#07292F',
+            '--mecury': '#eae9e9',
+            '--light_scampi': '#685FA1',
+            '--dove_gray': '#737373',
+            '--mineral_gray': '#dedede',
+            '--washed_gray': '#f1f1f1',
+            '--brown': '#a03321',
+            '--medium_red_violet': '#B62A99',
+            '--dark_medium_red_violet': '#b43393',
+            '--violet_blue': '#a54f9e',
+            '--mandy': '#E24256',
+            '--plum': '#7e2268',
+            '--wisteria': '#8e68ad',
+            '--grape': '#541c56',
+            '--paris_m': '#202855',
+            '--east_bay': '#4E4682',
+            '--victoria': '#4D4391',
+            '--scampi': '#685FA1',
+            '--sandybrown': '#EF9955',
+            '--jaffa': '#ee8c39',
+            '--saffron': '#F2B438',
+            '--saffron_light': '#f2b437',
+            '--cinnabar': '#EC3B3A',
+            '--cinnabar_dark': '#ee5523',
+            '--cardinal': '#bf2026',
+            '--pomegranate': '#ed3330',
+            '--roman': '#DF6859',
+            '--mauvelous': '#F38AA5',
+            '--beed_blush': '#e764a0',
+            '--maxican_red': '#a21d2e',
+            '--kobi': '#d481b5',
+            '--illusion': '#ee97ac',
+            '--celery': '#A4CE55',
+            '--de_york': '#6EC17F',
+            '--eucalyptus': '#2A9B58',
+            '--tradewind': '#4bab99',
+            '--moss_green': '#b3d9a1',
+            '--danube': '#6093CD',
+            '--light_danube': '#627abc',
+            '--indigo': '#5F7AC9',
+            '--mariner': '#4759a6',
+            '--robin_egg_blue': '#00BFC6',
+            '--pelorous': '#37BFBE',
+            '--iris_blue': '#03acc3',
+            '--red_berry': '#711e29',
+            '--bay_of_may': '#2b378c',
+            '--viking': '#3bbfbd',
+            '--denim': '#127f99',
+            '--tory_blue': '#134b90',
+        }.get(color_name)
