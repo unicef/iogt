@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.forms.utils import flatatt
 from django.template.loader import render_to_string
 from django.utils.html import format_html, format_html_join
@@ -7,6 +8,8 @@ from wagtail.core import blocks
 from wagtail.core.blocks import PageChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtailmedia.blocks import AbstractMediaChooserBlock
+
+from questionnaires.utils import SkipLogicPaginator
 
 
 class MediaBlock(AbstractMediaChooserBlock):
@@ -77,12 +80,55 @@ class SocialMediaShareButtonBlock(blocks.StructBlock):
 class EmbeddedQuestionnaireChooserBlock(blocks.PageChooserBlock):
 
     def render_basic(self, value, context=None):
+        from questionnaires.models import Poll
+
         context.update({
-            'object': value,
-            'type': value.__class__.__name__,
-            'form': value.get_form(),
+            'page': value,
         })
-        return render_to_string('blocks/embedded_questionnaire.html', context)
+
+        request = context['request']
+        if request.session.session_key is None:
+            request.session.save()
+        self.session = request.session
+
+        form_class = value.get_form_class()
+
+        if isinstance(value, Poll):
+            template = 'blocks/embedded_poll.html'
+            context.update({
+                'results': value.get_results(),
+                'result_as_percentage': value.result_as_percentage,
+            })
+        else:
+            template = 'blocks/embedded_questionnaire.html'
+            paginator = SkipLogicPaginator(value.get_form_fields(), {}, {})
+            step = paginator.page(1)
+            if hasattr(value, 'multi_step') and value.multi_step:
+                form_class = value.get_form_class_for_step(step)
+            context.update({
+                'fields_step': step,
+            })
+
+        multiple_submission_filter = (
+            Q(session_key=request.session.session_key) if request.user.is_anonymous else Q(user__pk=request.user.pk)
+        )
+        multiple_submission_check = (
+            not value.allow_multiple_submissions
+            and value.get_submission_class().objects.filter(multiple_submission_filter, page=value).exists()
+        )
+        anonymous_user_submission_check = request.user.is_anonymous and not value.allow_anonymous_submissions
+        if multiple_submission_check or anonymous_user_submission_check:
+            context.update({
+                'form': None,
+            })
+            return render_to_string(template, context)
+
+        form = form_class(page=value, user=request.user)
+
+        context.update({
+            'form': form,
+        })
+        return render_to_string(template, context)
 
     class Meta:
         icon = 'form'

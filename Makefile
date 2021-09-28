@@ -19,3 +19,5 @@ update_elasticsearch_index:
 	docker-compose run django python manage.py update_index
 test:
 	docker-compose run django python manage.py test --settings=iogt.settings.test
+cypress:
+	docker-compose -f docker-compose.cypress.yml up

@@ -534,7 +534,7 @@
   font-size: 12px;
   line-height: 16px;
   color: #303030;
-  z-index: 9;
+  z-index: 999;
 }
 
 .language_drop > a:after {
@@ -563,6 +563,7 @@
   padding: 20px 8px 0 12px;
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1), 0px 4px 8px rgba(0, 0, 0, 0.08), 0px 1px 12px rgba(0, 0, 0, 0.04);
   border-radius: 8px;
+  z-index: 99;
 }
 
 .language_drop:hover > a:after,
@@ -853,7 +854,50 @@
   }
 }
 
-.block-heading {
+
+.content .article__content__link-btn {
+    margin-top: 20px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 8px 16px;
+    border: 1px solid #303030;
+    border-radius: 8px;
+    width: 100%;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 10px;
+    line-height: 16px;
+    color: #303030;
+    text-decoration: none;
+}
+
+#app .content-holder .content h1 {
+  font-size: 22px;
+  line-height: 26px;
+  font-weight: bold;
+  margin: 12px 0;
+}
+
+#app .content-holder .content h1.large {
+  font-size: 28px;
+  line-height: 34px;
+  font-weight: bold;
+  margin: 15px 0;
+}
+
+.block-heading,
+#app .content-holder .content h2 {
   font-style: normal;
   font-weight: bold;
   font-size: 16px;
@@ -886,11 +930,43 @@
   max-height: 100%;
 }
 
+
+#app .content-holder .content h3 {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 18px;
+  margin: 12px 0;
+}
+
+#app .content-holder .content h4 {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 13px;
+  line-height: 16px;
+  margin: 10px 0;
+}
+
+@media only screen and (min-width: 360px){
+  .content .article__content__link-btn {
+      font-size: 16px;
+      line-height: 22px;
+      padding: 12px 16px;
+  }
+
 @media screen and (min-width: 360px) {
   .block-heading {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 20px;
+    margin: 16px 0;
+  }
+
+  #app .content-holder .content h1 {
     font-size: 24px;
     line-height: 28px;
-    margin: 24px 0;
+    margin: 16px 0;
   }
 
   .btn-primary .icon-holder {
@@ -900,5 +976,15 @@
 
   .btn-primary .icon-holder img {
     max-width: 16px;
+  }
+}
+  #app .content-holder .content h1.large {
+    font-size: 33px;
+    line-height: 36px;
+    margin: 18px 0;
+  }
+
+  .content .nav-bar__wrap {
+    display: none;
   }
 }

@@ -3,6 +3,8 @@ import os
 from django.conf import settings
 from django.contrib.admin.utils import flatten
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.core.files.images import get_image_dimensions
 from django.db import models
@@ -322,12 +324,9 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
     ]
 
-    search_fields = [
+    search_fields = Page.search_fields + [
         index.SearchField('get_heading_values', partial_match=True, boost=1),
         index.SearchField('get_paragraph_values', partial_match=True),
-        index.SearchField('title', partial_match=True, boost=2),
-
-        index.FilterField('live')
     ]
 
     edit_handler = TabbedInterface([
@@ -464,6 +463,14 @@ class SiteSettings(BaseSetting):
         related_name='+',
         help_text="Upload an image file (.jpg, .png, .svg). The ideal size is 100px x 40px"
     )
+    favicon = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text="Upload an image file (.jpg, .png, .svg). The ideal size is 40px x 40px"
+    )
     show_only_translated_pages = models.BooleanField(
         default=False,
         help_text=_('When selecting this option, untranslated pages'
@@ -527,9 +534,11 @@ class SiteSettings(BaseSetting):
     registration_survey = models.ForeignKey('questionnaires.Survey', null=True,
                                             blank=True,
                                             on_delete=models.SET_NULL)
+    opt_in_to_google_web_light = models.BooleanField(default=False)
 
     panels = [
         ImageChooserPanel('logo'),
+        ImageChooserPanel('favicon'),
         MultiFieldPanel(
             [
                 FieldPanel('show_only_translated_pages'),
@@ -591,6 +600,12 @@ class SiteSettings(BaseSetting):
                 PageChooserPanel('registration_survey'),
             ],
             heading="Registration Settings",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('opt_in_to_google_web_light'),
+            ],
+            heading="Opt in to Google web light",
         ),
     ]
 
@@ -861,3 +876,16 @@ class ThemeSettings(BaseSetting):
         null=True, blank=True, help_text='The background color of the primary button as a HEX code', max_length=8,
         default='#f0f0f0')
 
+class V1ToV2ObjectMap(models.Model):
+    v1_object_id = models.PositiveIntegerField()
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+
+    def __str__(self):
+        return f'{self.v1_object_id} -> {self.object_id}'
+
+    @classmethod
+    def create_map(cls, content_object, v1_object_id):
+        v1_to_v2_object_map = cls(content_object=content_object, v1_object_id=v1_object_id)
+        v1_to_v2_object_map.save()

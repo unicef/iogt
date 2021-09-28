@@ -17,13 +17,11 @@
         {% else %}
             {% for locale in default_locales %}
                 {% get_language_info for locale.language_code as lang %}
-                {% language lang.code %}
-                    <li class="{% if lang.code == LANGUAGE_CODE %}selected{% endif %}">
+                <li class="{% if lang.code == LANGUAGE_CODE %}selected{% endif %}">
                     <a href="{% change_lang lang.code %}" rel="alternate" hreflang="{{ lang.code }}">
                         {{ lang.name_local }}
                     </a>
-                    </li>
-                {% endlanguage %}
+                </li>
             {% endfor %}
     {% endif %}
 

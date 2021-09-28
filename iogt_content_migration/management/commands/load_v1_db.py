@@ -7,6 +7,7 @@ from wagtail_localize.models import Translation
 from wagtail_localize.views.submit_translations import TranslationCreator
 
 import home.models as models
+from home.models import V1ToV2ObjectMap
 from questionnaires.models import Poll, PollFormField, Survey, SurveyFormField, Quiz, QuizFormField
 import psycopg2
 import psycopg2.extras
@@ -86,6 +87,7 @@ class Command(BaseCommand):
         models.HomePage.objects.all().delete()
         Site.objects.all().delete()
         Image.objects.all().delete()
+        V1ToV2ObjectMap.objects.all().delete()
 
     def db_connect(self, options):
         connection_string = self.create_connection_string(options)
@@ -145,6 +147,7 @@ class Command(BaseCommand):
                 last_published_at=main['last_published_at'],
             )
             root.add_child(instance=home)
+            V1ToV2ObjectMap.create_map(content_object=home, v1_object_id=main['page_ptr_id'])
         else:
             raise Exception('Could not find a main page in v1 DB')
         cur.close()
@@ -246,7 +249,7 @@ class Command(BaseCommand):
         else:
             for row in section_page_translations:
                 section = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
-                locale, __ = Locale.objects.get_or_create(language_code=row['locale'])
+                locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
 
                 self.translate_page(locale=locale, page=section)
 
@@ -256,6 +259,7 @@ class Command(BaseCommand):
                     translated_section.draft_title = row['draft_title']
                     translated_section.live = row['live']
                     translated_section.save()
+                    V1ToV2ObjectMap.create_map(content_object=translated_section, v1_object_id=row['page_ptr_id'])
 
                     self.v1_to_v2_page_map.update({
                         row['page_ptr_id']: translated_section
@@ -276,6 +280,7 @@ class Command(BaseCommand):
             live=row['live'],
         )
         section.save()
+        V1ToV2ObjectMap.create_map(content_object=section, v1_object_id=row['page_ptr_id'])
 
         self.v1_to_v2_page_map.update({
             row['page_ptr_id']: section
@@ -302,7 +307,7 @@ class Command(BaseCommand):
         else:
             for row in article_page_translations:
                 article = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
-                locale, __ = Locale.objects.get_or_create(language_code=row['locale'])
+                locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
 
                 self.translate_page(locale=locale, page=article)
 
@@ -314,6 +319,7 @@ class Command(BaseCommand):
                     translated_article.live = row['live']
                     translated_article.body = self.map_article_body(row['body'])
                     translated_article.save()
+                    V1ToV2ObjectMap.create_map(content_object=translated_article, v1_object_id=row['page_ptr_id'])
 
                     self.v1_to_v2_page_map.update({
                         row['page_ptr_id']: translated_article
@@ -336,6 +342,7 @@ class Command(BaseCommand):
         )
         try:
             article.save()
+            V1ToV2ObjectMap.create_map(content_object=article, v1_object_id=row['page_ptr_id'])
             self.v1_to_v2_page_map.update({
                 row['page_ptr_id']: article
             })
@@ -370,7 +377,7 @@ class Command(BaseCommand):
         else:
             for row in banner_page_translations:
                 banner = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
-                locale, __ = Locale.objects.get_or_create(language_code=row['locale'])
+                locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
 
                 try:
                     self.translate_page(locale=locale, page=banner)
@@ -385,6 +392,7 @@ class Command(BaseCommand):
                     translated_banner.draft_title = row['draft_title']
                     translated_banner.live = row['live']
                     translated_banner.save()
+                    V1ToV2ObjectMap.create_map(content_object=translated_banner, v1_object_id=row['page_ptr_id'])
 
                     self.v1_to_v2_page_map.update({
                         row['page_ptr_id']: translated_banner
@@ -407,6 +415,7 @@ class Command(BaseCommand):
             banner_description=''
         )
         banner.save()
+        V1ToV2ObjectMap.create_map(content_object=banner, v1_object_id=row['page_ptr_id'])
         self.v1_to_v2_page_map.update({
             row['page_ptr_id']: banner
         })
@@ -432,7 +441,7 @@ class Command(BaseCommand):
         else:
             for row in footer_page_translations:
                 footer = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
-                locale, __ = Locale.objects.get_or_create(language_code=row['locale'])
+                locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
 
                 self.translate_page(locale=locale, page=footer)
 
@@ -444,6 +453,7 @@ class Command(BaseCommand):
                     translated_footer.live = row['live']
                     translated_footer.body = self.map_article_body(row['body'])
                     translated_footer.save()
+                    V1ToV2ObjectMap.create_map(content_object=translated_footer, v1_object_id=row['page_ptr_id'])
 
                     self.v1_to_v2_page_map.update({
                         row['page_ptr_id']: translated_footer
@@ -465,6 +475,7 @@ class Command(BaseCommand):
             body=self.map_article_body(row['body']),
         )
         footer.save()
+        V1ToV2ObjectMap.create_map(content_object=footer, v1_object_id=row['page_ptr_id'])
         self.v1_to_v2_page_map.update({
             row['page_ptr_id']: footer
         })
@@ -525,7 +536,7 @@ class Command(BaseCommand):
         else:
             for row in poll_page_translations:
                 poll = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
-                locale, __ = Locale.objects.get_or_create(language_code=row['locale'])
+                locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
 
                 try:
                     self.translate_page(locale=locale, page=poll)
@@ -540,6 +551,7 @@ class Command(BaseCommand):
                     translated_poll.live = row['live']
                     translated_poll.result_as_percentage = row['result_as_percentage']
                     translated_poll.save()
+                    V1ToV2ObjectMap.create_map(content_object=translated_poll, v1_object_id=row['page_ptr_id'])
 
                     self.v1_to_v2_page_map.update({
                         row['page_ptr_id']: translated_poll
@@ -565,6 +577,7 @@ class Command(BaseCommand):
         )
         try:
             poll.save()
+            V1ToV2ObjectMap.create_map(content_object=poll, v1_object_id=row['page_ptr_id'])
         except Exception as e:
             self.stdout.write(f"Unable to save poll, title={row['title']}")
             return
@@ -605,12 +618,15 @@ class Command(BaseCommand):
             else:
                 field_type = 'dropdown'
         else:
-            self.stdout.write(f'Unable to determine field type for poll={poll_row["title"]}')
+            self.stdout.write(f'Unable to determine field type for poll={poll_row["title"]}, so creating a multiline field.')
+            PollFormField.objects.create(page=poll, label=poll.title, field_type='multiline')
             return
 
-        choices = ','.join(choices)
+        choices = '|'.join(choices)
 
-        PollFormField.objects.create(page=poll, label=poll.title, field_type=field_type, choices=choices)
+        poll_form_field = PollFormField.objects.create(page=poll, label=poll.title, field_type=field_type, choices=choices)
+        for row in cur:
+            V1ToV2ObjectMap.create_map(content_object=poll_form_field, v1_object_id=row['page_ptr_id'])
         self.stdout.write(f"saved poll question, label={poll.title}")
 
     def migrate_surveys(self):
@@ -648,7 +664,7 @@ class Command(BaseCommand):
         else:
             for row in survey_page_translations:
                 survey = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
-                locale, __ = Locale.objects.get_or_create(language_code=row['locale'])
+                locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
 
                 try:
                     self.translate_page(locale=locale, page=survey)
@@ -668,6 +684,7 @@ class Command(BaseCommand):
                     translated_survey.direct_display = row['display_survey_directly']
                     translated_survey.multi_step = row['multi_step']
                     translated_survey.save()
+                    V1ToV2ObjectMap.create_map(content_object=translated_survey, v1_object_id=row['page_ptr_id'])
 
                     self.v1_to_v2_page_map.update({
                         row['page_ptr_id']: translated_survey
@@ -699,6 +716,7 @@ class Command(BaseCommand):
 
         try:
             survey.save()
+            V1ToV2ObjectMap.create_map(content_object=survey, v1_object_id=row['page_ptr_id'])
         except Exception as e:
             self.stdout.write(f"Unable to save survey, title={row['title']}")
             return
@@ -717,7 +735,7 @@ class Command(BaseCommand):
             if block['type'] == 'paragraph':
                 v2_survey_description.append(block)
             elif block['type'] == 'image':
-                image = self.image_map.get(block.value['image'])
+                image = self.image_map.get(block['value'])
                 if image:
                     v2_survey_description.append({'type': 'image', 'value': image.id})
         return json.dumps(v2_survey_description)
@@ -752,10 +770,22 @@ class Command(BaseCommand):
         SurveyFormField.objects.filter(page=survey).delete()
 
         for row in cur:
-            SurveyFormField.objects.create(
+            survey_form_field = SurveyFormField.objects.create(
                 page=survey, sort_order=row['sort_order'], label=row['label'], required=row['required'],
                 default_value=row['default_value'], help_text=row['help_text'], field_type=row['field_type'],
-                admin_label=row['admin_label'], page_break=row['page_break'], choices=row['choices'],
+                admin_label=row['admin_label'], page_break=row['page_break'], choices='|'.join(row['choices'].split(',')),
                 skip_logic=row['skip_logic']
             )
+            V1ToV2ObjectMap.create_map(content_object=survey_form_field, v1_object_id=row['page_ptr_id'])
+            skip_logic_next_actions = [logic['value']['skip_logic'] for logic in json.loads(row['skip_logic'])]
+            if not survey_row['multi_step'] and ('end' in skip_logic_next_actions or 'question' in skip_logic_next_actions):
+                self.stdout.write(f'skip logic without multi step')
             self.stdout.write(f"saved survey question, label={row['label']}")
+
+    def _get_iso_locale(self, locale):
+        iso_locales_map = {
+            'sho': 'sn',
+            'ch': 'ny',
+        }
+
+        return iso_locales_map.get(locale, locale)

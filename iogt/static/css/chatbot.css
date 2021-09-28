@@ -296,6 +296,11 @@
     line-height: 14px;
 }
 
+.btn-search.add {
+    position: static;
+    margin-top: 10px;
+}
+
 .attachment-box .attachment-line img {
     display: inline-block;
 }

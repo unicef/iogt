@@ -37,7 +37,22 @@
             <div class="nav-bar__item">
                 {% url 'account_login' as login_url %}
                 {% static 'icons/login.svg' as login_icon %}
-                {% primary_button title="Log in / Create account" href=login_url icon_path=login_icon %}
+                {% if request.user.is_anonymous %}
+                    <a href="{% url 'account_login' %}">
+                        <span class="nav-bar__item__icon">
+                             <img src="{% static 'icons/login.svg' %}">
+                        </span>
+                        {% primary_button title="Log in / Create account" href=login_url icon_path=login_icon %}
+{#                        <span class="nav-bar__item__title">{% translate "Log in / Create account" %}</span>#}
+                    </a>
+                {% else %}
+                    <a href="{% url 'user_profile' %}">
+                        <span class="nav-bar__item__icon">
+                             <img src="{% static 'icons/profile.svg' %}">
+                        </span>
+                        <span class="nav-bar__item__title">{% translate "Profile" %}</span>
+                    </a>
+                {% endif %}
             </div>
         </div>
     </div>
