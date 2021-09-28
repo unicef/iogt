@@ -918,15 +918,18 @@
   background: #f7f7f9;
   color: #444;
   justify-content: flex-start;
+  align-items: center;
 }
 
 .btn-primary .icon-holder {
   width: 18px;
   height: 18px;
+  display: flex;
+  align-items: center;
 }
 
 .btn-primary .icon-holder img {
-  max-width: 100%;
+  max-width: 14px;
   max-height: 100%;
 }
 
@@ -947,6 +950,19 @@
   margin: 10px 0;
 }
 
+@media screen and (max-width: 767px) {
+  .btn-primary {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 359px) {
+  .btn-primary {
+    font-weight: normal;
+    font-size: 12px;
+  }
+}
+
 @media only screen and (min-width: 360px){
   .content .article__content__link-btn {
       font-size: 16px;
@@ -954,7 +970,6 @@
       padding: 12px 16px;
   }
 
-@media screen and (min-width: 360px) {
   .block-heading {
     font-style: normal;
     font-weight: bold;
@@ -977,7 +992,7 @@
   .btn-primary .icon-holder img {
     max-width: 16px;
   }
-}
+
   #app .content-holder .content h1.large {
     font-size: 33px;
     line-height: 36px;
