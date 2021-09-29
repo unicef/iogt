@@ -232,6 +232,12 @@ class QuestionnairePage(Page, PageUtilsMixin):
 class SurveyFormField(AbstractFormField):
     page = ParentalKey("Survey", on_delete=models.CASCADE, related_name="survey_form_fields")
     required = models.BooleanField(verbose_name=_('required'), default=False)
+    clean_name = models.TextField(
+        verbose_name=_('name'),
+        blank=True,
+        default='',
+        help_text=_('Safe name of the form field, the label converted to ascii_snake_case')
+    )
     field_type = models.CharField(
         verbose_name=_('field type'),
         max_length=16,
@@ -426,6 +432,12 @@ class PollFormField(AbstractFormField):
         ('multiline', _('Multi-line text')),
         ('radio', _('Radio buttons')),
     )
+    clean_name = models.TextField(
+        verbose_name=_('name'),
+        blank=True,
+        default='',
+        help_text=_('Safe name of the form field, the label converted to ascii_snake_case')
+    )
     field_type = models.CharField(
         verbose_name=_('field type'),
         max_length=16,
@@ -573,6 +585,12 @@ class Poll(QuestionnairePage, AbstractForm):
 class QuizFormField(AbstractFormField):
     page = ParentalKey("Quiz", on_delete=models.CASCADE, related_name="quiz_form_fields")
     required = models.BooleanField(verbose_name=_('required'), default=True)
+    clean_name = models.TextField(
+        verbose_name=_('name'),
+        blank=True,
+        default='',
+        help_text=_('Safe name of the form field, the label converted to ascii_snake_case')
+    )
     field_type = models.CharField(
         verbose_name=_('field type'),
         max_length=16,

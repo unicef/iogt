@@ -632,7 +632,14 @@ class Command(BaseCommand):
 
         choices = '|'.join(choices)
 
-        PollFormField.objects.create(page=poll, label=poll.title, field_type=field_type, choices=choices)
+        try:
+            PollFormField.objects.create(page=poll, label=poll.title, field_type=field_type, choices=choices)
+        except Exception as e:
+            pass
+            breakpoint()
+            print('outside')
+            print('outside')
+
         for row in cur:
             V1ToV2ObjectMap.create_map(content_object=poll, v1_object_id=row['page_ptr_id'])
         self.stdout.write(f"saved poll question, label={poll.title}")
