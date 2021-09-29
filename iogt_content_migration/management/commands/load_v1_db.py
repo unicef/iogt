@@ -200,6 +200,7 @@ class Command(BaseCommand):
         for row in cur:
             image_file = self.open_image_file(row['file'])
             if image_file:
+                self.stdout.write(f"Creating image, file={row['file']}")
                 image = Image.objects.create(
                     title=row['title'],
                     file=ImageFile(image_file, name=row['file'].split('/')[-1]),
