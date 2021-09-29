@@ -13,7 +13,7 @@
     position: fixed;
     bottom: 0px;
     width: 100vw;
-    z-index: 99;
+    z-index: 9991;
   }
   .nav-bar a {
     text-decoration: none;

@@ -13,6 +13,18 @@ function validateFileUpload(fileInput, file_size_threshold) {
 	return true;
 }
 
+function validateFreeBasicsFileUpload(fileInput, file_size_threshold) {
+	if (!fileInput.files || !fileInput.files[0])
+		return true;
+	else {
+		var file = fileInput.files[0];
+		if (file.size >= file_size_threshold)
+			alert(`File size exceeds facebook free basics limit (${file_size_threshold / 1024}KB).`);
+	}
+
+	return true;
+}
+
 /** DOM Variables **/
 const $selects = document.querySelectorAll('.js-select');
 const $searchBtn = document.querySelector('.js-search-btn');
