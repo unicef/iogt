@@ -294,7 +294,6 @@ class Command(BaseCommand):
 
             image_file = self.open_file(row['file'])
             if image_file:
-                Document.objects.create()
                 image = Image.objects.create(
                     title=row['title'],
                     file=ImageFile(image_file, name=row['file'].split('/')[-1]),
