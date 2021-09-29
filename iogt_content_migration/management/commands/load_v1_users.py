@@ -13,7 +13,7 @@ from pip._vendor.distlib.compat import raw_input
 from wagtail.contrib.forms.utils import get_field_clean_name
 
 from tqdm import tqdm
-from wagtail.core.models import Page
+from wagtail.core.models import Page, PageViewRestriction
 
 from comments.models import CannedResponse
 from home.models import Article, V1ToV2ObjectMap
@@ -160,6 +160,8 @@ class Command(BaseCommand):
         self.migrate_user_poll_submissions()
         self.migrate_user_freetext_poll_submissions()
 
+        self.migrate_page_view_restrictions()
+
     def populate_content_type_map(self):
         sql = f'select * from django_content_type'
         cur = self.db_query(sql)
@@ -237,6 +239,10 @@ class Command(BaseCommand):
 
             new_article = V1ToV2ObjectMap.get_v2_obj(Article, row['object_pk'])
 
+            if not new_article:
+                self.stdout.write(self.style.ERROR(f'New Article for object_pk:{row["object_pk"]} not found.'))
+                continue
+
             max_thread_id_comment = XtdComment.objects.filter(
                 content_type_id=content_type.id, object_pk=new_article.pk).order_by('-thread_id').first()
 
@@ -290,7 +296,7 @@ class Command(BaseCommand):
             try:
                 new_survey = V1ToV2ObjectMap.get_v2_obj(Survey, row['page_id'])
                 new_survey_page = Page.objects.get(pk=new_survey.id)
-            except KeyError:
+            except (KeyError, AttributeError):
                 self.stdout.write(self.style.ERROR(f'Skipping Page: {row["page_id"]}'))
                 continue
 
@@ -360,10 +366,12 @@ class Command(BaseCommand):
                     page=v2_poll_page,
                     user=V1ToV2ObjectMap.get_v2_obj(get_user_model(), row['user_id']) if row['user_id'] else None,
                 )
+                submission.submit_time = row['submission_date']
+                submission.save()
                 V1ToV2ObjectMap.create_map(submission, row['id'], extra='poll')
 
     def migrate_user_freetext_poll_submissions(self):
-        sql = f'select wcp.id, wcp.title, pftv.answer, pftv.id as submission_id, pftv.user_id ' \
+        sql = f'select wcp.id, wcp.title, pftv.answer, pftv.id as submission_id, pftv.user_id, pftv.submission_date ' \
               f'from polls_freetextquestion pftq ' \
               f'inner join wagtailcore_page wcp on pftq.question_ptr_id = wcp.id ' \
               f'inner join polls_freetextvote pftv on pftv.question_id = wcp.id'
@@ -391,6 +399,30 @@ class Command(BaseCommand):
                     form_data=json.dumps(form_data, cls=DjangoJSONEncoder),
                     page=v2_poll_page,
                     user=V1ToV2ObjectMap.get_v2_obj(get_user_model(), freetext_submission['user_id']) if
-                    freetext_submission['user_id'] else None,
+                    freetext_submission['user_id'] else None
                 )
+                submission.submit_time = freetext_submission['submission_date']
+                submission.save()
                 V1ToV2ObjectMap.create_map(submission, submission_id, extra='freetext_poll')
+
+    def migrate_page_view_restrictions(self):
+        sql = f'select * from wagtailcore_pageviewrestriction'
+        cur = self.db_query(sql)
+
+        for row in self.with_progress(sql, cur, 'User Page View Restrictions migration in progress'):
+            if not V1ToV2ObjectMap.get_v2_obj(PageViewRestriction, row['id']):
+                for klass in [Page, Article, Survey, Poll]:
+                    migrated_page = V1ToV2ObjectMap.get_v2_obj(klass, row['page_id'])
+                    if migrated_page:
+                        break
+
+                pvr = PageViewRestriction.objects.create(
+                    page=migrated_page, restriction_type=row['restriction_type'], password=row['password'])
+                V1ToV2ObjectMap.create_map(pvr, row['id'])
+
+                pvr_groups_sql = f'select * from wagtailcore_pageviewrestriction_groups where pageviewrestriction_id={row["id"]}'
+                pvr_groups_cur = self.db_query(pvr_groups_sql)
+
+                for pvr_group in pvr_groups_cur:
+                    migrated_group = V1ToV2ObjectMap.get_v2_obj(Group, pvr_group['group_id'])
+                    PageViewRestriction.groups.add(migrated_group)
