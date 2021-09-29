@@ -76,6 +76,7 @@ class Command(BaseCommand):
         self.image_map = {}
         self.page_translation_map = {}
         self.v1_to_v2_page_map = {}
+        self.page_revision_map = {}
 
         self.clear()
         self.stdout.write('Existing site structure cleared')
@@ -153,6 +154,7 @@ class Command(BaseCommand):
         self.migrate_featured_articles_for_section()
         self.migrate_featured_articles_for_homepage()
         self.migrate_revisions()
+        self.update_page_revision_references()
         self.stop_translations()
 
     def create_home_page(self, root):
@@ -1184,12 +1186,26 @@ class Command(BaseCommand):
         for row in cur:
             v2_page = self.v1_to_v2_page_map.get(row['page_id'])
             if v2_page:
-                PageRevision.objects.create(
+                page_revision = PageRevision.objects.create(
                     submitted_for_moderation=row['submitted_for_moderation'],
                     created_at=row['created_at'],
                     content_json=row['content_json'],
                     approved_go_live_at=row['approved_go_live_at'],
                     page_id=v2_page.id,
                 )
+                V1ToV2ObjectMap.create_map(content_object=page_revision, v1_object_id=row['page_id'])
+                self.page_revision_map.update({row['id']: page_revision})
         cur.close()
         self.stdout.write('Revisions migrated')
+
+    def update_page_revision_references(self):
+        cur = self.db_query(f'select * from wagtailcore_page')
+        for row in cur:
+            v2_page = self.v1_to_v2_page_map.get(row['id'])
+            v2_page_revision = self.page_revision_map.get(row['live_revision_id'])
+            if v2_page and v2_page_revision:
+                v2_page.latest_revision_created_at = row['latest_revision_created_at']
+                v2_page.live_revision_id = v2_page_revision.id
+                v2_page.save()
+        cur.close()
+        self.stdout.write('Page revision reference updated')
