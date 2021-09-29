@@ -2,7 +2,7 @@ from pathlib import Path
 
 from django.core.files import File
 from django.core.management.base import BaseCommand
-from wagtail.core.models import Page, Site, Locale, Collection
+from wagtail.core.models import Page, Site, Locale, Collection, PageRevision
 from django.core.files.images import ImageFile
 from wagtail.documents.models import Document
 from wagtail.images.models import Image
@@ -84,6 +84,7 @@ class Command(BaseCommand):
         self.migrate(root)
 
     def clear(self):
+        PageRevision.objects.all().delete()
         PollFormField.objects.all().delete()
         Poll.objects.all().delete()
         SurveyFormField.objects.all().delete()
@@ -151,6 +152,7 @@ class Command(BaseCommand):
         self.migrate_recommended_articles_for_article()
         self.migrate_featured_articles_for_section()
         self.migrate_featured_articles_for_homepage()
+        self.migrate_revisions()
         self.stop_translations()
 
     def create_home_page(self, root):
@@ -1176,3 +1178,18 @@ class Command(BaseCommand):
             '--denim': '#127f99',
             '--tory_blue': '#134b90',
         }.get(color_name)
+
+    def migrate_revisions(self):
+        cur = self.db_query(f'select * from wagtailcore_pagerevision')
+        for row in cur:
+            v2_page = self.v1_to_v2_page_map.get(row['page_id'])
+            if v2_page:
+                PageRevision.objects.create(
+                    submitted_for_moderation=row['submitted_for_moderation'],
+                    created_at=row['created_at'],
+                    content_json=row['content_json'],
+                    approved_go_live_at=row['approved_go_live_at'],
+                    page_id=v2_page.id,
+                )
+        cur.close()
+        self.stdout.write('Revisions migrated')
