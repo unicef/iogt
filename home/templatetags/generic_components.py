@@ -50,5 +50,11 @@ def section_questionnaire_style(section):
 @register.simple_tag
 def language_picker_style():
     theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
-    return f"font-color:{theme_settings.language_picker_font_color};background-color:" \
+    return f"color:{theme_settings.language_picker_font_color};background-color:" \
            f"{theme_settings.language_picker_background_color}"
+
+
+@register.simple_tag
+def mobile_navbar_style():
+    theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
+    return f"background-color:{theme_settings.mobile_navbar_background_color}"
