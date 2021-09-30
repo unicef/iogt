@@ -863,11 +863,11 @@ class ThemeSettings(BaseSetting):
         max_length=8, default='#444')
 
     article_card_font_color = models.CharField(
-        null=True, blank=True, help_text='The background color of the Quiz in section listing as a HEX code',
-        max_length=8, default='#444')
+        null=True, blank=True, help_text='The background color of the Embedded Article in Home > Featured Content'
+                                         ' as a HEX code', max_length=8, default='#444')
     article_card_background_color = models.CharField(
-        null=True, blank=True, help_text='The background color of the Quiz in section listing as a HEX code',
-        max_length=8, default='#ffffff')
+        null=True, blank=True, help_text='The background color of the Embedded Article in Home > Featured Content'
+                                         ' as a HEX code', max_length=8, default='#ffffff')
 
     primary_button_font_color = models.CharField(
         null=True, blank=True, help_text='The font/icon color of the primary button as a HEX code', max_length=8,
