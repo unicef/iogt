@@ -517,6 +517,9 @@ class Command(BaseCommand):
         for block in v2_body:
             if block['type'] == 'paragraph':
                 block['type'] = 'markdown'
+            if block['type'] == 'media':
+                media = self.media_map.get(block['value'])
+                block['value'] = media.id if media else None
 
         if row['subtitle']:
             v2_body = [{
@@ -848,7 +851,8 @@ class Command(BaseCommand):
 
         poll_form_field = PollFormField.objects.create(
             page=poll, label=poll.title, field_type=field_type, choices=choices, admin_label=poll_row['short_name'])
-        cur.scroll(0, 'absolute')
+        if choices:
+            cur.scroll(0, 'absolute')
         for row in cur:
             V1ToV2ObjectMap.create_map(content_object=poll_form_field, v1_object_id=row['page_ptr_id'])
         self.stdout.write(f"saved poll question, label={poll.title}")
