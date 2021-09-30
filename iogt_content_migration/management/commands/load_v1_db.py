@@ -374,6 +374,7 @@ class Command(BaseCommand):
                     translated_section.has_unpublished_changes = row['has_unpublished_changes']
                     translated_section.search_description = row['search_description']
                     translated_section.seo_title = row['seo_title']
+                    translated_section.font_color = self.get_color_hex(row['extra_style_hints'])
                     translated_section.save()
                     content_type = self.find_content_type_id('core', 'sectionpage')
                     tags = self.find_tags(content_type, row['id'])
@@ -407,7 +408,7 @@ class Command(BaseCommand):
             has_unpublished_changes=row['has_unpublished_changes'],
             search_description=row['search_description'],
             seo_title=row['seo_title'],
-            background_color=self.get_color_hex(row['extra_style_hints'])
+            font_color=self.get_color_hex(row['extra_style_hints']),
         )
         section.save()
         content_type = self.find_content_type_id('core', 'sectionpage')
