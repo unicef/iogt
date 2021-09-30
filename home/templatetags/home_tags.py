@@ -74,8 +74,11 @@ def render_questionnaire_list(questionnaire):
 
 
 @register.inclusion_tag('home/tags/section_progress.html')
-def render_user_progress(user_progress):
-    return user_progress
+def render_user_progress(user_progress, show_count=True):
+    return {
+        **user_progress,
+        'show_count': show_count,
+    }
 
 
 @register.inclusion_tag('home/tags/is_completed.html', takes_context=True)

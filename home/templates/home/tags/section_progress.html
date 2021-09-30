@@ -1,9 +1,19 @@
 {% load i18n %}
 
 {% if total %}
-    <div class="user-progress-container">
-        {% blocktranslate %}
-            You have read {{ read }} out of {{ total }}
-        {% endblocktranslate %}
+    <div class="progress-holder">
+        {% if show_count %}
+            <strong class="progress-title">
+                {% blocktranslate %}
+                    You have read {{ read }} out of {{ total }}
+                {% endblocktranslate %}
+            </strong>
+        {% endif %}
+        <ul class="progress-list">
+            {% for i in range_ %}
+                <li style="width: {{ width_ }}%" class="{% if i < read %}completed{% endif %}"><span class="bar"></span>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
 {% endif %}

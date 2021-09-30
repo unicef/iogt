@@ -199,7 +199,9 @@ class Section(Page, PageUtilsMixin):
         read_article_count, total_article_count = progress_manager.get_progress(self)
         return {
             'read': read_article_count,
-            'total': total_article_count
+            'total': total_article_count,
+            'range_': list(range(total_article_count)),
+            'width_': 100 / total_article_count,
         }
 
     def is_completed(self, request):
