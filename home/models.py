@@ -211,7 +211,7 @@ class Section(Page, PageUtilsMixin):
         ]
         context['sub_sections'] = self.get_children().live().type(Section)
 
-        context['articles'] = self.get_children().live().type(Article)
+        context['articles'] = self.get_children().live().type(Article).order_by('-first_published_at')
 
         survey_page_ids = self.get_children().live().type(Survey).values_list('id', flat=True)
         context['surveys'] = Survey.objects.filter(pk__in=survey_page_ids)
