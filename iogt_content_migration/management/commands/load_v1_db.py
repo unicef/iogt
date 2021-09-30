@@ -296,6 +296,7 @@ class Command(BaseCommand):
 
             image_file = self.open_file(row['file'])
             if image_file:
+                self.stdout.write(f"Creating image, file={row['file']}")
                 image = Image.objects.create(
                     title=row['title'],
                     file=ImageFile(image_file, name=row['file'].split('/')[-1]),
@@ -312,7 +313,7 @@ class Command(BaseCommand):
                 tags = self.find_tags(content_type, row['id'])
                 if tags:
                     image.tags.add(*tags)
-                self.image_map.update({ row['id']: image })
+                self.image_map.update({row['id']: image})
         cur.close()
         self.stdout.write('Images migrated')
 
@@ -1057,12 +1058,13 @@ class Command(BaseCommand):
             survey_form_field = SurveyFormField.objects.create(
                 page=survey, sort_order=row['sort_order'], label=row['label'], required=row['required'],
                 default_value=row['default_value'], help_text=row['help_text'], field_type=field_type,
-                admin_label=row['admin_label'], page_break=row['page_break'], choices='|'.join(row['choices'].split(',')),
-                skip_logic=row['skip_logic']
+                admin_label=row['admin_label'], page_break=row['page_break'],
+                choices='|'.join(row['choices'].split(',')), skip_logic=row['skip_logic']
             )
             V1ToV2ObjectMap.create_map(content_object=survey_form_field, v1_object_id=row['smsffid'])
             skip_logic_next_actions = [logic['value']['skip_logic'] for logic in json.loads(row['skip_logic'])]
-            if not survey_row['multi_step'] and ('end' in skip_logic_next_actions or 'question' in skip_logic_next_actions):
+            if not survey_row['multi_step'] and (
+                    'end' in skip_logic_next_actions or 'question' in skip_logic_next_actions):
                 self.stdout.write(f'skip logic without multi step')
             self.stdout.write(f"saved survey question, label={row['label']}")
 
