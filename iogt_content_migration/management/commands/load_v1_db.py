@@ -259,8 +259,8 @@ class Command(BaseCommand):
         self.stdout.write('Documents migrated')
 
     def migrate_media(self):
-        cur = self.db_query('select * from wagtailmedia_media')
-        content_type = self.find_content_type_id('wagtailmedia', 'media')
+        cur = self.db_query('select * from core_molomedia')
+        content_type = self.find_content_type_id('core', 'molomedia')
         for row in cur:
             if not row['file']:
                 self.stdout.write(f'Media file path not found, id={row["id"]}')
