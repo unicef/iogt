@@ -153,8 +153,6 @@ class Command(BaseCommand):
         self.migrate_recommended_articles_for_article()
         self.migrate_featured_articles_for_section()
         self.migrate_featured_articles_for_homepage()
-        self.migrate_revisions()
-        self.update_page_revision_references()
         self.stop_translations()
 
     def create_home_page(self, root):
@@ -849,8 +847,9 @@ class Command(BaseCommand):
 
         poll_form_field = PollFormField.objects.create(
             page=poll, label=poll.title, field_type=field_type, choices=choices, admin_label=poll_row['short_name'])
+        cur.scroll(0, 'absolute')
         for row in cur:
-            V1ToV2ObjectMap.create_map(content_object=poll, v1_object_id=row['page_ptr_id'])
+            V1ToV2ObjectMap.create_map(content_object=poll_form_field, v1_object_id=row['page_ptr_id'])
         self.stdout.write(f"saved poll question, label={poll.title}")
 
     def migrate_surveys(self):
@@ -1036,7 +1035,7 @@ class Command(BaseCommand):
             ])
 
     def migrate_survey_questions(self, survey, survey_row):
-        sql = f'select * ' \
+        sql = f'select *, smsff.id as smsffid ' \
               f'from surveys_molosurveyformfield smsff, surveys_molosurveypage smsp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl ' \
               f'where smsff.page_id = smsp.page_ptr_id ' \
               f'and smsp.page_ptr_id = wcp.id ' \
@@ -1054,13 +1053,14 @@ class Command(BaseCommand):
         SurveyFormField.objects.filter(page=survey).delete()
 
         for row in cur:
+            field_type = 'positivenumber' if row['field_type'] == 'positive_number' else row['field_type']
             survey_form_field = SurveyFormField.objects.create(
                 page=survey, sort_order=row['sort_order'], label=row['label'], required=row['required'],
-                default_value=row['default_value'], help_text=row['help_text'], field_type=row['field_type'],
+                default_value=row['default_value'], help_text=row['help_text'], field_type=field_type,
                 admin_label=row['admin_label'], page_break=row['page_break'], choices='|'.join(row['choices'].split(',')),
                 skip_logic=row['skip_logic']
             )
-            V1ToV2ObjectMap.create_map(content_object=survey_form_field, v1_object_id=row['page_ptr_id'])
+            V1ToV2ObjectMap.create_map(content_object=survey_form_field, v1_object_id=row['smsffid'])
             skip_logic_next_actions = [logic['value']['skip_logic'] for logic in json.loads(row['skip_logic'])]
             if not survey_row['multi_step'] and ('end' in skip_logic_next_actions or 'question' in skip_logic_next_actions):
                 self.stdout.write(f'skip logic without multi step')
@@ -1180,32 +1180,3 @@ class Command(BaseCommand):
             '--denim': '#127f99',
             '--tory_blue': '#134b90',
         }.get(color_name)
-
-    def migrate_revisions(self):
-        cur = self.db_query(f'select * from wagtailcore_pagerevision')
-        for row in cur:
-            v2_page = self.v1_to_v2_page_map.get(row['page_id'])
-            if v2_page:
-                page_revision = PageRevision.objects.create(
-                    submitted_for_moderation=row['submitted_for_moderation'],
-                    created_at=row['created_at'],
-                    content_json=row['content_json'],
-                    approved_go_live_at=row['approved_go_live_at'],
-                    page_id=v2_page.id,
-                )
-                V1ToV2ObjectMap.create_map(content_object=page_revision, v1_object_id=row['page_id'])
-                self.page_revision_map.update({row['id']: page_revision})
-        cur.close()
-        self.stdout.write('Revisions migrated')
-
-    def update_page_revision_references(self):
-        cur = self.db_query(f'select * from wagtailcore_page')
-        for row in cur:
-            v2_page = self.v1_to_v2_page_map.get(row['id'])
-            v2_page_revision = self.page_revision_map.get(row['live_revision_id'])
-            if v2_page and v2_page_revision:
-                v2_page.latest_revision_created_at = row['latest_revision_created_at']
-                v2_page.live_revision_id = v2_page_revision.id
-                v2_page.save()
-        cur.close()
-        self.stdout.write('Page revision reference updated')
