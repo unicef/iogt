@@ -5,7 +5,7 @@ from django.contrib.admin.utils import flatten
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.files.images import get_image_dimensions
 from django.db import models
 from django.utils.deconstruct import deconstructible
@@ -39,7 +39,6 @@ from wagtailmarkdown.blocks import MarkdownBlock
 from wagtailmenus.models import AbstractFlatMenuItem, BooleanField
 from wagtailsvg.models import Svg
 from wagtailsvg.edit_handlers import SvgChooserPanel
-
 
 from messaging.blocks import ChatBotButtonBlock
 from comments.models import CommentableMixin
@@ -380,7 +379,6 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         verbose_name_plural = _("articles")
 
 
-
 class BannerIndexPage(Page):
     parent_page_types = ['home.HomePage']
     subpage_types = ['home.BannerPage']
@@ -429,11 +427,11 @@ class BannerPage(Page):
     content_panels = Page.content_panels + [
         FieldPanel('banner_description'),
         ImageChooserPanel('banner_image'),
-        #ImageChooserPanel('banner_background_image'),
+        # ImageChooserPanel('banner_background_image'),
         PageChooserPanel('banner_link_page'),
-        #FieldPanel('banner_button_text'),
-        #ImageChooserPanel('banner_icon_button'),
-        #FieldPanel('align_center')
+        # FieldPanel('banner_button_text'),
+        # ImageChooserPanel('banner_icon_button'),
+        # FieldPanel('align_center')
     ]
 
 
@@ -476,8 +474,8 @@ class SiteSettings(BaseSetting):
     show_only_translated_pages = models.BooleanField(
         default=False,
         help_text=_('When selecting this option, untranslated pages'
-                  ' will not be visible to the front end user'
-                  ' when viewing a child language of the site'))
+                    ' will not be visible to the front end user'
+                    ' when viewing a child language of the site'))
     # TODO: GA, FB analytics should be global.
     fb_analytics_app_id = models.CharField(
         verbose_name=_('Facebook Analytics App ID'),
@@ -844,6 +842,7 @@ class V1ToV2ObjectMap(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
+    extra = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return f'{self.v1_object_id} -> {self.object_id}'
@@ -852,6 +851,30 @@ class V1ToV2ObjectMap(models.Model):
     def create_map(cls, content_object, v1_object_id):
         v1_to_v2_object_map = cls(content_object=content_object, v1_object_id=v1_object_id)
         v1_to_v2_object_map.save()
+
+    def get_v1_id(cls, klass, object_id, extra=None):
+        content_type = ContentType.objects.get_for_model(klass)
+
+        try:
+            return cls.objects.get(content_type=content_type, object_id=object_id, extra=extra).v1_object_id
+        except ObjectDoesNotExist:
+            return None
+
+    @classmethod
+    def get_v2_obj(cls, klass, v1_object_id, extra=None):
+        content_type = ContentType.objects.get_for_model(klass)
+
+        try:
+            return cls.objects.get(content_type=content_type, v1_object_id=v1_object_id, extra=extra).content_object
+        except ObjectDoesNotExist:
+            return None
+
+    @classmethod
+    def create_map(cls, content_object, v1_object_id, extra=None):
+        content_type = ContentType.objects.get_for_model(type(content_object))
+        obj, __ = cls.objects.get_or_create(content_type=content_type, object_id=content_object.pk,
+                                            v1_object_id=v1_object_id, extra=extra)
+        return obj
 
 
 class SVGToPNGMap(models.Model):
