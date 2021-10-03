@@ -1,0 +1,7 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+<a href="{% pageurl article %}" style="color:{{ font_color }}; background:{{ background_color }};">
+    <p>{{ article.title }}</p>
+    {% image article.specific.lead_image width-75 class='related-articles__img--xs' %}
+    {% image article.specific.lead_image original class='related-articles__img--sm' %}
+</a>

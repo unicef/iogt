@@ -1,8 +1,8 @@
-{% load wagtailcore_tags i18n home_tags %}
+{% load wagtailcore_tags i18n home_tags generic_components %}
 {% get_current_language as LANGUAGE_CODE %}
 {% get_language_info for LANGUAGE_CODE as current_language %}
 <div class="language_drop">
-    <a href="#">{{ current_language.name_local }}</a>
+    <a href="#" style="{% language_picker_style %}">{{ current_language.name_local }}</a>
     <ul class="drop">
         {% if translations %}
             {% for translation in translations %}

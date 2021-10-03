@@ -1,16 +1,10 @@
-{% load static wagtailimages_tags menu_tags home_tags %}
+{% load static wagtailimages_tags menu_tags home_tags generic_components %}
 
 <nav class="nav-bar">
-    <div class="nav-bar__wrap">
+    <div class="nav-bar__wrap" style="{% mobile_navbar_style %}">
         {% for item in menu_items %}
-            <div class="nav-bar__item">
-                <a href="{{ item.href }}">
-                    <span class="nav-bar__item__icon">
-                         <img src="{% get_menu_icon item %}" />
-                    </span>
-                    <span class="nav-bar__item__title">{{ item.text }}</span>
-                </a>
-            </div>
+            {% get_menu_icon item as menu_icon %}
+            {% primary_button title=item.text icon_path=menu_icon href=item.href %}
         {% endfor %}
     </div>
 </nav>
