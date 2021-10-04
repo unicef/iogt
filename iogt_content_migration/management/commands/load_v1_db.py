@@ -172,7 +172,6 @@ class Command(BaseCommand):
                 expire_at=main['expire_at'],
                 first_published_at=main['first_published_at'],
                 last_published_at=main['last_published_at'],
-                has_unpublished_changes=main['has_unpublished_changes'],
                 search_description=main['search_description'],
                 seo_title=main['seo_title'],
             )
@@ -371,7 +370,6 @@ class Command(BaseCommand):
                     translated_section.expire_at = row['expire_at']
                     translated_section.first_published_at = row['first_published_at']
                     translated_section.last_published_at = row['last_published_at']
-                    translated_section.has_unpublished_changes = row['has_unpublished_changes']
                     translated_section.search_description = row['search_description']
                     translated_section.seo_title = row['seo_title']
                     translated_section.font_color = self.get_color_hex(row['extra_style_hints'])
@@ -405,7 +403,6 @@ class Command(BaseCommand):
             expire_at=row['expire_at'],
             first_published_at=row['first_published_at'],
             last_published_at=row['last_published_at'],
-            has_unpublished_changes=row['has_unpublished_changes'],
             search_description=row['search_description'],
             seo_title=row['seo_title'],
             font_color=self.get_color_hex(row['extra_style_hints']),
@@ -458,7 +455,6 @@ class Command(BaseCommand):
                     translated_article.expire_at = row['expire_at']
                     translated_article.first_published_at = row['first_published_at']
                     translated_article.last_published_at = row['last_published_at']
-                    translated_article.has_unpublished_changes = row['has_unpublished_changes']
                     translated_article.search_description = row['search_description']
                     translated_article.seo_title = row['seo_title']
                     translated_article.index_page_description = row['subtitle']
@@ -492,7 +488,6 @@ class Command(BaseCommand):
             expire_at=row['expire_at'],
             first_published_at=row['first_published_at'],
             last_published_at=row['last_published_at'],
-            has_unpublished_changes=row['has_unpublished_changes'],
             allow_comments=True if row['commenting_state'] == 'O' else False,
             search_description=row['search_description'],
             seo_title=row['seo_title'],
@@ -567,7 +562,6 @@ class Command(BaseCommand):
                     translated_banner.expire_at = row['expire_at']
                     translated_banner.first_published_at = row['first_published_at']
                     translated_banner.last_published_at = row['last_published_at']
-                    translated_banner.has_unpublished_changes = row['has_unpublished_changes']
                     translated_banner.search_description = row['search_description']
                     translated_banner.seo_title = row['seo_title']
                     translated_banner.save()
@@ -597,7 +591,6 @@ class Command(BaseCommand):
             expire_at=row['expire_at'],
             first_published_at=row['first_published_at'],
             last_published_at=row['last_published_at'],
-            has_unpublished_changes=row['has_unpublished_changes'],
             search_description=row['search_description'],
             seo_title=row['seo_title'],
         )
@@ -644,7 +637,6 @@ class Command(BaseCommand):
                     translated_footer.expire_at = row['expire_at']
                     translated_footer.first_published_at = row['first_published_at']
                     translated_footer.last_published_at = row['last_published_at']
-                    translated_footer.has_unpublished_changes = row['has_unpublished_changes']
                     translated_footer.search_description = row['search_description']
                     translated_footer.seo_title = row['seo_title']
                     translated_footer.save()
@@ -673,7 +665,6 @@ class Command(BaseCommand):
             expire_at=row['expire_at'],
             first_published_at=row['first_published_at'],
             last_published_at=row['last_published_at'],
-            has_unpublished_changes=row['has_unpublished_changes'],
             search_description=row['search_description'],
             seo_title=row['seo_title'],
         )
@@ -759,7 +750,6 @@ class Command(BaseCommand):
                     translated_poll.expire_at = row['expire_at']
                     translated_poll.first_published_at = row['first_published_at']
                     translated_poll.last_published_at = row['last_published_at']
-                    translated_poll.has_unpublished_changes = row['has_unpublished_changes']
                     translated_poll.search_description = row['search_description']
                     translated_poll.seo_title = row['seo_title']
                     translated_poll.randomise_options = row['randomise_options']
@@ -795,7 +785,6 @@ class Command(BaseCommand):
             expire_at=row['expire_at'],
             first_published_at=row['first_published_at'],
             last_published_at=row['last_published_at'],
-            has_unpublished_changes=row['has_unpublished_changes'],
             search_description=row['search_description'],
             seo_title=row['seo_title'],
             randomise_options=row['randomise_options'],
@@ -918,7 +907,6 @@ class Command(BaseCommand):
                     translated_survey.expire_at = row['expire_at']
                     translated_survey.first_published_at = row['first_published_at']
                     translated_survey.last_published_at = row['last_published_at']
-                    translated_survey.has_unpublished_changes = row['has_unpublished_changes']
                     translated_survey.search_description = row['search_description']
                     translated_survey.seo_title = row['seo_title']
                     translated_survey.index_page_description = row['homepage_introduction']
@@ -962,7 +950,6 @@ class Command(BaseCommand):
             expire_at=row['expire_at'],
             first_published_at=row['first_published_at'],
             last_published_at=row['last_published_at'],
-            has_unpublished_changes=row['has_unpublished_changes'],
             search_description=row['search_description'],
             seo_title=row['seo_title'],
             index_page_description=row['homepage_introduction'],
