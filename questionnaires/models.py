@@ -94,7 +94,6 @@ class QuestionnairePage(Page, PageUtilsMixin):
 
     terms_and_conditions = StreamField(
         [
-            ("paragraph", blocks.RichTextBlock()),
             ('page_button', PageButtonBlock()),
         ],
         null=True,

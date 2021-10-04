@@ -1034,10 +1034,6 @@ class Command(BaseCommand):
                         "page": self.v1_to_v2_page_map[v1_term_and_condition["terms_and_conditions_id"]].id,
                     },
                 },
-                {
-                    "type": "paragraph",
-                    "value": v1_term_and_condition["title"],
-                },
             ])
 
     def migrate_survey_questions(self, survey, survey_row):
