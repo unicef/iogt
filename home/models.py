@@ -50,6 +50,7 @@ from .blocks import (MediaBlock, SocialMediaLinkBlock,
                      PageButtonBlock, ArticleChooserBlock)
 from .forms import SectionPageForm
 from .mixins import PageUtilsMixin
+from .utils.image import convert_svg_to_png_bytes
 from .utils.progress_manager import ProgressManager
 
 User = get_user_model()
@@ -886,11 +887,11 @@ class SVGToPNGMap(models.Model):
     def get_png_image(cls, svg_path, color):
         try:
             obj = cls.objects.get(svg_path=svg_path, color=color)
-            obj.png_image_file
         except cls.DoesNotExist:
-            png_image = None
-            # png_image = get_png_file(svg_path, color)
-            return cls.objects.create(svg_path=svg_path, color=color, png_image_file=png_image)
+            png_image = convert_svg_to_png_bytes(svg_path, fill_color=color)
+
+            obj = cls.objects.create(svg_path=svg_path, color=color, png_image_file=png_image)
+        return obj.png_image_file
 
     def __str__(self):
         return f'{self.svg_path} ({self.color}) -> {self.png_image_file}'
