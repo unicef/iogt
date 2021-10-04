@@ -4,6 +4,7 @@
 {% for sub_section in sub_sections %}
     <a href="{% pageurl sub_section %}" class='sub-section'>
         {{ sub_section.title }}
+        {% image sub_section.specific.lead_image width-320 class='article__lead-img' %}
         {% if user_progress %}
             {% render_is_completed sub_section %}
         {% endif %}
