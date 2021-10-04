@@ -480,6 +480,10 @@ class PollFormField(AbstractFormField):
         null=True
     )
 
+    panels = AbstractFormField.panels + [
+        FieldPanel('admin_label', classname="formbuilder-default"),
+    ]
+
 
 class Poll(QuestionnairePage, AbstractForm):
     form_builder = CustomFormBuilder
@@ -512,6 +516,7 @@ class Poll(QuestionnairePage, AbstractForm):
                 FieldPanel("show_results"),
                 FieldPanel("result_as_percentage"),
                 FieldPanel("allow_multiple_submissions"),
+                FieldPanel("randomise_options"),
                 FieldPanel("submit_button_text"),
             ],
             heading=_(
