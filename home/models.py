@@ -274,6 +274,7 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         blank=True,
         on_delete=models.SET_NULL,
     )
+    index_page_description = models.TextField(null=True, blank=True)
 
     tags = ClusterTaggableManager(through='ArticleTaggedItem', blank=True)
     body = StreamField([
@@ -313,6 +314,7 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         ImageChooserPanel('lead_image'),
         SvgChooserPanel('icon'),
         StreamFieldPanel('body'),
+        FieldPanel('index_page_description'),
         MultiFieldPanel([
             InlinePanel('recommended_articles',
                         label=_("Recommended Articles")),

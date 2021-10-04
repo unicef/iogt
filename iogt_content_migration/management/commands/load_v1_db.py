@@ -1,12 +1,14 @@
 from pathlib import Path
 
-from django.contrib.auth import get_user_model
+from django.core.files import File
 from django.core.management.base import BaseCommand
-from wagtail.core.models import Page, Site, Locale
+from wagtail.core.models import Page, Site, Locale, Collection, PageRevision
 from django.core.files.images import ImageFile
+from wagtail.documents.models import Document
 from wagtail.images.models import Image
 from wagtail_localize.models import Translation
 from wagtail_localize.views.submit_translations import TranslationCreator
+from wagtailmedia.models import Media
 
 import home.models as models
 from home.models import V1ToV2ObjectMap
@@ -68,9 +70,13 @@ class Command(BaseCommand):
         self.media_dir = options.get('media_dir')
         self.skip_locales = options.get('skip_locales')
 
+        self.collection_map = {}
+        self.document_map = {}
+        self.media_map = {}
         self.image_map = {}
         self.page_translation_map = {}
         self.v1_to_v2_page_map = {}
+        self.page_revision_map = {}
 
         self.clear()
         self.stdout.write('Existing site structure cleared')
@@ -79,12 +85,15 @@ class Command(BaseCommand):
         self.migrate(root)
 
     def clear(self):
+        PageRevision.objects.all().delete()
         PollFormField.objects.all().delete()
         Poll.objects.all().delete()
         SurveyFormField.objects.all().delete()
         Survey.objects.all().delete()
         QuizFormField.objects.all().delete()
         Quiz.objects.all().delete()
+        models.FeaturedContent.objects.all().delete()
+        models.ArticleRecommendation.objects.all().delete()
         models.FooterPage.objects.all().delete()
         models.FooterIndexPage.objects.all().delete()
         models.BannerPage.objects.all().delete()
@@ -95,6 +104,8 @@ class Command(BaseCommand):
         models.HomePage.objects.all().delete()
         Site.objects.all().delete()
         Image.objects.all().delete()
+        Document.objects.all().delete()
+        Media.objects.all().delete()
         V1ToV2ObjectMap.objects.all().delete()
 
     def db_connect(self, options):
@@ -124,6 +135,9 @@ class Command(BaseCommand):
         return cur
 
     def migrate(self, root):
+        self.migrate_collections()
+        self.migrate_documents()
+        self.migrate_media()
         self.migrate_images()
         self.load_page_translation_map()
         home = self.create_home_page(root)
@@ -134,8 +148,12 @@ class Command(BaseCommand):
         self.migrate_footers()
         self.migrate_polls()
         self.migrate_surveys()
-        self.stop_translations()
+        self.translate_home_pages()
         Page.fix_tree()
+        self.migrate_recommended_articles_for_article()
+        self.migrate_featured_articles_for_section()
+        self.migrate_featured_articles_for_homepage()
+        self.stop_translations()
 
     def create_home_page(self, root):
         sql = 'select * from core_main main join wagtailcore_page page on main.page_ptr_id = page.id'
@@ -147,12 +165,15 @@ class Command(BaseCommand):
             home = models.HomePage(
                 title=main['title'],
                 draft_title=main['draft_title'],
-                seo_title=main['seo_title'],
                 slug=main['slug'],
                 live=main['live'],
-                latest_revision_created_at=main['latest_revision_created_at'],
+                locked=main['locked'],
+                go_live_at=main['go_live_at'],
+                expire_at=main['expire_at'],
                 first_published_at=main['first_published_at'],
                 last_published_at=main['last_published_at'],
+                search_description=main['search_description'],
+                seo_title=main['seo_title'],
             )
             root.add_child(instance=home)
             V1ToV2ObjectMap.create_map(content_object=home, v1_object_id=main['page_ptr_id'])
@@ -194,11 +215,85 @@ class Command(BaseCommand):
         self.quiz_index_page = QuizIndexPage(title='Quizzes')
         homepage.add_child(instance=self.quiz_index_page)
 
+    def migrate_collections(self):
+        cur = self.db_query('select * from wagtailcore_collection')
+        for row in cur:
+            collection, _ = Collection.objects.get_or_create(
+                name=row['name'],
+                defaults={
+                    'path': row['path'],
+                    'depth': row['depth'],
+                    'numchild': row['numchild'],
+                }
+            )
+            collection.save()
+            self.collection_map.update({row['id']: collection})
+            V1ToV2ObjectMap.create_map(content_object=collection, v1_object_id=row['id'])
+
+        cur.close()
+        self.stdout.write('Collections migrated')
+
+    def migrate_documents(self):
+        cur = self.db_query('select * from wagtaildocs_document')
+        content_type = self.find_content_type_id('wagtaildocs', 'document')
+        for row in cur:
+            if not row['file']:
+                self.stdout.write(f'Document file path not found, id={row["id"]}')
+                continue
+
+            file = self.open_file(row['file'])
+            if file:
+                document = Document.objects.create(
+                    title=row['title'],
+                    file=File(file),
+                    created_at=row['created_at'],
+                    collection=self.collection_map.get(row['collection_id']),
+                )
+                V1ToV2ObjectMap.create_map(content_object=document, v1_object_id=row['id'])
+                tags = self.find_tags(content_type, row['id'])
+                if tags:
+                    document.tags.add(*tags)
+                self.document_map.update({ row['id']: document })
+        cur.close()
+        self.stdout.write('Documents migrated')
+
+    def migrate_media(self):
+        cur = self.db_query('select * from core_molomedia')
+        content_type = self.find_content_type_id('core', 'molomedia')
+        for row in cur:
+            if not row['file']:
+                self.stdout.write(f'Media file path not found, id={row["id"]}')
+                continue
+
+            file = self.open_file(row['file'])
+            if file:
+                thumbnail = self.open_file(row['thumbnail'])
+                media = Media.objects.create(
+                    title=row['title'],
+                    file=File(file),
+                    type=row['type'],
+                    duration=row['duration'],
+                    thumbnail=File(thumbnail) if thumbnail else None,
+                    created_at=row['created_at'],
+                    collection=self.collection_map.get(row['collection_id']),
+                )
+                V1ToV2ObjectMap.create_map(content_object=media, v1_object_id=row['id'])
+                tags = self.find_tags(content_type, row['id'])
+                if tags:
+                    media.tags.add(*tags)
+                self.media_map.update({ row['id']: media })
+        cur.close()
+        self.stdout.write('Media migrated')
+
     def migrate_images(self):
         cur = self.db_query('select * from wagtailimages_image')
         content_type = self.find_content_type_id('wagtailimages', 'image')
         for row in cur:
-            image_file = self.open_image_file(row['file'])
+            if not row['file']:
+                self.stdout.write(f'Image file path not found, id={row["id"]}')
+                continue
+
+            image_file = self.open_file(row['file'])
             if image_file:
                 self.stdout.write(f"Creating image, file={row['file']}")
                 image = Image.objects.create(
@@ -208,8 +303,10 @@ class Command(BaseCommand):
                     focal_point_y=row['focal_point_y'],
                     focal_point_width=row['focal_point_width'],
                     focal_point_height=row['focal_point_height'],
-                    # uploaded_by_user='',
+                    created_at=row['created_at'],
+                    collection=self.collection_map.get(row['collection_id']),
                 )
+                V1ToV2ObjectMap.create_map(content_object=image, v1_object_id=row['id'])
                 image.get_file_size()
                 image.get_file_hash()
                 tags = self.find_tags(content_type, row['id'])
@@ -225,12 +322,12 @@ class Command(BaseCommand):
         cur.close()
         return content_type.get('id')
 
-    def open_image_file(self, file):
+    def open_file(self, file):
         file_path = Path(self.media_dir) / file
         try:
             return open(file_path, 'rb')
         except:
-            self.stdout.write(f"Image file not found: {file_path}")
+            self.stdout.write(f"File not found: {file_path}")
 
     def find_tags(self, content_type, object_id):
         tags_query = 'select t.name from taggit_tag t join taggit_taggeditem ti on t.id = ti.tag_id where ti.content_type_id = {} and ti.object_id = {}'
@@ -264,10 +361,23 @@ class Command(BaseCommand):
 
                 translated_section = section.get_translation_or_none(locale)
                 if translated_section:
+                    translated_section.lead_image = self.image_map.get(row['image_id'])
                     translated_section.title = row['title']
                     translated_section.draft_title = row['draft_title']
                     translated_section.live = row['live']
+                    translated_section.locked = row['locked']
+                    translated_section.go_live_at = row['go_live_at']
+                    translated_section.expire_at = row['expire_at']
+                    translated_section.first_published_at = row['first_published_at']
+                    translated_section.last_published_at = row['last_published_at']
+                    translated_section.search_description = row['search_description']
+                    translated_section.seo_title = row['seo_title']
+                    translated_section.font_color = self.get_color_hex(row['extra_style_hints'])
                     translated_section.save()
+                    content_type = self.find_content_type_id('core', 'sectionpage')
+                    tags = self.find_tags(content_type, row['id'])
+                    if tags:
+                        translated_section.tags.add(*tags)
                     V1ToV2ObjectMap.create_map(content_object=translated_section, v1_object_id=row['page_ptr_id'])
 
                     self.v1_to_v2_page_map.update({
@@ -279,6 +389,7 @@ class Command(BaseCommand):
 
     def create_section(self, row):
         section = models.Section(
+            lead_image=self.image_map.get(row['image_id']),
             title=row['title'],
             draft_title=row['draft_title'],
             show_in_menus=True,
@@ -287,8 +398,20 @@ class Command(BaseCommand):
             depth=row['depth'],
             numchild=row['numchild'],
             live=row['live'],
+            locked=row['locked'],
+            go_live_at=row['go_live_at'],
+            expire_at=row['expire_at'],
+            first_published_at=row['first_published_at'],
+            last_published_at=row['last_published_at'],
+            search_description=row['search_description'],
+            seo_title=row['seo_title'],
+            font_color=self.get_color_hex(row['extra_style_hints']),
         )
         section.save()
+        content_type = self.find_content_type_id('core', 'sectionpage')
+        tags = self.find_tags(content_type, row['id'])
+        if tags:
+            section.tags.add(*tags)
         V1ToV2ObjectMap.create_map(content_object=section, v1_object_id=row['page_ptr_id'])
 
         self.v1_to_v2_page_map.update({
@@ -326,8 +449,20 @@ class Command(BaseCommand):
                     translated_article.title = row['title']
                     translated_article.draft_title = row['draft_title']
                     translated_article.live = row['live']
-                    translated_article.body = self.map_article_body(row['body'])
+                    translated_article.body = self.map_article_body(row)
+                    translated_article.locked = row['locked']
+                    translated_article.go_live_at = row['go_live_at']
+                    translated_article.expire_at = row['expire_at']
+                    translated_article.first_published_at = row['first_published_at']
+                    translated_article.last_published_at = row['last_published_at']
+                    translated_article.search_description = row['search_description']
+                    translated_article.seo_title = row['seo_title']
+                    translated_article.index_page_description = row['subtitle']
                     translated_article.save()
+                    content_type = self.find_content_type_id('core', 'articlepage')
+                    tags = self.find_tags(content_type, row['id'])
+                    if tags:
+                        translated_article.tags.add(*tags)
                     V1ToV2ObjectMap.create_map(content_object=translated_article, v1_object_id=row['page_ptr_id'])
 
                     self.v1_to_v2_page_map.update({
@@ -347,10 +482,23 @@ class Command(BaseCommand):
             depth=row['depth'],
             numchild=row['numchild'],
             live=row['live'],
-            body=self.map_article_body(row['body']),
+            body=self.map_article_body(row),
+            locked=row['locked'],
+            go_live_at=row['go_live_at'],
+            expire_at=row['expire_at'],
+            first_published_at=row['first_published_at'],
+            last_published_at=row['last_published_at'],
+            allow_comments=True if row['commenting_state'] == 'O' else False,
+            search_description=row['search_description'],
+            seo_title=row['seo_title'],
+            index_page_description=row['subtitle'],
         )
         try:
             article.save()
+            content_type = self.find_content_type_id('core', 'articlepage')
+            tags = self.find_tags(content_type, row['id'])
+            if tags:
+                article.tags.add(*tags)
             V1ToV2ObjectMap.create_map(content_object=article, v1_object_id=row['page_ptr_id'])
             self.v1_to_v2_page_map.update({
                 row['page_ptr_id']: article
@@ -360,11 +508,20 @@ class Command(BaseCommand):
             return
         self.stdout.write(f"saved article, title={article.title}")
 
-    def map_article_body(self, v1_body):
-        v2_body = json.loads(v1_body)
+    def map_article_body(self, row):
+        v2_body = json.loads(row['body'])
         for block in v2_body:
             if block['type'] == 'paragraph':
                 block['type'] = 'markdown'
+            if block['type'] == 'media':
+                media = self.media_map.get(block['value'])
+                block['value'] = media.id if media else None
+
+        if row['subtitle']:
+            v2_body = [{
+                'type': 'paragraph',
+                'value': row['subtitle'],
+            }] + v2_body
         return json.dumps(v2_body)
 
     def migrate_banners(self):
@@ -400,6 +557,13 @@ class Command(BaseCommand):
                     translated_banner.title = row['title']
                     translated_banner.draft_title = row['draft_title']
                     translated_banner.live = row['live']
+                    translated_banner.locked = row['locked']
+                    translated_banner.go_live_at = row['go_live_at']
+                    translated_banner.expire_at = row['expire_at']
+                    translated_banner.first_published_at = row['first_published_at']
+                    translated_banner.last_published_at = row['last_published_at']
+                    translated_banner.search_description = row['search_description']
+                    translated_banner.seo_title = row['seo_title']
                     translated_banner.save()
                     V1ToV2ObjectMap.create_map(content_object=translated_banner, v1_object_id=row['page_ptr_id'])
 
@@ -421,7 +585,14 @@ class Command(BaseCommand):
             depth=row['depth'],
             numchild=row['numchild'],
             live=row['live'],
-            banner_description=''
+            banner_description='',
+            locked=row['locked'],
+            go_live_at=row['go_live_at'],
+            expire_at=row['expire_at'],
+            first_published_at=row['first_published_at'],
+            last_published_at=row['last_published_at'],
+            search_description=row['search_description'],
+            seo_title=row['seo_title'],
         )
         banner.save()
         V1ToV2ObjectMap.create_map(content_object=banner, v1_object_id=row['page_ptr_id'])
@@ -460,7 +631,14 @@ class Command(BaseCommand):
                     translated_footer.title = row['title']
                     translated_footer.draft_title = row['draft_title']
                     translated_footer.live = row['live']
-                    translated_footer.body = self.map_article_body(row['body'])
+                    translated_footer.body = self.map_article_body(row)
+                    translated_footer.locked = row['locked']
+                    translated_footer.go_live_at = row['go_live_at']
+                    translated_footer.expire_at = row['expire_at']
+                    translated_footer.first_published_at = row['first_published_at']
+                    translated_footer.last_published_at = row['last_published_at']
+                    translated_footer.search_description = row['search_description']
+                    translated_footer.seo_title = row['seo_title']
                     translated_footer.save()
                     V1ToV2ObjectMap.create_map(content_object=translated_footer, v1_object_id=row['page_ptr_id'])
 
@@ -481,7 +659,14 @@ class Command(BaseCommand):
             depth=row['depth'],
             numchild=row['numchild'],
             live=row['live'],
-            body=self.map_article_body(row['body']),
+            body=self.map_article_body(row),
+            locked=row['locked'],
+            go_live_at=row['go_live_at'],
+            expire_at=row['expire_at'],
+            first_published_at=row['first_published_at'],
+            last_published_at=row['last_published_at'],
+            search_description=row['search_description'],
+            seo_title=row['seo_title'],
         )
         footer.save()
         V1ToV2ObjectMap.create_map(content_object=footer, v1_object_id=row['page_ptr_id'])
@@ -559,6 +744,17 @@ class Command(BaseCommand):
                     translated_poll.draft_title = row['draft_title']
                     translated_poll.live = row['live']
                     translated_poll.result_as_percentage = row['result_as_percentage']
+                    translated_poll.show_results = row['show_results']
+                    translated_poll.locked = row['locked']
+                    translated_poll.go_live_at = row['go_live_at']
+                    translated_poll.expire_at = row['expire_at']
+                    translated_poll.first_published_at = row['first_published_at']
+                    translated_poll.last_published_at = row['last_published_at']
+                    translated_poll.search_description = row['search_description']
+                    translated_poll.seo_title = row['seo_title']
+                    translated_poll.randomise_options = row['randomise_options']
+                    translated_poll.allow_anonymous_submissions = False
+                    translated_poll.allow_multiple_submissions = False
                     translated_poll.save()
                     V1ToV2ObjectMap.create_map(content_object=translated_poll, v1_object_id=row['page_ptr_id'])
 
@@ -582,7 +778,18 @@ class Command(BaseCommand):
             depth=row['depth'],
             numchild=row['numchild'],
             live=row['live'],
+            show_results=row['show_results'],
             result_as_percentage=row['result_as_percentage'],
+            locked=row['locked'],
+            go_live_at=row['go_live_at'],
+            expire_at=row['expire_at'],
+            first_published_at=row['first_published_at'],
+            last_published_at=row['last_published_at'],
+            search_description=row['search_description'],
+            seo_title=row['seo_title'],
+            randomise_options=row['randomise_options'],
+            allow_anonymous_submissions=False,
+            allow_multiple_submissions=False,
         )
         try:
             poll.save()
@@ -619,25 +826,26 @@ class Command(BaseCommand):
 
         choices_length = len(choices)
 
-        if choices_length == 2:
-            field_type = 'radio'
-        elif choices_length > 2:
+        if choices_length == 0:
+            field_type = 'multiline'
+        elif choices_length > 1:
             if poll_row['allow_multiple_choice']:
                 field_type = 'checkboxes'
             else:
-                field_type = 'dropdown'
+                field_type = 'radio'
         else:
-            self.stdout.write(
-                f'Unable to determine field type for poll={poll_row["title"]}, so creating a multiline field.')
-            PollFormField.objects.create(page=poll, label=poll.title, field_type='multiline')
+            self.stdout.write(f'Unable to determine field type for poll={poll_row["title"]}.')
             return
 
         choices = '|'.join(choices)
 
-        PollFormField.objects.create(page=poll, label=poll.title, field_type=field_type, choices=choices)
-
+        poll_form_field = PollFormField.objects.create(
+            page=poll, label=poll.title, field_type=field_type, choices=choices,
+            admin_label=poll_row['short_name'] or poll.title)
+        if choices:
+            cur.scroll(0, 'absolute')
         for row in cur:
-            V1ToV2ObjectMap.create_map(content_object=poll, v1_object_id=row['page_ptr_id'])
+            V1ToV2ObjectMap.create_map(content_object=poll_form_field, v1_object_id=row['page_ptr_id'])
         self.stdout.write(f"saved poll question, label={poll.title}")
 
     def migrate_surveys(self):
@@ -681,20 +889,35 @@ class Command(BaseCommand):
                     self.translate_page(locale=locale, page=survey)
                 except Exception as e:
                     self.stdout.write(f"Unable to translate survey, title={row['title']}")
+                    continue
 
                 translated_survey = survey.get_translation_or_none(locale)
                 if translated_survey:
                     translated_survey.title = row['title']
                     translated_survey.draft_title = row['draft_title']
                     translated_survey.live = row['live']
-                    translated_survey.description = self.map_survey_description(row['description'])
+                    translated_survey.description = self.map_survey_description(row)
                     translated_survey.thank_you_text = self.map_survey_thank_you_text(row)
                     translated_survey.allow_anonymous_submissions = row['allow_anonymous_submissions']
                     translated_survey.allow_multiple_submissions = row['allow_multiple_submissions_per_user']
-                    translated_survey.submit_button_text = row['submit_text'] or 'Submit'
+                    translated_survey.submit_button_text = row['submit_text'][:40] if row['submit_text'] else 'Submit'
                     translated_survey.direct_display = row['display_survey_directly']
                     translated_survey.multi_step = row['multi_step']
+                    translated_survey.locked = row['locked']
+                    translated_survey.go_live_at = row['go_live_at']
+                    translated_survey.expire_at = row['expire_at']
+                    translated_survey.first_published_at = row['first_published_at']
+                    translated_survey.last_published_at = row['last_published_at']
+                    translated_survey.search_description = row['search_description']
+                    translated_survey.seo_title = row['seo_title']
+                    translated_survey.index_page_description = row['homepage_introduction']
+                    translated_survey.index_page_description_line_2 = row['homepage_button_text']
+                    translated_survey.terms_and_conditions = self.map_survey_terms_and_conditions(row)
                     translated_survey.save()
+
+                    if row['submit_text'] and len(row['submit_text']) > 40:
+                        self.stdout.write(f"Truncated survey submit button text, title={row['title']}")
+
                     V1ToV2ObjectMap.create_map(content_object=translated_survey, v1_object_id=row['page_ptr_id'])
 
                     self.v1_to_v2_page_map.update({
@@ -716,17 +939,29 @@ class Command(BaseCommand):
             depth=row['depth'],
             numchild=row['numchild'],
             live=row['live'],
-            description=self.map_survey_description(row['description']),
+            description=self.map_survey_description(row),
             thank_you_text=self.map_survey_thank_you_text(row),
             allow_anonymous_submissions=row['allow_anonymous_submissions'],
             allow_multiple_submissions=row['allow_multiple_submissions_per_user'],
-            submit_button_text=row['submit_text'] or 'Submit',
+            submit_button_text=row['submit_text'][:40] if row['submit_text'] else 'Submit',
             direct_display=row['display_survey_directly'],
             multi_step=row['multi_step'],
+            locked=row['locked'],
+            go_live_at=row['go_live_at'],
+            expire_at=row['expire_at'],
+            first_published_at=row['first_published_at'],
+            last_published_at=row['last_published_at'],
+            search_description=row['search_description'],
+            seo_title=row['seo_title'],
+            index_page_description=row['homepage_introduction'],
+            index_page_description_line_2=row['homepage_button_text'],
+            terms_and_conditions=self.map_survey_terms_and_conditions(row),
         )
 
         try:
             survey.save()
+            if row['submit_text'] and len(row['submit_text']) > 40:
+                self.stdout.write(f"Truncated survey submit button text, title={row['title']}")
             V1ToV2ObjectMap.create_map(content_object=survey, v1_object_id=row['page_ptr_id'])
         except Exception as e:
             self.stdout.write(f"Unable to save survey, title={row['title']}")
@@ -739,9 +974,18 @@ class Command(BaseCommand):
         })
         self.stdout.write(f"saved survey, title={survey.title}")
 
-    def map_survey_description(self, v1_survey_description):
-        v1_survey_description = json.loads(v1_survey_description)
+    def map_survey_description(self, row):
         v2_survey_description = []
+
+        v2_image = self.image_map.get(row['image_id'])
+        if v2_image:
+            v2_survey_description.append({'type': 'image', 'value': v2_image.id})
+
+        v1_introduction = row['introduction']
+        if v1_introduction:
+            v2_survey_description.append({'type': 'paragraph', 'value': v1_introduction})
+
+        v1_survey_description = json.loads(row['description'])
         for block in v1_survey_description:
             if block['type'] == 'paragraph':
                 v2_survey_description.append(block)
@@ -749,21 +993,39 @@ class Command(BaseCommand):
                 image = self.image_map.get(block['value'])
                 if image:
                     v2_survey_description.append({'type': 'image', 'value': image.id})
+
         return json.dumps(v2_survey_description)
 
     def map_survey_thank_you_text(self, row):
-        image = self.image_map.get(row['image_id'])
         v2_thank_you_text = []
 
         if row['thank_you_text']:
             v2_thank_you_text.append({'type': 'paragraph', 'value': row['thank_you_text']})
-        if image:
-            v2_thank_you_text.append({'type': 'image', 'value': image.id})
 
         return json.dumps(v2_thank_you_text)
 
-    def migrate_survey_questions(self, survey, survey_row):
+    def map_survey_terms_and_conditions(self, row):
         sql = f'select * ' \
+              f'from surveys_surveytermsconditions stc, surveys_molosurveypage msp, wagtailcore_page wcp ' \
+              f'where stc.page_id = msp.page_ptr_id ' \
+              f'and stc.terms_and_conditions_id = wcp.id ' \
+              f'and stc.page_id = {row["page_ptr_id"]}'
+
+        cur = self.db_query(sql)
+        v1_term_and_condition = cur.fetchone()
+        cur.close()
+        if v1_term_and_condition:
+            return json.dumps([
+                {
+                    "type": "page_button",
+                    "value": {
+                        "page": self.v1_to_v2_page_map[v1_term_and_condition["terms_and_conditions_id"]].id,
+                    },
+                },
+            ])
+
+    def migrate_survey_questions(self, survey, survey_row):
+        sql = f'select *, smsff.id as smsffid ' \
               f'from surveys_molosurveyformfield smsff, surveys_molosurveypage smsp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl ' \
               f'where smsff.page_id = smsp.page_ptr_id ' \
               f'and smsp.page_ptr_id = wcp.id ' \
@@ -781,14 +1043,14 @@ class Command(BaseCommand):
         SurveyFormField.objects.filter(page=survey).delete()
 
         for row in cur:
+            field_type = 'positivenumber' if row['field_type'] == 'positive_number' else row['field_type']
             survey_form_field = SurveyFormField.objects.create(
                 page=survey, sort_order=row['sort_order'], label=row['label'], required=row['required'],
-                default_value=row['default_value'], help_text=row['help_text'], field_type=row['field_type'],
+                default_value=row['default_value'], help_text=row['help_text'], field_type=field_type,
                 admin_label=row['admin_label'], page_break=row['page_break'],
-                choices='|'.join(row['choices'].split(',')),
-                skip_logic=row['skip_logic']
+                choices='|'.join(row['choices'].split(',')), skip_logic=row['skip_logic']
             )
-            V1ToV2ObjectMap.create_map(content_object=survey_form_field, v1_object_id=row['page_ptr_id'])
+            V1ToV2ObjectMap.create_map(content_object=survey_form_field, v1_object_id=row['smsffid'])
             skip_logic_next_actions = [logic['value']['skip_logic'] for logic in json.loads(row['skip_logic'])]
             if not survey_row['multi_step'] and (
                     'end' in skip_logic_next_actions or 'question' in skip_logic_next_actions):
@@ -802,3 +1064,110 @@ class Command(BaseCommand):
         }
 
         return iso_locales_map.get(locale, locale)
+
+    def translate_home_pages(self):
+        eng_home_page = models.HomePage.objects.get(locale__language_code='en')
+        locales = Locale.objects.exclude(language_code='en')
+        for locale in locales:
+            self.translate_page(locale=locale, page=eng_home_page)
+
+    def migrate_recommended_articles_for_article(self):
+        article_cur = self.db_query(f'select DISTINCT page_id from core_articlepagerecommendedsections')
+        for article_row in article_cur:
+            v1_article_id = article_row['page_id']
+            v2_article = self.v1_to_v2_page_map.get(v1_article_id)
+            if v2_article:
+                cur = self.db_query(f'select * from core_articlepagerecommendedsections where page_id = {v1_article_id} and recommended_article_id is not null')
+                for row in cur:
+                    v2_recommended_article = self.v1_to_v2_page_map.get(row['recommended_article_id'])
+                    if v2_recommended_article:
+                        models.ArticleRecommendation.objects.create(
+                            sort_order=row['sort_order'],
+                            article=v2_recommended_article,
+                            source=v2_article
+                        )
+                cur.close()
+        article_cur.close()
+        self.stdout.write('Recommended articles migrated')
+
+    def migrate_featured_articles_for_section(self):
+        cur = self.db_query(f'select * from core_articlepage where featured_in_section = true')
+        for row in cur:
+            v2_article = self.v1_to_v2_page_map.get(row['page_ptr_id'])
+            if v2_article:
+                section = v2_article.get_parent()
+                if isinstance(section.specific, models.Section):
+                    models.FeaturedContent.objects.create(source=section, content=v2_article)
+        cur.close()
+        self.stdout.write('Articles featured in sections migrated')
+
+    def migrate_featured_articles_for_homepage(self):
+        cur = self.db_query(f'select * from core_articlepage where featured_in_homepage = true')
+        for row in cur:
+            v2_article = self.v1_to_v2_page_map.get(row['page_ptr_id'])
+            if v2_article:
+                home_page = v2_article.get_ancestors().exact_type(models.HomePage).first().specific
+                home_featured_content = []
+                for hfc in home_page.home_featured_content:
+                    home_featured_content.append({
+                        'type': 'article',
+                        'value': hfc.value.id,
+                    })
+                home_featured_content.append({'type': 'article', 'value': v2_article.id})
+                home_page.home_featured_content = json.dumps(home_featured_content)
+                home_page.save()
+        cur.close()
+        self.stdout.write('Articles featured in home page migrated')
+
+    def get_color_hex(self, color_name):
+        return {
+            '--tiber': '#07292F',
+            '--mecury': '#eae9e9',
+            '--light_scampi': '#685FA1',
+            '--dove_gray': '#737373',
+            '--mineral_gray': '#dedede',
+            '--washed_gray': '#f1f1f1',
+            '--brown': '#a03321',
+            '--medium_red_violet': '#B62A99',
+            '--dark_medium_red_violet': '#b43393',
+            '--violet_blue': '#a54f9e',
+            '--mandy': '#E24256',
+            '--plum': '#7e2268',
+            '--wisteria': '#8e68ad',
+            '--grape': '#541c56',
+            '--paris_m': '#202855',
+            '--east_bay': '#4E4682',
+            '--victoria': '#4D4391',
+            '--scampi': '#685FA1',
+            '--sandybrown': '#EF9955',
+            '--jaffa': '#ee8c39',
+            '--saffron': '#F2B438',
+            '--saffron_light': '#f2b437',
+            '--cinnabar': '#EC3B3A',
+            '--cinnabar_dark': '#ee5523',
+            '--cardinal': '#bf2026',
+            '--pomegranate': '#ed3330',
+            '--roman': '#DF6859',
+            '--mauvelous': '#F38AA5',
+            '--beed_blush': '#e764a0',
+            '--maxican_red': '#a21d2e',
+            '--kobi': '#d481b5',
+            '--illusion': '#ee97ac',
+            '--celery': '#A4CE55',
+            '--de_york': '#6EC17F',
+            '--eucalyptus': '#2A9B58',
+            '--tradewind': '#4bab99',
+            '--moss_green': '#b3d9a1',
+            '--danube': '#6093CD',
+            '--light_danube': '#627abc',
+            '--indigo': '#5F7AC9',
+            '--mariner': '#4759a6',
+            '--robin_egg_blue': '#00BFC6',
+            '--pelorous': '#37BFBE',
+            '--iris_blue': '#03acc3',
+            '--red_berry': '#711e29',
+            '--bay_of_may': '#2b378c',
+            '--viking': '#3bbfbd',
+            '--denim': '#127f99',
+            '--tory_blue': '#134b90',
+        }.get(color_name)
