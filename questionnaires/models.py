@@ -477,7 +477,8 @@ class PollFormField(AbstractFormField):
         verbose_name=_('admin_label'),
         max_length=256,
         help_text=_('Column header used during CSV export of poll responses.'),
-        null=True
+        null=True,
+        blank=True
     )
 
     panels = AbstractFormField.panels + [
