@@ -18,6 +18,6 @@ modeladmin_register(ManifestSettingsAdmin)
 
 @admin.register(SVGToPNGMap)
 class SVGToPNGMapAdmin(admin.ModelAdmin):
-    list_display = ('id', 'svg_path', 'color', 'png_image_file')
+    list_display = ('id', 'svg_path', 'fill_color', 'stroke_color', 'png_image_file')
 
 

@@ -880,21 +880,22 @@ class V1ToV2ObjectMap(models.Model):
 
 class SVGToPNGMap(models.Model):
     svg_path = models.TextField()
-    color = models.TextField()
+    fill_color = models.TextField(null=True)
+    stroke_color = models.TextField(null=True)
     png_image_file = models.ImageField(upload_to='svg-to-png-maps/')
 
     @classmethod
-    def get_png_image(cls, svg_path, color):
+    def get_png_image(cls, svg_path, fill_color, stroke_color=None):
         try:
-            obj = cls.objects.get(svg_path=svg_path, color=color)
+            obj = cls.objects.get(svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color)
         except cls.DoesNotExist:
-            png_image = convert_svg_to_png_bytes(svg_path, fill_color=color)
-
-            obj = cls.objects.create(svg_path=svg_path, color=color, png_image_file=png_image)
+            png_image = convert_svg_to_png_bytes(svg_path, fill_color=fill_color, stroke_color=stroke_color, scale=10)
+            obj = cls.objects.create(
+                svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color, png_image_file=png_image)
         return obj.png_image_file
 
     def __str__(self):
-        return f'{self.svg_path} ({self.color}) -> {self.png_image_file}'
+        return f'{self.svg_path} (F={self.fill_color}) (S={self.stroke_color}) -> {self.png_image_file}'
 
     class Meta:
-        unique_together = ('svg_path', 'color')
+        unique_together = ('svg_path', 'fill_color', 'stroke_color')
