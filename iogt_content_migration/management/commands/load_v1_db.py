@@ -840,7 +840,8 @@ class Command(BaseCommand):
         choices = '|'.join(choices)
 
         poll_form_field = PollFormField.objects.create(
-            page=poll, label=poll.title, field_type=field_type, choices=choices, admin_label=poll_row['short_name'])
+            page=poll, label=poll.title, field_type=field_type, choices=choices,
+            admin_label=poll_row['short_name'] or poll.title)
         if choices:
             cur.scroll(0, 'absolute')
         for row in cur:

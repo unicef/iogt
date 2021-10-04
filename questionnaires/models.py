@@ -237,6 +237,18 @@ class QuestionnairePage(Page, PageUtilsMixin):
     def get_type(self):
         return self.__class__.__name__.lower()
 
+    def get_data_fields(self):
+        data_fields = [
+            ('user', _('User')),
+            ('submit_time', _('Submission Date')),
+            ('page_url', _('Page URL')),
+        ]
+        data_fields += [
+            (field.clean_name, field.admin_label or field.label)
+            for field in self.get_form_fields()
+        ]
+        return data_fields
+
     class Meta:
         abstract = True
 
@@ -410,18 +422,6 @@ class Survey(QuestionnairePage, AbstractForm):
         context.update({'form_length': request.GET.get('form_length')})
         return context
 
-    def get_data_fields(self):
-        data_fields = [
-            ('user', _('User')),
-            ('submit_time', _('Submission Date')),
-            ('page_url', _('Page URL'))
-        ]
-        data_fields += [
-            (field.clean_name, field.admin_label)
-            for field in self.get_form_fields()
-        ]
-        return data_fields
-
     class Meta:
         verbose_name = _("survey")
         verbose_name_plural = _("surveys")
@@ -478,8 +478,7 @@ class PollFormField(AbstractFormField):
         verbose_name=_('admin_label'),
         max_length=256,
         help_text=_('Column header used during CSV export of poll responses.'),
-        null=True,
-        blank=True
+        null=True
     )
 
     panels = AbstractFormField.panels + [
@@ -607,18 +606,6 @@ class Poll(QuestionnairePage, AbstractForm):
             'back_url': request.GET.get('back_url'),
         })
         return context
-
-    def get_data_fields(self):
-        data_fields = [
-            ('user', _('User')),
-            ('submit_time', _('Submission Date')),
-            ('page_url', _('Page URL')),
-        ]
-        data_fields += [
-            (field.clean_name, field.label)
-            for field in self.get_form_fields()
-        ]
-        return data_fields
 
 
 class QuizFormField(AbstractFormField):
@@ -783,18 +770,6 @@ class Quiz(QuestionnairePage, AbstractForm):
 
     def get_submission_class(self):
         return UserSubmission
-
-    def get_data_fields(self):
-        data_fields = [
-            ('user', _('User')),
-            ('submit_time', _('Submission Date')),
-            ('page_url', _('Page URL')),
-        ]
-        data_fields += [
-            (field.clean_name, field.admin_label)
-            for field in self.get_form_fields()
-        ]
-        return data_fields
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
