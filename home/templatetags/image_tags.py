@@ -7,8 +7,11 @@ register = template.Library()
 
 
 @register.inclusion_tag('home/tags/render_png.html')
-def render_png_from_svg(svg_relative_path, fill_color):
-    absolute_path = f'{settings.MEDIA_ROOT}{svg_relative_path}'
+def render_png_from_svg(svg_relative_path, height=None, width=None, fill_color=None, stroke_color=None, attrs=None):
+    absolute_path = f'{settings.BASE_DIR}{svg_relative_path}'
     return {
-        'image_url' : SVGToPNGMap.get_png_image(absolute_path, color=fill_color)
+        'image_url': SVGToPNGMap.get_png_image(absolute_path, fill_color=fill_color, stroke_color=stroke_color).url,
+        'height': height,
+        'width': width,
+        'attrs': attrs,
     }

@@ -1,4 +1,4 @@
-{% load static wagtailimages_tags menu_tags home_tags %}
+{% load static wagtailimages_tags menu_tags home_tags image_tags %}
 
 <nav class="nav-bar">
     <div class="nav-bar__wrap">
@@ -6,7 +6,8 @@
             <div class="nav-bar__item">
                 <a href="{{ item.href }}">
                     <span class="nav-bar__item__icon">
-                         <img src="{% get_menu_icon item %}" />
+                        {% get_menu_icon item as item_url %}
+                        {% render_png_from_svg  item_url %}
                     </span>
                     <span class="nav-bar__item__title">{{ item.text }}</span>
                 </a>

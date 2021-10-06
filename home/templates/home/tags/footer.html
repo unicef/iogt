@@ -1,21 +1,23 @@
-{% load static wagtailcore_tags wagtailimages_tags i18n %}
+{% load static wagtailcore_tags wagtailimages_tags i18n image_tags %}
 
 <footer class="bottom-level">
     <nav>
         <div class='bottom-level__section link-login'>
             {% if request.user.is_anonymous %}
-                <img src="{% static 'icons/login.svg' %}" />
+                {% static 'icons/login.svg' as login_url %}
+                {% render_png_from_svg login_url %}
                 <a href="{% url 'account_login' %}">{% translate "Log in / Create account" %}</a>
             {% else %}
-                <img src="{% static 'icons/profile.svg' %}" />
+                {% static 'icons/profile.svg' as profile_url %}
+                {% render_png_from_svg profile_url %}
                 <a href="{% url 'user_profile' %}">{% translate "Profile" %}</a>
             {% endif %}
         </div>
-         {% for footer_page in footer_pages %}
+        {% for footer_page in footer_pages %}
             <div class='bottom-level__section'>
-                <img src="{{ footer_page.specific.icon.url }}" />
+                {% render_png_from_svg footer_page.specific.icon.url %}
                 <a href="{% pageurl footer_page %}">{{ footer_page.specific.title }}</a>
             </div>
-         {% endfor %}
+        {% endfor %}
     </nav>
 </footer>

@@ -1,8 +1,9 @@
-{% load static wagtailcore_tags wagtailimages_tags sass_tags %}
+{% load static wagtailcore_tags wagtailimages_tags sass_tags image_tags %}
 
 {% for sub_section in sub_sections %}
     <a href="{% pageurl sub_section %}" class='sub-section'>
-        {{ sub_section.title }} 
-        <img src="{% static 'icons/arrow-right.svg' %}" alt='arrow-right'>
+        {{ sub_section.title }}
+        {% static 'icons/arrow-right.svg' as right_arrow_url %}
+        {% render_png_from_svg right_arrow_url attrs="alt='arrow-right'"%}
     </a>
 {% endfor %}
