@@ -7,7 +7,7 @@
                <a href="{% pageurl article %}">
                     <p> {{ article.title }}</p>
                     <p> {{ article.specific.index_page_description }}</p>
-                    {% image article.specific.lead_image width-75 class='related-articles__img--xs' %}
+                    {% image article.specific.lead_image original class='related-articles__img--xs' %}
                     {% image article.specific.lead_image original class='related-articles__img--sm' %}
                 </a>
             </li>
