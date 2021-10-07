@@ -190,21 +190,33 @@ class Command(BaseCommand):
             user_data = dict(row)
             user_data.update({'has_filled_registration_survey': True})
 
-            user, __ = get_user_model().objects.update_or_create(username=row['username'], defaults=user_data)
-            V1ToV2ObjectMap.create_map(user, v1_user_id)
+            migrated_user = V1ToV2ObjectMap.get_v2_obj(get_user_model(), v1_user_id)
 
-            user_groups_sql = f'select * from auth_user_groups aug ' \
-                              f'inner join auth_group ag on aug.group_id = ag.id ' \
-                              f'where user_id={v1_user_id}'
+            if not migrated_user:
+                if get_user_model().objects.filter(username=row['username']).exists():
+                    existing_user = get_user_model().objects.get(username=row['username'])
+                    modified_username = f'{existing_user}_v2'
+                    self.stdout.write(self.style.ERROR(f'Renaming {existing_user.username} to '
+                                                       f'{modified_username} due to username conflict'))
 
-            user_groups_cursor = self.db_query(user_groups_sql)
+                    existing_user.username = modified_username
+                    existing_user.save()
 
-            user.groups.clear()
-            for row_ in user_groups_cursor:
-                group = Group.objects.get(name=row_['name'])
-                group.user_set.add(user)
+                user = get_user_model().objects.create(**user_data)
+                V1ToV2ObjectMap.create_map(user, v1_user_id)
 
-            user_groups_cursor.close()
+                user_groups_sql = f'select * from auth_user_groups aug ' \
+                                  f'inner join auth_group ag on aug.group_id = ag.id ' \
+                                  f'where user_id={v1_user_id}'
+
+                user_groups_cursor = self.db_query(user_groups_sql)
+
+                user.groups.clear()
+                for row_ in user_groups_cursor:
+                    group = Group.objects.get(name=row_['name'])
+                    group.user_set.add(user)
+
+                user_groups_cursor.close()
 
     def migrate_user_groups(self):
         self.stdout.write(self.style.SUCCESS('Starting User Groups Migration'))
