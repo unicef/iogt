@@ -281,8 +281,6 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.ERROR(f'Content Type for {row["model"]} not found.'))
                 continue
 
-            breakpoint()
-
             parent_comment = V1ToV2ObjectMap.get_v2_obj(XtdComment, row['parent_id'])
 
             if not parent_comment:
