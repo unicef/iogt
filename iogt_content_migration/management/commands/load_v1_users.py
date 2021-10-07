@@ -222,14 +222,17 @@ class Command(BaseCommand):
         users = get_user_model().objects.filter(groups__id__in=self.registration_survey_mandatory_group_ids)
         users.update(has_filled_registration_survey=False)
 
-    def migrate_user_comments(self):
-        self.stdout.write(self.style.SUCCESS('Starting Comment migration'))
 
-        sql = f'select dc.id as comment_id, * ' \
-              f'from django_comments dc inner join django_content_type dct on dc.content_type_id = dct.id'
+    def migrate_root_level_user_comments(self):
+        sql = f'select dc.id as comment_id, wcp.id as wagtailpage_id, wcp.title, comment, * ' \
+              f'from django_comments dc ' \
+              f'inner join commenting_molocomment mc on dc.id = mc.comment_ptr_id ' \
+              f'inner join wagtailcore_page wcp on CAST (dc.object_pk as int) = wcp.id ' \
+              f'inner join django_content_type dct on dc.content_type_id = dct.id where parent_id is null ' \
+              f'order by submit_date'
         cur = self.db_query(sql)
 
-        for row in self.with_progress(sql, cur, 'User comments migration in progress...'):
+        for row in self.with_progress(sql, cur, 'User [root] comments migration in progress'):
             comment_id = row.pop('comment_id')
             content_type = self.content_type_map[row['model']]
 
@@ -260,6 +263,51 @@ class Command(BaseCommand):
                     thread_id=max_thread_id + 1, user=V1ToV2ObjectMap.get_v2_obj(get_user_model(), row['user_id']),
                     order=1, followup=0, nested_count=0, ip_address=row['ip_address'], site_id=1)
                 V1ToV2ObjectMap.create_map(comment, comment_id)
+
+    def migrate_nested_user_comments(self):
+        sql = f'select dc.id as comment_id, wcp.id as wagtailpage_id, wcp.title, comment, * ' \
+              f'from django_comments dc ' \
+              f'inner join commenting_molocomment mc on dc.id = mc.comment_ptr_id ' \
+              f'inner join wagtailcore_page wcp on CAST (dc.object_pk as int) = wcp.id ' \
+              f'inner join django_content_type dct on dc.content_type_id = dct.id where parent_id is not null ' \
+              f'order by submit_date'
+        cur = self.db_query(sql)
+
+        for row in self.with_progress(sql, cur, 'User [nested] comments migration in progress...'):
+            comment_id = row.pop('comment_id')
+            content_type = self.content_type_map[row['model']]
+
+            if not content_type:
+                self.stdout.write(self.style.ERROR(f'Content Type for {row["model"]} not found.'))
+                continue
+
+            breakpoint()
+
+            parent_comment = V1ToV2ObjectMap.get_v2_obj(XtdComment, row['parent_id'])
+
+            if not parent_comment:
+                self.stdout.write(self.style.ERROR(f'Parent comment for Comment ID:{comment_id} not found in V2'))
+
+
+            migrated_comment = V1ToV2ObjectMap.get_v2_obj(XtdComment, comment_id)
+
+            if not migrated_comment:
+                print(f'Migrating comment {row["comment"]} with parent {parent_comment}')
+                max_order_value = XtdComment.objects.filter(thread_id=parent_comment.thread_id)\
+                    .values_list('order', flat=True).first()
+                comment = XtdComment.objects.create(
+                    content_type_id=content_type.id, object_pk=parent_comment.object_pk, user_name=row['user_name'],
+                    user_email=row['user_email'], submit_date=row['submit_date'],
+                    comment=row['comment'], is_public=row['is_public'], is_removed=row['is_removed'],
+                    thread_id=parent_comment.thread_id, user=V1ToV2ObjectMap.get_v2_obj(get_user_model(), row['user_id']),
+                    level=parent_comment.level + 1, order=max_order_value + 1, followup=0, nested_count=0, ip_address=row['ip_address'],
+                    parent_id=parent_comment.pk,
+                    site_id=1)
+                V1ToV2ObjectMap.create_map(comment, comment_id)
+
+    def migrate_user_comments(self):
+        self.migrate_root_level_user_comments()
+        self.migrate_nested_user_comments()
 
     def migrate_comment_flags(self):
         sql = f'select * from django_comment_flags'
