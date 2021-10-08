@@ -1043,3 +1043,26 @@
 .progress-list li.current .bar {
   background: #1A9090;
 }
+
+.article__lead-img {
+  width: auto !important;
+  max-width: 86px;
+  height: auto;
+}
+
+@media screen and (min-width: 576px) {
+  .article__lead-img {
+    max-width: 118px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .article__lead-img {
+    max-width: 178px;
+  }
+}
+
+.article__lead-img-featured {
+  width: 100%;
+  height: auto;
+}

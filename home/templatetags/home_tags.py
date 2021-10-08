@@ -48,9 +48,12 @@ def render_banners_list(banners):
     return {'banners': banners}
 
 
-@register.inclusion_tag('home/tags/articles_list.html')
-def render_articles_list(articles):
-    return {'articles': articles}
+@register.inclusion_tag('home/tags/articles_list.html', takes_context=True)
+def render_articles_list(context, articles):
+    context.update({
+        'articles': articles,
+    })
+    return context
 
 
 @register.inclusion_tag('home/tags/featured_content_list.html')

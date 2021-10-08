@@ -76,12 +76,12 @@
   text-align: left;
 }
 
-.sub-section .img-holder {
+.overlay-holder {
   overflow: hidden;
   position: relative;
 }
 
-.sub-section .img-holder.completed:after {
+.overlay-holder.completed:after {
   position: absolute;
   left: 0;
   right: 0;
@@ -92,7 +92,7 @@
   background: linear-gradient(0deg, rgba(26, 144, 144, 0.7), rgba(26, 144, 144, 0.7)), url(.jpg);
 }
 
-.sub-section .img-holder.completed:before {
+.overlay-holder.completed:before {
   background-image: url("/static/icons/tick-square.svg");
   content: "";
   height: 28px;

@@ -199,13 +199,13 @@ class Section(Page, PageUtilsMixin):
         return {
             'read': read_article_count,
             'total': total_article_count,
-            'range_': list(range(total_article_count)),
-            'width_': 100 / total_article_count,
+            'range_': list(range(total_article_count)) if total_article_count else 0,
+            'width_': 100 / total_article_count if total_article_count else 0,
         }
 
     def is_completed(self, request):
         progress_manager = ProgressManager(request)
-        return progress_manager.is_completed(self)
+        return progress_manager.is_section_completed(self)
 
     def get_context(self, request):
         check_user_session(request)
@@ -380,6 +380,10 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
             if block.block_type == 'paragraph':
                 return block
         return ''
+
+    def is_completed(self, request):
+        progress_manager = ProgressManager(request)
+        return progress_manager.is_article_completed(self)
 
     class Meta:
         verbose_name = _("article")

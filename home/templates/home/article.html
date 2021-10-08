@@ -12,7 +12,7 @@
 
 {% block content %}
     <article class='article'>
-        {% image page.lead_image width-320 class='article__lead-img' %}
+        {% image page.lead_image width-320 class='article__lead-img-featured' %}
         {% if user_progress %}
             {% render_user_progress user_progress False %}
         {% endif %}
