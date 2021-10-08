@@ -5,9 +5,13 @@
     <ul>
         {% for article in articles %}
             <li>
-                <a href="{% pageurl article %}">
-                    <p> {{ article.title }}</p>
-                    <p> {{ article.specific.index_page_description }}</p>
+                <a class="related-articles-link" href="{% pageurl article %}">
+                    <div>
+                        <p> {{ article.title }}</p>
+                        {% if article.specific.index_page_description %}
+                            <p><small>{{ article.specific.index_page_description }}</small></p>
+                        {% endif %}
+                    </div>
                     <div class="overlay-holder {% render_is_content_completed article %}">
                         {% image article.specific.lead_image width-320 class='article__lead-img' %}
                     </div>

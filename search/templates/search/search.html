@@ -14,21 +14,9 @@
 
 {% block content %}
     <div class="search-container">
-    <h2>
-        {% translate "Search results for: " %} "{{ search_query }}"
-    </h2>
-
-    <!--<div class="container btn-back-container">
-    <a href="#" class="btn-back">
-        <figure class="btn-back__icon">
-            <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7 13L1 7.0005L7 1" stroke="#303030" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </figure>
-        <span class="btn-back__title">BACK</span>
-        <p class="btn-back__pageTitle">{{ search_query }}</p>
-    </a>
-</div>-->
+    {% if search_query %}
+        <h2>{% translate "Search results for: " %} "{{ search_query }}"</h2>
+    {% endif %}
     <div class="search-results js-search-result search__results">
         {% if search_groups %}
             {% for group, results in search_groups.items %}
