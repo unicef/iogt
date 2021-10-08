@@ -1,3 +1,4 @@
+{% load home_tags %}
 {% load wagtailcore_tags wagtailimages_tags %}
 
 <section class='related-articles'>
@@ -7,7 +8,7 @@
                 <a href="{% pageurl article %}">
                     <p> {{ article.title }}</p>
                     <p> {{ article.specific.index_page_description }}</p>
-                    <div class="overlay-holder {% if user_progress or render_is_completed %}completed{% endif %}">
+                    <div class="overlay-holder {% render_is_content_completed article %}">
                         {% image article.specific.lead_image width-320 class='article__lead-img' %}
                     </div>
                 </a>

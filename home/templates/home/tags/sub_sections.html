@@ -4,7 +4,7 @@
 {% for sub_section in sub_sections %}
     <a href="{% pageurl sub_section %}" class='sub-section'>
         {{ sub_section.title }}
-        <div class="overlay-holder {% if user_progress or render_is_completed %}completed{% endif %}">
+        <div class="overlay-holder {% render_is_content_completed sub_section %}">
             {% image sub_section.specific.lead_image width-320 class='article__lead-img' %}
         </div>
     </a>

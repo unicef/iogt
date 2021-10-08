@@ -85,9 +85,9 @@ def render_user_progress(user_progress, show_count=True):
 
 
 @register.inclusion_tag('home/tags/is_completed.html', takes_context=True)
-def render_is_completed(context, section):
+def render_is_content_completed(context, content):
     context.update({
-        'is_completed': section.specific.is_completed(context['request'])
+        'is_completed': content.specific.is_completed(context['request'])
     })
     return context
 
