@@ -82,8 +82,8 @@ class CannedResponseAdmin(ModelAdmin):
     model = CannedResponse
     menu_label = 'Canned Responses'
     menu_icon = 'placeholder'
-    list_display = ('text',)
-    search_fields = ('text',)
+    list_display = ('header', 'text')
+    search_fields = ('header', 'text')
     menu_order = 602
 
 

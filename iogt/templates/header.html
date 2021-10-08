@@ -1,11 +1,11 @@
-{% load static menu_tags i18n wagtailimages_tags home_tags %}
+{% load static menu_tags i18n wagtailimages_tags home_tags generic_components %}
 
 {% get_current_language as LANGUAGE_CODE %}
 {% get_language_info for LANGUAGE_CODE as lang %}
 {% get_available_languages as LANGUAGES %}
 {% get_language_info_list for LANGUAGES as languages %}
 
-<header id="header">
+<header id="header" style="background: {{settings.home.ThemeSettings.header_background_color}}">
     <div class="header-holder">
         <div class="header-content">
             <div class="logo-holder">
@@ -35,12 +35,15 @@
         </div>
         <div class="btn-holder">
             <div class="nav-bar__item">
-                <a href="{% url 'account_login' %}">
-                    <span class="nav-bar__item__icon">
-                         <img src="/static/icons/login.svg">
-                    </span>
-                    <span class="nav-bar__item__title">{% translate "Log in / Create account" %}</span>
-                </a>
+                {% url 'account_login' as login_url %}
+                {% static 'icons/login.svg' as login_icon %}
+                {% if request.user.is_anonymous %}
+                        {% primary_button title="Log in / Create account" href=login_url icon_path=login_icon %}
+                {% else %}
+                    {% url 'user_profile' as profile_url %}
+                    {% static 'icons/profile.svg' as profile_icon %}
+                    {% primary_button title="Profile" href=profile_url icon_path=profile_icon %}
+                {% endif %}
             </div>
         </div>
     </div>

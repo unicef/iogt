@@ -5,7 +5,7 @@ from django.contrib.admin.utils import flatten
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.files.images import get_image_dimensions
 from django.db import models
 from django.utils.deconstruct import deconstructible
@@ -39,7 +39,6 @@ from wagtailmarkdown.blocks import MarkdownBlock
 from wagtailmenus.models import AbstractFlatMenuItem, BooleanField
 from wagtailsvg.models import Svg
 from wagtailsvg.edit_handlers import SvgChooserPanel
-
 
 from messaging.blocks import ChatBotButtonBlock
 from comments.models import CommentableMixin
@@ -280,6 +279,7 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         blank=True,
         on_delete=models.SET_NULL,
     )
+    index_page_description = models.TextField(null=True, blank=True)
 
     tags = ClusterTaggableManager(through='ArticleTaggedItem', blank=True)
     body = StreamField([
@@ -319,6 +319,7 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         ImageChooserPanel('lead_image'),
         SvgChooserPanel('icon'),
         StreamFieldPanel('body'),
+        FieldPanel('index_page_description'),
         MultiFieldPanel([
             InlinePanel('recommended_articles',
                         label=_("Recommended Articles")),
@@ -385,7 +386,6 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         verbose_name_plural = _("articles")
 
 
-
 class BannerIndexPage(Page):
     parent_page_types = ['home.HomePage']
     subpage_types = ['home.BannerPage']
@@ -434,11 +434,11 @@ class BannerPage(Page):
     content_panels = Page.content_panels + [
         FieldPanel('banner_description'),
         ImageChooserPanel('banner_image'),
-        #ImageChooserPanel('banner_background_image'),
+        # ImageChooserPanel('banner_background_image'),
         PageChooserPanel('banner_link_page'),
-        #FieldPanel('banner_button_text'),
-        #ImageChooserPanel('banner_icon_button'),
-        #FieldPanel('align_center')
+        # FieldPanel('banner_button_text'),
+        # ImageChooserPanel('banner_icon_button'),
+        # FieldPanel('align_center')
     ]
 
 
@@ -470,11 +470,19 @@ class SiteSettings(BaseSetting):
         related_name='+',
         help_text="Upload an image file (.jpg, .png, .svg). The ideal size is 100px x 40px"
     )
+    favicon = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text="Upload an image file (.jpg, .png, .svg). The ideal size is 40px x 40px"
+    )
     show_only_translated_pages = models.BooleanField(
         default=False,
         help_text=_('When selecting this option, untranslated pages'
-                  ' will not be visible to the front end user'
-                  ' when viewing a child language of the site'))
+                    ' will not be visible to the front end user'
+                    ' when viewing a child language of the site'))
     # TODO: GA, FB analytics should be global.
     fb_analytics_app_id = models.CharField(
         verbose_name=_('Facebook Analytics App ID'),
@@ -533,9 +541,11 @@ class SiteSettings(BaseSetting):
     registration_survey = models.ForeignKey('questionnaires.Survey', null=True,
                                             blank=True,
                                             on_delete=models.SET_NULL)
+    opt_in_to_google_web_light = models.BooleanField(default=False)
 
     panels = [
         ImageChooserPanel('logo'),
+        ImageChooserPanel('favicon'),
         MultiFieldPanel(
             [
                 FieldPanel('show_only_translated_pages'),
@@ -597,6 +607,12 @@ class SiteSettings(BaseSetting):
                 PageChooserPanel('registration_survey'),
             ],
             heading="Registration Settings",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('opt_in_to_google_web_light'),
+            ],
+            heading="Opt in to Google web light",
         ),
     ]
 
@@ -828,16 +844,80 @@ class ManifestSettings(models.Model):
         verbose_name_plural = "Manifests settings"
 
 
+@register_setting
+class ThemeSettings(BaseSetting):
+
+    global_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the website',
+        max_length=8, default='#FFFFFF')
+
+    header_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the header background as a HEX code', max_length=8,
+        default='#FFFFFF')
+
+    language_picker_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the language picker button as a HEX code',
+        max_length=8, default='#FDD256')
+    language_picker_font_color = models.CharField(
+        null=True, blank=True, help_text='The font color of the language picker button as a HEX code',
+        max_length=8, default='#303030')
+
+    section_listing_questionnaire_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the Questionnaire in section listing as a HEX code',
+        max_length=8, default='#f0f0f0')
+    section_listing_questionnaire_font_color = models.CharField(
+        null=True, blank=True, help_text='The font color of the Questionnaire in section listing as a HEX code',
+        max_length=8, default='#444')
+
+    article_card_font_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the Embedded Article in Home > Featured Content'
+                                         ' as a HEX code', max_length=8, default='#444')
+    article_card_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the Embedded Article in Home > Featured Content'
+                                         ' as a HEX code', max_length=8, default='#ffffff')
+
+    primary_button_font_color = models.CharField(
+        null=True, blank=True, help_text='The font/icon color of the primary button as a HEX code', max_length=8,
+        default='#444')
+    primary_button_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the primary button as a HEX code', max_length=8,
+        default='#f0f0f0')
+
+    mobile_navbar_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the mobile-only navbar as a HEX code', max_length=8,
+        default='#0094F4')
+
 class V1ToV2ObjectMap(models.Model):
     v1_object_id = models.PositiveIntegerField()
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
+    extra = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return f'{self.v1_object_id} -> {self.object_id}'
 
     @classmethod
-    def create_map(cls, content_object, v1_object_id):
-        v1_to_v2_object_map = cls(content_object=content_object, v1_object_id=v1_object_id)
-        v1_to_v2_object_map.save()
+    def get_v1_id(cls, klass, object_id, extra=None):
+        content_type = ContentType.objects.get_for_model(klass)
+
+        try:
+            return cls.objects.get(content_type=content_type, object_id=object_id, extra=extra).v1_object_id
+        except ObjectDoesNotExist:
+            return None
+
+    @classmethod
+    def get_v2_obj(cls, klass, v1_object_id, extra=None):
+        content_type = ContentType.objects.get_for_model(klass)
+
+        try:
+            return cls.objects.get(content_type=content_type, v1_object_id=v1_object_id, extra=extra).content_object
+        except ObjectDoesNotExist:
+            return None
+
+    @classmethod
+    def create_map(cls, content_object, v1_object_id, extra=None):
+        content_type = ContentType.objects.get_for_model(type(content_object))
+        obj, __ = cls.objects.get_or_create(content_type=content_type, object_id=content_object.pk,
+                                            v1_object_id=v1_object_id, extra=extra)
+        return obj

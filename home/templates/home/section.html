@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags home_tags questionnaires_tags sass_tags i18n wagtailuserbar menu_tags %}
+{% load static wagtailcore_tags wagtailimages_tags home_tags questionnaires_tags sass_tags i18n wagtailuserbar menu_tags generic_components %}
 {% get_current_language as LANGUAGE_CODE %}
 {% get_language_info for LANGUAGE_CODE as lang %}
 {% get_available_languages as LANGUAGES %}
@@ -30,17 +30,17 @@
      {% if polls or surveys or quizzes %}
    <section class='questionnaire-components'>
         {% if polls %}
-        <section class='questionnaire-components__component' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
+        <section class='questionnaire-components__component' style="{% section_questionnaire_style page %}">
         {% render_polls_list polls %} 
         </section>
         {% endif %}
         {% if surveys %}
-        <section class='questionnaire-components__component' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
+        <section class='questionnaire-components__component' style="{% section_questionnaire_style page %}">
         {% render_surveys_list surveys %}
         </section>
         {% endif %}
         {% if quizzes %}
-        <section class='questionnaire-components__component' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
+        <section class='questionnaire-components__component' style="{% section_questionnaire_style page %}">
             {% render_quizzes_list quizzes %} 
         </section>
         {% endif %}

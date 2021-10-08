@@ -178,3 +178,7 @@
 .polls-widget__submit {
     margin-top: 24px
 }
+
+.survey-page__already-completed {
+    color: #FF0000;
+}

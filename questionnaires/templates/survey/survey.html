@@ -16,31 +16,39 @@
             <h1 class="title survey-page__title">{{ page.title }}</h1>
             {% if page.description %}
                 <div class="survey-page__description">{{ page.description }}</div>{% endif %}
-            <form action="{% get_action_url page self fields_step request form %}"
-                  method="POST" class="survey-page__content">
-                {% csrf_token %}
-                <div class="survey-page__content">
-                    {% for field in form %}
-                        <div class="quest-item" tabindex="0">
-                            <div class="quest-item__header">
-                                {% field_counter form forloop form_length fields_step page %}
-                                {% field_description field %}
-                            </div>
-                            <div class="quest-item__desc">
-                                {% if field.widget_type != "checkbox" %}
-                                    <p>{{ field.label }}</p>
-                                {% endif %}
-                            </div>
-                            {% render_field field %}
+            {% if user.is_authenticated or request.is_preview or page.allow_anonymous_submissions %}
+                {% if form %}
+                    <form action="{% get_action_url page self fields_step request form %}"
+                          method="POST" class="survey-page__content">
+                        {% csrf_token %}
+                        <div class="survey-page__content">
+                            {% for field in form %}
+                                <div class="quest-item" tabindex="0">
+                                    <div class="quest-item__header">
+                                        {% field_counter form forloop form_length fields_step page %}
+                                        {% field_description field %}
+                                    </div>
+                                    <div class="quest-item__desc">
+                                        {% if field.widget_type != "checkbox" %}
+                                            <p>{{ field.label }}</p>
+                                        {% endif %}
+                                    </div>
+                                    {% render_field field %}
+                                </div>
+                            {% endfor %}
                         </div>
-                    {% endfor %}
-                </div>
-                <div class="survey-page__btns">
-                    {% render_submit_button fields_step page %}
-                    <a href="{% translated_home_page_url LANGUAGE_CODE %}"
-                       class="cust-btn cust-btn--clear survey-page__btn"><span>{% translate "Go to homepage" %}</span></a>
-                </div>
-            </form>
+                        {% include 'questionnaires/terms_and_conditions.html' %}
+                        <div class="survey-page__btns">
+                            {% render_submit_button fields_step page %}
+                        </div>
+                    </form>
+                {% else %}
+                    {% include 'questionnaires/already_completed.html' %}
+                {% endif %}
+            {% else %}
+                {% include 'questionnaires/login_to_participate.html' %}
+            {% endif %}
+            {% include 'questionnaires/go_to_homepage.html' %}
         </div>
     </div>
 {% endblock content %}
