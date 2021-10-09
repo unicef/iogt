@@ -3,7 +3,9 @@
     <nav>
         {% for section in top_level_sections %}
         <div class='top-level__section' style="background-color:{{ section.specific.background_color }}; color: {{section.specific.font_color }}">
-            {% render_png_from_svg section.specific.icon.url fill_color='red' %}
+            {% if section.specific.icon %}
+                {% render_png_from_svg section.specific.icon.url fill_color='red' %}
+            {% endif %}
             <a href="{% pageurl section %}">{{ section.specific.title }}</a>
         </div>
         {% endfor %}

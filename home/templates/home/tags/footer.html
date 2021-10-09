@@ -15,7 +15,9 @@
         </div>
         {% for footer_page in footer_pages %}
             <div class='bottom-level__section'>
-                {% render_png_from_svg footer_page.specific.icon.url %}
+                {% if footer_page.specific.icon %}
+                    {% render_png_from_svg footer_page.specific.icon.url %}
+                {% endif %}
                 <a href="{% pageurl footer_page %}">{{ footer_page.specific.title }}</a>
             </div>
         {% endfor %}

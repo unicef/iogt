@@ -106,9 +106,6 @@
 
 .top-level__section,
 .bottom-level__section {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
   margin-top: 8px;
   padding: 9px 12px;
   border-radius: 8px;
@@ -128,6 +125,8 @@
 .top-level img,
 .bottom-level img {
   max-width: 16px;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 @media only screen and (min-width: 360px) {

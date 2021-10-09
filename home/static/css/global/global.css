@@ -339,6 +339,8 @@
 
   .nav-bar__item a img {
     max-width: 16px;
+    display: inline-block;
+    vertical-align: middle;
   }
 
   .nav-bar__item a .nav-bar__item__title {
@@ -668,12 +670,12 @@
 }
 
 .form-holder .js-search-btn img{
-  margin: 0;
+  margin: 0 0 0 12px;
   border-left: 1px solid #EFEFEF;
   padding: 5px 0;
-  padding-left: 10px;
-  width: inherit;
-  height: inherit;
+  padding-left: 15px;
+  width: 34px;
+  height: 26px;
 }
 
 .footer-head #header {
@@ -780,7 +782,7 @@
   }
 
   #header .btn-holder .nav-bar__item__icon {
-    display: flex;
+    /* display: flex; */
   }
   #header .btn-holder .nav-bar__item a {
     margin: 0;
