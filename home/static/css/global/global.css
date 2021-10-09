@@ -404,6 +404,7 @@
   outline: none;
   box-sizing: border-box;
   width: 100%;
+  border-radius: 8px;
 }
 
 .search__form input::placeholder {
@@ -668,7 +669,7 @@
 }
 
 .form-holder .js-search-btn img{
-  margin: 0;
+  margin: 0 0 0 12px;
   border-left: 1px solid #EFEFEF;
   padding: 5px 0;
   padding-left: 10px;
