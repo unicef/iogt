@@ -45,6 +45,18 @@
   color: #303030;
 }
 
+.related-articles-link div {
+  flex: 1;
+}
+
+.related-articles-link div p {
+  width: 100% !important;
+}
+
+.related-articles-link div p small {
+  font-weight: normal;
+}
+
 .related-articles img {
   border-radius: 8px;
   width: 50%;
@@ -1002,4 +1014,14 @@
   .content .nav-bar__wrap {
     display: none;
   }
+}
+
+.sm-paragraph {
+  font-size: 0.75em !important;
+  font-weight: normal !important;
+}
+
+.lg-paragraph {
+  font-size: 0.9em !important;
+  font-weight: normal !important;
 }
