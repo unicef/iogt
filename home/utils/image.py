@@ -2,7 +2,20 @@ import codecs
 import cairosvg
 import re
 
+from bs4 import BeautifulSoup
 from django.core.files.base import ContentFile
+
+
+def replace_fill_using_parser(svg_file_path, fill_color=None):
+    with open(svg_file_path, 'r', encoding='utf-8') as f:
+        soup = BeautifulSoup(f, 'lxml')
+        elements_to_fill = soup.find_all('svg') + soup.find_all('path')
+        for el in elements_to_fill:
+            if fill_color:
+                el['fill'] = fill_color
+
+    with open(svg_file_path, 'w', encoding='utf-8') as f:
+        f.write(str(soup.body.next))
 
 
 def convert_svg_to_png_bytes(svg_file, fill_color=None, stroke_color=None, scale=100):
