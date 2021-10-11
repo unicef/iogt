@@ -186,11 +186,11 @@ class Section(Page, PageUtilsMixin):
     base_form_class = SectionPageForm
 
     def get_descendant_articles(self):
-        return Article.objects.descendant_of(self).exact_type(Article)
+        return Article.objects.descendant_of(self).live().exact_type(Article)
 
     def get_progress_bar_enabled_ancestor(self):
         return Section.objects.ancestor_of(self, inclusive=True).exact_type(
-            Section).filter(
+            Section).live().filter(
             show_progress_bar=True).first()
 
     def get_user_progress_dict(self, request):
