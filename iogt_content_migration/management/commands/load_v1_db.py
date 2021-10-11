@@ -522,7 +522,6 @@ class Command(BaseCommand):
                     block['value'] = None
             if block['type'] == 'image':
                 image = self.image_map.get(block['value'])
-                block['value'] = image.id if image else None
                 if image:
                     block['value'] = image.id
                 else:
