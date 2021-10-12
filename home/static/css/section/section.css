@@ -76,6 +76,36 @@
   text-align: left;
 }
 
+.overlay-holder {
+  overflow: hidden;
+  position: relative;
+}
+
+.overlay-holder.completed:after {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  content: "";
+  z-index: 1;
+  background: linear-gradient(0deg, rgba(26, 144, 144, 0.7), rgba(26, 144, 144, 0.7)), url(.jpg);
+}
+
+.overlay-holder.completed:before {
+  background-image: url("/static/icons/tick-square.svg");
+  content: "";
+  height: 28px;
+  width: 28px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
 @media only screen and (min-width: 360px) {
   .sub-section {
     padding: 8px 20px;

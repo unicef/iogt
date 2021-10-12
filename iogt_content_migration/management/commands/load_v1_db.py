@@ -515,7 +515,18 @@ class Command(BaseCommand):
                 block['type'] = 'markdown'
             if block['type'] == 'media':
                 media = self.media_map.get(block['value'])
-                block['value'] = media.id if media else None
+                if media:
+                    block['value'] = media.id
+                else:
+                    self.stdout.write(f"Article (title={row['title']}) has media with invalid id {block['value']}")
+                    block['value'] = None
+            if block['type'] == 'image':
+                image = self.image_map.get(block['value'])
+                if image:
+                    block['value'] = image.id
+                else:
+                    self.stdout.write(f"Article (title={row['title']}) has image with invalid id {block['value']}")
+                    block['value'] = None
 
         if row['subtitle']:
             v2_body = [{
