@@ -4,6 +4,6 @@
     <a href="{% pageurl sub_section %}" class='sub-section'>
         {{ sub_section.title }}
         {% static 'icons/arrow-right.svg' as right_arrow_url %}
-        {% render_png_from_svg right_arrow_url attrs="alt='arrow-right'"%}
+        {% render_png_from_svg right_arrow_url attrs="width=10px alt='arrow-right'"%}
     </a>
 {% endfor %}
