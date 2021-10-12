@@ -13,6 +13,10 @@ services:
       DB_PORT: 5432
       DJANGO_SETTINGS_MODULE: iogt.settings.docker_compose_dev
       COMMIT_HASH: asdfghjkl
+      RAPIDPRO_BOT_USER_ID: 1
+      RAPIDPRO_BOT_USER_USERNAME: rapidpro
+      RAPIDPRO_BOT_USER_PASSWORD: 1234
+      WAGTAILTRANSFER_SECRET_KEY: wagtailtransfersecretkey
     command: bash -c "python manage.py compilemessages && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./:/app/
