@@ -808,6 +808,19 @@ body.rtl {
   .language__select {
     margin-left: 12px;
   }
+
+  .rtl .language__select {
+    margin-left: 0;
+    margin-right: 12px;
+  }
+
+  .rtl .language_drop > a:after {
+    right: auto;
+    left: 11px;
+}
+
+
+
   .header-content {
     justify-content: flex-start;
     padding: 0 16px;
