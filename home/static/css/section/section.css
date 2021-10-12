@@ -113,4 +113,8 @@
     line-height: 22px;
   }
 }
+
+.rtl .sub-section img {
+  transform: rotate(180deg);
+}
 /*# sourceMappingURL=section.css.map */
