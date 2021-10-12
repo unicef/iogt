@@ -1,25 +1,20 @@
-{% load static wagtailcore_tags wagtailimages_tags i18n image_tags %}
+{% load static wagtailcore_tags wagtailimages_tags i18n generic_components image_tags %}
 
 <footer class="bottom-level">
     <nav>
-        <div class='bottom-level__section link-login'>
             {% if request.user.is_anonymous %}
-                {% static 'icons/login.svg' as login_url %}
-                {% render_png_from_svg login_url %}
-                <a href="{% url 'account_login' %}">{% translate "Log in / Create account" %}</a>
+                {% url 'account_login' as login_url %}
+                {% static 'icons/login.svg' as login_icon_path %}
+
+                {% primary_button title='Login / Create account' href=login_url icon_path=login_icon_path is_svg_icon=True %}
             {% else %}
-                {% static 'icons/profile.svg' as profile_url %}
-                {% render_png_from_svg profile_url %}
-                <a href="{% url 'user_profile' %}">{% translate "Profile" %}</a>
+                {% url 'user_profile' as profile_url %}
+                {% static 'icons/profile.svg' as profile_icon_path %}
+                {% primary_button title='Profile' href=profile_url icon_path=profile_icon_path is_svg_icon=True %}
+
             {% endif %}
-        </div>
-        {% for footer_page in footer_pages %}
-            <div class='bottom-level__section'>
-                {% if footer_page.specific.icon %}
-                    {% render_png_from_svg footer_page.specific.icon.url %}
-                {% endif %}
-                <a href="{% pageurl footer_page %}">{{ footer_page.specific.title }}</a>
-            </div>
-        {% endfor %}
+         {% for footer_page in footer_pages %}
+            {% primary_button title=footer_page.specific.title href=footer_page_url icon_path=footer_page.specific.icon.url is_svg_icon=True %}
+         {% endfor %}
     </nav>
 </footer>

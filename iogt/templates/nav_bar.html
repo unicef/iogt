@@ -1,17 +1,11 @@
 {% load static wagtailimages_tags menu_tags home_tags image_tags %}
+{% load static wagtailimages_tags menu_tags home_tags generic_components image_tags %}
 
 <nav class="nav-bar">
-    <div class="nav-bar__wrap">
+    <div class="nav-bar__wrap" style="{% mobile_navbar_style %}">
         {% for item in menu_items %}
-            <div class="nav-bar__item">
-                <a href="{{ item.href }}">
-                    <span class="nav-bar__item__icon">
-                        {% get_menu_icon item as item_url %}
-                        {% render_png_from_svg  item_url %}
-                    </span>
-                    <span class="nav-bar__item__title">{{ item.text }}</span>
-                </a>
-            </div>
+            {% get_menu_icon item as menu_icon %}
+            {% primary_button title=item.text icon_path=menu_icon href=item.href is_svg_icon=True %}
         {% endfor %}
     </div>
 </nav>

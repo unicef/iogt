@@ -14,7 +14,7 @@ from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from wagtail_localize.fields import TranslatableField
 
-from home.blocks import MediaBlock
+from home.blocks import MediaBlock, PageButtonBlock
 from home.mixins import PageUtilsMixin
 from iogt_users.models import User
 from modelcluster.fields import ParentalKey
@@ -88,6 +88,18 @@ class QuestionnairePage(Page, PageUtilsMixin):
     )
 
     direct_display = models.BooleanField(default=False)
+
+    index_page_description = models.TextField(null=True, blank=True)
+    index_page_description_line_2 = models.TextField(null=True, blank=True)
+
+    terms_and_conditions = StreamField(
+        [
+            ("paragraph", blocks.RichTextBlock()),
+            ('page_button', PageButtonBlock()),
+        ],
+        null=True,
+        blank=True,
+    )
 
     settings_panels = Page.settings_panels + [
         FieldPanel('direct_display')
@@ -225,6 +237,18 @@ class QuestionnairePage(Page, PageUtilsMixin):
     def get_type(self):
         return self.__class__.__name__.lower()
 
+    def get_data_fields(self):
+        data_fields = [
+            ('user', _('User')),
+            ('submit_time', _('Submission Date')),
+            ('page_url', _('Page URL')),
+        ]
+        data_fields += [
+            (field.clean_name, field.admin_label or field.label)
+            for field in self.get_form_fields()
+        ]
+        return data_fields
+
     class Meta:
         abstract = True
 
@@ -346,6 +370,14 @@ class Survey(QuestionnairePage, AbstractForm):
             ],
             heading="Description at thank you page",
         ),
+        FieldPanel('index_page_description'),
+        FieldPanel('index_page_description_line_2'),
+        MultiFieldPanel(
+            [
+                StreamFieldPanel("terms_and_conditions"),
+            ],
+            heading="Terms and conditions",
+        ),
         InlinePanel("survey_form_fields", label="Form fields"),
     ]
 
@@ -389,18 +421,6 @@ class Survey(QuestionnairePage, AbstractForm):
         context.update({'back_url': request.GET.get('back_url')})
         context.update({'form_length': request.GET.get('form_length')})
         return context
-
-    def get_data_fields(self):
-        data_fields = [
-            ('user', _('User')),
-            ('submit_time', _('Submission Date')),
-            ('page_url', _('Page URL'))
-        ]
-        data_fields += [
-            (field.clean_name, field.admin_label)
-            for field in self.get_form_fields()
-        ]
-        return data_fields
 
     class Meta:
         verbose_name = _("survey")
@@ -454,6 +474,16 @@ class PollFormField(AbstractFormField):
         blank=True,
         help_text=_('Default value. Pipe (|) separated values supported for checkboxes.')
     )
+    admin_label = models.CharField(
+        verbose_name=_('admin_label'),
+        max_length=256,
+        help_text=_('Column header used during CSV export of poll responses.'),
+        null=True
+    )
+
+    panels = AbstractFormField.panels + [
+        FieldPanel('admin_label', classname="formbuilder-default"),
+    ]
 
 
 class Poll(QuestionnairePage, AbstractForm):
@@ -471,14 +501,13 @@ class Poll(QuestionnairePage, AbstractForm):
         ),
     )
 
-    # TODO allow randomising option ?
-    # randomise_options = models.BooleanField(
-    #     default=False,
-    #     help_text=_(
-    #         "Randomising the options allows the options to be shown in a different "
-    #         "order each time the page is displayed."
-    #     ),
-    # )
+    randomise_options = models.BooleanField(
+        default=False,
+        help_text=_(
+            "Randomising the options allows the options to be shown in a different "
+            "order each time the page is displayed."
+        ),
+    )
 
     content_panels = Page.content_panels + [
         FormSubmissionsPanel(),
@@ -488,6 +517,7 @@ class Poll(QuestionnairePage, AbstractForm):
                 FieldPanel("show_results"),
                 FieldPanel("result_as_percentage"),
                 FieldPanel("allow_multiple_submissions"),
+                FieldPanel("randomise_options"),
                 FieldPanel("submit_button_text"),
             ],
             heading=_(
@@ -507,6 +537,14 @@ class Poll(QuestionnairePage, AbstractForm):
                 StreamFieldPanel("thank_you_text"),
             ],
             heading="Description at thank you page",
+        ),
+        FieldPanel('index_page_description'),
+        FieldPanel('index_page_description_line_2'),
+        MultiFieldPanel(
+            [
+                StreamFieldPanel("terms_and_conditions"),
+            ],
+            heading="Terms and conditions",
         ),
         InlinePanel("poll_form_fields", label="Poll Form fields", min_num=1, max_num=1),
     ]
@@ -568,18 +606,6 @@ class Poll(QuestionnairePage, AbstractForm):
             'back_url': request.GET.get('back_url'),
         })
         return context
-
-    def get_data_fields(self):
-        data_fields = [
-            ('user', _('User')),
-            ('submit_time', _('Submission Date')),
-            ('page_url', _('Page URL')),
-        ]
-        data_fields += [
-            (field.clean_name, field.label)
-            for field in self.get_form_fields()
-        ]
-        return data_fields
 
 
 class QuizFormField(AbstractFormField):
@@ -718,6 +744,14 @@ class Quiz(QuestionnairePage, AbstractForm):
             ],
             heading="Description at thank you page",
         ),
+        FieldPanel('index_page_description'),
+        FieldPanel('index_page_description_line_2'),
+        MultiFieldPanel(
+            [
+                StreamFieldPanel("terms_and_conditions"),
+            ],
+            heading="Terms and conditions",
+        ),
         InlinePanel("quiz_form_fields", label="Form fields"),
     ]
 
@@ -736,18 +770,6 @@ class Quiz(QuestionnairePage, AbstractForm):
 
     def get_submission_class(self):
         return UserSubmission
-
-    def get_data_fields(self):
-        data_fields = [
-            ('user', _('User')),
-            ('submit_time', _('Submission Date')),
-            ('page_url', _('Page URL')),
-        ]
-        data_fields += [
-            (field.clean_name, field.admin_label)
-            for field in self.get_form_fields()
-        ]
-        return data_fields
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)

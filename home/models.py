@@ -275,6 +275,7 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         blank=True,
         on_delete=models.SET_NULL,
     )
+    index_page_description = models.TextField(null=True, blank=True)
 
     tags = ClusterTaggableManager(through='ArticleTaggedItem', blank=True)
     body = StreamField([
@@ -314,6 +315,7 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         ImageChooserPanel('lead_image'),
         SvgChooserPanel('icon'),
         StreamFieldPanel('body'),
+        FieldPanel('index_page_description'),
         MultiFieldPanel([
             InlinePanel('recommended_articles',
                         label=_("Recommended Articles")),
@@ -837,6 +839,49 @@ class ManifestSettings(models.Model):
         verbose_name = "Manifest settings"
         verbose_name_plural = "Manifests settings"
 
+
+@register_setting
+class ThemeSettings(BaseSetting):
+
+    global_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the website',
+        max_length=8, default='#FFFFFF')
+
+    header_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the header background as a HEX code', max_length=8,
+        default='#FFFFFF')
+
+    language_picker_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the language picker button as a HEX code',
+        max_length=8, default='#FDD256')
+    language_picker_font_color = models.CharField(
+        null=True, blank=True, help_text='The font color of the language picker button as a HEX code',
+        max_length=8, default='#303030')
+
+    section_listing_questionnaire_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the Questionnaire in section listing as a HEX code',
+        max_length=8, default='#f0f0f0')
+    section_listing_questionnaire_font_color = models.CharField(
+        null=True, blank=True, help_text='The font color of the Questionnaire in section listing as a HEX code',
+        max_length=8, default='#444')
+
+    article_card_font_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the Embedded Article in Home > Featured Content'
+                                         ' as a HEX code', max_length=8, default='#444')
+    article_card_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the Embedded Article in Home > Featured Content'
+                                         ' as a HEX code', max_length=8, default='#ffffff')
+
+    primary_button_font_color = models.CharField(
+        null=True, blank=True, help_text='The font/icon color of the primary button as a HEX code', max_length=8,
+        default='#444')
+    primary_button_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the primary button as a HEX code', max_length=8,
+        default='#f0f0f0')
+
+    mobile_navbar_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the mobile-only navbar as a HEX code', max_length=8,
+        default='#0094F4')
 
 class V1ToV2ObjectMap(models.Model):
     v1_object_id = models.PositiveIntegerField()
