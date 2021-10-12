@@ -977,22 +977,22 @@ class Command(BaseCommand):
     def map_survey_description(self, row):
         v2_survey_description = []
 
-        v2_image = self.image_map.get(row['image_id'])
-        if v2_image:
-            v2_survey_description.append({'type': 'image', 'value': v2_image.id})
-
         v1_introduction = row['introduction']
         if v1_introduction:
             v2_survey_description.append({'type': 'paragraph', 'value': v1_introduction})
 
         v1_survey_description = json.loads(row['description'])
         for block in v1_survey_description:
-            if block['type'] == 'paragraph':
+            if block['type'] in ['heading', 'paragraph', 'list', 'numbered_list']:
                 v2_survey_description.append(block)
             elif block['type'] == 'image':
                 image = self.image_map.get(block['value'])
                 if image:
                     v2_survey_description.append({'type': 'image', 'value': image.id})
+            elif block['type'] == 'page':
+                page = self.v1_to_v2_page_map.get(block['value'])
+                if page:
+                    v2_survey_description.append({'type': 'page', 'value': page.id})
 
         return json.dumps(v2_survey_description)
 

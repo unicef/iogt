@@ -57,8 +57,12 @@ class QuestionnairePage(Page, PageUtilsMixin):
 
     description = StreamField(
         [
-            ("paragraph", blocks.RichTextBlock()),
+            ('heading', blocks.CharBlock(form_classname="full title")),
+            ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
             ("image", ImageChooserBlock()),
+            ('list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
+            ('numbered_list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
+            ('page', blocks.PageChooserBlock()),
         ],
         null=True,
         blank=True,
