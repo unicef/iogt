@@ -19,3 +19,4 @@ whitenoise==5.2.*
 wagtailsvg==0.0.14
 cairosvg==2.5.2
 tqdm
+lxml
