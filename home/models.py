@@ -672,13 +672,13 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
     )
 
     color = models.CharField(
-        max_length=6,
+        max_length=255,
         blank=True,
         null=True
     )
 
     color_text = models.CharField(
-        max_length=6,
+        max_length=255,
         blank=True,
         null=True
     )
