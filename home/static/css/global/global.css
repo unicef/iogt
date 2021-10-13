@@ -543,12 +543,12 @@ body.rtl {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 5px 12px;
+  padding: 5px 20px 5px 12px;
   border-radius: 8px;
   flex-grow: 0;
   position: relative;
   min-width: 80px;
-  max-width: 80px;
+  /* max-width: 80px; */
   text-decoration: none;
   font-family: Poppins;
   font-style: normal;
@@ -559,7 +559,7 @@ body.rtl {
   z-index: 999;
 }
 
-.language_drop > a:after {
+.language_drop > a > span {
   position: absolute;
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
@@ -588,9 +588,9 @@ body.rtl {
   z-index: 99;
 }
 
-.language_drop:hover > a:after,
-.language_drop:active > a:after,
-.language_drop:focus > a:after {
+.language_drop:hover > a > span,
+.language_drop:active > a > span,
+.language_drop:focus > a > span {
   border-top: 4px solid transparent;
   border-bottom: 4px solid #303030;
   margin: -2px 0 0;
@@ -769,7 +769,7 @@ body.rtl {
   }
   .language_drop > a {
     min-width: 80px;
-    max-width: 80px;
+    /* max-width: 80px; */
   }
 
   #content-wrap .content {
@@ -803,7 +803,10 @@ body.rtl {
     padding: 16px 32px;
   }
 }
-.rtl .language_drop > a:after {
+.rtl .language_drop > a {
+  padding: 5px 12px 5px 20px;
+}
+.rtl .language_drop > a > span {
   right: auto;
   left: 11px;
 }

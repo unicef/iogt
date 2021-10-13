@@ -2,7 +2,10 @@
 {% get_current_language as LANGUAGE_CODE %}
 {% get_language_info for LANGUAGE_CODE as current_language %}
 <div class="language_drop">
-    <a href="#" style="{% language_picker_style %}">{{ current_language.name_local }}</a>
+    <a href="#" style="{% language_picker_style %}">
+        {{ current_language.name_local }}
+        <span class="arrow"></span>
+    </a>
     <ul class="drop">
         {% if translations %}
             {% for translation in translations %}
