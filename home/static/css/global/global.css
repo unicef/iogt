@@ -59,6 +59,12 @@
   height: auto;
 }
 
+.overlay-holder img {
+  border-radius: 8px;
+  width: 50%;
+  height: auto;
+}
+
 .related-articles__img--sm {
   display: none;
 }
