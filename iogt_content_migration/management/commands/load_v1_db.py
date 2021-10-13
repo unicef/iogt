@@ -76,7 +76,11 @@ class Command(BaseCommand):
         self.image_map = {}
         self.page_translation_map = {}
         self.v1_to_v2_page_map = {}
-        self.page_revision_map = {}
+        self.pages_pending_links = {
+            'articles': {},
+            'surveys': {},
+            'banners': {},
+        }
 
         self.clear()
         self.stdout.write('Existing site structure cleared')
@@ -144,11 +148,12 @@ class Command(BaseCommand):
         self.create_index_pages(home)
         self.migrate_sections()
         self.migrate_articles()
-        self.migrate_banners()
         self.migrate_footers()
         self.migrate_polls()
         self.migrate_surveys()
         self.translate_home_pages()
+        self.migrate_banners()
+        self.fix_pending_description_for_pages()
         Page.fix_tree()
         self.migrate_recommended_articles_for_article()
         self.migrate_featured_articles_for_section()
@@ -508,14 +513,46 @@ class Command(BaseCommand):
             return
         self.stdout.write(f"saved article, title={article.title}")
 
-    def map_article_body(self, row):
-        v2_body = json.loads(row['body'])
-        for block in v2_body:
-            if block['type'] == 'paragraph':
+    def _map_body(self, type_, row, v1_body):
+        v2_body = []
+        for block in v1_body:
+            if block['type'] in ['paragraph', 'html']:
                 block['type'] = 'markdown'
-            if block['type'] == 'media':
+                v2_body.append(block)
+            elif block['type'] == 'richtext':
+                block['type'] = 'paragraph'
+                v2_body.append(block)
+            elif block['type'] in ['heading', 'list', 'numbered_list']:
+                v2_body.append(block)
+            elif block['type'] == 'image':
+                image = self.image_map.get(block['value'])
+                block['value'] = image.id if image else None
+                v2_body.append(block)
+            elif block['type'] == 'media':
                 media = self.media_map.get(block['value'])
                 block['value'] = media.id if media else None
+                v2_body.append(block)
+            elif block['type'] == 'page':
+                page = self.v1_to_v2_page_map.get(block['value'])
+                if page:
+                    v2_body.append(
+                        {
+                            'type': 'page_button',
+                            'value': {
+                                'page': page.id
+                            },
+                        }
+                    )
+                else:
+                    self.pages_pending_links[type_].update({row['page_ptr_id']: row})
+                    self.stdout.write(f'Unable to attach v2 page for {type_[:-1]}, title={row["title"]}')
+
+        return v2_body
+
+    def map_article_body(self, row):
+        v1_body = json.loads(row['body'])
+
+        v2_body = self._map_body('articles', row, v1_body)
 
         if row['subtitle']:
             v2_body = [{
@@ -553,7 +590,7 @@ class Command(BaseCommand):
                 translated_banner = banner.get_translation_or_none(locale)
                 if translated_banner:
                     translated_banner.banner_image = self.image_map.get(row['banner_id'])
-                    translated_banner.banner_link_page = self.v1_to_v2_page_map.get(row['banner_link_page_id'])
+                    translated_banner.banner_link_page = self.map_banner_page(row)
                     translated_banner.title = row['title']
                     translated_banner.draft_title = row['draft_title']
                     translated_banner.live = row['live']
@@ -577,7 +614,7 @@ class Command(BaseCommand):
     def create_banner(self, row):
         banner = models.BannerPage(
             banner_image=self.image_map.get(row['banner_id']),
-            banner_link_page=self.v1_to_v2_page_map.get(row['banner_link_page_id']),
+            banner_link_page=self.map_banner_page(row),
             title=row['title'],
             draft_title=row['draft_title'],
             slug=row['slug'],
@@ -600,6 +637,17 @@ class Command(BaseCommand):
             row['page_ptr_id']: banner
         })
         self.stdout.write(f"saved banner, title={banner.title}")
+
+    def map_banner_page(self, row):
+        v2_page = None
+        v1_banner_link_page_id = row['banner_link_page_id']
+        if v1_banner_link_page_id:
+            v2_page = self.v1_to_v2_page_map.get(v1_banner_link_page_id)
+            if not v2_page:
+                self.pages_pending_links['banners'].update({row['page_ptr_id']: row})
+                self.stdout.write(f'Unable to attach v2 page for banner, title={row["title"]}')
+
+        return v2_page
 
     def migrate_footers(self):
         sql = "select * " \
@@ -975,24 +1023,15 @@ class Command(BaseCommand):
         self.stdout.write(f"saved survey, title={survey.title}")
 
     def map_survey_description(self, row):
-        v2_survey_description = []
-
-        v1_introduction = row['introduction']
-        if v1_introduction:
-            v2_survey_description.append({'type': 'paragraph', 'value': v1_introduction})
-
         v1_survey_description = json.loads(row['description'])
-        for block in v1_survey_description:
-            if block['type'] in ['heading', 'paragraph', 'list', 'numbered_list']:
-                v2_survey_description.append(block)
-            elif block['type'] == 'image':
-                image = self.image_map.get(block['value'])
-                if image:
-                    v2_survey_description.append({'type': 'image', 'value': image.id})
-            elif block['type'] == 'page':
-                page = self.v1_to_v2_page_map.get(block['value'])
-                if page:
-                    v2_survey_description.append({'type': 'page', 'value': page.id})
+
+        v2_survey_description = self._map_body('surveys', row, v1_survey_description)
+
+        if row['introduction']:
+            v2_survey_description = [{
+                'type': 'paragraph',
+                'value': row['introduction'],
+            }] + v2_survey_description
 
         return json.dumps(v2_survey_description)
 
@@ -1171,3 +1210,22 @@ class Command(BaseCommand):
             '--denim': '#127f99',
             '--tory_blue': '#134b90',
         }.get(color_name)
+
+    def fix_pending_description_for_pages(self):
+        for k, v in self.pages_pending_links['articles'].items():
+            v2_article = self.v1_to_v2_page_map.get(k)
+            if v2_article:
+                v2_article.body = self.map_article_body(v)
+                v2_article.save()
+
+        for k, v in self.pages_pending_links['surveys'].items():
+            v2_survey = self.v1_to_v2_page_map.get(k)
+            if v2_survey:
+                v2_survey.description = self.map_survey_description(v)
+                v2_survey.save()
+
+        for k, v in self.pages_pending_links['banners'].items():
+            v2_banner = self.v1_to_v2_page_map.get(k)
+            if v2_banner:
+                v2_banner.banner_link_page = self.map_banner_page(v)
+                v2_banner.save()

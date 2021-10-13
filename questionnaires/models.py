@@ -62,7 +62,7 @@ class QuestionnairePage(Page, PageUtilsMixin):
             ("image", ImageChooserBlock()),
             ('list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
             ('numbered_list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
-            ('page', blocks.PageChooserBlock()),
+            ('page_button', PageButtonBlock()),
         ],
         null=True,
         blank=True,
