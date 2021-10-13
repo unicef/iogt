@@ -153,7 +153,7 @@ class Command(BaseCommand):
         self.migrate_surveys()
         self.translate_home_pages()
         self.migrate_banners()
-        self.fix_pending_description_for_pages()
+        self.fix_pending_links_for_pages()
         Page.fix_tree()
         self.migrate_recommended_articles_for_article()
         self.migrate_featured_articles_for_section()
@@ -526,11 +526,19 @@ class Command(BaseCommand):
                 v2_body.append(block)
             elif block['type'] == 'image':
                 image = self.image_map.get(block['value'])
-                block['value'] = image.id if image else None
+                if image:
+                    block['value'] = image.id
+                else:
+                    self.stdout.write(f"Article (title={row['title']}) has image with invalid id {block['value']}")
+                    block['value'] = None
                 v2_body.append(block)
             elif block['type'] == 'media':
                 media = self.media_map.get(block['value'])
-                block['value'] = media.id if media else None
+                if media:
+                    block['value'] = media.id
+                else:
+                    self.stdout.write(f"Article (title={row['title']}) has media with invalid id {block['value']}")
+                    block['value'] = None
                 v2_body.append(block)
             elif block['type'] == 'page':
                 page = self.v1_to_v2_page_map.get(block['value'])
@@ -1211,7 +1219,7 @@ class Command(BaseCommand):
             '--tory_blue': '#134b90',
         }.get(color_name)
 
-    def fix_pending_description_for_pages(self):
+    def fix_pending_links_for_pages(self):
         for k, v in self.pages_pending_links['articles'].items():
             v2_article = self.v1_to_v2_page_map.get(k)
             if v2_article:
@@ -1229,3 +1237,5 @@ class Command(BaseCommand):
             if v2_banner:
                 v2_banner.banner_link_page = self.map_banner_page(v)
                 v2_banner.save()
+
+        self.stdout.write('Fixed pending links for pages.')
