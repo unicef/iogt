@@ -375,6 +375,8 @@ class Command(BaseCommand):
                     page=new_survey_page,
                     user=V1ToV2ObjectMap.get_v2_obj(get_user_model(), row['user_id']) if row['user_id'] else None,
                 )
+                submission.submit_time = row['created_at']
+                submission.save()
                 V1ToV2ObjectMap.create_map(submission, row['id'], extra='survey')
 
     def migrate_user_poll_submissions(self):
