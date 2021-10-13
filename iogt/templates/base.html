@@ -48,7 +48,8 @@
     {% endblock %}
 </head>
 
-<body class="rtl {% block body_class %}{% endblock %}">
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+<body class="{% if LANGUAGE_BIDI %}rtl{% endif %} {% block body_class %}{% endblock %}">
 {% wagtailuserbar %}
 
 <main id="app">
