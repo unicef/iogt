@@ -48,9 +48,12 @@ def render_banners_list(banners):
     return {'banners': banners}
 
 
-@register.inclusion_tag('home/tags/articles_list.html')
-def render_articles_list(articles):
-    return {'articles': articles}
+@register.inclusion_tag('home/tags/articles_list.html', takes_context=True)
+def render_articles_list(context, articles):
+    context.update({
+        'articles': articles,
+    })
+    return context
 
 
 @register.inclusion_tag('home/tags/featured_content_list.html')
@@ -74,13 +77,27 @@ def render_questionnaire_list(questionnaire):
 
 
 @register.inclusion_tag('home/tags/section_progress.html')
-def render_user_progress(user_progress):
-    return user_progress
+def render_user_progress(user_progress, show_count=True):
+    return {
+        **user_progress,
+        'show_count': show_count,
+    }
 
 
-@register.inclusion_tag('home/tags/sub_sections.html')
-def render_sub_sections_list(sub_sections):
-    return {'sub_sections': sub_sections}
+@register.inclusion_tag('home/tags/is_completed.html', takes_context=True)
+def render_is_content_completed(context, content):
+    context.update({
+        'is_completed': content.specific.is_completed(context['request'])
+    })
+    return context
+
+
+@register.inclusion_tag('home/tags/sub_sections.html', takes_context=True)
+def render_sub_sections_list(context, sub_sections):
+    context.update({
+        'sub_sections': sub_sections,
+    })
+    return context
 
 
 @register.simple_tag

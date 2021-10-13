@@ -11,10 +11,13 @@
 {% endblock extra_css %}
 
 {% block content %}
-   <div class="section-img">
-     {% image page.lead_image width-320 class='lead-img' %}
-     <div class="image-overlay__text">{{ page.title }}</div>
-   </div>
+    <div class="section-img">
+        {% image page.lead_image width-320 class='lead-img' %}
+        <div class="image-overlay__text">{{ page.title }}</div>
+    </div>
+    {% if user_progress %}
+        {% render_user_progress user_progress %}
+    {% endif %}
     {% if featured_content %}
    <section class='featured-content' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
         {% render_featured_content_list featured_content %}
