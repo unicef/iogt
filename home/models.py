@@ -418,7 +418,7 @@ class BannerPage(Page):
 
     banner_link_page = models.ForeignKey(
         Page, null=True, blank=True, related_name='banners',
-        on_delete=models.PROTECT,
+        on_delete=models.SET_NULL,
         help_text=_('Optional page to which the banner will link to'))
 
     banner_button_text = models.CharField(

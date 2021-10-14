@@ -76,7 +76,6 @@ class Command(BaseCommand):
         self.image_map = {}
         self.page_translation_map = {}
         self.v1_to_v2_page_map = {}
-        self.page_revision_map = {}
 
         self.clear()
         self.stdout.write('Existing site structure cleared')
@@ -141,15 +140,20 @@ class Command(BaseCommand):
         self.migrate_images()
         self.load_page_translation_map()
         home = self.create_home_page(root)
+        self.translate_home_pages(home)
         self.create_index_pages(home)
         self.migrate_sections()
         self.migrate_articles()
-        self.migrate_banners()
         self.migrate_footers()
         self.migrate_polls()
         self.migrate_surveys()
-        self.translate_home_pages()
+        self.migrate_banners()
         Page.fix_tree()
+        self.fix_articles_body()
+        self.fix_footers_body()
+        self.fix_survey_description()
+        self.fix_banner_link_page()
+        self.attach_banners_to_home_page()
         self.migrate_recommended_articles_for_article()
         self.migrate_featured_articles_for_section()
         self.migrate_featured_articles_for_homepage()
@@ -357,7 +361,11 @@ class Command(BaseCommand):
                 section = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
                 locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
 
-                self.translate_page(locale=locale, page=section)
+                try:
+                    self.translate_page(locale=locale, page=section)
+                except:
+                    self.stdout.write(f"Unable to translate section, title={row['title']}")
+                    continue
 
                 translated_section = section.get_translation_or_none(locale)
                 if translated_section:
@@ -441,7 +449,11 @@ class Command(BaseCommand):
                 article = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
                 locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
 
-                self.translate_page(locale=locale, page=article)
+                try:
+                    self.translate_page(locale=locale, page=article)
+                except:
+                    self.stdout.write(f"Unable to translate article, title={row['title']}")
+                    continue
 
                 translated_article = article.get_translation_or_none(locale)
                 if translated_article:
@@ -449,7 +461,6 @@ class Command(BaseCommand):
                     translated_article.title = row['title']
                     translated_article.draft_title = row['draft_title']
                     translated_article.live = row['live']
-                    translated_article.body = self.map_article_body(row)
                     translated_article.locked = row['locked']
                     translated_article.go_live_at = row['go_live_at']
                     translated_article.expire_at = row['expire_at']
@@ -482,7 +493,6 @@ class Command(BaseCommand):
             depth=row['depth'],
             numchild=row['numchild'],
             live=row['live'],
-            body=self.map_article_body(row),
             locked=row['locked'],
             go_live_at=row['go_live_at'],
             expire_at=row['expire_at'],
@@ -508,25 +518,41 @@ class Command(BaseCommand):
             return
         self.stdout.write(f"saved article, title={article.title}")
 
-    def map_article_body(self, row):
-        v2_body = json.loads(row['body'])
+    def _map_body(self, type_, row, v2_body):
         for block in v2_body:
             if block['type'] == 'paragraph':
                 block['type'] = 'markdown'
-            if block['type'] == 'media':
-                media = self.media_map.get(block['value'])
-                if media:
-                    block['value'] = media.id
-                else:
-                    self.stdout.write(f"Article (title={row['title']}) has media with invalid id {block['value']}")
-                    block['value'] = None
-            if block['type'] == 'image':
+            elif block['type'] == 'richtext':
+                block['type'] = 'paragraph'
+            elif block['type'] == 'image':
                 image = self.image_map.get(block['value'])
                 if image:
                     block['value'] = image.id
                 else:
                     self.stdout.write(f"Article (title={row['title']}) has image with invalid id {block['value']}")
                     block['value'] = None
+            elif block['type'] == 'media':
+                media = self.media_map.get(block['value'])
+                if media:
+                    block['value'] = media.id
+                else:
+                    self.stdout.write(f"Article (title={row['title']}) has media with invalid id {block['value']}")
+                    block['value'] = None
+            elif block['type'] == 'page':
+                block['type'] = 'page_button'
+                page = self.v1_to_v2_page_map.get(block['value'])
+                if page:
+                    block['value'] = {'page': page.id, 'text': ''}
+                else:
+                    block['value'] = {'page': None, 'text': ''}
+                    self.stdout.write(f'Unable to attach v2 page for {type_[:-1]}, title={row["title"]}')
+
+        return v2_body
+
+    def map_article_body(self, row):
+        v1_body = json.loads(row['body'])
+
+        v2_body = self._map_body('articles', row, v1_body)
 
         if row['subtitle']:
             v2_body = [{
@@ -559,12 +585,12 @@ class Command(BaseCommand):
                 try:
                     self.translate_page(locale=locale, page=banner)
                 except:
+                    self.stdout.write(f"Unable to translate banner, title={row['title']}")
                     continue
 
                 translated_banner = banner.get_translation_or_none(locale)
                 if translated_banner:
                     translated_banner.banner_image = self.image_map.get(row['banner_id'])
-                    translated_banner.banner_link_page = self.v1_to_v2_page_map.get(row['banner_link_page_id'])
                     translated_banner.title = row['title']
                     translated_banner.draft_title = row['draft_title']
                     translated_banner.live = row['live']
@@ -588,7 +614,6 @@ class Command(BaseCommand):
     def create_banner(self, row):
         banner = models.BannerPage(
             banner_image=self.image_map.get(row['banner_id']),
-            banner_link_page=self.v1_to_v2_page_map.get(row['banner_link_page_id']),
             title=row['title'],
             draft_title=row['draft_title'],
             slug=row['slug'],
@@ -612,6 +637,16 @@ class Command(BaseCommand):
         })
         self.stdout.write(f"saved banner, title={banner.title}")
 
+    def map_banner_page(self, row):
+        v2_page = None
+        v1_banner_link_page_id = row['banner_link_page_id']
+        if v1_banner_link_page_id:
+            v2_page = self.v1_to_v2_page_map.get(v1_banner_link_page_id)
+            if not v2_page:
+                self.stdout.write(f'Unable to attach v2 page for banner, title={row["title"]}')
+
+        return v2_page
+
     def migrate_footers(self):
         sql = "select * " \
               "from core_footerpage cfp, core_articlepage cap, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
@@ -634,7 +669,11 @@ class Command(BaseCommand):
                 footer = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
                 locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
 
-                self.translate_page(locale=locale, page=footer)
+                try:
+                    self.translate_page(locale=locale, page=footer)
+                except:
+                    self.stdout.write(f"Unable to translate footer, title={row['title']}")
+                    continue
 
                 translated_footer = footer.get_translation_or_none(locale)
                 if translated_footer:
@@ -642,7 +681,6 @@ class Command(BaseCommand):
                     translated_footer.title = row['title']
                     translated_footer.draft_title = row['draft_title']
                     translated_footer.live = row['live']
-                    translated_footer.body = self.map_article_body(row)
                     translated_footer.locked = row['locked']
                     translated_footer.go_live_at = row['go_live_at']
                     translated_footer.expire_at = row['expire_at']
@@ -670,7 +708,6 @@ class Command(BaseCommand):
             depth=row['depth'],
             numchild=row['numchild'],
             live=row['live'],
-            body=self.map_article_body(row),
             locked=row['locked'],
             go_live_at=row['go_live_at'],
             expire_at=row['expire_at'],
@@ -907,7 +944,6 @@ class Command(BaseCommand):
                     translated_survey.title = row['title']
                     translated_survey.draft_title = row['draft_title']
                     translated_survey.live = row['live']
-                    translated_survey.description = self.map_survey_description(row)
                     translated_survey.thank_you_text = self.map_survey_thank_you_text(row)
                     translated_survey.allow_anonymous_submissions = row['allow_anonymous_submissions']
                     translated_survey.allow_multiple_submissions = row['allow_multiple_submissions_per_user']
@@ -950,7 +986,6 @@ class Command(BaseCommand):
             depth=row['depth'],
             numchild=row['numchild'],
             live=row['live'],
-            description=self.map_survey_description(row),
             thank_you_text=self.map_survey_thank_you_text(row),
             allow_anonymous_submissions=row['allow_anonymous_submissions'],
             allow_multiple_submissions=row['allow_multiple_submissions_per_user'],
@@ -986,24 +1021,15 @@ class Command(BaseCommand):
         self.stdout.write(f"saved survey, title={survey.title}")
 
     def map_survey_description(self, row):
-        v2_survey_description = []
-
-        v2_image = self.image_map.get(row['image_id'])
-        if v2_image:
-            v2_survey_description.append({'type': 'image', 'value': v2_image.id})
-
-        v1_introduction = row['introduction']
-        if v1_introduction:
-            v2_survey_description.append({'type': 'paragraph', 'value': v1_introduction})
-
         v1_survey_description = json.loads(row['description'])
-        for block in v1_survey_description:
-            if block['type'] == 'paragraph':
-                v2_survey_description.append(block)
-            elif block['type'] == 'image':
-                image = self.image_map.get(block['value'])
-                if image:
-                    v2_survey_description.append({'type': 'image', 'value': image.id})
+
+        v2_survey_description = self._map_body('surveys', row, v1_survey_description)
+
+        if row['introduction']:
+            v2_survey_description = [{
+                'type': 'paragraph',
+                'value': row['introduction'],
+            }] + v2_survey_description
 
         return json.dumps(v2_survey_description)
 
@@ -1076,11 +1102,11 @@ class Command(BaseCommand):
 
         return iso_locales_map.get(locale, locale)
 
-    def translate_home_pages(self):
-        eng_home_page = models.HomePage.objects.get(locale__language_code='en')
-        locales = Locale.objects.exclude(language_code='en')
-        for locale in locales:
-            self.translate_page(locale=locale, page=eng_home_page)
+    def translate_home_pages(self, home):
+        cur = self.db_query(f'select * from core_sitelanguage')
+        for row in cur:
+            locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
+            self.translate_page(locale=locale, page=home)
 
     def migrate_recommended_articles_for_article(self):
         article_cur = self.db_query(f'select DISTINCT page_id from core_articlepagerecommendedsections')
@@ -1129,6 +1155,24 @@ class Command(BaseCommand):
                 home_page.save()
         cur.close()
         self.stdout.write('Articles featured in home page migrated')
+
+    def attach_banners_to_home_page(self):
+        sql = "select * " \
+              "from core_bannerpage cbp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              "where cbp.page_ptr_id = wcp.id " \
+              "and wcp.id = clr.page_id " \
+              "and clr.language_id = csl.id "
+        if self.skip_locales:
+            sql += " and locale = 'en' "
+        sql += ' order by wcp.path'
+        cur = self.db_query(sql)
+        for row in cur:
+            v2_banner = self.v1_to_v2_page_map.get(row['page_ptr_id'])
+            if v2_banner:
+                home_page = v2_banner.get_ancestors().exact_type(models.HomePage).first().specific
+                models.HomePageBanner.objects.create(source=home_page, banner_page=v2_banner)
+        cur.close()
+
 
     def get_color_hex(self, color_name):
         return {
@@ -1182,3 +1226,75 @@ class Command(BaseCommand):
             '--denim': '#127f99',
             '--tory_blue': '#134b90',
         }.get(color_name)
+
+    def fix_articles_body(self):
+        sql = "select * " \
+              "from core_articlepage cap, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              "where cap.page_ptr_id = wcp.id " \
+              "and wcp.id = clr.page_id " \
+              "and clr.language_id = csl.id "
+        if self.skip_locales:
+            sql += "and locale = 'en' "
+        sql += " and wcp.path like '000100010002%'order by wcp.path"
+        cur = self.db_query(sql)
+        for row in cur:
+            v2_article = self.v1_to_v2_page_map.get(row['page_ptr_id'])
+            if v2_article:
+                v2_article.body = self.map_article_body(row)
+                v2_article.save()
+            else:
+                self.stdout.write(f'Unable to add article body, title={row["title"]}')
+        cur.close()
+
+    def fix_footers_body(self):
+        sql = "select * " \
+              "from core_footerpage cfp, core_articlepage cap, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              "where cfp.articlepage_ptr_id = cap.page_ptr_id " \
+              "and cap.page_ptr_id = wcp.id " \
+              "and wcp.id = clr.page_id " \
+              "and clr.language_id = csl.id "
+        if self.skip_locales:
+            sql += " and locale = 'en' "
+        sql += ' order by wcp.path'
+        cur = self.db_query(sql)
+        for row in cur:
+            v2_footer = self.v1_to_v2_page_map.get(row['page_ptr_id'])
+            if v2_footer:
+                v2_footer.body = self.map_article_body(row)
+                v2_footer.save()
+        cur.close()
+
+    def fix_survey_description(self):
+        sql = f"select * " \
+              f"from surveys_molosurveypage smsp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              f"where smsp.page_ptr_id = wcp.id " \
+              f"and wcp.id = clr.page_id " \
+              f"and clr.language_id = csl.id  "
+        if self.skip_locales:
+            sql += " and locale = 'en' "
+        sql += ' order by wcp.path'
+        cur = self.db_query(sql)
+        for row in cur:
+            v2_survey = self.v1_to_v2_page_map.get(row['page_ptr_id'])
+            if v2_survey:
+                v2_survey.description = self.map_survey_description(row)
+                v2_survey.save()
+        cur.close()
+
+    def fix_banner_link_page(self):
+        sql = "select * " \
+              "from core_bannerpage cbp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              "where cbp.page_ptr_id = wcp.id " \
+              "and wcp.id = clr.page_id " \
+              "and clr.language_id = csl.id "
+        if self.skip_locales:
+            sql += " and locale = 'en' "
+        sql += ' order by wcp.path'
+        cur = self.db_query(sql)
+        for row in cur:
+            v2_banner = self.v1_to_v2_page_map.get(row['page_ptr_id'])
+            if v2_banner:
+                v2_banner.banner_link_page = self.map_banner_page(row)
+                v2_banner.save()
+        cur.close()
+
