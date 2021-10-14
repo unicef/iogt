@@ -362,7 +362,11 @@ class Command(BaseCommand):
                 section = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
                 locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
 
-                self.translate_page(locale=locale, page=section)
+                try:
+                    self.translate_page(locale=locale, page=section)
+                except:
+                    self.stdout.write(f"Unable to translate section, title={row['title']}")
+                    continue
 
                 translated_section = section.get_translation_or_none(locale)
                 if translated_section:
@@ -446,7 +450,11 @@ class Command(BaseCommand):
                 article = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
                 locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
 
-                self.translate_page(locale=locale, page=article)
+                try:
+                    self.translate_page(locale=locale, page=article)
+                except:
+                    self.stdout.write(f"Unable to translate article, title={row['title']}")
+                    continue
 
                 translated_article = article.get_translation_or_none(locale)
                 if translated_article:
@@ -513,17 +521,12 @@ class Command(BaseCommand):
             return
         self.stdout.write(f"saved article, title={article.title}")
 
-    def _map_body(self, type_, row, v1_body):
-        v2_body = []
-        for block in v1_body:
-            if block['type'] in ['paragraph', 'html']:
+    def _map_body(self, type_, row, v2_body):
+        for block in v2_body:
+            if block['type'] == 'paragraph':
                 block['type'] = 'markdown'
-                v2_body.append(block)
             elif block['type'] == 'richtext':
                 block['type'] = 'paragraph'
-                v2_body.append(block)
-            elif block['type'] in ['heading', 'list', 'numbered_list']:
-                v2_body.append(block)
             elif block['type'] == 'image':
                 image = self.image_map.get(block['value'])
                 if image:
@@ -531,7 +534,6 @@ class Command(BaseCommand):
                 else:
                     self.stdout.write(f"Article (title={row['title']}) has image with invalid id {block['value']}")
                     block['value'] = None
-                v2_body.append(block)
             elif block['type'] == 'media':
                 media = self.media_map.get(block['value'])
                 if media:
@@ -539,21 +541,15 @@ class Command(BaseCommand):
                 else:
                     self.stdout.write(f"Article (title={row['title']}) has media with invalid id {block['value']}")
                     block['value'] = None
-                v2_body.append(block)
             elif block['type'] == 'page':
+                block['type'] = 'page_button'
                 page = self.v1_to_v2_page_map.get(block['value'])
                 if page:
-                    v2_body.append(
-                        {
-                            'type': 'page_button',
-                            'value': {
-                                'page': page.id
-                            },
-                        }
-                    )
+                    block['value'] = {'page': page.id, 'text': ''}
                 else:
                     self.pages_pending_links[type_].update({row['page_ptr_id']: row})
                     self.stdout.write(f'Unable to attach v2 page for {type_[:-1]}, title={row["title"]}')
+                    block['value'] = {'page': None, 'text': ''}
 
         return v2_body
 
@@ -593,6 +589,7 @@ class Command(BaseCommand):
                 try:
                     self.translate_page(locale=locale, page=banner)
                 except:
+                    self.stdout.write(f"Unable to translate banner, title={row['title']}")
                     continue
 
                 translated_banner = banner.get_translation_or_none(locale)
@@ -679,7 +676,11 @@ class Command(BaseCommand):
                 footer = self.v1_to_v2_page_map.get(self.page_translation_map[row['page_ptr_id']])
                 locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
 
-                self.translate_page(locale=locale, page=footer)
+                try:
+                    self.translate_page(locale=locale, page=footer)
+                except:
+                    self.stdout.write(f"Unable to translate footer, title={row['title']}")
+                    continue
 
                 translated_footer = footer.get_translation_or_none(locale)
                 if translated_footer:
