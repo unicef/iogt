@@ -5,7 +5,7 @@
     <a href="{% pageurl sub_section %}" class='sub-section'>
         {{ sub_section.title }}
         <div class="overlay-holder {% render_is_content_completed sub_section %}">
-            {% image sub_section.specific.lead_image width-320 class='article__lead-img' %}
+            {% image sub_section.specific.lead_image original class='article__lead-img' %}
         </div>
     </a>
 {% endfor %}
