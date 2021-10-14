@@ -153,6 +153,7 @@ class Command(BaseCommand):
         self.fix_footers_body()
         self.fix_survey_description()
         self.fix_banner_link_page()
+        self.attach_banners_to_home_page()
         self.migrate_recommended_articles_for_article()
         self.migrate_featured_articles_for_section()
         self.migrate_featured_articles_for_homepage()
@@ -1154,6 +1155,24 @@ class Command(BaseCommand):
                 home_page.save()
         cur.close()
         self.stdout.write('Articles featured in home page migrated')
+
+    def attach_banners_to_home_page(self):
+        sql = "select * " \
+              "from core_bannerpage cbp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              "where cbp.page_ptr_id = wcp.id " \
+              "and wcp.id = clr.page_id " \
+              "and clr.language_id = csl.id "
+        if self.skip_locales:
+            sql += " and locale = 'en' "
+        sql += ' order by wcp.path'
+        cur = self.db_query(sql)
+        for row in cur:
+            v2_banner = self.v1_to_v2_page_map.get(row['page_ptr_id'])
+            if v2_banner:
+                home_page = v2_banner.get_ancestors().exact_type(models.HomePage).first().specific
+                models.HomePageBanner.objects.create(source=home_page, banner_page=v2_banner)
+        cur.close()
+
 
     def get_color_hex(self, color_name):
         return {
