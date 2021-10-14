@@ -76,11 +76,6 @@ class Command(BaseCommand):
         self.image_map = {}
         self.page_translation_map = {}
         self.v1_to_v2_page_map = {}
-        self.pages_pending_links = {
-            'articles': {},
-            'surveys': {},
-            'banners': {},
-        }
 
         self.clear()
         self.stdout.write('Existing site structure cleared')
@@ -145,16 +140,19 @@ class Command(BaseCommand):
         self.migrate_images()
         self.load_page_translation_map()
         home = self.create_home_page(root)
+        self.translate_home_pages(home)
         self.create_index_pages(home)
         self.migrate_sections()
         self.migrate_articles()
         self.migrate_footers()
         self.migrate_polls()
         self.migrate_surveys()
-        self.translate_home_pages()
         self.migrate_banners()
-        self.fix_pending_links_for_pages()
         Page.fix_tree()
+        self.fix_articles_body()
+        self.fix_footers_body()
+        self.fix_survey_description()
+        self.fix_banner_link_page()
         self.migrate_recommended_articles_for_article()
         self.migrate_featured_articles_for_section()
         self.migrate_featured_articles_for_homepage()
@@ -462,7 +460,6 @@ class Command(BaseCommand):
                     translated_article.title = row['title']
                     translated_article.draft_title = row['draft_title']
                     translated_article.live = row['live']
-                    translated_article.body = self.map_article_body(row)
                     translated_article.locked = row['locked']
                     translated_article.go_live_at = row['go_live_at']
                     translated_article.expire_at = row['expire_at']
@@ -495,7 +492,6 @@ class Command(BaseCommand):
             depth=row['depth'],
             numchild=row['numchild'],
             live=row['live'],
-            body=self.map_article_body(row),
             locked=row['locked'],
             go_live_at=row['go_live_at'],
             expire_at=row['expire_at'],
@@ -521,7 +517,7 @@ class Command(BaseCommand):
             return
         self.stdout.write(f"saved article, title={article.title}")
 
-    def _map_body(self, type_, row, v2_body, is_second_pass=False):
+    def _map_body(self, type_, row, v2_body):
         for block in v2_body:
             if block['type'] == 'paragraph':
                 block['type'] = 'markdown'
@@ -548,16 +544,14 @@ class Command(BaseCommand):
                     block['value'] = {'page': page.id, 'text': ''}
                 else:
                     block['value'] = {'page': None, 'text': ''}
-                    self.pages_pending_links[type_].update({row['page_ptr_id']: row})
-                    if is_second_pass:
-                        self.stdout.write(f'Unable to attach v2 page for {type_[:-1]}, title={row["title"]}')
+                    self.stdout.write(f'Unable to attach v2 page for {type_[:-1]}, title={row["title"]}')
 
         return v2_body
 
-    def map_article_body(self, row, is_second_pass=False):
+    def map_article_body(self, row):
         v1_body = json.loads(row['body'])
 
-        v2_body = self._map_body('articles', row, v1_body, is_second_pass=is_second_pass)
+        v2_body = self._map_body('articles', row, v1_body)
 
         if row['subtitle']:
             v2_body = [{
@@ -596,7 +590,6 @@ class Command(BaseCommand):
                 translated_banner = banner.get_translation_or_none(locale)
                 if translated_banner:
                     translated_banner.banner_image = self.image_map.get(row['banner_id'])
-                    translated_banner.banner_link_page = self.map_banner_page(row)
                     translated_banner.title = row['title']
                     translated_banner.draft_title = row['draft_title']
                     translated_banner.live = row['live']
@@ -620,7 +613,6 @@ class Command(BaseCommand):
     def create_banner(self, row):
         banner = models.BannerPage(
             banner_image=self.image_map.get(row['banner_id']),
-            banner_link_page=self.map_banner_page(row),
             title=row['title'],
             draft_title=row['draft_title'],
             slug=row['slug'],
@@ -644,15 +636,13 @@ class Command(BaseCommand):
         })
         self.stdout.write(f"saved banner, title={banner.title}")
 
-    def map_banner_page(self, row, is_second_pass=False):
+    def map_banner_page(self, row):
         v2_page = None
         v1_banner_link_page_id = row['banner_link_page_id']
         if v1_banner_link_page_id:
             v2_page = self.v1_to_v2_page_map.get(v1_banner_link_page_id)
             if not v2_page:
-                self.pages_pending_links['banners'].update({row['page_ptr_id']: row})
-                if is_second_pass:
-                    self.stdout.write(f'Unable to attach v2 page for banner, title={row["title"]}')
+                self.stdout.write(f'Unable to attach v2 page for banner, title={row["title"]}')
 
         return v2_page
 
@@ -690,7 +680,6 @@ class Command(BaseCommand):
                     translated_footer.title = row['title']
                     translated_footer.draft_title = row['draft_title']
                     translated_footer.live = row['live']
-                    translated_footer.body = self.map_article_body(row)
                     translated_footer.locked = row['locked']
                     translated_footer.go_live_at = row['go_live_at']
                     translated_footer.expire_at = row['expire_at']
@@ -718,7 +707,6 @@ class Command(BaseCommand):
             depth=row['depth'],
             numchild=row['numchild'],
             live=row['live'],
-            body=self.map_article_body(row),
             locked=row['locked'],
             go_live_at=row['go_live_at'],
             expire_at=row['expire_at'],
@@ -955,7 +943,6 @@ class Command(BaseCommand):
                     translated_survey.title = row['title']
                     translated_survey.draft_title = row['draft_title']
                     translated_survey.live = row['live']
-                    translated_survey.description = self.map_survey_description(row)
                     translated_survey.thank_you_text = self.map_survey_thank_you_text(row)
                     translated_survey.allow_anonymous_submissions = row['allow_anonymous_submissions']
                     translated_survey.allow_multiple_submissions = row['allow_multiple_submissions_per_user']
@@ -998,7 +985,6 @@ class Command(BaseCommand):
             depth=row['depth'],
             numchild=row['numchild'],
             live=row['live'],
-            description=self.map_survey_description(row),
             thank_you_text=self.map_survey_thank_you_text(row),
             allow_anonymous_submissions=row['allow_anonymous_submissions'],
             allow_multiple_submissions=row['allow_multiple_submissions_per_user'],
@@ -1033,10 +1019,10 @@ class Command(BaseCommand):
         })
         self.stdout.write(f"saved survey, title={survey.title}")
 
-    def map_survey_description(self, row, is_second_pass=False):
+    def map_survey_description(self, row):
         v1_survey_description = json.loads(row['description'])
 
-        v2_survey_description = self._map_body('surveys', row, v1_survey_description, is_second_pass=is_second_pass)
+        v2_survey_description = self._map_body('surveys', row, v1_survey_description)
 
         if row['introduction']:
             v2_survey_description = [{
@@ -1115,11 +1101,11 @@ class Command(BaseCommand):
 
         return iso_locales_map.get(locale, locale)
 
-    def translate_home_pages(self):
-        eng_home_page = models.HomePage.objects.get(locale__language_code='en')
-        locales = Locale.objects.exclude(language_code='en')
-        for locale in locales:
-            self.translate_page(locale=locale, page=eng_home_page)
+    def translate_home_pages(self, home):
+        cur = self.db_query(f'select * from core_sitelanguage')
+        for row in cur:
+            locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
+            self.translate_page(locale=locale, page=home)
 
     def migrate_recommended_articles_for_article(self):
         article_cur = self.db_query(f'select DISTINCT page_id from core_articlepagerecommendedsections')
@@ -1222,23 +1208,74 @@ class Command(BaseCommand):
             '--tory_blue': '#134b90',
         }.get(color_name)
 
-    def fix_pending_links_for_pages(self):
-        for k, v in self.pages_pending_links['articles'].items():
-            v2_article = self.v1_to_v2_page_map.get(k)
+    def fix_articles_body(self):
+        sql = "select * " \
+              "from core_articlepage cap, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              "where cap.page_ptr_id = wcp.id " \
+              "and wcp.id = clr.page_id " \
+              "and clr.language_id = csl.id "
+        if self.skip_locales:
+            sql += "and locale = 'en' "
+        sql += " and wcp.path like '000100010002%'order by wcp.path"
+        cur = self.db_query(sql)
+        for row in cur:
+            v2_article = self.v1_to_v2_page_map.get(row['page_ptr_id'])
             if v2_article:
-                v2_article.body = self.map_article_body(v, is_second_pass=True)
+                v2_article.body = self.map_article_body(row)
                 v2_article.save()
+            else:
+                self.stdout.write(f'Unable to add article body, title={row["title"]}')
+        cur.close()
 
-        for k, v in self.pages_pending_links['surveys'].items():
-            v2_survey = self.v1_to_v2_page_map.get(k)
+    def fix_footers_body(self):
+        sql = "select * " \
+              "from core_footerpage cfp, core_articlepage cap, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              "where cfp.articlepage_ptr_id = cap.page_ptr_id " \
+              "and cap.page_ptr_id = wcp.id " \
+              "and wcp.id = clr.page_id " \
+              "and clr.language_id = csl.id "
+        if self.skip_locales:
+            sql += " and locale = 'en' "
+        sql += ' order by wcp.path'
+        cur = self.db_query(sql)
+        for row in cur:
+            v2_footer = self.v1_to_v2_page_map.get(row['page_ptr_id'])
+            if v2_footer:
+                v2_footer.body = self.map_article_body(row)
+                v2_footer.save()
+        cur.close()
+
+    def fix_survey_description(self):
+        sql = f"select * " \
+              f"from surveys_molosurveypage smsp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              f"where smsp.page_ptr_id = wcp.id " \
+              f"and wcp.id = clr.page_id " \
+              f"and clr.language_id = csl.id  "
+        if self.skip_locales:
+            sql += " and locale = 'en' "
+        sql += ' order by wcp.path'
+        cur = self.db_query(sql)
+        for row in cur:
+            v2_survey = self.v1_to_v2_page_map.get(row['page_ptr_id'])
             if v2_survey:
-                v2_survey.description = self.map_survey_description(v, is_second_pass=True)
+                v2_survey.description = self.map_survey_description(row)
                 v2_survey.save()
+        cur.close()
 
-        for k, v in self.pages_pending_links['banners'].items():
-            v2_banner = self.v1_to_v2_page_map.get(k)
+    def fix_banner_link_page(self):
+        sql = "select * " \
+              "from core_bannerpage cbp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              "where cbp.page_ptr_id = wcp.id " \
+              "and wcp.id = clr.page_id " \
+              "and clr.language_id = csl.id "
+        if self.skip_locales:
+            sql += " and locale = 'en' "
+        sql += ' order by wcp.path'
+        cur = self.db_query(sql)
+        for row in cur:
+            v2_banner = self.v1_to_v2_page_map.get(row['page_ptr_id'])
             if v2_banner:
-                v2_banner.banner_link_page = self.map_banner_page(v, is_second_pass=True)
+                v2_banner.banner_link_page = self.map_banner_page(row)
                 v2_banner.save()
+        cur.close()
 
-        self.stdout.write('Fixed pending links for pages.')
