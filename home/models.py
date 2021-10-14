@@ -343,7 +343,7 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         ObjectList(CommentableMixin.comments_panels, heading='Comments')
     ])
 
-    def _get_progress_enabled_section(self):
+    def get_progress_enabled_section(self):
         """
         Returning .first() will bypass any discrepancies in settings show_progress_bar=True
         for sections
@@ -359,7 +359,7 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
                                   not crumb.is_root()]
         context['sections'] = self.get_ancestors().type(Section)
 
-        progress_enabled_section = self._get_progress_enabled_section()
+        progress_enabled_section = self.get_progress_enabled_section()
 
         if progress_enabled_section:
             context.update({

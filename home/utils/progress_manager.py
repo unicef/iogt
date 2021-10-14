@@ -37,4 +37,8 @@ class ProgressManager:
         return False
 
     def is_article_completed(self, article):
-        return article.id in self._get_read_articles_ids()
+        progress_enabled_ancestor = article.get_progress_enabled_section()
+        if progress_enabled_ancestor:
+            return article.id in self._get_read_articles_ids()
+
+        return False
