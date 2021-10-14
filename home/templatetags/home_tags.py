@@ -2,7 +2,7 @@ from django import template
 from django.urls import translate_url
 from wagtail.core.models import Locale, Site
 
-from home.models import FooterPage, SectionIndexPage, Section
+from home.models import FooterPage, SectionIndexPage, Section, Article
 from iogt.settings.base import LANGUAGES
 
 register = template.Library()
@@ -86,9 +86,11 @@ def render_user_progress(user_progress, show_count=True):
 
 @register.inclusion_tag('home/tags/is_completed.html', takes_context=True)
 def render_is_content_completed(context, content):
-    context.update({
-        'is_completed': content.specific.is_completed(context['request'])
-    })
+    content = content.specific
+    if isinstance(content, (Section, Article)):
+        context.update({
+            'is_completed': content.is_completed(context['request'])
+        })
     return context
 
 
