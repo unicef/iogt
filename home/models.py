@@ -186,21 +186,26 @@ class Section(Page, PageUtilsMixin):
     base_form_class = SectionPageForm
 
     def get_descendant_articles(self):
-        return Article.objects.descendant_of(self).exact_type(Article)
+        return Article.objects.descendant_of(self).live().exact_type(Article)
 
     def get_progress_bar_enabled_ancestor(self):
         return Section.objects.ancestor_of(self, inclusive=True).exact_type(
-            Section).filter(
+            Section).live().filter(
             show_progress_bar=True).first()
 
     def get_user_progress_dict(self, request):
         progress_manager = ProgressManager(request)
-        read_article_count, total_article_count = progress_manager.get_progress(
-            self)
+        read_article_count, total_article_count = progress_manager.get_progress(self)
         return {
             'read': read_article_count,
-            'total': total_article_count
+            'total': total_article_count,
+            'range_': list(range(total_article_count)) if total_article_count else 0,
+            'width_': 100 / total_article_count if total_article_count else 0,
         }
+
+    def is_completed(self, request):
+        progress_manager = ProgressManager(request)
+        return progress_manager.is_section_completed(self)
 
     def get_context(self, request):
         check_user_session(request)
@@ -375,6 +380,10 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
             if block.block_type == 'paragraph':
                 return block
         return ''
+
+    def is_completed(self, request):
+        progress_manager = ProgressManager(request)
+        return progress_manager.is_article_completed(self)
 
     class Meta:
         verbose_name = _("article")
@@ -663,13 +672,13 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
     )
 
     color = models.CharField(
-        max_length=6,
+        max_length=255,
         blank=True,
         null=True
     )
 
     color_text = models.CharField(
-        max_length=6,
+        max_length=255,
         blank=True,
         null=True
     )

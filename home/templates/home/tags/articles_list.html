@@ -1,3 +1,4 @@
+{% load home_tags %}
 {% load wagtailcore_tags wagtailimages_tags %}
 
 <section class='related-articles'>
@@ -11,8 +12,9 @@
                             <p><small>{{ article.specific.index_page_description }}</small></p>
                         {% endif %}
                     </div>
-                    {% image article.specific.lead_image original class='related-articles__img--xs' %}
-                    {% image article.specific.lead_image original class='related-articles__img--sm' %}
+                    <div class="overlay-holder {% render_is_content_completed article %}">
+                        {% image article.specific.lead_image original class='article__lead-img' %}
+                    </div>
                 </a>
             </li>
         {% endfor %}
