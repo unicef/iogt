@@ -521,7 +521,7 @@ class Command(BaseCommand):
             return
         self.stdout.write(f"saved article, title={article.title}")
 
-    def _map_body(self, type_, row, v2_body):
+    def _map_body(self, type_, row, v2_body, is_second_pass=False):
         for block in v2_body:
             if block['type'] == 'paragraph':
                 block['type'] = 'markdown'
@@ -547,16 +547,17 @@ class Command(BaseCommand):
                 if page:
                     block['value'] = {'page': page.id, 'text': ''}
                 else:
-                    self.pages_pending_links[type_].update({row['page_ptr_id']: row})
-                    self.stdout.write(f'Unable to attach v2 page for {type_[:-1]}, title={row["title"]}')
                     block['value'] = {'page': None, 'text': ''}
+                    self.pages_pending_links[type_].update({row['page_ptr_id']: row})
+                    if is_second_pass:
+                        self.stdout.write(f'Unable to attach v2 page for {type_[:-1]}, title={row["title"]}')
 
         return v2_body
 
-    def map_article_body(self, row):
+    def map_article_body(self, row, is_second_pass=False):
         v1_body = json.loads(row['body'])
 
-        v2_body = self._map_body('articles', row, v1_body)
+        v2_body = self._map_body('articles', row, v1_body, is_second_pass=is_second_pass)
 
         if row['subtitle']:
             v2_body = [{
@@ -643,14 +644,15 @@ class Command(BaseCommand):
         })
         self.stdout.write(f"saved banner, title={banner.title}")
 
-    def map_banner_page(self, row):
+    def map_banner_page(self, row, is_second_pass=False):
         v2_page = None
         v1_banner_link_page_id = row['banner_link_page_id']
         if v1_banner_link_page_id:
             v2_page = self.v1_to_v2_page_map.get(v1_banner_link_page_id)
             if not v2_page:
                 self.pages_pending_links['banners'].update({row['page_ptr_id']: row})
-                self.stdout.write(f'Unable to attach v2 page for banner, title={row["title"]}')
+                if is_second_pass:
+                    self.stdout.write(f'Unable to attach v2 page for banner, title={row["title"]}')
 
         return v2_page
 
@@ -1031,10 +1033,10 @@ class Command(BaseCommand):
         })
         self.stdout.write(f"saved survey, title={survey.title}")
 
-    def map_survey_description(self, row):
+    def map_survey_description(self, row, is_second_pass=False):
         v1_survey_description = json.loads(row['description'])
 
-        v2_survey_description = self._map_body('surveys', row, v1_survey_description)
+        v2_survey_description = self._map_body('surveys', row, v1_survey_description, is_second_pass=is_second_pass)
 
         if row['introduction']:
             v2_survey_description = [{
@@ -1224,19 +1226,19 @@ class Command(BaseCommand):
         for k, v in self.pages_pending_links['articles'].items():
             v2_article = self.v1_to_v2_page_map.get(k)
             if v2_article:
-                v2_article.body = self.map_article_body(v)
+                v2_article.body = self.map_article_body(v, is_second_pass=True)
                 v2_article.save()
 
         for k, v in self.pages_pending_links['surveys'].items():
             v2_survey = self.v1_to_v2_page_map.get(k)
             if v2_survey:
-                v2_survey.description = self.map_survey_description(v)
+                v2_survey.description = self.map_survey_description(v, is_second_pass=True)
                 v2_survey.save()
 
         for k, v in self.pages_pending_links['banners'].items():
             v2_banner = self.v1_to_v2_page_map.get(k)
             if v2_banner:
-                v2_banner.banner_link_page = self.map_banner_page(v)
+                v2_banner.banner_link_page = self.map_banner_page(v, is_second_pass=True)
                 v2_banner.save()
 
         self.stdout.write('Fixed pending links for pages.')
