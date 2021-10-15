@@ -13,8 +13,8 @@
 
         {% endif %}
         {% for footer_page in footer_pages %}
-            {% pageurl footer_page as footer_page_url %}
-            {% primary_button title=footer_page.specific.title href=footer_page_url icon_path=footer_page.specific.icon.url %}
+            {% pageurl footer_page.specific.get_page as footer_page_url %}
+            {% primary_button title=footer_page.specific.title href=footer_page_url icon_path=footer_page.specific.get_icon_url %}
         {% endfor %}
     </nav>
 </footer>

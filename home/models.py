@@ -448,7 +448,11 @@ class BannerPage(Page):
 
 class FooterIndexPage(Page):
     parent_page_types = ['home.HomePage']
-    subpage_types = ['home.FooterPage']
+    subpage_types = ['home.FooterPage', 'home.PageLinkPage']
+
+    @classmethod
+    def get_active_footers(cls):
+        return cls.objects.filter(locale=Locale.get_active()).first().get_descendants().live()
 
     def __str__(self):
         return self.title
@@ -459,9 +463,29 @@ class FooterPage(Article):
     subpage_types = []
     template = 'home/article.html'
 
-    @classmethod
-    def get_active_footers(cls):
-        return cls.objects.filter(locale=Locale.get_active()).live()
+    def get_page(self):
+        return self
+
+    def get_icon_url(self):
+        return self.icon.url if hasattr(self, 'icon') and self.icon else ''
+
+
+class PageLinkPage(Page):
+    parent_page_types = ['home.FooterIndexPage']
+    subpage_types = []
+
+    page = models.ForeignKey(Page, related_name='page_link_pages', on_delete=models.PROTECT)
+
+    content_panels = Page.content_panels + [
+        PageChooserPanel('page')
+    ]
+
+    def get_page(self):
+        return self.page
+
+    def get_icon_url(self):
+        page = self.page.specific
+        return page.icon.url if hasattr(page, 'icon') and page.icon else ''
 
 
 @register_setting
@@ -890,6 +914,7 @@ class ThemeSettings(BaseSetting):
     mobile_navbar_background_color = models.CharField(
         null=True, blank=True, help_text='The background color of the mobile-only navbar as a HEX code', max_length=8,
         default='#0094F4')
+
 
 class V1ToV2ObjectMap(models.Model):
     v1_object_id = models.PositiveIntegerField()
