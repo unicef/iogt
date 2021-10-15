@@ -480,6 +480,7 @@ class PageLinkPage(Page):
         PageChooserPanel('page')
     ]
 
+    # this is for ducktyping in templates
     def get_page(self):
         return self.page
 
