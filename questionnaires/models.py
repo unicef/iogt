@@ -13,6 +13,8 @@ from django.db import models
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from wagtail_localize.fields import TranslatableField
+from wagtailsvg.edit_handlers import SvgChooserPanel
+from wagtailsvg.models import Svg
 
 from home.blocks import MediaBlock, PageButtonBlock
 from home.mixins import PageUtilsMixin
@@ -103,6 +105,14 @@ class QuestionnairePage(Page, PageUtilsMixin):
         ],
         null=True,
         blank=True,
+    )
+
+    icon = models.ForeignKey(
+        Svg,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
     )
 
     settings_panels = Page.settings_panels + [
@@ -382,6 +392,7 @@ class Survey(QuestionnairePage, AbstractForm):
             ],
             heading="Terms and conditions",
         ),
+        SvgChooserPanel('icon'),
         InlinePanel("survey_form_fields", label="Form fields"),
     ]
 
@@ -550,6 +561,7 @@ class Poll(QuestionnairePage, AbstractForm):
             ],
             heading="Terms and conditions",
         ),
+        SvgChooserPanel('icon'),
         InlinePanel("poll_form_fields", label="Poll Form fields", min_num=1, max_num=1),
     ]
 
@@ -756,6 +768,7 @@ class Quiz(QuestionnairePage, AbstractForm):
             ],
             heading="Terms and conditions",
         ),
+        SvgChooserPanel('icon'),
         InlinePanel("quiz_form_fields", label="Form fields"),
     ]
 
