@@ -60,11 +60,22 @@
   padding-top: 12px;
 }
 
+@media only screen and (max-width: 767px) {
+  .footer-main {
+    border-top: 1px solid #EFEFEF;
+    padding-top: 20px;
+    margin-top: 60px;
+  }
+  .footer {
+    margin-top: 0;
+    border-top: 0;
+  }
+}
+
 @media only screen and (min-width: 360px) {
   .footer {
     padding-left: 32px;
     padding-right: 32px;
-    margin-top: 60px;
   }
   .footer .sm-home-header {
     display: -webkit-box;
