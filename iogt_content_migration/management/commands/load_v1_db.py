@@ -11,6 +11,7 @@ from wagtail_localize.views.submit_translations import TranslationCreator
 from wagtailmedia.models import Media
 
 import home.models as models
+from comments.models import CommentStatus
 from home.models import V1ToV2ObjectMap
 from questionnaires.models import Poll, PollFormField, Survey, SurveyFormField, Quiz, QuizFormField
 import psycopg2
@@ -435,6 +436,7 @@ class Command(BaseCommand):
             if row['page_ptr_id'] in self.page_translation_map:
                 article_page_translations.append(row)
             else:
+
                 self.create_article(row)
         else:
             for row in article_page_translations:
@@ -473,6 +475,16 @@ class Command(BaseCommand):
         cur.close()
 
     def create_article(self, row):
+
+        comments_map = {
+            'O': CommentStatus.OPEN,
+            'C': CommentStatus.CLOSED,
+            'D': CommentStatus.DISABLED,
+            'T': CommentStatus.TIMESTAMPED
+        }
+
+        commenting_status = comments_map[row['commenting_state']] if row['commenting_state'] else CommentStatus.CLOSED
+
         article = models.Article(
             lead_image=self.image_map.get(row['image_id']),
             title=row['title'],
@@ -488,7 +500,9 @@ class Command(BaseCommand):
             expire_at=row['expire_at'],
             first_published_at=row['first_published_at'],
             last_published_at=row['last_published_at'],
-            allow_comments=True if row['commenting_state'] == 'O' else False,
+            commenting_status=commenting_status,
+            commenting_starts_at=row['commenting_open_time'],
+            commenting_ends_at=row['commenting_close_time'],
             search_description=row['search_description'],
             seo_title=row['seo_title'],
             index_page_description=row['subtitle'],
@@ -678,6 +692,7 @@ class Command(BaseCommand):
             last_published_at=row['last_published_at'],
             search_description=row['search_description'],
             seo_title=row['seo_title'],
+            commenting_status=CommentStatus.CLOSED
         )
         footer.save()
         V1ToV2ObjectMap.create_map(content_object=footer, v1_object_id=row['page_ptr_id'])
