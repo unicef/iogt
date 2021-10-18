@@ -49,7 +49,7 @@ from .blocks import (MediaBlock, SocialMediaLinkBlock,
                      EmbeddedQuestionnaireChooserBlock,
                      PageButtonBlock, ArticleChooserBlock)
 from .forms import SectionPageForm
-from .mixins import PageUtilsMixin
+from .mixins import PageUtilsMixin, TitleIconMixin
 from .utils.progress_manager import ProgressManager
 
 User = get_user_model()
@@ -133,7 +133,7 @@ class SectionIndexPage(Page):
         return cls.objects.none()
 
 
-class Section(Page, PageUtilsMixin):
+class Section(Page, PageUtilsMixin, TitleIconMixin):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
@@ -264,7 +264,7 @@ class ArticleRecommendation(Orderable):
     ]
 
 
-class Article(Page, PageUtilsMixin, CommentableMixin):
+class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
@@ -448,7 +448,10 @@ class BannerPage(Page):
 
 class FooterIndexPage(Page):
     parent_page_types = ['home.HomePage']
-    subpage_types = ['home.FooterPage', 'home.PageLinkPage']
+    subpage_types = [
+        'home.Section', 'home.Article', 'home.FooterPage', 'home.PageLinkPage', 'questionnaires.Poll',
+        'questionnaires.Survey', 'questionnaires.Quiz',
+    ]
 
     @classmethod
     def get_active_footers(cls):
@@ -458,19 +461,13 @@ class FooterIndexPage(Page):
         return self.title
 
 
-class FooterPage(Article):
+class FooterPage(Article, TitleIconMixin):
     parent_page_types = ['home.FooterIndexPage']
     subpage_types = []
     template = 'home/article.html'
 
-    def get_page(self):
-        return self
 
-    def get_icon_url(self):
-        return self.icon.url if hasattr(self, 'icon') and self.icon else ''
-
-
-class PageLinkPage(Page):
+class PageLinkPage(Page, TitleIconMixin):
     parent_page_types = ['home.FooterIndexPage']
     subpage_types = []
 
@@ -480,13 +477,11 @@ class PageLinkPage(Page):
         PageChooserPanel('page')
     ]
 
-    # this is for ducktyping in templates
     def get_page(self):
         return self.page
 
     def get_icon_url(self):
-        page = self.page.specific
-        return page.icon.url if hasattr(page, 'icon') and page.icon else ''
+        return getattr(getattr(self.page.specific, 'icon', object), 'url', '')
 
 
 @register_setting
