@@ -471,9 +471,18 @@ class PageLinkPage(Page, TitleIconMixin):
     parent_page_types = ['home.FooterIndexPage']
     subpage_types = []
 
+    icon = models.ForeignKey(
+        Svg,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
+
     page = models.ForeignKey(Page, related_name='page_link_pages', on_delete=models.PROTECT)
 
     content_panels = Page.content_panels + [
+        SvgChooserPanel('icon'),
         PageChooserPanel('page')
     ]
 
@@ -481,6 +490,9 @@ class PageLinkPage(Page, TitleIconMixin):
         return self.page
 
     def get_icon_url(self):
+        if self.icon:
+            return self.icon.url
+
         return getattr(getattr(self.page.specific, 'icon', object), 'url', '')
 
 
