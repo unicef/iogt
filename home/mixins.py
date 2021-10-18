@@ -11,3 +11,15 @@ class PageUtilsMixin:
     def parent_section(self):
         from .models import Section
         return Section.objects.parent_of(self).type(Section).first()
+
+
+class TitleIconMixin:
+    """
+    This mixin is used for footers duck-typing
+    """
+
+    def get_page(self):
+        return self
+
+    def get_icon_url(self):
+        return getattr(getattr(self, 'icon', object), 'url', '')

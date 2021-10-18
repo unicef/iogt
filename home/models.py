@@ -49,7 +49,7 @@ from .blocks import (MediaBlock, SocialMediaLinkBlock,
                      EmbeddedQuestionnaireChooserBlock,
                      PageButtonBlock, ArticleChooserBlock)
 from .forms import SectionPageForm
-from .mixins import PageUtilsMixin
+from .mixins import PageUtilsMixin, TitleIconMixin
 from .utils.progress_manager import ProgressManager
 
 User = get_user_model()
@@ -133,7 +133,7 @@ class SectionIndexPage(Page):
         return cls.objects.none()
 
 
-class Section(Page, PageUtilsMixin):
+class Section(Page, PageUtilsMixin, TitleIconMixin):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
@@ -264,7 +264,7 @@ class ArticleRecommendation(Orderable):
     ]
 
 
-class Article(Page, PageUtilsMixin, CommentableMixin):
+class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
@@ -448,20 +448,52 @@ class BannerPage(Page):
 
 class FooterIndexPage(Page):
     parent_page_types = ['home.HomePage']
-    subpage_types = ['home.FooterPage']
+    subpage_types = [
+        'home.Section', 'home.Article', 'home.FooterPage', 'home.PageLinkPage', 'questionnaires.Poll',
+        'questionnaires.Survey', 'questionnaires.Quiz',
+    ]
+
+    @classmethod
+    def get_active_footers(cls):
+        return cls.objects.filter(locale=Locale.get_active()).first().get_descendants().live()
 
     def __str__(self):
         return self.title
 
 
-class FooterPage(Article):
+class FooterPage(Article, TitleIconMixin):
     parent_page_types = ['home.FooterIndexPage']
     subpage_types = []
     template = 'home/article.html'
 
-    @classmethod
-    def get_active_footers(cls):
-        return cls.objects.filter(locale=Locale.get_active()).live()
+
+class PageLinkPage(Page, TitleIconMixin):
+    parent_page_types = ['home.FooterIndexPage']
+    subpage_types = []
+
+    icon = models.ForeignKey(
+        Svg,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
+
+    page = models.ForeignKey(Page, related_name='page_link_pages', on_delete=models.PROTECT)
+
+    content_panels = Page.content_panels + [
+        SvgChooserPanel('icon'),
+        PageChooserPanel('page')
+    ]
+
+    def get_page(self):
+        return self.page
+
+    def get_icon_url(self):
+        if self.icon:
+            return self.icon.url
+
+        return getattr(getattr(self.page.specific, 'icon', object), 'url', '')
 
 
 @register_setting
@@ -890,6 +922,7 @@ class ThemeSettings(BaseSetting):
     mobile_navbar_background_color = models.CharField(
         null=True, blank=True, help_text='The background color of the mobile-only navbar as a HEX code', max_length=8,
         default='#0094F4')
+
 
 class V1ToV2ObjectMap(models.Model):
     v1_object_id = models.PositiveIntegerField()

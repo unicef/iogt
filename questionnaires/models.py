@@ -13,9 +13,11 @@ from django.db import models
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from wagtail_localize.fields import TranslatableField
+from wagtailsvg.edit_handlers import SvgChooserPanel
+from wagtailsvg.models import Svg
 
 from home.blocks import MediaBlock, PageButtonBlock
-from home.mixins import PageUtilsMixin
+from home.mixins import PageUtilsMixin, TitleIconMixin
 from iogt_users.models import User
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (FieldPanel, InlinePanel,
@@ -50,7 +52,7 @@ FORM_FIELD_CHOICES = (
 )
 
 
-class QuestionnairePage(Page, PageUtilsMixin):
+class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
     template = None
     parent_page_types = []
     subpage_types = []
@@ -103,6 +105,14 @@ class QuestionnairePage(Page, PageUtilsMixin):
         ],
         null=True,
         blank=True,
+    )
+
+    icon = models.ForeignKey(
+        Svg,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
     )
 
     settings_panels = Page.settings_panels + [
@@ -338,7 +348,9 @@ class Survey(QuestionnairePage, AbstractForm):
     base_form_class = SurveyForm
     form_builder = CustomFormBuilder
 
-    parent_page_types = ["home.HomePage", "home.Section", "home.Article", "questionnaires.SurveyIndexPage"]
+    parent_page_types = [
+        "home.HomePage", "home.Section", "home.Article", "questionnaires.SurveyIndexPage", 'home.FooterIndexPage',
+    ]
     template = "survey/survey.html"
     multi_step = models.BooleanField(
         default=False,
@@ -382,6 +394,7 @@ class Survey(QuestionnairePage, AbstractForm):
             ],
             heading="Terms and conditions",
         ),
+        SvgChooserPanel('icon'),
         InlinePanel("survey_form_fields", label="Form fields"),
     ]
 
@@ -493,7 +506,9 @@ class PollFormField(AbstractFormField):
 class Poll(QuestionnairePage, AbstractForm):
     form_builder = CustomFormBuilder
     template = "poll/poll.html"
-    parent_page_types = ["home.HomePage", "home.Section", "home.Article", "questionnaires.PollIndexPage"]
+    parent_page_types = [
+        "home.HomePage", "home.Section", "home.Article", "questionnaires.PollIndexPage", 'home.FooterIndexPage',
+    ]
 
     show_results = models.BooleanField(
         default=True, help_text=_("This option allows the users to see the results.")
@@ -550,6 +565,7 @@ class Poll(QuestionnairePage, AbstractForm):
             ],
             heading="Terms and conditions",
         ),
+        SvgChooserPanel('icon'),
         InlinePanel("poll_form_fields", label="Poll Form fields", min_num=1, max_num=1),
     ]
 
@@ -711,7 +727,9 @@ class Quiz(QuestionnairePage, AbstractForm):
     base_form_class = QuizForm
     form_builder = CustomFormBuilder
 
-    parent_page_types = ["home.HomePage", "home.Section", "home.Article", "questionnaires.QuizIndexPage"]
+    parent_page_types = [
+        "home.HomePage", "home.Section", "home.Article", "questionnaires.QuizIndexPage", 'home.FooterIndexPage',
+    ]
     template = "quizzes/quiz.html"
 
     multi_step = models.BooleanField(
@@ -756,6 +774,7 @@ class Quiz(QuestionnairePage, AbstractForm):
             ],
             heading="Terms and conditions",
         ),
+        SvgChooserPanel('icon'),
         InlinePanel("quiz_form_fields", label="Form fields"),
     ]
 
