@@ -12,6 +12,16 @@ class CommentForm(BaseCommentForm):
         self.fields['followup'].initial = False
         self.fields['followup'].widget = forms.HiddenInput()
 
+        self.fields['post_anonymously'] = forms.BooleanField(label='Post Anonymnously?', required=False)
+
+    def get_comment_create_data(self, site_id=None):
+        data = super().get_comment_create_data(site_id=site_id)
+        if self.cleaned_data['post_anonymously']:
+            data['user_email'] = ''
+            data['user_name'] = 'anonymous'
+        return data
+
+
 
 class AdminCommentForm(CommentForm):
 
