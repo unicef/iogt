@@ -1,4 +1,4 @@
-{% load static menu_tags i18n wagtailimages_tags home_tags generic_components %}
+{% load static menu_tags i18n wagtailimages_tags home_tags image_tags generic_components %}
 
 {% get_current_language as LANGUAGE_CODE %}
 {% get_language_info for LANGUAGE_CODE as lang %}
@@ -19,15 +19,14 @@
         </div>
         <div class="form-holder">
             <a class="js-search-btn" href="{% url "search" %}">
-                <img src="{% static "icons/search.svg" %}" alt="Search" class='xs-home-header__search'>
+                {% static "icons/search.svg" as search_icon_url %}
+                {% render_png_from_svg search_icon_url attrs="alt='Search' class='xs-home-header__search'"%}
             </a>
             <form class='search__form' action="{% url 'search' %}">
                 <label >
+                    {% static 'icons/search.svg' as search_icon_url %}
                     <span >
-                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M8.08333 15.4167C12.1334 15.4167 15.4167 12.1334 15.4167 8.08333C15.4167 4.03325 12.1334 0.75 8.08333 0.75C4.03325 0.75 0.75 4.03325 0.75 8.08333C0.75 12.1334 4.03325 15.4167 8.08333 15.4167Z" stroke="#9A9A9A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M17.2502 17.25L13.2627 13.2625" stroke="#9A9A9A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                        {% render_png_from_svg search_icon_url width=18 height=18 stroke_color='#9A9A9A' %}
                     </span>
                     <input type="text" name="query" placeholder="{% translate 'Search the site…' %}" pattern="\S+.*"/>
                 </label>
@@ -38,11 +37,11 @@
                 {% url 'account_login' as login_url %}
                 {% static 'icons/login.svg' as login_icon %}
                 {% if request.user.is_anonymous %}
-                        {% primary_button title="Log in / Create account" href=login_url icon_path=login_icon %}
+                    {% primary_button title="Log in / Create account" href=login_url icon_path=login_icon is_svg_icon=True %}
                 {% else %}
                     {% url 'user_profile' as profile_url %}
                     {% static 'icons/profile.svg' as profile_icon %}
-                    {% primary_button title="Profile" href=profile_url icon_path=profile_icon %}
+                    {% primary_button title="Profile" href=profile_url icon_path=profile_icon is_svg_icon=True %}
                 {% endif %}
             </div>
         </div>

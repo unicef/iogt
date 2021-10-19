@@ -2,6 +2,7 @@ from django import template
 from wagtail.core.models import Site
 
 from home.models import ThemeSettings
+from home.templatetags.image_tags import svg_to_png_url
 from iogt import settings
 
 register = template.Library()
@@ -9,18 +10,22 @@ register = template.Library()
 
 @register.inclusion_tag('generic_components/primary_button.html')
 def primary_button(title, extra_classnames='', href=None, icon_path=None,
-                   font_color=None, background_color=None):
+                   font_color=None, background_color=None, is_svg_icon=False):
     theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
 
     font_color = font_color or theme_settings.primary_button_font_color
     background_color = background_color or theme_settings.primary_button_background_color
+
+    if is_svg_icon and font_color:
+        icon_path = svg_to_png_url(icon_path, fill_color=font_color)
+
     return {
         'title': title,
         'href': href,
         'icon_path': icon_path,
         'font_color': font_color,
         'background_color': background_color,
-        'extra_classnames': extra_classnames
+        'extra_classnames': extra_classnames,
     }
 
 

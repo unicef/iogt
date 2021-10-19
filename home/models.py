@@ -50,6 +50,7 @@ from .blocks import (MediaBlock, SocialMediaLinkBlock,
                      PageButtonBlock, ArticleChooserBlock)
 from .forms import SectionPageForm
 from .mixins import PageUtilsMixin, TitleIconMixin
+from .utils.image import convert_svg_to_png_bytes
 from .utils.progress_manager import ProgressManager
 
 User = get_user_model()
@@ -935,6 +936,10 @@ class V1ToV2ObjectMap(models.Model):
         return f'{self.v1_object_id} -> {self.object_id}'
 
     @classmethod
+    def create_map(cls, content_object, v1_object_id):
+        v1_to_v2_object_map = cls(content_object=content_object, v1_object_id=v1_object_id)
+        v1_to_v2_object_map.save()
+
     def get_v1_id(cls, klass, object_id, extra=None):
         content_type = ContentType.objects.get_for_model(klass)
 
@@ -958,3 +963,26 @@ class V1ToV2ObjectMap(models.Model):
         obj, __ = cls.objects.get_or_create(content_type=content_type, object_id=content_object.pk,
                                             v1_object_id=v1_object_id, extra=extra)
         return obj
+
+
+class SVGToPNGMap(models.Model):
+    svg_path = models.TextField()
+    fill_color = models.TextField(null=True)
+    stroke_color = models.TextField(null=True)
+    png_image_file = models.ImageField(upload_to='svg-to-png-maps/')
+
+    @classmethod
+    def get_png_image(cls, svg_path, fill_color, stroke_color=None):
+        try:
+            obj = cls.objects.get(svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color)
+        except cls.DoesNotExist:
+            png_image = convert_svg_to_png_bytes(svg_path, fill_color=fill_color, stroke_color=stroke_color, scale=10)
+            obj = cls.objects.create(
+                svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color, png_image_file=png_image)
+        return obj.png_image_file
+
+    def __str__(self):
+        return f'{self.svg_path} (F={self.fill_color}) (S={self.stroke_color}) -> {self.png_image_file}'
+
+    class Meta:
+        unique_together = ('svg_path', 'fill_color', 'stroke_color')
