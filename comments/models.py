@@ -42,11 +42,14 @@ class CommentableMixin(models.Model):
         return self.commenting_status in [CommentStatus.OPEN, CommentStatus.CLOSED, CommentStatus.TIMESTAMPED]
 
     def should_show_new_comment_box(self):
-        commenting_still_valid = self.commenting_starts_at > timezone.now() > self.commenting_ends_at
+        commenting_still_valid = True
+        if self.commenting_starts_at:
+            commenting_still_valid = self.commenting_starts_at > timezone.now()
+        if self.commenting_ends_at:
+            commenting_still_valid = commenting_still_valid and self.commenting_ends_at < timezone.now()
 
         return self.commenting_status == CommentStatus.OPEN or \
-               (self.commenting_status == CommentStatus.TIMESTAMPED and self.commenting_starts_at
-                and self.commenting_ends_at and commenting_still_valid)
+               (self.commenting_status == CommentStatus.TIMESTAMPED and commenting_still_valid)
 
     def get_absolute_url(self):
         if isinstance(self, Page):
