@@ -49,7 +49,8 @@ from .blocks import (MediaBlock, SocialMediaLinkBlock,
                      EmbeddedQuestionnaireChooserBlock,
                      PageButtonBlock, ArticleChooserBlock)
 from .forms import SectionPageForm
-from .mixins import PageUtilsMixin
+from .mixins import PageUtilsMixin, TitleIconMixin
+from .utils.image import convert_svg_to_png_bytes
 from .utils.progress_manager import ProgressManager
 
 User = get_user_model()
@@ -133,7 +134,7 @@ class SectionIndexPage(Page):
         return cls.objects.none()
 
 
-class Section(Page, PageUtilsMixin):
+class Section(Page, PageUtilsMixin, TitleIconMixin):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
@@ -264,7 +265,7 @@ class ArticleRecommendation(Orderable):
     ]
 
 
-class Article(Page, PageUtilsMixin, CommentableMixin):
+class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
@@ -343,7 +344,7 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         ObjectList(CommentableMixin.comments_panels, heading='Comments')
     ])
 
-    def _get_progress_enabled_section(self):
+    def get_progress_enabled_section(self):
         """
         Returning .first() will bypass any discrepancies in settings show_progress_bar=True
         for sections
@@ -359,7 +360,7 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
                                   not crumb.is_root()]
         context['sections'] = self.get_ancestors().type(Section)
 
-        progress_enabled_section = self._get_progress_enabled_section()
+        progress_enabled_section = self.get_progress_enabled_section()
 
         if progress_enabled_section:
             context.update({
@@ -418,7 +419,7 @@ class BannerPage(Page):
 
     banner_link_page = models.ForeignKey(
         Page, null=True, blank=True, related_name='banners',
-        on_delete=models.PROTECT,
+        on_delete=models.SET_NULL,
         help_text=_('Optional page to which the banner will link to'))
 
     banner_button_text = models.CharField(
@@ -448,20 +449,52 @@ class BannerPage(Page):
 
 class FooterIndexPage(Page):
     parent_page_types = ['home.HomePage']
-    subpage_types = ['home.FooterPage']
+    subpage_types = [
+        'home.Section', 'home.Article', 'home.FooterPage', 'home.PageLinkPage', 'questionnaires.Poll',
+        'questionnaires.Survey', 'questionnaires.Quiz',
+    ]
+
+    @classmethod
+    def get_active_footers(cls):
+        return cls.objects.filter(locale=Locale.get_active()).first().get_descendants().live()
 
     def __str__(self):
         return self.title
 
 
-class FooterPage(Article):
+class FooterPage(Article, TitleIconMixin):
     parent_page_types = ['home.FooterIndexPage']
     subpage_types = []
     template = 'home/article.html'
 
-    @classmethod
-    def get_active_footers(cls):
-        return cls.objects.filter(locale=Locale.get_active()).live()
+
+class PageLinkPage(Page, TitleIconMixin):
+    parent_page_types = ['home.FooterIndexPage']
+    subpage_types = []
+
+    icon = models.ForeignKey(
+        Svg,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
+
+    page = models.ForeignKey(Page, related_name='page_link_pages', on_delete=models.PROTECT)
+
+    content_panels = Page.content_panels + [
+        SvgChooserPanel('icon'),
+        PageChooserPanel('page')
+    ]
+
+    def get_page(self):
+        return self.page
+
+    def get_icon_url(self):
+        if self.icon:
+            return self.icon.url
+
+        return getattr(getattr(self.page.specific, 'icon', object), 'url', '')
 
 
 @register_setting
@@ -672,13 +705,13 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
     )
 
     color = models.CharField(
-        max_length=6,
+        max_length=255,
         blank=True,
         null=True
     )
 
     color_text = models.CharField(
-        max_length=6,
+        max_length=255,
         blank=True,
         null=True
     )
@@ -891,6 +924,7 @@ class ThemeSettings(BaseSetting):
         null=True, blank=True, help_text='The background color of the mobile-only navbar as a HEX code', max_length=8,
         default='#0094F4')
 
+
 class V1ToV2ObjectMap(models.Model):
     v1_object_id = models.PositiveIntegerField()
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
@@ -902,6 +936,10 @@ class V1ToV2ObjectMap(models.Model):
         return f'{self.v1_object_id} -> {self.object_id}'
 
     @classmethod
+    def create_map(cls, content_object, v1_object_id):
+        v1_to_v2_object_map = cls(content_object=content_object, v1_object_id=v1_object_id)
+        v1_to_v2_object_map.save()
+
     def get_v1_id(cls, klass, object_id, extra=None):
         content_type = ContentType.objects.get_for_model(klass)
 
@@ -925,3 +963,26 @@ class V1ToV2ObjectMap(models.Model):
         obj, __ = cls.objects.get_or_create(content_type=content_type, object_id=content_object.pk,
                                             v1_object_id=v1_object_id, extra=extra)
         return obj
+
+
+class SVGToPNGMap(models.Model):
+    svg_path = models.TextField()
+    fill_color = models.TextField(null=True)
+    stroke_color = models.TextField(null=True)
+    png_image_file = models.ImageField(upload_to='svg-to-png-maps/')
+
+    @classmethod
+    def get_png_image(cls, svg_path, fill_color, stroke_color=None):
+        try:
+            obj = cls.objects.get(svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color)
+        except cls.DoesNotExist:
+            png_image = convert_svg_to_png_bytes(svg_path, fill_color=fill_color, stroke_color=stroke_color, scale=10)
+            obj = cls.objects.create(
+                svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color, png_image_file=png_image)
+        return obj.png_image_file
+
+    def __str__(self):
+        return f'{self.svg_path} (F={self.fill_color}) (S={self.stroke_color}) -> {self.png_image_file}'
+
+    class Meta:
+        unique_together = ('svg_path', 'fill_color', 'stroke_color')

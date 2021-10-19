@@ -1,4 +1,4 @@
-from html.parser import HTMLParser
+import html
 import re
 
 from django.conf import settings
@@ -36,7 +36,6 @@ class RewriteExternalLinksMiddleware:
         if response.streaming:
             return response
 
-        h = HTMLParser()
         html_content_type = 'text/html' in response.get('content-type', '')
         start_link = request.path.startswith(external_link_root)
 
@@ -50,7 +49,7 @@ class RewriteExternalLinksMiddleware:
                     before=m.group('before'),
                     # unescape the link before encoding it to ensure entities
                     # such as '&' don't get double escaped
-                    link=urlencode(h.unescape(m.group('link')), safe=''),
+                    link=urlencode(html.unescape(m.group('link')), safe=''),
                     after=m.group('after'),
                 )
             response.content = self.extlinks.sub(

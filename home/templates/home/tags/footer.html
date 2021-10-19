@@ -1,20 +1,21 @@
-{% load static wagtailcore_tags wagtailimages_tags i18n generic_components %}
+{% load static wagtailcore_tags wagtailimages_tags i18n generic_components image_tags %}
 
 <footer class="bottom-level">
     <nav>
         {% if request.user.is_anonymous %}
             {% url 'account_login' as login_url %}
             {% static 'icons/login.svg' as login_icon_path %}
-            {% primary_button title='Login / Create account' href=login_url icon_path=login_icon_path %}
+
+            {% primary_button title='Login / Create account' href=login_url icon_path=login_icon_path is_svg_icon=True %}
         {% else %}
             {% url 'user_profile' as profile_url %}
             {% static 'icons/profile.svg' as profile_icon_path %}
-            {% primary_button title='Profile' href=profile_url icon_path=profile_icon_path %}
+            {% primary_button title='Profile' href=profile_url icon_path=profile_icon_path is_svg_icon=True %}
 
         {% endif %}
         {% for footer_page in footer_pages %}
-            {% pageurl footer_page as footer_page_url %}
-            {% primary_button title=footer_page.specific.title href=footer_page_url icon_path=footer_page.specific.icon.url %}
+            {% pageurl footer_page.specific.get_page as footer_page_url %}
+            {% primary_button title=footer_page.specific.title href=footer_page_url icon_path=footer_page.specific.get_icon_url is_svg_icon=True %}
         {% endfor %}
     </nav>
 </footer>

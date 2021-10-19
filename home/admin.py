@@ -1,6 +1,7 @@
+from django.contrib import admin
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 
-from home.models import ManifestSettings
+from home.models import ManifestSettings, SVGToPNGMap
 
 
 class ManifestSettingsAdmin(ModelAdmin):
@@ -13,3 +14,10 @@ class ManifestSettingsAdmin(ModelAdmin):
 
 
 modeladmin_register(ManifestSettingsAdmin)
+
+
+@admin.register(SVGToPNGMap)
+class SVGToPNGMapAdmin(admin.ModelAdmin):
+    list_display = ('id', 'svg_path', 'fill_color', 'stroke_color', 'png_image_file')
+
+
