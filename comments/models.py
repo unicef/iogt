@@ -44,9 +44,9 @@ class CommentableMixin(models.Model):
     def should_show_new_comment_box(self):
         commenting_still_valid = True
         if self.commenting_starts_at:
-            commenting_still_valid = self.commenting_starts_at > timezone.now()
+            commenting_still_valid = self.commenting_starts_at < timezone.now()
         if self.commenting_ends_at:
-            commenting_still_valid = commenting_still_valid and self.commenting_ends_at < timezone.now()
+            commenting_still_valid = commenting_still_valid and self.commenting_ends_at > timezone.now()
 
         return self.commenting_status == CommentStatus.OPEN or \
                (self.commenting_status == CommentStatus.TIMESTAMPED and commenting_still_valid)
