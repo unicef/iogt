@@ -11,6 +11,7 @@ from wagtail_localize.views.submit_translations import TranslationCreator
 from wagtailmedia.models import Media
 
 import home.models as models
+from comments.models import CommentStatus
 from home.models import V1ToV2ObjectMap
 from questionnaires.models import Poll, PollFormField, Survey, SurveyFormField, Quiz, QuizFormField
 import psycopg2
@@ -456,7 +457,10 @@ class Command(BaseCommand):
                     continue
 
                 translated_article = article.get_translation_or_none(locale)
+
                 if translated_article:
+                    commenting_status, commenting_open_time, commenting_close_time = self._get_commenting_fields(row)
+
                     translated_article.lead_image = self.image_map.get(row['image_id'])
                     translated_article.title = row['title']
                     translated_article.draft_title = row['draft_title']
@@ -469,7 +473,11 @@ class Command(BaseCommand):
                     translated_article.search_description = row['search_description']
                     translated_article.seo_title = row['seo_title']
                     translated_article.index_page_description = row['subtitle']
+                    translated_article.commenting_status = commenting_status
+                    translated_article.commenting_starts_at = commenting_open_time
+                    translated_article.commenting_ends_at = commenting_close_time
                     translated_article.save()
+
                     content_type = self.find_content_type_id('core', 'articlepage')
                     tags = self.find_tags(content_type, row['id'])
                     if tags:
@@ -483,7 +491,20 @@ class Command(BaseCommand):
                 self.stdout.write(f"Translated article, title={row['title']}")
         cur.close()
 
+    def _get_commenting_fields(self, row):
+        comments_map = {
+            'O': CommentStatus.OPEN,
+            'C': CommentStatus.CLOSED,
+            'D': CommentStatus.DISABLED,
+            'T': CommentStatus.TIMESTAMPED
+        }
+
+        commenting_status = comments_map[row['commenting_state']] if row['commenting_state'] else CommentStatus.CLOSED
+        return commenting_status, row['commenting_open_time'], row['commenting_close_time']
+
     def create_article(self, row):
+        commenting_status, commenting_open_time, commenting_close_time = self._get_commenting_fields(row)
+
         article = models.Article(
             lead_image=self.image_map.get(row['image_id']),
             title=row['title'],
@@ -498,7 +519,9 @@ class Command(BaseCommand):
             expire_at=row['expire_at'],
             first_published_at=row['first_published_at'],
             last_published_at=row['last_published_at'],
-            allow_comments=True if row['commenting_state'] == 'O' else False,
+            commenting_status=commenting_status,
+            commenting_starts_at=commenting_open_time,
+            commenting_ends_at=commenting_close_time,
             search_description=row['search_description'],
             seo_title=row['seo_title'],
             index_page_description=row['subtitle'],
@@ -677,6 +700,8 @@ class Command(BaseCommand):
 
                 translated_footer = footer.get_translation_or_none(locale)
                 if translated_footer:
+                    commenting_status, commenting_open_time, commenting_close_time = self._get_commenting_fields(row)
+
                     translated_footer.lead_image = self.image_map.get(row['image_id'])
                     translated_footer.title = row['title']
                     translated_footer.draft_title = row['draft_title']
@@ -688,6 +713,9 @@ class Command(BaseCommand):
                     translated_footer.last_published_at = row['last_published_at']
                     translated_footer.search_description = row['search_description']
                     translated_footer.seo_title = row['seo_title']
+                    translated_footer.commenting_status = commenting_status
+                    translated_footer.commenting_starts_at = commenting_open_time
+                    translated_footer.commenting_ends_at = commenting_close_time
                     translated_footer.save()
                     V1ToV2ObjectMap.create_map(content_object=translated_footer, v1_object_id=row['page_ptr_id'])
 
@@ -699,6 +727,8 @@ class Command(BaseCommand):
         cur.close()
 
     def create_footer(self, row):
+        commenting_status, commenting_open_time, commenting_close_time = self._get_commenting_fields(row)
+
         footer = models.FooterPage(
             lead_image=self.image_map.get(row['image_id']),
             title=row['title'],
@@ -715,6 +745,9 @@ class Command(BaseCommand):
             last_published_at=row['last_published_at'],
             search_description=row['search_description'],
             seo_title=row['seo_title'],
+            commenting_status=commenting_status,
+            commenting_starts_at=commenting_open_time,
+            commenting_ends_at=commenting_close_time
         )
         footer.save()
         V1ToV2ObjectMap.create_map(content_object=footer, v1_object_id=row['page_ptr_id'])
