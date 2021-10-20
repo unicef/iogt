@@ -85,6 +85,7 @@ class Command(BaseCommand):
         self.migrate(root)
 
     def clear(self):
+        models.PageLinkPage.objects.all().delete()
         PageRevision.objects.all().delete()
         PollFormField.objects.all().delete()
         Poll.objects.all().delete()
@@ -158,6 +159,8 @@ class Command(BaseCommand):
         self.migrate_recommended_articles_for_article()
         self.migrate_featured_articles_for_section()
         self.migrate_featured_articles_for_homepage()
+        self.add_polls_from_polls_index_page_to_footer_index_page_as_page_link_page()
+        self.add_surveys_from_surveys_index_page_to_footer_index_page_as_page_link_page()
         self.stop_translations()
 
     def create_home_page(self, root):
@@ -1206,7 +1209,6 @@ class Command(BaseCommand):
                 models.HomePageBanner.objects.create(source=home_page, banner_page=v2_banner)
         cur.close()
 
-
     def get_color_hex(self, color_name):
         return {
             '--tiber': '#07292F',
@@ -1331,3 +1333,28 @@ class Command(BaseCommand):
                 v2_banner.save()
         cur.close()
 
+    def add_polls_from_polls_index_page_to_footer_index_page_as_page_link_page(self):
+        self.poll_index_page.refresh_from_db()
+        self.footer_index_page.refresh_from_db()
+        poll_index_pages = self.poll_index_page.get_translations(inclusive=True)
+        for poll_index_page in poll_index_pages:
+            polls = poll_index_page.get_children()
+            for poll in polls:
+                page_link_page = models.PageLinkPage(title=poll.title, page=poll)
+                footer_index_page = self.footer_index_page.get_translation_or_none(poll.locale)
+                footer_index_page.add_child(instance=page_link_page)
+
+        self.stdout.write('Added polls from poll index page to footer index page as page link page.')
+
+    def add_surveys_from_surveys_index_page_to_footer_index_page_as_page_link_page(self):
+        self.survey_index_page.refresh_from_db()
+        self.footer_index_page.refresh_from_db()
+        survey_index_page = self.survey_index_page.get_translations(inclusive=True)
+        for survey_index_page in survey_index_page:
+            surveys = survey_index_page.get_children()
+            for survey in surveys:
+                page_link_page = models.PageLinkPage(title=survey.title, page=survey)
+                footer_index_page = self.footer_index_page.get_translation_or_none(survey.locale)
+                footer_index_page.add_child(instance=page_link_page)
+
+        self.stdout.write('Added surveys from survey index page to footer index page as page link page.')
