@@ -139,9 +139,9 @@ class Command(BaseCommand):
         self.migrate_media()
         self.migrate_images()
         self.load_page_translation_map()
-        home = self.create_home_page(root)
-        self.translate_home_pages(home)
-        self.create_index_pages(home)
+        self.home_page = self.create_home_page(root)
+        self.translate_home_pages(self.home_page)
+        self.create_index_pages(self.home_page)
         self.migrate_sections()
         self.migrate_articles()
         self.migrate_footers()
@@ -157,6 +157,8 @@ class Command(BaseCommand):
         self.migrate_recommended_articles_for_article()
         self.migrate_featured_articles_for_section()
         self.migrate_featured_articles_for_homepage()
+        self.add_polls_from_polls_index_page_to_home_page_featured_content()
+        self.add_surveys_from_surveys_index_page_to_home_page_featured_content()
         self.stop_translations()
 
     def create_home_page(self, root):
@@ -1143,7 +1145,7 @@ class Command(BaseCommand):
         for row in cur:
             v2_article = self.v1_to_v2_page_map.get(row['page_ptr_id'])
             if v2_article:
-                home_page = v2_article.get_ancestors().exact_type(models.HomePage).first().specific
+                home_page = self.home_page.get_translation_or_none(v2_article.locale)
                 home_featured_content = []
                 for hfc in home_page.home_featured_content:
                     home_featured_content.append({
@@ -1172,7 +1174,6 @@ class Command(BaseCommand):
                 home_page = v2_banner.get_ancestors().exact_type(models.HomePage).first().specific
                 models.HomePageBanner.objects.create(source=home_page, banner_page=v2_banner)
         cur.close()
-
 
     def get_color_hex(self, color_name):
         return {
@@ -1298,3 +1299,38 @@ class Command(BaseCommand):
                 v2_banner.save()
         cur.close()
 
+    def add_polls_from_polls_index_page_to_home_page_featured_content(self):
+        self.poll_index_page.refresh_from_db()
+        self.home_page.refresh_from_db()
+        poll_index_pages = self.poll_index_page.get_translations(inclusive=True)
+        for poll_index_page in poll_index_pages:
+            home_page = self.home_page.get_translation_or_none(poll_index_page.locale)
+            home_featured_content = home_page.home_featured_content.stream_data
+            polls = poll_index_page.get_children().live()
+            for poll in polls:
+                home_featured_content.append({
+                    'type': 'embedded_poll',
+                    'value': poll.id,
+                })
+            home_page.home_featured_content = json.dumps(home_featured_content)
+            home_page.save()
+
+        self.stdout.write('Added polls from poll index page to home page featured content.')
+
+    def add_surveys_from_surveys_index_page_to_home_page_featured_content(self):
+        self.survey_index_page.refresh_from_db()
+        self.home_page.refresh_from_db()
+        survey_index_pages = self.survey_index_page.get_translations(inclusive=True)
+        for survey_index_page in survey_index_pages:
+            home_page = self.home_page.get_translation_or_none(survey_index_page.locale)
+            home_featured_content = home_page.home_featured_content.stream_data
+            surveys = survey_index_page.get_children().live()
+            for survey in surveys:
+                home_featured_content.append({
+                    'type': 'embedded_survey',
+                    'value': survey.id,
+                })
+            home_page.home_featured_content = json.dumps(home_featured_content)
+            home_page.save()
+
+        self.stdout.write('Added surveys from survey index page to home page featured content.')

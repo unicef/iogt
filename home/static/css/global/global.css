@@ -1087,9 +1087,11 @@
 .sm-paragraph {
   font-size: 0.75em !important;
   font-weight: normal !important;
+  width: 100% !important;
 }
 
 .lg-paragraph {
   font-size: 0.9em !important;
   font-weight: normal !important;
+  width: 100% !important;
 }
