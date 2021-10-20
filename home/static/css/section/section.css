@@ -113,4 +113,13 @@
     line-height: 22px;
   }
 }
+
+.rtl .quiz__imageholder  {
+  transform: rotate(180deg);
+}
+
+.rtl .featured-content__imageholder  {
+  transform: rotate(180deg);
+}
+
 /*# sourceMappingURL=section.css.map */

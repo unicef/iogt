@@ -27,11 +27,11 @@
     </article>
 
     {% get_comment_count for page as comment_count %}
-    {% if page.allow_comments or comment_count %}
+    {% if page.should_show_comments_list %}
         {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
         <section class='comments'>
             <h2>{% translate "Comments" %} <span class='comments__count'>{{ comment_count }}</span></h2>
-            {% if page.allow_comments %}
+            {% if page.should_show_new_comment_box %}
                 {% if user.is_authenticated %}
                     <div class='comments__form'>
                         {% render_comment_form for page %}
@@ -48,7 +48,7 @@
                 {% endif %}
             {% else %}
                 <p>
-                    {% translate "New comments have been disabled for this page." %}"
+                    {% translate "New comments have been disabled for this page." %}
                 </p>
             {% endif %}
             {% if comment_count %}
