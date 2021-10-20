@@ -7,9 +7,11 @@
 <a href="{% pageurl featured_content %}" > 
     {{ featured_content.title }} 
 </a>
-<svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M1 9L5 5.00033L1 1"  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+<div class="featured-content__imageholder">
+    <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 9L5 5.00033L1 1"  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+</div>
 
 {% endfor %}
 
