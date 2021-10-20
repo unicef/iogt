@@ -1,3 +1,8 @@
+body.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
 .related-articles {
   /* margin: 0px 12px; */
   font-family: Poppins;
@@ -442,6 +447,10 @@
   border-radius: 8px;
 }
 
+.rtl .search__form input {
+  padding: 11px 44px 11px 12px;
+}
+
 .search__form input::placeholder {
   color: #9a9a9a;
   opacity: 1;
@@ -453,6 +462,12 @@
 
 .search__form input::-ms-input-placeholder {
   color: #9a9a9a;
+}
+
+
+.rtl .search__form img {
+  left: auto;
+  right: 15px;
 }
 
 .search__form img {
@@ -538,12 +553,12 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 5px 12px;
+  padding: 5px 20px 5px 12px;
   border-radius: 8px;
   flex-grow: 0;
   position: relative;
   min-width: 80px;
-  max-width: 80px;
+  /* max-width: 80px; */
   text-decoration: none;
   font-family: Poppins;
   font-style: normal;
@@ -554,7 +569,7 @@
   z-index: 999;
 }
 
-.language_drop > a:after {
+.language_drop > a > span {
   position: absolute;
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
@@ -583,9 +598,9 @@
   z-index: 99;
 }
 
-.language_drop:hover > a:after,
-.language_drop:active > a:after,
-.language_drop:focus > a:after {
+.language_drop:hover > a > span,
+.language_drop:active > a > span,
+.language_drop:focus > a > span {
   border-top: 4px solid transparent;
   border-bottom: 4px solid #303030;
   margin: -2px 0 0;
@@ -703,6 +718,15 @@
   display: none;
 }
 
+.rtl .form-holder .js-search-btn img {
+  padding-left: 0;
+  padding-right: 10px;
+  border-left-width: 0;
+  border-right: 1px solid #EFEFEF;
+  margin-left: 0;
+  margin-right: 12px;
+}
+
 .form-holder .js-search-btn img{
   margin: 0 0 0 12px;
   border-left: 1px solid #EFEFEF;
@@ -755,7 +779,7 @@
   }
   .language_drop > a {
     min-width: 80px;
-    max-width: 80px;
+    /* max-width: 80px; */
   }
 
   #content-wrap .content {
@@ -789,6 +813,14 @@
     padding: 16px 32px;
   }
 }
+.rtl .language_drop > a {
+  padding: 5px 12px 5px 20px;
+}
+.rtl .language_drop > a > span {
+  right: auto;
+  left: 11px;
+}
+
 @media screen and (min-width: 768px) {
   .footer-head {
     display: none;
@@ -812,6 +844,12 @@
   .language__select {
     margin-left: 12px;
   }
+
+  .rtl .language__select {
+    margin-left: 0;
+    margin-right: 12px;
+  }
+
   .header-content {
     justify-content: flex-start;
     padding: 0 16px;
