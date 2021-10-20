@@ -141,9 +141,9 @@ class Command(BaseCommand):
         self.migrate_media()
         self.migrate_images()
         self.load_page_translation_map()
-        home = self.create_home_page(root)
-        self.translate_home_pages(home)
-        self.create_index_pages(home)
+        self.home_page = self.create_home_page(root)
+        self.translate_home_pages(self.home_page)
+        self.create_index_pages(self.home_page)
         self.migrate_sections()
         self.migrate_articles()
         self.migrate_footers()
@@ -158,7 +158,6 @@ class Command(BaseCommand):
         self.attach_banners_to_home_page()
         self.migrate_recommended_articles_for_article()
         self.migrate_featured_articles_for_section()
-        self.migrate_featured_articles_for_homepage()
         self.add_polls_from_polls_index_page_to_footer_index_page_as_page_link_page()
         self.add_surveys_from_surveys_index_page_to_footer_index_page_as_page_link_page()
         self.stop_translations()
@@ -481,6 +480,16 @@ class Command(BaseCommand):
                     translated_article.commenting_ends_at = commenting_close_time
                     translated_article.save()
 
+                    v1_article_id = V1ToV2ObjectMap.get_v1_id(models.Article, article.id)
+
+                    sql = f'select * from core_articlepage cap where cap.page_ptr_id = {v1_article_id}'
+                    cur = self.db_query(sql)
+                    v1_article = cur.fetchone()
+                    cur.close()
+
+                    if row['live'] and (row['featured_in_homepage_start_date'] or v1_article['featured_in_homepage_start_date']):
+                        self.add_article_as_featured_content_in_home_page(translated_article)
+
                     content_type = self.find_content_type_id('core', 'articlepage')
                     tags = self.find_tags(content_type, row['id'])
                     if tags:
@@ -531,6 +540,8 @@ class Command(BaseCommand):
         )
         try:
             article.save()
+            if row['live'] and row['featured_in_homepage_start_date']:
+                self.add_article_as_featured_content_in_home_page(article)
             content_type = self.find_content_type_id('core', 'articlepage')
             tags = self.find_tags(content_type, row['id'])
             if tags:
@@ -586,6 +597,16 @@ class Command(BaseCommand):
                 'value': row['subtitle'],
             }] + v2_body
         return json.dumps(v2_body)
+
+    def add_article_as_featured_content_in_home_page(self, article):
+        home_page = self.home_page.get_translation_or_none(article.locale)
+        if home_page:
+            home_featured_content = home_page.home_featured_content.stream_data
+            home_featured_content.append({
+                'type': 'article',
+                'value': article.id,
+            })
+            home_page.save()
 
     def migrate_banners(self):
         sql = "select * " \
@@ -1173,24 +1194,6 @@ class Command(BaseCommand):
                     models.FeaturedContent.objects.create(source=section, content=v2_article)
         cur.close()
         self.stdout.write('Articles featured in sections migrated')
-
-    def migrate_featured_articles_for_homepage(self):
-        cur = self.db_query(f'select * from core_articlepage where featured_in_homepage = true')
-        for row in cur:
-            v2_article = self.v1_to_v2_page_map.get(row['page_ptr_id'])
-            if v2_article:
-                home_page = v2_article.get_ancestors().exact_type(models.HomePage).first().specific
-                home_featured_content = []
-                for hfc in home_page.home_featured_content:
-                    home_featured_content.append({
-                        'type': 'article',
-                        'value': hfc.value.id,
-                    })
-                home_featured_content.append({'type': 'article', 'value': v2_article.id})
-                home_page.home_featured_content = json.dumps(home_featured_content)
-                home_page.save()
-        cur.close()
-        self.stdout.write('Articles featured in home page migrated')
 
     def attach_banners_to_home_page(self):
         sql = "select * " \
