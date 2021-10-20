@@ -480,7 +480,7 @@ class PageLinkPage(Page, TitleIconMixin):
         on_delete=models.SET_NULL,
     )
 
-    page = models.ForeignKey(Page, related_name='page_link_pages', on_delete=models.PROTECT)
+    page = models.ForeignKey(Page, related_name='page_link_pages', null=True, on_delete=models.SET_NULL)
 
     content_panels = Page.content_panels + [
         SvgChooserPanel('icon'),
