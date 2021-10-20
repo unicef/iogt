@@ -84,6 +84,7 @@ class Command(BaseCommand):
         self.migrate(root)
 
     def clear(self):
+        models.PageLinkPage.objects.all().delete()
         PageRevision.objects.all().delete()
         PollFormField.objects.all().delete()
         Poll.objects.all().delete()
