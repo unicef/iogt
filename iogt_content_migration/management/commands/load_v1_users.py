@@ -77,6 +77,7 @@ class Command(BaseCommand):
                                                        self.request_registration_survey_mandatory_groups()
         self.content_type_map = dict()
         self.delete_users = options.get('delete_users')
+        self.post_migration_report_messages = []
 
         self.clear()
 
@@ -196,9 +197,8 @@ class Command(BaseCommand):
                 if get_user_model().objects.filter(username=row['username']).exists():
                     existing_user = get_user_model().objects.get(username=row['username'])
                     modified_username = f'{existing_user}_v2'
-                    self.stdout.write(self.style.ERROR(f'Renaming {existing_user.username} to '
-                                                       f'{modified_username} due to username conflict'))
-
+                    self.post_migration_report_messages.append(f'Renamed {existing_user.username} to '
+                                                               f'{modified_username} due to username conflict')
                     existing_user.username = modified_username
                     existing_user.save()
 
