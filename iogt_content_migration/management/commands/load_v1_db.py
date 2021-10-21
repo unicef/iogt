@@ -1189,9 +1189,10 @@ class Command(BaseCommand):
             )
             articles_list = []
             for article_row in articles_cur:
-                v1_page_id = self.page_translation_map.get(article_row['page_ptr_id'])
-                if v1_page_id:
-                    eng_article_cur = self.db_query(f'select * from core_articlepage where page_ptr_id = {v1_page_id}')
+                translated_from_page_id = self.page_translation_map.get(article_row['page_ptr_id'])
+                if translated_from_page_id:
+                    eng_article_cur = self.db_query(
+                        f'select * from core_articlepage where page_ptr_id = {translated_from_page_id}')
                     eng_article_row = eng_article_cur.fetchone()
                     eng_article_cur.close()
                 else:
