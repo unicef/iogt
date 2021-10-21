@@ -89,7 +89,8 @@
   bottom: 0;
   content: "";
   z-index: 1;
-  background: linear-gradient(0deg, rgba(26, 144, 144, 0.7), rgba(26, 144, 144, 0.7)), url(.jpg);
+  background: linear-gradient(0deg, rgba(26, 144, 144, 0.7), rgba(26, 144, 144, 0.7));
+  border-radius: 8px;
 }
 
 .overlay-holder.completed:before {
