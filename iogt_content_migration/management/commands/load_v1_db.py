@@ -158,6 +158,7 @@ class Command(BaseCommand):
         self.attach_banners_to_home_page()
         self.migrate_recommended_articles_for_article()
         self.migrate_featured_articles_for_section()
+        self.migrate_featured_articles_for_homepage()
         self.add_polls_from_polls_index_page_to_footer_index_page_as_page_link_page()
         self.add_surveys_from_surveys_index_page_to_footer_index_page_as_page_link_page()
         self.stop_translations()
@@ -480,16 +481,6 @@ class Command(BaseCommand):
                     translated_article.commenting_ends_at = commenting_close_time
                     translated_article.save()
 
-                    v1_article_id = V1ToV2ObjectMap.get_v1_id(models.Article, article.id)
-
-                    sql = f'select * from core_articlepage cap where cap.page_ptr_id = {v1_article_id}'
-                    cur = self.db_query(sql)
-                    v1_article = cur.fetchone()
-                    cur.close()
-
-                    if row['live'] and (row['featured_in_homepage_start_date'] or v1_article['featured_in_homepage_start_date']):
-                        self.add_article_as_featured_content_in_home_page(translated_article)
-
                     content_type = self.find_content_type_id('core', 'articlepage')
                     tags = self.find_tags(content_type, row['id'])
                     if tags:
@@ -540,8 +531,6 @@ class Command(BaseCommand):
         )
         try:
             article.save()
-            if row['live'] and row['featured_in_homepage_start_date']:
-                self.add_article_as_featured_content_in_home_page(article)
             content_type = self.find_content_type_id('core', 'articlepage')
             tags = self.find_tags(content_type, row['id'])
             if tags:
@@ -597,16 +586,6 @@ class Command(BaseCommand):
                 'value': row['subtitle'],
             }] + v2_body
         return json.dumps(v2_body)
-
-    def add_article_as_featured_content_in_home_page(self, article):
-        home_page = self.home_page.get_translation_or_none(article.locale)
-        if home_page:
-            home_featured_content = home_page.home_featured_content.stream_data
-            home_featured_content.append({
-                'type': 'article',
-                'value': article.id,
-            })
-            home_page.save()
 
     def migrate_banners(self):
         sql = "select * " \
@@ -1194,6 +1173,57 @@ class Command(BaseCommand):
                     models.FeaturedContent.objects.create(source=section, content=v2_article)
         cur.close()
         self.stdout.write('Articles featured in sections migrated')
+
+    def migrate_featured_articles_for_homepage(self):
+        locale_cur = self.db_query(f"select * from core_sitelanguage")
+        for locale_row in locale_cur:
+            articles_cur = self.db_query(
+                f"select * "
+                f"from core_articlepage cap, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl "
+                f"where cap.page_ptr_id = wcp.id "
+                f"and wcp.id = clr.page_id "
+                f"and clr.language_id = csl.id "
+                f"and wcp.live = true "
+                f"and csl.locale = '{locale_row['locale']}' "
+                f"order by left(wcp.path, 16) "
+            )
+            articles_list = []
+            for article_row in articles_cur:
+                v1_page_id = self.page_translation_map.get(article_row['page_ptr_id'])
+                if v1_page_id:
+                    eng_article_cur = self.db_query(f'select * from core_articlepage where page_ptr_id = {v1_page_id}')
+                    eng_article_row = eng_article_cur.fetchone()
+                    eng_article_cur.close()
+                else:
+                    eng_article_row = {'featured_in_homepage_start_date': None}
+
+                featured_in_homepage_start_date = (
+                        article_row['featured_in_homepage_start_date'] or
+                        eng_article_row['featured_in_homepage_start_date']
+                )
+
+                if featured_in_homepage_start_date:
+                    article = self.v1_to_v2_page_map.get(article_row['page_ptr_id'])
+                    if article:
+                        article.featured_in_homepage_start_date = featured_in_homepage_start_date
+                        articles_list.append(article)
+
+            articles_cur.close()
+
+            for article in sorted(articles_list, key=lambda a: (a.path[:16], a.featured_in_homepage_start_date)):
+                self.add_article_as_featured_content_in_home_page(article)
+
+        locale_cur.close()
+
+    def add_article_as_featured_content_in_home_page(self, article):
+        home_page = self.home_page.get_translation_or_none(article.locale)
+        if home_page:
+            home_featured_content = home_page.home_featured_content.stream_data
+            home_featured_content.append({
+                'type': 'article',
+                'value': article.id,
+            })
+            home_page.save()
 
     def attach_banners_to_home_page(self):
         sql = "select * " \
