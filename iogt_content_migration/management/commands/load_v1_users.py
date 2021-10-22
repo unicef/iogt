@@ -65,7 +65,7 @@ class Command(BaseCommand):
             '--group-ids',
             nargs='+',
             type=int,
-            help='Groups IDs to mark registration survey mandatory'
+            help='Groups IDs to mark registration survey mandatory for'
         )
 
     def handle(self, *args, **options):
