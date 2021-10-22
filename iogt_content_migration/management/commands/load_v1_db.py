@@ -52,7 +52,7 @@ class Command(BaseCommand):
         parser.add_argument(
             '--media-dir',
             required=True,
-            help='Path to IoGT v1 media directory'
+            help='**RELATIVE Path** to IoGT v1 media directory'
         )
         parser.add_argument(
             '--skip-locales',

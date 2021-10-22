@@ -20,13 +20,20 @@ Start the legacy database with docker-compose:
 ```
 docker-compose -f docker-compose-legacy-db.yml up
 ```
-Execute the migration command:
+Execute the migration commands in the following order:
+
 ```
 ./manage.py load_v1_db --password iogt --media-dir <path to media dir backup>
 ```
+**Make sure that value of `--media-dir` argument is a relative URL**
+
+`./manage.py load_v1_users --password iogt`
+
+
 Run with the help flag to see more options:
 ```
 ./manage load_v1_db --help
+./manage.py load_v1_users --help
 ```
 
 ## Test / Staging / Production
