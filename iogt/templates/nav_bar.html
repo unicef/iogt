@@ -2,10 +2,12 @@
 {% load static wagtailimages_tags menu_tags home_tags generic_components image_tags %}
 
 <nav class="nav-bar">
-    <div class="nav-bar__wrap" style="{% mobile_navbar_style %}">
+{% navbar_background_color as navbar_background_color %}
+{% navbar_font_color as navbar_font_color %}
+    <div class="nav-bar__wrap" style="background-color:{{navbar_background_color}}">
         {% for item in menu_items %}
             {% get_menu_icon item as menu_icon %}
-            {% primary_button title=item.text icon_path=menu_icon href=item.href font_color=item.color_text background_color=item.color is_svg_icon=True %}
+            {% primary_button title=item.text icon_path=menu_icon href=item.href font_color=navbar_font_color background_color=navbar_background_color is_svg_icon=True %}
         {% endfor %}
     </div>
 </nav>

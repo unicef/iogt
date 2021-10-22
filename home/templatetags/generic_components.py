@@ -60,6 +60,12 @@ def language_picker_style():
 
 
 @register.simple_tag
-def mobile_navbar_style():
+def navbar_background_color():
     theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
-    return f"background-color:{theme_settings.mobile_navbar_background_color}"
+    return f"{theme_settings.navbar_background_color}"
+
+
+@register.simple_tag
+def navbar_font_color():
+    theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
+    return f"{theme_settings.navbar_font_color}"
