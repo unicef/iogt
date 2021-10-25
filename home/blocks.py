@@ -100,11 +100,7 @@ class EmbeddedQuestionnaireChooserBlock(blocks.PageChooserBlock):
                 'result_as_percentage': value.result_as_percentage,
             })
         else:
-            if value.direct_display:
-                template = 'blocks/embedded_questionnaire.html'
-            else:
-                template = 'blocks/questionnaire_card.html'
-
+            template = 'blocks/embedded_questionnaire.html'
             paginator = SkipLogicPaginator(value.get_form_fields(), {}, {})
             step = paginator.page(1)
             if hasattr(value, 'multi_step') and value.multi_step:
