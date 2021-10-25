@@ -1372,7 +1372,10 @@ class Command(BaseCommand):
             for poll in polls:
                 home_featured_content.append({
                     'type': 'embedded_poll',
-                    'value': poll.id,
+                    'value': {
+                        'direct_display': True,
+                        'poll': poll.id,
+                    },
                 })
             home_page.home_featured_content = json.dumps(home_featured_content)
             home_page.save()
@@ -1390,7 +1393,10 @@ class Command(BaseCommand):
             for survey in surveys:
                 home_featured_content.append({
                     'type': 'embedded_survey',
-                    'value': survey.id,
+                    'value': {
+                        'direct_display': survey.specific.direct_display,
+                        'survey': survey.id,
+                    },
                 })
             home_page.home_featured_content = json.dumps(home_featured_content)
             home_page.save()

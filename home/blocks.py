@@ -138,6 +138,52 @@ class EmbeddedQuestionnaireChooserBlock(blocks.PageChooserBlock):
         icon = 'form'
 
 
+class EmbeddedQuestionnaireBlock(blocks.StructBlock):
+    direct_display = blocks.BooleanBlock(required=False)
+
+
+class EmbeddedPollBlock(EmbeddedQuestionnaireBlock):
+    poll = EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')
+
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context)
+
+        context.update({'page': value['poll']})
+
+        return context
+
+    class Meta:
+        template = 'blocks/embedded_questionnaire_block.html'
+
+
+class EmbeddedSurveyBlock(EmbeddedQuestionnaireBlock):
+    survey = EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')
+
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context)
+
+        context.update({'page': value['survey']})
+
+        return context
+
+    class Meta:
+        template = 'blocks/embedded_questionnaire_block.html'
+
+
+class EmbeddedQuizBlock(EmbeddedQuestionnaireBlock):
+    quiz = EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Quiz')
+
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context)
+
+        context.update({'page': value['quiz']})
+
+        return context
+
+    class Meta:
+        template = 'blocks/embedded_questionnaire_block.html'
+
+
 class PageButtonBlock(blocks.StructBlock):
     page = blocks.PageChooserBlock()
     text = blocks.CharBlock(required=False, max_length=255)
