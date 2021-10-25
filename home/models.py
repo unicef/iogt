@@ -940,6 +940,7 @@ class V1ToV2ObjectMap(models.Model):
         v1_to_v2_object_map = cls(content_object=content_object, v1_object_id=v1_object_id)
         v1_to_v2_object_map.save()
 
+    @classmethod
     def get_v1_id(cls, klass, object_id, extra=None):
         content_type = ContentType.objects.get_for_model(klass)
 

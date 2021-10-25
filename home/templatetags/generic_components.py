@@ -16,7 +16,7 @@ def primary_button(title, extra_classnames='', href=None, icon_path=None,
     font_color = font_color or theme_settings.primary_button_font_color
     background_color = background_color or theme_settings.primary_button_background_color
 
-    if is_svg_icon and font_color:
+    if icon_path and is_svg_icon and font_color:
         icon_path = svg_to_png_url(icon_path, fill_color=font_color)
 
     return {

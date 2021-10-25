@@ -52,7 +52,7 @@ class Command(BaseCommand):
         parser.add_argument(
             '--media-dir',
             required=True,
-            help='Path to IoGT v1 media directory'
+            help='**RELATIVE Path** to IoGT v1 media directory'
         )
         parser.add_argument(
             '--skip-locales',
@@ -1177,22 +1177,57 @@ class Command(BaseCommand):
         self.stdout.write('Articles featured in sections migrated')
 
     def migrate_featured_articles_for_homepage(self):
-        cur = self.db_query(f'select * from core_articlepage where featured_in_homepage = true')
-        for row in cur:
-            v2_article = self.v1_to_v2_page_map.get(row['page_ptr_id'])
-            if v2_article:
-                home_page = self.home_page.get_translation_or_none(v2_article.locale)
-                home_featured_content = []
-                for hfc in home_page.home_featured_content:
-                    home_featured_content.append({
-                        'type': 'article',
-                        'value': hfc.value.id,
-                    })
-                home_featured_content.append({'type': 'article', 'value': v2_article.id})
-                home_page.home_featured_content = json.dumps(home_featured_content)
-                home_page.save()
-        cur.close()
-        self.stdout.write('Articles featured in home page migrated')
+        locale_cur = self.db_query(f"select * from core_sitelanguage")
+        for locale_row in locale_cur:
+            articles_cur = self.db_query(
+                f"select * "
+                f"from core_articlepage cap, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl "
+                f"where cap.page_ptr_id = wcp.id "
+                f"and wcp.id = clr.page_id "
+                f"and clr.language_id = csl.id "
+                f"and wcp.live = true "
+                f"and csl.locale = '{locale_row['locale']}' "
+                f"order by left(wcp.path, 16) "
+            )
+            articles_list = []
+            for article_row in articles_cur:
+                translated_from_page_id = self.page_translation_map.get(article_row['page_ptr_id'])
+                if translated_from_page_id:
+                    eng_article_cur = self.db_query(
+                        f'select * from core_articlepage where page_ptr_id = {translated_from_page_id}')
+                    eng_article_row = eng_article_cur.fetchone()
+                    eng_article_cur.close()
+                else:
+                    eng_article_row = {'featured_in_homepage_start_date': None}
+
+                featured_in_homepage_start_date = (
+                        article_row['featured_in_homepage_start_date'] or
+                        eng_article_row['featured_in_homepage_start_date']
+                )
+
+                if featured_in_homepage_start_date:
+                    article = self.v1_to_v2_page_map.get(article_row['page_ptr_id'])
+                    if article:
+                        article.featured_in_homepage_start_date = featured_in_homepage_start_date
+                        articles_list.append(article)
+
+            articles_cur.close()
+
+            articles_list = sorted(articles_list, key=lambda x: x.featured_in_homepage_start_date, reverse=True)
+            for article in sorted(articles_list, key=lambda x: x.path[:16]):
+                self.add_article_as_featured_content_in_home_page(article)
+
+        locale_cur.close()
+
+    def add_article_as_featured_content_in_home_page(self, article):
+        home_page = self.home_page.get_translation_or_none(article.locale)
+        if home_page:
+            home_featured_content = home_page.home_featured_content.stream_data
+            home_featured_content.append({
+                'type': 'article',
+                'value': article.id,
+            })
+            home_page.save()
 
     def attach_banners_to_home_page(self):
         sql = "select * " \
