@@ -1211,7 +1211,8 @@ class Command(BaseCommand):
 
             articles_cur.close()
 
-            for article in sorted(articles_list, key=lambda a: (a.path[:16], a.featured_in_homepage_start_date)):
+            articles_list = sorted(articles_list, key=lambda x: x.featured_in_homepage_start_date, reverse=True)
+            for article in sorted(articles_list, key=lambda x: x.path[:16]):
                 self.add_article_as_featured_content_in_home_page(article)
 
         locale_cur.close()
