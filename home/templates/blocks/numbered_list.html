@@ -2,6 +2,6 @@
 
 <ol>
     {% for block in value %}
-        <li>{% include_block block %}</li>
+        <li>{% autoescape off %}{% include_block block %}{% endautoescape %}</li>
     {% endfor %}
 </ol>
