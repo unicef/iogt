@@ -36,7 +36,7 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.models import Image
 from wagtail.search import index
 from wagtailmarkdown.blocks import MarkdownBlock
-from wagtailmenus.models import AbstractFlatMenuItem, BooleanField
+from wagtailmenus.models import AbstractFlatMenuItem, BooleanField, AbstractFlatMenu
 from wagtailsvg.models import Svg
 from wagtailsvg.edit_handlers import SvgChooserPanel
 
@@ -689,9 +689,36 @@ class CacheSettings(BaseSetting):
         verbose_name = "Cache settings"
 
 
+class TranslatedFlatMenu(AbstractFlatMenu):
+    handle = models.SlugField(
+        verbose_name=_('handle'),
+        max_length=100,
+        help_text=_(
+            'The handle must be written in this format "[language]_[menu name of your choice]". '
+            'For example, "en_menu1". If you would like the menu to be visible on the website '
+            'you must add "_live" to the end, eg "en_menu1_live". '
+            'Only one menu per language can be visible at one time.'
+        )
+    )
+
+    @classmethod
+    def create_from_collected_values(cls, contextual_vals, option_vals):
+        pass
+
+
 class IogtFlatMenuItem(AbstractFlatMenuItem):
+    link_url = models.CharField(
+        verbose_name=_('link to a custom URL'),
+        max_length=255,
+        blank=True,
+        null=True,
+        help_text=_("If you are linking back to a URL on your own IoGT site, "
+                    "be sure to remove the domain and everything before it. "
+                    "For example 'http://sd.goodinternet.org/url/' should instead be '/url/'.")
+    )
+
     menu = ParentalKey(
-        'wagtailmenus.FlatMenu',
+        'TranslatedFlatMenu',
         on_delete=models.CASCADE,
         related_name="iogt_flat_menu_items",
     )
