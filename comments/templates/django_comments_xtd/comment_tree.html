@@ -14,8 +14,14 @@
             <div>
                 <div class='individual-comment__data'>
                     <span>
-                        <p>{{ item.comment.user_name.0|capfirst }}</p>
-                        <p>{{ item.comment.user_name }}</p>
+                        {% if item.comment.user_name == 'anonymous' %}
+                            <p>A</p>
+                            <p>Anonymous</p>
+                        {% else %}
+                            <p>{{ item.comment.user.username.0|capfirst }}</p>
+                            <p>{{ item.comment.user.username }}</p>
+                        {% endif %}
+
                     </span>
                     <p class='individual-comment__date'>{{ item.comment.submit_date|naturaltime }}</p>
                 </div>
