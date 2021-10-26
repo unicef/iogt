@@ -705,13 +705,13 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
                     'Specify an icon here to override this.')
     )
 
-    color = models.CharField(
+    background_color = models.CharField(
         max_length=255,
         blank=True,
         null=True
     )
 
-    color_text = models.CharField(
+    font_color = models.CharField(
         max_length=255,
         blank=True,
         null=True

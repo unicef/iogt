@@ -69,3 +69,13 @@ def navbar_background_color():
 def navbar_font_color():
     theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
     return f"{theme_settings.navbar_font_color}"
+
+
+@register.simple_tag
+def menu_item_font_color(menu_item):
+    return menu_item.font_color or navbar_font_color
+
+
+@register.simple_tag
+def menu_item_background_color(menu_item):
+    return menu_item.background_color or navbar_background_color
