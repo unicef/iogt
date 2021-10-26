@@ -161,6 +161,7 @@ class Command(BaseCommand):
         self.migrate_featured_articles_for_homepage()
         self.add_polls_from_polls_index_page_to_footer_index_page_as_page_link_page()
         self.add_surveys_from_surveys_index_page_to_footer_index_page_as_page_link_page()
+        self.mark_pages_which_are_not_translated_in_v1_as_draft()
         self.stop_translations()
 
     def create_home_page(self, root):
@@ -1393,3 +1394,6 @@ class Command(BaseCommand):
                 footer_index_page.add_child(instance=page_link_page)
 
         self.stdout.write('Added surveys from survey index page to footer index page as page link page.')
+
+    def mark_pages_which_are_not_translated_in_v1_as_draft(self):
+        Page.objects.filter(alias_of__isnull=False).update(live=False)
