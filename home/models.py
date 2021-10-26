@@ -705,22 +705,24 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
                     'Specify an icon here to override this.')
     )
 
-    color = models.CharField(
+    background_color = models.CharField(
         max_length=255,
         blank=True,
-        null=True
+        null=True,
+        help_text=_('The background color of the flat menu item on Desktop + Mobile')
     )
 
-    color_text = models.CharField(
+    font_color = models.CharField(
         max_length=255,
         blank=True,
-        null=True
+        null=True,
+        help_text=_('The font color of the flat menu item on Desktop + Mobile')
     )
 
     panels = AbstractFlatMenuItem.panels + [
         SvgChooserPanel('icon'),
-        FieldPanel('color'),
-        FieldPanel('color_text')
+        FieldPanel('background_color'),
+        FieldPanel('font_color')
     ]
 
 
