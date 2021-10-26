@@ -32,7 +32,6 @@
 
 @media only screen and (max-width: 767px) {
     .nav-bar a {
-        color: white !important;
         background: inherit !important;
         margin: 0;
         align-items: center;

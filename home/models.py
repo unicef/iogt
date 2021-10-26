@@ -921,9 +921,12 @@ class ThemeSettings(BaseSetting):
         null=True, blank=True, help_text='The background color of the primary button as a HEX code', max_length=8,
         default='#f0f0f0')
 
-    mobile_navbar_background_color = models.CharField(
-        null=True, blank=True, help_text='The background color of the mobile-only navbar as a HEX code', max_length=8,
+    navbar_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the navbar as a HEX code', max_length=8,
         default='#0094F4')
+    navbar_font_color = models.CharField(
+        null=True, blank=True, help_text='The font color of the navbar as a HEX code', max_length=8,
+        default='#FFFFFF')
 
 
 class V1ToV2ObjectMap(models.Model):
