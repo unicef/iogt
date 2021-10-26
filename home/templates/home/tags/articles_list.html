@@ -8,6 +8,9 @@
                 <a class="related-articles-link" href="{% pageurl article %}">
                     <div>
                         <p> {{ article.title }}</p>
+                        {% if article.get_parent.specific.larger_image_for_top_page_in_list_as_in_v1 and forloop.counter0 == 0 %}
+                            <p> Show as large image </p>
+                        {% endif %}
                         {% if article.specific.index_page_description %}
                             <p><small>{{ article.specific.index_page_description }}</small></p>
                         {% endif %}
