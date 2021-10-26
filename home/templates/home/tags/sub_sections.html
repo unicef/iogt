@@ -1,11 +1,8 @@
 {% load static wagtailcore_tags wagtailimages_tags sass_tags image_tags home_tags %}
 
 {% for sub_section in sub_sections %}
-    <a href="{% pageurl sub_section %}" class='sub-section'>
+    <a href="{% pageurl sub_section %}" class='sub-section {% if sub_section.get_parent.specific.larger_image_for_top_page_in_list_as_in_v1 and forloop.counter0 == 0 %}first-content{% endif %}'>
         {{ sub_section.title }}
-        {% if sub_section.get_parent.specific.larger_image_for_top_page_in_list_as_in_v1 and forloop.counter0 == 0 %}
-            <p> Show as large image </p>
-        {% endif %}
         <div class="overlay-holder {% render_is_content_completed sub_section %}">
             {% image sub_section.specific.lead_image width-320 class='article__lead-img' %}
         </div>
