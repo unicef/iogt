@@ -689,7 +689,8 @@ class CacheSettings(BaseSetting):
         verbose_name = "Cache settings"
 
 
-class TranslatedFlatMenu(AbstractFlatMenu):
+class IogtFlatMenu(AbstractFlatMenu):
+
     handle = models.SlugField(
         verbose_name=_('handle'),
         max_length=100,
@@ -700,10 +701,6 @@ class TranslatedFlatMenu(AbstractFlatMenu):
             'Only one menu per language can be visible at one time.'
         )
     )
-
-    @classmethod
-    def create_from_collected_values(cls, contextual_vals, option_vals):
-        pass
 
 
 class IogtFlatMenuItem(AbstractFlatMenuItem):
@@ -718,7 +715,7 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
     )
 
     menu = ParentalKey(
-        'TranslatedFlatMenu',
+        'IogtFlatMenu',
         on_delete=models.CASCADE,
         related_name="iogt_flat_menu_items",
     )
