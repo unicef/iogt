@@ -148,3 +148,16 @@ class ArticleChooserBlock(PageChooserBlock):
 
     class Meta:
         template = 'blocks/article_page.html'
+
+
+class NumberedListBlock(blocks.ListBlock):
+
+    def render_basic(self, value, context=None):
+        children = format_html_join(
+            '\n', '<li>{0}</li>',
+            [
+                (self.child_block.render(child_value, context=context),)
+                for child_value in value
+            ]
+        )
+        return format_html("<ol>{0}</ol>", children)

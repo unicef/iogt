@@ -47,7 +47,7 @@ from questionnaires.models import Survey, Poll, Quiz
 from .blocks import (MediaBlock, SocialMediaLinkBlock,
                      SocialMediaShareButtonBlock,
                      EmbeddedQuestionnaireChooserBlock,
-                     PageButtonBlock, ArticleChooserBlock)
+                     PageButtonBlock, ArticleChooserBlock, NumberedListBlock)
 from .forms import SectionPageForm
 from .mixins import PageUtilsMixin, TitleIconMixin
 from .utils.image import convert_svg_to_png_bytes
@@ -289,8 +289,7 @@ class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         ('markdown', MarkdownBlock(icon='code')),
         ('image', ImageChooserBlock()),
         ('list', blocks.ListBlock(MarkdownBlock(icon='code'))),
-        ('numbered_list',
-         blocks.ListBlock(MarkdownBlock(icon='code'), template='blocks/numbered_list.html')),
+        ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
         ('page_button', PageButtonBlock()),
         ('embedded_poll',
          EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')),

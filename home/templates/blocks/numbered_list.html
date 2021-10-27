@@ -1,7 +1,0 @@
-{% load wagtailcore_tags %}
-
-<ol>
-    {% for block in value %}
-        <li>{% autoescape off %}{% include_block block %}{% endautoescape %}</li>
-    {% endfor %}
-</ol>
