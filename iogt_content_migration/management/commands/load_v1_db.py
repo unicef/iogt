@@ -1,3 +1,4 @@
+from collections import defaultdict
 from pathlib import Path
 
 from django.core.files import File
@@ -1216,8 +1217,18 @@ class Command(BaseCommand):
             articles_cur.close()
 
             articles_list = sorted(articles_list, key=lambda x: x.featured_in_homepage_start_date, reverse=True)
-            for article in sorted(articles_list, key=lambda x: x.path[:16]):
-                self.add_article_as_featured_content_in_home_page(article)
+            articles_list = sorted(articles_list, key=lambda x: x.path[:16])
+
+            article_groups = defaultdict(list)
+            for article in articles_list:
+                article_groups[article.path[:16]].append(article)
+
+            for k, v in article_groups.items():
+                for article in v:
+                    self.add_article_as_featured_content_in_home_page(article)
+
+                section = models.Section.objects.get(path=k)
+                self.add_section_as_featured_content_in_home_page(section)
 
         locale_cur.close()
 
@@ -1228,6 +1239,19 @@ class Command(BaseCommand):
             home_featured_content.append({
                 'type': 'article',
                 'value': article.id,
+            })
+            home_page.save()
+
+    def add_section_as_featured_content_in_home_page(self, section):
+        home_page = self.home_page.get_translation_or_none(section.locale)
+        if home_page:
+            home_featured_content = home_page.home_featured_content.stream_data
+            home_featured_content.append({
+                'type': 'page_button',
+                'value': {
+                    'page': section.id,
+                    'text': '',
+                },
             })
             home_page.save()
 
