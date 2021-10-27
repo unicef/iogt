@@ -1,5 +1,4 @@
 from collections import defaultdict
-import os
 from pathlib import Path
 
 from django.conf import settings
@@ -81,12 +80,14 @@ class Command(BaseCommand):
         self.image_map = {}
         self.page_translation_map = {}
         self.v1_to_v2_page_map = {}
+        self.post_migration_report_messages = defaultdict(list)
 
         self.clear()
         self.stdout.write('Existing site structure cleared')
 
         root = Page.get_first_root_node()
         self.migrate(root)
+        self.print_post_migration_report()
 
     def clear(self):
         models.PageLinkPage.objects.all().delete()
@@ -401,6 +402,9 @@ class Command(BaseCommand):
                     self.v1_to_v2_page_map.update({
                         row['page_ptr_id']: translated_section
                     })
+                    if row['description'] is None:
+                        self.post_migration_report_messages['sections_with_null_description'].append(
+                            f'title: {translated_section.title}. URL: {translated_section.full_url}.')
 
                 self.stdout.write(f"Translated section, title={row['title']}")
         cur.close()
@@ -436,6 +440,9 @@ class Command(BaseCommand):
         self.v1_to_v2_page_map.update({
             row['page_ptr_id']: section
         })
+        if row['description'] is None:
+            self.post_migration_report_messages['sections_with_null_description'].append(
+                f'title: {section.title}. URL: {section.full_url}.')
         self.stdout.write(f"saved section, title={section.title}")
 
     def migrate_articles(self):
@@ -1460,3 +1467,12 @@ class Command(BaseCommand):
             home_page.save()
 
         self.stdout.write('Added surveys from survey index page to home page featured content.')
+
+    def print_post_migration_report(self):
+        self.stdout.write(self.style.ERROR('====================='))
+        self.stdout.write(self.style.ERROR('POST MIGRATION REPORT'))
+        self.stdout.write(self.style.ERROR('====================='))
+
+        for k, v in self.post_migration_report_messages.items():
+            self.stdout.write(self.style.ERROR(f"===> {k.replace('_', ' ').upper()}"))
+            self.stdout.write(self.style.ERROR('\n'.join(v)))
