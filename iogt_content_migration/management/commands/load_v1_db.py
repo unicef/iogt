@@ -252,7 +252,9 @@ class Command(BaseCommand):
         content_type = self.find_content_type_id('wagtaildocs', 'document')
         for row in cur:
             if not row['file']:
-                self.stdout.write(f'Document file path not found, id={row["id"]}')
+                self.post_migration_report_messages['document_file_not_found'].append(
+                    f'Document file path not found, id={row["id"]}'
+                )
                 continue
 
             file = self.open_file(row['file'])
@@ -276,7 +278,9 @@ class Command(BaseCommand):
         content_type = self.find_content_type_id('core', 'molomedia')
         for row in cur:
             if not row['file']:
-                self.stdout.write(f'Media file path not found, id={row["id"]}')
+                self.post_migration_report_messages['media_file_not_found'].append(
+                    f'Media file path not found, id={row["id"]}'
+                )
                 continue
 
             file = self.open_file(row['file'])
@@ -304,7 +308,9 @@ class Command(BaseCommand):
         content_type = self.find_content_type_id('wagtailimages', 'image')
         for row in cur:
             if not row['file']:
-                self.stdout.write(f'Image file path not found, id={row["id"]}')
+                self.post_migration_report_messages['image_file_not_found'].append(
+                    f'Image file path not found, id={row["id"]}'
+                )
                 continue
 
             image_file = self.open_file(row['file'])
@@ -341,7 +347,9 @@ class Command(BaseCommand):
         try:
             return open(file_path, 'rb')
         except:
-            self.stdout.write(f"File not found: {file_path}")
+            self.post_migration_report_messages['file_not_found'].append(
+                f"File not found: {file_path}"
+            )
 
     def find_tags(self, content_type, object_id):
         tags_query = 'select t.name from taggit_tag t join taggit_taggeditem ti on t.id = ti.tag_id where ti.content_type_id = {} and ti.object_id = {}'
@@ -374,7 +382,9 @@ class Command(BaseCommand):
                 try:
                     self.translate_page(locale=locale, page=section)
                 except:
-                    self.stdout.write(f"Unable to translate section, title={row['title']}")
+                    self.post_migration_report_messages['untranslated_sections'].append(
+                        f"Unable to translate section, title={row['title']}"
+                    )
                     continue
 
                 translated_section = section.get_translation_or_none(locale)
@@ -470,7 +480,9 @@ class Command(BaseCommand):
                 try:
                     self.translate_page(locale=locale, page=article)
                 except:
-                    self.stdout.write(f"Unable to translate article, title={row['title']}")
+                    self.post_migration_report_messages['untranslated_articles'].append(
+                        f"Unable to translate article, title={row['title']}"
+                    )
                     continue
 
                 translated_article = article.get_translation_or_none(locale)
@@ -554,7 +566,9 @@ class Command(BaseCommand):
                 row['page_ptr_id']: article
             })
         except Page.DoesNotExist:
-            self.stdout.write(f"Skipping page with missing parent: title={row['title']}")
+            self.post_migration_report_messages['articles'].append(
+                f"Skipping article with missing parent: title={row['title']}"
+            )
             return
         self.stdout.write(f"saved article, title={article.title}")
 
@@ -569,14 +583,18 @@ class Command(BaseCommand):
                 if image:
                     block['value'] = image.id
                 else:
-                    self.stdout.write(f"Article (title={row['title']}) has image with invalid id {block['value']}")
+                    self.post_migration_report_messages['invalid_image_id'].append(
+                        f"title={row['title']} has image with invalid id {block['value']}"
+                    )
                     block['value'] = None
             elif block['type'] == 'media':
                 media = self.media_map.get(block['value'])
                 if media:
                     block['value'] = media.id
                 else:
-                    self.stdout.write(f"Article (title={row['title']}) has media with invalid id {block['value']}")
+                    self.post_migration_report_messages['invalid_media_id'].append(
+                        f"title={row['title']} has media with invalid id {block['value']}"
+                    )
                     block['value'] = None
             elif block['type'] == 'page':
                 block['type'] = 'page_button'
@@ -585,7 +603,9 @@ class Command(BaseCommand):
                     block['value'] = {'page': page.id, 'text': ''}
                 else:
                     block['value'] = {'page': None, 'text': ''}
-                    self.stdout.write(f'Unable to attach v2 page for {type_[:-1]}, title={row["title"]}')
+                    self.post_migration_report_messages['invalid_page_id'].append(
+                        f'Unable to attach v2 page for {type_[:-1]}, title={row["title"]}'
+                    )
 
         return v2_body
 
@@ -625,7 +645,9 @@ class Command(BaseCommand):
                 try:
                     self.translate_page(locale=locale, page=banner)
                 except:
-                    self.stdout.write(f"Unable to translate banner, title={row['title']}")
+                    self.post_migration_report_messages['untranslated_banners'].append(
+                        f"Unable to translate banner, title={row['title']}"
+                    )
                     continue
 
                 translated_banner = banner.get_translation_or_none(locale)
@@ -683,7 +705,9 @@ class Command(BaseCommand):
         if v1_banner_link_page_id:
             v2_page = self.v1_to_v2_page_map.get(v1_banner_link_page_id)
             if not v2_page:
-                self.stdout.write(f'Unable to attach v2 page for banner, title={row["title"]}')
+                self.post_migration_report_messages['banner_page_link'].append(
+                    f'Unable to attach v2 page for banner, title={row["title"]}'
+                )
 
         return v2_page
 
@@ -712,7 +736,9 @@ class Command(BaseCommand):
                 try:
                     self.translate_page(locale=locale, page=footer)
                 except:
-                    self.stdout.write(f"Unable to translate footer, title={row['title']}")
+                    self.post_migration_report_messages['untranslated_footers'].append(
+                        f"Unable to translate footer, title={row['title']}"
+                    )
                     continue
 
                 translated_footer = footer.get_translation_or_none(locale)
@@ -833,7 +859,9 @@ class Command(BaseCommand):
                 try:
                     self.translate_page(locale=locale, page=poll)
                 except Exception as e:
-                    self.stdout.write(f"Unable to translate poll, title={row['title']}")
+                    self.post_migration_report_messages['untranslated_polls'].append(
+                        f"Unable to translate poll, title={row['title']}"
+                    )
                     continue
 
                 translated_poll = poll.get_translation_or_none(locale)
@@ -893,7 +921,9 @@ class Command(BaseCommand):
             poll.save()
             V1ToV2ObjectMap.create_map(content_object=poll, v1_object_id=row['page_ptr_id'])
         except Exception as e:
-            self.stdout.write(f"Unable to save poll, title={row['title']}")
+            self.post_migration_report_messages['polls'].append(
+                f"Unable to save poll, title={row['title']}"
+            )
             return
 
         self.migrate_poll_questions(poll, row)
@@ -932,7 +962,9 @@ class Command(BaseCommand):
             else:
                 field_type = 'radio'
         else:
-            self.stdout.write(f'Unable to determine field type for poll={poll_row["title"]}.')
+            self.post_migration_report_messages['poll_questions'].append(
+                f'Unable to determine field type for poll={poll_row["title"]}.'
+            )
             return
 
         choices = '|'.join(choices)
@@ -986,7 +1018,10 @@ class Command(BaseCommand):
                 try:
                     self.translate_page(locale=locale, page=survey)
                 except Exception as e:
-                    self.stdout.write(f"Unable to translate survey, title={row['title']}")
+                    self.post_migration_report_messages['untranslated_surveys'].append(
+                        f"Unable to translate survey, title={row['title']}"
+                    )
+
                     continue
 
                 translated_survey = survey.get_translation_or_none(locale)
@@ -1013,7 +1048,9 @@ class Command(BaseCommand):
                     translated_survey.save()
 
                     if row['submit_text'] and len(row['submit_text']) > 40:
-                        self.stdout.write(f"Truncated survey submit button text, title={row['title']}")
+                        self.post_migration_report_messages['untranslated_surveys'].append(
+                            f"Truncated survey submit button text, title={row['title']}"
+                        )
 
                     V1ToV2ObjectMap.create_map(content_object=translated_survey, v1_object_id=row['page_ptr_id'])
 
@@ -1060,7 +1097,9 @@ class Command(BaseCommand):
                 self.stdout.write(f"Truncated survey submit button text, title={row['title']}")
             V1ToV2ObjectMap.create_map(content_object=survey, v1_object_id=row['page_ptr_id'])
         except Exception as e:
-            self.stdout.write(f"Unable to save survey, title={row['title']}")
+            self.post_migration_report_messages['surveys'].append(
+                f"Unable to save survey, title={row['title']}"
+            )
             return
 
         self.migrate_survey_questions(survey, row)
@@ -1141,7 +1180,9 @@ class Command(BaseCommand):
             skip_logic_next_actions = [logic['value']['skip_logic'] for logic in json.loads(row['skip_logic'])]
             if not survey_row['multi_step'] and (
                     'end' in skip_logic_next_actions or 'question' in skip_logic_next_actions):
-                self.stdout.write(f'skip logic without multi step')
+                self.post_migration_report_messages['survey_multistep'].append(
+                    f'skip logic without multi step'
+                )
             self.stdout.write(f"saved survey question, label={row['label']}")
 
     def _get_iso_locale(self, locale):
@@ -1339,7 +1380,10 @@ class Command(BaseCommand):
                 v2_article.body = self.map_article_body(row)
                 v2_article.save()
             else:
-                self.stdout.write(f'Unable to add article body, title={row["title"]}')
+                self.post_migration_report_messages['articles'].append(
+                    f'Unable to add article body, title={row["title"]}'
+                )
+
         cur.close()
 
     def fix_footers_body(self):
