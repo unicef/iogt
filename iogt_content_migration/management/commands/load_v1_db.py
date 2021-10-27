@@ -1263,8 +1263,12 @@ class Command(BaseCommand):
                 article_groups[article.path[:16]].append(article)
 
             for k, v in article_groups.items():
-                for article in v:
-                    self.add_article_as_featured_content_in_home_page(article)
+                for i, article in enumerate(v):
+                    if i < 5:
+                        self.add_article_as_featured_content_in_home_page(article)
+                    else:
+                        self.post_migration_report_messages['ommitted_old_featured_article'].append(
+                            f'title: {article.title}. URL: {article.full_url}. featured since: {article.featured_in_homepage_start_date}')
 
                 section = models.Section.objects.get(path=k)
                 self.add_section_as_featured_content_in_home_page(section)
