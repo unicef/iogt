@@ -161,6 +161,8 @@ class Command(BaseCommand):
         self.migrate_featured_articles_for_homepage()
         self.add_polls_from_polls_index_page_to_footer_index_page_as_page_link_page()
         self.add_surveys_from_surveys_index_page_to_footer_index_page_as_page_link_page()
+        self.add_polls_from_polls_index_page_to_home_page_featured_content()
+        self.add_surveys_from_surveys_index_page_to_home_page_featured_content()
         self.stop_translations()
 
     def create_home_page(self, root):
@@ -1395,3 +1397,45 @@ class Command(BaseCommand):
                 footer_index_page.add_child(instance=page_link_page)
 
         self.stdout.write('Added surveys from survey index page to footer index page as page link page.')
+
+    def add_polls_from_polls_index_page_to_home_page_featured_content(self):
+        self.poll_index_page.refresh_from_db()
+        self.home_page.refresh_from_db()
+        poll_index_pages = self.poll_index_page.get_translations(inclusive=True)
+        for poll_index_page in poll_index_pages:
+            home_page = self.home_page.get_translation_or_none(poll_index_page.locale)
+            home_featured_content = home_page.home_featured_content.stream_data
+            polls = poll_index_page.get_children().live()
+            for poll in polls:
+                home_featured_content.append({
+                    'type': 'embedded_poll',
+                    'value': {
+                        'direct_display': True,
+                        'poll': poll.id,
+                    },
+                })
+            home_page.home_featured_content = json.dumps(home_featured_content)
+            home_page.save()
+
+        self.stdout.write('Added polls from poll index page to home page featured content.')
+
+    def add_surveys_from_surveys_index_page_to_home_page_featured_content(self):
+        self.survey_index_page.refresh_from_db()
+        self.home_page.refresh_from_db()
+        survey_index_pages = self.survey_index_page.get_translations(inclusive=True)
+        for survey_index_page in survey_index_pages:
+            home_page = self.home_page.get_translation_or_none(survey_index_page.locale)
+            home_featured_content = home_page.home_featured_content.stream_data
+            surveys = survey_index_page.get_children().live()
+            for survey in surveys:
+                home_featured_content.append({
+                    'type': 'embedded_survey',
+                    'value': {
+                        'direct_display': survey.specific.direct_display,
+                        'survey': survey.id,
+                    },
+                })
+            home_page.home_featured_content = json.dumps(home_featured_content)
+            home_page.save()
+
+        self.stdout.write('Added surveys from survey index page to home page featured content.')

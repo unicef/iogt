@@ -44,10 +44,10 @@ from messaging.blocks import ChatBotButtonBlock
 from comments.models import CommentableMixin
 from iogt.views import check_user_session
 from questionnaires.models import Survey, Poll, Quiz
-from .blocks import (MediaBlock, SocialMediaLinkBlock,
-                     SocialMediaShareButtonBlock,
-                     EmbeddedQuestionnaireChooserBlock,
-                     PageButtonBlock, ArticleChooserBlock)
+from .blocks import (
+    MediaBlock, SocialMediaLinkBlock, SocialMediaShareButtonBlock, PageButtonBlock, ArticleChooserBlock,
+    EmbeddedPollBlock, EmbeddedSurveyBlock, EmbeddedQuizBlock,
+)
 from .forms import SectionPageForm
 from .mixins import PageUtilsMixin, TitleIconMixin
 from .utils.image import convert_svg_to_png_bytes
@@ -62,9 +62,9 @@ class HomePage(Page):
 
     home_featured_content = StreamField([
         ('page_button', PageButtonBlock()),
-        ('embedded_poll', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')),
-        ('embedded_survey', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')),
-        ('embedded_quiz', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Quiz')),
+        ('embedded_poll', EmbeddedPollBlock()),
+        ('embedded_survey', EmbeddedSurveyBlock()),
+        ('embedded_quiz', EmbeddedQuizBlock()),
         ('article', ArticleChooserBlock()),
     ], null=True)
 
@@ -294,10 +294,9 @@ class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         ('numbered_list',
          blocks.ListBlock(blocks.CharBlock(label="Item"), template="blocks/numbered_list.html")),
         ('page_button', PageButtonBlock()),
-        ('embedded_poll',
-         EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')),
-        ('embedded_survey', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')),
-        ('embedded_quiz', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Quiz')),
+        ('embedded_poll', EmbeddedPollBlock()),
+        ('embedded_survey', EmbeddedSurveyBlock()),
+        ('embedded_quiz', EmbeddedQuizBlock()),
         ('media', MediaBlock(icon='media')),
         ('chat_bot', ChatBotButtonBlock()),
     ])
