@@ -158,7 +158,6 @@ class Command(BaseCommand):
         self.fix_banner_link_page()
         self.attach_banners_to_home_page()
         self.migrate_recommended_articles_for_article()
-        self.migrate_featured_articles_for_section()
         self.migrate_featured_articles_for_homepage()
         self.add_polls_from_polls_index_page_to_footer_index_page_as_page_link_page()
         self.add_surveys_from_surveys_index_page_to_footer_index_page_as_page_link_page()
@@ -1167,17 +1166,6 @@ class Command(BaseCommand):
                 cur.close()
         article_cur.close()
         self.stdout.write('Recommended articles migrated')
-
-    def migrate_featured_articles_for_section(self):
-        cur = self.db_query(f'select * from core_articlepage where featured_in_section = true')
-        for row in cur:
-            v2_article = self.v1_to_v2_page_map.get(row['page_ptr_id'])
-            if v2_article:
-                section = v2_article.get_parent()
-                if isinstance(section.specific, models.Section):
-                    models.FeaturedContent.objects.create(source=section, content=v2_article)
-        cur.close()
-        self.stdout.write('Articles featured in sections migrated')
 
     def migrate_featured_articles_for_homepage(self):
         locale_cur = self.db_query(f"select * from core_sitelanguage")
