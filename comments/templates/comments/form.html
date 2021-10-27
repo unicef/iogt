@@ -26,6 +26,11 @@
 
 
         {% if not request.user.is_authenticated or not request.user.email %}
+            <div class="row form-group">
+                <div class="col-md-7">
+                    {{ form.canned_responses }}
+                </div>
+            </div>
             <div class="row form-group {% if 'email' in form.errors %}has-danger{% endif %}">
                 <label for="id_email" class="col-form-label col-md-3 text-right">
                     {#                {{ form.email.label }}#}
