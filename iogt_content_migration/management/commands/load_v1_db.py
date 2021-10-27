@@ -1,6 +1,8 @@
 from collections import defaultdict
+import os
 from pathlib import Path
 
+from django.conf import settings
 from django.core.files import File
 from django.core.management.base import BaseCommand
 from wagtail.core.models import Page, Site, Locale, Collection, PageRevision
@@ -10,6 +12,7 @@ from wagtail.images.models import Image
 from wagtail_localize.models import Translation
 from wagtail_localize.views.submit_translations import TranslationCreator
 from wagtailmedia.models import Media
+from wagtailsvg.models import Svg
 
 import home.models as models
 from comments.models import CommentStatus
@@ -1387,11 +1390,14 @@ class Command(BaseCommand):
     def add_polls_from_polls_index_page_to_footer_index_page_as_page_link_page(self):
         self.poll_index_page.refresh_from_db()
         self.footer_index_page.refresh_from_db()
+        svg_title = 'clip board pen'
+        file = File(open(Path(settings.BASE_DIR) / 'iogt/static/icons/clip_board_pen.svg'), name=svg_title)
+        icon = Svg.objects.create(title=svg_title, file=file)
         poll_index_pages = self.poll_index_page.get_translations(inclusive=True)
         for poll_index_page in poll_index_pages:
             polls = poll_index_page.get_children()
             for poll in polls:
-                page_link_page = models.PageLinkPage(title=poll.title, page=poll)
+                page_link_page = models.PageLinkPage(title=poll.title, page=poll, icon=icon)
                 footer_index_page = self.footer_index_page.get_translation_or_none(poll.locale)
                 footer_index_page.add_child(instance=page_link_page)
 
@@ -1400,11 +1406,14 @@ class Command(BaseCommand):
     def add_surveys_from_surveys_index_page_to_footer_index_page_as_page_link_page(self):
         self.survey_index_page.refresh_from_db()
         self.footer_index_page.refresh_from_db()
+        svg_title = 'loud speaker'
+        file = File(open(Path(settings.BASE_DIR) / 'iogt/static/icons/loud_speaker.svg'), name='loud speaker')
+        icon = Svg.objects.create(title=svg_title, file=file)
         survey_index_page = self.survey_index_page.get_translations(inclusive=True)
         for survey_index_page in survey_index_page:
             surveys = survey_index_page.get_children()
             for survey in surveys:
-                page_link_page = models.PageLinkPage(title=survey.title, page=survey)
+                page_link_page = models.PageLinkPage(title=survey.title, page=survey, icon=icon)
                 footer_index_page = self.footer_index_page.get_translation_or_none(survey.locale)
                 footer_index_page.add_child(instance=page_link_page)
 
