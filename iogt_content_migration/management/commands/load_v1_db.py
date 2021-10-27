@@ -385,6 +385,7 @@ class Command(BaseCommand):
                     translated_section.search_description = row['search_description']
                     translated_section.seo_title = row['seo_title']
                     translated_section.font_color = self.get_color_hex(row['extra_style_hints']) or section.font_color
+                    translated_section.larger_image_for_top_page_in_list_as_in_v1 = True
                     translated_section.save()
                     content_type = self.find_content_type_id('core', 'sectionpage')
                     tags = self.find_tags(content_type, row['id'])
@@ -418,6 +419,7 @@ class Command(BaseCommand):
             search_description=row['search_description'],
             seo_title=row['seo_title'],
             font_color=self.get_color_hex(row['extra_style_hints']),
+            larger_image_for_top_page_in_list_as_in_v1=True,
         )
         section.save()
         content_type = self.find_content_type_id('core', 'sectionpage')

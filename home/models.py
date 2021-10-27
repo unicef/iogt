@@ -162,6 +162,7 @@ class Section(Page, PageUtilsMixin, TitleIconMixin):
 
     tags = ClusterTaggableManager(through='SectionTaggedItem', blank=True)
     show_progress_bar = models.BooleanField(default=False)
+    larger_image_for_top_page_in_list_as_in_v1 = models.BooleanField(default=False)
 
     show_in_menus_default = True
 
@@ -174,6 +175,7 @@ class Section(Page, PageUtilsMixin, TitleIconMixin):
         SvgChooserPanel('icon'),
         FieldPanel('background_color'),
         FieldPanel('font_color'),
+        FieldPanel('larger_image_for_top_page_in_list_as_in_v1'),
         MultiFieldPanel([
             InlinePanel('featured_content', max_num=1,
                         label=_("Featured Content")),
