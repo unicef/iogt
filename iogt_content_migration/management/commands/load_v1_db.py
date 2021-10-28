@@ -1124,10 +1124,6 @@ class Command(BaseCommand):
 
     def map_survey_description(self, row, section):
         v1_survey_description = json.loads(row['description'])
-
-        if v1_survey_description and self.has_manually_inserted_links(str(v1_survey_description[0]['value'])):
-            self.generate_manually_inserted_internal_link_warning(section)
-
         v2_survey_description = self._map_body('surveys', row, v1_survey_description, section)
 
         if row['introduction']:
