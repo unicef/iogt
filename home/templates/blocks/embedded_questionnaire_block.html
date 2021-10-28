@@ -1,0 +1,9 @@
+{% load static wagtailcore_tags i18n questionnaires_tags %}
+
+{% if value.direct_display %}
+    <div style="padding-bottom: 10px">
+        {% render_questionnaire_form page %}
+    </div>
+{% else %}
+    {% include 'questionnaires/questionnaire_card.html' %}
+{% endif %}

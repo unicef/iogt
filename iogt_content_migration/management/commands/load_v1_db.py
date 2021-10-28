@@ -1,5 +1,7 @@
+from collections import defaultdict
 from pathlib import Path
 
+from django.conf import settings
 from django.core.files import File
 from django.core.management.base import BaseCommand
 from wagtail.core.models import Page, Site, Locale, Collection, PageRevision
@@ -9,6 +11,7 @@ from wagtail.images.models import Image
 from wagtail_localize.models import Translation
 from wagtail_localize.views.submit_translations import TranslationCreator
 from wagtailmedia.models import Media
+from wagtailsvg.models import Svg
 
 import home.models as models
 from comments.models import CommentStatus
@@ -77,12 +80,14 @@ class Command(BaseCommand):
         self.image_map = {}
         self.page_translation_map = {}
         self.v1_to_v2_page_map = {}
+        self.post_migration_report_messages = defaultdict(list)
 
         self.clear()
         self.stdout.write('Existing site structure cleared')
 
         root = Page.get_first_root_node()
         self.migrate(root)
+        self.print_post_migration_report()
 
     def clear(self):
         models.PageLinkPage.objects.all().delete()
@@ -141,9 +146,9 @@ class Command(BaseCommand):
         self.migrate_media()
         self.migrate_images()
         self.load_page_translation_map()
-        home = self.create_home_page(root)
-        self.translate_home_pages(home)
-        self.create_index_pages(home)
+        self.home_page = self.create_home_page(root)
+        self.translate_home_pages(self.home_page)
+        self.create_index_pages(self.home_page)
         self.migrate_sections()
         self.migrate_articles()
         self.migrate_footers()
@@ -157,10 +162,11 @@ class Command(BaseCommand):
         self.fix_banner_link_page()
         self.attach_banners_to_home_page()
         self.migrate_recommended_articles_for_article()
-        self.migrate_featured_articles_for_section()
         self.migrate_featured_articles_for_homepage()
         self.add_polls_from_polls_index_page_to_footer_index_page_as_page_link_page()
         self.add_surveys_from_surveys_index_page_to_footer_index_page_as_page_link_page()
+        self.add_polls_from_polls_index_page_to_home_page_featured_content()
+        self.add_surveys_from_surveys_index_page_to_home_page_featured_content()
         self.stop_translations()
 
     def create_home_page(self, root):
@@ -246,7 +252,9 @@ class Command(BaseCommand):
         content_type = self.find_content_type_id('wagtaildocs', 'document')
         for row in cur:
             if not row['file']:
-                self.stdout.write(f'Document file path not found, id={row["id"]}')
+                self.post_migration_report_messages['document_file_not_found'].append(
+                    f'Document file path not found, id={row["id"]}'
+                )
                 continue
 
             file = self.open_file(row['file'])
@@ -270,7 +278,9 @@ class Command(BaseCommand):
         content_type = self.find_content_type_id('core', 'molomedia')
         for row in cur:
             if not row['file']:
-                self.stdout.write(f'Media file path not found, id={row["id"]}')
+                self.post_migration_report_messages['media_file_not_found'].append(
+                    f'Media file path not found, id={row["id"]}'
+                )
                 continue
 
             file = self.open_file(row['file'])
@@ -298,7 +308,9 @@ class Command(BaseCommand):
         content_type = self.find_content_type_id('wagtailimages', 'image')
         for row in cur:
             if not row['file']:
-                self.stdout.write(f'Image file path not found, id={row["id"]}')
+                self.post_migration_report_messages['image_file_not_found'].append(
+                    f'Image file path not found, id={row["id"]}'
+                )
                 continue
 
             image_file = self.open_file(row['file'])
@@ -335,7 +347,9 @@ class Command(BaseCommand):
         try:
             return open(file_path, 'rb')
         except:
-            self.stdout.write(f"File not found: {file_path}")
+            self.post_migration_report_messages['file_not_found'].append(
+                f"File not found: {file_path}"
+            )
 
     def find_tags(self, content_type, object_id):
         tags_query = 'select t.name from taggit_tag t join taggit_taggeditem ti on t.id = ti.tag_id where ti.content_type_id = {} and ti.object_id = {}'
@@ -368,7 +382,9 @@ class Command(BaseCommand):
                 try:
                     self.translate_page(locale=locale, page=section)
                 except:
-                    self.stdout.write(f"Unable to translate section, title={row['title']}")
+                    self.post_migration_report_messages['untranslated_sections'].append(
+                        f"Unable to translate section, title={row['title']}"
+                    )
                     continue
 
                 translated_section = section.get_translation_or_none(locale)
@@ -385,6 +401,7 @@ class Command(BaseCommand):
                     translated_section.search_description = row['search_description']
                     translated_section.seo_title = row['seo_title']
                     translated_section.font_color = self.get_color_hex(row['extra_style_hints']) or section.font_color
+                    translated_section.larger_image_for_top_page_in_list_as_in_v1 = True
                     translated_section.save()
                     content_type = self.find_content_type_id('core', 'sectionpage')
                     tags = self.find_tags(content_type, row['id'])
@@ -395,6 +412,9 @@ class Command(BaseCommand):
                     self.v1_to_v2_page_map.update({
                         row['page_ptr_id']: translated_section
                     })
+                    if row['description'] is None:
+                        self.post_migration_report_messages['sections_with_null_description'].append(
+                            f'title: {translated_section.title}. URL: {translated_section.full_url}.')
 
                 self.stdout.write(f"Translated section, title={row['title']}")
         cur.close()
@@ -418,6 +438,7 @@ class Command(BaseCommand):
             search_description=row['search_description'],
             seo_title=row['seo_title'],
             font_color=self.get_color_hex(row['extra_style_hints']),
+            larger_image_for_top_page_in_list_as_in_v1=True,
         )
         section.save()
         content_type = self.find_content_type_id('core', 'sectionpage')
@@ -429,6 +450,9 @@ class Command(BaseCommand):
         self.v1_to_v2_page_map.update({
             row['page_ptr_id']: section
         })
+        if row['description'] is None:
+            self.post_migration_report_messages['sections_with_null_description'].append(
+                f'title: {section.title}. URL: {section.full_url}.')
         self.stdout.write(f"saved section, title={section.title}")
 
     def migrate_articles(self):
@@ -456,7 +480,9 @@ class Command(BaseCommand):
                 try:
                     self.translate_page(locale=locale, page=article)
                 except:
-                    self.stdout.write(f"Unable to translate article, title={row['title']}")
+                    self.post_migration_report_messages['untranslated_articles'].append(
+                        f"Unable to translate article, title={row['title']}"
+                    )
                     continue
 
                 translated_article = article.get_translation_or_none(locale)
@@ -540,7 +566,9 @@ class Command(BaseCommand):
                 row['page_ptr_id']: article
             })
         except Page.DoesNotExist:
-            self.stdout.write(f"Skipping page with missing parent: title={row['title']}")
+            self.post_migration_report_messages['articles'].append(
+                f"Skipping article with missing parent: title={row['title']}"
+            )
             return
         self.stdout.write(f"saved article, title={article.title}")
 
@@ -555,14 +583,18 @@ class Command(BaseCommand):
                 if image:
                     block['value'] = image.id
                 else:
-                    self.stdout.write(f"Article (title={row['title']}) has image with invalid id {block['value']}")
+                    self.post_migration_report_messages['invalid_image_id'].append(
+                        f"title={row['title']} has image with invalid id {block['value']}"
+                    )
                     block['value'] = None
             elif block['type'] == 'media':
                 media = self.media_map.get(block['value'])
                 if media:
                     block['value'] = media.id
                 else:
-                    self.stdout.write(f"Article (title={row['title']}) has media with invalid id {block['value']}")
+                    self.post_migration_report_messages['invalid_media_id'].append(
+                        f"title={row['title']} has media with invalid id {block['value']}"
+                    )
                     block['value'] = None
             elif block['type'] == 'page':
                 block['type'] = 'page_button'
@@ -571,7 +603,9 @@ class Command(BaseCommand):
                     block['value'] = {'page': page.id, 'text': ''}
                 else:
                     block['value'] = {'page': None, 'text': ''}
-                    self.stdout.write(f'Unable to attach v2 page for {type_[:-1]}, title={row["title"]}')
+                    self.post_migration_report_messages['invalid_page_id'].append(
+                        f'Unable to attach v2 page for {type_[:-1]}, title={row["title"]}'
+                    )
 
         return v2_body
 
@@ -611,7 +645,9 @@ class Command(BaseCommand):
                 try:
                     self.translate_page(locale=locale, page=banner)
                 except:
-                    self.stdout.write(f"Unable to translate banner, title={row['title']}")
+                    self.post_migration_report_messages['untranslated_banners'].append(
+                        f"Unable to translate banner, title={row['title']}"
+                    )
                     continue
 
                 translated_banner = banner.get_translation_or_none(locale)
@@ -669,7 +705,9 @@ class Command(BaseCommand):
         if v1_banner_link_page_id:
             v2_page = self.v1_to_v2_page_map.get(v1_banner_link_page_id)
             if not v2_page:
-                self.stdout.write(f'Unable to attach v2 page for banner, title={row["title"]}')
+                self.post_migration_report_messages['banner_page_link'].append(
+                    f'Unable to attach v2 page for banner, title={row["title"]}'
+                )
 
         return v2_page
 
@@ -698,7 +736,9 @@ class Command(BaseCommand):
                 try:
                     self.translate_page(locale=locale, page=footer)
                 except:
-                    self.stdout.write(f"Unable to translate footer, title={row['title']}")
+                    self.post_migration_report_messages['untranslated_footers'].append(
+                        f"Unable to translate footer, title={row['title']}"
+                    )
                     continue
 
                 translated_footer = footer.get_translation_or_none(locale)
@@ -819,7 +859,9 @@ class Command(BaseCommand):
                 try:
                     self.translate_page(locale=locale, page=poll)
                 except Exception as e:
-                    self.stdout.write(f"Unable to translate poll, title={row['title']}")
+                    self.post_migration_report_messages['untranslated_polls'].append(
+                        f"Unable to translate poll, title={row['title']}"
+                    )
                     continue
 
                 translated_poll = poll.get_translation_or_none(locale)
@@ -879,7 +921,9 @@ class Command(BaseCommand):
             poll.save()
             V1ToV2ObjectMap.create_map(content_object=poll, v1_object_id=row['page_ptr_id'])
         except Exception as e:
-            self.stdout.write(f"Unable to save poll, title={row['title']}")
+            self.post_migration_report_messages['polls'].append(
+                f"Unable to save poll, title={row['title']}"
+            )
             return
 
         self.migrate_poll_questions(poll, row)
@@ -918,7 +962,9 @@ class Command(BaseCommand):
             else:
                 field_type = 'radio'
         else:
-            self.stdout.write(f'Unable to determine field type for poll={poll_row["title"]}.')
+            self.post_migration_report_messages['poll_questions'].append(
+                f'Unable to determine field type for poll={poll_row["title"]}.'
+            )
             return
 
         choices = '|'.join(choices)
@@ -972,7 +1018,10 @@ class Command(BaseCommand):
                 try:
                     self.translate_page(locale=locale, page=survey)
                 except Exception as e:
-                    self.stdout.write(f"Unable to translate survey, title={row['title']}")
+                    self.post_migration_report_messages['untranslated_surveys'].append(
+                        f"Unable to translate survey, title={row['title']}"
+                    )
+
                     continue
 
                 translated_survey = survey.get_translation_or_none(locale)
@@ -999,7 +1048,9 @@ class Command(BaseCommand):
                     translated_survey.save()
 
                     if row['submit_text'] and len(row['submit_text']) > 40:
-                        self.stdout.write(f"Truncated survey submit button text, title={row['title']}")
+                        self.post_migration_report_messages['untranslated_surveys'].append(
+                            f"Truncated survey submit button text, title={row['title']}"
+                        )
 
                     V1ToV2ObjectMap.create_map(content_object=translated_survey, v1_object_id=row['page_ptr_id'])
 
@@ -1046,7 +1097,9 @@ class Command(BaseCommand):
                 self.stdout.write(f"Truncated survey submit button text, title={row['title']}")
             V1ToV2ObjectMap.create_map(content_object=survey, v1_object_id=row['page_ptr_id'])
         except Exception as e:
-            self.stdout.write(f"Unable to save survey, title={row['title']}")
+            self.post_migration_report_messages['surveys'].append(
+                f"Unable to save survey, title={row['title']}"
+            )
             return
 
         self.migrate_survey_questions(survey, row)
@@ -1127,7 +1180,9 @@ class Command(BaseCommand):
             skip_logic_next_actions = [logic['value']['skip_logic'] for logic in json.loads(row['skip_logic'])]
             if not survey_row['multi_step'] and (
                     'end' in skip_logic_next_actions or 'question' in skip_logic_next_actions):
-                self.stdout.write(f'skip logic without multi step')
+                self.post_migration_report_messages['survey_multistep'].append(
+                    f'skip logic without multi step'
+                )
             self.stdout.write(f"saved survey question, label={row['label']}")
 
     def _get_iso_locale(self, locale):
@@ -1163,34 +1218,81 @@ class Command(BaseCommand):
         article_cur.close()
         self.stdout.write('Recommended articles migrated')
 
-    def migrate_featured_articles_for_section(self):
-        cur = self.db_query(f'select * from core_articlepage where featured_in_section = true')
-        for row in cur:
-            v2_article = self.v1_to_v2_page_map.get(row['page_ptr_id'])
-            if v2_article:
-                section = v2_article.get_parent()
-                if isinstance(section.specific, models.Section):
-                    models.FeaturedContent.objects.create(source=section, content=v2_article)
-        cur.close()
-        self.stdout.write('Articles featured in sections migrated')
-
     def migrate_featured_articles_for_homepage(self):
-        cur = self.db_query(f'select * from core_articlepage where featured_in_homepage = true')
-        for row in cur:
-            v2_article = self.v1_to_v2_page_map.get(row['page_ptr_id'])
-            if v2_article:
-                home_page = v2_article.get_ancestors().exact_type(models.HomePage).first().specific
-                home_featured_content = []
-                for hfc in home_page.home_featured_content:
-                    home_featured_content.append({
-                        'type': 'article',
-                        'value': hfc.value.id,
-                    })
-                home_featured_content.append({'type': 'article', 'value': v2_article.id})
-                home_page.home_featured_content = json.dumps(home_featured_content)
-                home_page.save()
-        cur.close()
-        self.stdout.write('Articles featured in home page migrated')
+        locale_cur = self.db_query(f"select * from core_sitelanguage")
+        for locale_row in locale_cur:
+            articles_cur = self.db_query(
+                f"select * "
+                f"from core_articlepage cap, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl "
+                f"where cap.page_ptr_id = wcp.id "
+                f"and wcp.id = clr.page_id "
+                f"and clr.language_id = csl.id "
+                f"and wcp.live = true "
+                f"and csl.locale = '{locale_row['locale']}' "
+                f"order by left(wcp.path, 16) "
+            )
+            articles_list = []
+            for article_row in articles_cur:
+                translated_from_page_id = self.page_translation_map.get(article_row['page_ptr_id'])
+                if translated_from_page_id:
+                    eng_article_cur = self.db_query(
+                        f'select * from core_articlepage where page_ptr_id = {translated_from_page_id}')
+                    eng_article_row = eng_article_cur.fetchone()
+                    eng_article_cur.close()
+                else:
+                    eng_article_row = {'featured_in_homepage_start_date': None}
+
+                featured_in_homepage_start_date = (
+                        article_row['featured_in_homepage_start_date'] or
+                        eng_article_row['featured_in_homepage_start_date']
+                )
+
+                if featured_in_homepage_start_date:
+                    article = self.v1_to_v2_page_map.get(article_row['page_ptr_id'])
+                    if article:
+                        article.featured_in_homepage_start_date = featured_in_homepage_start_date
+                        articles_list.append(article)
+
+            articles_cur.close()
+
+            articles_list = sorted(articles_list, key=lambda x: x.featured_in_homepage_start_date, reverse=True)
+            articles_list = sorted(articles_list, key=lambda x: x.path[:16])
+
+            article_groups = defaultdict(list)
+            for article in articles_list:
+                article_groups[article.path[:16]].append(article)
+
+            for k, v in article_groups.items():
+                for article in v:
+                    self.add_article_as_featured_content_in_home_page(article)
+
+                section = models.Section.objects.get(path=k)
+                self.add_section_as_featured_content_in_home_page(section)
+
+        locale_cur.close()
+
+    def add_article_as_featured_content_in_home_page(self, article):
+        home_page = self.home_page.get_translation_or_none(article.locale)
+        if home_page:
+            home_featured_content = home_page.home_featured_content.stream_data
+            home_featured_content.append({
+                'type': 'article',
+                'value': article.id,
+            })
+            home_page.save()
+
+    def add_section_as_featured_content_in_home_page(self, section):
+        home_page = self.home_page.get_translation_or_none(section.locale)
+        if home_page:
+            home_featured_content = home_page.home_featured_content.stream_data
+            home_featured_content.append({
+                'type': 'page_button',
+                'value': {
+                    'page': section.id,
+                    'text': '',
+                },
+            })
+            home_page.save()
 
     def attach_banners_to_home_page(self):
         sql = "select * " \
@@ -1278,7 +1380,10 @@ class Command(BaseCommand):
                 v2_article.body = self.map_article_body(row)
                 v2_article.save()
             else:
-                self.stdout.write(f'Unable to add article body, title={row["title"]}')
+                self.post_migration_report_messages['articles'].append(
+                    f'Unable to add article body, title={row["title"]}'
+                )
+
         cur.close()
 
     def fix_footers_body(self):
@@ -1336,11 +1441,14 @@ class Command(BaseCommand):
     def add_polls_from_polls_index_page_to_footer_index_page_as_page_link_page(self):
         self.poll_index_page.refresh_from_db()
         self.footer_index_page.refresh_from_db()
+        svg_title = 'clip board pen'
+        file = File(open(Path(settings.BASE_DIR) / 'iogt/static/icons/clip_board_pen.svg'), name=svg_title)
+        icon = Svg.objects.create(title=svg_title, file=file)
         poll_index_pages = self.poll_index_page.get_translations(inclusive=True)
         for poll_index_page in poll_index_pages:
             polls = poll_index_page.get_children()
             for poll in polls:
-                page_link_page = models.PageLinkPage(title=poll.title, page=poll)
+                page_link_page = models.PageLinkPage(title=poll.title, page=poll, icon=icon)
                 footer_index_page = self.footer_index_page.get_translation_or_none(poll.locale)
                 footer_index_page.add_child(instance=page_link_page)
 
@@ -1349,12 +1457,66 @@ class Command(BaseCommand):
     def add_surveys_from_surveys_index_page_to_footer_index_page_as_page_link_page(self):
         self.survey_index_page.refresh_from_db()
         self.footer_index_page.refresh_from_db()
+        svg_title = 'loud speaker'
+        file = File(open(Path(settings.BASE_DIR) / 'iogt/static/icons/loud_speaker.svg'), name='loud speaker')
+        icon = Svg.objects.create(title=svg_title, file=file)
         survey_index_page = self.survey_index_page.get_translations(inclusive=True)
         for survey_index_page in survey_index_page:
             surveys = survey_index_page.get_children()
             for survey in surveys:
-                page_link_page = models.PageLinkPage(title=survey.title, page=survey)
+                page_link_page = models.PageLinkPage(title=survey.title, page=survey, icon=icon)
                 footer_index_page = self.footer_index_page.get_translation_or_none(survey.locale)
                 footer_index_page.add_child(instance=page_link_page)
 
         self.stdout.write('Added surveys from survey index page to footer index page as page link page.')
+
+    def add_polls_from_polls_index_page_to_home_page_featured_content(self):
+        self.poll_index_page.refresh_from_db()
+        self.home_page.refresh_from_db()
+        poll_index_pages = self.poll_index_page.get_translations(inclusive=True)
+        for poll_index_page in poll_index_pages:
+            home_page = self.home_page.get_translation_or_none(poll_index_page.locale)
+            home_featured_content = home_page.home_featured_content.stream_data
+            polls = poll_index_page.get_children().live()
+            for poll in polls:
+                home_featured_content.append({
+                    'type': 'embedded_poll',
+                    'value': {
+                        'direct_display': True,
+                        'poll': poll.id,
+                    },
+                })
+            home_page.home_featured_content = json.dumps(home_featured_content)
+            home_page.save()
+
+        self.stdout.write('Added polls from poll index page to home page featured content.')
+
+    def add_surveys_from_surveys_index_page_to_home_page_featured_content(self):
+        self.survey_index_page.refresh_from_db()
+        self.home_page.refresh_from_db()
+        survey_index_pages = self.survey_index_page.get_translations(inclusive=True)
+        for survey_index_page in survey_index_pages:
+            home_page = self.home_page.get_translation_or_none(survey_index_page.locale)
+            home_featured_content = home_page.home_featured_content.stream_data
+            surveys = survey_index_page.get_children().live()
+            for survey in surveys:
+                home_featured_content.append({
+                    'type': 'embedded_survey',
+                    'value': {
+                        'direct_display': survey.specific.direct_display,
+                        'survey': survey.id,
+                    },
+                })
+            home_page.home_featured_content = json.dumps(home_featured_content)
+            home_page.save()
+
+        self.stdout.write('Added surveys from survey index page to home page featured content.')
+
+    def print_post_migration_report(self):
+        self.stdout.write(self.style.ERROR('====================='))
+        self.stdout.write(self.style.ERROR('POST MIGRATION REPORT'))
+        self.stdout.write(self.style.ERROR('====================='))
+
+        for k, v in self.post_migration_report_messages.items():
+            self.stdout.write(self.style.ERROR(f"===> {k.replace('_', ' ').upper()}"))
+            self.stdout.write(self.style.ERROR('\n'.join(v)))
