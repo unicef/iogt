@@ -1277,7 +1277,10 @@ class Command(BaseCommand):
             home_featured_content = home_page.home_featured_content.stream_data
             home_featured_content.append({
                 'type': 'article',
-                'value': article.id,
+                'value': {
+                    'article': article.id,
+                    'display_section_title': True,
+                },
             })
             home_page.save()
 

@@ -30,6 +30,15 @@ body.rtl {
   letter-spacing: 0.01em;
 }
 
+.related-articles ul .article-header {
+  width: 50%;
+  padding-right: 10px;
+}
+
+.related-articles ul .article-header p {
+  width: 100%;
+}
+
 .related-articles a {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -89,6 +98,13 @@ body.rtl {
     font-size: 16px;
     margin-right: 5px;
     line-height: 24px;
+  }
+  .related-articles ul .article-header {
+    width: 50%;
+  }
+
+  .related-articles ul .article-header p {
+    width: 100%;
   }
   .related-articles a {
     padding: 16px 0px;
