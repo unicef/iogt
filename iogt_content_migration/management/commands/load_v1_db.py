@@ -71,10 +71,18 @@ class Command(BaseCommand):
             help='Delete existing Users and their associated data. Use carefully'
         )
 
+        parser.add_argument(
+            '--v1-domains',
+            nargs="+",
+            required=True,
+            help="IoGT V1 domains for manually inserted internal links, --v1-domains domain1 domain2 ..."
+        )
+
     def handle(self, *args, **options):
         self.db_connect(options)
         self.media_dir = options.get('media_dir')
         self.skip_locales = options.get('skip_locales')
+        self.v1_domains_list = options.get('v1_domains')
 
         self.collection_map = {}
         self.document_map = {}
@@ -611,8 +619,20 @@ class Command(BaseCommand):
                         )
                 else:
                     block['type'] = 'markdown'
+
+                if bool([domain for domain in self.v1_domains_list if domain in block['value']]):
+                    page = self.v1_to_v2_page_map.get(row['page_id'])
+                    self.post_migration_report_messages['sections_with_internal_links'].append(
+                        f"title: {page.title}. URL: {page.full_url}.")
+
             elif block['type'] == 'richtext':
                 block['type'] = 'paragraph'
+
+                if bool([domain for domain in self.v1_domains_list if domain in block['value']]):
+                    page = self.v1_to_v2_page_map.get(row['page_id'])
+                    self.post_migration_report_messages['sections_with_internal_links'].append(
+                        f"title: {page.title}. URL: {page.full_url}.")
+
             elif block['type'] == 'image':
                 image = self.image_map.get(block['value'])
                 if image:
@@ -1145,7 +1165,6 @@ class Command(BaseCommand):
 
     def map_survey_description(self, row):
         v1_survey_description = json.loads(row['description'])
-
         v2_survey_description = self._map_body('surveys', row, v1_survey_description)
 
         if row['introduction']:
@@ -1158,7 +1177,6 @@ class Command(BaseCommand):
 
     def map_survey_thank_you_text(self, row):
         v2_thank_you_text = []
-
         if row['thank_you_text']:
             v2_thank_you_text.append({'type': 'paragraph', 'value': row['thank_you_text']})
 
