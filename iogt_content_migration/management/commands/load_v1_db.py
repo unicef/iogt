@@ -1,6 +1,7 @@
 from collections import defaultdict
 from pathlib import Path
 
+from bs4 import BeautifulSoup
 from django.conf import settings
 from django.core.files import File
 from django.core.management.base import BaseCommand
@@ -575,7 +576,8 @@ class Command(BaseCommand):
     def _map_body(self, type_, row, v2_body):
         for block in v2_body:
             if block['type'] == 'paragraph':
-                block['type'] = 'markdown'
+                has_html = bool(BeautifulSoup(block['value'], "html.parser").find())
+                block['type'] = 'html' if has_html else 'markdown'
             elif block['type'] == 'richtext':
                 block['type'] = 'paragraph'
             elif block['type'] == 'image':
