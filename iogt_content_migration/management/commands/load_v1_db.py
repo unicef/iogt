@@ -1513,7 +1513,7 @@ class Command(BaseCommand):
         self.poll_index_page.refresh_from_db()
         self.footer_index_page.refresh_from_db()
         svg_title = 'clip board pen'
-        file = File(open(Path(settings.BASE_DIR) / 'iogt/static/icons/clip_board_pen.svg'), name=svg_title)
+        file = File(open(Path(settings.BASE_DIR) / 'iogt/static/icons/clip_board_pen.svg'), name='clip_board_pen.svg')
         icon = Svg.objects.create(title=svg_title, file=file)
         poll_index_pages = self.poll_index_page.get_translations(inclusive=True)
         for poll_index_page in poll_index_pages:
@@ -1529,7 +1529,7 @@ class Command(BaseCommand):
         self.survey_index_page.refresh_from_db()
         self.footer_index_page.refresh_from_db()
         svg_title = 'loud speaker'
-        file = File(open(Path(settings.BASE_DIR) / 'iogt/static/icons/loud_speaker.svg'), name='loud speaker')
+        file = File(open(Path(settings.BASE_DIR) / 'iogt/static/icons/loud_speaker.svg'), name='loud_speaker.svg')
         icon = Svg.objects.create(title=svg_title, file=file)
         survey_index_page = self.survey_index_page.get_translations(inclusive=True)
         for survey_index_page in survey_index_page:
