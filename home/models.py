@@ -44,10 +44,10 @@ from messaging.blocks import ChatBotButtonBlock
 from comments.models import CommentableMixin
 from iogt.views import check_user_session
 from questionnaires.models import Survey, Poll, Quiz
-from .blocks import (MediaBlock, SocialMediaLinkBlock,
-                     SocialMediaShareButtonBlock,
-                     EmbeddedPollBlock, EmbeddedSurveyBlock, EmbeddedQuizBlock,
-                     PageButtonBlock, NumberedListBlock, RawHTMLBlock, ArticleBlock)
+from .blocks import (
+    MediaBlock, SocialMediaLinkBlock, SocialMediaShareButtonBlock, EmbeddedPollBlock, EmbeddedSurveyBlock,
+    EmbeddedQuizBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock, ArticleBlock,
+)
 from .forms import SectionPageForm
 from .mixins import PageUtilsMixin, TitleIconMixin
 from .utils.image import convert_svg_to_png_bytes
