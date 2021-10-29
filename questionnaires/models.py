@@ -17,7 +17,7 @@ from wagtailmarkdown.blocks import MarkdownBlock
 from wagtailsvg.edit_handlers import SvgChooserPanel
 from wagtailsvg.models import Svg
 
-from home.blocks import MediaBlock, PageButtonBlock, NumberedListBlock
+from home.blocks import MediaBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock
 from home.mixins import PageUtilsMixin, TitleIconMixin
 from iogt_users.models import User
 from modelcluster.fields import ParentalKey
@@ -62,6 +62,7 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
         [
             ('heading', blocks.CharBlock(form_classname="full title")),
             ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
+            ('html', RawHTMLBlock(icon='code', help_text='Paragraph (V1 Legacy)')),
             ("image", ImageChooserBlock()),
             ('list', MarkdownBlock(icon='code')),
             ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),

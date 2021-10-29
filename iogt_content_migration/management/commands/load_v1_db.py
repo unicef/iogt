@@ -1,6 +1,7 @@
 from collections import defaultdict
 from pathlib import Path
 
+from bs4 import BeautifulSoup
 from django.conf import settings
 from django.core.files import File
 from django.core.management.base import BaseCommand
@@ -10,6 +11,7 @@ from wagtail.documents.models import Document
 from wagtail.images.models import Image
 from wagtail_localize.models import Translation
 from wagtail_localize.views.submit_translations import TranslationCreator
+from wagtailmarkdown.utils import _get_bleach_kwargs
 from wagtailmedia.models import Media
 from wagtailsvg.models import Svg
 
@@ -69,10 +71,18 @@ class Command(BaseCommand):
             help='Delete existing Users and their associated data. Use carefully'
         )
 
+        parser.add_argument(
+            '--v1-domains',
+            nargs="+",
+            required=True,
+            help="IoGT V1 domains for manually inserted internal links, --v1-domains domain1 domain2 ..."
+        )
+
     def handle(self, *args, **options):
         self.db_connect(options)
         self.media_dir = options.get('media_dir')
         self.skip_locales = options.get('skip_locales')
+        self.v1_domains_list = options.get('v1_domains')
 
         self.collection_map = {}
         self.document_map = {}
@@ -587,12 +597,42 @@ class Command(BaseCommand):
             return
         self.stdout.write(f"saved article, title={article.title}")
 
+    def has_unsupported_html_tag(self, value):
+        bleach_kwargs = _get_bleach_kwargs()
+
+        tags = BeautifulSoup(value, "html.parser").find_all()
+        for tag in tags:
+            if tag not in bleach_kwargs['tags']:
+                return True
+
+        return False
+
     def _map_body(self, type_, row, v2_body):
         for block in v2_body:
             if block['type'] == 'paragraph':
-                block['type'] = 'markdown'
+                if self.has_unsupported_html_tag(block['value']):
+                    block['type'] = 'html'
+                    page = self.v1_to_v2_page_map.get(row['page_ptr_id'])
+                    if page:
+                        self.post_migration_report_messages['page_with_unsupported_tags'].append(
+                            f'title: {page.title}. URL: {page.full_url}.'
+                        )
+                else:
+                    block['type'] = 'markdown'
+
+                if bool([domain for domain in self.v1_domains_list if domain in block['value']]):
+                    page = self.v1_to_v2_page_map.get(row['page_id'])
+                    self.post_migration_report_messages['sections_with_internal_links'].append(
+                        f"title: {page.title}. URL: {page.full_url}.")
+
             elif block['type'] == 'richtext':
                 block['type'] = 'paragraph'
+
+                if bool([domain for domain in self.v1_domains_list if domain in block['value']]):
+                    page = self.v1_to_v2_page_map.get(row['page_id'])
+                    self.post_migration_report_messages['sections_with_internal_links'].append(
+                        f"title: {page.title}. URL: {page.full_url}.")
+
             elif block['type'] == 'image':
                 image = self.image_map.get(block['value'])
                 if image:
@@ -621,7 +661,6 @@ class Command(BaseCommand):
                     self.post_migration_report_messages['invalid_page_id'].append(
                         f'Unable to attach v2 page for {type_[:-1]}, title={row["title"]}'
                     )
-
         return v2_body
 
     def map_article_body(self, row):
@@ -1126,7 +1165,6 @@ class Command(BaseCommand):
 
     def map_survey_description(self, row):
         v1_survey_description = json.loads(row['description'])
-
         v2_survey_description = self._map_body('surveys', row, v1_survey_description)
 
         if row['introduction']:
@@ -1139,7 +1177,6 @@ class Command(BaseCommand):
 
     def map_survey_thank_you_text(self, row):
         v2_thank_you_text = []
-
         if row['thank_you_text']:
             v2_thank_you_text.append({'type': 'paragraph', 'value': row['thank_you_text']})
 
