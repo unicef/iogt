@@ -289,7 +289,7 @@ class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         ('heading', blocks.CharBlock(form_classname="full title")),
         ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
         ('markdown', MarkdownBlock(icon='code')),
-        ('html', RawHTMLBlock(icon='code')),
+        ('html', RawHTMLBlock(icon='code', help_text='Paragraph (V1 Legacy)')),
         ('image', ImageChooserBlock()),
         ('list', blocks.ListBlock(MarkdownBlock(icon='code'))),
         ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
