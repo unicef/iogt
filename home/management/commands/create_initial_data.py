@@ -13,7 +13,6 @@ from wagtail.core.rich_text import RichText
 from wagtail.images.models import Image
 
 import home.models as models
-from comments.models import CommentStatus
 
 User = get_user_model()
 
@@ -65,8 +64,7 @@ class Command(BaseCommand):
             body=[('paragraph',
                    RichText('Someone sent me a friend request - but I don’t know this person, what should I do?'))],
             owner=owner,
-            first_published_at=datetime.now(timezone.utc),
-            commenting_status=CommentStatus.OPEN
+            first_published_at=datetime.now(timezone.utc)
         )
         internet_safety = models.Section(
             title='Internet Safety',
