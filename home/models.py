@@ -46,8 +46,8 @@ from iogt.views import check_user_session
 from questionnaires.models import Survey, Poll, Quiz
 from .blocks import (MediaBlock, SocialMediaLinkBlock,
                      SocialMediaShareButtonBlock,
-                     EmbeddedQuestionnaireChooserBlock,
-                     PageButtonBlock, ArticleChooserBlock)
+                     EmbeddedPollBlock, EmbeddedSurveyBlock, EmbeddedQuizBlock,
+                     PageButtonBlock, ArticleChooserBlock, NumberedListBlock)
 from .forms import SectionPageForm
 from .mixins import PageUtilsMixin, TitleIconMixin
 from .utils.image import convert_svg_to_png_bytes
@@ -62,9 +62,9 @@ class HomePage(Page):
 
     home_featured_content = StreamField([
         ('page_button', PageButtonBlock()),
-        ('embedded_poll', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')),
-        ('embedded_survey', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')),
-        ('embedded_quiz', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Quiz')),
+        ('embedded_poll', EmbeddedPollBlock()),
+        ('embedded_survey', EmbeddedSurveyBlock()),
+        ('embedded_quiz', EmbeddedQuizBlock()),
         ('article', ArticleChooserBlock()),
     ], null=True)
 
@@ -162,6 +162,7 @@ class Section(Page, PageUtilsMixin, TitleIconMixin):
 
     tags = ClusterTaggableManager(through='SectionTaggedItem', blank=True)
     show_progress_bar = models.BooleanField(default=False)
+    larger_image_for_top_page_in_list_as_in_v1 = models.BooleanField(default=False)
 
     show_in_menus_default = True
 
@@ -174,6 +175,7 @@ class Section(Page, PageUtilsMixin, TitleIconMixin):
         SvgChooserPanel('icon'),
         FieldPanel('background_color'),
         FieldPanel('font_color'),
+        FieldPanel('larger_image_for_top_page_in_list_as_in_v1'),
         MultiFieldPanel([
             InlinePanel('featured_content', max_num=1,
                         label=_("Featured Content")),
@@ -288,14 +290,12 @@ class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
         ('markdown', MarkdownBlock(icon='code')),
         ('image', ImageChooserBlock()),
-        ('list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
-        ('numbered_list',
-         blocks.ListBlock(blocks.CharBlock(label="Item"), template="blocks/numbered_list.html")),
+        ('list', blocks.ListBlock(MarkdownBlock(icon='code'))),
+        ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
         ('page_button', PageButtonBlock()),
-        ('embedded_poll',
-         EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')),
-        ('embedded_survey', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')),
-        ('embedded_quiz', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Quiz')),
+        ('embedded_poll', EmbeddedPollBlock()),
+        ('embedded_survey', EmbeddedSurveyBlock()),
+        ('embedded_quiz', EmbeddedQuizBlock()),
         ('media', MediaBlock(icon='media')),
         ('chat_bot', ChatBotButtonBlock()),
     ])

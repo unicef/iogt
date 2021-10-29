@@ -14,8 +14,14 @@
             <div>
                 <div class='individual-comment__data'>
                     <span>
-                        <p>{{ item.comment.user.username.0|capfirst }}</p>
-                        <p>{{ item.comment.user.username }}</p>
+                        {% if item.comment.user_name == 'anonymous' %}
+                            <p>A</p>
+                            <p>Anonymous</p>
+                        {% else %}
+                            <p>{{ item.comment.user.username.0|capfirst }}</p>
+                            <p>{{ item.comment.user.username }}</p>
+                        {% endif %}
+
                     </span>
                     <p class='individual-comment__date'>{{ item.comment.submit_date|naturaltime }}</p>
                 </div>
@@ -23,7 +29,7 @@
                     <a href="{{ item.comment.url }}" target="_new">
                 {% endif %}
                 {% if item.comment.url %}</a>{% endif %}
-                {% if item.comment.user and item.comment.user|has_permission:"django_comments_xtd.can_moderate" %}
+                {% if item.comment.user_name != 'anonymous' and item.comment.user and item.comment.user|has_permission:"django_comments_xtd.can_moderate" %}
                     &nbsp;<span class='individual-comment__moderator'>{% translate "moderator" %}</span>{% endif %}
                 &nbsp;&nbsp;
                 <span>
