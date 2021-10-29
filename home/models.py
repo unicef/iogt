@@ -47,7 +47,8 @@ from questionnaires.models import Survey, Poll, Quiz
 from .blocks import (MediaBlock, SocialMediaLinkBlock,
                      SocialMediaShareButtonBlock,
                      EmbeddedPollBlock, EmbeddedSurveyBlock, EmbeddedQuizBlock,
-                     PageButtonBlock, ArticleChooserBlock, NumberedListBlock, RawHTMLBlock)
+                     PageButtonBlock, ArticleBlock, NumberedListBlock, RawHTMLBlock)
+                     PageButtonBlock, NumberedListBlock, ArticleBlock)
 from .forms import SectionPageForm
 from .mixins import PageUtilsMixin, TitleIconMixin
 from .utils.image import convert_svg_to_png_bytes
@@ -65,7 +66,7 @@ class HomePage(Page):
         ('embedded_poll', EmbeddedPollBlock()),
         ('embedded_survey', EmbeddedSurveyBlock()),
         ('embedded_quiz', EmbeddedQuizBlock()),
-        ('article', ArticleChooserBlock()),
+        ('article', ArticleBlock()),
     ], null=True)
 
     content_panels = Page.content_panels + [
