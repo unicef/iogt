@@ -149,6 +149,7 @@ class Command(BaseCommand):
         self.home_page = self.create_home_page(root)
         self.translate_home_pages(self.home_page)
         self.create_index_pages(self.home_page)
+        self.translate_index_pages()
         self.migrate_sections()
         self.migrate_articles()
         self.migrate_footers()
@@ -212,23 +213,35 @@ class Command(BaseCommand):
         return home
 
     def create_index_pages(self, homepage):
-        self.section_index_page = models.SectionIndexPage(title='Sections')
-        homepage.add_child(instance=self.section_index_page)
+        self.section_index_page = models.SectionIndexPage.objects.first()
+        if self.section_index_page is None:
+            self.section_index_page = models.SectionIndexPage(title='Sections')
+            homepage.add_child(instance=self.section_index_page)
 
-        self.banner_index_page = models.BannerIndexPage(title='Banners')
-        homepage.add_child(instance=self.banner_index_page)
+        self.banner_index_page = models.BannerIndexPage.objects.first()
+        if self.banner_index_page is None:
+            self.banner_index_page = models.BannerIndexPage(title='Banners')
+            homepage.add_child(instance=self.banner_index_page)
 
-        self.footer_index_page = models.FooterIndexPage(title='Footers')
-        homepage.add_child(instance=self.footer_index_page)
+        self.footer_index_page = models.FooterIndexPage.objects.first()
+        if self.footer_index_page is None:
+            self.footer_index_page = models.FooterIndexPage(title='Footers')
+            homepage.add_child(instance=self.footer_index_page)
 
-        self.poll_index_page = PollIndexPage(title='Polls')
-        homepage.add_child(instance=self.poll_index_page)
+        self.poll_index_page = PollIndexPage.objects.first()
+        if self.poll_index_page is None:
+            self.poll_index_page = PollIndexPage(title='Polls')
+            homepage.add_child(instance=self.poll_index_page)
 
-        self.survey_index_page = SurveyIndexPage(title='Surveys')
-        homepage.add_child(instance=self.survey_index_page)
+        self.survey_index_page = SurveyIndexPage.objects.first()
+        if self.survey_index_page is None:
+            self.survey_index_page = SurveyIndexPage(title='Surveys')
+            homepage.add_child(instance=self.survey_index_page)
 
-        self.quiz_index_page = QuizIndexPage(title='Quizzes')
-        homepage.add_child(instance=self.quiz_index_page)
+        self.quiz_index_page = QuizIndexPage.objects.first()
+        if self.quiz_index_page is None:
+            self.quiz_index_page = QuizIndexPage(title='Quizzes')
+            homepage.add_child(instance=self.quiz_index_page)
 
     def migrate_collections(self):
         cur = self.db_query('select * from wagtailcore_collection')
@@ -1199,6 +1212,21 @@ class Command(BaseCommand):
         for row in cur:
             locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
             self.translate_page(locale=locale, page=home)
+
+    def translate_index_pages(self):
+        cur = self.db_query(f'select * from core_sitelanguage')
+        locales = []
+        for row in cur:
+            locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
+            locales.append(locale)
+
+        index_pages = [
+            self.section_index_page, self.banner_index_page, self.footer_index_page, self.poll_index_page,
+            self.survey_index_page, self.quiz_index_page,
+        ]
+        for page in index_pages:
+            for locale in locales:
+                self.translate_page(locale=locale, page=page)
 
     def migrate_recommended_articles_for_article(self):
         article_cur = self.db_query(f'select DISTINCT page_id from core_articlepagerecommendedsections')
