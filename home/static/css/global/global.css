@@ -1125,9 +1125,28 @@ body.rtl {
 .sm-paragraph {
   font-size: 0.75em !important;
   font-weight: normal !important;
+  width: 100% !important;
 }
 
 .lg-paragraph {
   font-size: 0.9em !important;
   font-weight: normal !important;
+  width: 100% !important;
+}
+
+#content-wrap .first-content {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    width: 100%;
+}
+
+#content-wrap .first-content .overlay-holder {
+  max-width: 320px;
+  margin: 0 auto 20px;
+}
+
+#content-wrap .first-content .overlay-holder img {
+  max-width: 320px;
+  margin: 0;
+  width: 100% !important;
 }

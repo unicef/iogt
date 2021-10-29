@@ -17,6 +17,7 @@ services:
       RAPIDPRO_BOT_USER_USERNAME: rapidpro
       RAPIDPRO_BOT_USER_PASSWORD: 1234
       WAGTAILTRANSFER_SECRET_KEY: wagtailtransfersecretkey
+      BASE_URL: 'http://localhost:8000'
     command: bash -c "python manage.py compilemessages && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./:/app/

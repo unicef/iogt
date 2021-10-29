@@ -1,4 +1,5 @@
 import json
+from collections import defaultdict
 from time import sleep
 
 import psycopg2
@@ -77,7 +78,7 @@ class Command(BaseCommand):
                                                        self.request_registration_survey_mandatory_groups()
         self.content_type_map = dict()
         self.delete_users = options.get('delete_users')
-        self.post_migration_report_messages = []
+        self.post_migration_report_messages = defaultdict(list)
 
         self.clear()
 
@@ -188,8 +189,7 @@ class Command(BaseCommand):
         cur = self.db_query(sql)
 
         colliding_usernames = [row['lower'] for row in cur]
-        self.post_migration_report_messages.append(f'Colliding users in V1:')
-        self.post_migration_report_messages.append(','.join(colliding_usernames))
+        self.post_migration_report_messages['colliding_users_in_v1'].append(','.join(colliding_usernames))
 
         sql = f'select * from auth_user'
         cur = self.db_query(sql)
@@ -228,8 +228,7 @@ class Command(BaseCommand):
                 user_groups_cursor.close()
 
         if renamed_users:
-            self.post_migration_report_messages.append(f'Renamed Users:')
-            self.post_migration_report_messages.append(','.join(renamed_users))
+            self.post_migration_report_messages['renamed_users'].append(','.join(renamed_users))
 
     def migrate_user_groups(self):
         self.stdout.write(self.style.SUCCESS('Starting User Groups Migration'))
@@ -505,4 +504,6 @@ class Command(BaseCommand):
         self.stdout.write(self.style.ERROR('POST MIGRATION REPORT'))
         self.stdout.write(self.style.ERROR('====================='))
 
-        self.stdout.write(self.style.ERROR('\n'.join(self.post_migration_report_messages)))
+        for k, v in self.post_migration_report_messages.items():
+            self.stdout.write(self.style.ERROR(f"===> {k.replace('_', ' ').upper()}"))
+            self.stdout.write(self.style.ERROR('\n'.join(v)))
