@@ -69,15 +69,16 @@ class Command(BaseCommand):
 
         parser.add_argument(
             '--v1-domains',
+            nargs="+",
             required=True,
-            help="IoGT V1 domains for manually inserted internal links, --v1-domain [domain1,domain2,...]"
+            help="IoGT V1 domains for manually inserted internal links, --v1-domains domain1 domain2 ..."
         )
 
     def handle(self, *args, **options):
         self.db_connect(options)
         self.media_dir = options.get('media_dir')
         self.skip_locales = options.get('skip_locales')
-        self.v1_domain_list = options.get('v1_domains').strip('[]').split(',')
+        self.v1_domains_list = options.get('v1_domains')
 
         self.collection_map = {}
         self.document_map = {}
@@ -568,28 +569,23 @@ class Command(BaseCommand):
             return
         self.stdout.write(f"saved article, title={article.title}")
 
-    def has_manually_inserted_links(self, content):
-        if any(domain in content for domain in self.v1_domain_list):
-            return True
-        return False
-
-    def generate_manually_inserted_internal_link_warning(self, section):
-        self.post_migration_report_messages['sections_with_internal_links'].append(
-            f"title: {section.title}. URL: {section.full_url}.")
-
-    def _map_body(self, type_, row, v2_body, section):
+    def _map_body(self, type_, row, v2_body):
         for block in v2_body:
             if block['type'] == 'paragraph':
                 block['type'] = 'markdown'
 
-                if self.has_manually_inserted_links(block['value']):
-                    self.generate_manually_inserted_internal_link_warning(section)
+                if bool([domain for domain in self.v1_domains_list if domain in block['value']]):
+                    page = self.v1_to_v2_page_map.get(row['page_id'])
+                    self.post_migration_report_messages['sections_with_internal_links'].append(
+                        f"title: {page.title}. URL: {page.full_url}.")
 
             elif block['type'] == 'richtext':
                 block['type'] = 'paragraph'
 
-                if self.has_manually_inserted_links(block['value']):
-                    self.generate_manually_inserted_internal_link_warning(section)
+                if bool([domain for domain in self.v1_domains_list if domain in block['value']]):
+                    page = self.v1_to_v2_page_map.get(row['page_id'])
+                    self.post_migration_report_messages['sections_with_internal_links'].append(
+                        f"title: {page.title}. URL: {page.full_url}.")
 
             elif block['type'] == 'image':
                 image = self.image_map.get(block['value'])
@@ -622,10 +618,10 @@ class Command(BaseCommand):
 
         return v2_body
 
-    def map_article_body(self, row, section):
+    def map_article_body(self, row):
         v1_body = json.loads(row['body'])
 
-        v2_body = self._map_body('articles', row, v1_body, section)
+        v2_body = self._map_body('articles', row, v1_body)
 
         if row['subtitle']:
             v2_body = [{
@@ -1122,9 +1118,9 @@ class Command(BaseCommand):
         })
         self.stdout.write(f"saved survey, title={survey.title}")
 
-    def map_survey_description(self, row, section):
+    def map_survey_description(self, row):
         v1_survey_description = json.loads(row['description'])
-        v2_survey_description = self._map_body('surveys', row, v1_survey_description, section)
+        v2_survey_description = self._map_body('surveys', row, v1_survey_description)
 
         if row['introduction']:
             v2_survey_description = [{
@@ -1376,7 +1372,7 @@ class Command(BaseCommand):
         for row in cur:
             v2_article = self.v1_to_v2_page_map.get(row['page_ptr_id'])
             if v2_article:
-                v2_article.body = self.map_article_body(row, v2_article)
+                v2_article.body = self.map_article_body(row)
                 v2_article.save()
             else:
                 self.post_migration_report_messages['articles'].append(
@@ -1399,7 +1395,7 @@ class Command(BaseCommand):
         for row in cur:
             v2_footer = self.v1_to_v2_page_map.get(row['page_ptr_id'])
             if v2_footer:
-                v2_footer.body = self.map_article_body(row, v2_footer)
+                v2_footer.body = self.map_article_body(row)
                 v2_footer.save()
         cur.close()
 
@@ -1416,7 +1412,7 @@ class Command(BaseCommand):
         for row in cur:
             v2_survey = self.v1_to_v2_page_map.get(row['page_ptr_id'])
             if v2_survey:
-                v2_survey.description = self.map_survey_description(row, v2_survey)
+                v2_survey.description = self.map_survey_description(row)
                 v2_survey.save()
         cur.close()
 
