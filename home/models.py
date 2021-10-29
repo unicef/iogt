@@ -47,7 +47,7 @@ from questionnaires.models import Survey, Poll, Quiz
 from .blocks import (MediaBlock, SocialMediaLinkBlock,
                      SocialMediaShareButtonBlock,
                      EmbeddedPollBlock, EmbeddedSurveyBlock, EmbeddedQuizBlock,
-                     PageButtonBlock, ArticleChooserBlock, NumberedListBlock)
+                     PageButtonBlock, ArticleChooserBlock, NumberedListBlock, RawHTMLBlock)
 from .forms import SectionPageForm
 from .mixins import PageUtilsMixin, TitleIconMixin
 from .utils.image import convert_svg_to_png_bytes
@@ -289,7 +289,7 @@ class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         ('heading', blocks.CharBlock(form_classname="full title")),
         ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
         ('markdown', MarkdownBlock(icon='code')),
-        ('html', blocks.RawHTMLBlock(icon='code')),
+        ('html', RawHTMLBlock(icon='code')),
         ('image', ImageChooserBlock()),
         ('list', blocks.ListBlock(MarkdownBlock(icon='code'))),
         ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
