@@ -439,7 +439,7 @@ class Command(BaseCommand):
                     })
                     if row['description'] is None:
                         self.post_migration_report_messages['sections_with_null_description'].append(
-                            f'title: {translated_section.title}. URL: {translated_section.full_url}.')
+                            f'title: {translated_section.title}. URL: {translated_section.full_url}. Admin URL: http://localhost/admin/pages/{translated_section.id}/edit/')
 
                 self.stdout.write(f"Translated section, title={row['title']}")
         cur.close()
@@ -477,7 +477,7 @@ class Command(BaseCommand):
         })
         if row['description'] is None:
             self.post_migration_report_messages['sections_with_null_description'].append(
-                f'title: {section.title}. URL: {section.full_url}.')
+                f'title: {section.title}. URL: {section.full_url}. Admin URL: http://localhost/admin/pages/{section.id}/edit/')
         self.stdout.write(f"saved section, title={section.title}")
 
     def migrate_articles(self):
@@ -615,7 +615,7 @@ class Command(BaseCommand):
                     page = self.v1_to_v2_page_map.get(row['page_ptr_id'])
                     if page:
                         self.post_migration_report_messages['page_with_unsupported_tags'].append(
-                            f'title: {page.title}. URL: {page.full_url}.'
+                            f'title: {page.title}. URL: {page.full_url}. Admin URL: http://localhost/admin/pages/{page.id}/edit/'
                         )
                 else:
                     block['type'] = 'markdown'
@@ -623,7 +623,7 @@ class Command(BaseCommand):
                 if bool([domain for domain in self.v1_domains_list if domain in block['value']]):
                     page = self.v1_to_v2_page_map.get(row['page_id'])
                     self.post_migration_report_messages['sections_with_internal_links'].append(
-                        f"title: {page.title}. URL: {page.full_url}.")
+                        f"title: {page.title}. URL: {page.full_url}. Admin URL: http://localhost/admin/pages/{page.id}/edit/")
 
             elif block['type'] == 'richtext':
                 block['type'] = 'paragraph'
@@ -631,7 +631,7 @@ class Command(BaseCommand):
                 if bool([domain for domain in self.v1_domains_list if domain in block['value']]):
                     page = self.v1_to_v2_page_map.get(row['page_id'])
                     self.post_migration_report_messages['sections_with_internal_links'].append(
-                        f"title: {page.title}. URL: {page.full_url}.")
+                        f"title: {page.title}. URL: {page.full_url}. Admin URL: http://localhost/admin/pages/{page.id}/edit/")
 
             elif block['type'] == 'image':
                 image = self.image_map.get(block['value'])
@@ -1335,7 +1335,7 @@ class Command(BaseCommand):
                         self.add_article_as_featured_content_in_home_page(article)
                     else:
                         self.post_migration_report_messages['ommitted_old_featured_article'].append(
-                            f'title: {article.title}. URL: {article.full_url}. featured since: {article.featured_in_homepage_start_date}')
+                            f'title: {article.title}. URL: {article.full_url}. Admin URL: http://localhost/admin/pages/{article.id}/edit/. Featured since: {article.featured_in_homepage_start_date}')
 
                 section = models.Section.objects.get(path=k)
                 self.add_section_as_featured_content_in_home_page(section)
