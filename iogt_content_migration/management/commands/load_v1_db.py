@@ -167,6 +167,7 @@ class Command(BaseCommand):
         self.add_surveys_from_surveys_index_page_to_footer_index_page_as_page_link_page()
         self.add_polls_from_polls_index_page_to_home_page_featured_content()
         self.add_surveys_from_surveys_index_page_to_home_page_featured_content()
+        self.move_footers_to_end_of_footer_index_page()
         self.stop_translations()
 
     def create_home_page(self, root):
@@ -772,7 +773,7 @@ class Command(BaseCommand):
     def create_footer(self, row):
         commenting_status, commenting_open_time, commenting_close_time = self._get_commenting_fields(row)
 
-        footer = models.FooterPage(
+        footer = models.Article(
             lead_image=self.image_map.get(row['image_id']),
             title=row['title'],
             draft_title=row['draft_title'],
@@ -1263,8 +1264,12 @@ class Command(BaseCommand):
                 article_groups[article.path[:16]].append(article)
 
             for k, v in article_groups.items():
-                for article in v:
-                    self.add_article_as_featured_content_in_home_page(article)
+                for i, article in enumerate(v):
+                    if i < 5:
+                        self.add_article_as_featured_content_in_home_page(article)
+                    else:
+                        self.post_migration_report_messages['ommitted_old_featured_article'].append(
+                            f'title: {article.title}. URL: {article.full_url}. featured since: {article.featured_in_homepage_start_date}')
 
                 section = models.Section.objects.get(path=k)
                 self.add_section_as_featured_content_in_home_page(section)
@@ -1451,7 +1456,7 @@ class Command(BaseCommand):
         for poll_index_page in poll_index_pages:
             polls = poll_index_page.get_children()
             for poll in polls:
-                page_link_page = models.PageLinkPage(title=poll.title, page=poll, icon=icon)
+                page_link_page = models.PageLinkPage(title=poll.title, page=poll, icon=icon, live=poll.live)
                 footer_index_page = self.footer_index_page.get_translation_or_none(poll.locale)
                 footer_index_page.add_child(instance=page_link_page)
 
@@ -1467,7 +1472,7 @@ class Command(BaseCommand):
         for survey_index_page in survey_index_page:
             surveys = survey_index_page.get_children()
             for survey in surveys:
-                page_link_page = models.PageLinkPage(title=survey.title, page=survey, icon=icon)
+                page_link_page = models.PageLinkPage(title=survey.title, page=survey, icon=icon, live=survey.live)
                 footer_index_page = self.footer_index_page.get_translation_or_none(survey.locale)
                 footer_index_page.add_child(instance=page_link_page)
 
@@ -1514,6 +1519,42 @@ class Command(BaseCommand):
             home_page.save()
 
         self.stdout.write('Added surveys from survey index page to home page featured content.')
+
+    def move_footers_to_end_of_footer_index_page(self):
+        footer_index_pages = self.footer_index_page.get_translations(inclusive=True)
+        for footer_index_page in footer_index_pages:
+            footer_index_page_children = footer_index_page.get_children()
+            articles = footer_index_page_children.exact_type(models.Article)
+            for article in articles:
+                self.move_page(page_to_move=article, position=footer_index_page_children.count())
+
+    def move_page(self, page_to_move, position):
+        parent_page = page_to_move.get_parent()
+
+        # Find page that is already in this position
+        position_page = None
+        if position is not None:
+            try:
+                position_page = parent_page.get_children()[int(position)]
+            except IndexError:
+                pass  # No page in this position
+
+        # Move page
+
+        # any invalid moves *should* be caught by the permission check above,
+        # so don't bother to catch InvalidMoveToDescendant
+
+        if position_page:
+            # If the page has been moved to the right, insert it to the
+            # right. If left, then left.
+            old_position = list(parent_page.get_children()).index(page_to_move)
+            if int(position) < old_position:
+                page_to_move.move(position_page, pos='left')
+            elif int(position) > old_position:
+                page_to_move.move(position_page, pos='right')
+        else:
+            # Move page to end
+            page_to_move.move(parent_page, pos='last-child')
 
     def print_post_migration_report(self):
         self.stdout.write(self.style.ERROR('====================='))
