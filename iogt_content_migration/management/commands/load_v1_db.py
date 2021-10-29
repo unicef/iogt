@@ -11,6 +11,7 @@ from wagtail.documents.models import Document
 from wagtail.images.models import Image
 from wagtail_localize.models import Translation
 from wagtail_localize.views.submit_translations import TranslationCreator
+from wagtailmarkdown.utils import _get_default_bleach_kwargs
 from wagtailmedia.models import Media
 from wagtailsvg.models import Svg
 
@@ -573,11 +574,36 @@ class Command(BaseCommand):
             return
         self.stdout.write(f"saved article, title={article.title}")
 
+    def has_unsupported_html_tag(self, value):
+        bleach_kwargs = _get_default_bleach_kwargs()
+        if "allowed_tags" in settings.WAGTAILMARKDOWN:
+            bleach_kwargs["tags"] = bleach_kwargs["tags"] + list(
+                set(settings.WAGTAILMARKDOWN["allowed_tags"] + bleach_kwargs["tags"])
+            )
+            bleach_kwargs["tags"] = list(
+                set(settings.WAGTAILMARKDOWN["allowed_tags"] + bleach_kwargs["tags"])
+            )
+
+        tags = BeautifulSoup(value, "html.parser").find_all()
+        for tag in tags:
+            if tag not in bleach_kwargs['tags']:
+                return True
+
+        return False
+
     def _map_body(self, type_, row, v2_body):
         for block in v2_body:
             if block['type'] == 'paragraph':
-                has_html = bool(BeautifulSoup(block['value'], "html.parser").find())
-                block['type'] = 'html' if has_html else 'markdown'
+                has_unsupported_html_tag = self.has_unsupported_html_tag(block['value'])
+                if has_unsupported_html_tag:
+                    block['type'] = 'html'
+                    page = self.v1_to_v2_page_map.get(row['page_ptr_id'])
+                    if page:
+                        self.post_migration_report_messages['page_with_unsupported_tags'].append(
+                            f'title: {page.title}. URL: {page.full_url}.'
+                        )
+                else:
+                    block['type'] = 'markdown'
             elif block['type'] == 'richtext':
                 block['type'] = 'paragraph'
             elif block['type'] == 'image':
@@ -608,7 +634,6 @@ class Command(BaseCommand):
                     self.post_migration_report_messages['invalid_page_id'].append(
                         f'Unable to attach v2 page for {type_[:-1]}, title={row["title"]}'
                     )
-
         return v2_body
 
     def map_article_body(self, row):
