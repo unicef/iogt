@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load comments %}
 
-<form method="POST" class="reply-form" action="{% comment_form_target %}" onsubmit="post.disabled = true; return true;">
+<form method="POST" class="reply-form" onsubmit="post.disabled = true; return true;">
     {% csrf_token %}
     <fieldset class='comments__holder'>
         <input type="hidden" name="next" value="{% spaceless %}{% if form.is_admin %}{% url 'comment_reply_view' comment_pk=comment.pk %}{% else %}{% url 'comments-xtd-sent' %}{% endif %}{% endspaceless %}"/>
@@ -17,7 +17,8 @@
         <div style="display:none">{{ form.honeypot }}</div>
         <div class="row form-group {% if 'comment' in form.errors %}has-danger{% endif %}">
             <div class="offset-md-1 col-md-10">
-                {{ form.comment }}
+                <textarea name="comment" placeholder="Your comment" class="form-control" id="id_comment"
+                          >{{ request.GET.canned_response }}</textarea>
                 {% for error in form.comment.errors %}
                     <div class="alert-danger">{{ error }}</div>
                 {% endfor %}
@@ -68,7 +69,10 @@
 
     <div class='comments__input-holder'>
         <div class="comments__submit">
-            <input type="submit" class="reply-comment" name="post" value="{% translate 'Leave comment' %}"/>
+            <input type="submit" class="reply-comment" formaction="{% url 'process_canned_response' %}#id_comment" name="post" value="{% translate 'Add Canned Response' %}"/>
+        </div>
+        <div class="comments__submit">
+            <input type="submit" class="reply-comment" formaction="{% comment_form_target %}" name="post" value="{% translate 'Leave comment' %}"/>
         </div>
     </div>
 </form>
