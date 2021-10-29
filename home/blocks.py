@@ -7,6 +7,7 @@ from django.utils.translation import gettext as _
 from wagtail.core import blocks
 from wagtail.core.blocks import PageChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
+from wagtailmarkdown.utils import render_markdown
 from wagtailmedia.blocks import AbstractMediaChooserBlock
 
 from questionnaires.utils import SkipLogicPaginator
@@ -207,3 +208,10 @@ class NumberedListBlock(blocks.ListBlock):
             ]
         )
         return format_html("<ol>{0}</ol>", children)
+
+
+class RawHTMLBlock(blocks.RawHTMLBlock):
+    def render_basic(self, value, context=None):
+        result = super(RawHTMLBlock, self).render_basic(value, context)
+
+        return render_markdown(result)
