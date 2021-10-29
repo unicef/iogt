@@ -12,6 +12,7 @@ from wagtail.core import hooks
 from wagtail.core.models import Page
 from wagtail.core.models import PageViewRestriction
 from wagtail.core.rich_text import LinkHandler
+from wagtail.admin.forms.choosers import ExternalLinkChooserForm
 
 from home.models import FooterIndexPage, BannerIndexPage, Section, \
     SectionIndexPage
@@ -31,6 +32,7 @@ class ExternalLinkHandler(LinkHandler, ABC):
         except Resolver404:
             external_link_page = reverse("external-link")
             return f'<a href="{external_link_page}?{urlencode({"next": next_page})}">'
+
 
 @hooks.register("register_rich_text_features")
 def register_external_link(features):
@@ -99,3 +101,8 @@ def global_admin_css():
 Redirect._meta.get_field("old_path").help_text = _(
     'A relative path to redirect from e.g. /en/youth. '
     'See https://docs.wagtail.io/en/stable/editor_manual/managing_redirects.html for more details')
+
+ExternalLinkChooserForm.base_fields['url'].help_text = _(
+    'If you are linking back to a URL on your own IoGT site, be sure to remove the domain and everything before it. '
+    'For example "http://sd.goodinternet.org/url/" should instead be "/url/".'
+)
