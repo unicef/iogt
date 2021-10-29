@@ -149,12 +149,14 @@ class Command(BaseCommand):
         self.home_page = self.create_home_page(root)
         self.translate_home_pages(self.home_page)
         self.create_index_pages(self.home_page)
+        self.translate_index_pages()
         self.migrate_sections()
         self.migrate_articles()
         self.migrate_footers()
         self.migrate_polls()
         self.migrate_surveys()
         self.migrate_banners()
+        self.mark_pages_which_are_not_translated_in_v1_as_draft()
         Page.fix_tree()
         self.fix_articles_body()
         self.fix_footers_body()
@@ -163,8 +165,8 @@ class Command(BaseCommand):
         self.attach_banners_to_home_page()
         self.migrate_recommended_articles_for_article()
         self.migrate_featured_articles_for_homepage()
-        self.add_polls_from_polls_index_page_to_footer_index_page_as_page_link_page()
         self.add_surveys_from_surveys_index_page_to_footer_index_page_as_page_link_page()
+        self.add_polls_from_polls_index_page_to_footer_index_page_as_page_link_page()
         self.add_polls_from_polls_index_page_to_home_page_featured_content()
         self.add_surveys_from_surveys_index_page_to_home_page_featured_content()
         self.move_footers_to_end_of_footer_index_page()
@@ -212,23 +214,35 @@ class Command(BaseCommand):
         return home
 
     def create_index_pages(self, homepage):
-        self.section_index_page = models.SectionIndexPage(title='Sections')
-        homepage.add_child(instance=self.section_index_page)
+        self.section_index_page = models.SectionIndexPage.objects.first()
+        if self.section_index_page is None:
+            self.section_index_page = models.SectionIndexPage(title='Sections')
+            homepage.add_child(instance=self.section_index_page)
 
-        self.banner_index_page = models.BannerIndexPage(title='Banners')
-        homepage.add_child(instance=self.banner_index_page)
+        self.banner_index_page = models.BannerIndexPage.objects.first()
+        if self.banner_index_page is None:
+            self.banner_index_page = models.BannerIndexPage(title='Banners')
+            homepage.add_child(instance=self.banner_index_page)
 
-        self.footer_index_page = models.FooterIndexPage(title='Footers')
-        homepage.add_child(instance=self.footer_index_page)
+        self.footer_index_page = models.FooterIndexPage.objects.first()
+        if self.footer_index_page is None:
+            self.footer_index_page = models.FooterIndexPage(title='Footers')
+            homepage.add_child(instance=self.footer_index_page)
 
-        self.poll_index_page = PollIndexPage(title='Polls')
-        homepage.add_child(instance=self.poll_index_page)
+        self.poll_index_page = PollIndexPage.objects.first()
+        if self.poll_index_page is None:
+            self.poll_index_page = PollIndexPage(title='Polls')
+            homepage.add_child(instance=self.poll_index_page)
 
-        self.survey_index_page = SurveyIndexPage(title='Surveys')
-        homepage.add_child(instance=self.survey_index_page)
+        self.survey_index_page = SurveyIndexPage.objects.first()
+        if self.survey_index_page is None:
+            self.survey_index_page = SurveyIndexPage(title='Surveys')
+            homepage.add_child(instance=self.survey_index_page)
 
-        self.quiz_index_page = QuizIndexPage(title='Quizzes')
-        homepage.add_child(instance=self.quiz_index_page)
+        self.quiz_index_page = QuizIndexPage.objects.first()
+        if self.quiz_index_page is None:
+            self.quiz_index_page = QuizIndexPage(title='Quizzes')
+            homepage.add_child(instance=self.quiz_index_page)
 
     def migrate_collections(self):
         cur = self.db_query('select * from wagtailcore_collection')
@@ -1200,6 +1214,21 @@ class Command(BaseCommand):
             locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
             self.translate_page(locale=locale, page=home)
 
+    def translate_index_pages(self):
+        cur = self.db_query(f'select * from core_sitelanguage')
+        locales = []
+        for row in cur:
+            locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
+            locales.append(locale)
+
+        index_pages = [
+            self.section_index_page, self.banner_index_page, self.footer_index_page, self.poll_index_page,
+            self.survey_index_page, self.quiz_index_page,
+        ]
+        for page in index_pages:
+            for locale in locales:
+                self.translate_page(locale=locale, page=page)
+
     def migrate_recommended_articles_for_article(self):
         article_cur = self.db_query(f'select DISTINCT page_id from core_articlepagerecommendedsections')
         for article_row in article_cur:
@@ -1477,6 +1506,24 @@ class Command(BaseCommand):
                 footer_index_page.add_child(instance=page_link_page)
 
         self.stdout.write('Added surveys from survey index page to footer index page as page link page.')
+
+    def mark_pages_which_are_not_translated_in_v1_as_draft(self):
+        self.section_index_page.refresh_from_db()
+        self.banner_index_page.refresh_from_db()
+        self.footer_index_page.refresh_from_db()
+        self.poll_index_page.refresh_from_db()
+        self.survey_index_page.refresh_from_db()
+        self.quiz_index_page.refresh_from_db()
+
+        page_ids_to_exclude = []
+        page_ids_to_exclude += self.section_index_page.get_translations(inclusive=True).values_list('id', flat=True)
+        page_ids_to_exclude += self.banner_index_page.get_translations(inclusive=True).values_list('id', flat=True)
+        page_ids_to_exclude += self.footer_index_page.get_translations(inclusive=True).values_list('id', flat=True)
+        page_ids_to_exclude += self.poll_index_page.get_translations(inclusive=True).values_list('id', flat=True)
+        page_ids_to_exclude += self.survey_index_page.get_translations(inclusive=True).values_list('id', flat=True)
+        page_ids_to_exclude += self.quiz_index_page.get_translations(inclusive=True).values_list('id', flat=True)
+
+        Page.objects.filter(alias_of__isnull=False).exclude(id__in=page_ids_to_exclude).update(live=False)
 
     def add_polls_from_polls_index_page_to_home_page_featured_content(self):
         self.poll_index_page.refresh_from_db()
