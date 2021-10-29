@@ -4,6 +4,7 @@ from django.urls import reverse
 from rest_framework import status
 from wagtail.core.models import PageViewRestriction
 
+from comments.models import CommentStatus
 from home.factories import ArticleFactory, SectionFactory
 from home.models import HomePage
 from iogt_users.factories import UserFactory
@@ -14,12 +15,12 @@ class LimitPageChooserHookTests(TestCase):
     def setUp(self):
         self.user = UserFactory()
         self.home_page = HomePage.objects.first()
-        self.article01 = ArticleFactory.build(owner=self.user)
+        self.article01 = ArticleFactory.build(owner=self.user, commenting_status=CommentStatus.OPEN)
         self.section01 = SectionFactory.build(owner=self.user)
         self.home_page.add_child(instance=self.article01)
         self.home_page.add_child(instance=self.section01)
         self.section02 = SectionFactory.build(owner=self.user)
-        self.article02 = ArticleFactory.build(owner=self.user)
+        self.article02 = ArticleFactory.build(owner=self.user, commenting_status=CommentStatus.OPEN)
         self.section01.add_child(instance=self.section02)
         self.section01.add_child(instance=self.article02)
 
