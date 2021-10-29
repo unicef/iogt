@@ -156,6 +156,7 @@ class Command(BaseCommand):
         self.migrate_polls()
         self.migrate_surveys()
         self.migrate_banners()
+        self.mark_pages_which_are_not_translated_in_v1_as_draft()
         Page.fix_tree()
         self.fix_articles_body()
         self.fix_footers_body()
@@ -1502,6 +1503,24 @@ class Command(BaseCommand):
                 footer_index_page.add_child(instance=page_link_page)
 
         self.stdout.write('Added surveys from survey index page to footer index page as page link page.')
+
+    def mark_pages_which_are_not_translated_in_v1_as_draft(self):
+        self.section_index_page.refresh_from_db()
+        self.banner_index_page.refresh_from_db()
+        self.footer_index_page.refresh_from_db()
+        self.poll_index_page.refresh_from_db()
+        self.survey_index_page.refresh_from_db()
+        self.quiz_index_page.refresh_from_db()
+
+        page_ids_to_exclude = []
+        page_ids_to_exclude += self.section_index_page.get_translations(inclusive=True).values_list('id', flat=True)
+        page_ids_to_exclude += self.banner_index_page.get_translations(inclusive=True).values_list('id', flat=True)
+        page_ids_to_exclude += self.footer_index_page.get_translations(inclusive=True).values_list('id', flat=True)
+        page_ids_to_exclude += self.poll_index_page.get_translations(inclusive=True).values_list('id', flat=True)
+        page_ids_to_exclude += self.survey_index_page.get_translations(inclusive=True).values_list('id', flat=True)
+        page_ids_to_exclude += self.quiz_index_page.get_translations(inclusive=True).values_list('id', flat=True)
+
+        Page.objects.filter(alias_of__isnull=False).exclude(id__in=page_ids_to_exclude).update(live=False)
 
     def add_polls_from_polls_index_page_to_home_page_featured_content(self):
         self.poll_index_page.refresh_from_db()
