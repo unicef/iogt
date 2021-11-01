@@ -690,16 +690,6 @@ class CacheSettings(BaseSetting):
 
 
 class IogtFlatMenuItem(AbstractFlatMenuItem):
-    link_url = models.CharField(
-        verbose_name=_('link to a custom URL'),
-        max_length=255,
-        blank=True,
-        null=True,
-        help_text=_("If you are linking back to a URL on your own IoGT site, "
-                    "be sure to remove the domain and everything before it. "
-                    "For example 'http://sd.goodinternet.org/url/' should instead be '/url/'.")
-    )
-
     menu = ParentalKey(
         'wagtailmenus.FlatMenu',
         on_delete=models.CASCADE,
