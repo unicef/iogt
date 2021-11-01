@@ -12,6 +12,7 @@ from wagtail.core.models import Page
 from wagtail.core.models import PageViewRestriction
 from wagtail.core.rich_text import LinkHandler
 from wagtail.admin.forms.choosers import ExternalLinkChooserForm
+from wagtailmenus.models.menus import FlatMenu
 
 from home.models import FooterIndexPage, BannerIndexPage, Section, \
     SectionIndexPage
@@ -99,4 +100,11 @@ Redirect._meta.get_field("old_path").help_text = _(
 ExternalLinkChooserForm.base_fields['url'].help_text = _(
     'If you are linking back to a URL on your own IoGT site, be sure to remove the domain and everything before it. '
     'For example "http://sd.goodinternet.org/url/" should instead be "/url/".'
+)
+
+FlatMenu._meta.get_field("handle").help_text = _(
+    'The handle must be written in the format "[language_code]_menu_live", '
+    'e.g. "en_menu_live", for the menu to be live on the website. '
+    'You can use other handles, e.g. "en_oldmenu", to store other draft '
+    'menus without them getting displayed.'
 )
