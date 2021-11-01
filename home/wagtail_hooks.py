@@ -6,13 +6,14 @@ from django.urls import resolve, Resolver404
 from django.urls import reverse
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
+from django.templatetags.static import static
+from django.utils.html import format_html
 from wagtail.contrib.redirects.models import Redirect
 from wagtail.core import hooks
 from wagtail.core.models import Page
 from wagtail.core.models import PageViewRestriction
 from wagtail.core.rich_text import LinkHandler
 from wagtail.admin.forms.choosers import ExternalLinkChooserForm
-from wagtailmenus.models.menus import FlatMenu
 
 from home.models import FooterIndexPage, BannerIndexPage, Section, \
     SectionIndexPage
@@ -93,6 +94,13 @@ def limit_page_chooser(pages, request):
     return pages
 
 
+@hooks.register('insert_global_admin_js', order=100)
+def global_admin_js():
+    return format_html(
+        '<script src="{}"></script>',
+        static("js/global/admin.js")
+    )
+
 Redirect._meta.get_field("old_path").help_text = _(
     'A relative path to redirect from e.g. /en/youth. '
     'See https://docs.wagtail.io/en/stable/editor_manual/managing_redirects.html for more details')
@@ -102,9 +110,3 @@ ExternalLinkChooserForm.base_fields['url'].help_text = _(
     'For example "http://sd.goodinternet.org/url/" should instead be "/url/".'
 )
 
-FlatMenu._meta.get_field("handle").help_text = _(
-    'The handle must be written in the format "[language_code]_menu_live", '
-    'e.g. "en_menu_live", for the menu to be live on the website. '
-    'You can use other handles, e.g. "en_oldmenu", to store other draft '
-    'menus without them getting displayed.'
-)
