@@ -443,7 +443,8 @@ textarea:focus ~ .cust-input__length-text {
 }
 
 .cust-btn--dark span {
-    color: #fff
+    color: #fff;
+    flex: 1;
 }
 
 .cust-btn--dark:hover {

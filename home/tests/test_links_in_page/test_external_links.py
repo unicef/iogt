@@ -1,5 +1,7 @@
 from bs4 import BeautifulSoup
 from django.test import Client, TestCase
+
+from comments.models import CommentStatus
 from home.models import Article
 from home.tests.faker import faker
 from rest_framework import status
@@ -15,7 +17,8 @@ class TransitionPageForExtIntLinksInRichTextTests(TestCase):
 
     def create_published_article_to_root(self, body) -> Article:
         parent: Page = Page.objects.get(url_path="/home/")  # should be const
-        article: Article = Article(title=faker.pystr(), slug=faker.pystr(), body=body)
+        article: Article = Article(title=faker.pystr(), slug=faker.pystr(), body=body,
+                                   commenting_status=CommentStatus.OPEN)
         parent.add_child(instance=article)
         article.save_revision().publish()
 
@@ -49,11 +52,11 @@ class TransitionPageForExtIntLinksInRichTextTests(TestCase):
         assert response.status_code == status.HTTP_200_OK
 
         html_parser = BeautifulSoup(response.content, "html.parser")
-        main_block = html_parser.find("div", {"class": "main-text"})
+        links = html_parser.select("section.article__content .block-paragraph a")
 
-        assert len(main_block.find_all("a")) == len(body)
+        assert len(links) == len(body)
 
-        for link in main_block.find_all("a"):
+        for link in links:
             assert self.external_link_pattern in link["href"]
 
     def test_if_rich_text_field_internal_links_redirect_directly(self):
@@ -73,7 +76,7 @@ class TransitionPageForExtIntLinksInRichTextTests(TestCase):
             (
                 "paragraph",
                 RichText(
-                    '<p>Lorem dolor sit amet <a id="3" linktype="page">external link at the end</a></p>'
+                    '<p>Lorem dolor sit amet <a id="3" linktype="page">internal link at the end</a></p>'
                 ),
             ),
         ]
@@ -84,9 +87,9 @@ class TransitionPageForExtIntLinksInRichTextTests(TestCase):
         assert response.status_code == status.HTTP_200_OK
 
         html_parser = BeautifulSoup(response.content, "html.parser")
-        main_block = html_parser.find("div", {"class": "main-text"})
+        links = html_parser.select("section.article__content .block-paragraph a")
 
-        assert len(main_block.find_all("a")) == len(body)
+        assert len(links) == len(body)
 
-        for link in main_block.find_all("a"):
+        for link in links:
             assert self.external_link_pattern not in link["href"]

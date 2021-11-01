@@ -1,0 +1,5 @@
+.action-add-block-html {
+    text-decoration: line-through;
+    pointer-events: none;
+    background-color: gray;
+}

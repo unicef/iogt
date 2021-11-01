@@ -2,9 +2,10 @@ from abc import ABC
 from urllib.parse import urlparse, urlunparse, urlencode
 
 from django.core.exceptions import PermissionDenied
+from django.templatetags.static import static
 from django.urls import resolve, Resolver404
 from django.urls import reverse
-from django.utils.html import escape
+from django.utils.html import escape, format_html
 from django.utils.translation import gettext_lazy as _
 from django.templatetags.static import static
 from django.utils.html import format_html
@@ -104,6 +105,7 @@ def global_admin_js():
         '<script src="{}"></script>',
         static("js/global/admin.js")
     )
+
 
 Redirect._meta.get_field("old_path").help_text = _(
     'A relative path to redirect from e.g. /en/youth. '

@@ -1,4 +1,5 @@
 import json
+from collections import defaultdict
 from time import sleep
 
 import psycopg2
@@ -65,7 +66,7 @@ class Command(BaseCommand):
             '--group-ids',
             nargs='+',
             type=int,
-            help='Groups IDs to mark registration survey mandatory'
+            help='Groups IDs to mark registration survey mandatory for'
         )
 
     def handle(self, *args, **options):
@@ -77,6 +78,7 @@ class Command(BaseCommand):
                                                        self.request_registration_survey_mandatory_groups()
         self.content_type_map = dict()
         self.delete_users = options.get('delete_users')
+        self.post_migration_report_messages = defaultdict(list)
 
         self.clear()
 
@@ -162,6 +164,8 @@ class Command(BaseCommand):
 
         self.migrate_page_view_restrictions()
 
+        self.print_post_migration_report()
+
     def populate_content_type_map(self):
         sql = f'select * from django_content_type'
         cur = self.db_query(sql)
@@ -181,9 +185,16 @@ class Command(BaseCommand):
         cur.close()
 
     def migrate_user_accounts(self):
+        sql = f'select lower(username), count(*) from auth_user group by lower(username) having count(*) > 1'
+        cur = self.db_query(sql)
+
+        colliding_usernames = [row['lower'] for row in cur]
+        self.post_migration_report_messages['colliding_users_in_v1'].append(','.join(colliding_usernames))
+
         sql = f'select * from auth_user'
         cur = self.db_query(sql)
 
+        renamed_users = []
         for row in self.with_progress(sql, cur, 'User Migration in progress'):
             v1_user_id = row.pop('id')
 
@@ -196,9 +207,7 @@ class Command(BaseCommand):
                 if get_user_model().objects.filter(username=row['username']).exists():
                     existing_user = get_user_model().objects.get(username=row['username'])
                     modified_username = f'{existing_user}_v2'
-                    self.stdout.write(self.style.ERROR(f'Renaming {existing_user.username} to '
-                                                       f'{modified_username} due to username conflict'))
-
+                    renamed_users.append(f'{existing_user} -> {modified_username}')
                     existing_user.username = modified_username
                     existing_user.save()
 
@@ -218,6 +227,9 @@ class Command(BaseCommand):
 
                 user_groups_cursor.close()
 
+        if renamed_users:
+            self.post_migration_report_messages['renamed_users'].append(','.join(renamed_users))
+
     def migrate_user_groups(self):
         self.stdout.write(self.style.SUCCESS('Starting User Groups Migration'))
 
@@ -233,7 +245,6 @@ class Command(BaseCommand):
     def mark_user_registration_survey_required(self):
         users = get_user_model().objects.filter(groups__id__in=self.registration_survey_mandatory_group_ids)
         users.update(has_filled_registration_survey=False)
-
 
     def migrate_root_level_user_comments(self):
         sql = f'select dc.id as comment_id, wcp.id as wagtailpage_id, wcp.title, comment, * ' \
@@ -298,19 +309,19 @@ class Command(BaseCommand):
             if not parent_comment:
                 self.stdout.write(self.style.ERROR(f'Parent comment for Comment ID:{comment_id} not found in V2'))
 
-
             migrated_comment = V1ToV2ObjectMap.get_v2_obj(XtdComment, comment_id)
 
             if not migrated_comment:
-                print(f'Migrating comment {row["comment"]} with parent {parent_comment}')
-                max_order_value = XtdComment.objects.filter(thread_id=parent_comment.thread_id)\
+                max_order_value = XtdComment.objects.filter(thread_id=parent_comment.thread_id) \
                     .values_list('order', flat=True).first()
                 comment = XtdComment.objects.create(
                     content_type_id=content_type.id, object_pk=parent_comment.object_pk, user_name=row['user_name'],
                     user_email=row['user_email'], submit_date=row['submit_date'],
                     comment=row['comment'], is_public=row['is_public'], is_removed=row['is_removed'],
-                    thread_id=parent_comment.thread_id, user=V1ToV2ObjectMap.get_v2_obj(get_user_model(), row['user_id']),
-                    level=parent_comment.level + 1, order=max_order_value + 1, followup=0, nested_count=0, ip_address=row['ip_address'],
+                    thread_id=parent_comment.thread_id,
+                    user=V1ToV2ObjectMap.get_v2_obj(get_user_model(), row['user_id']),
+                    level=parent_comment.level + 1, order=max_order_value + 1, followup=0, nested_count=0,
+                    ip_address=row['ip_address'],
                     parent_id=parent_comment.pk,
                     site_id=1)
                 V1ToV2ObjectMap.create_map(comment, comment_id)
@@ -480,9 +491,19 @@ class Command(BaseCommand):
                     page=migrated_page, restriction_type=row['restriction_type'], password=row['password'])
                 V1ToV2ObjectMap.create_map(pvr, row['id'])
 
-                pvr_groups_sql = f'select * from wagtailcore_pageviewrestriction_groups where pageviewrestriction_id={row["id"]}'
+                pvr_groups_sql = f'select * from wagtailcore_pageviewrestriction_groups ' \
+                                 f'where pageviewrestriction_id={row["id"]}'
                 pvr_groups_cur = self.db_query(pvr_groups_sql)
 
                 for pvr_group in pvr_groups_cur:
                     migrated_group = V1ToV2ObjectMap.get_v2_obj(Group, pvr_group['group_id'])
                     PageViewRestriction.groups.add(migrated_group)
+
+    def print_post_migration_report(self):
+        self.stdout.write(self.style.ERROR('====================='))
+        self.stdout.write(self.style.ERROR('POST MIGRATION REPORT'))
+        self.stdout.write(self.style.ERROR('====================='))
+
+        for k, v in self.post_migration_report_messages.items():
+            self.stdout.write(self.style.ERROR(f"===> {k.replace('_', ' ').upper()}"))
+            self.stdout.write(self.style.ERROR('\n'.join(v)))

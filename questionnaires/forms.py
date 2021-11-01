@@ -1,3 +1,4 @@
+import random
 from collections import defaultdict
 
 from django.core.exceptions import ValidationError
@@ -34,29 +35,28 @@ class CustomFormBuilder(FormBuilder):
         return forms.IntegerField(**options)
 
     def create_dropdown_field(self, field, options):
-        options['choices'] = map(
-            lambda x: (x.strip(), x.strip()),
-            field.choices.split('|')
-        )
+        options['choices'] = [(x.strip(), x.strip()) for x in field.choices.split('|')]
+        if getattr(field.page, 'randomise_options', False):
+            random.shuffle(options['choices'])
         return forms.ChoiceField(**options)
 
     def create_multiselect_field(self, field, options):
-        options['choices'] = map(
-            lambda x: (x.strip(), x.strip()),
-            field.choices.split('|')
-        )
+        options['choices'] = [(x.strip(), x.strip()) for x in field.choices.split('|')]
+        if getattr(field.page, 'randomise_options', False):
+            random.shuffle(options['choices'])
         return forms.MultipleChoiceField(**options)
 
     def create_radio_field(self, field, options):
-        options['choices'] = map(
-            lambda x: (x.strip(), x.strip()),
-            field.choices.split('|')
-        )
+        options['choices'] = [(x.strip(), x.strip()) for x in field.choices.split('|')]
+        if getattr(field.page, 'randomise_options', False):
+            random.shuffle(options['choices'])
         return forms.ChoiceField(widget=forms.RadioSelect, **options)
 
     def create_checkboxes_field(self, field, options):
         options['choices'] = [(x.strip(), x.strip()) for x in field.choices.split('|')]
         options['initial'] = [x.strip() for x in field.default_value.split('|')]
+        if getattr(field.page, 'randomise_options', False):
+            random.shuffle(options['choices'])
         return forms.MultipleChoiceField(
             widget=forms.CheckboxSelectMultiple, **options
         )

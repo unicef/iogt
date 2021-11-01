@@ -30,6 +30,15 @@ body.rtl {
   letter-spacing: 0.01em;
 }
 
+.related-articles ul .article-header {
+  width: 50%;
+  padding-right: 10px;
+}
+
+.related-articles ul .article-header p {
+  width: 100%;
+}
+
 .related-articles a {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -89,6 +98,13 @@ body.rtl {
     font-size: 16px;
     margin-right: 5px;
     line-height: 24px;
+  }
+  .related-articles ul .article-header {
+    width: 50%;
+  }
+
+  .related-articles ul .article-header p {
+    width: 100%;
   }
   .related-articles a {
     padding: 16px 0px;
@@ -1125,9 +1141,28 @@ body.rtl {
 .sm-paragraph {
   font-size: 0.75em !important;
   font-weight: normal !important;
+  width: 100% !important;
 }
 
 .lg-paragraph {
   font-size: 0.9em !important;
   font-weight: normal !important;
+  width: 100% !important;
+}
+
+#content-wrap .first-content {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    width: 100%;
+}
+
+#content-wrap .first-content .overlay-holder {
+  max-width: 320px;
+  margin: 0 auto 20px;
+}
+
+#content-wrap .first-content .overlay-holder img {
+  max-width: 320px;
+  margin: 0;
+  width: 100% !important;
 }
