@@ -197,6 +197,14 @@ class ArticleChooserBlock(PageChooserBlock):
         template = 'blocks/article_page.html'
 
 
+class ArticleBlock(blocks.StructBlock):
+    display_section_title = blocks.BooleanBlock(required=False)
+    article = PageChooserBlock(target_model='home.Article')
+
+    class Meta:
+        template = 'blocks/article.html'
+
+
 class NumberedListBlock(blocks.ListBlock):
 
     def render_basic(self, value, context=None):
