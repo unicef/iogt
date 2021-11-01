@@ -3,6 +3,7 @@ from django.urls import reverse
 from rest_framework import status
 from wagtail.core.models import PageViewRestriction
 
+from comments.models import CommentStatus
 from home.factories import ArticleFactory
 from home.models import HomePage
 from iogt_users.factories import UserFactory, GroupFactory
@@ -15,7 +16,8 @@ class PageViewGroupPermissionTests(TestCase):
         self.admin_user = UserFactory()
 
         self.home_page = HomePage.objects.first()
-        self.group_restricted_article = ArticleFactory.build(owner=self.admin_user)
+        self.group_restricted_article = ArticleFactory.build(owner=self.admin_user,
+                                                             commenting_status=CommentStatus.OPEN)
         self.home_page.add_child(instance=self.group_restricted_article)
         view_restriction = PageViewRestriction.objects.create(page=self.group_restricted_article,
                                                               restriction_type=PageViewRestriction.GROUPS)

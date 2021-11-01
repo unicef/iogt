@@ -7,6 +7,7 @@ from django.utils.translation import gettext as _
 from wagtail.core import blocks
 from wagtail.core.blocks import PageChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
+from wagtailmarkdown.utils import render_markdown
 from wagtailmedia.blocks import AbstractMediaChooserBlock
 
 from questionnaires.utils import SkipLogicPaginator
@@ -134,6 +135,52 @@ class EmbeddedQuestionnaireChooserBlock(blocks.PageChooserBlock):
         icon = 'form'
 
 
+class EmbeddedQuestionnaireBlock(blocks.StructBlock):
+    direct_display = blocks.BooleanBlock(required=False)
+
+
+class EmbeddedPollBlock(EmbeddedQuestionnaireBlock):
+    poll = EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')
+
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context)
+
+        context.update({'page': value['poll']})
+
+        return context
+
+    class Meta:
+        template = 'blocks/embedded_questionnaire_block.html'
+
+
+class EmbeddedSurveyBlock(EmbeddedQuestionnaireBlock):
+    survey = EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')
+
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context)
+
+        context.update({'page': value['survey']})
+
+        return context
+
+    class Meta:
+        template = 'blocks/embedded_questionnaire_block.html'
+
+
+class EmbeddedQuizBlock(EmbeddedQuestionnaireBlock):
+    quiz = EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Quiz')
+
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context)
+
+        context.update({'page': value['quiz']})
+
+        return context
+
+    class Meta:
+        template = 'blocks/embedded_questionnaire_block.html'
+
+
 class PageButtonBlock(blocks.StructBlock):
     page = blocks.PageChooserBlock()
     text = blocks.CharBlock(required=False, max_length=255)
@@ -148,3 +195,31 @@ class ArticleChooserBlock(PageChooserBlock):
 
     class Meta:
         template = 'blocks/article_page.html'
+
+
+class ArticleBlock(blocks.StructBlock):
+    display_section_title = blocks.BooleanBlock(required=False)
+    article = PageChooserBlock(target_model='home.Article')
+
+    class Meta:
+        template = 'blocks/article.html'
+
+
+class NumberedListBlock(blocks.ListBlock):
+
+    def render_basic(self, value, context=None):
+        children = format_html_join(
+            '\n', '<li>{0}</li>',
+            [
+                (self.child_block.render(child_value, context=context),)
+                for child_value in value
+            ]
+        )
+        return format_html("<ol>{0}</ol>", children)
+
+
+class RawHTMLBlock(blocks.RawHTMLBlock):
+    def render_basic(self, value, context=None):
+        result = super(RawHTMLBlock, self).render_basic(value, context)
+
+        return render_markdown(result)
