@@ -611,7 +611,7 @@ class Command(BaseCommand):
         for block in v2_body:
             if block['type'] == 'paragraph':
                 if self.has_unsupported_html_tag(block['value']):
-                    block['type'] = 'html'
+                    block['type'] = 'paragraph_v1_legacy'
                     page = self.v1_to_v2_page_map.get(row['page_ptr_id'])
                     if page:
                         self.post_migration_report_messages['page_with_unsupported_tags'].append(
