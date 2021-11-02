@@ -602,7 +602,7 @@ class Command(BaseCommand):
 
         tags = BeautifulSoup(value, "html.parser").find_all()
         for tag in tags:
-            if tag not in bleach_kwargs['tags']:
+            if tag.name not in bleach_kwargs['tags']:
                 return True
 
         return False
