@@ -1844,6 +1844,7 @@ textarea:focus ~ .cust-input__length-text {
 }
 
 .canned-response-select {
+    margin-top: 20px;
     display: block;
     width: 100%;
     padding: 15px 10px;

@@ -83,7 +83,8 @@ class ProcessCannedResponseView(View):
         parsed_url = urlparse(referer)
 
         query_dict = dict(parse_qsl(parsed_url.query))
-        canned_response_text = get_object_or_404(CannedResponse, pk=canned_response_id).text
+        canned_response_text = get_object_or_404(CannedResponse,
+                                                 pk=canned_response_id).text if canned_response_id else ''
         comment_text = request.POST.get('comment')
         query_dict.update({'canned_response': f'{comment_text} {canned_response_text}'})
 
@@ -91,4 +92,3 @@ class ProcessCannedResponseView(View):
         referer_url = urlunparse(parsed_url)
 
         return redirect(to=referer_url)
-

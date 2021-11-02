@@ -11,9 +11,9 @@ class CommentForm(BaseCommentForm):
         self.fields['email'].initial = 'noreply@example.com'
         self.fields['email'].widget = forms.HiddenInput()
 
-        canned_responses_choices = [(None, 'Canned Responses')]
+        canned_responses_choices = [(None, 'Select Canned Response')]
 
-        canned_responses_choices += ([(canned_response.id, canned_response.text) for canned_response in
+        canned_responses_choices += ([(canned_response.id, f'{canned_response.header} - {canned_response.text}') for canned_response in
                                     CannedResponse.objects.all()])
 
         self.fields['canned_responses'] = forms.ChoiceField(choices=canned_responses_choices, required=False)
