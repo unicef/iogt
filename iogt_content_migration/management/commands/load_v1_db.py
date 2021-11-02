@@ -1250,6 +1250,14 @@ class Command(BaseCommand):
         for row in cur:
             locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
             self.translate_page(locale=locale, page=home)
+            self.add_home_page_title_and_locale(home, locale)
+
+    def add_home_page_title_and_locale(self, home_page, locale):
+        translated_home_page = home_page.get_translation_or_none(locale)
+        if translated_home_page:
+            translated_home_page.title = home_page.title + ' [' + locale.__str__() + ']'
+            translated_home_page.save()
+
 
     def translate_index_pages(self):
         cur = self.db_query(f'select * from core_sitelanguage')
