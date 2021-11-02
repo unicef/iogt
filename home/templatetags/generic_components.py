@@ -30,13 +30,13 @@ def primary_button(title, extra_classnames='', href=None, icon_path=None,
 
 
 @register.inclusion_tag('generic_components/article_card.html')
-def article_card(article, display_section_title=False, background_color=None, font_color=None):
+def render_article_card(page, display_section_title=False, background_color=None, font_color=None):
     theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
 
     font_color = font_color or theme_settings.article_card_font_color
     background_color = background_color or theme_settings.article_card_background_color
     return {
-        'article': article,
+        'page': page,
         'display_section_title': display_section_title,
         'background_color': background_color,
         'font_color': font_color

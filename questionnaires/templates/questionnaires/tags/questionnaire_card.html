@@ -1,0 +1,10 @@
+{% load static wagtailcore_tags wagtailimages_tags questionnaires_tags i18n %}
+
+<a href="{% pageurl page %}">
+    <span class='quiz__details'>
+        <p>{% translate page.get_type|upper %}</p>
+        <p>{{ page.title }}</p>
+        {% include 'questionnaires/tags/index_page_description_lines.html' with page=page %}
+    </span>
+    {% include 'home/tags/angle_bracket.html' %}
+</a>

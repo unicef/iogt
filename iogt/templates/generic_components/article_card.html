@@ -1,14 +1,14 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
-<a href="{% pageurl article %}" style="color:{{ font_color }}; background:{{ background_color }};">
+<a href="{% pageurl page %}" style="color:{{ font_color }}; background:{{ background_color }};">
     <div class="article-header">
         {% if display_section_title %}
             <p class="sm-paragraph">
-                {{ article.specific.get_parent.title|upper }}
+                {{ page.get_parent.title|upper }}
             </p>
         {% endif %}
-        <p>{{ article.title }}</p>
+        <p>{{ page.title }}</p>
     </div>
-    {% image article.specific.lead_image width-75 class='related-articles__img--xs' %}
-    {% image article.specific.lead_image original class='related-articles__img--sm' %}
+    {% image page.lead_image width-75 class='related-articles__img--xs' %}
+    {% image page.lead_image original class='related-articles__img--sm' %}
 </a>

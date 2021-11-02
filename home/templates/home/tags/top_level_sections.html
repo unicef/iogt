@@ -1,10 +1,10 @@
 {% load static wagtailcore_tags wagtailimages_tags i18n generic_components image_tags %}
-<footer class="top-level">
+
+<section class="top-level">
     <nav>
-        {% for section in top_level_sections %}
-            {% pageurl section as section_url %}
-            {% primary_button title=section.specific.title font_color=section.specific.font_color background_color=section.specific.background_color icon_path=section.specific.icon.url href=section_url is_svg_icon=True %}
+        {% for page in pages %}
+            {% pageurl page as page_url %}
+            {% primary_button title=page.title font_color=page.font_color background_color=page.background_color icon_path=page.icon.url href=page_url is_svg_icon=True %}
         {% endfor %}
     </nav>
-</footer>
-
+</section>

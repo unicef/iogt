@@ -111,7 +111,7 @@ class Migration(migrations.Migration):
             name='HomePage',
             fields=[
                 ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
-                ('home_featured_content', wagtail.core.fields.StreamField([('page_button', wagtail.core.blocks.StructBlock([('page', wagtail.core.blocks.PageChooserBlock()), ('text', wagtail.core.blocks.CharBlock(max_length=255, required=False))])), ('embedded_poll', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Poll'])), ('embedded_survey', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Survey'])), ('embedded_quiz', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Quiz'])), ('article', home.blocks.ArticleChooserBlock())], null=True)),
+                ('home_featured_content', wagtail.core.fields.StreamField([('page_button', wagtail.core.blocks.StructBlock([('page', wagtail.core.blocks.PageChooserBlock()), ('text', wagtail.core.blocks.CharBlock(max_length=255, required=False))])), ('embedded_poll', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Poll'])), ('embedded_survey', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Survey'])), ('embedded_quiz', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Quiz']))], null=True)),
             ],
             options={
                 'abstract': False,

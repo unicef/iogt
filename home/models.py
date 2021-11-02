@@ -79,14 +79,9 @@ class HomePage(Page):
         check_user_session(request)
         context = super().get_context(request)
         context['banners'] = [
-            home_page_banner.banner_page for home_page_banner in
-            self.home_page_banners.filter(banner_page__live=True)
+            home_page_banner.banner_page.specific
+            for home_page_banner in self.home_page_banners.filter(banner_page__live=True)
         ]
-        context['featured_content'] = [
-            featured_content.content for featured_content in
-            self.featured_content.filter(content__live=True)
-        ]
-        context["footer"] = FooterPage.objects.live()
         return context
 
 
@@ -130,7 +125,7 @@ class SectionIndexPage(Page):
     def get_top_level_sections(cls):
         section_index_page = cls.objects.filter(locale=Locale.get_active()).first()
         if section_index_page:
-            return section_index_page.get_children().live()
+            return section_index_page.get_children().live().specific()
         return cls.objects.none()
 
 
@@ -188,6 +183,10 @@ class Section(Page, PageUtilsMixin, TitleIconMixin):
 
     base_form_class = SectionPageForm
 
+    @property
+    def get_type(self):
+        return self.__class__.__name__.lower()
+
     def get_descendant_articles(self):
         return Article.objects.descendant_of(self).live().exact_type(Article)
 
@@ -213,23 +212,11 @@ class Section(Page, PageUtilsMixin, TitleIconMixin):
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
-        context['featured_content'] = [
-            featured_content.content for featured_content in
-            self.featured_content.all() if featured_content.content.live
+        context['featured_content_items'] = [
+            featured_content.content.specific
+            for featured_content in self.featured_content.filter(content__live=True)
         ]
-        context['sub_sections'] = self.get_children().live().type(Section)
-
-        context['articles'] = self.get_children().live().type(Article)
-
-        survey_page_ids = self.get_children().live().type(Survey).values_list('id', flat=True)
-        context['surveys'] = Survey.objects.filter(pk__in=survey_page_ids)
-
-        poll_page_ids = self.get_children().live().type(Poll).values_list('id', flat=True)
-        context['polls'] = Poll.objects.filter(pk__in=poll_page_ids)
-
-        quiz_page_ids = self.get_children().live().type(Quiz).values_list('id', flat=True)
-        context['quizzes'] = Quiz.objects.filter(pk__in=quiz_page_ids)
-
+        context['children'] = self.get_children().live().specific()
         context['user_progress'] = self.get_user_progress_dict(request)
 
         return context
@@ -302,6 +289,10 @@ class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     ])
     show_in_menus_default = True
 
+    @property
+    def get_type(self):
+        return self.__class__.__name__.lower()
+
     def _get_child_block_values(self, block_type):
         searchable_content = []
         for block in self.body:
@@ -358,12 +349,13 @@ class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
-        context['breadcrumbs'] = [crumb for crumb in self.get_ancestors() if
-                                  not crumb.is_root()]
-        context['sections'] = self.get_ancestors().type(Section)
+        context['children'] = self.get_children().live().specific()
+        context['recommended_articles'] = [
+            recommended_article.article.specific
+            for recommended_article in self.recommended_articles.filter(article__live=True)
+        ]
 
         progress_enabled_section = self.get_progress_enabled_section()
-
         if progress_enabled_section:
             context.update({
                 'user_progress': progress_enabled_section.get_user_progress_dict(
@@ -458,7 +450,10 @@ class FooterIndexPage(Page):
 
     @classmethod
     def get_active_footers(cls):
-        return cls.objects.filter(locale=Locale.get_active()).first().get_descendants().live()
+        footer_index_page = cls.objects.filter(locale=Locale.get_active()).first()
+        if footer_index_page:
+            return footer_index_page.get_children().live().specific()
+        return cls.objects.none()
 
     def __str__(self):
         return self.title
@@ -887,7 +882,6 @@ class ManifestSettings(models.Model):
 
 @register_setting
 class ThemeSettings(BaseSetting):
-
     global_background_color = models.CharField(
         null=True, blank=True, help_text='The background color of the website',
         max_length=8, default='#FFFFFF')

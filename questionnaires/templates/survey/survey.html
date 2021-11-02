@@ -37,18 +37,18 @@
                                 </div>
                             {% endfor %}
                         </div>
-                        {% include 'questionnaires/terms_and_conditions.html' %}
+                        {% include 'questionnaires/tags/terms_and_conditions.html' %}
                         <div class="survey-page__btns">
                             {% render_submit_button fields_step page %}
                         </div>
                     </form>
                 {% else %}
-                    {% include 'questionnaires/already_completed.html' %}
+                    {% include 'questionnaires/tags/already_completed.html' %}
                 {% endif %}
             {% else %}
-                {% include 'questionnaires/login_to_participate.html' %}
+                {% include 'questionnaires/tags/login_to_participate.html' %}
             {% endif %}
-            {% include 'questionnaires/go_to_homepage.html' %}
+            {% include 'questionnaires/tags/go_to_homepage.html' %}
         </div>
     </div>
 {% endblock content %}

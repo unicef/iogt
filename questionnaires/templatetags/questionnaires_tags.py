@@ -8,24 +8,6 @@ from questionnaires.utils import SkipLogicPaginator
 register = template.Library()
 
 
-@register.inclusion_tag('questionnaires/tags/surveys_list.html', takes_context=True)
-def render_surveys_list(context, surveys):
-    context.update({'surveys': surveys})
-    return context
-
-
-@register.inclusion_tag('questionnaires/tags/polls_list.html', takes_context=True)
-def render_polls_list(context, polls):
-    context.update({'polls': polls})
-    return context
-
-
-@register.inclusion_tag('questionnaires/tags/quizzes_list.html', takes_context=True)
-def render_quizzes_list(context, quizzes):
-    context.update({'quizzes': quizzes})
-    return context
-
-
 @register.inclusion_tag('questionnaires/tags/checkbox.html')
 def render_checkbox(field):
     return {'field': field}
@@ -95,49 +77,50 @@ def get_action_url(page, self, fields_step, request, form):
             "request": request, "form": form}
 
 
-@register.inclusion_tag('blocks/embedded_questionnaires_wrapper.html', takes_context=True)
-def render_questionnaire_form(context, questionnaire):
+@register.inclusion_tag('questionnaires/tags/questionnaire_template_wrapper.html', takes_context=True)
+def render_questionnaire_form(context, page):
     request = context['request']
 
-    form_class = questionnaire.get_form_class()
+    form_class = page.get_form_class()
 
-    if isinstance(questionnaire, Poll):
-        template = 'blocks/embedded_poll.html'
+    if isinstance(page, Poll):
+        template = 'questionnaires/tags/embedded_poll.html'
+        # template = 'poll/poll.html'
         context.update({
-            'results': questionnaire.specific.get_results(),
-            'result_as_percentage': questionnaire.specific.result_as_percentage,
+            'results': page.get_results(),
+            'result_as_percentage': page.result_as_percentage,
         })
     else:
-        template = 'blocks/embedded_questionnaire.html'
-        paginator = SkipLogicPaginator(questionnaire.get_form_fields(), {}, {})
+        template = 'questionnaires/tags/embedded_questionnaire.html'
+        paginator = SkipLogicPaginator(page.get_form_fields(), {}, {})
         step = paginator.page(1)
-        if hasattr(questionnaire, 'multi_step') and questionnaire.multi_step:
-            form_class = questionnaire.get_form_class_for_step(step)
+        if hasattr(page, 'multi_step') and page.multi_step:
+            form_class = page.get_form_class_for_step(step)
         context.update({
             'fields_step': step,
         })
 
     context.update({
         'template': template,
-        'page': questionnaire,
+        'page': page,
     })
 
     multiple_submission_filter = (
         Q(session_key=request.session.session_key) if request.user.is_anonymous else Q(user__pk=request.user.pk)
     )
     multiple_submission_check = (
-            not questionnaire.allow_multiple_submissions
-            and questionnaire.get_submission_class().objects.filter(multiple_submission_filter,
-                                                                    page=questionnaire).exists()
+            not page.allow_multiple_submissions
+            and page.get_submission_class().objects.filter(multiple_submission_filter,
+                                                           page=page).exists()
     )
-    anonymous_user_submission_check = request.user.is_anonymous and not questionnaire.allow_anonymous_submissions
+    anonymous_user_submission_check = request.user.is_anonymous and not page.allow_anonymous_submissions
     if multiple_submission_check or anonymous_user_submission_check:
         context.update({
             'form': None,
         })
         return context
 
-    form = form_class(page=questionnaire, user=context['request'].user)
+    form = form_class(page=page, user=context['request'].user)
 
     context.update({
         'form': form,
@@ -159,8 +142,7 @@ def get_value_from_querydict(querydict, key):
 
 @register.simple_tag
 def snake_case(text):
-    return text.lower().replace(" ", "_").replace("__", "_").replace('?',
-                                                                     '')
+    return text.lower().replace(" ", "_").replace("__", "_").replace('?', '')
 
 
 @register.simple_tag

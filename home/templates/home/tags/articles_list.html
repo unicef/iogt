@@ -1,21 +1,12 @@
+{% load generic_components %}
 {% load home_tags %}
 {% load wagtailcore_tags wagtailimages_tags %}
 
 <section class='related-articles'>
     <ul>
-        {% for article in articles %}
+        {% for page in pages %}
             <li>
-                <a class="related-articles-link {% if article.get_parent.specific.larger_image_for_top_page_in_list_as_in_v1 and forloop.counter0 == 0 %}first-content{% endif %}" href="{% pageurl article %}">
-                    <div>
-                        <p> {{ article.title }}</p>
-                        {% if article.specific.index_page_description %}
-                            <p><small>{{ article.specific.index_page_description }}</small></p>
-                        {% endif %}
-                    </div>
-                    <div class="overlay-holder {% render_is_content_completed article %}">
-                        {% image article.specific.lead_image width-320 class='article__lead-img' %}
-                    </div>
-                </a>
+                {% render_article_card page=page background_color=page.get_parent.specific.background_color font_color=page.get_parent.specific.font_color %}
             </li>
         {% endfor %}
     </ul>
