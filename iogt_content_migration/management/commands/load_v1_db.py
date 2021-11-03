@@ -1250,13 +1250,13 @@ class Command(BaseCommand):
         for row in cur:
             locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
             self.translate_page(locale=locale, page=home)
-            self.add_home_page_title_and_locale(home, locale)
+            translated_home_page = home.get_translation_or_none(locale)
 
-    def add_home_page_title_and_locale(self, home_page, locale):
-        translated_home_page = home_page.get_translation_or_none(locale)
-        if translated_home_page:
-            translated_home_page.title = home_page.title + ' [' + locale.__str__() + ']'
-            translated_home_page.save()
+            if translated_home_page:
+                modified_title = f"{home.title} [{locale.__str__()}]"
+                translated_home_page.title = modified_title
+                translated_home_page.draft_title = modified_title
+                translated_home_page.save()
 
 
     def translate_index_pages(self):
