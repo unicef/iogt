@@ -180,7 +180,10 @@ class Command(BaseCommand):
         self.add_polls_from_polls_index_page_to_home_page_featured_content()
         self.add_surveys_from_surveys_index_page_to_home_page_featured_content()
         self.move_footers_to_end_of_footer_index_page()
+
         self.stop_translations()
+
+        self.migrate_post_registration_survey()
 
     def create_home_page(self, root):
         sql = 'select * from core_main main join wagtailcore_page page on main.page_ptr_id = page.id'
@@ -294,7 +297,7 @@ class Command(BaseCommand):
                 tags = self.find_tags(content_type, row['id'])
                 if tags:
                     document.tags.add(*tags)
-                self.document_map.update({ row['id']: document })
+                self.document_map.update({row['id']: document})
         cur.close()
         self.stdout.write('Documents migrated')
 
@@ -324,7 +327,7 @@ class Command(BaseCommand):
                 tags = self.find_tags(content_type, row['id'])
                 if tags:
                     media.tags.add(*tags)
-                self.media_map.update({ row['id']: media })
+                self.media_map.update({row['id']: media})
         cur.close()
         self.stdout.write('Media migrated')
 
@@ -1272,7 +1275,8 @@ class Command(BaseCommand):
             v1_article_id = article_row['page_id']
             v2_article = self.v1_to_v2_page_map.get(v1_article_id)
             if v2_article:
-                cur = self.db_query(f'select * from core_articlepagerecommendedsections where page_id = {v1_article_id} and recommended_article_id is not null')
+                cur = self.db_query(
+                    f'select * from core_articlepagerecommendedsections where page_id = {v1_article_id} and recommended_article_id is not null')
                 for row in cur:
                     v2_recommended_article = self.v1_to_v2_page_map.get(row['recommended_article_id'])
                     if v2_recommended_article:
@@ -1639,6 +1643,70 @@ class Command(BaseCommand):
         else:
             # Move page to end
             page_to_move.move(parent_page, pos='last-child')
+
+    def migrate_post_registration_survey(self):
+        # Get default language locale
+        # sql = 'select locale from core_sitelanguage where is_main_language = true'
+
+        sql = 'select * from profiles_userprofilessettings pups ' \
+              'inner join wagtailcore_site ws on pups.site_id = ws.id ' \
+              'where is_default_site = true'
+        cur = self.db_query(sql)
+
+        row = cur.fetchone()
+
+        survey = Survey(
+            title='Registration Survey', live=True, allow_multiple_submissions=False, submit_button_text='Register')
+
+        self.survey_index_page.add_child(instance=survey)
+
+        if row['activate_dob']:
+            SurveyFormField.objects.create(
+                page=survey,
+                label='Select date of birth',
+                required=bool(row['dob_required']),
+                field_type='date',
+                admin_label='date_of_birth')
+
+        if row['activate_gender']:
+            SurveyFormField.objects.create(
+                page=survey,
+                label='I identify my gender as:',
+                required=bool(row['gender_required']),
+                field_type='singleline',
+                admin_label='gender')
+
+        if row['activate_location']:
+            SurveyFormField.objects.create(
+                page=survey,
+                label='Where do you live?',
+                required=bool(row['location_required']),
+                field_type='singleline',
+                admin_label='location')
+
+        if row['activate_education_level']:
+            SurveyFormField.objects.create(
+                page=survey,
+                label='What is your highest level of education?',
+                required=bool(row['activate_education_level_required']),
+                field_type='singleline',
+                admin_label='education_level')
+
+        if row['show_mobile_number_field']:
+            SurveyFormField.objects.create(
+                page=survey,
+                label='Enter your mobile number',
+                required=bool(row['mobile_number_required']),
+                field_type='singleline',
+                admin_label='mobile_number')
+
+        if row['show_email_field']:
+            SurveyFormField.objects.create(
+                page=survey,
+                label='Enter your email address',
+                required=bool(row['email_required']),
+                field_type='email',
+                admin_label='email')
 
     def print_post_migration_report(self):
         self.stdout.write(self.style.ERROR('====================='))

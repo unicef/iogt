@@ -18,7 +18,7 @@ from wagtail.core.models import Page, PageViewRestriction
 
 from comments.models import CannedResponse
 from home.models import Article, V1ToV2ObjectMap
-from questionnaires.models import Survey, UserSubmission, Poll
+from questionnaires.models import Survey, UserSubmission, Poll, SurveyFormField
 
 
 class Command(BaseCommand):
@@ -498,6 +498,9 @@ class Command(BaseCommand):
                 for pvr_group in pvr_groups_cur:
                     migrated_group = V1ToV2ObjectMap.get_v2_obj(Group, pvr_group['group_id'])
                     PageViewRestriction.groups.add(migrated_group)
+
+
+
 
     def print_post_migration_report(self):
         self.stdout.write(self.style.ERROR('====================='))
