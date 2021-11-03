@@ -770,8 +770,8 @@ class ManifestSettings(models.Model):
         verbose_name=_("Scope"),
         help_text=_(
             "Provide navigation scope to limit what web pages can be viewed "
-            "Example: 'https://examplesite.com/subdirectory limits navigation "
-            "to a subdirectory of the current site:"
+            "Example: 'https://www.iogt.com/<page-url>/' limits navigation "
+            "to <page-url> of https://www.iogt.com:"
         ),
     )
     start_url = models.CharField(
