@@ -758,22 +758,29 @@ class ManifestSettings(models.Model):
     name = models.CharField(
         max_length=255,
         verbose_name=_("Name"),
-        help_text=_("Provide name"),
+        help_text=_("Provide name that usually represents the name of the web application to user"),
     )
     short_name = models.CharField(
         max_length=255,
         verbose_name=_("Short name"),
-        help_text=_("Provide short name"),
+        help_text=_("Provide short name to be displayed, if there is not enough space to display full name"),
     )
     scope = models.CharField(
         max_length=255,
         verbose_name=_("Scope"),
-        help_text=_("Provide scope"),
+        help_text=_(
+            "Provide navigation scope to limit what web pages can be viewed "
+            "Example: 'https://examplesite.com/subdirectory limits navigation "
+            "to a subdirectory of the current site:"
+        ),
     )
     start_url = models.CharField(
         max_length=255,
         verbose_name=_("Start URL"),
-        help_text=_("Provide start URL"),
+        help_text=_(
+            "Start URL is the preferred URL that should be loaded "
+            "when the user launches the web application"
+        ),
     )
     display = models.CharField(
         max_length=255,
@@ -784,22 +791,28 @@ class ManifestSettings(models.Model):
             ('BROWSER', 'browser')
         ],
         verbose_name=_("Browser UI"),
-        help_text=_("Provide browser UI"),
+        help_text=_(
+            "Determines the preferred display mode for the website. The possible values are "
+            "'fullscreen' 'standalone' 'minimal-ui' 'browser'"
+        ),
     )
     background_color = models.CharField(
         max_length=10,
         verbose_name=_("Background color"),
-        help_text=_("Provide background color (example: #FFF)"),
+        help_text=__(
+            "Background color member defines a placeholder background color "
+            "for the application page to display before its stylesheet is loaded. (example: #FFF)"
+        ),
     )
     theme_color = models.CharField(
         max_length=10,
         verbose_name=_("Theme color"),
-        help_text=_("Provide theme color(example: #493174)"),
+        help_text=_("Theme color defines the default theme color for the application (example: #493174)"),
     )
     description = models.CharField(
         max_length=500,
         verbose_name=_("Description"),
-        help_text=_("Provide description"),
+        help_text=_("Provide description for application"),
     )
     language = models.CharField(
         max_length=3,
