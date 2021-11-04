@@ -270,6 +270,11 @@
   width: 100%;
 }
 
+.comments__submit + .comments__submit {
+  margin-left: 10px;
+}
+
+
 .comments__submit input,
 .comments__submit a {
   text-decoration: none;
