@@ -1253,7 +1253,7 @@ class Command(BaseCommand):
             translated_home_page = home.get_translation_or_none(locale)
 
             if translated_home_page:
-                modified_title = f"{translated_home_page.title} [{locale.__str__()}]"
+                modified_title = f"{translated_home_page.title} [{str(locale)}]"
                 translated_home_page.title = modified_title
                 translated_home_page.draft_title = modified_title
                 translated_home_page.save()
