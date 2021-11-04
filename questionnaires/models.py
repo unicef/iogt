@@ -13,10 +13,11 @@ from django.db import models
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from wagtail_localize.fields import TranslatableField
+from wagtailmarkdown.blocks import MarkdownBlock
 from wagtailsvg.edit_handlers import SvgChooserPanel
 from wagtailsvg.models import Svg
 
-from home.blocks import MediaBlock, PageButtonBlock
+from home.blocks import MediaBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock
 from home.mixins import PageUtilsMixin, TitleIconMixin
 from iogt_users.models import User
 from modelcluster.fields import ParentalKey
@@ -61,10 +62,10 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
         [
             ('heading', blocks.CharBlock(form_classname="full title")),
             ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
+            ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
             ("image", ImageChooserBlock()),
-            ('list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
-            ('numbered_list',
-             blocks.ListBlock(blocks.CharBlock(label="Item"), template="blocks/numbered_list.html")),
+            ('list', MarkdownBlock(icon='code')),
+            ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
             ('page_button', PageButtonBlock()),
         ],
         null=True,

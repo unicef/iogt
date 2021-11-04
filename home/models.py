@@ -45,10 +45,10 @@ from messaging.blocks import ChatBotButtonBlock
 from comments.models import CommentableMixin, CannedResponse
 from iogt.views import check_user_session
 from questionnaires.models import Survey, Poll, Quiz
-from .blocks import (MediaBlock, SocialMediaLinkBlock,
-                     SocialMediaShareButtonBlock,
-                     EmbeddedQuestionnaireChooserBlock,
-                     PageButtonBlock, ArticleChooserBlock)
+from .blocks import (
+    MediaBlock, SocialMediaLinkBlock, SocialMediaShareButtonBlock, EmbeddedPollBlock, EmbeddedSurveyBlock,
+    EmbeddedQuizBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock, ArticleBlock,
+)
 from .forms import SectionPageForm
 from .mixins import PageUtilsMixin, TitleIconMixin
 from .utils.image import convert_svg_to_png_bytes
@@ -63,10 +63,10 @@ class HomePage(Page):
 
     home_featured_content = StreamField([
         ('page_button', PageButtonBlock()),
-        ('embedded_poll', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')),
-        ('embedded_survey', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')),
-        ('embedded_quiz', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Quiz')),
-        ('article', ArticleChooserBlock()),
+        ('embedded_poll', EmbeddedPollBlock()),
+        ('embedded_survey', EmbeddedSurveyBlock()),
+        ('embedded_quiz', EmbeddedQuizBlock()),
+        ('article', ArticleBlock()),
     ], null=True)
 
     content_panels = Page.content_panels + [
@@ -163,6 +163,7 @@ class Section(Page, PageUtilsMixin, TitleIconMixin):
 
     tags = ClusterTaggableManager(through='SectionTaggedItem', blank=True)
     show_progress_bar = models.BooleanField(default=False)
+    larger_image_for_top_page_in_list_as_in_v1 = models.BooleanField(default=False)
 
     show_in_menus_default = True
 
@@ -175,6 +176,7 @@ class Section(Page, PageUtilsMixin, TitleIconMixin):
         SvgChooserPanel('icon'),
         FieldPanel('background_color'),
         FieldPanel('font_color'),
+        FieldPanel('larger_image_for_top_page_in_list_as_in_v1'),
         MultiFieldPanel([
             InlinePanel('featured_content', max_num=1,
                         label=_("Featured Content")),
@@ -288,15 +290,14 @@ class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         ('heading', blocks.CharBlock(form_classname="full title")),
         ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
         ('markdown', MarkdownBlock(icon='code')),
+        ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
         ('image', ImageChooserBlock()),
-        ('list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
-        ('numbered_list',
-         blocks.ListBlock(blocks.CharBlock(label="Item"), template="blocks/numbered_list.html")),
+        ('list', blocks.ListBlock(MarkdownBlock(icon='code'))),
+        ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
         ('page_button', PageButtonBlock()),
-        ('embedded_poll',
-         EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')),
-        ('embedded_survey', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')),
-        ('embedded_quiz', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Quiz')),
+        ('embedded_poll', EmbeddedPollBlock()),
+        ('embedded_survey', EmbeddedSurveyBlock()),
+        ('embedded_quiz', EmbeddedQuizBlock()),
         ('media', MediaBlock(icon='media')),
         ('chat_bot', ChatBotButtonBlock()),
     ])
@@ -706,22 +707,24 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
                     'Specify an icon here to override this.')
     )
 
-    color = models.CharField(
+    background_color = models.CharField(
         max_length=255,
         blank=True,
-        null=True
+        null=True,
+        help_text=_('The background color of the flat menu item on Desktop + Mobile')
     )
 
-    color_text = models.CharField(
+    font_color = models.CharField(
         max_length=255,
         blank=True,
-        null=True
+        null=True,
+        help_text=_('The font color of the flat menu item on Desktop + Mobile')
     )
 
     panels = AbstractFlatMenuItem.panels + [
         SvgChooserPanel('icon'),
-        FieldPanel('color'),
-        FieldPanel('color_text')
+        FieldPanel('background_color'),
+        FieldPanel('font_color')
     ]
 
 
@@ -922,9 +925,12 @@ class ThemeSettings(BaseSetting):
         null=True, blank=True, help_text='The background color of the primary button as a HEX code', max_length=8,
         default='#f0f0f0')
 
-    mobile_navbar_background_color = models.CharField(
-        null=True, blank=True, help_text='The background color of the mobile-only navbar as a HEX code', max_length=8,
+    navbar_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the navbar as a HEX code', max_length=8,
         default='#0094F4')
+    navbar_font_color = models.CharField(
+        null=True, blank=True, help_text='The font color of the navbar as a HEX code', max_length=8,
+        default='#FFFFFF')
 
 
 class V1ToV2ObjectMap(models.Model):
