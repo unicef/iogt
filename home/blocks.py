@@ -144,6 +144,14 @@ class ArticleBlock(blocks.StructBlock):
     display_section_title = blocks.BooleanBlock(required=False)
     article = PageChooserBlock(target_model='home.Article')
 
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context)
+        context.update({
+            'display_section_title': value['display_section_title'],
+            'page': value['article'].specific,
+        })
+        return context
+
     class Meta:
         template = 'blocks/article.html'
 

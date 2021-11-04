@@ -5,7 +5,7 @@
         <div class="article-header">
             {% if display_section_title %}
                 <p class="sm-paragraph">
-                    {{ page.get_parent.title|upper }}
+                    {{ page.top_level_section.title|upper }}
                 </p>
             {% endif %}
             <p class="article-title">{{ page.title }}</p>

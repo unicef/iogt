@@ -3,11 +3,7 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 <section class='related-articles'>
-    <ul>
-        {% for page in pages %}
-            <li>
-                {% render_article_card page=page background_color=page.get_parent.specific.background_color font_color=page.get_parent.specific.font_color %}
-            </li>
-        {% endfor %}
-    </ul>
+    {% for page in pages %}
+        {% render_article_card page=page background_color=page.top_level_section.background_color font_color=page.top_level_section.font_color %}
+    {% endfor %}
 </section>

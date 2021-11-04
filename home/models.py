@@ -379,6 +379,10 @@ class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         progress_manager = ProgressManager(request)
         return progress_manager.is_article_completed(self)
 
+    @property
+    def top_level_section(self):
+        return self.get_ancestors().filter(depth=4).specific().first()
+
     class Meta:
         verbose_name = _("article")
         verbose_name_plural = _("articles")
