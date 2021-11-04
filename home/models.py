@@ -349,7 +349,6 @@ class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
-        context['children'] = self.get_children().live().specific()
         context['recommended_articles'] = [
             recommended_article.article.specific
             for recommended_article in self.recommended_articles.filter(article__live=True)

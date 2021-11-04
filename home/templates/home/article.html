@@ -19,9 +19,6 @@
         <section class='article__content'>
             <h1>{{ page.title }}</h1>
             {% include_block page.body %}
-            {% if children %}
-                {% include 'home/tags/child_pages.html' with pages=children %}
-            {% endif %}
             <section class='article__navigation'>
                 {% render_previous_next_buttons page %}
             </section>
