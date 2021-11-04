@@ -62,7 +62,7 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
         [
             ('heading', blocks.CharBlock(form_classname="full title")),
             ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
-            ('html', RawHTMLBlock(icon='code', help_text='Paragraph (V1 Legacy)')),
+            ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
             ("image", ImageChooserBlock()),
             ('list', MarkdownBlock(icon='code')),
             ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),

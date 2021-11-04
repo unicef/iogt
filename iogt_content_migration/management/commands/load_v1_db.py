@@ -605,7 +605,7 @@ class Command(BaseCommand):
 
         tags = BeautifulSoup(value, "html.parser").find_all()
         for tag in tags:
-            if tag not in bleach_kwargs['tags']:
+            if tag.name not in bleach_kwargs['tags']:
                 return True
 
         return False
@@ -614,7 +614,7 @@ class Command(BaseCommand):
         for block in v2_body:
             if block['type'] == 'paragraph':
                 if self.has_unsupported_html_tag(block['value']):
-                    block['type'] = 'html'
+                    block['type'] = 'paragraph_v1_legacy'
                     page = self.v1_to_v2_page_map.get(row['page_ptr_id'])
                     if page:
                         self.post_migration_report_messages['page_with_unsupported_tags'].append(
