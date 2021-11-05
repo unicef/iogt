@@ -597,25 +597,27 @@ class Command(BaseCommand):
             return
         self.stdout.write(f"saved article, title={article.title}")
 
-    def has_unsupported_html_tag(self, value):
+    def get_unsupported_html_tags(self, value):
         bleach_kwargs = _get_bleach_kwargs()
 
+        unsupported_html_tags = []
         tags = BeautifulSoup(value, "html.parser").find_all()
         for tag in tags:
             if tag.name not in bleach_kwargs['tags']:
-                return True
+                unsupported_html_tags.append(tag.name)
 
-        return False
+        return unsupported_html_tags
 
     def _map_body(self, type_, row, v2_body):
         for block in v2_body:
             if block['type'] == 'paragraph':
-                if self.has_unsupported_html_tag(block['value']):
+                unsupported_html_tags = self.get_unsupported_html_tags(block['value'])
+                if unsupported_html_tags:
                     block['type'] = 'paragraph_v1_legacy'
                     page = self.v1_to_v2_page_map.get(row['page_ptr_id'])
                     if page:
                         self.post_migration_report_messages['page_with_unsupported_tags'].append(
-                            f'title: {page.title}. URL: {page.full_url}.'
+                            f'title: {page.title}. URL: {page.full_url}. Tags: {unsupported_html_tags}.'
                         )
                 else:
                     block['type'] = 'markdown'
