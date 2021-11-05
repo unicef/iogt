@@ -3,3 +3,7 @@
     pointer-events: none;
     background-color: gray;
 }
+
+.red-help-text p.help {
+    color: red;
+}

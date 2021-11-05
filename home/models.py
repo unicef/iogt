@@ -696,6 +696,16 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
         on_delete=models.CASCADE,
         related_name="iogt_flat_menu_items",
     )
+    link_url = models.CharField(
+        verbose_name=_('link to a custom URL'),
+        max_length=255,
+        blank=True,
+        null=True,
+        help_text=_(
+            'If you are linking back to a URL on your own IoGT site, be sure to remove the domain and everything '
+            'before it. For example "http://sd.goodinternet.org/url/" should instead be "/url/".'
+        ),
+    )
     icon = models.ForeignKey(
         Svg,
         related_name='+',
@@ -720,7 +730,13 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
         help_text=_('The font color of the flat menu item on Desktop + Mobile')
     )
 
-    panels = AbstractFlatMenuItem.panels + [
+    panels = [
+        PageChooserPanel('link_page'),
+        FieldPanel('link_url', classname='red-help-text'),
+        FieldPanel('url_append'),
+        FieldPanel('link_text'),
+        FieldPanel('handle'),
+        FieldPanel('allow_subnav'),
         SvgChooserPanel('icon'),
         FieldPanel('background_color'),
         FieldPanel('font_color')

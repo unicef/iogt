@@ -105,8 +105,3 @@ def global_admin_js():
         '<script src="{}"></script>',
         static("js/global/admin.js")
     )
-
-
-Redirect._meta.get_field("old_path").help_text = _(
-    'A relative path to redirect from e.g. /en/youth. '
-    'See https://docs.wagtail.io/en/stable/editor_manual/managing_redirects.html for more details')
