@@ -74,7 +74,7 @@ class TranslationEditView(EditView):
 
 class LoadTranslationsFromPOFiles(View):
     def get(self, request):
-        call_command('load_po_files')
+        call_command('reload_po_files')
 
         messages.success(request, _('The translations have been loaded successfully!'))
 
