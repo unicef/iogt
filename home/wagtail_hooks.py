@@ -66,6 +66,7 @@ def sort_page_listing_by_path(parent_page, pages, request):
     return pages
 
 
+@hooks.register('construct_main_menu')
 def rename_forms_menu_item(request, menu_items):
     for item in menu_items:
         if item.name == "forms":
