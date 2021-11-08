@@ -381,7 +381,7 @@ class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
 
     @property
     def top_level_section(self):
-        return self.get_ancestors().filter(depth=4).specific().first()
+        return self.get_ancestors().filter(depth=4).first().specific
 
     class Meta:
         verbose_name = _("article")
