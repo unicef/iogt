@@ -1,4 +1,4 @@
-{% load static wagtailuserbar home_tags sass_tags wagtailsettings_tags menu_tags i18n%}
+{% load static wagtailuserbar home_tags sass_tags wagtailsettings_tags menu_tags generic_components i18n wagtailimages_tags%}
 {% get_settings %}
 
 <!--  Commit Hash: {{commit_hash}} -->
@@ -27,6 +27,8 @@
             {% endwith %}
         {% endblock %}
     </title>
+{% image settings.home.SiteSettings.favicon width-60 as favicon_img %}
+    <link rel="shortcut icon" type="image/jpg" href="{{ favicon_img.url }}"/>
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="theme-color" content="#493174">
@@ -34,7 +36,6 @@
     <link rel="apple-touch-icon" href="{% static 'icons/unicef-logo.png' %}">
 
         {# Global stylesheets #}
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" type="text/css" href="{% static 'css/iogt.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/chatbot.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/header/header.css' %}">
@@ -47,7 +48,8 @@
     {% endblock %}
 </head>
 
-<body class="{% block body_class %}{% endblock %}">
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+<body class="{% if LANGUAGE_BIDI %}rtl{% endif %} {% block body_class %}{% endblock %}">
 {% wagtailuserbar %}
 
 <main id="app">
@@ -56,16 +58,18 @@
             {% include "cache_banner.html" %}
         {% endif %}
         {% include "header.html" %}
-        <div class="content-holder">
-            <div class="other-links">
-                {% footer %}
+        <div class="main-wrapper" style="background: {{settings.home.ThemeSettings.global_background_color }}">
+            <div class="content-holder">
+                <div class="other-links">
+                    {% footer %}
+                </div>
+                <div class="content">
+                    {% include "messages.html" %}
+                    {% block content %}{% endblock %}
+                    <p class='footer__copyright'>{% translate "© The Internet of Good Things"%}</p>
+                </div>
+                {% include "footer.html" %}
             </div>
-            <div class="content">
-                {% include "messages.html" %} 
-                {% block content %}{% endblock %}
-                <p class='footer__copyright'>{% translate "© The Internet of Good Things"%}</p>
-            </div>
-            {% include "footer.html" %}
         </div>
     </div>
 </main>

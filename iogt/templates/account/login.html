@@ -11,7 +11,7 @@
 
     {% get_providers as socialaccount_providers %}
 
-    <form class="login" method="POST" action="{% url 'account_login' %}">
+    <form class="login" method="POST" action="{% url 'account_login' %}?next={{ request.GET.next }}">
         {% csrf_token %}
         <div class="profile-form__inputs">
             {{ form.as_p }}

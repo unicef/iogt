@@ -1,8 +1,10 @@
-{% load static wagtailcore_tags wagtailimages_tags sass_tags %}
+{% load static wagtailcore_tags wagtailimages_tags sass_tags image_tags home_tags %}
 
 {% for sub_section in sub_sections %}
-    <a href="{% pageurl sub_section %}" class='sub-section'>
-        {{ sub_section.title }} 
-        <img src="{% static 'icons/arrow-right.svg' %}" alt='arrow-right'>
+    <a href="{% pageurl sub_section %}" class='sub-section {% if sub_section.get_parent.specific.larger_image_for_top_page_in_list_as_in_v1 and forloop.counter0 == 0 %}first-content{% endif %}'>
+        {{ sub_section.title }}
+        <div class="overlay-holder {% render_is_content_completed sub_section %}">
+            {% image sub_section.specific.lead_image width-320 class='article__lead-img' %}
+        </div>
     </a>
 {% endfor %}

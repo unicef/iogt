@@ -13,6 +13,11 @@ services:
       DB_PORT: 5432
       DJANGO_SETTINGS_MODULE: iogt.settings.docker_compose_dev
       COMMIT_HASH: asdfghjkl
+      RAPIDPRO_BOT_USER_ID: 1
+      RAPIDPRO_BOT_USER_USERNAME: rapidpro
+      RAPIDPRO_BOT_USER_PASSWORD: 1234
+      WAGTAILTRANSFER_SECRET_KEY: wagtailtransfersecretkey
+      BASE_URL: 'http://localhost:8000'
     command: bash -c "python manage.py compilemessages && python manage.py reload_po_files && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./:/app/
@@ -39,6 +44,16 @@ services:
       - ./initdb.d:/docker-entrypoint-initdb.d
     ports:
       - 5432:5432
+  legacy-db:
+    image: postgres:alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: iogt
+    volumes:
+      - /var/lib/postgresql/data
+      - ./legacy-initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - 54321:5432
 
 volumes:
   es-data01:

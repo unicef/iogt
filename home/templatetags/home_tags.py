@@ -2,7 +2,7 @@ from django import template
 from django.urls import translate_url
 from wagtail.core.models import Locale, Site
 
-from home.models import FooterPage, SectionIndexPage, Section
+from home.models import SectionIndexPage, Section, Article, FooterIndexPage
 from iogt.settings.base import LANGUAGES
 
 register = template.Library()
@@ -30,7 +30,7 @@ def render_previous_next_buttons(page):
 @register.inclusion_tag('home/tags/footer.html', takes_context=True)
 def footer(context):
     return {
-        'footer_pages': FooterPage.get_active_footers(),
+        'footer_pages': FooterIndexPage.get_active_footers(),
         'request': context['request'],
     }
 
@@ -48,9 +48,12 @@ def render_banners_list(banners):
     return {'banners': banners}
 
 
-@register.inclusion_tag('home/tags/articles_list.html')
-def render_articles_list(articles):
-    return {'articles': articles}
+@register.inclusion_tag('home/tags/articles_list.html', takes_context=True)
+def render_articles_list(context, articles):
+    context.update({
+        'articles': articles,
+    })
+    return context
 
 
 @register.inclusion_tag('home/tags/featured_content_list.html')
@@ -74,13 +77,29 @@ def render_questionnaire_list(questionnaire):
 
 
 @register.inclusion_tag('home/tags/section_progress.html')
-def render_user_progress(user_progress):
-    return user_progress
+def render_user_progress(user_progress, show_count=True):
+    return {
+        **user_progress,
+        'show_count': show_count,
+    }
 
 
-@register.inclusion_tag('home/tags/sub_sections.html')
-def render_sub_sections_list(sub_sections):
-    return {'sub_sections': sub_sections}
+@register.inclusion_tag('home/tags/is_completed.html', takes_context=True)
+def render_is_content_completed(context, content):
+    content = content.specific
+    if isinstance(content, (Section, Article)):
+        context.update({
+            'is_completed': content.is_completed(context['request'])
+        })
+    return context
+
+
+@register.inclusion_tag('home/tags/sub_sections.html', takes_context=True)
+def render_sub_sections_list(context, sub_sections):
+    context.update({
+        'sub_sections': sub_sections,
+    })
+    return context
 
 
 @register.simple_tag

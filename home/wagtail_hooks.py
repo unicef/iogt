@@ -4,9 +4,10 @@ from urllib.parse import urlparse, urlunparse, urlencode
 from django.contrib.admin import SimpleListFilter
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
+from django.templatetags.static import static
 from django.urls import resolve, Resolver404
 from django.urls import reverse
-from django.utils.html import escape
+from django.utils.html import escape, format_html
 from django.utils.translation import gettext_lazy as _
 from translation_manager.models import TranslationEntry
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
@@ -87,6 +88,11 @@ def limit_page_chooser(pages, request):
         pages = Page.objects.get(id=page_id).get_children()
 
     return pages
+
+
+@hooks.register('insert_global_admin_css', order=100)
+def global_admin_css():
+    return format_html('<link rel="stylesheet" href="{}">', static('css/global/admin.css'))
 
 
 Redirect._meta.get_field("old_path").help_text = _(

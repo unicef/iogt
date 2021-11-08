@@ -3,7 +3,9 @@ import os
 from django.conf import settings
 from django.contrib.admin.utils import flatten
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.files.images import get_image_dimensions
 from django.db import models
 from django.utils.deconstruct import deconstructible
@@ -38,17 +40,17 @@ from wagtailmenus.models import AbstractFlatMenuItem, BooleanField
 from wagtailsvg.models import Svg
 from wagtailsvg.edit_handlers import SvgChooserPanel
 
-
 from messaging.blocks import ChatBotButtonBlock
 from comments.models import CommentableMixin
 from iogt.views import check_user_session
 from questionnaires.models import Survey, Poll, Quiz
-from .blocks import (MediaBlock, SocialMediaLinkBlock,
-                     SocialMediaShareButtonBlock,
-                     EmbeddedQuestionnaireChooserBlock,
-                     PageButtonBlock, ArticleChooserBlock)
+from .blocks import (
+    MediaBlock, SocialMediaLinkBlock, SocialMediaShareButtonBlock, EmbeddedPollBlock, EmbeddedSurveyBlock,
+    EmbeddedQuizBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock, ArticleBlock,
+)
 from .forms import SectionPageForm
-from .mixins import PageUtilsMixin
+from .mixins import PageUtilsMixin, TitleIconMixin
+from .utils.image import convert_svg_to_png_bytes
 from .utils.progress_manager import ProgressManager
 
 User = get_user_model()
@@ -60,10 +62,10 @@ class HomePage(Page):
 
     home_featured_content = StreamField([
         ('page_button', PageButtonBlock()),
-        ('embedded_poll', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')),
-        ('embedded_survey', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')),
-        ('embedded_quiz', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Quiz')),
-        ('article', ArticleChooserBlock()),
+        ('embedded_poll', EmbeddedPollBlock()),
+        ('embedded_survey', EmbeddedSurveyBlock()),
+        ('embedded_quiz', EmbeddedQuizBlock()),
+        ('article', ArticleBlock()),
     ], null=True)
 
     content_panels = Page.content_panels + [
@@ -132,7 +134,7 @@ class SectionIndexPage(Page):
         return cls.objects.none()
 
 
-class Section(Page, PageUtilsMixin):
+class Section(Page, PageUtilsMixin, TitleIconMixin):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
@@ -160,6 +162,7 @@ class Section(Page, PageUtilsMixin):
 
     tags = ClusterTaggableManager(through='SectionTaggedItem', blank=True)
     show_progress_bar = models.BooleanField(default=False)
+    larger_image_for_top_page_in_list_as_in_v1 = models.BooleanField(default=False)
 
     show_in_menus_default = True
 
@@ -172,6 +175,7 @@ class Section(Page, PageUtilsMixin):
         SvgChooserPanel('icon'),
         FieldPanel('background_color'),
         FieldPanel('font_color'),
+        FieldPanel('larger_image_for_top_page_in_list_as_in_v1'),
         MultiFieldPanel([
             InlinePanel('featured_content', max_num=1,
                         label=_("Featured Content")),
@@ -185,21 +189,26 @@ class Section(Page, PageUtilsMixin):
     base_form_class = SectionPageForm
 
     def get_descendant_articles(self):
-        return Article.objects.descendant_of(self).exact_type(Article)
+        return Article.objects.descendant_of(self).live().exact_type(Article)
 
     def get_progress_bar_enabled_ancestor(self):
         return Section.objects.ancestor_of(self, inclusive=True).exact_type(
-            Section).filter(
+            Section).live().filter(
             show_progress_bar=True).first()
 
     def get_user_progress_dict(self, request):
         progress_manager = ProgressManager(request)
-        read_article_count, total_article_count = progress_manager.get_progress(
-            self)
+        read_article_count, total_article_count = progress_manager.get_progress(self)
         return {
             'read': read_article_count,
-            'total': total_article_count
+            'total': total_article_count,
+            'range_': list(range(total_article_count)) if total_article_count else 0,
+            'width_': 100 / total_article_count if total_article_count else 0,
         }
+
+    def is_completed(self, request):
+        progress_manager = ProgressManager(request)
+        return progress_manager.is_section_completed(self)
 
     def get_context(self, request):
         check_user_session(request)
@@ -258,7 +267,7 @@ class ArticleRecommendation(Orderable):
     ]
 
 
-class Article(Page, PageUtilsMixin, CommentableMixin):
+class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
@@ -273,20 +282,21 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         blank=True,
         on_delete=models.SET_NULL,
     )
+    index_page_description = models.TextField(null=True, blank=True)
 
     tags = ClusterTaggableManager(through='ArticleTaggedItem', blank=True)
     body = StreamField([
         ('heading', blocks.CharBlock(form_classname="full title")),
         ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
         ('markdown', MarkdownBlock(icon='code')),
+        ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
         ('image', ImageChooserBlock()),
-        ('list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
-        ('numbered_list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
+        ('list', blocks.ListBlock(MarkdownBlock(icon='code'))),
+        ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
         ('page_button', PageButtonBlock()),
-        ('embedded_poll',
-         EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Poll')),
-        ('embedded_survey', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Survey')),
-        ('embedded_quiz', EmbeddedQuestionnaireChooserBlock(target_model='questionnaires.Quiz')),
+        ('embedded_poll', EmbeddedPollBlock()),
+        ('embedded_survey', EmbeddedSurveyBlock()),
+        ('embedded_quiz', EmbeddedQuizBlock()),
         ('media', MediaBlock(icon='media')),
         ('chat_bot', ChatBotButtonBlock()),
     ])
@@ -312,6 +322,7 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         ImageChooserPanel('lead_image'),
         SvgChooserPanel('icon'),
         StreamFieldPanel('body'),
+        FieldPanel('index_page_description'),
         MultiFieldPanel([
             InlinePanel('recommended_articles',
                         label=_("Recommended Articles")),
@@ -335,7 +346,7 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
         ObjectList(CommentableMixin.comments_panels, heading='Comments')
     ])
 
-    def _get_progress_enabled_section(self):
+    def get_progress_enabled_section(self):
         """
         Returning .first() will bypass any discrepancies in settings show_progress_bar=True
         for sections
@@ -351,7 +362,7 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
                                   not crumb.is_root()]
         context['sections'] = self.get_ancestors().type(Section)
 
-        progress_enabled_section = self._get_progress_enabled_section()
+        progress_enabled_section = self.get_progress_enabled_section()
 
         if progress_enabled_section:
             context.update({
@@ -373,10 +384,13 @@ class Article(Page, PageUtilsMixin, CommentableMixin):
                 return block
         return ''
 
+    def is_completed(self, request):
+        progress_manager = ProgressManager(request)
+        return progress_manager.is_article_completed(self)
+
     class Meta:
         verbose_name = _("article")
         verbose_name_plural = _("articles")
-
 
 
 class BannerIndexPage(Page):
@@ -407,7 +421,7 @@ class BannerPage(Page):
 
     banner_link_page = models.ForeignKey(
         Page, null=True, blank=True, related_name='banners',
-        on_delete=models.PROTECT,
+        on_delete=models.SET_NULL,
         help_text=_('Optional page to which the banner will link to'))
 
     banner_button_text = models.CharField(
@@ -427,30 +441,62 @@ class BannerPage(Page):
     content_panels = Page.content_panels + [
         FieldPanel('banner_description'),
         ImageChooserPanel('banner_image'),
-        #ImageChooserPanel('banner_background_image'),
+        # ImageChooserPanel('banner_background_image'),
         PageChooserPanel('banner_link_page'),
-        #FieldPanel('banner_button_text'),
-        #ImageChooserPanel('banner_icon_button'),
-        #FieldPanel('align_center')
+        # FieldPanel('banner_button_text'),
+        # ImageChooserPanel('banner_icon_button'),
+        # FieldPanel('align_center')
     ]
 
 
 class FooterIndexPage(Page):
     parent_page_types = ['home.HomePage']
-    subpage_types = ['home.FooterPage']
+    subpage_types = [
+        'home.Section', 'home.Article', 'home.FooterPage', 'home.PageLinkPage', 'questionnaires.Poll',
+        'questionnaires.Survey', 'questionnaires.Quiz',
+    ]
+
+    @classmethod
+    def get_active_footers(cls):
+        return cls.objects.filter(locale=Locale.get_active()).first().get_descendants().live()
 
     def __str__(self):
         return self.title
 
 
-class FooterPage(Article):
+class FooterPage(Article, TitleIconMixin):
     parent_page_types = ['home.FooterIndexPage']
     subpage_types = []
     template = 'home/article.html'
 
-    @classmethod
-    def get_active_footers(cls):
-        return cls.objects.filter(locale=Locale.get_active()).live()
+
+class PageLinkPage(Page, TitleIconMixin):
+    parent_page_types = ['home.FooterIndexPage']
+    subpage_types = []
+
+    icon = models.ForeignKey(
+        Svg,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
+
+    page = models.ForeignKey(Page, related_name='page_link_pages', on_delete=models.PROTECT)
+
+    content_panels = Page.content_panels + [
+        SvgChooserPanel('icon'),
+        PageChooserPanel('page')
+    ]
+
+    def get_page(self):
+        return self.page
+
+    def get_icon_url(self):
+        if self.icon:
+            return self.icon.url
+
+        return getattr(getattr(self.page.specific, 'icon', object), 'url', '')
 
 
 @register_setting
@@ -463,11 +509,19 @@ class SiteSettings(BaseSetting):
         related_name='+',
         help_text="Upload an image file (.jpg, .png, .svg). The ideal size is 100px x 40px"
     )
+    favicon = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text="Upload an image file (.jpg, .png, .svg). The ideal size is 40px x 40px"
+    )
     show_only_translated_pages = models.BooleanField(
         default=False,
         help_text=_('When selecting this option, untranslated pages'
-                  ' will not be visible to the front end user'
-                  ' when viewing a child language of the site'))
+                    ' will not be visible to the front end user'
+                    ' when viewing a child language of the site'))
     # TODO: GA, FB analytics should be global.
     fb_analytics_app_id = models.CharField(
         verbose_name=_('Facebook Analytics App ID'),
@@ -526,9 +580,11 @@ class SiteSettings(BaseSetting):
     registration_survey = models.ForeignKey('questionnaires.Survey', null=True,
                                             blank=True,
                                             on_delete=models.SET_NULL)
+    opt_in_to_google_web_light = models.BooleanField(default=False)
 
     panels = [
         ImageChooserPanel('logo'),
+        ImageChooserPanel('favicon'),
         MultiFieldPanel(
             [
                 FieldPanel('show_only_translated_pages'),
@@ -591,6 +647,12 @@ class SiteSettings(BaseSetting):
             ],
             heading="Registration Settings",
         ),
+        MultiFieldPanel(
+            [
+                FieldPanel('opt_in_to_google_web_light'),
+            ],
+            heading="Opt in to Google web light",
+        ),
     ]
 
     @classmethod
@@ -644,22 +706,24 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
                     'Specify an icon here to override this.')
     )
 
-    color = models.CharField(
-        max_length=6,
+    background_color = models.CharField(
+        max_length=255,
         blank=True,
-        null=True
+        null=True,
+        help_text=_('The background color of the flat menu item on Desktop + Mobile')
     )
 
-    color_text = models.CharField(
-        max_length=6,
+    font_color = models.CharField(
+        max_length=255,
         blank=True,
-        null=True
+        null=True,
+        help_text=_('The font color of the flat menu item on Desktop + Mobile')
     )
 
     panels = AbstractFlatMenuItem.panels + [
         SvgChooserPanel('icon'),
-        FieldPanel('color'),
-        FieldPanel('color_text')
+        FieldPanel('background_color'),
+        FieldPanel('font_color')
     ]
 
 
@@ -819,3 +883,114 @@ class ManifestSettings(models.Model):
         )
         verbose_name = "Manifest settings"
         verbose_name_plural = "Manifests settings"
+
+
+@register_setting
+class ThemeSettings(BaseSetting):
+
+    global_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the website',
+        max_length=8, default='#FFFFFF')
+
+    header_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the header background as a HEX code', max_length=8,
+        default='#FFFFFF')
+
+    language_picker_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the language picker button as a HEX code',
+        max_length=8, default='#FDD256')
+    language_picker_font_color = models.CharField(
+        null=True, blank=True, help_text='The font color of the language picker button as a HEX code',
+        max_length=8, default='#303030')
+
+    section_listing_questionnaire_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the Questionnaire in section listing as a HEX code',
+        max_length=8, default='#f0f0f0')
+    section_listing_questionnaire_font_color = models.CharField(
+        null=True, blank=True, help_text='The font color of the Questionnaire in section listing as a HEX code',
+        max_length=8, default='#444')
+
+    article_card_font_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the Embedded Article in Home > Featured Content'
+                                         ' as a HEX code', max_length=8, default='#444')
+    article_card_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the Embedded Article in Home > Featured Content'
+                                         ' as a HEX code', max_length=8, default='#ffffff')
+
+    primary_button_font_color = models.CharField(
+        null=True, blank=True, help_text='The font/icon color of the primary button as a HEX code', max_length=8,
+        default='#444')
+    primary_button_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the primary button as a HEX code', max_length=8,
+        default='#f0f0f0')
+
+    navbar_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the navbar as a HEX code', max_length=8,
+        default='#0094F4')
+    navbar_font_color = models.CharField(
+        null=True, blank=True, help_text='The font color of the navbar as a HEX code', max_length=8,
+        default='#FFFFFF')
+
+
+class V1ToV2ObjectMap(models.Model):
+    v1_object_id = models.PositiveIntegerField()
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+    extra = models.CharField(max_length=100, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.v1_object_id} -> {self.object_id}'
+
+    @classmethod
+    def create_map(cls, content_object, v1_object_id):
+        v1_to_v2_object_map = cls(content_object=content_object, v1_object_id=v1_object_id)
+        v1_to_v2_object_map.save()
+
+    @classmethod
+    def get_v1_id(cls, klass, object_id, extra=None):
+        content_type = ContentType.objects.get_for_model(klass)
+
+        try:
+            return cls.objects.get(content_type=content_type, object_id=object_id, extra=extra).v1_object_id
+        except ObjectDoesNotExist:
+            return None
+
+    @classmethod
+    def get_v2_obj(cls, klass, v1_object_id, extra=None):
+        content_type = ContentType.objects.get_for_model(klass)
+
+        try:
+            return cls.objects.get(content_type=content_type, v1_object_id=v1_object_id, extra=extra).content_object
+        except ObjectDoesNotExist:
+            return None
+
+    @classmethod
+    def create_map(cls, content_object, v1_object_id, extra=None):
+        content_type = ContentType.objects.get_for_model(type(content_object))
+        obj, __ = cls.objects.get_or_create(content_type=content_type, object_id=content_object.pk,
+                                            v1_object_id=v1_object_id, extra=extra)
+        return obj
+
+
+class SVGToPNGMap(models.Model):
+    svg_path = models.TextField()
+    fill_color = models.TextField(null=True)
+    stroke_color = models.TextField(null=True)
+    png_image_file = models.ImageField(upload_to='svg-to-png-maps/')
+
+    @classmethod
+    def get_png_image(cls, svg_path, fill_color, stroke_color=None):
+        try:
+            obj = cls.objects.get(svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color)
+        except cls.DoesNotExist:
+            png_image = convert_svg_to_png_bytes(svg_path, fill_color=fill_color, stroke_color=stroke_color, scale=10)
+            obj = cls.objects.create(
+                svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color, png_image_file=png_image)
+        return obj.png_image_file
+
+    def __str__(self):
+        return f'{self.svg_path} (F={self.fill_color}) (S={self.stroke_color}) -> {self.png_image_file}'
+
+    class Meta:
+        unique_together = ('svg_path', 'fill_color', 'stroke_color')

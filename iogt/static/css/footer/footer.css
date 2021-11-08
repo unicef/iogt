@@ -60,11 +60,22 @@
   padding-top: 12px;
 }
 
+@media only screen and (max-width: 767px) {
+  .footer-main {
+    border-top: 1px solid #EFEFEF;
+    padding-top: 20px;
+    margin-top: 60px;
+  }
+  .footer {
+    margin-top: 0;
+    border-top: 0;
+  }
+}
+
 @media only screen and (min-width: 360px) {
   .footer {
-    padding-left: 20px;
-    padding-right: 20px;
-    margin-top: 60px;
+    padding-left: 32px;
+    padding-right: 32px;
   }
   .footer .sm-home-header {
     display: -webkit-box;
@@ -106,9 +117,6 @@
 
 .top-level__section,
 .bottom-level__section {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
   margin-top: 8px;
   padding: 9px 12px;
   border-radius: 8px;
@@ -128,6 +136,8 @@
 .top-level img,
 .bottom-level img {
   max-width: 16px;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 @media only screen and (min-width: 360px) {

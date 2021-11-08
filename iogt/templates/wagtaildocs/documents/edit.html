@@ -1,0 +1,14 @@
+{% extends "wagtaildocs/documents/edit.html" %}
+{% load static %}
+
+
+{% block extra_js %}
+  <script type="text/javascript" src="{% static 'js/iogt.js' %}"></script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $('input[type=submit]').click(function () {
+          alert('Documents aren\'t support in facebook free basics.');
+      });
+    });
+  </script>
+{% endblock %}

@@ -13,9 +13,12 @@ from django.db import models
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from wagtail_localize.fields import TranslatableField
+from wagtailmarkdown.blocks import MarkdownBlock
+from wagtailsvg.edit_handlers import SvgChooserPanel
+from wagtailsvg.models import Svg
 
-from home.blocks import MediaBlock
-from home.mixins import PageUtilsMixin
+from home.blocks import MediaBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock
+from home.mixins import PageUtilsMixin, TitleIconMixin
 from iogt_users.models import User
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (FieldPanel, InlinePanel,
@@ -50,15 +53,20 @@ FORM_FIELD_CHOICES = (
 )
 
 
-class QuestionnairePage(Page, PageUtilsMixin):
+class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
     template = None
     parent_page_types = []
     subpage_types = []
 
     description = StreamField(
         [
-            ("paragraph", blocks.RichTextBlock()),
+            ('heading', blocks.CharBlock(form_classname="full title")),
+            ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
+            ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
             ("image", ImageChooserBlock()),
+            ('list', MarkdownBlock(icon='code')),
+            ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
+            ('page_button', PageButtonBlock()),
         ],
         null=True,
         blank=True,
@@ -88,6 +96,26 @@ class QuestionnairePage(Page, PageUtilsMixin):
     )
 
     direct_display = models.BooleanField(default=False)
+
+    index_page_description = models.TextField(null=True, blank=True)
+    index_page_description_line_2 = models.TextField(null=True, blank=True)
+
+    terms_and_conditions = StreamField(
+        [
+            ("paragraph", blocks.RichTextBlock()),
+            ('page_button', PageButtonBlock()),
+        ],
+        null=True,
+        blank=True,
+    )
+
+    icon = models.ForeignKey(
+        Svg,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
 
     settings_panels = Page.settings_panels + [
         FieldPanel('direct_display')
@@ -225,6 +253,18 @@ class QuestionnairePage(Page, PageUtilsMixin):
     def get_type(self):
         return self.__class__.__name__.lower()
 
+    def get_data_fields(self):
+        data_fields = [
+            ('user', _('User')),
+            ('submit_time', _('Submission Date')),
+            ('page_url', _('Page URL')),
+        ]
+        data_fields += [
+            (field.clean_name, field.admin_label or field.label)
+            for field in self.get_form_fields()
+        ]
+        return data_fields
+
     class Meta:
         abstract = True
 
@@ -232,6 +272,12 @@ class QuestionnairePage(Page, PageUtilsMixin):
 class SurveyFormField(AbstractFormField):
     page = ParentalKey("Survey", on_delete=models.CASCADE, related_name="survey_form_fields")
     required = models.BooleanField(verbose_name=_('required'), default=False)
+    clean_name = models.TextField(
+        verbose_name=_('name'),
+        blank=True,
+        default='',
+        help_text=_('Safe name of the form field, the label converted to ascii_snake_case')
+    )
     field_type = models.CharField(
         verbose_name=_('field type'),
         max_length=16,
@@ -304,7 +350,9 @@ class Survey(QuestionnairePage, AbstractForm):
     base_form_class = SurveyForm
     form_builder = CustomFormBuilder
 
-    parent_page_types = ["home.HomePage", "home.Section", "home.Article", "questionnaires.SurveyIndexPage"]
+    parent_page_types = [
+        "home.HomePage", "home.Section", "home.Article", "questionnaires.SurveyIndexPage", 'home.FooterIndexPage',
+    ]
     template = "survey/survey.html"
     multi_step = models.BooleanField(
         default=False,
@@ -340,6 +388,15 @@ class Survey(QuestionnairePage, AbstractForm):
             ],
             heading="Description at thank you page",
         ),
+        FieldPanel('index_page_description'),
+        FieldPanel('index_page_description_line_2'),
+        MultiFieldPanel(
+            [
+                StreamFieldPanel("terms_and_conditions"),
+            ],
+            heading="Terms and conditions",
+        ),
+        SvgChooserPanel('icon'),
         InlinePanel("survey_form_fields", label="Form fields"),
     ]
 
@@ -384,18 +441,6 @@ class Survey(QuestionnairePage, AbstractForm):
         context.update({'form_length': request.GET.get('form_length')})
         return context
 
-    def get_data_fields(self):
-        data_fields = [
-            ('user', _('User')),
-            ('submit_time', _('Submission Date')),
-            ('page_url', _('Page URL'))
-        ]
-        data_fields += [
-            (field.clean_name, field.admin_label)
-            for field in self.get_form_fields()
-        ]
-        return data_fields
-
     class Meta:
         verbose_name = _("survey")
         verbose_name_plural = _("surveys")
@@ -426,6 +471,12 @@ class PollFormField(AbstractFormField):
         ('multiline', _('Multi-line text')),
         ('radio', _('Radio buttons')),
     )
+    clean_name = models.TextField(
+        verbose_name=_('name'),
+        blank=True,
+        default='',
+        help_text=_('Safe name of the form field, the label converted to ascii_snake_case')
+    )
     field_type = models.CharField(
         verbose_name=_('field type'),
         max_length=16,
@@ -442,12 +493,24 @@ class PollFormField(AbstractFormField):
         blank=True,
         help_text=_('Default value. Pipe (|) separated values supported for checkboxes.')
     )
+    admin_label = models.CharField(
+        verbose_name=_('admin_label'),
+        max_length=256,
+        help_text=_('Column header used during CSV export of poll responses.'),
+        null=True
+    )
+
+    panels = AbstractFormField.panels + [
+        FieldPanel('admin_label', classname="formbuilder-default"),
+    ]
 
 
 class Poll(QuestionnairePage, AbstractForm):
     form_builder = CustomFormBuilder
     template = "poll/poll.html"
-    parent_page_types = ["home.HomePage", "home.Section", "home.Article", "questionnaires.PollIndexPage"]
+    parent_page_types = [
+        "home.HomePage", "home.Section", "home.Article", "questionnaires.PollIndexPage", 'home.FooterIndexPage',
+    ]
 
     show_results = models.BooleanField(
         default=True, help_text=_("This option allows the users to see the results.")
@@ -459,14 +522,13 @@ class Poll(QuestionnairePage, AbstractForm):
         ),
     )
 
-    # TODO allow randomising option ?
-    # randomise_options = models.BooleanField(
-    #     default=False,
-    #     help_text=_(
-    #         "Randomising the options allows the options to be shown in a different "
-    #         "order each time the page is displayed."
-    #     ),
-    # )
+    randomise_options = models.BooleanField(
+        default=False,
+        help_text=_(
+            "Randomising the options allows the options to be shown in a different "
+            "order each time the page is displayed."
+        ),
+    )
 
     content_panels = Page.content_panels + [
         FormSubmissionsPanel(),
@@ -476,6 +538,7 @@ class Poll(QuestionnairePage, AbstractForm):
                 FieldPanel("show_results"),
                 FieldPanel("result_as_percentage"),
                 FieldPanel("allow_multiple_submissions"),
+                FieldPanel("randomise_options"),
                 FieldPanel("submit_button_text"),
             ],
             heading=_(
@@ -496,6 +559,15 @@ class Poll(QuestionnairePage, AbstractForm):
             ],
             heading="Description at thank you page",
         ),
+        FieldPanel('index_page_description'),
+        FieldPanel('index_page_description_line_2'),
+        MultiFieldPanel(
+            [
+                StreamFieldPanel("terms_and_conditions"),
+            ],
+            heading="Terms and conditions",
+        ),
+        SvgChooserPanel('icon'),
         InlinePanel("poll_form_fields", label="Poll Form fields", min_num=1, max_num=1),
     ]
 
@@ -509,45 +581,46 @@ class Poll(QuestionnairePage, AbstractForm):
     def get_submission_class(self):
         return UserSubmission
 
+    def get_results(self):
+        results = dict()
+        data_fields = [
+            (field.clean_name, field.label)
+            for field in self.get_form_fields()
+        ]
+        submissions = self.get_submission_class().objects.filter(page=self)
+        for submission in submissions:
+            data = submission.get_data()
+
+            # Count results for each question
+            for name, label in data_fields:
+                answer = data.get(name)
+                if answer is None:
+                    # Something wrong with data.
+                    # Probably you have changed questions
+                    # and now we are receiving answers for old questions.
+                    # Just skip them.
+                    continue
+
+                question_stats = results.get(label, {})
+                if type(answer) != list:
+                    answer = [answer]
+
+                for answer_ in answer:
+                    question_stats[answer_] = question_stats.get(answer_, 0) + 1
+
+                results[label] = question_stats
+
+        if self.result_as_percentage:
+            total_submissions = len(submissions)
+            for key in results:
+                for k, v in results[key].items():
+                    results[key][k] = round(v/total_submissions, 4) * 100
+
+        return results
+
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
-        results = dict()
-
-        if request.method == 'POST':
-            # Get information about form fields
-            data_fields = [
-                (field.clean_name, field.label)
-                for field in self.get_form_fields()
-            ]
-
-            submissions = self.get_submission_class().objects.filter(page=self)
-            for submission in submissions:
-                data = submission.get_data()
-
-                # Count results for each question
-                for name, label in data_fields:
-                    answer = data.get(name)
-                    if answer is None:
-                        # Something wrong with data.
-                        # Probably you have changed questions
-                        # and now we are receiving answers for old questions.
-                        # Just skip them.
-                        continue
-
-                    question_stats = results.get(label, {})
-                    if type(answer) != list:
-                        answer = [answer]
-
-                    for answer_ in answer:
-                        question_stats[answer_] = question_stats.get(answer_, 0) + 1
-
-                    results[label] = question_stats
-
-            if self.result_as_percentage:
-                total_submissions = len(submissions)
-                for key in results:
-                    for k,v in results[key].items():
-                        results[key][k] = round(v/total_submissions, 4) * 100
+        results = self.get_results()
 
         context.update({
             'results': results,
@@ -556,22 +629,16 @@ class Poll(QuestionnairePage, AbstractForm):
         })
         return context
 
-    def get_data_fields(self):
-        data_fields = [
-            ('user', _('User')),
-            ('submit_time', _('Submission Date')),
-            ('page_url', _('Page URL')),
-        ]
-        data_fields += [
-            (field.clean_name, field.label)
-            for field in self.get_form_fields()
-        ]
-        return data_fields
-
 
 class QuizFormField(AbstractFormField):
     page = ParentalKey("Quiz", on_delete=models.CASCADE, related_name="quiz_form_fields")
     required = models.BooleanField(verbose_name=_('required'), default=True)
+    clean_name = models.TextField(
+        verbose_name=_('name'),
+        blank=True,
+        default='',
+        help_text=_('Safe name of the form field, the label converted to ascii_snake_case')
+    )
     field_type = models.CharField(
         verbose_name=_('field type'),
         max_length=16,
@@ -662,7 +729,9 @@ class Quiz(QuestionnairePage, AbstractForm):
     base_form_class = QuizForm
     form_builder = CustomFormBuilder
 
-    parent_page_types = ["home.HomePage", "home.Section", "home.Article", "questionnaires.QuizIndexPage"]
+    parent_page_types = [
+        "home.HomePage", "home.Section", "home.Article", "questionnaires.QuizIndexPage", 'home.FooterIndexPage',
+    ]
     template = "quizzes/quiz.html"
 
     multi_step = models.BooleanField(
@@ -699,6 +768,15 @@ class Quiz(QuestionnairePage, AbstractForm):
             ],
             heading="Description at thank you page",
         ),
+        FieldPanel('index_page_description'),
+        FieldPanel('index_page_description_line_2'),
+        MultiFieldPanel(
+            [
+                StreamFieldPanel("terms_and_conditions"),
+            ],
+            heading="Terms and conditions",
+        ),
+        SvgChooserPanel('icon'),
         InlinePanel("quiz_form_fields", label="Form fields"),
     ]
 
@@ -717,18 +795,6 @@ class Quiz(QuestionnairePage, AbstractForm):
 
     def get_submission_class(self):
         return UserSubmission
-
-    def get_data_fields(self):
-        data_fields = [
-            ('user', _('User')),
-            ('submit_time', _('Submission Date')),
-            ('page_url', _('Page URL')),
-        ]
-        data_fields += [
-            (field.clean_name, field.admin_label)
-            for field in self.get_form_fields()
-        ]
-        return data_fields
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)

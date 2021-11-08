@@ -1,11 +1,9 @@
-{% load static wagtailcore_tags wagtailimages_tags i18n %}
+{% load static wagtailcore_tags wagtailimages_tags i18n generic_components image_tags %}
 <footer class="top-level">
     <nav>
         {% for section in top_level_sections %}
-        <div class='top-level__section' style="background-color:{{ section.specific.background_color }}; color: {{section.specific.font_color }}">
-            <img src="{{ section.specific.icon.url }}"/>
-            <a href="{% pageurl section %}">{{ section.specific.title }}</a>
-        </div>
+            {% pageurl section as section_url %}
+            {% primary_button title=section.specific.title font_color=section.specific.font_color background_color=section.specific.background_color icon_path=section.specific.icon.url href=section_url is_svg_icon=True %}
         {% endfor %}
     </nav>
 </footer>

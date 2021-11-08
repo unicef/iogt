@@ -54,7 +54,7 @@ class ThreadDetailView(View):
         }
 
     def get(self, request, thread_id):
-        thread = get_object_or_404(Thread, pk=thread_id)
+        thread = get_object_or_404(Thread, pk=thread_id, users__in=[request.user])
         thread.mark_read(request.user)
         return render(request, 'messaging/thread_detail.html', context=self.get_context(thread))
 
@@ -69,7 +69,7 @@ class ThreadDetailView(View):
 
             return redirect(reverse('messaging:thread', kwargs={'thread_id': thread.pk}))
         else:
-            return render(request, 'messaging/thread_detail.html', context=self.get_context(thread, form))
+            return render(request, 'messaging/thread_detail.html', context=self.get_context(thread))
 
 
 @method_decorator(login_required, name='dispatch')
@@ -83,10 +83,10 @@ class MessageCreateView(View):
         if form.is_valid():
             user = request.user
             data = form.cleaned_data
-            ChatManager.initiate_thread(
+            thread = ChatManager.initiate_thread(
                 sender=user, recipients=[], chatbot=data['chatbot'], subject=data['subject'], text=data['text'])
 
-            return redirect('messaging:inbox')
+            return redirect(reverse('messaging:thread', kwargs={'thread_id': thread.pk}))
 
         messages.add_message(request, messages.ERROR, 'Can\'t connect with bot.')
         return redirect(request.META.get('HTTP_REFERER'))

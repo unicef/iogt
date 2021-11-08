@@ -90,6 +90,7 @@ MIDDLEWARE = [
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
     'iogt_users.middlewares.RegistrationSurveyRedirectMiddleware',
     'external_links.middleware.RewriteExternalLinksMiddleware',
+    'iogt.middleware.CacheControlMiddleware',
 ]
 
 # Prevent Wagtail's built in menu from showing in Admin > Settings
@@ -220,7 +221,7 @@ WAGTAIL_USER_CUSTOM_FIELDS = ['first_name', 'last_name', 'email', 'terms_accepte
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-BASE_URL = 'http://iogt.site'
+BASE_URL = os.getenv('BASE_URL')
 
 # SITE ID
 SITE_ID = 1

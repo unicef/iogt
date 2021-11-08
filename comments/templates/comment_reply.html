@@ -23,7 +23,7 @@
             <select name="cannedResponses" id="cannedResponses">
                 <option value="">----</option>
                 {% for response in canned_responses %}
-                    <option value="{{ response.text }}">{{ response.text }}</option>
+                    <option value="{{ response.text }}">{{ response.header }}</option>
                 {% endfor %}
 
             </select>
