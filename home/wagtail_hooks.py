@@ -66,6 +66,14 @@ def sort_page_listing_by_path(parent_page, pages, request):
     return pages
 
 
+def rename_forms_menu_item(request, menu_items):
+    for item in menu_items:
+        if item.name == "forms":
+            item.label = _("Form Data")
+        if item.name == 'translations':
+            item.url = f'{TranslationEntryAdmin().url_helper.get_action_url("index")}?limited=yes'
+
+
 @hooks.register('construct_page_chooser_queryset')
 def limit_page_chooser(pages, request):
     """
@@ -95,6 +103,14 @@ def limit_page_chooser(pages, request):
 @hooks.register('insert_global_admin_css', order=100)
 def global_admin_css():
     return format_html('<link rel="stylesheet" href="{}">', static('css/global/admin.css'))
+
+
+@hooks.register('insert_global_admin_js', order=100)
+def global_admin_js():
+    return format_html(
+        '<script src="{}"></script>',
+        static("js/global/admin.js")
+    )
 
 
 class LimitedTranslatableStringsFilter(SimpleListFilter):
@@ -149,20 +165,3 @@ class TranslationEntryAdmin(ModelAdmin):
 
 
 modeladmin_register(TranslationEntryAdmin)
-
-
-@hooks.register('construct_main_menu')
-def rename_forms_menu_item(request, menu_items):
-    for item in menu_items:
-        if item.name == "forms":
-            item.label = _("Form Data")
-        if item.name == 'translations':
-            item.url = f'{TranslationEntryAdmin().url_helper.get_action_url("index")}?limited=yes'
-
-
-@hooks.register('insert_global_admin_js', order=100)
-def global_admin_js():
-    return format_html(
-        '<script src="{}"></script>',
-        static("js/global/admin.js")
-    )
