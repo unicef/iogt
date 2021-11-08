@@ -35,6 +35,8 @@ def store_to_db(self, pofile, locale, store_translations=False):
             tdict.update({t.original: {}})
         tdict[t.original][t.language] = t.translation
 
+
+    translations_to_keep = []
     for m in messages:
         occs = []
         for occ in m.occurrences:
@@ -58,6 +60,7 @@ def store_to_db(self, pofile, locale, store_translations=False):
                 original=m.msgid, language=language, locale_path=locale_path, domain=domain).first()
             if t:
                 if t.translation:
+                    translations_to_keep.append(m.msgid)
                     continue
 
         t, created = TranslationEntry.objects.update_or_create(
@@ -73,6 +76,8 @@ def store_to_db(self, pofile, locale, store_translations=False):
             }
         )
 
+        translations_to_keep.append(m.msgid)
+
         if locale_path not in self.tors:
             self.tors[locale_path] = {}
         if language not in self.tors[locale_path]:
@@ -81,8 +86,31 @@ def store_to_db(self, pofile, locale, store_translations=False):
             self.tors[locale_path][language][domain] = []
         self.tors[locale_path][language][domain].append(t.original)
 
+    return translations_to_keep
+
+
+def load_data_from_po(self):
+    import os
+    from glob import glob
+
+    from django.conf import settings
+    from translation_manager.models import TranslationEntry
+
+    translations_to_keep = []
+    for lang, lang_name in settings.LANGUAGES:
+        for path in settings.LOCALE_PATHS:
+            locale = get_dirname_from_lang(lang)
+            po_pattern = os.path.join(path, locale, "LC_MESSAGES", "*.po")
+            for pofile in glob(po_pattern):
+                translations_to_keep += self.store_to_db(pofile=pofile, locale=locale, store_translations=True)
+
+    TranslationEntry.objects.exclude(original__in=translations_to_keep).delete()
+
+    self.postprocess()
+
 
 def patch_store_to_db():
     from translation_manager.manager import Manager
 
     Manager.store_to_db = store_to_db
+    Manager.load_data_from_po = load_data_from_po
