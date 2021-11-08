@@ -1,17 +1,15 @@
+{% load home_tags %}
 {% load generic_components %}
 {% load static wagtailcore_tags i18n %}
 
-{% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/article/article.css' %}">
-{% endblock extra_css %}
-
 {% block content %}
-    <section class='page-children'>
+    <section class='child-pages'>
         {% for page in pages %}
+            {% is_first_content forloop.counter0 as is_first_content %}
             {% if page.get_type == 'section' %}
-                {% include 'home/tags/section_card.html' with page=page %}
+                {% include 'home/tags/section_card.html' with page=page is_first_content=is_first_content %}
             {% elif page.get_type == 'article' %}
-                {% render_article_card page=page background_color=page.get_parent.specific.background_color font_color=page.get_parent.specific.font_color %}
+                {% render_article_card page=page is_first_content=is_first_content background_color=page.get_parent.specific.background_color font_color=page.get_parent.specific.font_color %}
             {% elif page.get_type == 'poll' or page.get_type == 'survey' or page.get_type == 'quiz' %}
                 {% include 'questionnaires/tags/questionnaire_wrapper.html' with page=page direct_display=page.direct_display %}
             {% endif %}

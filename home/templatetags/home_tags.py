@@ -92,3 +92,12 @@ def get_menu_icon(menu_item):
         return menu_item.link_page.specific.icon.url
 
     return ''
+
+
+@register.simple_tag
+def is_first_content(value):
+    is_first_content = False
+    if value == 0:
+        is_first_content = True
+
+    return is_first_content

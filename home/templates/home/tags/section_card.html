@@ -1,7 +1,6 @@
 {% load static wagtailcore_tags wagtailimages_tags sass_tags image_tags home_tags %}
 
-<a href="{% pageurl page %}"
-   class='sub-section {% if is_first_content %}first-content{% endif %}'>
+<a href="{% pageurl page %}" class='sub-section {% if is_first_content %}first-content{% endif %}'>
     {{ page.title }}
     <div class="overlay-holder {% render_is_content_completed page %}">
         {% image page.lead_image width-320 class='article__lead-img' %}

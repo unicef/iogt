@@ -1,7 +1,8 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 <div class="article-card">
-    <a href="{% pageurl page %}" style="color:{{ font_color }}; background:{{ background_color }};">
+    <a href="{% pageurl page %}" style="color:{{ font_color }}; background:{{ background_color }};"
+       class="{% if is_first_content %}first-content{% endif %}">
         <div class="article-header">
             {% if display_section_title %}
                 <p class="sm-paragraph">
