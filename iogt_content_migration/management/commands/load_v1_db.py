@@ -1645,14 +1645,11 @@ class Command(BaseCommand):
             page_to_move.move(parent_page, pos='last-child')
 
     def migrate_post_registration_survey(self):
-        # Get default language locale
-        # sql = 'select locale from core_sitelanguage where is_main_language = true'
 
         sql = 'select * from profiles_userprofilessettings pups ' \
               'inner join wagtailcore_site ws on pups.site_id = ws.id ' \
               'where is_default_site = true'
         cur = self.db_query(sql)
-
         row = cur.fetchone()
 
         survey = Survey(
@@ -1707,6 +1704,25 @@ class Command(BaseCommand):
                 required=bool(row['email_required']),
                 field_type='email',
                 admin_label='email')
+
+        self.stdout.write('Successfully migrated post registration survey')
+
+        default_site_settings = models.SiteSettings.get_for_default_site()
+        default_site_settings.registration_survey = survey
+        default_site_settings.save()
+
+        for locale in Locale.objects.all():
+            try:
+                self.translate_page(locale=locale, page=survey)
+                translated_survey = survey.get_translation_or_none(locale)
+                if translated_survey:
+                    # TODO: load translations from CSV and update the fields
+                    pass
+
+            except Exception as e:
+                self.post_migration_report_messages['registration_survey'].append(
+                    f"Unable to translate survey, title={row['title']} to locale={locale}"
+                )
 
     def print_post_migration_report(self):
         self.stdout.write(self.style.ERROR('====================='))
