@@ -1,3 +1,4 @@
+{% load home_tags %}
 {% load wagtailcore_tags wagtailimages_tags %}
 
 <div class="article-card">
@@ -11,6 +12,8 @@
             {% endif %}
             <p class="article-title">{{ page.title }}</p>
         </div>
-        {% image page.lead_image original class='related-articles__img--sm' %}
+        <div class="overlay-holder {% render_is_complete page %}">
+            {% image page.lead_image original class='related-articles__img--sm' %}
+        </div>
     </a>
 </div>

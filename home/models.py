@@ -205,9 +205,9 @@ class Section(Page, PageUtilsMixin, TitleIconMixin):
             'width_': 100 / total_article_count if total_article_count else 0,
         }
 
-    def is_completed(self, request):
+    def is_complete(self, request):
         progress_manager = ProgressManager(request)
-        return progress_manager.is_section_completed(self)
+        return progress_manager.is_section_complete(self)
 
     def get_context(self, request):
         check_user_session(request)
@@ -375,9 +375,9 @@ class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
                 return block
         return ''
 
-    def is_completed(self, request):
+    def is_complete(self, request):
         progress_manager = ProgressManager(request)
-        return progress_manager.is_article_completed(self)
+        return progress_manager.is_article_complete(self)
 
     @property
     def top_level_section(self):

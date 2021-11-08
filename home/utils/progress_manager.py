@@ -27,7 +27,7 @@ class ProgressManager:
 
         return None, None
 
-    def is_section_completed(self, section):
+    def is_section_complete(self, section):
         progress_enabled_ancestor = section.get_progress_bar_enabled_ancestor()
         if progress_enabled_ancestor:
             read_article_count, total_article_count = self._get_progress(section)
@@ -36,7 +36,7 @@ class ProgressManager:
 
         return False
 
-    def is_article_completed(self, article):
+    def is_article_complete(self, article):
         progress_enabled_ancestor = article.get_progress_enabled_section()
         if progress_enabled_ancestor:
             return article.id in self._get_read_articles_ids()
