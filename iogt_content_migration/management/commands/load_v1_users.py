@@ -149,24 +149,24 @@ class Command(BaseCommand):
 
     def migrate(self):
         self.populate_content_type_map()
-        #
+
         self.migrate_user_groups()
         self.migrate_user_accounts()
         self.mark_user_registration_survey_required()
-        #
-        # self.migrate_user_comments()
-        # self.migrate_comment_flags()
-        # self.migrate_canned_responses()
-        #
-        # self.migrate_user_survey_submissions()
-        # self.migrate_user_poll_submissions()
-        # self.migrate_user_freetext_poll_submissions()
-        #
-        # self.migrate_page_view_restrictions()
+
+        self.migrate_user_comments()
+        self.migrate_comment_flags()
+        self.migrate_canned_responses()
+
+        self.migrate_user_survey_submissions()
+        self.migrate_user_poll_submissions()
+        self.migrate_user_freetext_poll_submissions()
+
+        self.migrate_page_view_restrictions()
 
         self.migrate_registration_survey_submissions()
 
-        # self.print_post_migration_report()
+        self.print_post_migration_report()
 
     def populate_content_type_map(self):
         sql = f'select * from django_content_type'
