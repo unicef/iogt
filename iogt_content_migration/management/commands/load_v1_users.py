@@ -517,7 +517,6 @@ class Command(BaseCommand):
                     'where_do_you_live': row['location'],
                     'what_is_your_highest_level_of_education': row['education_level'],
                     'enter_your_mobile_number': row['mobile_number'],
-                    # TODO: Check where the email is stored
                     'enter_your_email_address': row['email'],
 
                 }
