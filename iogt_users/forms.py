@@ -2,6 +2,7 @@ from allauth.account.forms import SignupForm, ChangePasswordForm as BaseChangePa
 from allauth.utils import set_form_field_order
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.core.exceptions import ValidationError
 from django.forms import TextInput, Field
 from django.utils.translation import gettext_lazy as _
 from wagtail.users.forms import UserEditForm as WagtailUserEditForm, \
@@ -59,6 +60,12 @@ class WagtailAdminUserCreateForm(WagtailUserCreationForm):
     first_name = forms.CharField(required=False, label='First Name')
     last_name = forms.CharField(required=False, label='Last Name')
     terms_accepted = forms.BooleanField(label=_('I accept the terms & conditions'))
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if User.objects.filter(username__iexact=username):
+            raise ValidationError(_('A user with that username already exists.'))
+        return username
 
 
 class WagtailAdminUserEditForm(WagtailUserEditForm):

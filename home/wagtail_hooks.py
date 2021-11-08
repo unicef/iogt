@@ -4,13 +4,14 @@ from urllib.parse import urlparse, urlunparse, urlencode
 from django.contrib.admin import SimpleListFilter
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
-from django.templatetags.static import static
 from django.urls import resolve, Resolver404
 from django.urls import reverse
-from django.utils.html import escape, format_html
+from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from translation_manager.models import TranslationEntry
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
+from django.templatetags.static import static
+from django.utils.html import format_html
 from wagtail.contrib.redirects.models import Redirect
 from wagtail.core import hooks
 from wagtail.core.models import Page
@@ -37,6 +38,7 @@ class ExternalLinkHandler(LinkHandler, ABC):
         except Resolver404:
             external_link_page = reverse("external-link")
             return f'<a href="{external_link_page}?{urlencode({"next": next_page})}">'
+
 
 @hooks.register("register_rich_text_features")
 def register_external_link(features):
@@ -93,11 +95,6 @@ def limit_page_chooser(pages, request):
 @hooks.register('insert_global_admin_css', order=100)
 def global_admin_css():
     return format_html('<link rel="stylesheet" href="{}">', static('css/global/admin.css'))
-
-
-Redirect._meta.get_field("old_path").help_text = _(
-    'A relative path to redirect from e.g. /en/youth. '
-    'See https://docs.wagtail.io/en/stable/editor_manual/managing_redirects.html for more details')
 
 
 class LimitedTranslatableStringsFilter(SimpleListFilter):
@@ -161,3 +158,11 @@ def rename_forms_menu_item(request, menu_items):
             item.label = _("Form Data")
         if item.name == 'translations':
             item.url = f'{TranslationEntryAdmin().url_helper.get_action_url("index")}?limited=yes'
+
+
+@hooks.register('insert_global_admin_js', order=100)
+def global_admin_js():
+    return format_html(
+        '<script src="{}"></script>',
+        static("js/global/admin.js")
+    )
