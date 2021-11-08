@@ -1512,9 +1512,9 @@ class Command(BaseCommand):
     def add_polls_from_polls_index_page_to_footer_index_page_as_page_link_page(self):
         self.poll_index_page.refresh_from_db()
         self.footer_index_page.refresh_from_db()
-        svg_title = 'clip board pen'
         file = File(open(Path(settings.BASE_DIR) / 'iogt/static/icons/clip_board_pen.svg'), name='clip_board_pen.svg')
-        icon = Svg.objects.create(title=svg_title, file=file)
+        file = File(open(Path(settings.BASE_DIR) / 'iogt/static/icons/clip_board_pen.svg'), name='clip_board_pen.svg')
+        icon = Svg.objects.create(title='clip board pen', file=file)
         poll_index_pages = self.poll_index_page.get_translations(inclusive=True)
         for poll_index_page in poll_index_pages:
             polls = poll_index_page.get_children()
@@ -1528,9 +1528,8 @@ class Command(BaseCommand):
     def add_surveys_from_surveys_index_page_to_footer_index_page_as_page_link_page(self):
         self.survey_index_page.refresh_from_db()
         self.footer_index_page.refresh_from_db()
-        svg_title = 'loud speaker'
         file = File(open(Path(settings.BASE_DIR) / 'iogt/static/icons/loud_speaker.svg'), name='loud_speaker.svg')
-        icon = Svg.objects.create(title=svg_title, file=file)
+        icon = Svg.objects.create(title='loud speaker', file=file)
         survey_index_page = self.survey_index_page.get_translations(inclusive=True)
         for survey_index_page in survey_index_page:
             surveys = survey_index_page.get_children()
