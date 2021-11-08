@@ -521,13 +521,16 @@ class Poll(QuestionnairePage, AbstractForm):
             "If not checked, the results will be shown as a total instead of a percentage."
         ),
     )
-
     randomise_options = models.BooleanField(
         default=False,
         help_text=_(
             "Randomising the options allows the options to be shown in a different "
             "order each time the page is displayed."
         ),
+    )
+    show_results_with_no_votes = models.BooleanField(
+        default = True,
+        help_text=_("Display options with 0 votes in results.")
     )
 
     content_panels = Page.content_panels + [
@@ -539,6 +542,7 @@ class Poll(QuestionnairePage, AbstractForm):
                 FieldPanel("result_as_percentage"),
                 FieldPanel("allow_multiple_submissions"),
                 FieldPanel("randomise_options"),
+                FieldPanel("show_results_with_no_votes"),
                 FieldPanel("submit_button_text"),
             ],
             heading=_(
@@ -584,15 +588,23 @@ class Poll(QuestionnairePage, AbstractForm):
     def get_results(self):
         results = dict()
         data_fields = [
-            (field.clean_name, field.label)
+            (field.clean_name, field.label, field.choices)
             for field in self.get_form_fields()
         ]
         submissions = self.get_submission_class().objects.filter(page=self)
+
+        # Default result counts to zero so choices with no votes are included
+        if len(submissions) > 0 and self.show_results_with_no_votes:
+            for _, label, choices in data_fields:
+                results[label] = {
+                    choice: 0 for choice in choices.split('|') if len(choice) > 0
+                }
+
         for submission in submissions:
             data = submission.get_data()
 
             # Count results for each question
-            for name, label in data_fields:
+            for name, label, _ in data_fields:
                 answer = data.get(name)
                 if answer is None:
                     # Something wrong with data.
