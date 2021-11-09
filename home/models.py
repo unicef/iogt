@@ -792,14 +792,17 @@ class ManifestSettings(models.Model):
         ],
         verbose_name=_("Browser UI"),
         help_text=_(
-            "Determines the preferred display mode for the website. The possible values are "
-            "'fullscreen' 'standalone' 'minimal-ui' 'browser'"
+            "Determines the preferred display mode for the website. The possible values are:"
+            " ['fullscreen': Entire display area is used. address bar, navigation and status bar is hidden.]"
+            ", ['standalone': Runs in its own window, address bar and navigation are hidden while status bar is still visible.]"
+            ", ['minimal-ui': Standalone mode, but some browser UI is retained. For example, in Chrome, the address bar is displayed.]"
+            ", ['browser': All browser UI is retained. The Add to Home Screen Notice is never displayed.]"
         ),
     )
     background_color = models.CharField(
         max_length=10,
         verbose_name=_("Background color"),
-        help_text=__(
+        help_text=_(
             "Background color member defines a placeholder background color "
             "for the application page to display before its stylesheet is loaded. (example: #FFF)"
         ),
