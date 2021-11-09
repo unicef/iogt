@@ -60,29 +60,27 @@ class Command(BaseCommand):
             help='**RELATIVE Path** to IoGT v1 media directory'
         )
         parser.add_argument(
-            '--skip-locales',
-            action='store_true',
-            help='Skip data of locales other than default language'
-        )
-
-        parser.add_argument(
             '--delete-users',
             action='store_true',
             help='Delete existing Users and their associated data. Use carefully'
         )
-
         parser.add_argument(
             '--v1-domains',
             nargs="+",
             required=True,
             help="IoGT V1 domains for manually inserted internal links, --v1-domains domain1 domain2 ..."
         )
+        parser.add_argument(
+            '--sort',
+            required=True,
+            help='Sort page by "type1" or "type2"'
+        )
 
     def handle(self, *args, **options):
         self.db_connect(options)
         self.media_dir = options.get('media_dir')
-        self.skip_locales = options.get('skip_locales')
         self.v1_domains_list = options.get('v1_domains')
+        self.sort = options.get('sort')
 
         self.collection_map = {}
         self.document_map = {}
@@ -180,6 +178,7 @@ class Command(BaseCommand):
         self.add_polls_from_polls_index_page_to_home_page_featured_content()
         self.add_surveys_from_surveys_index_page_to_home_page_featured_content()
         self.move_footers_to_end_of_footer_index_page()
+        self.sort_pages()
         self.stop_translations()
 
     def create_home_page(self, root):
@@ -384,14 +383,12 @@ class Command(BaseCommand):
         return tags
 
     def migrate_sections(self):
-        sql = "select * " \
-              "from core_sectionpage csp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
-              "where csp.page_ptr_id = wcp.id " \
-              "and wcp.id = clr.page_id " \
-              "and clr.language_id = csl.id "
-        if self.skip_locales:
-            sql += " and locale = 'en' "
-        sql += 'order by wcp.path'
+        sql = f"select * " \
+              f"from core_sectionpage csp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              f"where csp.page_ptr_id = wcp.id " \
+              f"and wcp.id = clr.page_id " \
+              f"and clr.language_id = csl.id " \
+              f"order by wcp.path"
         cur = self.db_query(sql)
         section_page_translations = []
         for row in cur:
@@ -429,7 +426,7 @@ class Command(BaseCommand):
                     translated_section.larger_image_for_top_page_in_list_as_in_v1 = True
                     translated_section.save()
                     content_type = self.find_content_type_id('core', 'sectionpage')
-                    tags = self.find_tags(content_type, row['id'])
+                    tags = self.find_tags(content_type, row['page_ptr_id'])
                     if tags:
                         translated_section.tags.add(*tags)
                     V1ToV2ObjectMap.create_map(content_object=translated_section, v1_object_id=row['page_ptr_id'])
@@ -467,7 +464,7 @@ class Command(BaseCommand):
         )
         section.save()
         content_type = self.find_content_type_id('core', 'sectionpage')
-        tags = self.find_tags(content_type, row['id'])
+        tags = self.find_tags(content_type, row['page_ptr_id'])
         if tags:
             section.tags.add(*tags)
         V1ToV2ObjectMap.create_map(content_object=section, v1_object_id=row['page_ptr_id'])
@@ -481,14 +478,13 @@ class Command(BaseCommand):
         self.stdout.write(f"saved section, title={section.title}")
 
     def migrate_articles(self):
-        sql = "select * " \
-              "from core_articlepage cap, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
-              "where cap.page_ptr_id = wcp.id " \
-              "and wcp.id = clr.page_id " \
-              "and clr.language_id = csl.id "
-        if self.skip_locales:
-            sql += "and locale = 'en' "
-        sql += " and wcp.path like '000100010002%'order by wcp.path"
+        sql = f"select * " \
+              f"from core_articlepage cap, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              f"where cap.page_ptr_id = wcp.id " \
+              f"and wcp.id = clr.page_id " \
+              f"and clr.language_id = csl.id " \
+              f"and wcp.path like '000100010002%' " \
+              f"order by wcp.path"
         cur = self.db_query(sql)
 
         article_page_translations = []
@@ -533,7 +529,7 @@ class Command(BaseCommand):
                     translated_article.save()
 
                     content_type = self.find_content_type_id('core', 'articlepage')
-                    tags = self.find_tags(content_type, row['id'])
+                    tags = self.find_tags(content_type, row['page_ptr_id'])
                     if tags:
                         translated_article.tags.add(*tags)
                     V1ToV2ObjectMap.create_map(content_object=translated_article, v1_object_id=row['page_ptr_id'])
@@ -583,7 +579,7 @@ class Command(BaseCommand):
         try:
             article.save()
             content_type = self.find_content_type_id('core', 'articlepage')
-            tags = self.find_tags(content_type, row['id'])
+            tags = self.find_tags(content_type, row['page_ptr_id'])
             if tags:
                 article.tags.add(*tags)
             V1ToV2ObjectMap.create_map(content_object=article, v1_object_id=row['page_ptr_id'])
@@ -678,14 +674,12 @@ class Command(BaseCommand):
         return json.dumps(v2_body)
 
     def migrate_banners(self):
-        sql = "select * " \
-              "from core_bannerpage cbp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
-              "where cbp.page_ptr_id = wcp.id " \
-              "and wcp.id = clr.page_id " \
-              "and clr.language_id = csl.id "
-        if self.skip_locales:
-            sql += " and locale = 'en' "
-        sql += ' order by wcp.path'
+        sql = f"select * " \
+              f"from core_bannerpage cbp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              f"where cbp.page_ptr_id = wcp.id " \
+              f"and wcp.id = clr.page_id " \
+              f"and clr.language_id = csl.id " \
+              f"order by wcp.path"
         cur = self.db_query(sql)
         banner_page_translations = []
         for row in cur:
@@ -768,15 +762,13 @@ class Command(BaseCommand):
         return v2_page
 
     def migrate_footers(self):
-        sql = "select * " \
-              "from core_footerpage cfp, core_articlepage cap, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
-              "where cfp.articlepage_ptr_id = cap.page_ptr_id " \
-              "and cap.page_ptr_id = wcp.id " \
-              "and wcp.id = clr.page_id " \
-              "and clr.language_id = csl.id "
-        if self.skip_locales:
-            sql += " and locale = 'en' "
-        sql += ' order by wcp.path'
+        sql = f"select * " \
+              f"from core_footerpage cfp, core_articlepage cap, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              f"where cfp.articlepage_ptr_id = cap.page_ptr_id " \
+              f"and cap.page_ptr_id = wcp.id " \
+              f"and wcp.id = clr.page_id " \
+              f"and clr.language_id = csl.id " \
+              f"order by wcp.path"
         cur = self.db_query(sql)
         footer_page_translations = []
         for row in cur:
@@ -876,14 +868,20 @@ class Command(BaseCommand):
         self.stdout.write('Translations stopped.')
 
     def migrate_polls(self):
-        sql = "select * from polls_pollsindexpage ppip, wagtailcore_page wcp where ppip.page_ptr_id = wcp.id"
+        sql = f"select * " \
+              f"from polls_pollsindexpage ppip, wagtailcore_page wcp " \
+              f"where ppip.page_ptr_id = wcp.id " \
+              f"order by wcp.path"
         cur = self.db_query(sql)
         v1_poll_index_page = cur.fetchone()
         cur.close()
 
         self._migrate_polls(v1_poll_index_page, self.poll_index_page)
 
-        sql = "select * from core_sectionindexpage csip, wagtailcore_page wcp where csip.page_ptr_id = wcp.id"
+        sql = f"select * " \
+              f"from core_sectionindexpage csip, wagtailcore_page wcp " \
+              f"where csip.page_ptr_id = wcp.id " \
+              f"order by wcp.path"
         cur = self.db_query(sql)
         v1_section_index_page = cur.fetchone()
         cur.close()
@@ -896,10 +894,8 @@ class Command(BaseCommand):
               f"where pq.page_ptr_id = wcp.id " \
               f"and wcp.id = clr.page_id " \
               f"and clr.language_id = csl.id " \
-              f"and wcp.path like '{v1_index_page['path']}%' "
-        if self.skip_locales:
-            sql += " and locale = 'en' "
-        sql += 'order by wcp.path'
+              f"and wcp.path like '{v1_index_page['path']}%' " \
+              f"order by wcp.path"
         cur = self.db_query(sql)
         poll_page_translations = []
         for row in cur:
@@ -1035,14 +1031,20 @@ class Command(BaseCommand):
         self.stdout.write(f"saved poll question, label={poll.title}")
 
     def migrate_surveys(self):
-        sql = "select * from surveys_surveysindexpage ssip, wagtailcore_page wcp where ssip.page_ptr_id = wcp.id"
+        sql = f"select * " \
+              f"from surveys_surveysindexpage ssip, wagtailcore_page wcp " \
+              f"where ssip.page_ptr_id = wcp.id " \
+              f"order by wcp.path"
         cur = self.db_query(sql)
         v1_survey_index_page = cur.fetchone()
         cur.close()
 
         self._migrate_surveys(v1_survey_index_page, self.survey_index_page)
 
-        sql = "select * from core_sectionindexpage csip, wagtailcore_page wcp where csip.page_ptr_id = wcp.id"
+        sql = f"select * " \
+              f"from core_sectionindexpage csip, wagtailcore_page wcp " \
+              f"where csip.page_ptr_id = wcp.id " \
+              f"order by wcp.path"
         cur = self.db_query(sql)
         v1_section_index_page = cur.fetchone()
         cur.close()
@@ -1055,10 +1057,8 @@ class Command(BaseCommand):
               f"where smsp.page_ptr_id = wcp.id " \
               f"and wcp.id = clr.page_id " \
               f"and clr.language_id = csl.id " \
-              f"and wcp.path like '{v1_index_page['path']}%' "
-        if self.skip_locales:
-            sql += "and locale = 'en' "
-        sql += 'order by wcp.path'
+              f"and wcp.path like '{v1_index_page['path']}%' " \
+              f"order by wcp.path"
         cur = self.db_query(sql)
         survey_page_translations = []
         for row in cur:
@@ -1189,7 +1189,8 @@ class Command(BaseCommand):
               f'from surveys_surveytermsconditions stc, surveys_molosurveypage msp, wagtailcore_page wcp ' \
               f'where stc.page_id = msp.page_ptr_id ' \
               f'and stc.terms_and_conditions_id = wcp.id ' \
-              f'and stc.page_id = {row["page_ptr_id"]}'
+              f'and stc.page_id = {row["page_ptr_id"]} ' \
+              f'order by wcp.path'
 
         cur = self.db_query(sql)
         v1_term_and_condition = cur.fetchone()
@@ -1211,10 +1212,8 @@ class Command(BaseCommand):
               f'and smsp.page_ptr_id = wcp.id ' \
               f'and wcp.id = clr.page_id ' \
               f'and clr.language_id = csl.id ' \
-              f'and wcp.id = {survey_row["page_ptr_id"]} '
-        if self.skip_locales:
-            sql += "and locale = 'en' "
-        sql += 'order by wcp.path'
+              f'and wcp.id = {survey_row["page_ptr_id"]} ' \
+              f'order by wcp.path'
         cur = self.db_query(sql)
         self.create_survey_question(survey, survey_row, cur)
         cur.close()
@@ -1259,7 +1258,6 @@ class Command(BaseCommand):
                 translated_home_page.title = modified_title
                 translated_home_page.draft_title = modified_title
                 translated_home_page.save()
-
 
     def translate_index_pages(self):
         cur = self.db_query(f'select * from core_sitelanguage')
@@ -1379,14 +1377,12 @@ class Command(BaseCommand):
             home_page.save()
 
     def attach_banners_to_home_page(self):
-        sql = "select * " \
-              "from core_bannerpage cbp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
-              "where cbp.page_ptr_id = wcp.id " \
-              "and wcp.id = clr.page_id " \
-              "and clr.language_id = csl.id "
-        if self.skip_locales:
-            sql += " and locale = 'en' "
-        sql += ' order by wcp.path'
+        sql = f"select * " \
+              f"from core_bannerpage cbp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              f"where cbp.page_ptr_id = wcp.id " \
+              f"and wcp.id = clr.page_id " \
+              f"and clr.language_id = csl.id " \
+              f"order by wcp.path"
         cur = self.db_query(sql)
         for row in cur:
             v2_banner = self.v1_to_v2_page_map.get(row['page_ptr_id'])
@@ -1449,14 +1445,13 @@ class Command(BaseCommand):
         }.get(color_name)
 
     def fix_articles_body(self):
-        sql = "select * " \
-              "from core_articlepage cap, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
-              "where cap.page_ptr_id = wcp.id " \
-              "and wcp.id = clr.page_id " \
-              "and clr.language_id = csl.id "
-        if self.skip_locales:
-            sql += "and locale = 'en' "
-        sql += " and wcp.path like '000100010002%'order by wcp.path"
+        sql = f"select * " \
+              f"from core_articlepage cap, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              f"where cap.page_ptr_id = wcp.id " \
+              f"and wcp.id = clr.page_id " \
+              f"and clr.language_id = csl.id " \
+              f"and wcp.path like '000100010002%' " \
+              f"order by wcp.path"
         cur = self.db_query(sql)
         for row in cur:
             v2_article = self.v1_to_v2_page_map.get(row['page_ptr_id'])
@@ -1471,15 +1466,13 @@ class Command(BaseCommand):
         cur.close()
 
     def fix_footers_body(self):
-        sql = "select * " \
-              "from core_footerpage cfp, core_articlepage cap, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
-              "where cfp.articlepage_ptr_id = cap.page_ptr_id " \
-              "and cap.page_ptr_id = wcp.id " \
-              "and wcp.id = clr.page_id " \
-              "and clr.language_id = csl.id "
-        if self.skip_locales:
-            sql += " and locale = 'en' "
-        sql += ' order by wcp.path'
+        sql = f"select * " \
+              f"from core_footerpage cfp, core_articlepage cap, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              f"where cfp.articlepage_ptr_id = cap.page_ptr_id " \
+              f"and cap.page_ptr_id = wcp.id " \
+              f"and wcp.id = clr.page_id " \
+              f"and clr.language_id = csl.id " \
+              f"order by wcp.path"
         cur = self.db_query(sql)
         for row in cur:
             v2_footer = self.v1_to_v2_page_map.get(row['page_ptr_id'])
@@ -1493,10 +1486,8 @@ class Command(BaseCommand):
               f"from surveys_molosurveypage smsp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
               f"where smsp.page_ptr_id = wcp.id " \
               f"and wcp.id = clr.page_id " \
-              f"and clr.language_id = csl.id  "
-        if self.skip_locales:
-            sql += " and locale = 'en' "
-        sql += ' order by wcp.path'
+              f"and clr.language_id = csl.id  " \
+              f"order by wcp.path"
         cur = self.db_query(sql)
         for row in cur:
             v2_survey = self.v1_to_v2_page_map.get(row['page_ptr_id'])
@@ -1506,14 +1497,12 @@ class Command(BaseCommand):
         cur.close()
 
     def fix_banner_link_page(self):
-        sql = "select * " \
-              "from core_bannerpage cbp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
-              "where cbp.page_ptr_id = wcp.id " \
-              "and wcp.id = clr.page_id " \
-              "and clr.language_id = csl.id "
-        if self.skip_locales:
-            sql += " and locale = 'en' "
-        sql += ' order by wcp.path'
+        sql = f"select * " \
+              f"from core_bannerpage cbp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
+              f"where cbp.page_ptr_id = wcp.id " \
+              f"and wcp.id = clr.page_id " \
+              f"and clr.language_id = csl.id " \
+              f"order by wcp.path"
         cur = self.db_query(sql)
         for row in cur:
             v2_banner = self.v1_to_v2_page_map.get(row['page_ptr_id'])
@@ -1525,7 +1514,6 @@ class Command(BaseCommand):
     def add_polls_from_polls_index_page_to_footer_index_page_as_page_link_page(self):
         self.poll_index_page.refresh_from_db()
         self.footer_index_page.refresh_from_db()
-        file = File(open(Path(settings.BASE_DIR) / 'iogt/static/icons/clip_board_pen.svg'), name='clip_board_pen.svg')
         file = File(open(Path(settings.BASE_DIR) / 'iogt/static/icons/clip_board_pen.svg'), name='clip_board_pen.svg')
         icon = Svg.objects.create(title='clip board pen', file=file)
         poll_index_pages = self.poll_index_page.get_translations(inclusive=True)
@@ -1648,6 +1636,33 @@ class Command(BaseCommand):
         else:
             # Move page to end
             page_to_move.move(parent_page, pos='last-child')
+
+    def sort_pages(self):
+        if self.sort != 'type1':
+            return
+
+        section_index_pages = self.section_index_page.get_translations(inclusive=True)
+        pages = [page for page in section_index_pages]
+        for page in pages:
+            children = page.get_children().specific()
+            children_list = []
+            for child in children:
+                v1_id = V1ToV2ObjectMap.get_v1_id(child, child.id)
+                if v1_id:
+                    cur = self.db_query(f'select * from wagtailcore_page wcp where id = {v1_id}')
+                    v1_row = cur.fetchone()
+                    cur.close()
+                    setattr(child, 'creation_date', v1_row['latest_revision_created_at'])
+                else:
+                    setattr(child, 'creation_date', None)
+
+                pages.append(child)
+                children_list.append(child)
+
+            children_list = sorted(
+                children_list, key=lambda x: (x.creation_date is not None, x.creation_date), reverse=True)
+            for child in children_list:
+                self.move_page(page_to_move=child, position=None)
 
     def print_post_migration_report(self):
         self.stdout.write(self.style.ERROR('====================='))
