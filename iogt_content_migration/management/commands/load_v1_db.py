@@ -1526,7 +1526,6 @@ class Command(BaseCommand):
         self.poll_index_page.refresh_from_db()
         self.footer_index_page.refresh_from_db()
         file = File(open(Path(settings.BASE_DIR) / 'iogt/static/icons/clip_board_pen.svg'), name='clip_board_pen.svg')
-        file = File(open(Path(settings.BASE_DIR) / 'iogt/static/icons/clip_board_pen.svg'), name='clip_board_pen.svg')
         icon = Svg.objects.create(title='clip board pen', file=file)
         poll_index_pages = self.poll_index_page.get_translations(inclusive=True)
         for poll_index_page in poll_index_pages:
