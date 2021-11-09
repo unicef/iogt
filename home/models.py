@@ -517,6 +517,15 @@ class SiteSettings(BaseSetting):
         related_name='+',
         help_text="Upload an image file (.jpg, .png, .svg). The ideal size is 40px x 40px"
     )
+    apple_touch_icon = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text="Upload an image file (.jpg, .png, .svg) to be used as apple touch icon. "
+                  "The ideal size is 120px x 120px"
+    )
     show_only_translated_pages = models.BooleanField(
         default=False,
         help_text=_('When selecting this option, untranslated pages'
@@ -585,6 +594,7 @@ class SiteSettings(BaseSetting):
     panels = [
         ImageChooserPanel('logo'),
         ImageChooserPanel('favicon'),
+        ImageChooserPanel('apple_touch_icon'),
         MultiFieldPanel(
             [
                 FieldPanel('show_only_translated_pages'),
