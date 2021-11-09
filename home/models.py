@@ -507,7 +507,7 @@ class SiteSettings(BaseSetting):
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
-        help_text="Upload an image file (.jpg, .png, .svg). The ideal size is 100px x 40px"
+        help_text="Upload an image file (.jpg, .png). The ideal size is 100px x 40px"
     )
     favicon = models.ForeignKey(
         'wagtailimages.Image',
@@ -515,7 +515,7 @@ class SiteSettings(BaseSetting):
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
-        help_text="Upload an image file (.jpg, .png, .svg). The ideal size is 40px x 40px"
+        help_text="Upload an image file (.jpg, .png). The ideal size is 40px x 40px"
     )
     apple_touch_icon = models.ForeignKey(
         'wagtailimages.Image',
@@ -523,7 +523,7 @@ class SiteSettings(BaseSetting):
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
-        help_text="Upload an image file (.jpg, .png, .svg) to be used as apple touch icon. "
+        help_text="Upload an image file (.jpg, .png) to be used as apple touch icon. "
                   "The ideal size is 120px x 120px"
     )
     show_only_translated_pages = models.BooleanField(
