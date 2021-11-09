@@ -6,10 +6,6 @@
 {% get_language_info_list for LANGUAGES as languages %}
 {% get_current_language as LANGUAGE_CODE %}
 
-{% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/section/section.css' %}">
-{% endblock extra_css %}
-
 {% block content %}
     <div class="section-img">
         {% image page.lead_image width-320 class='lead-img' %}
@@ -28,6 +24,3 @@
         {% include 'home/tags/child_pages.html' with pages=children %}
     {% endif %}
 {% endblock content %}
-
-
-
