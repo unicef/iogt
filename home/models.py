@@ -183,10 +183,6 @@ class Section(Page, PageUtilsMixin, TitleIconMixin):
 
     base_form_class = SectionPageForm
 
-    @property
-    def get_type(self):
-        return self.__class__.__name__.lower()
-
     def get_descendant_articles(self):
         return Article.objects.descendant_of(self).live().exact_type(Article)
 
@@ -288,10 +284,6 @@ class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         ('chat_bot', ChatBotButtonBlock()),
     ])
     show_in_menus_default = True
-
-    @property
-    def get_type(self):
-        return self.__class__.__name__.lower()
 
     def _get_child_block_values(self, block_type):
         searchable_content = []
