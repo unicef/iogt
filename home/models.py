@@ -792,11 +792,10 @@ class ManifestSettings(models.Model):
         ],
         verbose_name=_("Browser UI"),
         help_text=_(
-            "Determines the preferred display mode for the website. The possible values are:"
-            " ['fullscreen': Entire display area is used. address bar, navigation and status bar is hidden.]"
-            ", ['standalone': Runs in its own window, address bar and navigation are hidden while status bar is still visible.]"
-            ", ['minimal-ui': Standalone mode, but some browser UI is retained. For example, in Chrome, the address bar is displayed.]"
-            ", ['browser': All browser UI is retained. The Add to Home Screen Notice is never displayed.]"
+            "Determines the preferred display mode for the website. The possible values are: "
+            "'fullscreen', 'standalone', 'minimal-ui', 'browser'. A better choice would be to use standalone "
+            "as it looks great on mobile as well. For further information refer to: "
+            "https://developer.mozilla.org/en-US/docs/Web/Manifest/display#values"
         ),
     )
     background_color = models.CharField(
