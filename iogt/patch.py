@@ -94,6 +94,7 @@ def load_data_from_po(self):
     from glob import glob
 
     from django.conf import settings
+    from django.db.models import Q
     from translation_manager.models import TranslationEntry
 
     translations_to_keep = []
@@ -104,7 +105,7 @@ def load_data_from_po(self):
             for pofile in glob(po_pattern):
                 translations_to_keep += self.store_to_db(pofile=pofile, locale=locale, store_translations=True)
 
-    TranslationEntry.objects.exclude(original__in=translations_to_keep).delete()
+    TranslationEntry.objects.exclude(Q(Q(original__in=translations_to_keep) | Q(translation__isnull=False))).delete()
 
     self.postprocess()
 
