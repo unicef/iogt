@@ -62,14 +62,14 @@ class LogoutRedirectHackView(View):
 
 
 class TranslationEditView(EditView):
-    def get_success_message(self, instance):
-        success_message = super().get_success_message(instance)
+    def post(self, request, *args, **kwargs):
+        super(TranslationEditView, self).post(request, *args, **kwargs)
 
         manager = Manager()
         for language, language_name in settings.LANGUAGES:
             manager.update_po_from_db(lang=language)
 
-        return success_message
+        return redirect(request.META['HTTP_REFERER'])
 
 
 class LoadTranslationsFromPOFiles(View):
