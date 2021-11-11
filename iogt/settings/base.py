@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
+import allauth
+from django.contrib import auth
 from django.utils.translation import gettext_lazy as _
 
 import django.conf.locale
@@ -64,6 +66,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'rest_framework',
     'sass_processor',
+    'translation_manager',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -367,6 +370,9 @@ django.conf.locale.LANG_INFO.update(EXTRA_LANG_INFO)
 
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, "locale"),
+    os.path.dirname(django.conf.locale.__file__),
+    os.path.join(os.path.dirname(allauth.__file__), 'locale'),
+    os.path.join(os.path.dirname(auth.__file__), 'locale'),
 ]
 
 # ========= Rapid Pro =================
@@ -403,3 +409,7 @@ EXPORT_FILENAME_TIMESTAMP_FORMAT = '%Y-%m-%dT%H%M%S'
 WAGTAILMARKDOWN = {
     'allowed_tags': ['i', 'b'],
 }
+
+TRANSLATIONS_PROJECT_BASE_DIR = BASE_DIR
+
+from iogt.patch import *
