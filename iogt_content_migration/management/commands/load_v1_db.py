@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from django.conf import settings
 from django.core.files import File
 from django.core.management.base import BaseCommand
+from django.urls import reverse
 from wagtail.core.models import Page, Site, Locale, Collection, PageRevision
 from django.core.files.images import ImageFile
 from wagtail.documents.models import Document
@@ -436,7 +437,9 @@ class Command(BaseCommand):
                     })
                     if row['description'] is None:
                         self.post_migration_report_messages['sections_with_null_description'].append(
-                            f'title: {translated_section.title}. URL: {translated_section.full_url}.')
+                            f'title: {translated_section.title}. URL: {translated_section.full_url}. '
+                            f'Admin URL: {self.get_admin_url(translated_section.id)}.'
+                        )
 
                 self.stdout.write(f"Translated section, title={row['title']}")
         cur.close()
@@ -474,7 +477,9 @@ class Command(BaseCommand):
         })
         if row['description'] is None:
             self.post_migration_report_messages['sections_with_null_description'].append(
-                f'title: {section.title}. URL: {section.full_url}.')
+                f'title: {section.title}. URL: {section.full_url}. '
+                f'Admin URL: {self.get_admin_url(section.id)}.'
+            )
         self.stdout.write(f"saved section, title={section.title}")
 
     def migrate_articles(self):
@@ -613,7 +618,9 @@ class Command(BaseCommand):
                     page = self.v1_to_v2_page_map.get(row['page_ptr_id'])
                     if page:
                         self.post_migration_report_messages['page_with_unsupported_tags'].append(
-                            f'title: {page.title}. URL: {page.full_url}. Tags: {unsupported_html_tags}.'
+                            f'title: {page.title}. URL: {page.full_url}. '
+                            f'Admin URL: {self.get_admin_url(page.id)}. '
+                            f'Tags: {unsupported_html_tags}.'
                         )
                 else:
                     block['type'] = 'markdown'
@@ -621,7 +628,8 @@ class Command(BaseCommand):
                 if bool([domain for domain in self.v1_domains_list if domain in block['value']]):
                     page = self.v1_to_v2_page_map.get(row['page_id'])
                     self.post_migration_report_messages['sections_with_internal_links'].append(
-                        f"title: {page.title}. URL: {page.full_url}.")
+                        f"title: {page.title}. URL: {page.full_url}. "
+                        f"Admin URL: {self.get_admin_url(page.id)}.")
 
             elif block['type'] == 'richtext':
                 block['type'] = 'paragraph'
@@ -629,7 +637,8 @@ class Command(BaseCommand):
                 if bool([domain for domain in self.v1_domains_list if domain in block['value']]):
                     page = self.v1_to_v2_page_map.get(row['page_id'])
                     self.post_migration_report_messages['sections_with_internal_links'].append(
-                        f"title: {page.title}. URL: {page.full_url}.")
+                        f"title: {page.title}. URL: {page.full_url}. "
+                        f"Admin URL: {self.get_admin_url(page.id)}.")
 
             elif block['type'] == 'image':
                 image = self.image_map.get(block['value'])
@@ -1343,7 +1352,10 @@ class Command(BaseCommand):
                         self.add_article_as_featured_content_in_home_page(article)
                     else:
                         self.post_migration_report_messages['ommitted_old_featured_article'].append(
-                            f'title: {article.title}. URL: {article.full_url}. featured since: {article.featured_in_homepage_start_date}')
+                            f'title: {article.title}. URL: {article.full_url}. '
+                            f'Admin URL: {self.get_admin_url(article.id)}. '
+                            f'featured since: {article.featured_in_homepage_start_date}.'
+                        )
 
                 section = models.Section.objects.get(path=k)
                 self.add_section_as_featured_content_in_home_page(section)
@@ -1667,6 +1679,10 @@ class Command(BaseCommand):
                 self.move_page(page_to_move=child, position=None)
 
         self.stdout.write('Pages sorted.')
+
+    def get_admin_url(self, id):
+        site = Site.objects.filter(is_default_site=True).first()
+        return f"{site.root_url}{reverse('wagtailadmin_pages:edit', args=(id,))}"
 
     def print_post_migration_report(self):
         self.stdout.write(self.style.ERROR('====================='))
