@@ -1652,17 +1652,19 @@ class Command(BaseCommand):
                     cur = self.db_query(f'select * from wagtailcore_page wcp where id = {v1_id}')
                     v1_row = cur.fetchone()
                     cur.close()
-                    setattr(child, 'creation_date', v1_row['latest_revision_created_at'])
+                    setattr(child, 'creation_date', v1_row['first_published_at'])
                 else:
                     setattr(child, 'creation_date', None)
 
-                pages.append(child)
+                pages += [page for page in child.get_translations(inclusive=True)]
                 children_list.append(child)
 
             children_list = sorted(
                 children_list, key=lambda x: (x.creation_date is not None, x.creation_date), reverse=True)
             for child in children_list:
                 self.move_page(page_to_move=child, position=None)
+
+        self.stdout.write('Pages sorted.')
 
     def print_post_migration_report(self):
         self.stdout.write(self.style.ERROR('====================='))
