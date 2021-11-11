@@ -1641,13 +1641,16 @@ class Command(BaseCommand):
         if self.sort != 'type1':
             return
 
-        section_index_pages = self.section_index_page.get_translations(inclusive=True)
-        pages = [page for page in section_index_pages]
+        pages = models.Section.objects.all().order_by('path')
         for page in pages:
+            page.refresh_from_db()
             children = page.get_children().specific()
             children_list = []
             for child in children:
-                v1_id = V1ToV2ObjectMap.get_v1_id(child, child.id)
+                try:
+                    v1_id = V1ToV2ObjectMap.get_v1_id(child, child.id)
+                except Exception as e:
+                    continue
                 if v1_id:
                     cur = self.db_query(f'select * from wagtailcore_page wcp where id = {v1_id}')
                     v1_row = cur.fetchone()
@@ -1656,7 +1659,6 @@ class Command(BaseCommand):
                 else:
                     setattr(child, 'creation_date', None)
 
-                pages += [page for page in child.get_translations(inclusive=True)]
                 children_list.append(child)
 
             children_list = sorted(
