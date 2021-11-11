@@ -57,7 +57,8 @@ def store_to_db(self, pofile, locale, store_translations=False):
 
         if not m.msgstr:
             t = TranslationEntry.objects.filter(
-                original=m.msgid, language=language, locale_path=locale_path, domain=domain).first()
+                original=m.msgid, language=language, locale_path=locale_path, domain=domain
+            ).first()
             if t:
                 if t.translation:
                     translations_to_keep.append(m.msgid)
@@ -89,12 +90,82 @@ def store_to_db(self, pofile, locale, store_translations=False):
     return translations_to_keep
 
 
+def update_po_from_db(self, lang):
+    import logging
+    import os
+    from datetime import datetime
+
+    import polib
+    from django.conf import settings
+    from translation_manager.models import TranslationEntry
+    from translation_manager.settings import get_settings
+
+    logger = logging.getLogger('translation_manager')
+
+
+    translations = TranslationEntry.objects.filter(
+        language=lang,
+        is_published=True
+    ).order_by("original")
+
+    locale_params = TranslationEntry.objects.filter(is_published=True).order_by('locale_path', 'domain')
+
+    forced_locale_paths = get_settings('TRANSLATIONS_UPDATE_FORCED_LOCALE_PATHS')
+    if forced_locale_paths:
+        translations = translations.filter(locale_path__in=forced_locale_paths)
+        locale_params = locale_params.filter(locale_path__in=forced_locale_paths)
+
+    locale_params = locale_params.values_list('locale_path', 'domain')
+    locale_params = list(set(locale_params))
+
+    for locale_path, domain in locale_params:
+        lang_dir_path = os.path.abspath(
+            os.path.join(get_settings('TRANSLATIONS_BASE_DIR'), locale_path, get_dirname_from_lang(lang)))
+        if not os.path.isdir(lang_dir_path):
+            os.mkdir(lang_dir_path)
+            os.mkdir(os.path.join(lang_dir_path, 'LC_MESSAGES'))
+
+        pofile_path = os.path.join(get_settings('TRANSLATIONS_BASE_DIR'), locale_path, get_dirname_from_lang(lang),
+                                   'LC_MESSAGES',
+                                           "%s.po" % domain)
+        mofile_path = os.path.join(get_settings('TRANSLATIONS_BASE_DIR'), locale_path, get_dirname_from_lang(lang),
+                                   'LC_MESSAGES',
+                                           "%s.mo" % domain)
+
+        if not os.path.exists(pofile_path):
+            logger.debug("Po file '{}' does't exists, it will be created".format(pofile_path))
+
+        now = datetime.now()
+        pofile = polib.POFile()
+        pofile.metadata = {
+            'Project-Id-Version': '0.1',
+            'Report-Msgid-Bugs-To': '%s' % settings.DEFAULT_FROM_EMAIL,
+            'POT-Creation-Date': now.strftime("%Y-%m-%d %H:%M:%S"),
+            'PO-Revision-Date': now.strftime("%Y-%m-%d %H:%M:%S"),
+            'Last-Translator': 'Server <%s>' % settings.SERVER_EMAIL,
+            'Language-Team': 'English <%s>' % settings.DEFAULT_FROM_EMAIL,
+            'MIME-Version': '1.0',
+            'Content-Type': 'text/plain; charset=utf-8',
+            'Content-Transfer-Encoding': '8bit',
+        }
+
+        for translation in translations.filter(locale_path=locale_path, domain=domain):
+            entry = polib.POEntry(
+                msgid=translation.original,
+                msgstr=translation.translation,
+                occurrences=[occ.split(":") for occ in translation.occurrences.split()]
+            )
+            pofile.append(entry)
+
+        pofile.save(pofile_path)
+        pofile.save_as_mofile(mofile_path)
+
+
 def load_data_from_po(self):
     import os
     from glob import glob
 
     from django.conf import settings
-    from django.db.models import Q
     from translation_manager.models import TranslationEntry
 
     translations_to_keep = []
@@ -105,9 +176,9 @@ def load_data_from_po(self):
             for pofile in glob(po_pattern):
                 translations_to_keep += self.store_to_db(pofile=pofile, locale=locale, store_translations=True)
 
-    TranslationEntry.objects.exclude(Q(Q(original__in=translations_to_keep) | Q(translation__isnull=False))).delete()
-
     self.postprocess()
+    TranslationEntry.objects.exclude(original__in=translations_to_keep).delete()
+    TranslationEntry.objects.filter(original__in=translations_to_keep).update(is_published=True)
 
 
 def patch_store_to_db():
@@ -115,3 +186,4 @@ def patch_store_to_db():
 
     Manager.store_to_db = store_to_db
     Manager.load_data_from_po = load_data_from_po
+    Manager.update_po_from_db = update_po_from_db
