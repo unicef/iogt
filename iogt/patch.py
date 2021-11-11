@@ -166,6 +166,7 @@ def load_data_from_po(self):
     from glob import glob
 
     from django.conf import settings
+    from django.db.models import Q
     from translation_manager.models import TranslationEntry
 
     translations_to_keep = []
@@ -177,8 +178,8 @@ def load_data_from_po(self):
                 translations_to_keep += self.store_to_db(pofile=pofile, locale=locale, store_translations=True)
 
     self.postprocess()
-    TranslationEntry.objects.exclude(original__in=translations_to_keep).delete()
-    TranslationEntry.objects.filter(original__in=translations_to_keep).update(is_published=True)
+    TranslationEntry.objects.exclude(Q(Q(original__in=translations_to_keep) | ~Q(translation=''))).delete()
+    TranslationEntry.objects.filter(Q(Q(original__in=translations_to_keep) | ~Q(translation=''))).update(is_published=True)
 
 
 def patch_store_to_db():
