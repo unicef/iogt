@@ -37,51 +37,9 @@ describe("Articles components tests", () => {
 
     })
 
-    it("Test chat bot with logged in user", () => {
-        cy.visitUrl("/en/accounts/login/");
-        cy.login("saqlain", "saqlain");
-        cy.visitUrl(url);
-        cy.get("#content-wrap > div.main-wrapper > div > div.content > article > section > div.block-chat_bot > div > form > button").click({force: true})
-        cy.url().should("include", "/en/messaging/message/");
-    });
+    it("Test related article section", () => {
 
-    it("Test chat bot with anonymous user", () => {
-        cy.visitUrl(url);
-        cy.get("#content-wrap > div.main-wrapper > div > div.content > article > section > div.block-chat_bot > div > form > button").click({force: true});
-        cy.login("saqlain", "saqlain");
-        cy.url().should("include", "/en/messaging/message/create");
+        cy.get(".related-articles > ul:nth-child(2) > li:nth-child(1) > a:nth-child(1) > p:nth-child(1)")
+            .contains("Where to get vaccinated in?")
     })
-
-    it("Test previous buttons", () => {
-        cy.visit(url);
-        cy.get("a[class=article__navigation--previous]").click();
-        cy.url().should("include", "/en/sections/covid-19/where-to-get-vaccination/")
-
-    })
-
-    it("Test next button", () => {
-        cy.visit(url);
-        cy.get("a[class=article__navigation--next]").click();
-        cy.url().should("include", "/en/sections/covid-19/early-life-tips-quick-survey/")
-    })
-
-    it("Test article comments when user is logged out", () => {
-        cy.visitUrl(url)
-        cy.get("[class=comments__submit] a").contains("Log in / Create account");
-    })
-
-    it("Test article comments when user is logged in and commenting is open", () => {
-        cy.visitUrl("/en/accounts/login/");
-        cy.login("saqlain", "saqlain");
-        cy.visitUrl(url)
-        cy.get("textarea[id=id_comment]")
-    })
-
-    it("Test article comments when user is logged in and comments are closed", () => {
-        cy.visitUrl("/en/accounts/login/");
-        cy.login("saqlain", "saqlain");
-        cy.visitUrl(url)
-        cy.get("section[class=comments] > p:nth-child(2)").contains("New comments have been disabled for this page.")
-    })
-
 })
