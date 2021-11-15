@@ -26,10 +26,15 @@ describe("Articles components tests", () => {
             expect($img[0].naturalWidth).to.be.greaterThan(0)
         });
 
-        // //todo content block List (should have bullet points)
-        // cy.get("[class=block-list]").contains("::marker")
-        // //todo content block Numbered list (should have 1., 2., 3. etc)
-        // cy.get("[class=block-numbered_list]").contains("::marker")
+        cy.get(".block-list > ul:nth-child(1) > li:nth-child(1)").invoke("css","list-style-type")
+            .should("equal","disc")
+        cy.get(".block-list > ul:nth-child(1) > li:nth-child(2)").invoke("css","list-style-type")
+            .should("equal","disc")
+
+        cy.get(".block-numbered_list > ol:nth-child(1) > li:nth-child(1)").invoke("css","list-style-type")
+            .should("equal","decimal")
+        cy.get(".block-numbered_list > ol:nth-child(1) > li:nth-child(2)").invoke("css","list-style-type")
+            .should("equal","decimal")
 
         cy.get("[class=article__content__link-btn]").contains("Youth");
 

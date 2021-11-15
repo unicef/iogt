@@ -37,10 +37,12 @@ describe("Quiz with text fields tests", () => {
     });
 
     it("Submits the form and check for not allowed multiple submission", () => {
-        cy.submit(".survey-page__btn>span", "Submit");
+        cy.get("[name=checkbox]").check();
+        cy.get("[id=id_checkboxes_0]").check();
+        cy.get(".survey-page__btns > .cust-btn > span").click();
         cy.url().should("include", `/?back_url=${url}&form_length=12`);
 
-        cy.get(".quiz-answer-banner__counter").contains("7 / 12");
+        cy.get(".quiz-answer-banner__counter").contains("0 / 12");
         cy.get(".quest-item__status").each($el => {
             cy.wrap($el).contains(/Correct|Incorrect/).should("be.visible");
         });
