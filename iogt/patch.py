@@ -151,6 +151,7 @@ def update_po_from_db(self, lang):
 
         for translation in translations.filter(locale_path=locale_path, domain=domain):
             entry = polib.POEntry(
+                flags=['fuzzy'],
                 msgid=translation.original,
                 msgstr=translation.translation,
                 occurrences=[occ.split(":") for occ in translation.occurrences.split()]
