@@ -1,0 +1,12 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1\n"
+"Report-Msgid-Bugs-To: webmaster@localhost\n"
+"POT-Creation-Date: 2021-11-15 09:26:33\n"
+"PO-Revision-Date: 2021-11-15 09:26:33\n"
+"Last-Translator: Server <root@localhost>\n"
+"Language-Team: English <webmaster@localhost>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
