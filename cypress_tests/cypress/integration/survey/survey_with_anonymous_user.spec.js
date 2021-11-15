@@ -22,16 +22,16 @@ describe("Survey with text field tests", () => {
     });
 
     it("Fills the form  and submits it", () => {
-        cy.get("[name=single]").type("example text");
-        cy.get("[name=multiline]").type("this is multiline text");
-        cy.get("[name=email]").type("abc@xyz.com");
-        cy.get("[name=url]").type("http://localhost:8000");
-        cy.get("[name=date]").type("2021-09-09");
-        cy.get("[name=number]").type("1234556");
-        cy.get("[name=positive_number]").type("2020909");
-        cy.get("[name=checkbox]").check();
-        cy.get("[id=id_checkboxes_0]").check();
-        cy.get("[name=dropdown]").select("c1");
+        cy.get("[name=single]").scrollIntoView().type("example text");
+        cy.get("[name=multiline]").scrollIntoView().type("this is multiline text");
+        cy.get("[name=email]").scrollIntoView().type("abc@xyz.com");
+        cy.get("[name=url]").scrollIntoView().type("http://localhost:8000");
+        cy.get("[name=date]").scrollIntoView().type("2021-09-09");
+        cy.get("[name=number]").scrollIntoView().type("1234556");
+        cy.get("[name=positive_number]").scrollIntoView().type("2020909");
+        cy.get("[name=checkbox]").scrollIntoView().check();
+        cy.get("[id=id_checkboxes_0]").scrollIntoView().check();
+        cy.get("[name=dropdown]").scrollIntoView().select("c1");
 
         cy.submit(".survey-page__btn>span", "Submit");
         cy.url().should("include", `/?back_url=${url}&form_length=12`);

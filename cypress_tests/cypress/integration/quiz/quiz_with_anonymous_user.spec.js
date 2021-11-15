@@ -24,13 +24,13 @@ describe("Quiz with text fields tests", () => {
     });
 
     it("Fills the form with correct answers", () => {
-        cy.get("[name=single_line_text_ans_is_hte_correct_answer]").type("ans");
+        cy.get("[name=single_line_text_ans_is_hte_correct_answer]").scrollIntoView().type("ans");
         cy.get("[name=multi_line_text_ans]").type("ans");
         cy.get("[name=email_field_abcom]").type("a@b.com");
-        cy.get("[name=number_0]").type("0");
+        cy.get("[name=number_0]").scrollIntoView().type("0");
         cy.get("[name=url_field_wwwidemsinternational]").type("https://www.idems.international.com");
         cy.get("[id=id_pick_a_date_0]").click();
-        cy.get("[name=positive_numbers]").type('12');
+        cy.get("[name=positive_numbers]").scrollIntoView().type('12');
         cy.get("[id=id_radio_0]").click();
         cy.get("[name=checkbox]").check();
         cy.get("[id=id_checkboxes_0]").check();
@@ -42,7 +42,7 @@ describe("Quiz with text fields tests", () => {
         cy.get(".survey-page__btns > .cust-btn > span").click();
         cy.url().should("include", `/?back_url=${url}&form_length=12`);
 
-        cy.get(".quiz-answer-banner__counter").contains("0 / 12");
+        cy.get(".quiz-answer-banner__counter").contains("7 / 12");
         cy.get(".quest-item__status").each($el => {
             cy.wrap($el).contains(/Correct|Incorrect/).should("be.visible");
         });

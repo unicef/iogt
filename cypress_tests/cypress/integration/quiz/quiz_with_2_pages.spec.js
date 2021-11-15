@@ -13,7 +13,7 @@ describe("2 pages quizes tests", () => {
     });
 
     it("Select the wrong answer and go to next page", () => {
-        cy.get(".quest-item__content #id_q1_c1_ends_the_quiz_c2_is_correct_0").click();
+        cy.get(".quest-item__content #id_q1_c1_ends_the_quiz_c2_is_correct_0").scrollIntoView().click();
         cy.get("button[type=submit]>span").contains("Next").click();
         cy.url().should("include", `/?p=2&back_url=${url}&form_length=1`);
         cy.get(".quest-item__step-desc>span").contains("Select one");
