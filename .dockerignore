@@ -1,39 +1,39 @@
 # Django project
+*.sqlite3
 /media/
 /static/
-*.sqlite3
 
 # Python and others
-__pycache__
 *.pyc
-.DS_Store
 *.swp
-/venv/
-/tmp/
+.DS_Store
+.python-version
+.vscode
+/.idea/
 /.vagrant/
 /Vagrantfile.local
-node_modules/
 /npm-debug.log
-/.idea/
-.vscode
+/tmp/
+/venv/
+__pycache__
 coverage
-.python-version
+node_modules/
 
 # Distribution / packaging
+*.egg
+*.egg-info/
 .Python
-env/
+.eggs/
+.installed.cfg
 build/
 develop-eggs/
 dist/
 downloads/
 eggs/
-.eggs/
+env/
 lib/
 lib64/
 parts/
 sdist/
 var/
 wheels/
-*.egg-info/
-.installed.cfg
-*.egg
