@@ -1,4 +1,4 @@
-describe("Articles components tests", () => {
+describe("Section questionnaires tests", () => {
     const url = "/en/sections/covid-19/"
 
     it("Test for questionnaire poll in section", () => {
