@@ -181,6 +181,7 @@ class Command(BaseCommand):
         self.add_polls_from_polls_index_page_to_home_page_featured_content()
         self.add_surveys_from_surveys_index_page_to_home_page_featured_content()
         self.move_footers_to_end_of_footer_index_page()
+        self.migrate_article_related_sections()
         self.stop_translations()
 
     def create_home_page(self, root):
@@ -1269,7 +1270,6 @@ class Command(BaseCommand):
                 translated_home_page.draft_title = modified_title
                 translated_home_page.save()
 
-
     def translate_index_pages(self):
         cur = self.db_query(f'select * from core_sitelanguage')
         locales = []
@@ -1623,6 +1623,19 @@ class Command(BaseCommand):
             home_page.save()
 
         self.stdout.write('Added surveys from survey index page to home page featured content.')
+
+    def migrate_article_related_sections(self):
+        cur = self.db_query('select * from core_articlepagerelatedsections caprs')
+        for row in cur:
+            section = self.v1_to_v2_page_map.get(row['section_id'])
+            article = self.v1_to_v2_page_map.get(row['page_id'])
+            if (not section) or (not article):
+                self.post_migration_report_messages['articles_in_related_sections'].append(
+                    f"Couldn't find v2 page for v1 section: {row['section_id']} and article: {row['page_id']}"
+                )
+                continue
+            page_link_page = models.PageLinkPage(title=article.title, page=article, live=article.live)
+            section.add_child(instance=page_link_page)
 
     def move_footers_to_end_of_footer_index_page(self):
         footer_index_pages = self.footer_index_page.get_translations(inclusive=True)
