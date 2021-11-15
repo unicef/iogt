@@ -221,7 +221,7 @@ class Section(Page, PageUtilsMixin, TitleIconMixin):
 
         articles = self.get_children().live().type(Article)
         page_link_pages = self.get_children().live().type(PageLinkPage)
-        context['articles'] = [a for a in articles] + [plp for plp in page_link_pages]
+        context['articles'] = [a for a in articles] + [plp.specific.page for plp in page_link_pages]
 
         survey_page_ids = self.get_children().live().type(Survey).values_list('id', flat=True)
         context['surveys'] = Survey.objects.filter(pk__in=survey_page_ids)
