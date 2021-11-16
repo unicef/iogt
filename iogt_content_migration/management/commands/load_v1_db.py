@@ -1656,7 +1656,7 @@ class Command(BaseCommand):
         pages = models.Section.objects.all().order_by('path')
         for page in pages:
             page.refresh_from_db()
-            children = page.get_children().specific()
+            children = page.get_children().type(models.Article)
             children_list = []
             for child in children:
                 try:
@@ -1676,7 +1676,7 @@ class Command(BaseCommand):
             children_list = sorted(
                 children_list, key=lambda x: (x.creation_date is not None, x.creation_date), reverse=True)
             for child in children_list:
-                self.move_page(page_to_move=child, position=None)
+                self.move_page(page_to_move=child, position=0)
 
         self.stdout.write('Pages sorted.')
 
