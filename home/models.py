@@ -869,16 +869,16 @@ class ManifestSettings(models.Model):
         help_text=_("Add PNG icon 512x512 px"),
         validators=[ImageValidator(width=512, height=512)],
     )
-    icon_196_196 = models.ForeignKey(
+    icon_192_192 = models.ForeignKey(
         "wagtailimages.Image",
         on_delete=models.SET_NULL,
         null=True,
         related_name="+",
-        verbose_name=_("Icon 196x196 (maskable)"),
+        verbose_name=_("Icon 192x192 (maskable)"),
         help_text=_(
-            "Add PNG icon 196x196 px (maskable image can be created using https://maskable.app/)"
+            "Add PNG icon 192x192 px (maskable image can be created using https://maskable.app/)"
         ),
-        validators=[ImageValidator(width=196, height=196)],
+        validators=[ImageValidator(width=192, height=192)],
     )
 
     panels = [
@@ -910,7 +910,7 @@ class ManifestSettings(models.Model):
             [
                 ImageChooserPanel("icon_96_96"),
                 ImageChooserPanel("icon_512_512"),
-                ImageChooserPanel("icon_196_196"),
+                ImageChooserPanel("icon_192_192"),
             ],
             heading="Icons",
         ),
