@@ -2,7 +2,9 @@ import json
 from collections import defaultdict
 from time import sleep
 
+import csv
 import psycopg2
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
@@ -77,6 +79,7 @@ class Command(BaseCommand):
         self.registration_survey_mandatory_group_ids = mandatory_survey_group_ids or \
                                                        self.request_registration_survey_mandatory_groups()
         self.content_type_map = dict()
+        self.registration_survey_translations = defaultdict()
         self.delete_users = options.get('delete_users')
         self.post_migration_report_messages = defaultdict(list)
 
@@ -500,6 +503,9 @@ class Command(BaseCommand):
                 for pvr_group in pvr_groups_cur:
                     migrated_group = V1ToV2ObjectMap.get_v2_obj(Group, pvr_group['group_id'])
                     PageViewRestriction.groups.add(migrated_group)
+
+
+
 
     def migrate_registration_survey_submissions(self):
         sql = f'select * from profiles_userprofile pup inner join auth_user au on pup.user_id = au.id'

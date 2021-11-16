@@ -1,6 +1,7 @@
 from collections import defaultdict
 from pathlib import Path
 
+import csv
 from bs4 import BeautifulSoup
 from django.conf import settings
 from django.core.files import File
@@ -91,6 +92,7 @@ class Command(BaseCommand):
         self.page_translation_map = {}
         self.v1_to_v2_page_map = {}
         self.post_migration_report_messages = defaultdict(list)
+        self.registration_survey_translations = defaultdict()
 
         self.clear()
         self.stdout.write('Existing site structure cleared')
@@ -183,6 +185,7 @@ class Command(BaseCommand):
 
         self.stop_translations()
 
+        self.populate_registration_survey_translations()
         self.migrate_post_registration_survey()
 
     def create_home_page(self, root):
@@ -1644,6 +1647,15 @@ class Command(BaseCommand):
             # Move page to end
             page_to_move.move(parent_page, pos='last-child')
 
+
+    def populate_registration_survey_translations(self):
+        with open(f'{settings.BASE_DIR}/iogt_content_migration/files/registration_survey_translations.csv',
+                  newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                str_key = row.pop('str')
+                self.registration_survey_translations[str_key] = row
+
     def migrate_post_registration_survey(self):
 
         sql = 'select * from profiles_userprofilessettings pups ' \
@@ -1660,50 +1672,62 @@ class Command(BaseCommand):
         if row['activate_dob']:
             SurveyFormField.objects.create(
                 page=survey,
-                label='Select date of birth',
+                label=self.registration_survey_translations['dob']['en'],
                 required=bool(row['dob_required']),
                 field_type='date',
-                admin_label='date_of_birth')
+                admin_label='date_of_birth',
+                help_text=self.registration_survey_translations['dob_helptext']['en']
+            )
 
         if row['activate_gender']:
             SurveyFormField.objects.create(
                 page=survey,
-                label='I identify my gender as:',
+                label=self.registration_survey_translations['gender']['en'],
                 required=bool(row['gender_required']),
                 field_type='singleline',
-                admin_label='gender')
+                admin_label='gender',
+                help_text=self.registration_survey_translations['gender_helptext']['en']
+            )
 
         if row['activate_location']:
             SurveyFormField.objects.create(
                 page=survey,
-                label='Where do you live?',
+                label=self.registration_survey_translations['location']['en'],
                 required=bool(row['location_required']),
                 field_type='singleline',
-                admin_label='location')
+                admin_label='location',
+                help_text=self.registration_survey_translations['location_helptext']['en']
+            )
 
         if row['activate_education_level']:
             SurveyFormField.objects.create(
                 page=survey,
-                label='What is your highest level of education?',
+                label=self.registration_survey_translations['education_level']['en'],
                 required=bool(row['activate_education_level_required']),
                 field_type='singleline',
-                admin_label='education_level')
+                admin_label='education_level',
+                help_text=self.registration_survey_translations['education_level_helptext']['en']
+            )
 
         if row['show_mobile_number_field']:
             SurveyFormField.objects.create(
                 page=survey,
-                label='Enter your mobile number',
+                label=self.registration_survey_translations['mobile_number']['en'],
                 required=bool(row['mobile_number_required']),
                 field_type='singleline',
-                admin_label='mobile_number')
+                admin_label='mobile_number',
+                help_text=self.registration_survey_translations['mobile_number_helptext']['en']
+            )
 
         if row['show_email_field']:
             SurveyFormField.objects.create(
                 page=survey,
-                label='Enter your email address',
+                label=self.registration_survey_translations['email_address']['en'],
                 required=bool(row['email_required']),
                 field_type='email',
-                admin_label='email')
+                admin_label='email',
+                help_text=self.registration_survey_translations['email_address_helptext']['en']
+            )
 
         self.stdout.write('Successfully migrated post registration survey')
 
@@ -1715,14 +1739,32 @@ class Command(BaseCommand):
             try:
                 self.translate_page(locale=locale, page=survey)
                 translated_survey = survey.get_translation_or_none(locale)
-                if translated_survey:
-                    # TODO: load translations from CSV and update the fields
-                    pass
-
             except Exception as e:
                 self.post_migration_report_messages['registration_survey'].append(
-                    f"Unable to translate survey, title={row['title']} to locale={locale}"
+                    f"Unable to translate survey, title={survey.title} to locale={locale}"
                 )
+                continue
+
+            if translated_survey:
+                for (admin_label, label_identifier) in [
+                    ('date_of_birth', 'dob'),
+                    ('gender', 'gender'),
+                    ('location', 'location'),
+                    ('mobile_number', 'mobile_number'),
+                    ('education_level', 'education_level'),
+                    ('email', 'email_address')
+                ]:
+                    field = SurveyFormField.objects.get(page=translated_survey, admin_label=admin_label)
+                    try:
+                        field.label = self.registration_survey_translations[label_identifier][locale.language_code]
+                        field.help_text = self.registration_survey_translations[
+                            f'{label_identifier}_helptext'][locale.language_code]
+                    except KeyError:
+                        self.post_migration_report_messages['registration_survey_translation_not_found'].append(
+                            f'Translation not found for label: {label_identifier} in locale: {locale}'
+                        )
+                    field.save()
+
 
     def print_post_migration_report(self):
         self.stdout.write(self.style.ERROR('====================='))
