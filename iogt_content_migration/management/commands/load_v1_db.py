@@ -1616,6 +1616,7 @@ class Command(BaseCommand):
 
     def migrate_article_related_sections(self):
         cur = self.db_query('select * from core_articlepagerelatedsections caprs')
+        sections = defaultdict(list)
         for row in cur:
             section = self.v1_to_v2_page_map.get(row['section_id'])
             article = self.v1_to_v2_page_map.get(row['page_id'])
@@ -1626,6 +1627,16 @@ class Command(BaseCommand):
                 continue
             page_link_page = models.PageLinkPage(title=article.title, page=article, live=article.live)
             section.add_child(instance=page_link_page)
+            page = Page.objects.get(id=page_link_page.id)
+            self.move_page(page_to_move=page, position=0)
+            sections[section.id].append(article.title)
+
+        for k, v in sections.items():
+            page = Page.objects.get(id=k)
+            self.post_migration_report_messages['unordered_related_articles_in_section'].append(
+                f"title: {page.title}. URL: {page.full_url}. Admin URL: {self.get_admin_url(page.id)}. "
+                f"articles: {', '.join(v)}"
+            )
 
     def move_footers_to_end_of_footer_index_page(self):
         footer_index_pages = self.footer_index_page.get_translations(inclusive=True)
@@ -1675,7 +1686,7 @@ class Command(BaseCommand):
             for child in children:
                 try:
                     v1_id = V1ToV2ObjectMap.get_v1_id(child, child.id)
-                except Exception as e:
+                except:
                     continue
                 if v1_id:
                     cur = self.db_query(f'select * from wagtailcore_page wcp where id = {v1_id}')
