@@ -219,7 +219,9 @@ class Section(Page, PageUtilsMixin, TitleIconMixin):
         ]
         context['sub_sections'] = self.get_children().live().type(Section)
 
-        context['articles'] = self.get_children().live().type(Article)
+        articles = self.get_children().live().type(Article)
+        page_link_pages = self.get_children().live().type(PageLinkPage)
+        context['articles'] = [a for a in articles] + [plp.specific.page for plp in page_link_pages]
 
         survey_page_ids = self.get_children().live().type(Survey).values_list('id', flat=True)
         context['surveys'] = Survey.objects.filter(pk__in=survey_page_ids)
@@ -471,7 +473,7 @@ class FooterPage(Article, TitleIconMixin):
 
 
 class PageLinkPage(Page, TitleIconMixin):
-    parent_page_types = ['home.FooterIndexPage']
+    parent_page_types = ['home.FooterIndexPage', 'home.Section']
     subpage_types = []
 
     icon = models.ForeignKey(
@@ -507,7 +509,7 @@ class SiteSettings(BaseSetting):
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
-        help_text="Upload an image file (.jpg, .png, .svg). The ideal size is 100px x 40px"
+        help_text="Upload an image file (.jpg, .png). The ideal size is 100px x 40px"
     )
     favicon = models.ForeignKey(
         'wagtailimages.Image',
@@ -515,7 +517,16 @@ class SiteSettings(BaseSetting):
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
-        help_text="Upload an image file (.jpg, .png, .svg). The ideal size is 40px x 40px"
+        help_text="Upload an image file (.jpg, .png). The ideal size is 40px x 40px"
+    )
+    apple_touch_icon = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text="Upload an image file (.jpg, .png) to be used as apple touch icon. "
+                  "The ideal size is 120px x 120px"
     )
     show_only_translated_pages = models.BooleanField(
         default=False,
@@ -585,6 +596,7 @@ class SiteSettings(BaseSetting):
     panels = [
         ImageChooserPanel('logo'),
         ImageChooserPanel('favicon'),
+        ImageChooserPanel('apple_touch_icon'),
         MultiFieldPanel(
             [
                 FieldPanel('show_only_translated_pages'),
@@ -1010,7 +1022,7 @@ class SVGToPNGMap(models.Model):
         try:
             obj = cls.objects.get(svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color)
         except cls.DoesNotExist:
-            png_image = convert_svg_to_png_bytes(svg_path, fill_color=fill_color, stroke_color=stroke_color, scale=10)
+            png_image = convert_svg_to_png_bytes(svg_path, fill_color=fill_color, stroke_color=stroke_color, width=32)
             obj = cls.objects.create(
                 svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color, png_image_file=png_image)
         return obj.png_image_file

@@ -20,3 +20,4 @@ wagtailsvg==0.0.14
 cairosvg==2.5.2
 tqdm
 lxml
+django-translation-manager==1.1.1
