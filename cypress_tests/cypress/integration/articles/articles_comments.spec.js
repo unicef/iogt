@@ -1,8 +1,9 @@
 describe("Tests for comment section in articles", () => {
     const url = "/en/sections/covid-19/odd-story/"
+    const adminLoginUrl = "/admin/login/"
 
     it("Test article comments when user is logged out and comments are open", () => {
-        cy.visitUrl("/admin/login/")
+        cy.visitUrl(adminLoginUrl)
         cy.adminLogin("mbilal", "mbilal");
         cy.visitUrl("/admin/pages/22/edit/#tab-comments")
         cy.get("select#id_commenting_status").select('Open').should('have.value', 'open');
@@ -30,7 +31,7 @@ describe("Tests for comment section in articles", () => {
     })
 
     it("Test remove button when user is logged in as admin/moderator", () => {
-        cy.visitUrl("/admin/login/")
+        cy.visitUrl(adminLoginUrl)
         cy.adminLogin("mbilal", "mbilal");
         cy.visitUrl(url)
         cy.get(".reply-link.text-danger")
@@ -44,7 +45,7 @@ describe("Tests for comment section in articles", () => {
     })
 
     it("Test article comments when user is logged in and comments are closed", () => {
-        cy.visitUrl("/admin/login/")
+        cy.visitUrl(adminLoginUrl)
         cy.adminLogin("mbilal", "mbilal");
         cy.visitUrl("/admin/pages/22/edit/#tab-comments")
         cy.get("select#id_commenting_status").select('Closed').should('have.value', 'closed')
@@ -55,7 +56,7 @@ describe("Tests for comment section in articles", () => {
     })
 
     it("Test article comments when comments are disabled", () => {
-        cy.visitUrl("/admin/login/")
+        cy.visitUrl(adminLoginUrl)
         cy.adminLogin("mbilal", "mbilal");
         cy.visitUrl("/admin/pages/22/edit/#tab-comments")
         cy.get("select#id_commenting_status").select('Disabled').should('have.value', 'disabled')
