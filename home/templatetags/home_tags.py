@@ -109,6 +109,7 @@ def locale_set(locale, url):
         url = url.replace(f"/{code}/", "")
     return f'/{locale}/{url}'
 
+
 @register.simple_tag
 def translated_home_page_url(language_code):
     locale = Locale.objects.get(language_code=language_code)
@@ -128,7 +129,24 @@ def change_lang(context, lang=None, *args, **kwargs):
 def get_menu_icon(menu_item):
     if hasattr(menu_item.icon, 'url'):
         return menu_item.icon.url
-    elif hasattr(menu_item, 'link_page') and isinstance(menu_item.link_page, Section) and hasattr(menu_item.link_page.icon, 'url'):
+    elif hasattr(menu_item, 'link_page') and isinstance(menu_item.link_page, Section) and hasattr(
+            menu_item.link_page.icon, 'url'):
         return menu_item.link_page.specific.icon.url
 
     return ''
+
+
+@register.inclusion_tag('wagtailadmin/shared/field_as_li.html')
+def render_external_link_with_help_text(field):
+    field.help_text = f'If you are linking back to a URL on your own IoGT site, be sure to remove the domain and ' \
+                      f'everything before it. For example "http://sd.goodinternet.org/url/" should instead be "/url/".'
+
+    return {'field': field, 'red_help_text': True}
+
+
+@register.inclusion_tag('wagtailadmin/shared/field_as_li.html')
+def render_redirect_from_with_help_text(field):
+    field.help_text = f'A relative path to redirect from e.g. /en/youth. ' \
+                      f'See "https://docs.wagtail.io/en/stable/editor_manual/managing_redirects.html" for more details.'
+
+    return {'field': field, 'red_help_text': True}

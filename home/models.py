@@ -219,7 +219,9 @@ class Section(Page, PageUtilsMixin, TitleIconMixin):
         ]
         context['sub_sections'] = self.get_children().live().type(Section)
 
-        context['articles'] = self.get_children().live().type(Article)
+        articles = self.get_children().live().type(Article)
+        page_link_pages = self.get_children().live().type(PageLinkPage)
+        context['articles'] = [a for a in articles] + [plp.specific.page for plp in page_link_pages]
 
         survey_page_ids = self.get_children().live().type(Survey).values_list('id', flat=True)
         context['surveys'] = Survey.objects.filter(pk__in=survey_page_ids)
@@ -471,7 +473,7 @@ class FooterPage(Article, TitleIconMixin):
 
 
 class PageLinkPage(Page, TitleIconMixin):
-    parent_page_types = ['home.FooterIndexPage']
+    parent_page_types = ['home.FooterIndexPage', 'home.Section']
     subpage_types = []
 
     icon = models.ForeignKey(
@@ -507,7 +509,7 @@ class SiteSettings(BaseSetting):
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
-        help_text="Upload an image file (.jpg, .png, .svg). The ideal size is 100px x 40px"
+        help_text="Upload an image file (.jpg, .png). The ideal size is 100px x 40px"
     )
     favicon = models.ForeignKey(
         'wagtailimages.Image',
@@ -515,7 +517,16 @@ class SiteSettings(BaseSetting):
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
-        help_text="Upload an image file (.jpg, .png, .svg). The ideal size is 40px x 40px"
+        help_text="Upload an image file (.jpg, .png). The ideal size is 40px x 40px"
+    )
+    apple_touch_icon = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text="Upload an image file (.jpg, .png) to be used as apple touch icon. "
+                  "The ideal size is 120px x 120px"
     )
     show_only_translated_pages = models.BooleanField(
         default=False,
@@ -585,6 +596,7 @@ class SiteSettings(BaseSetting):
     panels = [
         ImageChooserPanel('logo'),
         ImageChooserPanel('favicon'),
+        ImageChooserPanel('apple_touch_icon'),
         MultiFieldPanel(
             [
                 FieldPanel('show_only_translated_pages'),
@@ -696,6 +708,16 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
         on_delete=models.CASCADE,
         related_name="iogt_flat_menu_items",
     )
+    link_url = models.CharField(
+        verbose_name=_('link to a custom URL'),
+        max_length=255,
+        blank=True,
+        null=True,
+        help_text=_(
+            'If you are linking back to a URL on your own IoGT site, be sure to remove the domain and everything '
+            'before it. For example "http://sd.goodinternet.org/url/" should instead be "/url/".'
+        ),
+    )
     icon = models.ForeignKey(
         Svg,
         related_name='+',
@@ -720,7 +742,13 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
         help_text=_('The font color of the flat menu item on Desktop + Mobile')
     )
 
-    panels = AbstractFlatMenuItem.panels + [
+    panels = [
+        PageChooserPanel('link_page'),
+        FieldPanel('link_url', classname='red-help-text'),
+        FieldPanel('url_append'),
+        FieldPanel('link_text'),
+        FieldPanel('handle'),
+        FieldPanel('allow_subnav'),
         SvgChooserPanel('icon'),
         FieldPanel('background_color'),
         FieldPanel('font_color')
@@ -758,22 +786,29 @@ class ManifestSettings(models.Model):
     name = models.CharField(
         max_length=255,
         verbose_name=_("Name"),
-        help_text=_("Provide name"),
+        help_text=_("Provide name that usually represents the name of the web application to user"),
     )
     short_name = models.CharField(
         max_length=255,
         verbose_name=_("Short name"),
-        help_text=_("Provide short name"),
+        help_text=_("Provide short name to be displayed, if there is not enough space to display full name"),
     )
     scope = models.CharField(
         max_length=255,
         verbose_name=_("Scope"),
-        help_text=_("Provide scope"),
+        help_text=_(
+            "Provide navigation scope to limit what web pages can be viewed "
+            "Example: 'https://www.iogt.com/<page-url>/' limits navigation "
+            "to <page-url> of https://www.iogt.com:"
+        ),
     )
     start_url = models.CharField(
         max_length=255,
         verbose_name=_("Start URL"),
-        help_text=_("Provide start URL"),
+        help_text=_(
+            "Start URL is the preferred URL that should be loaded "
+            "when the user launches the web application"
+        ),
     )
     display = models.CharField(
         max_length=255,
@@ -784,22 +819,30 @@ class ManifestSettings(models.Model):
             ('BROWSER', 'browser')
         ],
         verbose_name=_("Browser UI"),
-        help_text=_("Provide browser UI"),
+        help_text=_(
+            "Determines the preferred display mode for the website. The possible values are: "
+            "'fullscreen', 'standalone', 'minimal-ui', 'browser'. A better choice would be to use standalone "
+            "as it looks great on mobile as well. For further information refer to: "
+            "https://developer.mozilla.org/en-US/docs/Web/Manifest/display#values"
+        ),
     )
     background_color = models.CharField(
         max_length=10,
         verbose_name=_("Background color"),
-        help_text=_("Provide background color (example: #FFF)"),
+        help_text=_(
+            "Background color member defines a placeholder background color "
+            "for the application page to display before its stylesheet is loaded. (example: #FFF)"
+        ),
     )
     theme_color = models.CharField(
         max_length=10,
         verbose_name=_("Theme color"),
-        help_text=_("Provide theme color(example: #493174)"),
+        help_text=_("Theme color defines the default theme color for the application (example: #493174)"),
     )
     description = models.CharField(
         max_length=500,
         verbose_name=_("Description"),
-        help_text=_("Provide description"),
+        help_text=_("Provide description for application"),
     )
     language = models.CharField(
         max_length=3,
@@ -984,7 +1027,7 @@ class SVGToPNGMap(models.Model):
         try:
             obj = cls.objects.get(svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color)
         except cls.DoesNotExist:
-            png_image = convert_svg_to_png_bytes(svg_path, fill_color=fill_color, stroke_color=stroke_color, scale=10)
+            png_image = convert_svg_to_png_bytes(svg_path, fill_color=fill_color, stroke_color=stroke_color, width=32)
             obj = cls.objects.create(
                 svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color, png_image_file=png_image)
         return obj.png_image_file

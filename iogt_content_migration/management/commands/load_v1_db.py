@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 from django.conf import settings
 from django.core.files import File
 from django.core.management.base import BaseCommand
+from django.urls import reverse
 from wagtail.core.models import Page, Site, Locale, Collection, PageRevision
 from django.core.files.images import ImageFile
 from wagtail.documents.models import Document
@@ -183,6 +184,7 @@ class Command(BaseCommand):
         self.add_surveys_from_surveys_index_page_to_home_page_featured_content()
         self.move_footers_to_end_of_footer_index_page()
 
+        self.migrate_article_related_sections()
         self.stop_translations()
 
         self.populate_registration_survey_translations()
@@ -445,7 +447,9 @@ class Command(BaseCommand):
                     })
                     if row['description'] is None:
                         self.post_migration_report_messages['sections_with_null_description'].append(
-                            f'title: {translated_section.title}. URL: {translated_section.full_url}.')
+                            f'title: {translated_section.title}. URL: {translated_section.full_url}. '
+                            f'Admin URL: {self.get_admin_url(translated_section.id)}.'
+                        )
 
                 self.stdout.write(f"Translated section, title={row['title']}")
         cur.close()
@@ -483,7 +487,9 @@ class Command(BaseCommand):
         })
         if row['description'] is None:
             self.post_migration_report_messages['sections_with_null_description'].append(
-                f'title: {section.title}. URL: {section.full_url}.')
+                f'title: {section.title}. URL: {section.full_url}. '
+                f'Admin URL: {self.get_admin_url(section.id)}.'
+            )
         self.stdout.write(f"saved section, title={section.title}")
 
     def migrate_articles(self):
@@ -603,25 +609,29 @@ class Command(BaseCommand):
             return
         self.stdout.write(f"saved article, title={article.title}")
 
-    def has_unsupported_html_tag(self, value):
+    def get_unsupported_html_tags(self, value):
         bleach_kwargs = _get_bleach_kwargs()
 
+        unsupported_html_tags = []
         tags = BeautifulSoup(value, "html.parser").find_all()
         for tag in tags:
             if tag.name not in bleach_kwargs['tags']:
-                return True
+                unsupported_html_tags.append(tag.name)
 
-        return False
+        return unsupported_html_tags
 
     def _map_body(self, type_, row, v2_body):
         for block in v2_body:
             if block['type'] == 'paragraph':
-                if self.has_unsupported_html_tag(block['value']):
+                unsupported_html_tags = self.get_unsupported_html_tags(block['value'])
+                if unsupported_html_tags:
                     block['type'] = 'paragraph_v1_legacy'
                     page = self.v1_to_v2_page_map.get(row['page_ptr_id'])
                     if page:
                         self.post_migration_report_messages['page_with_unsupported_tags'].append(
-                            f'title: {page.title}. URL: {page.full_url}.'
+                            f'title: {page.title}. URL: {page.full_url}. '
+                            f'Admin URL: {self.get_admin_url(page.id)}. '
+                            f'Tags: {unsupported_html_tags}.'
                         )
                 else:
                     block['type'] = 'markdown'
@@ -629,7 +639,8 @@ class Command(BaseCommand):
                 if bool([domain for domain in self.v1_domains_list if domain in block['value']]):
                     page = self.v1_to_v2_page_map.get(row['page_id'])
                     self.post_migration_report_messages['sections_with_internal_links'].append(
-                        f"title: {page.title}. URL: {page.full_url}.")
+                        f"title: {page.title}. URL: {page.full_url}. "
+                        f"Admin URL: {self.get_admin_url(page.id)}.")
 
             elif block['type'] == 'richtext':
                 block['type'] = 'paragraph'
@@ -637,7 +648,8 @@ class Command(BaseCommand):
                 if bool([domain for domain in self.v1_domains_list if domain in block['value']]):
                     page = self.v1_to_v2_page_map.get(row['page_id'])
                     self.post_migration_report_messages['sections_with_internal_links'].append(
-                        f"title: {page.title}. URL: {page.full_url}.")
+                        f"title: {page.title}. URL: {page.full_url}. "
+                        f"Admin URL: {self.get_admin_url(page.id)}.")
 
             elif block['type'] == 'image':
                 image = self.image_map.get(block['value'])
@@ -1256,6 +1268,13 @@ class Command(BaseCommand):
         for row in cur:
             locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
             self.translate_page(locale=locale, page=home)
+            translated_home_page = home.get_translation_or_none(locale)
+
+            if translated_home_page:
+                modified_title = f"{translated_home_page.title} [{str(locale)}]"
+                translated_home_page.title = modified_title
+                translated_home_page.draft_title = modified_title
+                translated_home_page.save()
 
     def translate_index_pages(self):
         cur = self.db_query(f'select * from core_sitelanguage')
@@ -1342,7 +1361,10 @@ class Command(BaseCommand):
                         self.add_article_as_featured_content_in_home_page(article)
                     else:
                         self.post_migration_report_messages['ommitted_old_featured_article'].append(
-                            f'title: {article.title}. URL: {article.full_url}. featured since: {article.featured_in_homepage_start_date}')
+                            f'title: {article.title}. URL: {article.full_url}. '
+                            f'Admin URL: {self.get_admin_url(article.id)}. '
+                            f'featured since: {article.featured_in_homepage_start_date}.'
+                        )
 
                 section = models.Section.objects.get(path=k)
                 self.add_section_as_featured_content_in_home_page(section)
@@ -1522,9 +1544,8 @@ class Command(BaseCommand):
     def add_polls_from_polls_index_page_to_footer_index_page_as_page_link_page(self):
         self.poll_index_page.refresh_from_db()
         self.footer_index_page.refresh_from_db()
-        svg_title = 'clip board pen'
-        file = File(open(Path(settings.BASE_DIR) / 'iogt/static/icons/clip_board_pen.svg'), name=svg_title)
-        icon = Svg.objects.create(title=svg_title, file=file)
+        file = File(open(Path(settings.BASE_DIR) / 'iogt/static/icons/clip_board_pen.svg'), name='clip_board_pen.svg')
+        icon = Svg.objects.create(title='clip board pen', file=file)
         poll_index_pages = self.poll_index_page.get_translations(inclusive=True)
         for poll_index_page in poll_index_pages:
             polls = poll_index_page.get_children()
@@ -1538,9 +1559,8 @@ class Command(BaseCommand):
     def add_surveys_from_surveys_index_page_to_footer_index_page_as_page_link_page(self):
         self.survey_index_page.refresh_from_db()
         self.footer_index_page.refresh_from_db()
-        svg_title = 'loud speaker'
-        file = File(open(Path(settings.BASE_DIR) / 'iogt/static/icons/loud_speaker.svg'), name='loud speaker')
-        icon = Svg.objects.create(title=svg_title, file=file)
+        file = File(open(Path(settings.BASE_DIR) / 'iogt/static/icons/loud_speaker.svg'), name='loud_speaker.svg')
+        icon = Svg.objects.create(title='loud speaker', file=file)
         survey_index_page = self.survey_index_page.get_translations(inclusive=True)
         for survey_index_page in survey_index_page:
             surveys = survey_index_page.get_children()
@@ -1611,6 +1631,19 @@ class Command(BaseCommand):
 
         self.stdout.write('Added surveys from survey index page to home page featured content.')
 
+    def migrate_article_related_sections(self):
+        cur = self.db_query('select * from core_articlepagerelatedsections caprs')
+        for row in cur:
+            section = self.v1_to_v2_page_map.get(row['section_id'])
+            article = self.v1_to_v2_page_map.get(row['page_id'])
+            if (not section) or (not article):
+                self.post_migration_report_messages['articles_in_related_sections'].append(
+                    f"Couldn't find v2 page for v1 section: {row['section_id']} and article: {row['page_id']}"
+                )
+                continue
+            page_link_page = models.PageLinkPage(title=article.title, page=article, live=article.live)
+            section.add_child(instance=page_link_page)
+
     def move_footers_to_end_of_footer_index_page(self):
         footer_index_pages = self.footer_index_page.get_translations(inclusive=True)
         for footer_index_page in footer_index_pages:
@@ -1646,6 +1679,7 @@ class Command(BaseCommand):
         else:
             # Move page to end
             page_to_move.move(parent_page, pos='last-child')
+
 
 
     def populate_registration_survey_translations(self):
@@ -1764,6 +1798,11 @@ class Command(BaseCommand):
                             f'Translation not found for label: {label_identifier} in locale: {locale}'
                         )
                     field.save()
+
+
+    def get_admin_url(self, id):
+        site = Site.objects.filter(is_default_site=True).first()
+        return f"{site.root_url}{reverse('wagtailadmin_pages:edit', args=(id,))}"
 
 
     def print_post_migration_report(self):

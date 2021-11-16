@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from django.core.files.base import ContentFile
 
 
-def convert_svg_to_png_bytes(svg_file_path, fill_color=None, stroke_color=None, scale=100):
+def convert_svg_to_png_bytes(svg_file_path, fill_color=None, stroke_color=None, width=32):
     with open(svg_file_path, 'r', encoding='utf-8') as f:
         soup = BeautifulSoup(f, 'lxml')
         elements_to_fill = soup.find_all('path')
@@ -19,5 +19,5 @@ def convert_svg_to_png_bytes(svg_file_path, fill_color=None, stroke_color=None, 
     parsed_soup = str(soup.body.next)
     parsed_soup = parsed_soup.replace('viewbox', 'viewBox')
 
-    file_bytes = cairosvg.svg2png(bytestring=parsed_soup, scale=scale)
+    file_bytes = cairosvg.svg2png(bytestring=parsed_soup, output_width=width)
     return ContentFile(file_bytes, 'svg-to-png.png')
