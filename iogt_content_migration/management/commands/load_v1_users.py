@@ -191,6 +191,16 @@ class Command(BaseCommand):
         colliding_usernames = [row['lower'] for row in cur]
         self.post_migration_report_messages['colliding_users_in_v1'].append(','.join(colliding_usernames))
 
+        sql = f'select lower(alias), count(*) ' \
+              f'from profiles_userprofile ' \
+              f'where alias is not null ' \
+              f'group by lower(alias) ' \
+              f'having count(*) > 1'
+        cur = self.db_query(sql)
+
+        colliding_display_names = [row['lower'] for row in cur]
+        self.post_migration_report_messages['colliding_display_names_in_v1'].append(','.join(colliding_display_names))
+
         sql = f'select * ' \
               f'from auth_user au, profiles_userprofile pup ' \
               f'where au.id = pup.user_id'
@@ -211,7 +221,7 @@ class Command(BaseCommand):
                 'is_staff': row['is_staff'],
                 'is_active': row['is_active'],
                 'date_joined': row['date_joined'],
-                'display_name': row['alias'],
+                'display_name': row['alias'] or row['username'],
                 'has_filled_registration_survey': True,
             }
 

@@ -46,6 +46,12 @@ class AccountSignupForm(SignupForm):
             raise ValidationError(_('Username not available.'))
         return username
 
+    def clean_displayname(self):
+        display_name = self.cleaned_data.get('display_name')
+        if User.objects.filter(display_name__iexact=display_name):
+            raise ValidationError(_('Display name not available.'))
+        return display_name
+
 
 class ChangePasswordForm(BaseChangePasswordForm):
 
@@ -80,6 +86,12 @@ class WagtailAdminUserCreateForm(WagtailUserCreationForm):
         if User.objects.filter(username__iexact=username):
             raise ValidationError(_('A user with that username already exists.'))
         return username
+
+    def clean_displayname(self):
+        display_name = self.cleaned_data.get('display_name')
+        if User.objects.filter(display_name__iexact=display_name):
+            raise ValidationError(_('Display name not available.'))
+        return display_name
 
 
 class WagtailAdminUserEditForm(WagtailUserEditForm):
