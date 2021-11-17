@@ -18,8 +18,8 @@
                             <p>A</p>
                             <p>Anonymous</p>
                         {% else %}
-                            <p>{{ item.comment.user.username.0|capfirst }}</p>
-                            <p>{{ item.comment.user.username }}</p>
+                            <p>{{ item.comment.user.display_name.0|capfirst }}</p>
+                            <p>{{ item.comment.user.display_name }}</p>
                         {% endif %}
 
                     </span>

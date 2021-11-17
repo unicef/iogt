@@ -12,10 +12,10 @@
 {% block allauth_content %}
     {% if user.username %}
         <h1 class="title profile__title">
-            {% blocktranslate trimmed with username=user.username %}
-                Hey, {{ username }}
+            {% blocktranslate trimmed with display_name=user.display_name %}
+                Hey, {{ display_name }}
             {% endblocktranslate %}
-            <span class="profile__icon">{{ user.username | first | upper }}</span>
+            <span class="profile__icon">{{ display_name | first | upper }}</span>
         </h1>
     {% endif %}
     <div class="profile__btns">

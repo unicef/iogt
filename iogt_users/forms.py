@@ -3,7 +3,6 @@ from allauth.utils import set_form_field_order
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.core.exceptions import ValidationError
-from django.forms import TextInput, Field
 from django.utils.translation import gettext_lazy as _
 from wagtail.users.forms import UserEditForm as WagtailUserEditForm, \
     UserCreationForm as WagtailUserCreationForm
@@ -13,10 +12,18 @@ from .models import User
 
 
 class AccountSignupForm(SignupForm):
+    display_name = forms.CharField(
+        label=_("Display name"),
+        widget=forms.TextInput(
+            attrs={"placeholder": _("Display name"),}
+        ),
+        required=False,
+    )
     terms_accepted = forms.BooleanField(label=_('I accept the terms & conditions'))
 
     field_order = [
         "username",
+        "display_name",
         "password1",
         "password2",
         "terms_accepted",
@@ -33,6 +40,12 @@ class AccountSignupForm(SignupForm):
         if hasattr(self, "field_order"):
             set_form_field_order(self, self.field_order)
 
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(username__iexact=username):
+            raise ValidationError(_('Username not available.'))
+        return username
+
 
 class ChangePasswordForm(BaseChangePasswordForm):
 
@@ -46,17 +59,18 @@ class ChangePasswordForm(BaseChangePasswordForm):
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('username',)
+        fields = ('username', 'display_name',)
 
 
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = User
-        fields = ('username', 'groups', 'user_permissions')
+        fields = ('username', 'display_name', 'groups', 'user_permissions')
 
 
 class WagtailAdminUserCreateForm(WagtailUserCreationForm):
     email = forms.EmailField(required=False, label='Email')
+    display_name = forms.CharField(required=False, label='Display Name')
     first_name = forms.CharField(required=False, label='First Name')
     last_name = forms.CharField(required=False, label='Last Name')
     terms_accepted = forms.BooleanField(label=_('I accept the terms & conditions'))
@@ -70,6 +84,7 @@ class WagtailAdminUserCreateForm(WagtailUserCreationForm):
 
 class WagtailAdminUserEditForm(WagtailUserEditForm):
     email = forms.EmailField(required=False, label='Email')
+    display_name = forms.CharField(required=False, label='Display Name')
     first_name = forms.CharField(required=False, label='First Name')
     last_name = forms.CharField(required=False, label='Last Name')
 
