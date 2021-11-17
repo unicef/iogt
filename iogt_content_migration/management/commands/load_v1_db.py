@@ -1680,8 +1680,6 @@ class Command(BaseCommand):
             # Move page to end
             page_to_move.move(parent_page, pos='last-child')
 
-
-
     def populate_registration_survey_translations(self):
         with open(f'{settings.BASE_DIR}/iogt_content_migration/files/registration_survey_translations.csv',
                   newline='') as csvfile:
@@ -1699,69 +1697,29 @@ class Command(BaseCommand):
         row = cur.fetchone()
 
         survey = Survey(
-            title='Registration Survey', live=True, allow_multiple_submissions=False, submit_button_text='Register')
+            title='Registration Survey', live=True, allow_multiple_submissions=False,
+            allow_anonymous_submissions=False, submit_button_text='Register')
 
         self.survey_index_page.add_child(instance=survey)
 
-        if row['activate_dob']:
-            SurveyFormField.objects.create(
-                page=survey,
-                label=self.registration_survey_translations['dob']['en'],
-                required=bool(row['dob_required']),
-                field_type='date',
-                admin_label='date_of_birth',
-                help_text=self.registration_survey_translations['dob_helptext']['en']
-            )
-
-        if row['activate_gender']:
-            SurveyFormField.objects.create(
-                page=survey,
-                label=self.registration_survey_translations['gender']['en'],
-                required=bool(row['gender_required']),
-                field_type='singleline',
-                admin_label='gender',
-                help_text=self.registration_survey_translations['gender_helptext']['en']
-            )
-
-        if row['activate_location']:
-            SurveyFormField.objects.create(
-                page=survey,
-                label=self.registration_survey_translations['location']['en'],
-                required=bool(row['location_required']),
-                field_type='singleline',
-                admin_label='location',
-                help_text=self.registration_survey_translations['location_helptext']['en']
-            )
-
-        if row['activate_education_level']:
-            SurveyFormField.objects.create(
-                page=survey,
-                label=self.registration_survey_translations['education_level']['en'],
-                required=bool(row['activate_education_level_required']),
-                field_type='singleline',
-                admin_label='education_level',
-                help_text=self.registration_survey_translations['education_level_helptext']['en']
-            )
-
-        if row['show_mobile_number_field']:
-            SurveyFormField.objects.create(
-                page=survey,
-                label=self.registration_survey_translations['mobile_number']['en'],
-                required=bool(row['mobile_number_required']),
-                field_type='singleline',
-                admin_label='mobile_number',
-                help_text=self.registration_survey_translations['mobile_number_helptext']['en']
-            )
-
-        if row['show_email_field']:
-            SurveyFormField.objects.create(
-                page=survey,
-                label=self.registration_survey_translations['email_address']['en'],
-                required=bool(row['email_required']),
-                field_type='email',
-                admin_label='email',
-                help_text=self.registration_survey_translations['email_address_helptext']['en']
-            )
+        for (should_add_field_key, translation_key, is_required_key, field_type, admin_label) in [
+            ('activate_dob', 'dob', 'dob_required', 'date', 'date_of_birth'),
+            ('activate_gender', 'gender', 'gender_required', 'singleline', 'gender'),
+            ('activate_location', 'location', 'location_required', 'singleline', 'location'),
+            ('activate_education_level', 'education_level', 'activate_education_level_required', 'singleline',
+             'education_level'),
+            ('show_mobile_number_field', 'mobile_number', 'mobile_number_required', 'singleline', 'mobile_number'),
+            ('show_email_field', 'email_address', 'email_required', 'email', 'email'),
+        ]:
+            if row[should_add_field_key]:
+                SurveyFormField.objects.create(
+                    page=survey,
+                    label=self.registration_survey_translations[translation_key]['en'],
+                    required=bool(row[is_required_key]),
+                    field_type=field_type,
+                    admin_label=admin_label,
+                    help_text=self.registration_survey_translations[f'{translation_key}_helptext']['en']
+                )
 
         self.stdout.write('Successfully migrated post registration survey')
 
@@ -1799,11 +1757,9 @@ class Command(BaseCommand):
                         )
                     field.save()
 
-
     def get_admin_url(self, id):
         site = Site.objects.filter(is_default_site=True).first()
         return f"{site.root_url}{reverse('wagtailadmin_pages:edit', args=(id,))}"
-
 
     def print_post_migration_report(self):
         self.stdout.write(self.style.ERROR('====================='))
