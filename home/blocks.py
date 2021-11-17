@@ -226,7 +226,7 @@ class RawHTMLBlock(blocks.RawHTMLBlock):
 
 
 class OfflineAppButtonBlock(blocks.StructBlock):
-    display_button = blocks.BooleanBlock(required=False)
+    display_button = blocks.BooleanBlock(default=True, required=False)
 
     class Meta:
         template = 'blocks/offline_app_button.html'

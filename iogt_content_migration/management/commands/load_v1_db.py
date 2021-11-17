@@ -256,6 +256,11 @@ class Command(BaseCommand):
             self.quiz_index_page = QuizIndexPage(title='Quizzes')
             homepage.add_child(instance=self.quiz_index_page)
 
+        self.miscellaneous_index_page = models.MiscellaneousIndexPage.objects.first()
+        if self.miscellaneous_index_page is None:
+            self.miscellaneous_index_page = models.MiscellaneousIndexPage(title='Miscellaneous')
+            homepage.add_child(instance=self.miscellaneous_index_page)
+
     def migrate_collections(self):
         cur = self.db_query('select * from wagtailcore_collection')
         for row in cur:
@@ -1279,7 +1284,7 @@ class Command(BaseCommand):
 
         index_pages = [
             self.section_index_page, self.banner_index_page, self.footer_index_page, self.poll_index_page,
-            self.survey_index_page, self.quiz_index_page,
+            self.survey_index_page, self.quiz_index_page, self.miscellaneous_index_page,
         ]
         for page in index_pages:
             for locale in locales:

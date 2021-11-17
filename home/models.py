@@ -425,21 +425,16 @@ class OfflineAppPage(AbstractArticle):
         ('offline_app_button', OfflineAppButtonBlock()),
     ])
 
-    content_panels = Page.content_panels + [
+    content_panels = AbstractArticle.content_panels + [
         ImageChooserPanel('lead_image'),
         SvgChooserPanel('icon'),
         StreamFieldPanel('body'),
         FieldPanel('index_page_description'),
     ]
 
-    search_fields = Page.search_fields + [
-        index.SearchField('get_heading_values', partial_match=True, boost=1),
-        index.SearchField('get_paragraph_values', partial_match=True),
-    ]
-
     edit_handler = TabbedInterface([
         ObjectList(content_panels, heading='Content'),
-        ObjectList(Page.settings_panels, heading='Settings'),
+        ObjectList(AbstractArticle.settings_panels, heading='Settings'),
         ObjectList(CommentableMixin.comments_panels, heading='Comments')
     ])
 
