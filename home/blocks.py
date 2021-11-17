@@ -223,3 +223,10 @@ class RawHTMLBlock(blocks.RawHTMLBlock):
         result = super(RawHTMLBlock, self).render_basic(value, context)
 
         return render_markdown(result)
+
+
+class OfflineAppButtonBlock(blocks.StructBlock):
+    display_button = blocks.BooleanBlock(required=False)
+
+    class Meta:
+        template = 'blocks/offline_app_button.html'

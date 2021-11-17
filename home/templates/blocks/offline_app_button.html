@@ -1,0 +1,8 @@
+{% load i18n %}
+
+{% if settings.home.CacheSettings.cache and value.display_button %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <a href="#" type="submit" class='article__content__link-btn' onclick="cache()">{% translate 'Download' %}</a>
+    </form>
+{% endif %}
