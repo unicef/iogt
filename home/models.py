@@ -368,7 +368,7 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
 
 
 class Article(AbstractArticle):
-    content_panels = Page.content_panels + [
+    content_panels = AbstractArticle.content_panels + [
         ImageChooserPanel('lead_image'),
         SvgChooserPanel('icon'),
         StreamFieldPanel('body'),
@@ -380,14 +380,14 @@ class Article(AbstractArticle):
             heading='Recommended Content')
     ]
 
-    promote_panels = Page.promote_panels + [
+    promote_panels = AbstractArticle.promote_panels + [
         MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
     ]
 
     edit_handler = TabbedInterface([
         ObjectList(content_panels, heading='Content'),
         ObjectList(promote_panels, heading='Promote'),
-        ObjectList(Page.settings_panels, heading='Settings'),
+        ObjectList(AbstractArticle.settings_panels, heading='Settings'),
         ObjectList(CommentableMixin.comments_panels, heading='Comments')
     ])
 
