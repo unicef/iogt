@@ -41,6 +41,8 @@
 
 .featured-content {
   margin: 0 12px;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
   margin-top: 7px;
   margin-bottom: 19px;
   border-radius: 8px;
@@ -169,6 +171,7 @@
 
 .article__content {
   padding: 0px 12px;
+  padding: 0 !important;
   font-family: Poppins;
 }
 
@@ -657,12 +660,12 @@
 }
 /*# sourceMappingURL=article.css.map */
 
-.article-card .img-holder {
+.article-card .img-holder, .section-card .img-holder {
   overflow: hidden;
   position: relative;
 }
 
-.article-card .img-holder.complete:after {
+.article-card .img-holder.complete:after, .section-card .img-holder.complete:after {
   position: absolute;
   left: 0;
   right: 0;
@@ -673,7 +676,7 @@
   background: linear-gradient(0deg, rgba(26, 144, 144, 0.7), rgba(26, 144, 144, 0.7));
 }
 
-.article-card .img-holder.complete:before {
+.article-card .img-holder.complete:before, .section-card .img-holder.complete:before {
   background-image: url("/static/icons/tick-square.svg");
   content: "";
   height: 28px;
@@ -765,6 +768,18 @@ body.rtl {
   height: auto;
 }
 
+.article-card .img-holder, .section-card .img-holder {
+  border-radius: 8px;
+  width: 50%;
+  height: auto;
+}
+
+.article-card .img-holder img, .section-card .img-holder img {
+  border-radius: 8px;
+  width: 100%;
+  height: auto;
+}
+
 .overlay-holder img {
   border-radius: 8px;
   width: 50%;
@@ -815,6 +830,7 @@ body.rtl {
 
 .questionnaire-components {
   margin: 40px 12px;
+  margin: 0 !important;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1861,8 +1877,16 @@ body.rtl {
   width: 100% !important;
 }
 
+#content-wrap .first-content .img-holder, #content-wrap .first-content .article-header {
+    width: 100%;
+}
+
 /* questionnaires start */
 .angle-bracket {
   min-width: 6px;
+}
+
+.survey-page__description img {
+  height: auto;
 }
 /* questionnaires end */

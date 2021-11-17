@@ -12,8 +12,8 @@
             {% endif %}
             <p class="article-title">{{ page.title }}</p>
         </div>
-        <div class="overlay-holder {% render_is_complete page %}">
-            {% image page.lead_image original class='related-articles__img--sm' %}
+        <div class="img-holder {% render_is_complete page %}">
+            {% image page.lead_image original class='' %}
         </div>
     </a>
 </div>
