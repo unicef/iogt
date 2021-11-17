@@ -1685,7 +1685,7 @@ class Command(BaseCommand):
                   newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
-                str_key = row.pop('str')
+                str_key = self._get_iso_locale(row.pop('str'))
                 self.registration_survey_translations[str_key] = row
 
     def migrate_post_registration_survey(self):
@@ -1753,8 +1753,9 @@ class Command(BaseCommand):
                             f'{label_identifier}_helptext'][locale.language_code]
                     except KeyError:
                         self.post_migration_report_messages['registration_survey_translation_not_found'].append(
-                            f'Translation not found for label: {label_identifier} in locale: {locale}'
+                            f'Incomplete translation for registration survey to locale: {locale}'
                         )
+                        break
                     field.save()
 
     def get_admin_url(self, id):
