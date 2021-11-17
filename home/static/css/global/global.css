@@ -1687,6 +1687,7 @@ body.rtl {
 .btn-primary .icon-holder {
   width: 18px;
   height: 18px;
+  min-width: 18px;
   display: flex;
   align-items: center;
 }
@@ -1750,6 +1751,7 @@ body.rtl {
   .btn-primary .icon-holder {
     width: 25px;
     height: 25px;
+    min-width: 25px;
   }
 
   .btn-primary .icon-holder img {

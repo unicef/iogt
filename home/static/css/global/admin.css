@@ -1,5 +1,9 @@
-.action-add-block-html {
+.action-add-block-paragraph_v1_legacy {
     text-decoration: line-through;
     pointer-events: none;
     background-color: gray;
+}
+
+.red-help-text p.help {
+    color: red;
 }
