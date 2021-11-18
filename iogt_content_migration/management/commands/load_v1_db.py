@@ -1746,7 +1746,11 @@ class Command(BaseCommand):
                     ('education_level', 'education_level'),
                     ('email', 'email_address')
                 ]:
-                    field = SurveyFormField.objects.get(page=translated_survey, admin_label=admin_label)
+                    try:
+                        field = SurveyFormField.objects.get(page=translated_survey, admin_label=admin_label)
+                    except SurveyFormField.DoesNotExist:
+                        # This field is not marked as required in the registration survey
+                        continue
                     try:
                         field.label = self.registration_survey_translations[label_identifier][locale.language_code]
                         field.help_text = self.registration_survey_translations[
