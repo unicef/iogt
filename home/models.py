@@ -286,7 +286,6 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     )
     index_page_description = models.TextField(null=True, blank=True)
 
-    tags = ClusterTaggableManager(through='ArticleTaggedItem', blank=True)
     body = StreamField([
         ('heading', blocks.CharBlock(form_classname="full title")),
         ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
@@ -368,6 +367,8 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
 
 
 class Article(AbstractArticle):
+    tags = ClusterTaggableManager(through='ArticleTaggedItem', blank=True)
+
     content_panels = AbstractArticle.content_panels + [
         ImageChooserPanel('lead_image'),
         SvgChooserPanel('icon'),
