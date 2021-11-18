@@ -101,8 +101,9 @@ class Command(BaseCommand):
         self.print_post_migration_report()
 
     def clear(self):
+        models.OfflineAppPage.objects.all().delete()
+        models.MiscellaneousIndexPage.objects.all().delete()
         models.PageLinkPage.objects.all().delete()
-        PageRevision.objects.all().delete()
         PollFormField.objects.all().delete()
         Poll.objects.all().delete()
         SurveyFormField.objects.all().delete()
