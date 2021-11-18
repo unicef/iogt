@@ -9,6 +9,7 @@ from django.views.generic import TemplateView
 from translation_manager.manager import Manager
 from wagtail.contrib.modeladmin.views import EditView
 
+from iogt.patch import patch_store_to_db
 from .models import ManifestSettings
 
 
@@ -64,6 +65,7 @@ class LogoutRedirectHackView(View):
 class TranslationEditView(EditView):
     def post(self, request, *args, **kwargs):
         super(TranslationEditView, self).post(request, *args, **kwargs)
+        patch_store_to_db()
 
         manager = Manager()
         for language, language_name in settings.LANGUAGES:
