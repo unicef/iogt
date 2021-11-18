@@ -21,7 +21,7 @@ User = get_user_model()
 class Command(BaseCommand):
 
     def clear(self):
-        models.BannerPage.objects.all().delete()
+        models.MiscellaneousIndexPage.objects.all().delete()
         models.BannerIndexPage.objects.all().delete()
         models.Article.objects.all().delete()
         models.Section.objects.all().delete()
@@ -107,6 +107,9 @@ class Command(BaseCommand):
             first_published_at=datetime.now(timezone.utc)
         )
         footer_index_page.add_child(instance=footer)
+
+        miscellaneous_index_page = models.MiscellaneousIndexPage(title='Miscellaneous')
+        home.add_child(instance=miscellaneous_index_page)
 
         # Create RapidPro Bot User
         management.call_command('sync_rapidpro_bot_user')
