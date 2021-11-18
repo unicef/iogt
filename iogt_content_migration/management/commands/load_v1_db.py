@@ -1685,7 +1685,7 @@ class Command(BaseCommand):
             children_list = []
             for child in children:
                 try:
-                    v1_id = V1ToV2ObjectMap.get_v1_id(child, child.id)
+                    v1_id = V1ToV2ObjectMap.get_v1_id(child.specific, child.id)
                 except:
                     continue
                 if v1_id:
@@ -1699,9 +1699,10 @@ class Command(BaseCommand):
                 children_list.append(child)
 
             children_list = sorted(
-                children_list, key=lambda x: (x.creation_date is not None, x.creation_date), reverse=True)
+                children_list, key=lambda x: (x.creation_date is not None, x.creation_date))
             for child in children_list:
-                self.move_page(page_to_move=child, position=0)
+                child.refresh_from_db()
+                child.move(page, pos='first-child')
 
         self.stdout.write('Pages sorted.')
 
