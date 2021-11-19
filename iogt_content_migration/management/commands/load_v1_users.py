@@ -2,7 +2,9 @@ import json
 from collections import defaultdict
 from time import sleep
 
+import csv
 import psycopg2
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
@@ -17,8 +19,8 @@ from tqdm import tqdm
 from wagtail.core.models import Page, PageViewRestriction
 
 from comments.models import CannedResponse
-from home.models import Article, V1ToV2ObjectMap
-from questionnaires.models import Survey, UserSubmission, Poll
+from home.models import Article, V1ToV2ObjectMap, SiteSettings
+from questionnaires.models import Survey, UserSubmission, Poll, SurveyFormField
 
 
 class Command(BaseCommand):
@@ -77,6 +79,7 @@ class Command(BaseCommand):
         self.registration_survey_mandatory_group_ids = mandatory_survey_group_ids or \
                                                        self.request_registration_survey_mandatory_groups()
         self.content_type_map = dict()
+        self.registration_survey_translations = defaultdict()
         self.delete_users = options.get('delete_users')
         self.post_migration_report_messages = defaultdict(list)
 
@@ -163,6 +166,8 @@ class Command(BaseCommand):
         self.migrate_user_freetext_poll_submissions()
 
         self.migrate_page_view_restrictions()
+
+        self.migrate_registration_survey_submissions()
 
         self.print_post_migration_report()
 
@@ -498,6 +503,38 @@ class Command(BaseCommand):
                 for pvr_group in pvr_groups_cur:
                     migrated_group = V1ToV2ObjectMap.get_v2_obj(Group, pvr_group['group_id'])
                     PageViewRestriction.groups.add(migrated_group)
+
+
+
+
+    def migrate_registration_survey_submissions(self):
+        sql = f'select * from profiles_userprofile pup inner join auth_user au on pup.user_id = au.id'
+        cur = self.db_query(sql)
+
+        site_settings = SiteSettings.get_for_default_site()
+        registration_survey = site_settings.registration_survey
+
+        if registration_survey:
+            for row in self.with_progress(sql, cur, 'User Registration Survey migration in progress'):
+
+                form_data = {
+                    'select_date_of_birth': row['date_of_birth'],
+                    'i_identify_my_gender_as': row['gender'],
+                    'where_do_you_live': row['location'],
+                    'what_is_your_highest_level_of_education': row['education_level'],
+                    'enter_your_mobile_number': row['mobile_number'],
+                    'enter_your_email_address': row['email'],
+
+                }
+
+                if not V1ToV2ObjectMap.get_v2_obj(UserSubmission, row['id'], extra='registration'):
+                    submission = UserSubmission.objects.create(
+                        form_data=json.dumps(form_data, cls=DjangoJSONEncoder),
+                        page=registration_survey,
+                        user=V1ToV2ObjectMap.get_v2_obj(get_user_model(), row['user_id'])
+                    )
+
+                    V1ToV2ObjectMap.create_map(submission, row['id'], extra='registration')
 
     def print_post_migration_report(self):
         self.stdout.write(self.style.ERROR('====================='))

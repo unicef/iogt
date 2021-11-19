@@ -1,6 +1,7 @@
 from collections import defaultdict
 from pathlib import Path
 
+import csv
 from bs4 import BeautifulSoup
 from django.conf import settings
 from django.core.files import File
@@ -90,6 +91,7 @@ class Command(BaseCommand):
         self.page_translation_map = {}
         self.v1_to_v2_page_map = {}
         self.post_migration_report_messages = defaultdict(list)
+        self.registration_survey_translations = defaultdict()
 
         self.clear()
         self.stdout.write('Existing site structure cleared')
@@ -180,9 +182,13 @@ class Command(BaseCommand):
         self.add_polls_from_polls_index_page_to_home_page_featured_content()
         self.add_surveys_from_surveys_index_page_to_home_page_featured_content()
         self.move_footers_to_end_of_footer_index_page()
+
         self.migrate_article_related_sections()
         self.sort_pages()
         self.stop_translations()
+
+        self.populate_registration_survey_translations()
+        self.migrate_post_registration_survey()
 
     def create_home_page(self, root):
         sql = 'select * from core_main main join wagtailcore_page page on main.page_ptr_id = page.id'
@@ -296,7 +302,7 @@ class Command(BaseCommand):
                 tags = self.find_tags(content_type, row['id'])
                 if tags:
                     document.tags.add(*tags)
-                self.document_map.update({ row['id']: document })
+                self.document_map.update({row['id']: document})
         cur.close()
         self.stdout.write('Documents migrated')
 
@@ -326,7 +332,7 @@ class Command(BaseCommand):
                 tags = self.find_tags(content_type, row['id'])
                 if tags:
                     media.tags.add(*tags)
-                self.media_map.update({ row['id']: media })
+                self.media_map.update({row['id']: media})
         cur.close()
         self.stdout.write('Media migrated')
 
@@ -1297,7 +1303,8 @@ class Command(BaseCommand):
             v1_article_id = article_row['page_id']
             v2_article = self.v1_to_v2_page_map.get(v1_article_id)
             if v2_article:
-                cur = self.db_query(f'select * from core_articlepagerecommendedsections where page_id = {v1_article_id} and recommended_article_id is not null')
+                cur = self.db_query(
+                    f'select * from core_articlepagerecommendedsections where page_id = {v1_article_id} and recommended_article_id is not null')
                 for row in cur:
                     v2_recommended_article = self.v1_to_v2_page_map.get(row['recommended_article_id'])
                     if v2_recommended_article:
@@ -1712,6 +1719,88 @@ class Command(BaseCommand):
                 child.move(page, pos='first-child')
 
         self.stdout.write('Pages sorted.')
+
+    def populate_registration_survey_translations(self):
+        with open(f'{settings.BASE_DIR}/iogt_content_migration/files/registration_survey_translations.csv',
+                  newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                str_key = self._get_iso_locale(row.pop('str'))
+                self.registration_survey_translations[str_key] = row
+
+    def migrate_post_registration_survey(self):
+
+        sql = 'select * from profiles_userprofilessettings pups ' \
+              'inner join wagtailcore_site ws on pups.site_id = ws.id ' \
+              'where is_default_site = true'
+        cur = self.db_query(sql)
+        row = cur.fetchone()
+
+        survey = Survey(
+            title='Registration Survey', live=True, allow_multiple_submissions=False,
+            allow_anonymous_submissions=False, submit_button_text='Register')
+
+        self.survey_index_page.add_child(instance=survey)
+
+        for (should_add_field_key, translation_key, is_required_key, field_type, admin_label) in [
+            ('activate_dob', 'dob', 'dob_required', 'date', 'date_of_birth'),
+            ('activate_gender', 'gender', 'gender_required', 'singleline', 'gender'),
+            ('activate_location', 'location', 'location_required', 'singleline', 'location'),
+            ('activate_education_level', 'education_level', 'activate_education_level_required', 'singleline',
+             'education_level'),
+            ('show_mobile_number_field', 'mobile_number', 'mobile_number_required', 'singleline', 'mobile_number'),
+            ('show_email_field', 'email_address', 'email_required', 'email', 'email'),
+        ]:
+            if row[should_add_field_key]:
+                SurveyFormField.objects.create(
+                    page=survey,
+                    label=self.registration_survey_translations[translation_key]['en'],
+                    required=bool(row[is_required_key]),
+                    field_type=field_type,
+                    admin_label=admin_label,
+                    help_text=self.registration_survey_translations[f'{translation_key}_helptext']['en']
+                )
+
+        self.stdout.write('Successfully migrated post registration survey')
+
+        default_site_settings = models.SiteSettings.get_for_default_site()
+        default_site_settings.registration_survey = survey
+        default_site_settings.save()
+
+        for locale in Locale.objects.all():
+            try:
+                self.translate_page(locale=locale, page=survey)
+                translated_survey = survey.get_translation_or_none(locale)
+            except Exception as e:
+                self.post_migration_report_messages['registration_survey'].append(
+                    f"Unable to translate survey, title={survey.title} to locale={locale}"
+                )
+                continue
+
+            if translated_survey:
+                for (admin_label, label_identifier) in [
+                    ('date_of_birth', 'dob'),
+                    ('gender', 'gender'),
+                    ('location', 'location'),
+                    ('mobile_number', 'mobile_number'),
+                    ('education_level', 'education_level'),
+                    ('email', 'email_address')
+                ]:
+                    try:
+                        field = SurveyFormField.objects.get(page=translated_survey, admin_label=admin_label)
+                    except SurveyFormField.DoesNotExist:
+                        # This field is not marked as required in the registration survey
+                        continue
+                    try:
+                        field.label = self.registration_survey_translations[label_identifier][locale.language_code]
+                        field.help_text = self.registration_survey_translations[
+                            f'{label_identifier}_helptext'][locale.language_code]
+                    except KeyError:
+                        self.post_migration_report_messages['registration_survey_translation_not_found'].append(
+                            f'Incomplete translation for registration survey to locale: {locale}'
+                        )
+                        break
+                    field.save()
 
     def get_admin_url(self, id):
         site = Site.objects.filter(is_default_site=True).first()
