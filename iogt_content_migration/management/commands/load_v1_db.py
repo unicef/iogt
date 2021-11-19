@@ -18,7 +18,7 @@ from wagtailsvg.models import Svg
 
 import home.models as models
 from comments.models import CommentStatus
-from home.models import V1ToV2ObjectMap
+from home.models import V1ToV2ObjectMap, Section
 from questionnaires.models import Poll, PollFormField, Survey, SurveyFormField, Quiz, QuizFormField
 import psycopg2
 import psycopg2.extras
@@ -169,6 +169,7 @@ class Command(BaseCommand):
         self.migrate_banners()
         self.mark_pages_which_are_not_translated_in_v1_as_draft()
         Page.fix_tree()
+        self.mark_empty_sections_as_draft()
         self.fix_articles_body()
         self.fix_footers_body()
         self.fix_survey_description()
@@ -429,8 +430,6 @@ class Command(BaseCommand):
                     translated_section.seo_title = row['seo_title']
                     translated_section.font_color = self.get_color_hex(row['extra_style_hints']) or section.font_color
                     translated_section.larger_image_for_top_page_in_list_as_in_v1 = True
-                    if not translated_section.get_children().filter(live=True):
-                        translated_section.live = False
                     translated_section.save()
                     content_type = self.find_content_type_id('core', 'sectionpage')
                     tags = self.find_tags(content_type, row['id'])
@@ -449,6 +448,12 @@ class Command(BaseCommand):
 
                 self.stdout.write(f"Translated section, title={row['title']}")
         cur.close()
+
+    def mark_empty_sections_as_draft(self):
+        for section in Section.objects.all():
+            if not section.get_children().filter(live=True):
+                section.live = False
+                section.save()
 
     def create_section(self, row):
         section = models.Section(
