@@ -22,7 +22,7 @@ class CommentForm(BaseCommentForm):
 
         if self.cleaned_data['post_anonymously']:
             data['user_email'] = ''
-            data['user_name'] = 'Anonymous'
+            data['user_name'] = 'anonymous'
         return data
 
 
