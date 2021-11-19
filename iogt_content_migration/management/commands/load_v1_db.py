@@ -169,6 +169,7 @@ class Command(BaseCommand):
         self.migrate_banners()
         self.mark_pages_which_are_not_translated_in_v1_as_draft()
         Page.fix_tree()
+        self.mark_empty_sections_as_draft()
         self.fix_articles_body()
         self.fix_footers_body()
         self.fix_survey_description()
@@ -447,6 +448,12 @@ class Command(BaseCommand):
 
                 self.stdout.write(f"Translated section, title={row['title']}")
         cur.close()
+
+    def mark_empty_sections_as_draft(self):
+        for section in models.Section.objects.all():
+            if section.get_children().filter(live=True).count() == 0:
+                section.live = False
+                section.save(update_fields=['live'])
 
     def create_section(self, row):
         section = models.Section(
