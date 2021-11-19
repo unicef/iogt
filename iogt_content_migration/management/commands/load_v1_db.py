@@ -182,13 +182,11 @@ class Command(BaseCommand):
         self.add_polls_from_polls_index_page_to_home_page_featured_content()
         self.add_surveys_from_surveys_index_page_to_home_page_featured_content()
         self.move_footers_to_end_of_footer_index_page()
-
         self.migrate_article_related_sections()
         self.sort_pages()
-        self.stop_translations()
-
         self.populate_registration_survey_translations()
         self.migrate_post_registration_survey()
+        self.stop_translations()
 
     def create_home_page(self, root):
         sql = 'select * from core_main main join wagtailcore_page page on main.page_ptr_id = page.id'

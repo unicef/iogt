@@ -518,13 +518,12 @@ class Command(BaseCommand):
             for row in self.with_progress(sql, cur, 'User Registration Survey migration in progress'):
 
                 form_data = {
-                    'select_date_of_birth': row['date_of_birth'],
-                    'i_identify_my_gender_as': row['gender'],
-                    'where_do_you_live': row['location'],
-                    'what_is_your_highest_level_of_education': row['education_level'],
-                    'enter_your_mobile_number': row['mobile_number'],
-                    'enter_your_email_address': row['email'],
-
+                    'date_of_birth': row['date_of_birth'],
+                    'gender': row['gender'],
+                    'location': row['location'],
+                    'education_level': row['education_level'],
+                    'mobile_number': row['mobile_number'],
+                    'email': row['email'],
                 }
 
                 if not V1ToV2ObjectMap.get_v2_obj(UserSubmission, row['id'], extra='registration'):
