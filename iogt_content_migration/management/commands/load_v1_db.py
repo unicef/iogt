@@ -18,7 +18,7 @@ from wagtailsvg.models import Svg
 
 import home.models as models
 from comments.models import CommentStatus
-from home.models import V1ToV2ObjectMap, Section
+from home.models import V1ToV2ObjectMap
 from questionnaires.models import Poll, PollFormField, Survey, SurveyFormField, Quiz, QuizFormField
 import psycopg2
 import psycopg2.extras
@@ -450,10 +450,10 @@ class Command(BaseCommand):
         cur.close()
 
     def mark_empty_sections_as_draft(self):
-        for section in Section.objects.all():
-            if not section.get_children().filter(live=True):
+        for section in models.Section.objects.all():
+            if section.get_children().filter(live=True).count() == 0:
                 section.live = False
-                section.save()
+                section.save(update_fields=['live'])
 
     def create_section(self, row):
         section = models.Section(
