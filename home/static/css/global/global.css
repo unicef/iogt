@@ -208,6 +208,7 @@
 
 .article__content__link-btn {
   margin-top: 20px;
+  margin-bottom: 20px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
