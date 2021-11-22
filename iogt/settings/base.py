@@ -375,6 +375,8 @@ LOCALE_PATHS = [
     os.path.join(os.path.dirname(auth.__file__), 'locale'),
 ]
 
+TRANSLATIONS_BASE_DIR = BASE_DIR
+
 # ========= Rapid Pro =================
 RAPIDPRO_BOT_USER_ID = os.getenv('RAPIDPRO_BOT_USER_ID')
 RAPIDPRO_BOT_USER_USERNAME = os.getenv('RAPIDPRO_BOT_USER_USERNAME')

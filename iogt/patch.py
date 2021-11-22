@@ -67,13 +67,13 @@ def store_to_db(self, pofile, locale, store_translations=False):
         t, created = TranslationEntry.objects.update_or_create(
             original=m.msgid,
             language=language,
-            locale_path=locale_path,
             domain=domain,
             defaults={
                 "occurrences": "\n".join(occs),
                 "translation": translation,
                 "locale_parent_dir": locale_dir_name,
                 "is_published": True,
+                "locale_path": locale_path,
             }
         )
 
@@ -108,15 +108,7 @@ def update_po_from_db(self, lang):
         is_published=True
     ).order_by("original")
 
-    locale_params = TranslationEntry.objects.filter(is_published=True).order_by('locale_path', 'domain')
-
-    forced_locale_paths = get_settings('TRANSLATIONS_UPDATE_FORCED_LOCALE_PATHS')
-    if forced_locale_paths:
-        translations = translations.filter(locale_path__in=forced_locale_paths)
-        locale_params = locale_params.filter(locale_path__in=forced_locale_paths)
-
-    locale_params = locale_params.values_list('locale_path', 'domain')
-    locale_params = list(set(locale_params))
+    locale_params = [('locale', 'django')]
 
     for locale_path, domain in locale_params:
         lang_dir_path = os.path.abspath(
@@ -149,7 +141,7 @@ def update_po_from_db(self, lang):
             'Content-Transfer-Encoding': '8bit',
         }
 
-        for translation in translations.filter(locale_path=locale_path, domain=domain):
+        for translation in translations:
             flags = []
             if translation.original.endswith('\n') or translation.translation.endswith('\n'):
                 flags.append('fuzzy')

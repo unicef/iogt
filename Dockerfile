@@ -26,13 +26,6 @@ RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-r
     libpango1.0-0 \
  && rm -rf /var/lib/apt/lists/*
 
-ENV VIRTUAL_ENV=/venv
-RUN python3 -m venv $VIRTUAL_ENV
-#RUN . venv/bin/activate
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-
-RUN pip install --upgrade pip
-
 # Install the application server.
 RUN pip install "gunicorn==20.0.4"
 
@@ -46,8 +39,7 @@ WORKDIR /app
 # Set this directory to be owned by the "wagtail" user. This Wagtail project
 # uses SQLite, the folder needs to be owned by the user that
 # will be writing to the database file.
-RUN chown -R wagtail:wagtail /app
-RUN chown -R wagtail:wagtail /venv
+RUN chown wagtail:wagtail /app
 
 # Copy the source code of the project into the container.
 COPY --chown=wagtail:wagtail . .
