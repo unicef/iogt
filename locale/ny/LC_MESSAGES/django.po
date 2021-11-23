@@ -12,4 +12,310 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Laguage: Chichewa\n"
+
+msgid "POLL"
+msgstr "KAFUKUFUKU OFUNSA MAGANIZO A ANTHU"
+
+msgid "SURVEY"
+msgstr "KAFUKUFUKU OKHALA NDI MAFUNSO OSIYANASIYANA"
+
+msgid "QUIZ"
+msgstr "MAFUNSO"
+
+msgid "quiz"
+msgstr "mafunso"
+
+msgid "quizzes"
+msgstr "mafunso"
+
+msgid "Log in to participate"
+msgstr "Lowani mu akaunti yanu kuti mutenge gawo"
+
+msgid "Log in / Create account"
+msgstr "Lowani mu akaunti yanu / Tsekulani akaunti"
+
+msgid "© The Internet of Good Things"
+msgstr "© The Internet of Good Things"
+
+msgid "Profile"
+msgstr "Zokhudza akaunti yanu"
+
+msgid "Chat"
+msgstr "Macheza"
+
+msgid "More"
+msgstr "Zambiri"
+
+msgid "Log in"
+msgstr "Lowani mu akaunti yanu"
+
+msgid "Back"
+msgstr "Kubwerera"
+
+msgid "BACK"
+msgstr "KUBWERERA"
+
+msgid "Previous"
+msgstr "Kubwerera"
+
+msgid "Next"
+msgstr "Kupita patsogolo"
+
+msgid "Comments"
+msgstr "Ndemanga"
+
+msgid "Please log in or create your account"
+msgstr "Chonde lowani ku akaunti yanu kapena tsekulani akaunti"
+
+msgid "Report"
+msgstr "Nenezani"
+
+msgid "Related Articles"
+msgstr "Masamba/nkhani zina zofananira"
+
+msgid "This comment has been reported."
+msgstr "Ndemanga imeneyi yanenezedwa."
+
+msgid ""
+"It will be reviewed by the team and may be removed if it breaks our Platform"
+" Rules"
+msgstr ""
+"Iwunikidwa ndi gulu lathu ndipo ikhoza kuchotsedwa ngati ikuphwanya Malamulo"
+" a Tsamba Lathu"
+
+msgid "articles"
+msgstr "masamba/nkhani"
+
+msgid "Search the site..."
+msgstr "Fufuzani tsamba la..."
+
+msgid "Search results for: "
+msgstr "Zotsatira za funso lokhudza:"
+
+msgid "No search results were found for"
+msgstr "Sipanapezeke zotsatira zilizonse za"
+
+msgid "Username"
+msgstr "Dzina lolowera mu akaunti"
+
+msgid "Create your account"
+msgstr "Tsekulani akaunti yanu"
+
+msgid "Forgot PIN"
+msgstr "Ndaiwala nambala yachinsinsi (PIN)"
+
+msgid "Cancel"
+msgstr "Chotsani zomwe mwalemba/mwasankha"
+
+msgid "Hey, %(username)s"
+msgstr "Wawa, %(username)s"
+
+msgid "Change Digital Pin"
+msgstr "Sinthani Nambala Yachinsinsi (PIN)"
+
+msgid "Personal Details"
+msgstr "Zokhudza Inuyo"
+
+msgid "Save changes"
+msgstr "Sungani zomwe mwalemba/mwasankha"
+
+msgid "Reset PIN"
+msgstr "Chotsani nambala yachinsinsi (PIN)"
+
+msgid "Your PIN has been changed successfully."
+msgstr "Nambala yanu yachinsinsi (PIN) yatheka kusintha."
+
+msgid "I accept the Terms and Conditions."
+msgstr "Ndavomera Malamulowa."
+
+msgid "You have read %(read)s out of %(total)s"
+msgstr "Mwawerenga %(read)s pa %(total)s"
+
+msgid "%(counter)s of %(total)s questions"
+msgstr "Mafunso %(counter)s pa mafunso %(total)s"
+
+msgid "Select one"
+msgstr "Sankhani limodzi"
+
+msgid "Optional"
+msgstr "Losankha"
+
+msgid "No limit"
+msgstr "Palibe malire"
+
+msgid "Go to homepage"
+msgstr "Pitani pa tsamba loyamba"
+
+msgid "You have already completed this survey."
+msgstr "Mwamaliza kale kuyankha mafunso a kafukufukuyu."
+
+msgid "Check all that apply"
+msgstr "Sankhani zonse zomwe zili zoyenera"
+
+msgid "Your results!"
+msgstr "Zotsatira zanu!"
+
+msgid "Replay Quiz"
+msgstr "Yankhaninso Mafunso"
+
+msgid "Incorrect"
+msgstr "Mwalephera"
+
+msgid "Correct"
+msgstr "Mwakhoza"
+
+msgid "Your answer"
+msgstr "Yankho lanu"
+
+msgid "Leave comment"
+msgstr "Lembani ndemanga"
+
+msgid "Reply"
+msgstr "Yankhani"
+
+msgid "Page not found"
+msgstr "Tsambali silikupezeka"
+
+msgid "Sorry, this page could not be found."
+msgstr "Pepani, tsambali silikupezeka."
+
+msgid "Internal server error"
+msgstr "Pali vuto la netiweki"
+
+msgid "4-digit PIN"
+msgstr "Pangani nambala yachinsinsi (PIN) yokhala ndi manambala anayi"
+
+msgid "Confirm new 4-digit PIN"
+msgstr "Tsimikizani nambala yanu yachinsinsi (PIN)"
+
+msgid "Old 4-digit PIN"
+msgstr "Mawu Achinsinsi (Password) Akale"
+
+msgid "New 4-digit PIN"
+msgstr "Pangani nambala yachinsinsi (PIN) yokhala ndi manambala anayi"
+
+msgid "1 result"
+msgid_plural "%(counter)s results"
+msgstr[0] "Zotsatira zonse 1"
+msgstr[1] "Zotsatira zonse %(counter)s"
+
+msgid "Correct answer"
+msgstr "Mwakhoza"
+
+msgid "This field is required."
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "Remove this comment?"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "This comment has been removed."
+msgstr ""
+
+msgid "moderator"
+msgstr ""
+
+msgid "sections"
+msgstr ""
+
+msgid "Check if applies"
+msgstr ""
+
+msgid "New comments have been disabled for this page."
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid ""
+"You are leaving the <b>Internet of Good Things</b> to visit an external "
+"website and standard data charges by your network provider might apply"
+msgstr ""
+
+msgid "Continue to external site"
+msgstr ""
+
+msgid "Log out"
+msgstr ""
+
+msgid "Reported by %(count)s user"
+msgstr ""
+
+msgid "Reported by %(count)s users"
+msgstr ""
+
+msgid "section"
+msgstr ""
+
+msgid "article"
+msgstr ""
+
+msgid "Remember me"
+msgstr ""
+
+msgid "You have signed out."
+msgstr ""
+
+msgid ""
+"Enter a valid username. This value may contain only letters, numbers, and "
+"@/./+/-/_ characters."
+msgstr ""
+
+msgid "You must type the same password each time."
+msgstr ""
+
+msgid "This password is too short. It must contain at least 4 characters."
+msgstr ""
+
+msgid "Please type your current password."
+msgstr ""
+
+msgid "Password successfully changed."
+msgstr ""
+
+msgid "Enter a valid date/time."
+msgstr ""
+
+msgid "Enter a valid date."
+msgstr ""
+
+msgid "Enter a valid URL."
+msgstr ""
+
+msgid "Enter a valid email address."
+msgstr ""
+
+msgid "Enter a valid integer."
+msgstr ""
+
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+msgid "Your comment"
+msgstr ""
+
+msgid "Are you sure you want to log out?"
+msgstr ""
+
+msgid "Your browser does not support video playback."
+msgstr ""
+
+msgid "Your browser does not support audio playback."
+msgstr ""
+
+msgid "Don't display my username next to my comment"
+msgstr ""
+
+msgid "Anonymous"
+msgstr ""
+
+msgid "Report this comment?"
+msgstr ""
+
+msgid "Display name"
+msgstr ""

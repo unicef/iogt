@@ -12,4 +12,308 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Laguage: Tigrinya\n"
+
+msgid "POLL"
+msgstr "መረጻታት"
+
+msgid "SURVEY"
+msgstr "መጽናዕትታት"
+
+msgid "QUIZ"
+msgstr "ሕቶታት"
+
+msgid "quiz"
+msgstr "ሕቶታት"
+
+msgid "quizzes"
+msgstr "ሕቶታት"
+
+msgid "Log in to participate"
+msgstr "ንኽትሳተፍ እቶ"
+
+msgid "Log in / Create account"
+msgstr "እቶ / መፍለዪ ፍጠር"
+
+msgid "© The Internet of Good Things"
+msgstr "© The Internet of Good Things"
+
+msgid "Profile"
+msgstr "መግለጺ"
+
+msgid "Chat"
+msgstr "ዕላል"
+
+msgid "More"
+msgstr "ተወሳኺ ነገራት"
+
+msgid "Log in"
+msgstr "እቶ"
+
+msgid "Back"
+msgstr "ተመለስ"
+
+msgid "BACK"
+msgstr "ተመለስ"
+
+msgid "Previous"
+msgstr "ቅድሚኡ ዝነበረ"
+
+msgid "Next"
+msgstr "ቀጺሉ ዘሎ"
+
+msgid "Comments"
+msgstr "ርኢቶታት"
+
+msgid "Please log in or create your account"
+msgstr "በጃኻ እቶ ወይ መፍለይኻ ፍጠር"
+
+msgid "Report"
+msgstr "ጸብጻብ"
+
+msgid "Related Articles"
+msgstr "ምስኡ ዝተተሓሓዙ ዓንቀጻት"
+
+msgid "This comment has been reported."
+msgstr "እዚ ርኢቶ እዚ ተመዝጊቡ ኣሎ።"
+
+msgid ""
+"It will be reviewed by the team and may be removed if it breaks our Platform"
+" Rules"
+msgstr "እታ ጉጅለ ኽትምርምሮ እያ ንሕግታት ፕላቶና እንተ ጥሒሳ ክዓ ክተጥፍኦ ትኽእል እያ"
+
+msgid "articles"
+msgstr "ዓንቀጻት"
+
+msgid "Search the site..."
+msgstr "ነቲ ዌብ ሳይት ድለዮ..."
+
+msgid "Search results for: "
+msgstr "ውጽኢት ምድላይ:"
+
+msgid "No search results were found for"
+msgstr "ውጽኢት ምንዳይ ኣይተረኽበን"
+
+msgid "Username"
+msgstr "ስም ተጠቃሚ"
+
+msgid "Create your account"
+msgstr "መፍለይኻ ፍጠር"
+
+msgid "Forgot PIN"
+msgstr "ፒን ረሲዕካ"
+
+msgid "Cancel"
+msgstr "ደምስስ"
+
+msgid "Hey, %(username)s"
+msgstr "ሰላም፣ %(username)s"
+
+msgid "Change Digital Pin"
+msgstr "ናይ ኤለክትሮኒካዊ ሽናቕ ቀያይር"
+
+msgid "Personal Details"
+msgstr "ብሕታዊ ዝርዝራት"
+
+msgid "Save changes"
+msgstr "ለውጥታት ኣዋህልል"
+
+msgid "Reset PIN"
+msgstr "ፒን እንደገና ኣዐርዩ"
+
+msgid "Your PIN has been changed successfully."
+msgstr "ፒንካ ብዕዉት መንገዲ ተቐይሩ እዩ።"
+
+msgid "I accept the Terms and Conditions."
+msgstr "ነቶም መምርሕታትን ኩነታትን ይቕበሎም እየ።"
+
+msgid "You have read %(read)s out of %(total)s"
+msgstr "%(read)s ካብ %(total)s ኣንቢብካ ኢኻ"
+
+msgid "%(counter)s of %(total)s questions"
+msgstr "%(counter)s ሕቶታት %(total)s"
+
+msgid "Select one"
+msgstr "ሓንቲ ምረጽ"
+
+msgid "Optional"
+msgstr "መማረጺ"
+
+msgid "No limit"
+msgstr "ደረት የብሉን"
+
+msgid "Go to homepage"
+msgstr "ናብ ገዛ ገጽ ኪድ"
+
+msgid "You have already completed this survey."
+msgstr "ነዚ መጽናዕቲ እዚ ቀደም ዛዚምካዮ ኢኻ።"
+
+msgid "Check all that apply"
+msgstr "ንኹሉ እቲ ዝሰርሕ መርምሮ"
+
+msgid "Your results!"
+msgstr "እቲ ዝረኸብካዮ ውጽኢት!"
+
+msgid "Replay Quiz"
+msgstr "ሕቶ መልስ"
+
+msgid "Incorrect"
+msgstr "ጌጋ"
+
+msgid "Correct"
+msgstr "ትኽክል"
+
+msgid "Your answer"
+msgstr "መልስኻ"
+
+msgid "Leave comment"
+msgstr "ርኢቶ ሕደግ"
+
+msgid "Reply"
+msgstr "ግብረ መልሲ"
+
+msgid "Page not found"
+msgstr "ገጽ ኣይተረኽበን"
+
+msgid "Sorry, this page could not be found."
+msgstr "ይቅርታ፣ እዚ ገጽ እዚ ኣይተረኽበን።"
+
+msgid "Internal server error"
+msgstr "ውሽጣዊ ሰርቨር ጌጋ"
+
+msgid "4-digit PIN"
+msgstr "4 ናይ ቁጽሪ ሽካር ፍጠር"
+
+msgid "Confirm new 4-digit PIN"
+msgstr "ፒን ኣረጋግጽ"
+
+msgid "Old 4-digit PIN"
+msgstr "ናይ ቀደም መሕለፊ ቃል"
+
+msgid "New 4-digit PIN"
+msgstr "4 ናይ ቁጽሪ ሽካር ፍጠር"
+
+msgid "1 result"
+msgid_plural "%(counter)s results"
+msgstr[0] "ኩሉ 1 ውጽኢት"
+msgstr[1] "ኩሉ %(counter)s ውጽኢት"
+
+msgid "Correct answer"
+msgstr "ትኽክል"
+
+msgid "This field is required."
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "Remove this comment?"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "This comment has been removed."
+msgstr ""
+
+msgid "moderator"
+msgstr ""
+
+msgid "sections"
+msgstr ""
+
+msgid "Check if applies"
+msgstr ""
+
+msgid "New comments have been disabled for this page."
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid ""
+"You are leaving the <b>Internet of Good Things</b> to visit an external "
+"website and standard data charges by your network provider might apply"
+msgstr ""
+
+msgid "Continue to external site"
+msgstr ""
+
+msgid "Log out"
+msgstr ""
+
+msgid "Reported by %(count)s user"
+msgstr ""
+
+msgid "Reported by %(count)s users"
+msgstr ""
+
+msgid "section"
+msgstr ""
+
+msgid "article"
+msgstr ""
+
+msgid "Remember me"
+msgstr ""
+
+msgid "You have signed out."
+msgstr ""
+
+msgid ""
+"Enter a valid username. This value may contain only letters, numbers, and "
+"@/./+/-/_ characters."
+msgstr ""
+
+msgid "You must type the same password each time."
+msgstr ""
+
+msgid "This password is too short. It must contain at least 4 characters."
+msgstr ""
+
+msgid "Please type your current password."
+msgstr ""
+
+msgid "Password successfully changed."
+msgstr ""
+
+msgid "Enter a valid date/time."
+msgstr ""
+
+msgid "Enter a valid date."
+msgstr ""
+
+msgid "Enter a valid URL."
+msgstr ""
+
+msgid "Enter a valid email address."
+msgstr ""
+
+msgid "Enter a valid integer."
+msgstr ""
+
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+msgid "Your comment"
+msgstr ""
+
+msgid "Are you sure you want to log out?"
+msgstr ""
+
+msgid "Your browser does not support video playback."
+msgstr ""
+
+msgid "Your browser does not support audio playback."
+msgstr ""
+
+msgid "Don't display my username next to my comment"
+msgstr ""
+
+msgid "Anonymous"
+msgstr ""
+
+msgid "Report this comment?"
+msgstr ""
+
+msgid "Display name"
+msgstr ""
