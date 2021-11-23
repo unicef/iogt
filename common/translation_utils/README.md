@@ -79,6 +79,9 @@ python3 make_pos.py
 
 Note: `make_testing_po` assumes that any entry from `translations_status.csv` which is marked as a plural in `translations.csv` is preceded by its singular in `translations_status.csv`.
 
-TODO: Fix `make_testing_po.py`
-TODO: Fix `djangojs`
-TODO: Extra status: country office provide tranlsations
+TODO: Extra status: country office provide translations
+
+### Outputs
+
+Move `translatable_strings.py` to `/home/translatable_strings.py`.
+Move `locale/*` to `/`.

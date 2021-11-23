@@ -3,9 +3,6 @@ import csv
 import copy
 import os
 
-class Translation(object):
-    pass
-
 po_metadata_template = {
     "Report-Msgid-Bugs-To": "",
     "POT-Creation-Date": "2021-07-31 09:38+0000",
@@ -30,12 +27,15 @@ all_phrases = {r[3] : r for r in data}
 processed_phrases = set()
 
 entries = []
+entriesjs = []
 for i, row in enumerate(reader):
     if i == 0:
-        translation = Translation()
         po = polib.POFile()
         po.metadata = copy.deepcopy(po_metadata_template)
         po.metadata["Language"] = "Testing"
+        pojs = polib.POFile()
+        pojs.metadata = copy.deepcopy(po_metadata_template)
+        pojs.metadata["Language"] = "Testing"
         continue
     plural = False
     phrase = row[0]
@@ -60,12 +60,18 @@ for i, row in enumerate(reader):
             msgid=phrase,
             msgstr=trans,
         )
-        entries.append(entry)
+        if row[3] == 'js':
+            entriesjs.append(entry)
+        else:
+            entries.append(entry)
 
 for entry in entries:
     po.append(entry)
+for entry in entriesjs:
+    pojs.append(entry)
 
 sheet.close()
 
 os.makedirs("locale/xy/LC_MESSAGES/", exist_ok=True)
 po.save("locale/xy/LC_MESSAGES/django.po")
+pojs.save("locale/xy/LC_MESSAGES/djangojs.po")

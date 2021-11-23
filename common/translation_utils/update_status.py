@@ -35,13 +35,15 @@ def lookup_status(msg, replacement_strings=[]):
     return status
 
 
-def process_message(msg):
+def process_message(msg, is_js=False):
     po_msgs.add(msg)
     if msg not in logged_phrases:
         status = lookup_status(msg)
-        status_sheet.append([msg, '', '', '', status, '', '', ''])
+        status_sheet.append([msg, '', '', 'js' if is_js else '', status, '', '', ''])
     else:
         status_row = status_sheet[logged_phrases[msg]]
+        if is_js:
+            status_row[3] = 'js'
         tag = status_row[2]
         replacement_strings = status_row[6].split('|')
         if tag == 'not needed':
@@ -53,7 +55,14 @@ def process_message(msg):
             if status_row[4] == 'needs translation' and status_row[3] == 'django':
                 status_row[4] = 'needs translation (partial)'
 
-po = polib.pofile('../../locale/xy/LC_MESSAGES/django.po')
+def process_po(po, is_js=False):
+    for entry in po:
+        if entry.obsolete:
+            continue
+        process_message(entry.msgid, is_js)
+        if entry.msgid_plural:
+            process_message(entry.msgid_plural, is_js)
+
 
 sheet = open("translation_status.csv", newline='')
 status_sheet = list(csv.reader(sheet))
@@ -64,12 +73,10 @@ translations = {r[3] : Translation(r) for r in list(csv.reader(sheet2)) if Trans
 po_msgs = set()
 
 # process those rows that are in the PO file
-for entry in po:
-    if entry.obsolete:
-        continue
-    process_message(entry.msgid)
-    if entry.msgid_plural:
-        process_message(entry.msgid_plural)
+po = polib.pofile('../../locale/xy/LC_MESSAGES/django.po')
+process_po(po)
+pojs = polib.pofile('../../locale/xy/LC_MESSAGES/djangojs.po')
+process_po(pojs, is_js=True)
 
 # Process the remaining rows
 for status_row in status_sheet[1:]:
