@@ -1692,35 +1692,75 @@ class Command(BaseCommand):
             # Move page to end
             page_to_move.move(parent_page, pos='last-child')
 
+    def _sort_articles(self):
+        pages = models.Section.objects.all().order_by('path')
+        for page in pages:
+            page.refresh_from_db()
+            articles = page.get_children().type(models.Article)
+            children_list = []
+            for article in articles:
+                try:
+                    v1_id = V1ToV2ObjectMap.get_v1_id(article.specific, article.id)
+                except:
+                    continue
+                if v1_id:
+                    translated_from_page_id = self.page_translation_map.get(v1_id)
+                    if translated_from_page_id:
+                        v1_id = translated_from_page_id
+                    cur = self.db_query(f'select * from wagtailcore_page wcp where id = {v1_id}')
+                    v1_row = cur.fetchone()
+                    cur.close()
+                    setattr(article, 'creation_date', v1_row['first_published_at'])
+                else:
+                    setattr(article, 'creation_date', None)
+
+                children_list.append(article)
+
+            children_list = sorted(
+                children_list, key=lambda x: (x.creation_date is not None, x.creation_date))
+            for article in children_list:
+                article.refresh_from_db()
+                article.move(page, pos='first-child')
+
+    def _sort_sections(self):
+        locales = Locale.objects.all()
+        for locale in locales:
+            pages = models.Section.objects.filter(locale=locale).order_by('path')
+            for page in pages:
+                page.refresh_from_db()
+                try:
+                    v1_id = V1ToV2ObjectMap.get_v1_id(page.specific, page.id)
+                except:
+                    continue
+
+                translated_from_page_id = self.page_translation_map.get(v1_id)
+                if not translated_from_page_id:
+                    continue
+
+                translated_from_page = self.v1_to_v2_page_map.get(translated_from_page_id)
+                if not translated_from_page:
+                    continue
+
+                translated_from_page.refresh_from_db()
+
+                translated_from_sub_sections = translated_from_page.get_children().type(models.Section)
+                translated_sub_sections = page.get_children().type(models.Section)
+
+                if translated_sub_sections:
+                    index_to_move = list(page.get_children()).index(translated_sub_sections.first())
+                    for child in translated_from_sub_sections:
+                        child.refresh_from_db()
+                        translated_sub_section = child.get_translation_or_none(locale)
+                        if translated_sub_section:
+                            self.move_page(page_to_move=translated_sub_section, position=index_to_move)
+                            index_to_move += 1
+
     def sort_pages(self):
         if self.sort != 'type1':
             return
 
-        pages = models.Section.objects.all().order_by('path')
-        for page in pages:
-            page.refresh_from_db()
-            children = page.get_children().type(models.Article)
-            children_list = []
-            for child in children:
-                try:
-                    v1_id = V1ToV2ObjectMap.get_v1_id(child.specific, child.id)
-                except:
-                    continue
-                if v1_id:
-                    cur = self.db_query(f'select * from wagtailcore_page wcp where id = {v1_id}')
-                    v1_row = cur.fetchone()
-                    cur.close()
-                    setattr(child, 'creation_date', v1_row['first_published_at'])
-                else:
-                    setattr(child, 'creation_date', None)
-
-                children_list.append(child)
-
-            children_list = sorted(
-                children_list, key=lambda x: (x.creation_date is not None, x.creation_date))
-            for child in children_list:
-                child.refresh_from_db()
-                child.move(page, pos='first-child')
+        self._sort_sections()
+        self._sort_articles()
 
         self.stdout.write('Pages sorted.')
 
