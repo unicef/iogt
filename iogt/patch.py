@@ -150,7 +150,17 @@ def update_po_from_db(self, lang):
         }
 
         for translation in translations.filter(locale_path=locale_path, domain=domain):
+            flags = []
+            if translation.original.endswith('\n') or translation.translation.endswith('\n'):
+                flags.append('fuzzy')
+            elif ('{' in translation.original or
+                  '}' in translation.original or
+                  '{' in translation.translation or
+                  '}' in translation.translation):
+                flags.append('fuzzy')
+                flags.append('python-brace-format')
             entry = polib.POEntry(
+                flags=flags,
                 msgid=translation.original,
                 msgstr=translation.translation,
                 occurrences=[occ.split(":") for occ in translation.occurrences.split()]
