@@ -1,8 +1,10 @@
 {% load i18n %}
 
-{% if settings.home.CacheSettings.cache and value.display_button %}
+{% if settings.home.CacheSettings.cache %}
     <form action="" method="post">
         {% csrf_token %}
-        <a href="#" type="submit" class='article__content__link-btn' onclick="cache()">{% translate 'Download' %}</a>
+        <a href="#" type="submit" class='article__content__link-btn' onclick="cache()">
+            {% translate value.smartphone_text %}
+        </a>
     </form>
 {% endif %}
