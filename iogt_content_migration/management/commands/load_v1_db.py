@@ -1337,18 +1337,14 @@ class Command(BaseCommand):
             articles_list = []
             for article_row in articles_cur:
                 translated_from_page_id = self.page_translation_map.get(article_row['page_ptr_id'])
+                featured_in_homepage_start_date = article_row['featured_in_homepage_start_date']
                 if translated_from_page_id:
                     eng_article_cur = self.db_query(
                         f'select * from core_articlepage where page_ptr_id = {translated_from_page_id}')
                     eng_article_row = eng_article_cur.fetchone()
                     eng_article_cur.close()
-                else:
-                    eng_article_row = {'featured_in_homepage_start_date': None}
-
-                featured_in_homepage_start_date = (
-                        article_row['featured_in_homepage_start_date'] or
-                        eng_article_row['featured_in_homepage_start_date']
-                )
+                    # For translated articles, only the date of the English version matters
+                    featured_in_homepage_start_date = eng_article_row['featured_in_homepage_start_date']
 
                 if featured_in_homepage_start_date:
                     article = self.v1_to_v2_page_map.get(article_row['page_ptr_id'])
