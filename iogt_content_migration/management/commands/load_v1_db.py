@@ -1701,6 +1701,9 @@ class Command(BaseCommand):
                 except:
                     continue
                 if v1_id:
+                    translated_from_page_id = self.page_translation_map.get(v1_id)
+                    if translated_from_page_id:
+                        v1_id = translated_from_page_id
                     cur = self.db_query(f'select * from wagtailcore_page wcp where id = {v1_id}')
                     v1_row = cur.fetchone()
                     cur.close()
