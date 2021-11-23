@@ -44,7 +44,7 @@ class User(AbstractUser):
             if article.id and not user.read_articles.filter(id=article.id).exists():
                 user.read_articles.add(article)
 
-    def display_name(self):
+    def get_display_name(self):
         return self.display_name or self.username
 
     class Meta:
