@@ -4,7 +4,7 @@ const successMsg = gettext("Your app is now ready to install. If you are using a
 async function cache() {
     if ('serviceWorker' in navigator && confirm(gettext("Install this website as an app on your device?")) === true) {
         try {
-            await navigator.serviceWorker.register('{% url "sw.js" %}', {scope: '/'});
+            await navigator.serviceWorker.register(serviceWorkerURL, {scope: '/'});
             alert(successMsg)
         } catch {
             alert(failMsg);

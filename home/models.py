@@ -46,7 +46,7 @@ from iogt.views import check_user_session
 from questionnaires.models import Survey, Poll, Quiz
 from .blocks import (
     MediaBlock, SocialMediaLinkBlock, SocialMediaShareButtonBlock, EmbeddedPollBlock, EmbeddedSurveyBlock,
-    EmbeddedQuizBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock, ArticleBlock,
+    EmbeddedQuizBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock, ArticleBlock, OfflineAppButtonBlock,
 )
 from .forms import SectionPageForm
 from .mixins import PageUtilsMixin, TitleIconMixin
@@ -269,7 +269,7 @@ class ArticleRecommendation(Orderable):
     ]
 
 
-class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
+class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
@@ -286,7 +286,6 @@ class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     )
     index_page_description = models.TextField(null=True, blank=True)
 
-    tags = ClusterTaggableManager(through='ArticleTaggedItem', blank=True)
     body = StreamField([
         ('heading', blocks.CharBlock(form_classname="full title")),
         ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
@@ -304,6 +303,11 @@ class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     ])
     show_in_menus_default = True
 
+    search_fields = Page.search_fields + [
+        index.SearchField('get_heading_values', partial_match=True, boost=1),
+        index.SearchField('get_paragraph_values', partial_match=True),
+    ]
+
     def _get_child_block_values(self, block_type):
         searchable_content = []
         for block in self.body:
@@ -319,34 +323,6 @@ class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     def get_paragraph_values(self):
         paragraph_values = self._get_child_block_values('paragraph')
         return '\n'.join(paragraph_values)
-
-    content_panels = Page.content_panels + [
-        ImageChooserPanel('lead_image'),
-        SvgChooserPanel('icon'),
-        StreamFieldPanel('body'),
-        FieldPanel('index_page_description'),
-        MultiFieldPanel([
-            InlinePanel('recommended_articles',
-                        label=_("Recommended Articles")),
-        ],
-            heading='Recommended Content')
-    ]
-
-    promote_panels = Page.promote_panels + [
-        MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
-    ]
-
-    search_fields = Page.search_fields + [
-        index.SearchField('get_heading_values', partial_match=True, boost=1),
-        index.SearchField('get_paragraph_values', partial_match=True),
-    ]
-
-    edit_handler = TabbedInterface([
-        ObjectList(content_panels, heading='Content'),
-        ObjectList(promote_panels, heading='Promote'),
-        ObjectList(Page.settings_panels, heading='Settings'),
-        ObjectList(CommentableMixin.comments_panels, heading='Comments')
-    ])
 
     def get_progress_enabled_section(self):
         """
@@ -374,12 +350,6 @@ class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
 
         return context
 
-    def serve(self, request):
-        response = super().serve(request)
-        if response.status_code == status.HTTP_200_OK:
-            User.record_article_read(request=request, article=self)
-        return response
-
     def description(self):
         for block in self.body:
             if block.block_type == 'paragraph':
@@ -391,8 +361,83 @@ class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         return progress_manager.is_article_completed(self)
 
     class Meta:
+        abstract = True
         verbose_name = _("article")
         verbose_name_plural = _("articles")
+
+
+class Article(AbstractArticle):
+    tags = ClusterTaggableManager(through='ArticleTaggedItem', blank=True)
+
+    content_panels = AbstractArticle.content_panels + [
+        ImageChooserPanel('lead_image'),
+        SvgChooserPanel('icon'),
+        StreamFieldPanel('body'),
+        FieldPanel('index_page_description'),
+        MultiFieldPanel([
+            InlinePanel('recommended_articles',
+                        label=_("Recommended Articles")),
+        ],
+            heading='Recommended Content')
+    ]
+
+    promote_panels = AbstractArticle.promote_panels + [
+        MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
+    ]
+
+    edit_handler = TabbedInterface([
+        ObjectList(content_panels, heading='Content'),
+        ObjectList(promote_panels, heading='Promote'),
+        ObjectList(AbstractArticle.settings_panels, heading='Settings'),
+        ObjectList(CommentableMixin.comments_panels, heading='Comments')
+    ])
+
+    def serve(self, request):
+        response = super().serve(request)
+        if response.status_code == status.HTTP_200_OK:
+            User.record_article_read(request=request, article=self)
+        return response
+
+
+class MiscellaneousIndexPage(Page):
+    parent_page_types = ['home.HomePage']
+    subpage_types = ['home.OfflineAppPage']
+
+
+class OfflineAppPage(AbstractArticle):
+    template = 'home/article.html'
+    parent_page_types = ['home.MiscellaneousIndexPage']
+    subpage_types = []
+
+    body = StreamField([
+        ('heading', blocks.CharBlock(form_classname="full title")),
+        ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
+        ('markdown', MarkdownBlock(icon='code')),
+        ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
+        ('image', ImageChooserBlock()),
+        ('list', blocks.ListBlock(MarkdownBlock(icon='code'))),
+        ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
+        ('page_button', PageButtonBlock()),
+        ('embedded_poll', EmbeddedPollBlock()),
+        ('embedded_survey', EmbeddedSurveyBlock()),
+        ('embedded_quiz', EmbeddedQuizBlock()),
+        ('media', MediaBlock(icon='media')),
+        ('chat_bot', ChatBotButtonBlock()),
+        ('offline_app_button', OfflineAppButtonBlock()),
+    ])
+
+    content_panels = AbstractArticle.content_panels + [
+        ImageChooserPanel('lead_image'),
+        SvgChooserPanel('icon'),
+        StreamFieldPanel('body'),
+        FieldPanel('index_page_description'),
+    ]
+
+    edit_handler = TabbedInterface([
+        ObjectList(content_panels, heading='Content'),
+        ObjectList(AbstractArticle.settings_panels, heading='Settings'),
+        ObjectList(CommentableMixin.comments_panels, heading='Comments')
+    ])
 
 
 class BannerIndexPage(Page):
@@ -470,6 +515,10 @@ class FooterPage(Article, TitleIconMixin):
     parent_page_types = ['home.FooterIndexPage']
     subpage_types = []
     template = 'home/article.html'
+
+    class Meta:
+        verbose_name = _("footer")
+        verbose_name_plural = _("footers")
 
 
 class PageLinkPage(Page, TitleIconMixin):
