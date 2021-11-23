@@ -196,15 +196,39 @@ class Command(BaseCommand):
         colliding_usernames = [row['lower'] for row in cur]
         self.post_migration_report_messages['colliding_users_in_v1'].append(','.join(colliding_usernames))
 
-        sql = f'select * from auth_user'
+        sql = f'select lower(alias), count(*) ' \
+              f'from profiles_userprofile ' \
+              f'where alias is not null ' \
+              f'group by lower(alias) ' \
+              f'having count(*) > 1'
+        cur = self.db_query(sql)
+
+        colliding_display_names = [row['lower'] for row in cur]
+        self.post_migration_report_messages['colliding_display_names_in_v1'].append(','.join(colliding_display_names))
+
+        sql = f'select * ' \
+              f'from auth_user au, profiles_userprofile pup ' \
+              f'where au.id = pup.user_id'
         cur = self.db_query(sql)
 
         renamed_users = []
         for row in self.with_progress(sql, cur, 'User Migration in progress'):
             v1_user_id = row.pop('id')
 
-            user_data = dict(row)
-            user_data.update({'has_filled_registration_survey': True})
+            user_data = {
+                'password': row['password'],
+                'last_login': row['last_login'],
+                'is_superuser': row['is_superuser'],
+                'username': row['username'],
+                'first_name': row['first_name'],
+                'last_name': row['last_name'],
+                'email': row['email'],
+                'is_staff': row['is_staff'],
+                'is_active': row['is_active'],
+                'date_joined': row['date_joined'],
+                'display_name': row['alias'] or row['username'],
+                'has_filled_registration_survey': True,
+            }
 
             migrated_user = V1ToV2ObjectMap.get_v2_obj(get_user_model(), v1_user_id)
 

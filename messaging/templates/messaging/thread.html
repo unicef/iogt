@@ -17,7 +17,7 @@
                     {% if message.sent_from_bot %}
                         <div class="message-from">{{ thread.chatbot.display_name }}</div>
                     {% else %}
-                        <div class="message-from">{{ message.sender.username }}</div>
+                        <div class="message-from">{{ message.sender.display_name }}</div>
                     {% endif %}
                     <div class="message-sent">{{ message.sent_at }}</div>
                 </div>
