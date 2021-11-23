@@ -30,9 +30,12 @@ po_metadata_template = {
 sheet0 = open("translation_status.csv", newline='')
 status_data = list(csv.reader(sheet0))
 js_phrases = set()
+used_phrases = set()
 for row in status_data:
     if row[3] == 'js':
         js_phrases.add(row[0])
+    if row[2] == 'translate' and row[4] != 'unused':
+        used_phrases.add(row[0])
 
 processed_phrases = set()
 
@@ -61,9 +64,13 @@ for i, row in enumerate(reader):
             translation.path = "locale/{}/LC_MESSAGES/".format(phrase)
 
     phrase_eng = row[3]
+    if phrase_eng not in used_phrases:
+        continue
+
     translation_list = translations
     if phrase_eng in js_phrases:
         translation_list = translationsjs
+
     for translation, phrase in zip(translation_list, row[4:]):
         if row[0] == 'Section':
             continue
