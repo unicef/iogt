@@ -2,7 +2,7 @@
 
 <div class="questionnaire-components">
     <div class='questionnaire-components__component'>
-        <a href="{% pageurl page %}">
+        <a href="{% pageurl page %}" style="color:{{ font_color }}; background:{{ background_color }};">
             <div>
                 <p>{% translate page.get_type|upper %}</p>
                 <p>{{ page.title }}</p>

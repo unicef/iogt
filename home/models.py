@@ -940,6 +940,13 @@ class ThemeSettings(BaseSetting):
         null=True, blank=True, help_text='The font color of the Questionnaire in section listing as a HEX code',
         max_length=8, default='#444')
 
+    section_card_font_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the sub section as a HEX code',
+        max_length=8, default='#444')
+    section_card_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the sub section as a HEX code',
+        max_length=8, default='#ffffff')
+
     article_card_font_color = models.CharField(
         null=True, blank=True, help_text='The background color of the Embedded Article in Home > Featured Content'
                                          ' as a HEX code', max_length=8, default='#444')
