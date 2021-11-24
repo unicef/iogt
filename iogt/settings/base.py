@@ -369,10 +369,10 @@ EXTRA_LANG_INFO = {
 django.conf.locale.LANG_INFO.update(EXTRA_LANG_INFO)
 
 LOCALE_PATHS = [
-    os.path.join(BASE_DIR, "locale"),
     os.path.dirname(django.conf.locale.__file__),
     os.path.join(os.path.dirname(allauth.__file__), 'locale'),
     os.path.join(os.path.dirname(auth.__file__), 'locale'),
+    os.path.join(BASE_DIR, "locale"),
 ]
 
 TRANSLATIONS_BASE_DIR = BASE_DIR
