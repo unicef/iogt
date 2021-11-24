@@ -11,7 +11,14 @@
 
         {% for field in form %}
             {% if field.is_hidden %}
-                <div>{{ field }}</div>{% endif %}
+                <div>
+                    {% if field.name == 'name' %}
+                        <input type="hidden" name="name" value="{{ request.user.display_name }}" />
+                    {% else %}
+                        {{ field }}
+                    {% endif %}
+                </div>
+            {% endif %}
         {% endfor %}
 
         <div style="display:none">{{ form.honeypot }}</div>

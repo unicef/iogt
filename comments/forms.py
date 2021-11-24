@@ -9,6 +9,8 @@ class CommentForm(BaseCommentForm):
         self.fields['email'].initial = 'noreply@example.com'
         self.fields['email'].widget = forms.HiddenInput()
 
+        self.fields['name'].widget = forms.HiddenInput()
+
         self.fields['followup'].initial = False
         self.fields['followup'].widget = forms.HiddenInput()
 

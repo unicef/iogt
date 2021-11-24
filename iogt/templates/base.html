@@ -60,9 +60,6 @@
 
 <main id="app">
     <div id="content-wrap">
-        {% if settings.home.CacheSettings.cache and first_time_user %}
-            {% include "cache_banner.html" %}
-        {% endif %}
         {% include "header.html" %}
         <div class="main-wrapper" style="background: {{ settings.home.ThemeSettings.global_background_color }}">
             <div class="content-holder">
@@ -81,6 +78,9 @@
 </main>
 
 {# Global javascript #}
+<script>
+    var serviceWorkerURL = '{% url "sw.js" %}'
+</script>
 <script src="{% url 'javascript-catalog' %}"></script>
 <script src="{% static 'js/sw-init.js' %}"></script>
 <noscript>
