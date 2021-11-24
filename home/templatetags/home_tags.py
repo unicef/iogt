@@ -95,9 +95,9 @@ def get_menu_icon(menu_item):
 
 
 @register.simple_tag
-def is_first_content(value):
+def is_first_content(page, value):
     is_first_content = False
-    if value == 0:
+    if value == 0 and page.get_parent().specific.larger_image_for_top_page_in_list_as_in_v1:
         is_first_content = True
 
     return is_first_content

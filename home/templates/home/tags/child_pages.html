@@ -5,7 +5,7 @@
 {% block content %}
     <section class='child-pages'>
         {% for page in pages %}
-            {% is_first_content forloop.counter0 as is_first_content %}
+            {% is_first_content page forloop.counter0 as is_first_content %}
             {% if page.get_type == 'section' %}
                 {% include 'home/tags/section_card.html' with page=page %}
             {% elif page.get_type == 'article' %}
