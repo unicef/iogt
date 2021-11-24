@@ -480,7 +480,7 @@ class PageLinkPage(Page, TitleIconMixin):
     ]
 
     def get_page(self):
-        return self.page
+        return self.page.specific if self.page else self.page
 
     def get_icon_url(self):
         if self.icon:

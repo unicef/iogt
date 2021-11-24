@@ -103,6 +103,11 @@ def is_first_content(page, value):
     return is_first_content
 
 
+@register.simple_tag
+def get_page(page):
+    return page.get_page()
+
+
 @register.inclusion_tag('wagtailadmin/shared/field_as_li.html')
 def render_external_link_with_help_text(field):
     field.help_text = f'If you are linking back to a URL on your own IoGT site, be sure to remove the domain and ' \
