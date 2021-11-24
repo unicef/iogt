@@ -12,4 +12,310 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Laguage: Portuguese\n"
+
+msgid "POLL"
+msgstr "VOTAÇÕES"
+
+msgid "SURVEY"
+msgstr "INQUÉRITOS"
+
+msgid "QUIZ"
+msgstr "QUESTIONÁRIOS"
+
+msgid "quiz"
+msgstr "questionários"
+
+msgid "quizzes"
+msgstr "questionários"
+
+msgid "Log in to participate"
+msgstr "Iniciar sessão para participar"
+
+msgid "Log in / Create account"
+msgstr "Iniciar Sessão / Criar conta"
+
+msgid "© The Internet of Good Things"
+msgstr "© The Internet of Good Things"
+
+msgid "Profile"
+msgstr "Perfil"
+
+msgid "Chat"
+msgstr "Conversa"
+
+msgid "More"
+msgstr "Mais"
+
+msgid "Log in"
+msgstr "Iniciar sessão"
+
+msgid "Back"
+msgstr "Voltar"
+
+msgid "BACK"
+msgstr "VOLTAR"
+
+msgid "Previous"
+msgstr "Anterior"
+
+msgid "Next"
+msgstr "Próximo"
+
+msgid "Comments"
+msgstr "Comentários"
+
+msgid "Please log in or create your account"
+msgstr "Por favor inicie sessão ou crie a sua conta"
+
+msgid "Report"
+msgstr "Relatório"
+
+msgid "Related Articles"
+msgstr "Artigos relacionados"
+
+msgid "This comment has been reported."
+msgstr "Este comentário foi reportado."
+
+msgid ""
+"It will be reviewed by the team and may be removed if it breaks our Platform"
+" Rules"
+msgstr ""
+"Será revisto pela equipa e poderá ser retirado se quebrar as Regras da nossa"
+" Plataforma"
+
+msgid "articles"
+msgstr "artigos"
+
+msgid "Search the site..."
+msgstr "Pesquisar o site..."
+
+msgid "Search results for: "
+msgstr "Resultados da pesquisa por:"
+
+msgid "No search results were found for"
+msgstr "Não foram encontrados resultados de pesquisa para"
+
+msgid "Username"
+msgstr "Nome de utilizador"
+
+msgid "Create your account"
+msgstr "Crie a sua conta"
+
+msgid "Forgot PIN"
+msgstr "Esqueci-me do PIN"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "Hey, %(username)s"
+msgstr "Olá, %(username)s"
+
+msgid "Change Digital Pin"
+msgstr "Mudar Pin Digital"
+
+msgid "Personal Details"
+msgstr "Dados Pessoais"
+
+msgid "Save changes"
+msgstr "Guardar alterações"
+
+msgid "Reset PIN"
+msgstr "Reinicializar PIN"
+
+msgid "Your PIN has been changed successfully."
+msgstr "O seu PIN foi alterado com sucesso."
+
+msgid "I accept the Terms and Conditions."
+msgstr "Aceito os Termos e Condições."
+
+msgid "You have read %(read)s out of %(total)s"
+msgstr "Você leu %(read)s de %(total)s"
+
+msgid "%(counter)s of %(total)s questions"
+msgstr "%(counter)s de %(total)s perguntas"
+
+msgid "Select one"
+msgstr "Seleccione um"
+
+msgid "Optional"
+msgstr "Opcional"
+
+msgid "No limit"
+msgstr "Sem limite"
+
+msgid "Go to homepage"
+msgstr "Ir para a página inicial"
+
+msgid "You have already completed this survey."
+msgstr "Já completou este inquérito."
+
+msgid "Check all that apply"
+msgstr "Verifique tudo o que se aplica"
+
+msgid "Your results!"
+msgstr "Os seus resultados!"
+
+msgid "Replay Quiz"
+msgstr "Quiz de Repetição"
+
+msgid "Incorrect"
+msgstr "Incorrecto"
+
+msgid "Correct"
+msgstr "Correcto"
+
+msgid "Your answer"
+msgstr "A sua resposta"
+
+msgid "Leave comment"
+msgstr "Deixe aqui o seu comentário"
+
+msgid "Reply"
+msgstr "Resposta"
+
+msgid "Page not found"
+msgstr "Página não encontrada"
+
+msgid "Sorry, this page could not be found."
+msgstr "Lamentamos, esta página não pôde ser encontrada."
+
+msgid "Internal server error"
+msgstr "Erro interno do servidor"
+
+msgid "4-digit PIN"
+msgstr "pin de 4 dígitos"
+
+msgid "Confirm new 4-digit PIN"
+msgstr "Confirmar PIN"
+
+msgid "Old 4-digit PIN"
+msgstr "Palavra-passe Antiga"
+
+msgid "New 4-digit PIN"
+msgstr "Crie um pin de 4 dígitos"
+
+msgid "1 result"
+msgid_plural "%(counter)s results"
+msgstr[0] "Todos os 1 resultados"
+msgstr[1] "Todos os %(counter)s resultados"
+
+msgid "Correct answer"
+msgstr "Correcto"
+
+msgid "This field is required."
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "Remove this comment?"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "This comment has been removed."
+msgstr ""
+
+msgid "moderator"
+msgstr ""
+
+msgid "sections"
+msgstr ""
+
+msgid "Check if applies"
+msgstr ""
+
+msgid "New comments have been disabled for this page."
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid ""
+"You are leaving the <b>Internet of Good Things</b> to visit an external "
+"website and standard data charges by your network provider might apply"
+msgstr ""
+
+msgid "Continue to external site"
+msgstr ""
+
+msgid "Log out"
+msgstr ""
+
+msgid "Reported by %(count)s user"
+msgstr ""
+
+msgid "Reported by %(count)s users"
+msgstr ""
+
+msgid "section"
+msgstr ""
+
+msgid "article"
+msgstr ""
+
+msgid "Remember me"
+msgstr ""
+
+msgid "You have signed out."
+msgstr ""
+
+msgid ""
+"Enter a valid username. This value may contain only letters, numbers, and "
+"@/./+/-/_ characters."
+msgstr ""
+
+msgid "You must type the same password each time."
+msgstr ""
+
+msgid "This password is too short. It must contain at least 4 characters."
+msgstr ""
+
+msgid "Please type your current password."
+msgstr ""
+
+msgid "Password successfully changed."
+msgstr ""
+
+msgid "Enter a valid date/time."
+msgstr ""
+
+msgid "Enter a valid date."
+msgstr ""
+
+msgid "Enter a valid URL."
+msgstr ""
+
+msgid "Enter a valid email address."
+msgstr ""
+
+msgid "Enter a valid integer."
+msgstr ""
+
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+msgid "Your comment"
+msgstr ""
+
+msgid "Are you sure you want to log out?"
+msgstr ""
+
+msgid "Your browser does not support video playback."
+msgstr ""
+
+msgid "Your browser does not support audio playback."
+msgstr ""
+
+msgid "Don't display my username next to my comment"
+msgstr ""
+
+msgid "Anonymous"
+msgstr ""
+
+msgid "Report this comment?"
+msgstr ""
+
+msgid "Display name"
+msgstr ""
