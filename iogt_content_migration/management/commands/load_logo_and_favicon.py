@@ -27,7 +27,9 @@ class Command(BaseCommand):
         file = ImageFile(self._open_file(Path(settings.BASE_DIR) / 'iogt/static/images/favicon.png'), name='favicon.png')
         favicon = Image.objects.create(title='Favicon', file=file)
 
-        site_settings = SiteSettings.get_for_default_site()
-        site_settings.logo = logo
-        site_settings.favicon = favicon
-        site_settings.save(update_fields=['logo', 'favicon'])
+        site_settings = SiteSettings.objects.all()
+        for site_setting in site_settings:
+            site_setting.logo = logo
+            site_setting.favicon = favicon
+
+        SiteSettings.objects.bulk_update(site_settings, ['logo', 'favicon'])
