@@ -223,3 +223,18 @@ class RawHTMLBlock(blocks.RawHTMLBlock):
         result = super(RawHTMLBlock, self).render_basic(value, context)
 
         return render_markdown(result)
+
+
+class OfflineAppButtonBlock(blocks.StructBlock):
+    smartphone_text = blocks.CharBlock(
+        help_text=_('This text appears when it is possible for the user to install the app on their phone.'))
+    feature_phone_text = blocks.CharBlock(required=False,
+        help_text=_('This text appears when the user is using a feature phone and thus cannot install the app '
+                    '(the button will be disabled in this case). [Currently not implemented]'))
+    offline_text = blocks.CharBlock(required=False,
+        help_text=_('This text appears when the user is navigating the site via the offline app and '
+                    'thus it doesn\'t make sense to install the offline app again '
+                    '(the button will be disabled in this case). [Currently not implemented]'))
+
+    class Meta:
+        template = 'blocks/offline_app_button.html'

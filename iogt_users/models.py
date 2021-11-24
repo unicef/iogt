@@ -11,6 +11,7 @@ class User(AbstractUser):
                                   blank=True)
     last_name = models.CharField('last name', max_length=150, null=True,
                                  blank=True)
+    display_name = models.CharField('display name', max_length=255, null=True, blank=True)
     email = models.EmailField('email address', null=True, blank=True)
     terms_accepted = models.BooleanField(default=False)
 
@@ -42,6 +43,9 @@ class User(AbstractUser):
         else:
             if article.id and not user.read_articles.filter(id=article.id).exists():
                 user.read_articles.add(article)
+
+    def get_display_name(self):
+        return self.display_name or self.username
 
     class Meta:
         ordering = ('id',)
