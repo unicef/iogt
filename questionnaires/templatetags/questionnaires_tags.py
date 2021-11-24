@@ -148,3 +148,13 @@ def snake_case(text):
 @register.simple_tag
 def subtract(value, arg):
     return int(value) - int(arg)
+
+@register.inclusion_tag('questionnaires/tags/questionnaire_wrapper.html', takes_context=True)
+def render_questionnaire_wrapper(context, page, direct_display, background_color, font_color):
+    context.update({
+        'page': page,
+        'direct_display': direct_display,
+        'background_color': background_color,
+        'font_color': font_color,
+    })
+    return context

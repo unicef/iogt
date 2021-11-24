@@ -885,8 +885,13 @@ body.rtl {
 .questionnaire-components__component {
   width: 100%;
   margin: 10px;
-  padding: 8px 12px;
+  /*padding: 8px 12px;*/
+  padding: 0 !important;
   border-radius: 8px;
+}
+
+.questionnaire-components__component a {
+  padding: 10px;
 }
 
 .questionnaire-components svg {
@@ -912,7 +917,12 @@ body.rtl {
   .questionnaire-components__component {
     margin: 16px;
     padding: 8px 12px;
+    padding: 0 !important;
     border-radius: 8px;
+  }
+
+  .questionnaire-components__component a {
+    padding: 10px;
   }
 }
 
