@@ -12,4 +12,310 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Laguage: Indonesian\n"
+
+msgid "POLL"
+msgstr "JAJAK PENDAPAT"
+
+msgid "SURVEY"
+msgstr "SURVEI"
+
+msgid "QUIZ"
+msgstr "KUIS"
+
+msgid "quiz"
+msgstr "kuis"
+
+msgid "quizzes"
+msgstr "kuis"
+
+msgid "Log in to participate"
+msgstr "Masuk untuk berpartisipasi"
+
+msgid "Log in / Create account"
+msgstr "Masuk / Buat akun"
+
+msgid "© The Internet of Good Things"
+msgstr "© The Internet of Good Things"
+
+msgid "Profile"
+msgstr "Profil"
+
+msgid "Chat"
+msgstr "Obrolan"
+
+msgid "More"
+msgstr "Lebih"
+
+msgid "Log in"
+msgstr "Masuk"
+
+msgid "Back"
+msgstr "Kembali"
+
+msgid "BACK"
+msgstr "KEMBALI"
+
+msgid "Previous"
+msgstr "Sebelumnya"
+
+msgid "Next"
+msgstr "Selanjutnya"
+
+msgid "Comments"
+msgstr "Komentar"
+
+msgid "Please log in or create your account"
+msgstr "Silakan masuk atau buat dengan akun Anda"
+
+msgid "Report"
+msgstr "Laporan"
+
+msgid "Related Articles"
+msgstr "Artikel terkait"
+
+msgid "This comment has been reported."
+msgstr "Komentar ini telah dilaporkan."
+
+msgid ""
+"It will be reviewed by the team and may be removed if it breaks our Platform"
+" Rules"
+msgstr ""
+"Komentar akan ditinjau oleh tim dan mungkin akan dihapus jika melanggar "
+"aturan platform kami"
+
+msgid "articles"
+msgstr "artikel"
+
+msgid "Search the site..."
+msgstr "Cari pada situs…"
+
+msgid "Search results for: "
+msgstr "Cari hasil untuk:"
+
+msgid "No search results were found for"
+msgstr "Tidak ada hasil pencarian yang ditemukan"
+
+msgid "Username"
+msgstr "Nama pengguna"
+
+msgid "Create your account"
+msgstr "Buat akun Anda"
+
+msgid "Forgot PIN"
+msgstr "Lupa PIN"
+
+msgid "Cancel"
+msgstr "Batal"
+
+msgid "Hey, %(username)s"
+msgstr "Hai, %(username)s"
+
+msgid "Change Digital Pin"
+msgstr "Ubah Pin Digital"
+
+msgid "Personal Details"
+msgstr "Detail Pribadi"
+
+msgid "Save changes"
+msgstr "Simpan perubahan"
+
+msgid "Reset PIN"
+msgstr "Reset PIN"
+
+msgid "Your PIN has been changed successfully."
+msgstr "PIN Anda berhasil diubah."
+
+msgid "I accept the Terms and Conditions."
+msgstr "Saya menerima Syarat dan Ketentuan."
+
+msgid "You have read %(read)s out of %(total)s"
+msgstr "Anda telah membaca %(read)s dari %(total)s"
+
+msgid "%(counter)s of %(total)s questions"
+msgstr "%(counter)s dari %(total)s pertanyaan"
+
+msgid "Select one"
+msgstr "Pilih satu"
+
+msgid "Optional"
+msgstr "Opsional"
+
+msgid "No limit"
+msgstr "Tanpa batasan"
+
+msgid "Go to homepage"
+msgstr "Pergi ke beranda"
+
+msgid "You have already completed this survey."
+msgstr "Anda telah melengkapi survei ini."
+
+msgid "Check all that apply"
+msgstr "Periksa semua yang berlaku"
+
+msgid "Your results!"
+msgstr "Hasil Anda!"
+
+msgid "Replay Quiz"
+msgstr "Mengulang Kuis"
+
+msgid "Incorrect"
+msgstr "Salah"
+
+msgid "Correct"
+msgstr "Benar"
+
+msgid "Your answer"
+msgstr "Jawaban Anda"
+
+msgid "Leave comment"
+msgstr "Tinggalkan komentar"
+
+msgid "Reply"
+msgstr "Balas"
+
+msgid "Page not found"
+msgstr "Laman tidak ditemukan"
+
+msgid "Sorry, this page could not be found."
+msgstr "Maaf, laman ini tidak dapat ditemukan."
+
+msgid "Internal server error"
+msgstr "Terjadi kesalahan pada internal"
+
+msgid "4-digit PIN"
+msgstr "Buat 4 digit pin"
+
+msgid "Confirm new 4-digit PIN"
+msgstr "Konfirmasi PIN"
+
+msgid "Old 4-digit PIN"
+msgstr "Kata sandi lama"
+
+msgid "New 4-digit PIN"
+msgstr "Buat 4 digit pin"
+
+msgid "1 result"
+msgid_plural "%(counter)s results"
+msgstr[0] "Semua Hasil 1"
+msgstr[1] "Semua Hasil %(counter)s"
+
+msgid "Correct answer"
+msgstr "Benar"
+
+msgid "This field is required."
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "Remove this comment?"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "This comment has been removed."
+msgstr ""
+
+msgid "moderator"
+msgstr ""
+
+msgid "sections"
+msgstr ""
+
+msgid "Check if applies"
+msgstr ""
+
+msgid "New comments have been disabled for this page."
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid ""
+"You are leaving the <b>Internet of Good Things</b> to visit an external "
+"website and standard data charges by your network provider might apply"
+msgstr ""
+
+msgid "Continue to external site"
+msgstr ""
+
+msgid "Log out"
+msgstr ""
+
+msgid "Reported by %(count)s user"
+msgstr ""
+
+msgid "Reported by %(count)s users"
+msgstr ""
+
+msgid "section"
+msgstr ""
+
+msgid "article"
+msgstr ""
+
+msgid "Remember me"
+msgstr ""
+
+msgid "You have signed out."
+msgstr ""
+
+msgid ""
+"Enter a valid username. This value may contain only letters, numbers, and "
+"@/./+/-/_ characters."
+msgstr ""
+
+msgid "You must type the same password each time."
+msgstr ""
+
+msgid "This password is too short. It must contain at least 4 characters."
+msgstr ""
+
+msgid "Please type your current password."
+msgstr ""
+
+msgid "Password successfully changed."
+msgstr ""
+
+msgid "Enter a valid date/time."
+msgstr ""
+
+msgid "Enter a valid date."
+msgstr ""
+
+msgid "Enter a valid URL."
+msgstr ""
+
+msgid "Enter a valid email address."
+msgstr ""
+
+msgid "Enter a valid integer."
+msgstr ""
+
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+msgid "Your comment"
+msgstr ""
+
+msgid "Are you sure you want to log out?"
+msgstr ""
+
+msgid "Your browser does not support video playback."
+msgstr ""
+
+msgid "Your browser does not support audio playback."
+msgstr ""
+
+msgid "Don't display my username next to my comment"
+msgstr ""
+
+msgid "Anonymous"
+msgstr ""
+
+msgid "Report this comment?"
+msgstr ""
+
+msgid "Display name"
+msgstr ""

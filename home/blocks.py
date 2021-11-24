@@ -18,8 +18,8 @@ class MediaBlock(AbstractMediaChooserBlock):
         if not value:
             return ''
 
-        video_not_supported_text = _("Your browser does not support the video tag.")
-        audio_not_supported_text = _("Your browser does not support the audio element.")
+        video_not_supported_text = _("Your browser does not support video playback.")
+        audio_not_supported_text = _("Your browser does not support audio playback.")
         # Translators: Part of this message (between %(start_link)s and %(end_link)s ) is a clickable download link
         download_video_text = _('If you cannot view the above video, perhaps would'
                 ' you like to %(start_link)s download it? %(end_link)s.') % {

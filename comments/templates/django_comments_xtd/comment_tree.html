@@ -16,7 +16,7 @@
                     <span>
                         {% if item.comment.user_name == 'anonymous' %}
                             <p>A</p>
-                            <p>Anonymous</p>
+                            <p>{% translate "Anonymous" %}</p>
                         {% else %}
                             <p>{{ item.comment.user.display_name.0|capfirst }}</p>
                             <p>{{ item.comment.user.display_name }}</p>
@@ -67,7 +67,7 @@
 
 
                         <i title="{% translate 'Comment flagged' %}"
-                           class='report-comment__disclaimer'>{% translate "This is a reported comment" %} </i>
+                           class='report-comment__disclaimer'>{% translate "This comment has been reported." %} </i>
 
                     {% endif %}
 
