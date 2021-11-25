@@ -231,15 +231,18 @@ class Command(BaseCommand):
                 root_page=home,
                 site_name=v1_site['site_name'] if v1_site['site_name'] else 'Internet of Good Things',
             )
+            models.SiteSettings.objects.get_or_create(site=site)
             site.pk = None
             site.hostname = self.v2_domain
             site.is_default_site = True
             site.save()
+            models.SiteSettings.objects.get_or_create(site=site)
             site.is_default_site = False
             for v1_domain in self.v1_domains_list:
                 site.pk = None
                 site.hostname = v1_domain
                 site.save()
+                models.SiteSettings.objects.get_or_create(site=site)
         else:
             raise Exception('Could not find site in v1 DB')
         return home
