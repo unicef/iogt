@@ -244,10 +244,15 @@ class Command(BaseCommand):
                     existing_user.save()
 
                 is_user_display_name_colliding = False
-                if (row['alias'] and
-                        get_user_model().objects.filter(
-                            Q(Q(display_name__iexact=row['alias']) | Q(username__iexact=row['alias']))
-                        ).exists()):
+
+                display_name_matched = get_user_model().objects.filter(
+                    Q(Q(display_name__iexact=row['alias']) | Q(username__iexact=row['alias']))
+                ).exists()
+                username_matched = get_user_model().objects.filter(
+                    Q(Q(display_name__iexact=row['username']) | Q(username__iexact=row['username']))
+                ).exists()
+
+                if (row['alias'] and display_name_matched) or (not row['alias'] and username_matched):
                     is_user_display_name_colliding = True
 
                 user = get_user_model().objects.create(**user_data)
