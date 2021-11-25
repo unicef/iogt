@@ -206,6 +206,25 @@ class Command(BaseCommand):
         colliding_display_names = [row['lower'] for row in cur]
         self.post_migration_report_messages['colliding_display_names_in_v1'].append(','.join(colliding_display_names))
 
+        if colliding_display_names:
+            cur.scroll(0, 'absolute')
+
+        colliding_display_name_user_ids = []
+        for row in cur:
+            sql = f'select * ' \
+                  f'from profiles_userprofile pup, auth_user au ' \
+                  f'where pup.user_id = au.id ' \
+                  f'and pup.alias = \'{row["lower"]}\' ' \
+                  f'order by au.date_joined asc'
+            cur2 = self.db_query(sql)
+            for i, row2 in enumerate(cur2):
+                if i >= 1:
+                    colliding_display_name_user_ids.append(row2['user_id'])
+
+            cur2.close()
+
+        cur.close()
+
         sql = f'select * ' \
               f'from auth_user au, profiles_userprofile pup ' \
               f'where au.id = pup.user_id'
@@ -254,6 +273,10 @@ class Command(BaseCommand):
                     group = Group.objects.get(name=row_['name'])
                     group.user_set.add(user)
 
+                if v1_user_id in colliding_display_name_user_ids:
+                    group = Group.objects.get(name='Colliding Display Names')
+                    group.user_set.add(user)
+
                 user_groups_cursor.close()
 
         if renamed_users:
@@ -268,6 +291,8 @@ class Command(BaseCommand):
         for row in cur:
             group, __ = Group.objects.get_or_create(name=row['name'])
             V1ToV2ObjectMap.create_map(group, row['id'])
+
+        Group.objects.get_or_create(name='Colliding Display Names')
 
         self.stdout.write(self.style.SUCCESS('Completed User Groups Migration'))
 
