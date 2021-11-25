@@ -77,11 +77,6 @@ class Command(BaseCommand):
             required=True,
             help='Sort page by "type1" or "type2"'
         )
-        parser.add_argument(
-            '--v2-domain',
-            required=True,
-            help='Domain to create default site object with'
-        )
 
     def handle(self, *args, **options):
         self.db_connect(options)
@@ -89,6 +84,7 @@ class Command(BaseCommand):
         self.v1_domains_list = options.get('v1_domains')
         self.sort = options.get('sort')
         self.v2_domain = options.get('v2_domain')
+        self.v2_site_port = options.get('v2_site_port')
 
         self.collection_map = {}
         self.document_map = {}
@@ -225,16 +221,13 @@ class Command(BaseCommand):
         v1_site = cur.fetchone()
         cur.close()
         if v1_site:
-            site = Site.objects.create(
+            Site.objects.create(
                 hostname=v1_site['hostname'],
                 port=v1_site['port'],
                 root_page=home,
+                is_default_site=True,
                 site_name=v1_site['site_name'] if v1_site['site_name'] else 'Internet of Good Things',
             )
-            site.pk = None
-            site.hostname = self.v2_domain
-            site.is_default_site = True
-            site.save()
         else:
             raise Exception('Could not find site in v1 DB')
         return home
