@@ -13,7 +13,7 @@
             {% if field.is_hidden %}
                 <div>
                     {% if field.name == 'name' %}
-                        <input type="hidden" name="name" value="{{ request.user.display_name }}" />
+                        <input type="hidden" name="name" value="{{ request.user.get_display_name }}" />
                     {% else %}
                         {{ field }}
                     {% endif %}

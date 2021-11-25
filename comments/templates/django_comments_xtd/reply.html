@@ -18,7 +18,7 @@
         <div class="media-body">
           <div class="comment pb-3">
             <h6 class="mb-1 small">
-              {{ comment.submit_date|naturaltime }}&nbsp;-&nbsp;{% if comment.user_name == 'anonymous' %}Anonymous{% else %}{{ comment.user.display_name }}{% endif %}
+              {{ comment.submit_date|naturaltime }}&nbsp;-&nbsp;{% if comment.user_name == 'anonymous' %}Anonymous{% else %}{{ comment.user.get_display_name }}{% endif %}
             </h6>
             <p>{{ comment.comment }}</p>
           </div>
