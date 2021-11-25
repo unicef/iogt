@@ -196,38 +196,21 @@ class Command(BaseCommand):
         colliding_usernames = [row['lower'] for row in cur]
         self.post_migration_report_messages['colliding_users_in_v1'].append(','.join(colliding_usernames))
 
-        sql = f'select lower(alias), count(*) ' \
-              f'from profiles_userprofile ' \
-              f'where alias is not null ' \
-              f'group by lower(alias) ' \
-              f'having count(*) > 1'
+        sql = f"select lower(alias), count(*) " \
+              f"from profiles_userprofile " \
+              f"where (alias is not null or alias != '') " \
+              f"group by lower(alias) " \
+              f"having count(*) > 1"
         cur = self.db_query(sql)
-
         colliding_display_names = [row['lower'] for row in cur]
+        cur.close()
         self.post_migration_report_messages['colliding_display_names_in_v1'].append(','.join(colliding_display_names))
 
-        if colliding_display_names:
-            cur.scroll(0, 'absolute')
-
-        colliding_display_name_user_ids = []
-        for row in cur:
-            sql = f'select * ' \
-                  f'from profiles_userprofile pup, auth_user au ' \
-                  f'where pup.user_id = au.id ' \
-                  f'and pup.alias = \'{row["lower"]}\' ' \
-                  f'order by au.date_joined asc'
-            cur2 = self.db_query(sql)
-            for i, row2 in enumerate(cur2):
-                if i >= 1:
-                    colliding_display_name_user_ids.append(row2['user_id'])
-
-            cur2.close()
-
-        cur.close()
 
         sql = f'select * ' \
               f'from auth_user au, profiles_userprofile pup ' \
-              f'where au.id = pup.user_id'
+              f'where au.id = pup.user_id ' \
+              f'order by au.date_joined'
         cur = self.db_query(sql)
 
         renamed_users = []
@@ -252,12 +235,16 @@ class Command(BaseCommand):
             migrated_user = V1ToV2ObjectMap.get_v2_obj(get_user_model(), v1_user_id)
 
             if not migrated_user:
-                if get_user_model().objects.filter(username=row['username']).exists():
+                if get_user_model().objects.filter(username__iexact=row['username']).exists():
                     existing_user = get_user_model().objects.get(username=row['username'])
                     modified_username = f'{existing_user}_v2'
                     renamed_users.append(f'{existing_user} -> {modified_username}')
                     existing_user.username = modified_username
                     existing_user.save()
+
+                is_user_display_name_colliding = False
+                if get_user_model().objects.filter(display_name__iexact=row['alias']).exists():
+                    is_user_display_name_colliding = True
 
                 user = get_user_model().objects.create(**user_data)
                 V1ToV2ObjectMap.create_map(user, v1_user_id)
@@ -273,7 +260,7 @@ class Command(BaseCommand):
                     group = Group.objects.get(name=row_['name'])
                     group.user_set.add(user)
 
-                if v1_user_id in colliding_display_name_user_ids:
+                if is_user_display_name_colliding:
                     group = Group.objects.get(name='Colliding Display Names')
                     group.user_set.add(user)
 
