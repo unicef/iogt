@@ -18,8 +18,8 @@
                             <p>A</p>
                             <p>{% translate "Anonymous" %}</p>
                         {% else %}
-                            <p>{{ item.comment.user.display_name.0|capfirst }}</p>
-                            <p>{{ item.comment.user.display_name }}</p>
+                            <p>{{ item.comment.user.get_display_name.0|capfirst }}</p>
+                            <p>{{ item.comment.user.get_display_name }}</p>
                         {% endif %}
                     </span>
                     <p class='individual-comment__date'>{{ item.comment.submit_date|naturaltime }}</p>
