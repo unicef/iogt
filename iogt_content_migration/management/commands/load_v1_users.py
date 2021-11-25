@@ -10,6 +10,7 @@ from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
 from django.core.management import BaseCommand
 from django.core.serializers.json import DjangoJSONEncoder
+from django.db.models import Q
 from django_comments.models import CommentFlag
 from django_comments_xtd.models import XtdComment
 from pip._vendor.distlib.compat import raw_input
@@ -243,7 +244,10 @@ class Command(BaseCommand):
                     existing_user.save()
 
                 is_user_display_name_colliding = False
-                if row['alias'] and get_user_model().objects.filter(display_name__iexact=row['alias']).exists():
+                if (row['alias'] and
+                        get_user_model().objects.filter(
+                            Q(Q(display_name__iexact=row['alias']) | Q(username__iexact=row['alias']))
+                        ).exists()):
                     is_user_display_name_colliding = True
 
                 user = get_user_model().objects.create(**user_data)
