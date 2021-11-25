@@ -82,6 +82,12 @@ class Command(BaseCommand):
             required=True,
             help='Domain to create default site object with'
         )
+        parser.add_argument(
+            '--v2-site-port',
+            default=80,
+            type=int,
+            help='Site port to use while creating default site object'
+        )
 
     def handle(self, *args, **options):
         self.db_connect(options)
@@ -89,6 +95,7 @@ class Command(BaseCommand):
         self.v1_domains_list = options.get('v1_domains')
         self.sort = options.get('sort')
         self.v2_domain = options.get('v2_domain')
+        self.v2_site_port = options.get('v2_site_port')
 
         self.collection_map = {}
         self.document_map = {}
@@ -234,6 +241,7 @@ class Command(BaseCommand):
             models.SiteSettings.objects.get_or_create(site=site)
             site.pk = None
             site.hostname = self.v2_domain
+            site.port = self.v2_site_port
             site.is_default_site = True
             site.save()
             models.SiteSettings.objects.get_or_create(site=site)
