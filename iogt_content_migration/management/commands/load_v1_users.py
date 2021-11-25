@@ -228,7 +228,7 @@ class Command(BaseCommand):
                 'is_staff': row['is_staff'],
                 'is_active': row['is_active'],
                 'date_joined': row['date_joined'],
-                'display_name': row['alias'] or row['username'],
+                'display_name': row['alias'],
                 'has_filled_registration_survey': True,
             }
 
@@ -243,7 +243,7 @@ class Command(BaseCommand):
                     existing_user.save()
 
                 is_user_display_name_colliding = False
-                if get_user_model().objects.filter(display_name__iexact=row['alias']).exists():
+                if row['alias'] and get_user_model().objects.filter(display_name__iexact=row['alias']).exists():
                     is_user_display_name_colliding = True
 
                 user = get_user_model().objects.create(**user_data)
