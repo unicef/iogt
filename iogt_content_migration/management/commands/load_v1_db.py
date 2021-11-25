@@ -1783,7 +1783,6 @@ class Command(BaseCommand):
                 self.registration_survey_translations[str_key] = row
 
     def migrate_post_registration_survey(self):
-
         sql = 'select * from profiles_userprofilessettings pups ' \
               'inner join wagtailcore_site ws on pups.site_id = ws.id ' \
               'where is_default_site = true'
@@ -1817,9 +1816,11 @@ class Command(BaseCommand):
 
         self.stdout.write('Successfully migrated post registration survey')
 
-        default_site_settings = models.SiteSettings.get_for_default_site()
-        default_site_settings.registration_survey = survey
-        default_site_settings.save()
+        site_settings = models.SiteSettings.objects.all()
+        for site_setting in site_settings:
+            site_setting.registration_survey = survey
+
+        models.SiteSettings.objects.bulk_update(site_settings, ['registration_survey'])
 
         for locale in Locale.objects.all():
             try:
