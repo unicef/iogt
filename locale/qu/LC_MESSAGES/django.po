@@ -12,4 +12,310 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Laguage: Kichwa/Quichua\n"
+
+msgid "POLL"
+msgstr "TAPUYKUNA"
+
+msgid "SURVEY"
+msgstr "TAPUYKUNA"
+
+msgid "QUIZ"
+msgstr "EXAMENKUNA"
+
+msgid "quiz"
+msgstr "examenkuna"
+
+msgid "quizzes"
+msgstr "examenkuna"
+
+msgid "Log in to participate"
+msgstr "Particinpankapak yaikuy"
+
+msgid "Log in / Create account"
+msgstr "Yaikunkapak / Cuentata ruray"
+
+msgid "© The Internet of Good Things"
+msgstr "© The Internet of Good Things"
+
+msgid "Profile"
+msgstr "Perfil"
+
+msgid "Chat"
+msgstr "Mensajekunata kachay"
+
+msgid "More"
+msgstr "Ashtawan"
+
+msgid "Log in"
+msgstr "Yaikunkapak"
+
+msgid "Back"
+msgstr "Washaman"
+
+msgid "BACK"
+msgstr "WASHAMAN"
+
+msgid "Previous"
+msgstr "Washaman"
+
+msgid "Next"
+msgstr "Kati"
+
+msgid "Comments"
+msgstr "Comentariokuna"
+
+msgid "Please log in or create your account"
+msgstr "Yaikupai o cuentata ruray"
+
+msgid "Report"
+msgstr "Willay"
+
+msgid "Related Articles"
+msgstr "Temakuna ashtawan yachankapak"
+
+msgid "This comment has been reported."
+msgstr "Kay comentariotaka revisanaman kachashkami kan."
+
+msgid ""
+"It will be reviewed by the team and may be removed if it breaks our Platform"
+" Rules"
+msgstr ""
+"Kay comentarioka revisanaman kachashka kan. Kay Paginapa Leykunata mana "
+"paktachikpika kay comentario anchuchiskami kanka"
+
+msgid "articles"
+msgstr "chikan temakuna"
+
+msgid "Search the site..."
+msgstr "Kaypi mashkay..."
+
+msgid "Search results for: "
+msgstr "Kan mashkakushka temakunapi mashkay:"
+
+msgid "No search results were found for"
+msgstr "Kan mashkakushkaka mana tiyanchu"
+
+msgid "Username"
+msgstr "Kanpa usuario"
+
+msgid "Create your account"
+msgstr "Kanpa cuentata ruray"
+
+msgid "Forgot PIN"
+msgstr "PIN cunkarirkani"
+
+msgid "Cancel"
+msgstr "Cancelay"
+
+msgid "Hey, %(username)s"
+msgstr "Oye, %(username)s"
+
+msgid "Change Digital Pin"
+msgstr "Digital Pin cambiay"
+
+msgid "Personal Details"
+msgstr "Kanpa datokuna"
+
+msgid "Save changes"
+msgstr "Cambiokunataka wakichi"
+
+msgid "Reset PIN"
+msgstr "PIN kutin ruray"
+
+msgid "Your PIN has been changed successfully."
+msgstr "Kanpa PIN cambiashka kashka."
+
+msgid "I accept the Terms and Conditions."
+msgstr "Paginapa Términos y Condiciones ari nircani."
+
+msgid "You have read %(read)s out of %(total)s"
+msgstr "Kaykuna leyishka %(read)s de %(total)s"
+
+msgid "%(counter)s of %(total)s questions"
+msgstr "Tapuykuna %(counter)s de %(total)s"
+
+msgid "Select one"
+msgstr "Shuklla akllay"
+
+msgid "Optional"
+msgstr "Munashpaka akllay"
+
+msgid "No limit"
+msgstr "Killkaylla"
+
+msgid "Go to homepage"
+msgstr "Kallari paginaman ri"
+
+msgid "You have already completed this survey."
+msgstr "Tukuy tapuykunata kutichishkami kashka."
+
+msgid "Check all that apply"
+msgstr "Alli kakpika akllay"
+
+msgid "Your results!"
+msgstr "Kanpa notakuna."
+
+msgid "Replay Quiz"
+msgstr "Examenta kutin ruray"
+
+msgid "Incorrect"
+msgstr "Panda"
+
+msgid "Correct"
+msgstr "Alli"
+
+msgid "Your answer"
+msgstr "Kanpa respuesta"
+
+msgid "Leave comment"
+msgstr "Shuk comentariota saki"
+
+msgid "Reply"
+msgstr "Kutichi"
+
+msgid "Page not found"
+msgstr "Página mana tiyanchu"
+
+msgid "Sorry, this page could not be found."
+msgstr "Kishpichiway, kay pagina mana tiyanchu."
+
+msgid "Internal server error"
+msgstr "Internetta mana valinchu"
+
+msgid "4-digit PIN"
+msgstr "4 número pin ruray"
+
+msgid "Confirm new 4-digit PIN"
+msgstr "PIN kutin churay"
+
+msgid "Old 4-digit PIN"
+msgstr "Ñawpa Clave"
+
+msgid "New 4-digit PIN"
+msgstr "4 número pin ruray"
+
+msgid "1 result"
+msgid_plural "%(counter)s results"
+msgstr[0] "Kaymi tiyan 1 temakuna"
+msgstr[1] "Kaymi tiyan %(counter)s temakuna"
+
+msgid "Correct answer"
+msgstr "Alli"
+
+msgid "This field is required."
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "Remove this comment?"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "This comment has been removed."
+msgstr ""
+
+msgid "moderator"
+msgstr ""
+
+msgid "sections"
+msgstr ""
+
+msgid "Check if applies"
+msgstr ""
+
+msgid "New comments have been disabled for this page."
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid ""
+"You are leaving the <b>Internet of Good Things</b> to visit an external "
+"website and standard data charges by your network provider might apply"
+msgstr ""
+
+msgid "Continue to external site"
+msgstr ""
+
+msgid "Log out"
+msgstr ""
+
+msgid "Reported by %(count)s user"
+msgstr ""
+
+msgid "Reported by %(count)s users"
+msgstr ""
+
+msgid "section"
+msgstr ""
+
+msgid "article"
+msgstr ""
+
+msgid "Remember me"
+msgstr ""
+
+msgid "You have signed out."
+msgstr ""
+
+msgid ""
+"Enter a valid username. This value may contain only letters, numbers, and "
+"@/./+/-/_ characters."
+msgstr ""
+
+msgid "You must type the same password each time."
+msgstr ""
+
+msgid "This password is too short. It must contain at least 4 characters."
+msgstr ""
+
+msgid "Please type your current password."
+msgstr ""
+
+msgid "Password successfully changed."
+msgstr ""
+
+msgid "Enter a valid date/time."
+msgstr ""
+
+msgid "Enter a valid date."
+msgstr ""
+
+msgid "Enter a valid URL."
+msgstr ""
+
+msgid "Enter a valid email address."
+msgstr ""
+
+msgid "Enter a valid integer."
+msgstr ""
+
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+msgid "Your comment"
+msgstr ""
+
+msgid "Are you sure you want to log out?"
+msgstr ""
+
+msgid "Your browser does not support video playback."
+msgstr ""
+
+msgid "Your browser does not support audio playback."
+msgstr ""
+
+msgid "Don't display my username next to my comment"
+msgstr ""
+
+msgid "Anonymous"
+msgstr ""
+
+msgid "Report this comment?"
+msgstr ""
+
+msgid "Display name"
+msgstr ""

@@ -12,4 +12,310 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Laguage: Karakalpak\n"
+
+msgid "POLL"
+msgstr "SORAWNAMA"
+
+msgid "SURVEY"
+msgstr "IZERTLEW"
+
+msgid "QUIZ"
+msgstr "VIKTORINALAR"
+
+msgid "quiz"
+msgstr "viktorinalar"
+
+msgid "quizzes"
+msgstr "viktorinalar"
+
+msgid "Log in to participate"
+msgstr "Qatnasıw ushın kirin’"
+
+msgid "Log in / Create account"
+msgstr "Kiriw / Akkaunt jaratıw"
+
+msgid "© The Internet of Good Things"
+msgstr "© The Internet of Good Things"
+
+msgid "Profile"
+msgstr "Profil"
+
+msgid "Chat"
+msgstr "Chat"
+
+msgid "More"
+msgstr "Ko’brek mag’lumat"
+
+msgid "Log in"
+msgstr "Kiriw"
+
+msgid "Back"
+msgstr "Qaytıw"
+
+msgid "BACK"
+msgstr "QAYTIW"
+
+msgid "Previous"
+msgstr "Aldıng’ı"
+
+msgid "Next"
+msgstr "Keyingi"
+
+msgid "Comments"
+msgstr "Komment"
+
+msgid "Please log in or create your account"
+msgstr "Iltimas login arqalı kırın’ yaki akkaunt jaratın’"
+
+msgid "Report"
+msgstr "Esabat berıw"
+
+msgid "Related Articles"
+msgstr "Baylanıslı maqalalar"
+
+msgid "This comment has been reported."
+msgstr "Bul komment jetkerildi."
+
+msgid ""
+"It will be reviewed by the team and may be removed if it breaks our Platform"
+" Rules"
+msgstr ""
+"Bul komanda ta’repinen ko’rip shıg’ıladı ha’m de eger bul Platforma "
+"Qag’ıdaların buzsa o’shilip taslanadı"
+
+msgid "articles"
+msgstr "maqalalar"
+
+msgid "Search the site..."
+msgstr "Sayt boyınsha izlew..."
+
+msgid "Search results for: "
+msgstr "Izlew natiyjeleri:"
+
+msgid "No search results were found for"
+msgstr "Izlew natiyjeleri tabılmadi"
+
+msgid "Username"
+msgstr "Paydalanıwshı atı"
+
+msgid "Create your account"
+msgstr "Akkauntın’izdı jaratın’"
+
+msgid "Forgot PIN"
+msgstr "PINdı umıtıp qaldım"
+
+msgid "Cancel"
+msgstr "Biykarlaw"
+
+msgid "Hey, %(username)s"
+msgstr "Ey, %(username)s"
+
+msgid "Change Digital Pin"
+msgstr "Sanlı Pindi o’zgertiw"
+
+msgid "Personal Details"
+msgstr "Jeke mag’lumatlar"
+
+msgid "Save changes"
+msgstr "O’zgerislerdi saqlaw"
+
+msgid "Reset PIN"
+msgstr "PINdi qa’lpine keltiriw"
+
+msgid "Your PIN has been changed successfully."
+msgstr "Sizdin’ PIN tabıslı turde o’zgertildi."
+
+msgid "I accept the Terms and Conditions."
+msgstr "Men Qag’ıydalar ha’m Sha’tlerdi qabıllayman."
+
+msgid "You have read %(read)s out of %(total)s"
+msgstr "Siz %(read)s dan %(total)s in oqıp shıqtın’ız"
+
+msgid "%(counter)s of %(total)s questions"
+msgstr "Sorawdın’ %(counter)s dan %(total)s i"
+
+msgid "Select one"
+msgstr "Birin tan’lan’"
+
+msgid "Optional"
+msgstr "Qosımsha (ma’jburiy emes)"
+
+msgid "No limit"
+msgstr "Sheklew joq"
+
+msgid "Go to homepage"
+msgstr "Bas betke o’tiw"
+
+msgid "You have already completed this survey."
+msgstr "Siz bul sorawnamanı tamamladın’ız."
+
+msgid "Check all that apply"
+msgstr "Barlıg’ın teksenin’"
+
+msgid "Your results!"
+msgstr "Sizdin’ na’tiyjen’iz!"
+
+msgid "Replay Quiz"
+msgstr "Viktorinag’a qaytıw"
+
+msgid "Incorrect"
+msgstr "Nadurıs"
+
+msgid "Correct"
+msgstr "Durıs"
+
+msgid "Your answer"
+msgstr "Sizdin` juwabın`ız"
+
+msgid "Leave comment"
+msgstr "Komment qaldiriw"
+
+msgid "Reply"
+msgstr "Juwap beriw"
+
+msgid "Page not found"
+msgstr "Bet tabılmadı"
+
+msgid "Sorry, this page could not be found."
+msgstr "Keshiresiz, bul bet tabılıwı mu’mkin bolmadı."
+
+msgid "Internal server error"
+msgstr "Ishki qa’telik"
+
+msgid "4-digit PIN"
+msgstr "4 sanliq pin jaratın’"
+
+msgid "Confirm new 4-digit PIN"
+msgstr "PINdi tastıyıqlan’"
+
+msgid "Old 4-digit PIN"
+msgstr "Eski Parol"
+
+msgid "New 4-digit PIN"
+msgstr "4 sanliq pin jaratın’"
+
+msgid "1 result"
+msgid_plural "%(counter)s results"
+msgstr[0] "Ba’rshe 1 na’tiyje"
+msgstr[1] "Ba’rshe %(counter)s na’tiyje"
+
+msgid "Correct answer"
+msgstr "Durıs"
+
+msgid "This field is required."
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "Remove this comment?"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "This comment has been removed."
+msgstr ""
+
+msgid "moderator"
+msgstr ""
+
+msgid "sections"
+msgstr ""
+
+msgid "Check if applies"
+msgstr ""
+
+msgid "New comments have been disabled for this page."
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid ""
+"You are leaving the <b>Internet of Good Things</b> to visit an external "
+"website and standard data charges by your network provider might apply"
+msgstr ""
+
+msgid "Continue to external site"
+msgstr ""
+
+msgid "Log out"
+msgstr ""
+
+msgid "Reported by %(count)s user"
+msgstr ""
+
+msgid "Reported by %(count)s users"
+msgstr ""
+
+msgid "section"
+msgstr ""
+
+msgid "article"
+msgstr ""
+
+msgid "Remember me"
+msgstr ""
+
+msgid "You have signed out."
+msgstr ""
+
+msgid ""
+"Enter a valid username. This value may contain only letters, numbers, and "
+"@/./+/-/_ characters."
+msgstr ""
+
+msgid "You must type the same password each time."
+msgstr ""
+
+msgid "This password is too short. It must contain at least 4 characters."
+msgstr ""
+
+msgid "Please type your current password."
+msgstr ""
+
+msgid "Password successfully changed."
+msgstr ""
+
+msgid "Enter a valid date/time."
+msgstr ""
+
+msgid "Enter a valid date."
+msgstr ""
+
+msgid "Enter a valid URL."
+msgstr ""
+
+msgid "Enter a valid email address."
+msgstr ""
+
+msgid "Enter a valid integer."
+msgstr ""
+
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+msgid "Your comment"
+msgstr ""
+
+msgid "Are you sure you want to log out?"
+msgstr ""
+
+msgid "Your browser does not support video playback."
+msgstr ""
+
+msgid "Your browser does not support audio playback."
+msgstr ""
+
+msgid "Don't display my username next to my comment"
+msgstr ""
+
+msgid "Anonymous"
+msgstr ""
+
+msgid "Report this comment?"
+msgstr ""
+
+msgid "Display name"
+msgstr ""

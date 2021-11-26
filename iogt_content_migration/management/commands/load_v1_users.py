@@ -10,6 +10,7 @@ from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
 from django.core.management import BaseCommand
 from django.core.serializers.json import DjangoJSONEncoder
+from django.db.models import Q
 from django_comments.models import CommentFlag
 from django_comments_xtd.models import XtdComment
 from pip._vendor.distlib.compat import raw_input
@@ -196,19 +197,21 @@ class Command(BaseCommand):
         colliding_usernames = [row['lower'] for row in cur]
         self.post_migration_report_messages['colliding_users_in_v1'].append(','.join(colliding_usernames))
 
-        sql = f'select lower(alias), count(*) ' \
-              f'from profiles_userprofile ' \
-              f'where alias is not null ' \
-              f'group by lower(alias) ' \
-              f'having count(*) > 1'
+        sql = f"select lower(alias), count(*) " \
+              f"from profiles_userprofile " \
+              f"where (alias is not null or alias != '') " \
+              f"group by lower(alias) " \
+              f"having count(*) > 1"
         cur = self.db_query(sql)
-
         colliding_display_names = [row['lower'] for row in cur]
+        cur.close()
         self.post_migration_report_messages['colliding_display_names_in_v1'].append(','.join(colliding_display_names))
+
 
         sql = f'select * ' \
               f'from auth_user au, profiles_userprofile pup ' \
-              f'where au.id = pup.user_id'
+              f'where au.id = pup.user_id ' \
+              f'order by au.date_joined'
         cur = self.db_query(sql)
 
         renamed_users = []
@@ -226,19 +229,31 @@ class Command(BaseCommand):
                 'is_staff': row['is_staff'],
                 'is_active': row['is_active'],
                 'date_joined': row['date_joined'],
-                'display_name': row['alias'] or row['username'],
+                'display_name': row['alias'],
                 'has_filled_registration_survey': True,
             }
 
             migrated_user = V1ToV2ObjectMap.get_v2_obj(get_user_model(), v1_user_id)
 
             if not migrated_user:
-                if get_user_model().objects.filter(username=row['username']).exists():
+                if get_user_model().objects.filter(username__iexact=row['username']).exists():
                     existing_user = get_user_model().objects.get(username=row['username'])
                     modified_username = f'{existing_user}_v2'
                     renamed_users.append(f'{existing_user} -> {modified_username}')
                     existing_user.username = modified_username
                     existing_user.save()
+
+                is_user_display_name_colliding = False
+
+                display_name_matched = get_user_model().objects.filter(
+                    Q(Q(display_name__iexact=row['alias']) | Q(username__iexact=row['alias']))
+                ).exists()
+                username_matched = get_user_model().objects.filter(
+                    Q(Q(display_name__iexact=row['username']) | Q(username__iexact=row['username']))
+                ).exists()
+
+                if (row['alias'] and display_name_matched) or (not row['alias'] and username_matched):
+                    is_user_display_name_colliding = True
 
                 user = get_user_model().objects.create(**user_data)
                 V1ToV2ObjectMap.create_map(user, v1_user_id)
@@ -252,6 +267,10 @@ class Command(BaseCommand):
                 user.groups.clear()
                 for row_ in user_groups_cursor:
                     group = Group.objects.get(name=row_['name'])
+                    group.user_set.add(user)
+
+                if is_user_display_name_colliding:
+                    group = Group.objects.get(name='Colliding Display Names')
                     group.user_set.add(user)
 
                 user_groups_cursor.close()
@@ -268,6 +287,8 @@ class Command(BaseCommand):
         for row in cur:
             group, __ = Group.objects.get_or_create(name=row['name'])
             V1ToV2ObjectMap.create_map(group, row['id'])
+
+        Group.objects.get_or_create(name='Colliding Display Names')
 
         self.stdout.write(self.style.SUCCESS('Completed User Groups Migration'))
 

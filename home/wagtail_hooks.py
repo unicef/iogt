@@ -125,7 +125,7 @@ class LimitedTranslatableStringsFilter(SimpleListFilter):
         )
 
     def queryset(self, request, queryset):
-        if self.value() in ['yes', None]:
+        if self.value() in ['yes']:
             translatable_string_filter = Q()
             for translatable_string in translatable_strings:
                 translatable_string_filter |= Q(original__iexact=translatable_string)

@@ -104,7 +104,8 @@ class Command(BaseCommand):
             body=[('paragraph',
                    RichText('Footer1 paragraph1'))],
             owner=owner,
-            first_published_at=datetime.now(timezone.utc)
+            first_published_at=datetime.now(timezone.utc),
+            commenting_status=CommentStatus.OPEN,
         )
         footer_index_page.add_child(instance=footer)
 

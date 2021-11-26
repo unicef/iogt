@@ -83,6 +83,8 @@ class Command(BaseCommand):
         self.media_dir = options.get('media_dir')
         self.v1_domains_list = options.get('v1_domains')
         self.sort = options.get('sort')
+        self.v2_domain = options.get('v2_domain')
+        self.v2_site_port = options.get('v2_site_port')
 
         self.collection_map = {}
         self.document_map = {}

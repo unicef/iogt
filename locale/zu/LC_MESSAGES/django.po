@@ -12,4 +12,310 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Laguage: Zulu\n"
+
+msgid "POLL"
+msgstr "UKUVOTA"
+
+msgid "SURVEY"
+msgstr "IZINHLOLOVO"
+
+msgid "QUIZ"
+msgstr "IMIBUZO"
+
+msgid "quiz"
+msgstr "imibuzo"
+
+msgid "quizzes"
+msgstr "imibuzo"
+
+msgid "Log in to participate"
+msgstr "Ngena ukuze ubambe iqhaza"
+
+msgid "Log in / Create account"
+msgstr "Ngena wenze i-akhawunti"
+
+msgid "© The Internet of Good Things"
+msgstr "© The Internet of Good Things"
+
+msgid "Profile"
+msgstr "Iphrofayili"
+
+msgid "Chat"
+msgstr "Ukuxoxa"
+
+msgid "More"
+msgstr "Okuningi"
+
+msgid "Log in"
+msgstr "Ngena"
+
+msgid "Back"
+msgstr "Emumva"
+
+msgid "BACK"
+msgstr "EMUMVA"
+
+msgid "Previous"
+msgstr "Okwedlule"
+
+msgid "Next"
+msgstr "Okulandelayo"
+
+msgid "Comments"
+msgstr "Imibono"
+
+msgid "Please log in or create your account"
+msgstr "Cela ungene noma wenze i-akhawunti yakho"
+
+msgid "Report"
+msgstr "Bika"
+
+msgid "Related Articles"
+msgstr "Izindatshana ezihlobene"
+
+msgid "This comment has been reported."
+msgstr "Lokhu kuphawula sekubikiwe."
+
+msgid ""
+"It will be reviewed by the team and may be removed if it breaks our Platform"
+" Rules"
+msgstr ""
+"Izobuyekezwa yithimba futhi ingasuswa uma yephuma imithetho yepulatifomu "
+"yethu"
+
+msgid "articles"
+msgstr "izindatshana"
+
+msgid "Search the site..."
+msgstr "Cinga kwisayithi..."
+
+msgid "Search results for: "
+msgstr "Cinga imiphumela ye:"
+
+msgid "No search results were found for"
+msgstr "Ayikho imiphumela yokucinga etholakele"
+
+msgid "Username"
+msgstr "Igama lomsebenzisi"
+
+msgid "Create your account"
+msgstr "Yenza i-akhawunti yakho"
+
+msgid "Forgot PIN"
+msgstr "Ukhohlwe iPhini"
+
+msgid "Cancel"
+msgstr "Khansela"
+
+msgid "Hey, %(username)s"
+msgstr "Sawubona, %(username)s"
+
+msgid "Change Digital Pin"
+msgstr "Shintsha iPhini yeDijithali"
+
+msgid "Personal Details"
+msgstr "Imininingwane yomuntu"
+
+msgid "Save changes"
+msgstr "Gcina izinguquko"
+
+msgid "Reset PIN"
+msgstr "Setha kabusha iPhini"
+
+msgid "Your PIN has been changed successfully."
+msgstr "IPhini yakho isishintshiwe ngempumelelo."
+
+msgid "I accept the Terms and Conditions."
+msgstr "Ngiyayamukela Imigomo Nemibhandela."
+
+msgid "You have read %(read)s out of %(total)s"
+msgstr "Usufunde i-%(read)s koku %(total)s"
+
+msgid "%(counter)s of %(total)s questions"
+msgstr "Imibuzo engu %(counter)s kwengu %(total)s"
+
+msgid "Select one"
+msgstr "Khetha okukodwa"
+
+msgid "Optional"
+msgstr "Ongakukhetha"
+
+msgid "No limit"
+msgstr "Akunamkhawulo"
+
+msgid "Go to homepage"
+msgstr "Iya ekhasini eliyisiqalo"
+
+msgid "You have already completed this survey."
+msgstr "Usuyiqedile le nhlolovo."
+
+msgid "Check all that apply"
+msgstr "Hlola konke okusebenzayo"
+
+msgid "Your results!"
+msgstr "Imiphumela yakho!"
+
+msgid "Replay Quiz"
+msgstr "Phindudlale imibuzo"
+
+msgid "Incorrect"
+msgstr "akulungile"
+
+msgid "Correct"
+msgstr "kulungile"
+
+msgid "Your answer"
+msgstr "Impendulo yakho"
+
+msgid "Leave comment"
+msgstr "Shiya isiphawulo"
+
+msgid "Reply"
+msgstr "Phendula"
+
+msgid "Page not found"
+msgstr "Ikhasi alitholakali"
+
+msgid "Sorry, this page could not be found."
+msgstr "Siyaxolisa, lelikhasi alitholakalanga."
+
+msgid "Internal server error"
+msgstr "Iphutha leseva engaphakathi"
+
+msgid "4-digit PIN"
+msgstr "Yenza iphini eyezinamba ezingu-4"
+
+msgid "Confirm new 4-digit PIN"
+msgstr "Qinisekisa iPhini"
+
+msgid "Old 4-digit PIN"
+msgstr "IPhasiwedi endala"
+
+msgid "New 4-digit PIN"
+msgstr "Yenza iphini eyezinamba ezingu-4"
+
+msgid "1 result"
+msgid_plural "%(counter)s results"
+msgstr[0] "Wonke 1 umphumela"
+msgstr[1] "Wonke %(counter)s umphumela"
+
+msgid "Correct answer"
+msgstr "kulungile"
+
+msgid "This field is required."
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "Remove this comment?"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "This comment has been removed."
+msgstr ""
+
+msgid "moderator"
+msgstr ""
+
+msgid "sections"
+msgstr ""
+
+msgid "Check if applies"
+msgstr ""
+
+msgid "New comments have been disabled for this page."
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid ""
+"You are leaving the <b>Internet of Good Things</b> to visit an external "
+"website and standard data charges by your network provider might apply"
+msgstr ""
+
+msgid "Continue to external site"
+msgstr ""
+
+msgid "Log out"
+msgstr ""
+
+msgid "Reported by %(count)s user"
+msgstr ""
+
+msgid "Reported by %(count)s users"
+msgstr ""
+
+msgid "section"
+msgstr ""
+
+msgid "article"
+msgstr ""
+
+msgid "Remember me"
+msgstr ""
+
+msgid "You have signed out."
+msgstr ""
+
+msgid ""
+"Enter a valid username. This value may contain only letters, numbers, and "
+"@/./+/-/_ characters."
+msgstr ""
+
+msgid "You must type the same password each time."
+msgstr ""
+
+msgid "This password is too short. It must contain at least 4 characters."
+msgstr ""
+
+msgid "Please type your current password."
+msgstr ""
+
+msgid "Password successfully changed."
+msgstr ""
+
+msgid "Enter a valid date/time."
+msgstr ""
+
+msgid "Enter a valid date."
+msgstr ""
+
+msgid "Enter a valid URL."
+msgstr ""
+
+msgid "Enter a valid email address."
+msgstr ""
+
+msgid "Enter a valid integer."
+msgstr ""
+
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+msgid "Your comment"
+msgstr ""
+
+msgid "Are you sure you want to log out?"
+msgstr ""
+
+msgid "Your browser does not support video playback."
+msgstr ""
+
+msgid "Your browser does not support audio playback."
+msgstr ""
+
+msgid "Don't display my username next to my comment"
+msgstr ""
+
+msgid "Anonymous"
+msgstr ""
+
+msgid "Report this comment?"
+msgstr ""
+
+msgid "Display name"
+msgstr ""

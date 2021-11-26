@@ -2,10 +2,10 @@
 
 {% load i18n %}
 
-{% block title %}{% translate "Log Out" %}{% endblock %}
+{% block title %}{% translate "Log out" %}{% endblock %}
 
 {% block allauth_content %}
-<h1>{% translate "Log Out" %}</h1>
+<h1>{% translate "Log out" %}</h1>
 
 <p>{% translate 'Are you sure you want to log out?' %}</p>
 
@@ -15,7 +15,7 @@
   <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
   {% endif %}
   <button class="cust-btn cust-btn--dark profile-form__btn" type="submit">
-    <span>{% translate 'Log Out' %}</span>
+    <span>{% translate 'Log out' %}</span>
   </button>
 </form>
 

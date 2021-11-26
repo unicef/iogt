@@ -12,4 +12,310 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Laguage: Kurdish\n"
+
+msgid "POLL"
+msgstr "دەنگدانەکان"
+
+msgid "SURVEY"
+msgstr "ڕاپرسییەکان"
+
+msgid "QUIZ"
+msgstr "کویزەکان"
+
+msgid "quiz"
+msgstr "کویزەکان"
+
+msgid "quizzes"
+msgstr "کویزەکان"
+
+msgid "Log in to participate"
+msgstr "بچۆرە ژوورەوە بۆ بەشداری کردن"
+
+msgid "Log in / Create account"
+msgstr "بچۆرە ژوورەوە / هەژمارێک درووست بکە"
+
+msgid "© The Internet of Good Things"
+msgstr "© The Internet of Good Things"
+
+msgid "Profile"
+msgstr "پڕۆفایل"
+
+msgid "Chat"
+msgstr "چات"
+
+msgid "More"
+msgstr "زیاتر"
+
+msgid "Log in"
+msgstr "بچۆرە ناوەوە"
+
+msgid "Back"
+msgstr "گەڕانەوە"
+
+msgid "BACK"
+msgstr "گەڕانەوە"
+
+msgid "Previous"
+msgstr "پێشتر"
+
+msgid "Next"
+msgstr "دواتر"
+
+msgid "Comments"
+msgstr "سەرنجدان"
+
+msgid "Please log in or create your account"
+msgstr "تکایە بچۆرە ناوەوە یان هەژمارێک درووست بکە"
+
+msgid "Report"
+msgstr "ڕاپۆرت"
+
+msgid "Related Articles"
+msgstr "نوسراوە پەیوەندیدارەکان"
+
+msgid "This comment has been reported."
+msgstr "ڕاپۆرت لەسەر ئەم سەرنجەت دراوە."
+
+msgid ""
+"It will be reviewed by the team and may be removed if it breaks our Platform"
+" Rules"
+msgstr ""
+"لەلایەن تیمەکەوە پێداچوونەوەی بۆ دەکرێت و لەوانەیە لاببرێت ئەگەر یاساکانی "
+"سەکۆکەمان پێشێل بکات"
+
+msgid "articles"
+msgstr "نوسینەکان"
+
+msgid "Search the site..."
+msgstr "گەڕان بە ناو ماڵپەڕەکەدا"
+
+msgid "Search results for: "
+msgstr "ئەنجامەکانی گەڕان بۆ:"
+
+msgid "No search results were found for"
+msgstr "هیچ ئەنجامێکی گەڕان نەدۆزرایەوە"
+
+msgid "Username"
+msgstr "ناوی بەکارهێنەر"
+
+msgid "Create your account"
+msgstr "هەژماری خۆت درووست بکە"
+
+msgid "Forgot PIN"
+msgstr "ژمارەی ناسینەوەی کەسیت بیرچووەتەوە"
+
+msgid "Cancel"
+msgstr "هەڵوەشاندنەوە"
+
+msgid "Hey, %(username)s"
+msgstr "هێی، %(username)s"
+
+msgid "Change Digital Pin"
+msgstr "ژمارەی ناسینەوەی کەسی بگۆڕە"
+
+msgid "Personal Details"
+msgstr "وردەکارییە کەسییەکان"
+
+msgid "Save changes"
+msgstr "گۆڕانکارییەکان هەڵبگرە"
+
+msgid "Reset PIN"
+msgstr "گەڕانەوەی ژمارەی ناسینەوەی کەسی"
+
+msgid "Your PIN has been changed successfully."
+msgstr "ژمارەی ناسینەوەی کەسیت بەشێوەیەکی سەرکەوتوو گۆڕدرا."
+
+msgid "I accept the Terms and Conditions."
+msgstr "ڕازیم بە مەرجەکان و یاساکان."
+
+msgid "You have read %(read)s out of %(total)s"
+msgstr "%(total)sت لە %(read)s خوێندۆتەوە"
+
+msgid "%(counter)s of %(total)s questions"
+msgstr "%(total)sت لە %(counter)s پرسیار"
+
+msgid "Select one"
+msgstr "یەک دانە هەڵبژێرە"
+
+msgid "Optional"
+msgstr "ئارەزوومەندانە"
+
+msgid "No limit"
+msgstr "سنووردار نییە"
+
+msgid "Go to homepage"
+msgstr "بڕۆ بۆ پەڕەی سەرەکی"
+
+msgid "You have already completed this survey."
+msgstr "تۆ پێشتر ئەم ڕاپرسییەت تەواوکردووە"
+
+msgid "Check all that apply"
+msgstr "لە هەموو ئەوانە دڵنیابەرەوە کە جێبەجێدەکرێن"
+
+msgid "Your results!"
+msgstr "ئەنجامەکانت!"
+
+msgid "Replay Quiz"
+msgstr "وەڵامدانەوەی کویز"
+
+msgid "Incorrect"
+msgstr "ڕاست نییە"
+
+msgid "Correct"
+msgstr "ڕاستە"
+
+msgid "Your answer"
+msgstr "وەڵامەکەت"
+
+msgid "Leave comment"
+msgstr "سەرنجێک بەجێبێڵە"
+
+msgid "Reply"
+msgstr "وەڵامدانەوە"
+
+msgid "Page not found"
+msgstr "پەڕەکە نەدۆزرایەوە"
+
+msgid "Sorry, this page could not be found."
+msgstr "ببورە، نەتوانرا ئەم پەڕەیە بدۆزرێتەوە"
+
+msgid "Internal server error"
+msgstr "هەڵەی ناوخۆی سێرڤەر"
+
+msgid "4-digit PIN"
+msgstr "کۆدی ٤ ژمارەیی"
+
+msgid "Confirm new 4-digit PIN"
+msgstr "ژمارەی ناسینەوەی کەسی دووپات بکەرەوە"
+
+msgid "Old 4-digit PIN"
+msgstr "وشەی تێپەڕی کۆن"
+
+msgid "New 4-digit PIN"
+msgstr "ژمارەی ناسینەوەی کەسی ٤ ڕەنووسی درووست بکە"
+
+msgid "1 result"
+msgid_plural "%(counter)s results"
+msgstr[0] "هەموو ئەنجامە 1 ەکان"
+msgstr[1] "هەموو ئەنجامە %(counter)s ەکان"
+
+msgid "Correct answer"
+msgstr "ڕاستە"
+
+msgid "This field is required."
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "Remove this comment?"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "This comment has been removed."
+msgstr ""
+
+msgid "moderator"
+msgstr ""
+
+msgid "sections"
+msgstr ""
+
+msgid "Check if applies"
+msgstr ""
+
+msgid "New comments have been disabled for this page."
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid ""
+"You are leaving the <b>Internet of Good Things</b> to visit an external "
+"website and standard data charges by your network provider might apply"
+msgstr ""
+
+msgid "Continue to external site"
+msgstr ""
+
+msgid "Log out"
+msgstr ""
+
+msgid "Reported by %(count)s user"
+msgstr ""
+
+msgid "Reported by %(count)s users"
+msgstr ""
+
+msgid "section"
+msgstr ""
+
+msgid "article"
+msgstr ""
+
+msgid "Remember me"
+msgstr ""
+
+msgid "You have signed out."
+msgstr ""
+
+msgid ""
+"Enter a valid username. This value may contain only letters, numbers, and "
+"@/./+/-/_ characters."
+msgstr ""
+
+msgid "You must type the same password each time."
+msgstr ""
+
+msgid "This password is too short. It must contain at least 4 characters."
+msgstr ""
+
+msgid "Please type your current password."
+msgstr ""
+
+msgid "Password successfully changed."
+msgstr ""
+
+msgid "Enter a valid date/time."
+msgstr ""
+
+msgid "Enter a valid date."
+msgstr ""
+
+msgid "Enter a valid URL."
+msgstr ""
+
+msgid "Enter a valid email address."
+msgstr ""
+
+msgid "Enter a valid integer."
+msgstr ""
+
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+msgid "Your comment"
+msgstr ""
+
+msgid "Are you sure you want to log out?"
+msgstr ""
+
+msgid "Your browser does not support video playback."
+msgstr ""
+
+msgid "Your browser does not support audio playback."
+msgstr ""
+
+msgid "Don't display my username next to my comment"
+msgstr ""
+
+msgid "Anonymous"
+msgstr ""
+
+msgid "Report this comment?"
+msgstr ""
+
+msgid "Display name"
+msgstr ""
