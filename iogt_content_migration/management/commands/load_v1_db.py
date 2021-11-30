@@ -440,6 +440,7 @@ class Command(BaseCommand):
                     translated_section.seo_title = row['seo_title']
                     translated_section.font_color = self.get_color_hex(row['extra_style_hints']) or section.font_color
                     translated_section.larger_image_for_top_page_in_list_as_in_v1 = True
+                    translated_section.latest_revision_created_at = row['latest_revision_created_at']
                     translated_section.save()
                     content_type = self.find_content_type_id('core', 'sectionpage')
                     tags = self.find_tags(content_type, row['page_ptr_id'])
@@ -485,6 +486,7 @@ class Command(BaseCommand):
             seo_title=row['seo_title'],
             font_color=self.get_color_hex(row['extra_style_hints']),
             larger_image_for_top_page_in_list_as_in_v1=True,
+            latest_revision_created_at=row['latest_revision_created_at'],
         )
         section.save()
         content_type = self.find_content_type_id('core', 'sectionpage')
@@ -552,6 +554,7 @@ class Command(BaseCommand):
                     translated_article.commenting_status = commenting_status
                     translated_article.commenting_starts_at = commenting_open_time
                     translated_article.commenting_ends_at = commenting_close_time
+                    translated_article.latest_revision_created_at = row['latest_revision_created_at']
                     translated_article.save()
 
                     content_type = self.find_content_type_id('core', 'articlepage')
@@ -601,6 +604,7 @@ class Command(BaseCommand):
             search_description=row['search_description'],
             seo_title=row['seo_title'],
             index_page_description=row['subtitle'],
+            latest_revision_created_at=row['latest_revision_created_at'],
         )
         try:
             article.save()
