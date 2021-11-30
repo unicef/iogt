@@ -28,52 +28,19 @@ def render_previous_next_buttons(page):
 
 
 @register.inclusion_tag('home/tags/footer.html', takes_context=True)
-def footer(context):
+def render_footer(context):
     return {
-        'footer_pages': FooterIndexPage.get_active_footers(),
+        'pages': FooterIndexPage.get_active_footers(),
         'request': context['request'],
     }
 
 
 @register.inclusion_tag('home/tags/top_level_sections.html', takes_context=True)
-def top_level_sections(context):
+def render_top_level_sections(context):
     return {
-        'top_level_sections': SectionIndexPage.get_top_level_sections(),
+        'pages': SectionIndexPage.get_top_level_sections(),
         'request': context['request'],
     }
-
-
-@register.inclusion_tag('home/tags/banners_list.html')
-def render_banners_list(banners):
-    return {'banners': banners}
-
-
-@register.inclusion_tag('home/tags/articles_list.html', takes_context=True)
-def render_articles_list(context, articles):
-    context.update({
-        'articles': articles,
-    })
-    return context
-
-
-@register.inclusion_tag('home/tags/featured_content_list.html')
-def render_featured_content_list(featured_content):
-    return {'featured_content_items': featured_content}
-
-
-@register.inclusion_tag('home/tags/sub_sections.html')
-def render_sub_sections_list(sub_sections):
-    return {'sub_sections': sub_sections}
-
-
-@register.inclusion_tag('home/tags/polls.html')
-def render_polls_list(polls):
-    return {'polls': polls}
-
-
-@register.inclusion_tag('home/tags/questionnaire.html')
-def render_questionnaire_list(questionnaire):
-    return {'questionnaire': questionnaire}
 
 
 @register.inclusion_tag('home/tags/section_progress.html')
@@ -84,21 +51,12 @@ def render_user_progress(user_progress, show_count=True):
     }
 
 
-@register.inclusion_tag('home/tags/is_completed.html', takes_context=True)
-def render_is_content_completed(context, content):
-    content = content.specific
-    if isinstance(content, (Section, Article)):
+@register.inclusion_tag('home/tags/is_complete.html', takes_context=True)
+def render_is_complete(context, page):
+    if isinstance(page, (Section, Article)):
         context.update({
-            'is_completed': content.is_completed(context['request'])
+            'is_complete': page.is_complete(context['request'])
         })
-    return context
-
-
-@register.inclusion_tag('home/tags/sub_sections.html', takes_context=True)
-def render_sub_sections_list(context, sub_sections):
-    context.update({
-        'sub_sections': sub_sections,
-    })
     return context
 
 
@@ -134,6 +92,20 @@ def get_menu_icon(menu_item):
         return menu_item.link_page.specific.icon.url
 
     return ''
+
+
+@register.simple_tag
+def is_first_content(page, value):
+    is_first_content = False
+    if value == 0 and page.get_parent().specific.larger_image_for_top_page_in_list_as_in_v1:
+        is_first_content = True
+
+    return is_first_content
+
+
+@register.simple_tag
+def get_page(page):
+    return page.get_page()
 
 
 @register.inclusion_tag('wagtailadmin/shared/field_as_li.html')

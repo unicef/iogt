@@ -6,10 +6,6 @@
 {% get_language_info_list for LANGUAGES as languages %}
 {% get_current_language as LANGUAGE_CODE %}
 
-{% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/article/article.css' %}">
-{% endblock extra_css %}
-
 {% block content %}
     <article class='article'>
         {% image page.lead_image width-320 class='article__lead-img-featured' %}
@@ -19,8 +15,6 @@
         <section class='article__content'>
             <h1>{{ page.title }}</h1>
             {% include_block page.body %}
-            {% render_polls_list polls %}
-            {% render_surveys_list surveys %}
             <section class='article__navigation'>
                 {% render_previous_next_buttons page %}
             </section>
@@ -60,19 +54,9 @@
     {% endif %}
 
     <section class='related-articles'>
-        {% if page.recommended_articles.count %}
+        {% if recommended_articles %}
             <h3>{% translate "Related Articles" %}</h3>
-            <ul>
-                {% for recommended_article_model in page.recommended_articles.all %}
-                    <li>
-                        <a href="{% pageurl recommended_article_model.article %}">
-                            <p> {{ recommended_article_model.article.title }}</p>
-                            {% image recommended_article_model.article.lead_image width-75 class='related-articles__img--xs' %}
-                            {% image recommended_article_model.article.lead_image original class='related-articles__img--sm' %}
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
+            {% include 'home/tags/articles_list.html' with pages=recommended_articles %}
         {% endif %}
     </section>
 {% endblock content %}

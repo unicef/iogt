@@ -1,14 +1,19 @@
-{% load static wagtailuserbar home_tags sass_tags wagtailsettings_tags menu_tags generic_components i18n wagtailimages_tags%}
+{% load static wagtailuserbar home_tags sass_tags wagtailsettings_tags menu_tags generic_components i18n wagtailimages_tags %}
 {% get_settings %}
 
 <!--  Commit Hash: {{commit_hash}} -->
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id={{ settings.home.SiteSettings.local_ga_tracking_code }}"></script>
+    <script async
+            src="https://www.googletagmanager.com/gtag/js?id={{ settings.home.SiteSettings.local_ga_tracking_code }}"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){window.dataLayer.push(arguments);}
+
+        function gtag() {
+            window.dataLayer.push(arguments);
+        }
+
         gtag('js', new Date());
         gtag('config', '{{ settings.home.SiteSettings.local_ga_tag_manager }}');
         gtag('config', '{{ settings.home.SiteSettings.global_ga_tag_manager }}');
@@ -27,7 +32,7 @@
             {% endwith %}
         {% endblock %}
     </title>
-{% image settings.home.SiteSettings.favicon width-60 as favicon_img %}
+    {% image settings.home.SiteSettings.favicon width-60 as favicon_img %}
     <link rel="shortcut icon" type="image/jpg" href="{{ favicon_img.url }}"/>
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -36,13 +41,13 @@
 {% image settings.home.SiteSettings.apple_touch_icon width-120 as apple_touch_icon %}
     <link rel="apple-touch-icon" type="image/jpg" href="{{ apple_touch_icon.url }}"/>
 
-        {# Global stylesheets #}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/iogt.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/chatbot.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/header/header.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/footer/footer.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/navbar/navbar.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/global/global.css' %}">
+    {# Global stylesheets #}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/iogt.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/chatbot.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/header/header.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/footer/footer.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/navbar/navbar.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/global/global.css' %}">
 
     {% block extra_css %}
         {# Override this in templates to add extra stylesheets #}
@@ -56,15 +61,15 @@
 <main id="app">
     <div id="content-wrap">
         {% include "header.html" %}
-        <div class="main-wrapper" style="background: {{settings.home.ThemeSettings.global_background_color }}">
+        <div class="main-wrapper" style="background: {{ settings.home.ThemeSettings.global_background_color }}">
             <div class="content-holder">
                 <div class="other-links">
-                    {% footer %}
+                    {% render_footer %}
                 </div>
                 <div class="content">
                     {% include "messages.html" %}
                     {% block content %}{% endblock %}
-                    <p class='footer__copyright'>{% translate "© The Internet of Good Things"%}</p>
+                    <p class='footer__copyright'>{% translate "© The Internet of Good Things" %}</p>
                 </div>
                 {% include "footer.html" %}
             </div>
@@ -87,12 +92,21 @@
         .showOnNonJSDevice {
             display: block !important;
         }
-        </script> 
-        <noscript>
-            <style type="text/css">
-                .cache-banner { display:none; }
-            </style>
-        </noscript>
-        {% block extra_js %}{% endblock %}
-    </body>
+
+        <
+        /
+        script >
+        < noscript >
+        < style type
+
+        =
+        "text/css"
+        >
+        .cache-banner {
+            display: none;
+        }
+    </style>
+</noscript>
+{% block extra_js %}{% endblock %}
+</body>
 </html>

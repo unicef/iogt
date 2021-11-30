@@ -79,14 +79,9 @@ class HomePage(Page):
         check_user_session(request)
         context = super().get_context(request)
         context['banners'] = [
-            home_page_banner.banner_page for home_page_banner in
-            self.home_page_banners.filter(banner_page__live=True)
+            home_page_banner.banner_page.specific
+            for home_page_banner in self.home_page_banners.filter(banner_page__live=True)
         ]
-        context['featured_content'] = [
-            featured_content.content for featured_content in
-            self.featured_content.filter(content__live=True)
-        ]
-        context["footer"] = FooterPage.objects.live()
         return context
 
 
@@ -130,7 +125,7 @@ class SectionIndexPage(Page):
     def get_top_level_sections(cls):
         section_index_page = cls.objects.filter(locale=Locale.get_active()).first()
         if section_index_page:
-            return section_index_page.get_children().live()
+            return section_index_page.get_children().live().specific()
         return cls.objects.none()
 
 
@@ -206,32 +201,18 @@ class Section(Page, PageUtilsMixin, TitleIconMixin):
             'width_': 100 / total_article_count if total_article_count else 0,
         }
 
-    def is_completed(self, request):
+    def is_complete(self, request):
         progress_manager = ProgressManager(request)
-        return progress_manager.is_section_completed(self)
+        return progress_manager.is_section_complete(self)
 
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
-        context['featured_content'] = [
-            featured_content.content for featured_content in
-            self.featured_content.all() if featured_content.content.live
+        context['featured_content_items'] = [
+            featured_content.content.specific
+            for featured_content in self.featured_content.filter(content__live=True)
         ]
-        context['sub_sections'] = self.get_children().live().type(Section)
-
-        articles = self.get_children().live().type(Article)
-        page_link_pages = self.get_children().live().type(PageLinkPage)
-        context['articles'] = [a for a in articles] + [plp.specific.page for plp in page_link_pages]
-
-        survey_page_ids = self.get_children().live().type(Survey).values_list('id', flat=True)
-        context['surveys'] = Survey.objects.filter(pk__in=survey_page_ids)
-
-        poll_page_ids = self.get_children().live().type(Poll).values_list('id', flat=True)
-        context['polls'] = Poll.objects.filter(pk__in=poll_page_ids)
-
-        quiz_page_ids = self.get_children().live().type(Quiz).values_list('id', flat=True)
-        context['quizzes'] = Quiz.objects.filter(pk__in=quiz_page_ids)
-
+        context['children'] = self.get_children().live().specific()
         context['user_progress'] = self.get_user_progress_dict(request)
 
         return context
@@ -336,12 +317,12 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
-        context['breadcrumbs'] = [crumb for crumb in self.get_ancestors() if
-                                  not crumb.is_root()]
-        context['sections'] = self.get_ancestors().type(Section)
+        context['recommended_articles'] = [
+            recommended_article.article.specific
+            for recommended_article in self.recommended_articles.filter(article__live=True)
+        ]
 
         progress_enabled_section = self.get_progress_enabled_section()
-
         if progress_enabled_section:
             context.update({
                 'user_progress': progress_enabled_section.get_user_progress_dict(
@@ -356,9 +337,13 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
                 return block
         return ''
 
-    def is_completed(self, request):
+    def is_complete(self, request):
         progress_manager = ProgressManager(request)
-        return progress_manager.is_article_completed(self)
+        return progress_manager.is_article_complete(self)
+
+    @property
+    def top_level_section(self):
+        return self.get_ancestors().filter(depth=4).first().specific
 
     class Meta:
         abstract = True
@@ -505,7 +490,10 @@ class FooterIndexPage(Page):
 
     @classmethod
     def get_active_footers(cls):
-        return cls.objects.filter(locale=Locale.get_active()).first().get_descendants().live()
+        footer_index_page = cls.objects.filter(locale=Locale.get_active()).first()
+        if footer_index_page:
+            return footer_index_page.get_children().live().specific()
+        return cls.objects.none()
 
     def __str__(self):
         return self.title
@@ -541,7 +529,7 @@ class PageLinkPage(Page, TitleIconMixin):
     ]
 
     def get_page(self):
-        return self.page
+        return self.page.specific if self.page else self.page
 
     def get_icon_url(self):
         if self.icon:
@@ -979,7 +967,6 @@ class ManifestSettings(models.Model):
 
 @register_setting
 class ThemeSettings(BaseSetting):
-
     global_background_color = models.CharField(
         null=True, blank=True, help_text='The background color of the website',
         max_length=8, default='#FFFFFF')
@@ -1001,6 +988,13 @@ class ThemeSettings(BaseSetting):
     section_listing_questionnaire_font_color = models.CharField(
         null=True, blank=True, help_text='The font color of the Questionnaire in section listing as a HEX code',
         max_length=8, default='#444')
+
+    section_card_font_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the sub section as a HEX code',
+        max_length=8, default='#444')
+    section_card_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the sub section as a HEX code',
+        max_length=8, default='#ffffff')
 
     article_card_font_color = models.CharField(
         null=True, blank=True, help_text='The background color of the Embedded Article in Home > Featured Content'
