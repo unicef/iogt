@@ -747,6 +747,7 @@ class Command(BaseCommand):
                     translated_banner.last_published_at = row['last_published_at']
                     translated_banner.search_description = row['search_description']
                     translated_banner.seo_title = row['seo_title']
+                    translated_banner.latest_revision_created_at = row['latest_revision_created_at']
                     translated_banner.save()
                     V1ToV2ObjectMap.create_map(content_object=translated_banner, v1_object_id=row['page_ptr_id'])
 
@@ -775,6 +776,7 @@ class Command(BaseCommand):
             last_published_at=row['last_published_at'],
             search_description=row['search_description'],
             seo_title=row['seo_title'],
+            latest_revision_created_at=row['latest_revision_created_at'],
         )
         banner.save()
         V1ToV2ObjectMap.create_map(content_object=banner, v1_object_id=row['page_ptr_id'])
@@ -841,6 +843,7 @@ class Command(BaseCommand):
                     translated_footer.commenting_status = commenting_status
                     translated_footer.commenting_starts_at = commenting_open_time
                     translated_footer.commenting_ends_at = commenting_close_time
+                    translated_footer.latest_revision_created_at = row['latest_revision_created_at']
                     translated_footer.save()
                     V1ToV2ObjectMap.create_map(content_object=translated_footer, v1_object_id=row['page_ptr_id'])
 
@@ -872,7 +875,8 @@ class Command(BaseCommand):
             seo_title=row['seo_title'],
             commenting_status=commenting_status,
             commenting_starts_at=commenting_open_time,
-            commenting_ends_at=commenting_close_time
+            commenting_ends_at=commenting_close_time,
+            latest_revision_created_at=row['latest_revision_created_at'],
         )
         footer.save()
         V1ToV2ObjectMap.create_map(content_object=footer, v1_object_id=row['page_ptr_id'])
@@ -967,6 +971,7 @@ class Command(BaseCommand):
                     translated_poll.randomise_options = row['randomise_options']
                     translated_poll.allow_anonymous_submissions = False
                     translated_poll.allow_multiple_submissions = False
+                    translated_poll.latest_revision_created_at = row['latest_revision_created_at']
                     translated_poll.save()
                     V1ToV2ObjectMap.create_map(content_object=translated_poll, v1_object_id=row['page_ptr_id'])
 
@@ -1002,6 +1007,7 @@ class Command(BaseCommand):
             randomise_options=row['randomise_options'],
             allow_anonymous_submissions=False,
             allow_multiple_submissions=False,
+            latest_revision_created_at=row['latest_revision_created_at'],
         )
         try:
             poll.save()
@@ -1135,6 +1141,7 @@ class Command(BaseCommand):
                     translated_survey.index_page_description = row['homepage_introduction']
                     translated_survey.index_page_description_line_2 = row['homepage_button_text']
                     translated_survey.terms_and_conditions = self.map_survey_terms_and_conditions(row)
+                    translated_survey.latest_revision_created_at = row['latest_revision_created_at']
                     translated_survey.save()
 
                     if row['submit_text'] and len(row['submit_text']) > 40:
@@ -1179,6 +1186,7 @@ class Command(BaseCommand):
             index_page_description=row['homepage_introduction'],
             index_page_description_line_2=row['homepage_button_text'],
             terms_and_conditions=self.map_survey_terms_and_conditions(row),
+            latest_revision_created_at=row['latest_revision_created_at'],
         )
 
         try:
