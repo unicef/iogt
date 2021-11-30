@@ -171,6 +171,7 @@ class Command(BaseCommand):
         self.migrate_surveys()
         self.migrate_banners()
         self.mark_pages_which_are_not_translated_in_v1_as_draft()
+        self.migrate_page_revisions()
         Page.fix_tree()
         self.mark_empty_sections_as_draft()
         self.fix_articles_body()
@@ -1587,6 +1588,24 @@ class Command(BaseCommand):
         page_ids_to_exclude += self.quiz_index_page.get_translations(inclusive=True).values_list('id', flat=True)
 
         Page.objects.filter(alias_of__isnull=False).exclude(id__in=page_ids_to_exclude).update(live=False)
+
+    def migrate_page_revisions(self):
+        sql = f"select * " \
+              f"from wagtailcore_pagerevision wcpr, wagtailcore_page wcp " \
+              f"where wcpr.page_id = wcp.id"
+        cur = self.db_query(sql)
+        for row in cur:
+            v2_page = self.v1_to_v2_page_map.get(row['page_id'])
+            if v2_page:
+                PageRevision.objects.create(
+                    page=v2_page,
+                    submitted_for_moderation=row['submitted_for_moderation'],
+                    created_at=row['created_at'],
+                    content_json=row['content_json'],
+                    approved_go_live_at=row['approved_go_live_at'],
+
+                )
+        cur.close()
 
     def add_polls_from_polls_index_page_to_home_page_featured_content(self):
         self.poll_index_page.refresh_from_db()
