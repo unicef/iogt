@@ -55,7 +55,7 @@ class CommentableMixin(models.Model):
         commenting_status = self.commenting_status
         if commenting_status == CommentStatus.INHERITED:
             ancestor = self._get_valid_ancestor_for_commenting()
-            commenting_status = ancestor.commenting_status
+            commenting_status = ancestor.commenting_status if ancestor else CommentStatus.DISABLED
 
         return commenting_status in [CommentStatus.OPEN, CommentStatus.CLOSED, CommentStatus.TIMESTAMPED]
 
@@ -69,9 +69,14 @@ class CommentableMixin(models.Model):
 
         if commenting_status == CommentStatus.INHERITED:
             ancestor = self._get_valid_ancestor_for_commenting()
-            commenting_status = ancestor.commenting_status
-            commenting_starts_at = ancestor.commenting_starts_at
-            commenting_ends_at = ancestor.commenting_ends_at
+            if ancestor:
+                commenting_status = ancestor.commenting_status
+                commenting_starts_at = ancestor.commenting_starts_at
+                commenting_ends_at = ancestor.commenting_ends_at
+            else:
+                commenting_status = CommentStatus.DISABLED
+                commenting_starts_at = None
+                commenting_ends_at = None
 
         if commenting_starts_at:
             commenting_still_valid = commenting_starts_at < timezone.now()
