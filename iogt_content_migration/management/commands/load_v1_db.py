@@ -1597,7 +1597,7 @@ class Command(BaseCommand):
         for row in cur:
             v2_page = self.v1_to_v2_page_map.get(row['page_id'])
             if v2_page:
-                PageRevision.objects.create(
+                page_revision = PageRevision.objects.create(
                     page=v2_page,
                     submitted_for_moderation=row['submitted_for_moderation'],
                     created_at=row['created_at'],
@@ -1605,6 +1605,7 @@ class Command(BaseCommand):
                     approved_go_live_at=row['approved_go_live_at'],
 
                 )
+                V1ToV2ObjectMap.create_map(page_revision, row['id'])
         cur.close()
 
     def add_polls_from_polls_index_page_to_home_page_featured_content(self):
