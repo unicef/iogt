@@ -40,10 +40,24 @@ class CommentableMixin(models.Model):
 
     ]
 
+    def _get_valid_ancestor_for_commenting(self):
+        from home.models import Section
+
+        ancestors = self.get_ancestors().type(Section).specific().order_by('-path')
+        for ancestor in ancestors:
+            if ancestor.commenting_status in [
+                CommentStatus.OPEN, CommentStatus.CLOSED, CommentStatus.DISABLED, CommentStatus.TIMESTAMPED]:
+                return ancestor
+
     def should_show_comments_list(self):
-        return self.commenting_status in [
-            CommentStatus.OPEN, CommentStatus.CLOSED, CommentStatus.TIMESTAMPED, CommentStatus.INHERITED
-        ]
+        from home.models import Section
+
+        commenting_status = self.commenting_status
+        if commenting_status == CommentStatus.INHERITED:
+            ancestor = self._get_valid_ancestor_for_commenting()
+            commenting_status = ancestor.commenting_status
+
+        return commenting_status in [CommentStatus.OPEN, CommentStatus.CLOSED, CommentStatus.TIMESTAMPED]
 
     def should_show_new_comment_box(self):
         from home.models import Section
@@ -54,14 +68,10 @@ class CommentableMixin(models.Model):
         commenting_ends_at = self.commenting_ends_at
 
         if commenting_status == CommentStatus.INHERITED:
-            ancestors = self.get_ancestors().type(Section).specific().order_by('-path')
-            for ancestor in ancestors:
-                if ancestor.commenting_status in [
-                    CommentStatus.OPEN, CommentStatus.CLOSED, CommentStatus.DISABLED, CommentStatus.TIMESTAMPED]:
-                    commenting_status = ancestor.commenting_status
-                    commenting_starts_at = ancestor.commenting_starts_at
-                    commenting_ends_at = ancestor.commenting_ends_at
-                    break
+            ancestor = self._get_valid_ancestor_for_commenting()
+            commenting_status = ancestor.commenting_status
+            commenting_starts_at = ancestor.commenting_starts_at
+            commenting_ends_at = ancestor.commenting_ends_at
 
         if commenting_starts_at:
             commenting_still_valid = commenting_starts_at < timezone.now()
