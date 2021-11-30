@@ -134,7 +134,7 @@ class SectionIndexPage(Page):
         return cls.objects.none()
 
 
-class Section(Page, PageUtilsMixin, TitleIconMixin):
+class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
@@ -185,6 +185,13 @@ class Section(Page, PageUtilsMixin, TitleIconMixin):
     settings_panels = Page.settings_panels + [
         FieldPanel('show_progress_bar')
     ]
+
+    edit_handler = TabbedInterface([
+        ObjectList(content_panels, heading='Content'),
+        ObjectList(promote_panels, heading='Promote'),
+        ObjectList(settings_panels, heading='Settings'),
+        ObjectList(CommentableMixin.comments_panels, heading='Comments')
+    ])
 
     base_form_class = SectionPageForm
 
