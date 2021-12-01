@@ -426,6 +426,8 @@ class Command(BaseCommand):
 
                 translated_section = section.get_translation_or_none(locale)
                 if translated_section:
+                    commenting_status, commenting_open_time, commenting_close_time = self._get_commenting_fields(row)
+
                     translated_section.lead_image = self.image_map.get(row['image_id'])
                     translated_section.title = row['title']
                     translated_section.draft_title = row['draft_title']
@@ -439,6 +441,9 @@ class Command(BaseCommand):
                     translated_section.seo_title = row['seo_title']
                     translated_section.font_color = self.get_color_hex(row['extra_style_hints']) or section.font_color
                     translated_section.larger_image_for_top_page_in_list_as_in_v1 = True
+                    translated_section.commenting_status = commenting_status
+                    translated_section.commenting_starts_at = commenting_open_time
+                    translated_section.commenting_ends_at = commenting_close_time
                     translated_section.save()
                     content_type = self.find_content_type_id('core', 'sectionpage')
                     tags = self.find_tags(content_type, row['page_ptr_id'])
@@ -465,6 +470,8 @@ class Command(BaseCommand):
                 section.save(update_fields=['live'])
 
     def create_section(self, row):
+        commenting_status, commenting_open_time, commenting_close_time = self._get_commenting_fields(row)
+
         section = models.Section(
             lead_image=self.image_map.get(row['image_id']),
             title=row['title'],
@@ -480,6 +487,9 @@ class Command(BaseCommand):
             expire_at=row['expire_at'],
             first_published_at=row['first_published_at'],
             last_published_at=row['last_published_at'],
+            commenting_status=commenting_status,
+            commenting_starts_at=commenting_open_time,
+            commenting_ends_at=commenting_close_time,
             search_description=row['search_description'],
             seo_title=row['seo_title'],
             font_color=self.get_color_hex(row['extra_style_hints']),
@@ -574,7 +584,7 @@ class Command(BaseCommand):
             'T': CommentStatus.TIMESTAMPED
         }
 
-        commenting_status = comments_map[row['commenting_state']] if row['commenting_state'] else CommentStatus.CLOSED
+        commenting_status = comments_map[row['commenting_state']] if row['commenting_state'] else CommentStatus.INHERITED
         return commenting_status, row['commenting_open_time'], row['commenting_close_time']
 
     def create_article(self, row):
