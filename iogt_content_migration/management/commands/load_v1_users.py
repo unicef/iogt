@@ -17,7 +17,7 @@ from pip._vendor.distlib.compat import raw_input
 from wagtail.contrib.forms.utils import get_field_clean_name
 
 from tqdm import tqdm
-from wagtail.core.models import Page, PageViewRestriction
+from wagtail.core.models import Page, PageViewRestriction, PageRevision
 
 from comments.models import CannedResponse
 from home.models import Article, V1ToV2ObjectMap, SiteSettings
@@ -169,6 +169,8 @@ class Command(BaseCommand):
         self.migrate_page_view_restrictions()
 
         self.migrate_registration_survey_submissions()
+
+        self.migrate_page_revision_users()
 
         self.print_post_migration_report()
 
@@ -549,9 +551,6 @@ class Command(BaseCommand):
                     migrated_group = V1ToV2ObjectMap.get_v2_obj(Group, pvr_group['group_id'])
                     PageViewRestriction.groups.add(migrated_group)
 
-
-
-
     def migrate_registration_survey_submissions(self):
         sql = f'select * from profiles_userprofile pup inner join auth_user au on pup.user_id = au.id'
         cur = self.db_query(sql)
@@ -579,6 +578,20 @@ class Command(BaseCommand):
                     )
 
                     V1ToV2ObjectMap.create_map(submission, row['id'], extra='registration')
+
+    def migrate_page_revision_users(self):
+        sql = f"select * " \
+              f"from wagtailcore_pagerevision wcpr"
+        cur = self.db_query(sql)
+        for row in self.with_progress(sql, cur, 'Page revision migration in progress'):
+            v2_page_revision = V1ToV2ObjectMap.get_v2_obj(PageRevision, row['id'])
+            v2_user = V1ToV2ObjectMap.get_v2_obj(get_user_model(), row['user_id'])
+            print('old --> ', row['id'], row['user_id'])
+            print('new --> ', v2_page_revision, v2_user)
+            if v2_page_revision and v2_user:
+                print('new --> ', v2_page_revision.id, v2_user.id)
+                v2_page_revision.user = v2_user
+                v2_page_revision.save()
 
     def print_post_migration_report(self):
         self.stdout.write(self.style.ERROR('====================='))

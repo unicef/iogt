@@ -103,6 +103,7 @@ class Command(BaseCommand):
         self.print_post_migration_report()
 
     def clear(self):
+        PageRevision.objects.all().delete()
         models.OfflineAppPage.objects.all().delete()
         models.MiscellaneousIndexPage.objects.all().delete()
         models.PageLinkPage.objects.all().delete()
@@ -1603,8 +1604,7 @@ class Command(BaseCommand):
 
     def migrate_page_revisions(self):
         sql = f"select * " \
-              f"from wagtailcore_pagerevision wcpr, wagtailcore_page wcp " \
-              f"where wcpr.page_id = wcp.id"
+              f"from wagtailcore_pagerevision wcpr"
         cur = self.db_query(sql)
         for row in cur:
             v2_page = self.v1_to_v2_page_map.get(row['page_id'])
@@ -1615,7 +1615,6 @@ class Command(BaseCommand):
                     created_at=row['created_at'],
                     content_json=row['content_json'],
                     approved_go_live_at=row['approved_go_live_at'],
-
                 )
                 V1ToV2ObjectMap.create_map(page_revision, row['id'])
         cur.close()
