@@ -28,15 +28,15 @@
                         </div>
                     {% endfor %}
                 </div>
-                {% include 'questionnaires/terms_and_conditions.html' %}
+                {% include 'questionnaires/tags/terms_and_conditions.html' %}
                 <button type="submit" class="cust-btn cust-btn--dark {{ page.get_type }}-page__btn">
                     <span>{{ page.submit_button_text }}</span>
                 </button>
             </form>
         {% else %}
-            {% include 'questionnaires/already_completed.html' %}
+            {% include 'questionnaires/tags/already_completed.html' %}
         {% endif %}
     {% else %}
-        {% include 'questionnaires/login_to_participate.html' %}
+        {% include 'questionnaires/tags/login_to_participate.html' %}
     {% endif %}
 </div>

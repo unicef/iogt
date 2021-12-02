@@ -12,6 +12,10 @@ class PageUtilsMixin:
         from .models import Section
         return Section.objects.parent_of(self).type(Section).first()
 
+    @cached_property
+    def get_type(self):
+        return self.__class__.__name__.lower()
+
 
 class TitleIconMixin:
     """

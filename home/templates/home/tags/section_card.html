@@ -1,0 +1,10 @@
+{% load static wagtailcore_tags wagtailimages_tags sass_tags image_tags home_tags %}
+
+<div class="section-card">
+    <a href="{% pageurl page %}" class='sub-section {% if is_first_content %}first-content{% endif %}'>
+        <p>{{ page.title }}</p>
+        <div class="img-holder {% render_is_complete page %}">
+            {% image page.lead_image width-320 class='' %}
+        </div>
+    </a>
+</div>

@@ -1,0 +1,5 @@
+{% load i18n %}
+
+<a href="{% url 'account_login' %}?next={{ request.path }}" class="cust-btn cust-btn--dark survey-page__btn">
+    <span>{% translate "Log in to participate" %}</span>
+</a>

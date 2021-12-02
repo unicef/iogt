@@ -249,10 +249,6 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
 
         return f'{object_type}-{title}_{timestamp}'
 
-    @property
-    def get_type(self):
-        return self.__class__.__name__.lower()
-
     def get_data_fields(self):
         data_fields = [
             ('user', _('User')),
