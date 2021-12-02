@@ -172,7 +172,6 @@ class Command(BaseCommand):
         self.migrate_surveys()
         self.migrate_banners()
         self.mark_pages_which_are_not_translated_in_v1_as_draft()
-        self.migrate_page_revisions()
         Page.fix_tree()
         self.mark_empty_sections_as_draft()
         self.fix_articles_body()
@@ -191,6 +190,7 @@ class Command(BaseCommand):
         self.sort_pages()
         self.populate_registration_survey_translations()
         self.migrate_post_registration_survey()
+        self.migrate_page_revisions()
         self.stop_translations()
 
     def create_home_page(self, root):
@@ -1613,6 +1613,7 @@ class Command(BaseCommand):
         Page.objects.filter(alias_of__isnull=False).exclude(id__in=page_ids_to_exclude).update(live=False)
 
     def migrate_page_revisions(self):
+        PageRevision.objects.all().delete()
         sql = f"select * " \
               f"from wagtailcore_pagerevision wcpr"
         cur = self.db_query(sql)

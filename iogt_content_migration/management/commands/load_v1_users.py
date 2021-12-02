@@ -239,7 +239,7 @@ class Command(BaseCommand):
 
             if not migrated_user:
                 if get_user_model().objects.filter(username__iexact=row['username']).exists():
-                    existing_user = get_user_model().objects.get(username=row['username'])
+                    existing_user = get_user_model().objects.get(username__iexact=row['username'])
                     modified_username = f'{existing_user}_v2'
                     renamed_users.append(f'{existing_user} -> {modified_username}')
                     existing_user.username = modified_username
@@ -586,10 +586,7 @@ class Command(BaseCommand):
         for row in self.with_progress(sql, cur, 'Page revision migration in progress'):
             v2_page_revision = V1ToV2ObjectMap.get_v2_obj(PageRevision, row['id'])
             v2_user = V1ToV2ObjectMap.get_v2_obj(get_user_model(), row['user_id'])
-            print('old --> ', row['id'], row['user_id'])
-            print('new --> ', v2_page_revision, v2_user)
             if v2_page_revision and v2_user:
-                print('new --> ', v2_page_revision.id, v2_user.id)
                 v2_page_revision.user = v2_user
                 v2_page_revision.save()
 
