@@ -1082,3 +1082,17 @@ class SVGToPNGMap(models.Model):
 
     class Meta:
         unique_together = ('svg_path', 'fill_color', 'stroke_color')
+
+
+class V1PageURLToV2PageMap(models.Model):
+    v1_page_url = models.CharField(max_length=255)
+    v2_page = models.ForeignKey(Page, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.v1_page_url} -> {self.v2_page.id}'
+
+    @classmethod
+    def create_map(cls, url, page):
+        obj, __ = cls.objects.get_or_create(v2_page=page, defaults={'v1_page_url': url})
+
+        return obj

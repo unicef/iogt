@@ -19,7 +19,7 @@ from wagtailsvg.models import Svg
 
 import home.models as models
 from comments.models import CommentStatus
-from home.models import V1ToV2ObjectMap
+from home.models import V1ToV2ObjectMap, V1PageURLToV2PageMap
 from questionnaires.models import Poll, PollFormField, Survey, SurveyFormField, Quiz, QuizFormField
 import psycopg2
 import psycopg2.extras
@@ -449,7 +449,9 @@ class Command(BaseCommand):
                     tags = self.find_tags(content_type, row['page_ptr_id'])
                     if tags:
                         translated_section.tags.add(*tags)
+
                     V1ToV2ObjectMap.create_map(content_object=translated_section, v1_object_id=row['page_ptr_id'])
+                    V1PageURLToV2PageMap.create_map(url=row['url_path'], page=translated_section)
 
                     self.v1_to_v2_page_map.update({
                         row['page_ptr_id']: translated_section
@@ -500,7 +502,9 @@ class Command(BaseCommand):
         tags = self.find_tags(content_type, row['page_ptr_id'])
         if tags:
             section.tags.add(*tags)
+
         V1ToV2ObjectMap.create_map(content_object=section, v1_object_id=row['page_ptr_id'])
+        V1PageURLToV2PageMap.create_map(url=row['url_path'], page=section)
 
         self.v1_to_v2_page_map.update({
             row['page_ptr_id']: section
@@ -567,7 +571,9 @@ class Command(BaseCommand):
                     tags = self.find_tags(content_type, row['page_ptr_id'])
                     if tags:
                         translated_article.tags.add(*tags)
+
                     V1ToV2ObjectMap.create_map(content_object=translated_article, v1_object_id=row['page_ptr_id'])
+                    V1PageURLToV2PageMap.create_map(url=row['url_path'], page=translated_article)
 
                     self.v1_to_v2_page_map.update({
                         row['page_ptr_id']: translated_article
@@ -617,7 +623,10 @@ class Command(BaseCommand):
             tags = self.find_tags(content_type, row['page_ptr_id'])
             if tags:
                 article.tags.add(*tags)
+
             V1ToV2ObjectMap.create_map(content_object=article, v1_object_id=row['page_ptr_id'])
+            V1PageURLToV2PageMap.create_map(url=row['url_path'], page=article)
+
             self.v1_to_v2_page_map.update({
                 row['page_ptr_id']: article
             })
@@ -753,7 +762,9 @@ class Command(BaseCommand):
                     translated_banner.search_description = row['search_description']
                     translated_banner.seo_title = row['seo_title']
                     translated_banner.save()
+
                     V1ToV2ObjectMap.create_map(content_object=translated_banner, v1_object_id=row['page_ptr_id'])
+                    V1PageURLToV2PageMap.create_map(url=row['url_path'], page=translated_banner)
 
                     self.v1_to_v2_page_map.update({
                         row['page_ptr_id']: translated_banner
@@ -782,7 +793,10 @@ class Command(BaseCommand):
             seo_title=row['seo_title'],
         )
         banner.save()
+
         V1ToV2ObjectMap.create_map(content_object=banner, v1_object_id=row['page_ptr_id'])
+        V1PageURLToV2PageMap.create_map(url=row['url_path'], page=banner)
+
         self.v1_to_v2_page_map.update({
             row['page_ptr_id']: banner
         })
@@ -847,7 +861,9 @@ class Command(BaseCommand):
                     translated_footer.commenting_starts_at = commenting_open_time
                     translated_footer.commenting_ends_at = commenting_close_time
                     translated_footer.save()
+
                     V1ToV2ObjectMap.create_map(content_object=translated_footer, v1_object_id=row['page_ptr_id'])
+                    V1PageURLToV2PageMap.create_map(url=row['url_path'], page=translated_footer)
 
                     self.v1_to_v2_page_map.update({
                         row['page_ptr_id']: translated_footer
@@ -880,7 +896,10 @@ class Command(BaseCommand):
             commenting_ends_at=commenting_close_time
         )
         footer.save()
+
         V1ToV2ObjectMap.create_map(content_object=footer, v1_object_id=row['page_ptr_id'])
+        V1PageURLToV2PageMap.create_map(url=row['url_path'], page=footer)
+
         self.v1_to_v2_page_map.update({
             row['page_ptr_id']: footer
         })
@@ -973,7 +992,9 @@ class Command(BaseCommand):
                     translated_poll.allow_anonymous_submissions = False
                     translated_poll.allow_multiple_submissions = False
                     translated_poll.save()
+
                     V1ToV2ObjectMap.create_map(content_object=translated_poll, v1_object_id=row['page_ptr_id'])
+                    V1PageURLToV2PageMap.create_map(url=row['url_path'], page=translated_poll)
 
                     self.v1_to_v2_page_map.update({
                         row['page_ptr_id']: translated_poll
@@ -1011,6 +1032,7 @@ class Command(BaseCommand):
         try:
             poll.save()
             V1ToV2ObjectMap.create_map(content_object=poll, v1_object_id=row['page_ptr_id'])
+            V1PageURLToV2PageMap.create_map(url=row['url_path'], page=poll)
         except Exception as e:
             self.post_migration_report_messages['polls'].append(
                 f"Unable to save poll, title={row['title']}"
@@ -1148,6 +1170,7 @@ class Command(BaseCommand):
                         )
 
                     V1ToV2ObjectMap.create_map(content_object=translated_survey, v1_object_id=row['page_ptr_id'])
+                    V1PageURLToV2PageMap.create_map(url=row['url_path'], page=translated_survey)
 
                     self.v1_to_v2_page_map.update({
                         row['page_ptr_id']: translated_survey
@@ -1191,6 +1214,7 @@ class Command(BaseCommand):
             if row['submit_text'] and len(row['submit_text']) > 40:
                 self.stdout.write(f"Truncated survey submit button text, title={row['title']}")
             V1ToV2ObjectMap.create_map(content_object=survey, v1_object_id=row['page_ptr_id'])
+            V1PageURLToV2PageMap.create_map(url=row['url_path'], page=survey)
         except Exception as e:
             self.post_migration_report_messages['surveys'].append(
                 f"Unable to save survey, title={row['title']}"
