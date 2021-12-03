@@ -13,8 +13,9 @@ class CommentForm(BaseCommentForm):
         self.fields['email'].widget = forms.HiddenInput()
 
         canned_responses_choices = [(None, 'Select Canned Response')]
-        canned_responses_choices += ([(canned_response.id, f'{canned_response.header} - {canned_response.text}') for canned_response in
-                                    CannedResponse.objects.all()])
+        for canned_response in CannedResponse.objects.all():
+            text = f"{canned_response.text[:50]}..." if len(canned_response.text) > 50 else canned_response.text
+            canned_responses_choices.append((canned_response.id, f'{canned_response.header} - {text}'))
 
         self.fields['canned_responses'] = forms.ChoiceField(choices=canned_responses_choices, required=False)
         self.fields['canned_responses'].widget.attrs['class'] = 'canned-response-select'
