@@ -430,6 +430,7 @@ class Command(BaseCommand):
 
                     translated_section.lead_image = self.image_map.get(row['image_id'])
                     translated_section.title = row['title']
+                    translated_section.slug = row['slug']
                     translated_section.draft_title = row['draft_title']
                     translated_section.live = row['live']
                     translated_section.locked = row['locked']
@@ -552,6 +553,7 @@ class Command(BaseCommand):
 
                     translated_article.lead_image = self.image_map.get(row['image_id'])
                     translated_article.title = row['title']
+                    translated_article.slug = row['slug']
                     translated_article.draft_title = row['draft_title']
                     translated_article.live = row['live']
                     translated_article.locked = row['locked']
@@ -752,6 +754,7 @@ class Command(BaseCommand):
                 if translated_banner:
                     translated_banner.banner_image = self.image_map.get(row['banner_id'])
                     translated_banner.title = row['title']
+                    translated_banner.slug = row['slug']
                     translated_banner.draft_title = row['draft_title']
                     translated_banner.live = row['live']
                     translated_banner.locked = row['locked']
@@ -848,6 +851,7 @@ class Command(BaseCommand):
 
                     translated_footer.lead_image = self.image_map.get(row['image_id'])
                     translated_footer.title = row['title']
+                    translated_footer.slug = row['slug']
                     translated_footer.draft_title = row['draft_title']
                     translated_footer.live = row['live']
                     translated_footer.locked = row['locked']
@@ -977,6 +981,7 @@ class Command(BaseCommand):
                 translated_poll = poll.get_translation_or_none(locale)
                 if translated_poll:
                     translated_poll.title = row['title']
+                    translated_poll.slug = row['slug']
                     translated_poll.draft_title = row['draft_title']
                     translated_poll.live = row['live']
                     translated_poll.result_as_percentage = row['result_as_percentage']
@@ -1144,6 +1149,7 @@ class Command(BaseCommand):
                 translated_survey = survey.get_translation_or_none(locale)
                 if translated_survey:
                     translated_survey.title = row['title']
+                    translated_survey.slug = row['slug']
                     translated_survey.draft_title = row['draft_title']
                     translated_survey.live = row['live']
                     translated_survey.thank_you_text = self.map_survey_thank_you_text(row)
