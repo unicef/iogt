@@ -11,7 +11,9 @@
                 </p>
             {% endif %}
             <p class="article-title">{{ page.title }}</p>
-            <p class="sm-paragraph">{{ page.index_page_description }}</p>
+            {% if page.index_page_description %}
+                <p class="sm-paragraph">{{ page.index_page_description }}</p>
+            {% endif %}
         </div>
         <div class="img-holder {% render_is_complete page %}">
             {% image page.lead_image original class='' %}
