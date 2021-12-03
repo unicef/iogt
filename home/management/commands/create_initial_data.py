@@ -112,9 +112,6 @@ class Command(BaseCommand):
         miscellaneous_index_page = models.MiscellaneousIndexPage(title='Miscellaneous')
         home.add_child(instance=miscellaneous_index_page)
 
-        # Create RapidPro Bot User
-        management.call_command('sync_rapidpro_bot_user')
-
     def populate_group_permissions(self):
         self.stdout.write('Adding group permissions')
 
@@ -141,3 +138,6 @@ class Command(BaseCommand):
         self.populate_group_permissions()
 
         management.call_command('create_default_site')
+
+        # Create RapidPro Bot User
+        management.call_command('sync_rapidpro_bot_user')
