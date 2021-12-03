@@ -103,6 +103,7 @@ class Command(BaseCommand):
         self.print_post_migration_report()
 
     def clear(self):
+        PageRevision.objects.all().delete()
         models.OfflineAppPage.objects.all().delete()
         models.MiscellaneousIndexPage.objects.all().delete()
         models.PageLinkPage.objects.all().delete()
@@ -189,6 +190,7 @@ class Command(BaseCommand):
         self.sort_pages()
         self.populate_registration_survey_translations()
         self.migrate_post_registration_survey()
+        self.migrate_page_revisions()
         self.stop_translations()
 
     def create_home_page(self, root):
@@ -445,6 +447,7 @@ class Command(BaseCommand):
                     translated_section.commenting_status = commenting_status
                     translated_section.commenting_starts_at = commenting_open_time
                     translated_section.commenting_ends_at = commenting_close_time
+                    translated_section.latest_revision_created_at = row['latest_revision_created_at']
                     translated_section.save()
                     content_type = self.find_content_type_id('core', 'sectionpage')
                     tags = self.find_tags(content_type, row['page_ptr_id'])
@@ -497,6 +500,7 @@ class Command(BaseCommand):
             seo_title=row['seo_title'],
             font_color=self.get_color_hex(row['extra_style_hints']),
             larger_image_for_top_page_in_list_as_in_v1=True,
+            latest_revision_created_at=row['latest_revision_created_at'],
         )
         section.save()
         content_type = self.find_content_type_id('core', 'sectionpage')
@@ -567,6 +571,7 @@ class Command(BaseCommand):
                     translated_article.commenting_status = commenting_status
                     translated_article.commenting_starts_at = commenting_open_time
                     translated_article.commenting_ends_at = commenting_close_time
+                    translated_article.latest_revision_created_at = row['latest_revision_created_at']
                     translated_article.save()
 
                     content_type = self.find_content_type_id('core', 'articlepage')
@@ -618,6 +623,7 @@ class Command(BaseCommand):
             search_description=row['search_description'],
             seo_title=row['seo_title'],
             index_page_description=row['subtitle'],
+            latest_revision_created_at=row['latest_revision_created_at'],
         )
         try:
             article.save()
@@ -764,6 +770,7 @@ class Command(BaseCommand):
                     translated_banner.last_published_at = row['last_published_at']
                     translated_banner.search_description = row['search_description']
                     translated_banner.seo_title = row['seo_title']
+                    translated_banner.latest_revision_created_at = row['latest_revision_created_at']
                     translated_banner.save()
 
                     V1ToV2ObjectMap.create_map(content_object=translated_banner, v1_object_id=row['page_ptr_id'])
@@ -794,6 +801,7 @@ class Command(BaseCommand):
             last_published_at=row['last_published_at'],
             search_description=row['search_description'],
             seo_title=row['seo_title'],
+            latest_revision_created_at=row['latest_revision_created_at'],
         )
         banner.save()
 
@@ -864,6 +872,7 @@ class Command(BaseCommand):
                     translated_footer.commenting_status = commenting_status
                     translated_footer.commenting_starts_at = commenting_open_time
                     translated_footer.commenting_ends_at = commenting_close_time
+                    translated_footer.latest_revision_created_at = row['latest_revision_created_at']
                     translated_footer.save()
 
                     V1ToV2ObjectMap.create_map(content_object=translated_footer, v1_object_id=row['page_ptr_id'])
@@ -897,7 +906,8 @@ class Command(BaseCommand):
             seo_title=row['seo_title'],
             commenting_status=commenting_status,
             commenting_starts_at=commenting_open_time,
-            commenting_ends_at=commenting_close_time
+            commenting_ends_at=commenting_close_time,
+            latest_revision_created_at=row['latest_revision_created_at'],
         )
         footer.save()
 
@@ -996,6 +1006,7 @@ class Command(BaseCommand):
                     translated_poll.randomise_options = row['randomise_options']
                     translated_poll.allow_anonymous_submissions = False
                     translated_poll.allow_multiple_submissions = False
+                    translated_poll.latest_revision_created_at = row['latest_revision_created_at']
                     translated_poll.save()
 
                     V1ToV2ObjectMap.create_map(content_object=translated_poll, v1_object_id=row['page_ptr_id'])
@@ -1033,6 +1044,7 @@ class Command(BaseCommand):
             randomise_options=row['randomise_options'],
             allow_anonymous_submissions=False,
             allow_multiple_submissions=False,
+            latest_revision_created_at=row['latest_revision_created_at'],
         )
         try:
             poll.save()
@@ -1168,6 +1180,7 @@ class Command(BaseCommand):
                     translated_survey.index_page_description = row['homepage_introduction']
                     translated_survey.index_page_description_line_2 = row['homepage_button_text']
                     translated_survey.terms_and_conditions = self.map_survey_terms_and_conditions(row)
+                    translated_survey.latest_revision_created_at = row['latest_revision_created_at']
                     translated_survey.save()
 
                     if row['submit_text'] and len(row['submit_text']) > 40:
@@ -1213,6 +1226,7 @@ class Command(BaseCommand):
             index_page_description=row['homepage_introduction'],
             index_page_description_line_2=row['homepage_button_text'],
             terms_and_conditions=self.map_survey_terms_and_conditions(row),
+            latest_revision_created_at=row['latest_revision_created_at'],
         )
 
         try:
@@ -1627,6 +1641,24 @@ class Command(BaseCommand):
         page_ids_to_exclude += self.quiz_index_page.get_translations(inclusive=True).values_list('id', flat=True)
 
         Page.objects.filter(alias_of__isnull=False).exclude(id__in=page_ids_to_exclude).update(live=False)
+
+    def migrate_page_revisions(self):
+        PageRevision.objects.all().delete()
+        sql = f"select * " \
+              f"from wagtailcore_pagerevision wcpr"
+        cur = self.db_query(sql)
+        for row in cur:
+            v2_page = self.v1_to_v2_page_map.get(row['page_id'])
+            if v2_page:
+                page_revision = PageRevision.objects.create(
+                    page=v2_page,
+                    submitted_for_moderation=row['submitted_for_moderation'],
+                    created_at=row['created_at'],
+                    content_json=row['content_json'],
+                    approved_go_live_at=row['approved_go_live_at'],
+                )
+                V1ToV2ObjectMap.create_map(page_revision, row['id'])
+        cur.close()
 
     def add_polls_from_polls_index_page_to_home_page_featured_content(self):
         self.poll_index_page.refresh_from_db()
