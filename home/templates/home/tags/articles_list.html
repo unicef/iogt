@@ -4,6 +4,6 @@
 
 <section class='related-articles'>
     {% for page in pages %}
-        {% render_article_card page=page background_color=page.top_level_section.background_color font_color=page.top_level_section.font_color %}
+        {% render_article_card page=page %}
     {% endfor %}
 </section>
