@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
+import allauth
+from django.contrib import auth
 from django.utils.translation import gettext_lazy as _
 
 import django.conf.locale
@@ -64,6 +66,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'rest_framework',
     'sass_processor',
+    'translation_manager',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -214,7 +217,7 @@ ACCOUNT_ADAPTER = 'iogt_users.adapters.AccountAdapter'
 
 WAGTAIL_USER_EDIT_FORM = 'iogt_users.forms.WagtailAdminUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'iogt_users.forms.WagtailAdminUserCreateForm'
-WAGTAIL_USER_CUSTOM_FIELDS = ['first_name', 'last_name', 'email', 'terms_accepted']
+WAGTAIL_USER_CUSTOM_FIELDS = ['display_name', 'first_name', 'last_name', 'email', 'terms_accepted']
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
@@ -369,6 +372,8 @@ LOCALE_PATHS = [
     os.path.join(BASE_DIR, "locale"),
 ]
 
+TRANSLATIONS_BASE_DIR = BASE_DIR
+
 # ========= Rapid Pro =================
 RAPIDPRO_BOT_USER_ID = os.getenv('RAPIDPRO_BOT_USER_ID')
 RAPIDPRO_BOT_USER_USERNAME = os.getenv('RAPIDPRO_BOT_USER_USERNAME')
@@ -403,3 +408,7 @@ EXPORT_FILENAME_TIMESTAMP_FORMAT = '%Y-%m-%dT%H%M%S'
 WAGTAILMARKDOWN = {
     'allowed_tags': ['i', 'b'],
 }
+
+TRANSLATIONS_PROJECT_BASE_DIR = BASE_DIR
+
+from iogt.patch import *

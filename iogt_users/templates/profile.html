@@ -1,7 +1,7 @@
 {% extends 'account/base.html' %}
 {% load i18n static image_tags %}
 
-{% block title %}{% translate "My Profile" %}{% endblock %}
+{% block title %}{% translate "Profile" %}{% endblock %}
 
 {% block extra_css %}
     {{ block.super }}
@@ -19,21 +19,6 @@
         </h1>
     {% endif %}
     <div class="profile__btns">
-{#          Commenting user profile edit - See https://github.com/unicef/iogt/issues/409 is resolved #}
-
-{#        <a href="{% url "user_profile_edit" %}" class="icon-btn profile__btn">#}
-{#            <span class="icon-btn__icon">#}
-{#                <img src="{% static "icons/pencil.png" %}" alt="Pencil icon">#}
-{#            </span>#}
-{#            <span class="icon-btn__title">{% translate "Edit my profile" %}</span>#}
-{#        </a>#}
-{#        Commenting the notifications section until functionality is added #}
-{#        <a href="#" class="icon-btn profile__btn">#}
-{#            <span class="icon-btn__icon">#}
-{#                <img src="{% static "icons/bell.png" %}" alt="bell icon">#}
-{#            </span>#}
-{#            <span class="icon-btn__title">{% translate "Notifications" %}</span>#}
-{#        </a>#}
         <a href="{% url 'account_change_password' %}" class="icon-btn profile__btn">
             <span class="icon-btn__icon">
                 <img src="{% static "icons/lock.png" %}" alt="lock icon">
@@ -44,8 +29,6 @@
             <span class="icon-btn__icon">
                 {% static "icons/arrow_icon_left.svg" as logout_url %}
                 {% render_png_from_svg  logout_url attrs='alt="lock icon"'%}
-{#                <img src="{% static "icons/arrow_icon_left.svg" %}"#}
-{#                     alt="lock icon">#}
             </span>
             <span class="icon-btn__title">{% translate "Log out" %}</span>
         </a>

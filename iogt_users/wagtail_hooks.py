@@ -11,12 +11,12 @@ class UsersExportAdmin(ModelAdmin):
     model = get_user_model()
     menu_label = 'Export/Import Users'
     menu_icon = 'user'
-    list_display = ('username', 'date_joined', 'is_staff', 'is_active')
+    list_display = ('username', 'display_name', 'date_joined', 'is_staff', 'is_active')
     list_filter = (GroupsFilter, 'date_joined', 'is_staff', 'is_active')
     form_fields_exclude = ('password', 'last_login', 'is_superuser', 'groups', 'user_permissions')
     search_fields = ('username',)
-    list_export = ('username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active', 'date_joined',
-                   'terms_accepted', 'has_filled_registration_survey', 'registration_survey_response',)
+    list_export = ('username', 'display_name', 'first_name', 'last_name', 'email', 'is_staff', 'is_active',
+                   'date_joined', 'terms_accepted', 'has_filled_registration_survey', 'registration_survey_response',)
     add_to_settings_menu = True
     list_per_page = 20
     menu_order = 601

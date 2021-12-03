@@ -1,9 +1,15 @@
+from django.conf import settings
+from django.contrib import messages
+from django.core.management import call_command
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import TemplateView
+from translation_manager.manager import Manager
+from wagtail.contrib.modeladmin.views import EditView
 
+from iogt.patch import patch_store_to_db
 from .models import ManifestSettings
 
 
@@ -38,9 +44,9 @@ def get_manifest(request):
                 "sizes": f"{manifest.icon_512_512.height}x{manifest.icon_512_512.width}",
             },
             {
-                "src": f"{manifest.icon_196_196.file.url}",
-                "type": f"image/{manifest.icon_196_196.title.split('.')[1]}",
-                "sizes": f"{manifest.icon_196_196.height}x{manifest.icon_196_196.width}",
+                "src": f"{manifest.icon_192_192.file.url}",
+                "type": f"image/{manifest.icon_192_192.title.split('.')[1]}",
+                "sizes": f"{manifest.icon_192_192.height}x{manifest.icon_192_192.width}",
                 "purpose": "any maskable",
             },
         ],
@@ -54,3 +60,24 @@ def get_manifest(request):
 class LogoutRedirectHackView(View):
     def get(self, request):
         return redirect(f'/{request.LANGUAGE_CODE}/')
+
+
+class TranslationEditView(EditView):
+    def post(self, request, *args, **kwargs):
+        super(TranslationEditView, self).post(request, *args, **kwargs)
+        patch_store_to_db()
+
+        manager = Manager()
+        for language, language_name in settings.LANGUAGES:
+            manager.update_po_from_db(lang=language)
+
+        return redirect(request.META['HTTP_REFERER'])
+
+
+class LoadTranslationsFromPOFiles(View):
+    def get(self, request):
+        call_command('reload_po_files')
+
+        messages.success(request, _('The translations have been loaded successfully!'))
+
+        return redirect(request.META['HTTP_REFERER'])

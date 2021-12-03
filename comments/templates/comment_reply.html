@@ -14,7 +14,7 @@
     </header>
     <div class="row nice-padding">
         <h2>Comment </h2>{{ comment.comment }}
-        <h4>User</h4>{{ comment.user.username }}
+        <h4>User</h4>{% if comment.user_name|lower == 'anonymous' %}Anonymous{% else %}{{ comment.user.get_display_name }}{% endif %}
     </div>
     <hr/>
     <div class="row nice-padding">

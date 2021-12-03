@@ -1,12 +1,17 @@
 from abc import ABC
 from urllib.parse import urlparse, urlunparse, urlencode
 
+from django.contrib.admin import SimpleListFilter
 from django.core.exceptions import PermissionDenied
-from django.templatetags.static import static
+from django.db.models import Q
 from django.urls import resolve, Resolver404
 from django.urls import reverse
-from django.utils.html import escape, format_html
+from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
+from translation_manager.models import TranslationEntry
+from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
+from django.templatetags.static import static
+from django.utils.html import format_html
 from wagtail.contrib.redirects.models import Redirect
 from wagtail.core import hooks
 from wagtail.core.models import Page
@@ -15,6 +20,8 @@ from wagtail.core.rich_text import LinkHandler
 
 from home.models import FooterIndexPage, BannerIndexPage, Section, \
     SectionIndexPage
+from home.translatable_strings import translatable_strings
+from home.views import TranslationEditView
 
 
 class ExternalLinkHandler(LinkHandler, ABC):
@@ -31,6 +38,7 @@ class ExternalLinkHandler(LinkHandler, ABC):
         except Resolver404:
             external_link_page = reverse("external-link")
             return f'<a href="{external_link_page}?{urlencode({"next": next_page})}">'
+
 
 @hooks.register("register_rich_text_features")
 def register_external_link(features):
@@ -63,6 +71,8 @@ def rename_forms_menu_item(request, menu_items):
     for item in menu_items:
         if item.name == "forms":
             item.label = _("Form Data")
+        if item.name == 'translations':
+            item.url = f'{TranslationEntryAdmin().url_helper.get_action_url("index")}?limited=yes'
 
 
 @hooks.register('construct_page_chooser_queryset')
@@ -96,6 +106,63 @@ def global_admin_css():
     return format_html('<link rel="stylesheet" href="{}">', static('css/global/admin.css'))
 
 
-Redirect._meta.get_field("old_path").help_text = _(
-    'A relative path to redirect from e.g. /en/youth. '
-    'See https://docs.wagtail.io/en/stable/editor_manual/managing_redirects.html for more details')
+@hooks.register('insert_global_admin_js', order=100)
+def global_admin_js():
+    return format_html(
+        '<script src="{}"></script>',
+        static("js/global/admin.js")
+    )
+
+
+class LimitedTranslatableStringsFilter(SimpleListFilter):
+    title = _('limited translatable strings')
+    parameter_name = 'limited'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('yes', 'Yes'),
+            ('no', 'No'),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() in ['yes']:
+            translatable_string_filter = Q()
+            for translatable_string in translatable_strings:
+                translatable_string_filter |= Q(original__iexact=translatable_string)
+            queryset = queryset.filter(translatable_string_filter)
+
+        return queryset
+
+
+class MissingTranslationsFilter(SimpleListFilter):
+    title = _('missing translations')
+    parameter_name = 'missing'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('yes', 'Yes'),
+            ('no', 'No'),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'yes':
+            queryset = queryset.filter(translation='')
+        if self.value() == 'no':
+            queryset = queryset.exclude(translation='')
+
+        return queryset
+
+
+class TranslationEntryAdmin(ModelAdmin):
+    model = TranslationEntry
+    menu_label = 'Translations'
+    menu_icon = 'edit'
+    list_display = ('original', 'language', 'translation',)
+    list_filter = ('language', LimitedTranslatableStringsFilter, MissingTranslationsFilter)
+    search_fields = ('original', 'translation',)
+    edit_view_class = TranslationEditView
+    index_template_name = 'modeladmin/translation_manager/translationentry/index.html'
+    menu_order = 601
+
+
+modeladmin_register(TranslationEntryAdmin)

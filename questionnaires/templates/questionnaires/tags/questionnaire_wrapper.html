@@ -1,0 +1,10 @@
+{% load generic_components %}
+{% load static wagtailcore_tags i18n questionnaires_tags %}
+
+{% if direct_display %}
+    <div style="padding-bottom: 10px">
+        {% render_questionnaire_form page %}
+    </div>
+{% else %}
+    {% render_questionnaire_card page=page background_color=background_color font_color=font_color %}
+{% endif %}

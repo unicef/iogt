@@ -12,4 +12,311 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Laguage: Tajik\n"
+
+msgid "POLL"
+msgstr "НАЗАРСАНҶИҲО"
+
+msgid "SURVEY"
+msgstr "ПУРСИШҲО"
+
+msgid "QUIZ"
+msgstr "ТЕСТҲОИ КӮТОҲ"
+
+msgid "quiz"
+msgstr "тестҳои кӯтоҳ"
+
+msgid "quizzes"
+msgstr "тестҳои кӯтоҳ"
+
+msgid "Log in to participate"
+msgstr "Барои иштирок кардан вориди система шавед"
+
+msgid "Log in / Create account"
+msgstr "Вориди система шавед/ Сабти ном кунед"
+
+msgid "© The Internet of Good Things"
+msgstr "© The Internet of Good Things"
+
+msgid "Profile"
+msgstr "Профил"
+
+msgid "Chat"
+msgstr "Барои сӯҳбат/Чат"
+
+msgid "More"
+msgstr "Бештар"
+
+msgid "Log in"
+msgstr "Вориди система шавед"
+
+msgid "Back"
+msgstr "Бозгашт"
+
+msgid "BACK"
+msgstr "БОЗГАШТ"
+
+msgid "Previous"
+msgstr "Қаблӣ"
+
+msgid "Next"
+msgstr "Баъдӣ"
+
+msgid "Comments"
+msgstr "Шарҳҳо"
+
+msgid "Please log in or create your account"
+msgstr "Лутфан вориди система шавед ё сабти ном кунед"
+
+msgid "Report"
+msgstr "Гузориш"
+
+msgid "Related Articles"
+msgstr "Матолиби марбут"
+
+msgid "This comment has been reported."
+msgstr "Шарҳи шумо ворид карда шуд."
+
+msgid ""
+"It will be reviewed by the team and may be removed if it breaks our Platform"
+" Rules"
+msgstr ""
+"Шарҳи шумо тавассути гӯрӯҳи кории мо мурур карда мешавад ва агар он бо "
+"қавонини платформаи мо мутобиқат накунад, мумкин аст аз система ҳазф карда "
+"шавад."
+
+msgid "articles"
+msgstr "матолиб"
+
+msgid "Search the site..."
+msgstr "Сайти...ҷустуҷӯ кунед"
+
+msgid "Search results for: "
+msgstr "Натиҷаҳои ҷустуҷӯ барои:"
+
+msgid "No search results were found for"
+msgstr "Ягон натиҷа паёдо нашуд"
+
+msgid "Username"
+msgstr "номи корбар"
+
+msgid "Create your account"
+msgstr "Ҳисоби худро кушоед"
+
+msgid "Forgot PIN"
+msgstr "Пинкодро фаромӯш кардам"
+
+msgid "Cancel"
+msgstr "Лағв кунед"
+
+msgid "Hey, %(username)s"
+msgstr "Салом, %(username)s"
+
+msgid "Change Digital Pin"
+msgstr "Тағйири Пинкоди Рақамӣ"
+
+msgid "Personal Details"
+msgstr "Маълумотҳои шахсӣ"
+
+msgid "Save changes"
+msgstr "Тағйиротро захира кунед"
+
+msgid "Reset PIN"
+msgstr "Пинкодро иваз кунед"
+
+msgid "Your PIN has been changed successfully."
+msgstr "Пинкоди шумо бо муваффақият тағйир дода шуд ."
+
+msgid "I accept the Terms and Conditions."
+msgstr "Ман ин Шарту Шурутро қабул мекунам."
+
+msgid "You have read %(read)s out of %(total)s"
+msgstr "Шумо алакай %(read)s аз %(total)s хондаед"
+
+msgid "%(counter)s of %(total)s questions"
+msgstr "%(counter)s аз %(total)s саволҳо"
+
+msgid "Select one"
+msgstr "якеро интихоб кунед"
+
+msgid "Optional"
+msgstr "Ихтиёрӣ"
+
+msgid "No limit"
+msgstr "Номаҳдуд"
+
+msgid "Go to homepage"
+msgstr "Ба сафҳаи аслӣ равед"
+
+msgid "You have already completed this survey."
+msgstr "Шумо алакай ин пурсишро ба итмом расонадед."
+
+msgid "Check all that apply"
+msgstr "Тамоми чизҳои марбутро бозбинӣ намоед"
+
+msgid "Your results!"
+msgstr "Натоиҷи шумо!"
+
+msgid "Replay Quiz"
+msgstr "Санҷиши такрорӣ"
+
+msgid "Incorrect"
+msgstr "Нодуруст"
+
+msgid "Correct"
+msgstr "Дуруст"
+
+msgid "Your answer"
+msgstr "Ҷавоби шумо"
+
+msgid "Leave comment"
+msgstr "Шарҳ гузоред"
+
+msgid "Reply"
+msgstr "Посух"
+
+msgid "Page not found"
+msgstr "Саҳифа ёфт нашуд"
+
+msgid "Sorry, this page could not be found."
+msgstr "Бубахшед, ин сафҳа ёфт намешавад."
+
+msgid "Internal server error"
+msgstr "Хатои дохилии сервер"
+
+msgid "4-digit PIN"
+msgstr "Пинкоди 4 рақамаро созед"
+
+msgid "Confirm new 4-digit PIN"
+msgstr "Пинкодро тасдиқ кунед"
+
+msgid "Old 4-digit PIN"
+msgstr "Пароли кӯҳна"
+
+msgid "New 4-digit PIN"
+msgstr "Пинкоди 4 рақамаро созед"
+
+msgid "1 result"
+msgid_plural "%(counter)s results"
+msgstr[0] "Натиҷаи ҳамаи 1"
+msgstr[1] "Натиҷаи ҳамаи %(counter)s"
+
+msgid "Correct answer"
+msgstr "Дуруст"
+
+msgid "This field is required."
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "Remove this comment?"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "This comment has been removed."
+msgstr ""
+
+msgid "moderator"
+msgstr ""
+
+msgid "sections"
+msgstr ""
+
+msgid "Check if applies"
+msgstr ""
+
+msgid "New comments have been disabled for this page."
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid ""
+"You are leaving the <b>Internet of Good Things</b> to visit an external "
+"website and standard data charges by your network provider might apply"
+msgstr ""
+
+msgid "Continue to external site"
+msgstr ""
+
+msgid "Log out"
+msgstr ""
+
+msgid "Reported by %(count)s user"
+msgstr ""
+
+msgid "Reported by %(count)s users"
+msgstr ""
+
+msgid "section"
+msgstr ""
+
+msgid "article"
+msgstr ""
+
+msgid "Remember me"
+msgstr ""
+
+msgid "You have signed out."
+msgstr ""
+
+msgid ""
+"Enter a valid username. This value may contain only letters, numbers, and "
+"@/./+/-/_ characters."
+msgstr ""
+
+msgid "You must type the same password each time."
+msgstr ""
+
+msgid "This password is too short. It must contain at least 4 characters."
+msgstr ""
+
+msgid "Please type your current password."
+msgstr ""
+
+msgid "Password successfully changed."
+msgstr ""
+
+msgid "Enter a valid date/time."
+msgstr ""
+
+msgid "Enter a valid date."
+msgstr ""
+
+msgid "Enter a valid URL."
+msgstr ""
+
+msgid "Enter a valid email address."
+msgstr ""
+
+msgid "Enter a valid integer."
+msgstr ""
+
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+msgid "Your comment"
+msgstr ""
+
+msgid "Are you sure you want to log out?"
+msgstr ""
+
+msgid "Your browser does not support video playback."
+msgstr ""
+
+msgid "Your browser does not support audio playback."
+msgstr ""
+
+msgid "Don't display my username next to my comment"
+msgstr ""
+
+msgid "Anonymous"
+msgstr ""
+
+msgid "Report this comment?"
+msgstr ""
+
+msgid "Display name"
+msgstr ""

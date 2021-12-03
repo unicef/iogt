@@ -6,10 +6,6 @@
 {% get_language_info_list for LANGUAGES as languages %}
 {% get_current_language as LANGUAGE_CODE %}
 
-{% block extra_css %}
-  <link rel="stylesheet" type="text/css" href="{% static 'css/section/section.css' %}">
-{% endblock extra_css %}
-
 {% block content %}
     <div class="section-img">
         {% image page.lead_image width-320 class='lead-img' %}
@@ -18,36 +14,13 @@
     {% if user_progress %}
         {% render_user_progress user_progress %}
     {% endif %}
-    {% if featured_content %}
-   <section class='featured-content' style="background-color:{{ page.background_color }}; color:{{page.font_color}}">
-        {% render_featured_content_list featured_content %}
-    </section>
+    {% if featured_content_items %}
+        <section class='featured-content'
+                 style="background-color:{{ page.background_color }}; color:{{ page.font_color }}">
+            {% include 'home/tags/featured_content_list.html' with featured_content_items=featured_content_items %}
+        </section>
     {% endif %}
-    <section>
-        {% render_sub_sections_list sub_sections %}
-    </section>
-    {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
-     {% if polls or surveys or quizzes %}
-   <section class='questionnaire-components'>
-        {% if polls %}
-        <section class='questionnaire-components__component' style="{% section_questionnaire_style page %}">
-        {% render_polls_list polls %} 
-        </section>
-        {% endif %}
-        {% if surveys %}
-        <section class='questionnaire-components__component' style="{% section_questionnaire_style page %}">
-        {% render_surveys_list surveys %}
-        </section>
-        {% endif %}
-        {% if quizzes %}
-        <section class='questionnaire-components__component' style="{% section_questionnaire_style page %}">
-            {% render_quizzes_list quizzes %} 
-        </section>
-        {% endif %}
-    </section>
+    {% if children %}
+        {% include 'home/tags/child_pages.html' with children=children %}
     {% endif %}
-     {% render_articles_list articles %} 
 {% endblock content %}
-
-
-
