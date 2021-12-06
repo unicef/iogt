@@ -8,6 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.files.images import get_image_dimensions
 from django.db import models
+from django.shortcuts import get_object_or_404
 from django.utils.deconstruct import deconstructible
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
@@ -41,7 +42,7 @@ from wagtailsvg.models import Svg
 from wagtailsvg.edit_handlers import SvgChooserPanel
 
 from messaging.blocks import ChatBotButtonBlock
-from comments.models import CommentableMixin
+from comments.models import CommentableMixin, CannedResponse
 from iogt.views import check_user_session
 from questionnaires.models import Survey, Poll, Quiz
 from .blocks import (

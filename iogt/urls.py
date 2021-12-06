@@ -34,6 +34,7 @@ urlpatterns = [
     path('sitemap/', SitemapAPIView.as_view(), name='sitemap'),
     path("manifest.webmanifest", get_manifest, name="manifest"),
     path('load-translations/', LoadTranslationsFromPOFiles.as_view(), name='load_translations'),
+    path('comments/', include('comments.urls')),
     *i18n_patterns(path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog')),
 ]
 

@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load comments %}
 
-<form method="POST" class="reply-form" action="{% comment_form_target %}" onsubmit="post.disabled = true; return true;">
+<form method="POST" class="reply-form" onsubmit="post.disabled = true; return true;">
     {% csrf_token %}
     <fieldset class='comments__holder'>
         <input type="hidden" name="next" value="{% spaceless %}{% if form.is_admin %}{% url 'comment_reply_view' comment_pk=comment.pk %}{% else %}{% url 'comments-xtd-sent' %}{% endif %}{% endspaceless %}"/>
@@ -24,7 +24,8 @@
         <div style="display:none">{{ form.honeypot }}</div>
         <div class="row form-group {% if 'comment' in form.errors %}has-danger{% endif %}">
             <div class="offset-md-1 col-md-10">
-                {{ form.comment }}
+                <textarea name="comment" placeholder="Your comment" class="form-control" id="id_comment"
+                          >{{ request.GET.canned_response }}</textarea>
                 {% for error in form.comment.errors %}
                     <div class="alert-danger">{{ error }}</div>
                 {% endfor %}
@@ -32,22 +33,6 @@
         </div>
 
 
-        {% if not request.user.is_authenticated or not request.user.email %}
-            <div class="row form-group {% if 'email' in form.errors %}has-danger{% endif %}">
-                <label for="id_email" class="col-form-label col-md-3 text-right">
-                    {#                {{ form.email.label }}#}
-                </label>
-                <div class="col-md-7">
-                    {{ form.email }}
-                    {% for error in email.errors %}
-                        <div class="alert alert-danger">
-                            {{ error|escape }}
-                        </div>
-                    {% endfor %}
-                    {#                <span class="form-text small">{{ form.email.help_text }}</span>#}
-                </div>
-            </div>
-        {% endif %}
 
     <div class="row form-group">
             <div class="offset-md-3 col-md-7">
@@ -57,6 +42,13 @@
             </div>
         </div>
 
+        {% if request.user.is_authenticated and perms.django_comments_xtd.can_moderate %}
+            <div class="row form-group">
+                <div class="col-md-7">
+                    {{ form.canned_responses }}
+                </div>
+            </div>
+        {% endif %}
         <div class="row form-group">
             <div class="offset-md-3 col-md-7">
                 <div class="custom-control custom-checkbox">
@@ -67,10 +59,14 @@
 
     </fieldset>
 
-
     <div class='comments__input-holder'>
+        {% if perms.django_comments_xtd.can_moderate %}
         <div class="comments__submit">
-            <input type="submit" class="reply-comment" name="post" value="{% translate 'Leave comment' %}"/>
+            <input type="submit" class="reply-comment" formaction="{% url 'process_canned_response' %}#id_comment" name="post" value="{% translate 'Add Canned Response' %}"/>
+        </div>
+        {% endif %}
+        <div class="comments__submit">
+            <input type="submit" class="reply-comment" formaction="{% comment_form_target %}" name="post" value="{% translate 'Leave comment' %}"/>
         </div>
     </div>
 </form>
