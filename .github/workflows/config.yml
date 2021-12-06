@@ -1,0 +1,30 @@
+name: IoGT
+
+on: [push]
+
+jobs:
+
+  django-unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: make test
+      - uses: actions/upload-artifact@v2
+        with:
+          path: htmlcov
+
+  cypress-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: make cypress
+      - uses: actions/setup-node@v2
+      - run: cd ./cypress_tests && npm install && npx cypress run
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          path: cypress_tests/cypress/screenshots
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          path: cypress_tests/cypress/videos

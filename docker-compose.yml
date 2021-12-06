@@ -1,10 +1,12 @@
 version: '3.5'
 
 services:
+
   django:
     build:
       context: ./
       dockerfile: Dockerfile.dev
+    container_name: dc01
     environment:
       DB_NAME: postgres
       DB_USER: postgres
@@ -29,16 +31,20 @@ services:
     depends_on:
       - elasticsearch
       - db
+
   elasticsearch:
     image: 'docker.elastic.co/elasticsearch/elasticsearch:7.12.1'
+    container_name: ec01
     environment:
       - discovery.type=single-node
     volumes:
       - es-data01:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
+
   db:
     image: postgres:alpine
+    container_name: pc01
     restart: unless-stopped
     environment:
       POSTGRES_PASSWORD: iogt
@@ -47,8 +53,10 @@ services:
       - ./initdb.d:/docker-entrypoint-initdb.d
     ports:
       - 5432:5432
+
   legacy-db:
     image: postgres:alpine
+    container_name: lc01
     restart: unless-stopped
     environment:
       POSTGRES_PASSWORD: iogt
