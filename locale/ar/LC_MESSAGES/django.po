@@ -12,4 +12,310 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Laguage: Arabic\n"
+
+msgid "POLL"
+msgstr "استطلاعات الرأي"
+
+msgid "SURVEY"
+msgstr "الدراسات الإستطلاعية"
+
+msgid "QUIZ"
+msgstr "الإختبارات"
+
+msgid "quiz"
+msgstr "الإختبارات"
+
+msgid "quizzes"
+msgstr "الإختبارات"
+
+msgid "Log in to participate"
+msgstr "تسجيل الدخول للمشاركة"
+
+msgid "Log in / Create account"
+msgstr "تسجيل الدخول /  إنشاء حساب"
+
+msgid "© The Internet of Good Things"
+msgstr "© The Internet of Good Things"
+
+msgid "Profile"
+msgstr "الملف الشخصي"
+
+msgid "Chat"
+msgstr "المحادثة"
+
+msgid "More"
+msgstr "أكثر"
+
+msgid "Log in"
+msgstr "تسجيل الدخول"
+
+msgid "Back"
+msgstr "الرجوع"
+
+msgid "BACK"
+msgstr "الرجوع"
+
+msgid "Previous"
+msgstr "السابق"
+
+msgid "Next"
+msgstr "التالي"
+
+msgid "Comments"
+msgstr "التعليقات"
+
+msgid "Please log in or create your account"
+msgstr "رجاءاً دير تسجيل الدخول أو أنشئ حساب"
+
+msgid "Report"
+msgstr "تقرير"
+
+msgid "Related Articles"
+msgstr "المقالات لي عندها صلة"
+
+msgid "This comment has been reported."
+msgstr "هاذ التعليق تم الإبلاغ عنُ"
+
+msgid ""
+"It will be reviewed by the team and may be removed if it breaks our Platform"
+" Rules"
+msgstr ""
+"غادي تم المراجعة ديالُ من طرف الفريق و يمكن يتم حذفُ إلا خالف القواعد الخاصة"
+" بالمنصة ديالنا"
+
+msgid "articles"
+msgstr "المقالات"
+
+msgid "Search the site..."
+msgstr "ابحث في الموقع….."
+
+msgid "Search results for: "
+msgstr "قلب على النتائج الخاصة ب:"
+
+msgid "No search results were found for"
+msgstr "لم يتم العثور على نتائج البحث الخاصة ب:"
+
+msgid "Username"
+msgstr "اسم مستخدم"
+
+msgid "Create your account"
+msgstr "أنشئ الحساب الخاص بك"
+
+msgid "Forgot PIN"
+msgstr "نسيت الكود"
+
+msgid "Cancel"
+msgstr "إلغاء"
+
+msgid "Hey, %(username)s"
+msgstr "سلام، %(username)s"
+
+msgid "Change Digital Pin"
+msgstr "غير الكود الرقمي ديالك"
+
+msgid "Personal Details"
+msgstr "المعلومات الخاصة"
+
+msgid "Save changes"
+msgstr "احفظ التغييرات"
+
+msgid "Reset PIN"
+msgstr "تغيير الكود الرقمي"
+
+msgid "Your PIN has been changed successfully."
+msgstr "تم تغيير الكود الرقمي ديالك بنجاح."
+
+msgid "I accept the Terms and Conditions."
+msgstr "أنا كنقبل شروط التسجيل."
+
+msgid "You have read %(read)s out of %(total)s"
+msgstr "قريتي %(read)s من %(total)s"
+
+msgid "%(counter)s of %(total)s questions"
+msgstr "أسئلة %(total)s من %(counter)s"
+
+msgid "Select one"
+msgstr "اختار واحد"
+
+msgid "Optional"
+msgstr "اختياري"
+
+msgid "No limit"
+msgstr "غير محدود"
+
+msgid "Go to homepage"
+msgstr "اذهب إلى الصفحة الرئيسية"
+
+msgid "You have already completed this survey."
+msgstr "كملتي هاذ الإستطلاع."
+
+msgid "Check all that apply"
+msgstr "تحقق من هادشي واش منطبق"
+
+msgid "Your results!"
+msgstr "النتائج ديالك!"
+
+msgid "Replay Quiz"
+msgstr "إعادة مسابقة"
+
+msgid "Incorrect"
+msgstr "غير صحيح"
+
+msgid "Correct"
+msgstr "صحيح"
+
+msgid "Your answer"
+msgstr "الإجابة ديالك"
+
+msgid "Leave comment"
+msgstr "خلي تعليق"
+
+msgid "Reply"
+msgstr "جاوب"
+
+msgid "Page not found"
+msgstr "صفحة غير موجودة"
+
+msgid "Sorry, this page could not be found."
+msgstr "نعتذز، هاذ الصفحة غير موجودة."
+
+msgid "Internal server error"
+msgstr "خطأ في الخادم الداخلي"
+
+msgid "4-digit PIN"
+msgstr "رقم السري 4 أرقام"
+
+msgid "Confirm new 4-digit PIN"
+msgstr "أكد الكود الرقمي"
+
+msgid "Old 4-digit PIN"
+msgstr "كلمة مرور قديمة"
+
+msgid "New 4-digit PIN"
+msgstr "أنشئ الكود الرقمي المكون من 4 أرقام"
+
+msgid "1 result"
+msgid_plural "%(counter)s results"
+msgstr[0] "جميع 1 الأجوبة"
+msgstr[1] "جميع %(counter)s الأجوبة"
+
+msgid "Correct answer"
+msgstr "صحيح"
+
+msgid "This field is required."
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "Remove this comment?"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "This comment has been removed."
+msgstr ""
+
+msgid "moderator"
+msgstr ""
+
+msgid "sections"
+msgstr ""
+
+msgid "Check if applies"
+msgstr ""
+
+msgid "New comments have been disabled for this page."
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid ""
+"You are leaving the <b>Internet of Good Things</b> to visit an external "
+"website and standard data charges by your network provider might apply"
+msgstr ""
+
+msgid "Continue to external site"
+msgstr ""
+
+msgid "Log out"
+msgstr ""
+
+msgid "Reported by %(count)s user"
+msgstr ""
+
+msgid "Reported by %(count)s users"
+msgstr ""
+
+msgid "section"
+msgstr ""
+
+msgid "article"
+msgstr ""
+
+msgid "Remember me"
+msgstr ""
+
+msgid "You have signed out."
+msgstr ""
+
+msgid ""
+"Enter a valid username. This value may contain only letters, numbers, and "
+"@/./+/-/_ characters."
+msgstr ""
+
+msgid "You must type the same password each time."
+msgstr ""
+
+msgid "This password is too short. It must contain at least 4 characters."
+msgstr ""
+
+msgid "Please type your current password."
+msgstr ""
+
+msgid "Password successfully changed."
+msgstr ""
+
+msgid "Enter a valid date/time."
+msgstr ""
+
+msgid "Enter a valid date."
+msgstr ""
+
+msgid "Enter a valid URL."
+msgstr ""
+
+msgid "Enter a valid email address."
+msgstr ""
+
+msgid "Enter a valid integer."
+msgstr ""
+
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+msgid "Your comment"
+msgstr ""
+
+msgid "Are you sure you want to log out?"
+msgstr ""
+
+msgid "Your browser does not support video playback."
+msgstr ""
+
+msgid "Your browser does not support audio playback."
+msgstr ""
+
+msgid "Don't display my username next to my comment"
+msgstr ""
+
+msgid "Anonymous"
+msgstr ""
+
+msgid "Report this comment?"
+msgstr ""
+
+msgid "Display name"
+msgstr ""

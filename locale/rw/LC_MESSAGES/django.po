@@ -12,4 +12,310 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Laguage: Kinyarwanda\n"
+
+msgid "POLL"
+msgstr "AMATORA"
+
+msgid "SURVEY"
+msgstr "UBUSHAKASHATSI"
+
+msgid "QUIZ"
+msgstr "IBAZWA"
+
+msgid "quiz"
+msgstr "ibazwa"
+
+msgid "quizzes"
+msgstr "ibazwa"
+
+msgid "Log in to participate"
+msgstr "Injira kugirango utange umusanzu"
+
+msgid "Log in / Create account"
+msgstr "Kwinjira/ Fungura konti"
+
+msgid "© The Internet of Good Things"
+msgstr "© The Internet of Good Things"
+
+msgid "Profile"
+msgstr "Umwirondoro"
+
+msgid "Chat"
+msgstr "Kwandika ubutumwa"
+
+msgid "More"
+msgstr "Ibindi"
+
+msgid "Log in"
+msgstr "Kwinjira"
+
+msgid "Back"
+msgstr "Gusubira inyuma"
+
+msgid "BACK"
+msgstr "GUSUBIRA INYUMA"
+
+msgid "Previous"
+msgstr "Ahabanje"
+
+msgid "Next"
+msgstr "Ibikurikiyeho"
+
+msgid "Comments"
+msgstr "Ibitekerezo"
+
+msgid "Please log in or create your account"
+msgstr "Injiramo cyangwa ufungure konti"
+
+msgid "Report"
+msgstr "Raporo"
+
+msgid "Related Articles"
+msgstr "Inyandiko zerekeye"
+
+msgid "This comment has been reported."
+msgstr "Icyi gitekerezo cyawe bacyireze."
+
+msgid ""
+"It will be reviewed by the team and may be removed if it breaks our Platform"
+" Rules"
+msgstr ""
+"Cyiraza gusuzumwa n’ikipe yacu kandi gishobora gukurwaho mu gihe "
+"kitubahiriza Amabwiriza y’Urubuga rwacu"
+
+msgid "articles"
+msgstr "inyandiko"
+
+msgid "Search the site..."
+msgstr "Shakisha urubuga..."
+
+msgid "Search results for: "
+msgstr "Amakuru ku gushakisha:"
+
+msgid "No search results were found for"
+msgstr "Nta makuru yabonetse ku byo muri gushakisha"
+
+msgid "Username"
+msgstr "Izina ryo gukoresha"
+
+msgid "Create your account"
+msgstr "Fungura konti"
+
+msgid "Forgot PIN"
+msgstr "Nibagiwe umubare w’ibanga"
+
+msgid "Cancel"
+msgstr "Hagarika"
+
+msgid "Hey, %(username)s"
+msgstr "Muraho, %(username)s"
+
+msgid "Change Digital Pin"
+msgstr "Guhindura umubare w’ibanga"
+
+msgid "Personal Details"
+msgstr "Amakuru y’Umwirondoro"
+
+msgid "Save changes"
+msgstr "Bika amakuru yahindutse"
+
+msgid "Reset PIN"
+msgstr "Kugarura Umubare w’ibanga"
+
+msgid "Your PIN has been changed successfully."
+msgstr "Guhindura Umubare w’ibanga byagenze neza."
+
+msgid "I accept the Terms and Conditions."
+msgstr "Nemeye Amategeko n’Amabwiriza."
+
+msgid "You have read %(read)s out of %(total)s"
+msgstr "Wasomye %(read)s muri %(total)s"
+
+msgid "%(counter)s of %(total)s questions"
+msgstr "Ibibazo %(counter)s muri %(total)s"
+
+msgid "Select one"
+msgstr "Hitamo kimwe"
+
+msgid "Optional"
+msgstr "Ufite amahitamo"
+
+msgid "No limit"
+msgstr "Nta mbibi"
+
+msgid "Go to homepage"
+msgstr "Subira ahabanza"
+
+msgid "You have already completed this survey."
+msgstr "Ubu bushakashatsi wamaze kubwuzuza."
+
+msgid "Check all that apply"
+msgstr "Hitamo ibishoboka byose"
+
+msgid "Your results!"
+msgstr "Amanota yawe!"
+
+msgid "Replay Quiz"
+msgstr "Gusubiramo Ibazwa"
+
+msgid "Incorrect"
+msgstr "Wabyishe"
+
+msgid "Correct"
+msgstr "Wabikoze"
+
+msgid "Your answer"
+msgstr "Igisubizo cyawe"
+
+msgid "Leave comment"
+msgstr "Dusangize igitekerezo"
+
+msgid "Reply"
+msgstr "Subiza"
+
+msgid "Page not found"
+msgstr "Iyi paji twayibuze"
+
+msgid "Sorry, this page could not be found."
+msgstr "Mwihangane, iyi paji twayibuze."
+
+msgid "Internal server error"
+msgstr "Seriveri yacu yagize ikibazo"
+
+msgid "4-digit PIN"
+msgstr "Andika umubare w’ibanga ugizwe n’imibare 4"
+
+msgid "Confirm new 4-digit PIN"
+msgstr "Emeza Umubare w’ibanga"
+
+msgid "Old 4-digit PIN"
+msgstr "Ijambo ry’ibanga Usanganwe"
+
+msgid "New 4-digit PIN"
+msgstr "Andika umubare w’ibanga ugizwe n’imibare 4"
+
+msgid "1 result"
+msgid_plural "%(counter)s results"
+msgstr[0] "Amakuru yose ya 1"
+msgstr[1] "Amakuru yose ya %(counter)s"
+
+msgid "Correct answer"
+msgstr "Wabikoze"
+
+msgid "This field is required."
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "Remove this comment?"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "This comment has been removed."
+msgstr ""
+
+msgid "moderator"
+msgstr ""
+
+msgid "sections"
+msgstr ""
+
+msgid "Check if applies"
+msgstr ""
+
+msgid "New comments have been disabled for this page."
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid ""
+"You are leaving the <b>Internet of Good Things</b> to visit an external "
+"website and standard data charges by your network provider might apply"
+msgstr ""
+
+msgid "Continue to external site"
+msgstr ""
+
+msgid "Log out"
+msgstr ""
+
+msgid "Reported by %(count)s user"
+msgstr ""
+
+msgid "Reported by %(count)s users"
+msgstr ""
+
+msgid "section"
+msgstr ""
+
+msgid "article"
+msgstr ""
+
+msgid "Remember me"
+msgstr ""
+
+msgid "You have signed out."
+msgstr ""
+
+msgid ""
+"Enter a valid username. This value may contain only letters, numbers, and "
+"@/./+/-/_ characters."
+msgstr ""
+
+msgid "You must type the same password each time."
+msgstr ""
+
+msgid "This password is too short. It must contain at least 4 characters."
+msgstr ""
+
+msgid "Please type your current password."
+msgstr ""
+
+msgid "Password successfully changed."
+msgstr ""
+
+msgid "Enter a valid date/time."
+msgstr ""
+
+msgid "Enter a valid date."
+msgstr ""
+
+msgid "Enter a valid URL."
+msgstr ""
+
+msgid "Enter a valid email address."
+msgstr ""
+
+msgid "Enter a valid integer."
+msgstr ""
+
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+msgid "Your comment"
+msgstr ""
+
+msgid "Are you sure you want to log out?"
+msgstr ""
+
+msgid "Your browser does not support video playback."
+msgstr ""
+
+msgid "Your browser does not support audio playback."
+msgstr ""
+
+msgid "Don't display my username next to my comment"
+msgstr ""
+
+msgid "Anonymous"
+msgstr ""
+
+msgid "Report this comment?"
+msgstr ""
+
+msgid "Display name"
+msgstr ""

@@ -1,6 +1,9 @@
+from urllib.parse import urlparse, urlunparse, urlencode, parse_qsl
+
 from django.db.models import Q
 from django.contrib import messages
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
+from django.views import View
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView
@@ -70,3 +73,24 @@ def post_admin_comment(request):
     response = post_comment(request, next='/')
     messages.success(request, _("Sent Reply successfully"))
     return response
+
+
+class ProcessCannedResponseView(View):
+    def post(self, request):
+        referer = request.META.get('HTTP_REFERER')
+        canned_response_id = request.POST.get('canned_responses')
+        parsed_url = urlparse(referer)
+
+        if not request.user.has_perm('django_comments_xtd.can_moderate'):
+            messages.error(request, _("You do not have the permission to perform this action."))
+        else:
+            query_dict = dict(parse_qsl(parsed_url.query))
+            canned_response_text = get_object_or_404(CannedResponse,
+                                                     pk=canned_response_id).text if canned_response_id else ''
+            comment_text = request.POST.get('comment')
+            query_dict.update({'canned_response': f'{comment_text} {canned_response_text}'})
+
+            parsed_url = parsed_url._replace(query=urlencode(query_dict))
+
+        referer_url = urlunparse(parsed_url)
+        return redirect(to=referer_url)

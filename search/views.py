@@ -22,7 +22,7 @@ def search(request):
         search_results_count = 0
         if search_query:
             search_results = search_group.objects.live().\
-                filter(locale=Locale.objects.get(language_code=request.LANGUAGE_CODE)).search(search_query)
+                filter(locale=Locale.objects.get(language_code=request.LANGUAGE_CODE)).specific().search(search_query)
             search_results_count = search_results.count()
             query = Query.get(search_query)
 

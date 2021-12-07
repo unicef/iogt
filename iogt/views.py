@@ -1,5 +1,4 @@
 from django.contrib.admin.utils import flatten
-from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from django.views.generic import TemplateView
 from rest_framework.response import Response
@@ -32,16 +31,13 @@ class SitemapAPIView(APIView):
     def get(self, request):
         from home.models import HomePage, Section, Article, FooterPage
 
-        protocol = request.scheme
-        site = get_current_site(request)
-
-        home_page_urls = [f'{protocol}://{site}{p.url}' for p in HomePage.objects.live()],
-        section_urls = [f'{protocol}://{site}{p.url}' for p in Section.objects.live()],
-        article_urls = [f'{protocol}://{site}{p.url}' for p in Article.objects.live()],
-        footer_urls = [f'{protocol}://{site}{p.url}' for p in FooterPage.objects.live()],
-        poll_urls = [f'{protocol}://{site}{p.url}' for p in Poll.objects.live()],
-        survey_urls = [f'{protocol}://{site}{p.url}' for p in Survey.objects.live()],
-        quiz_urls = [f'{protocol}://{site}{p.url}' for p in Quiz.objects.live()],
+        home_page_urls = [p.full_url for p in HomePage.objects.live()],
+        section_urls = [p.full_url for p in Section.objects.live()],
+        article_urls = [p.full_url for p in Article.objects.live()],
+        footer_urls = [p.full_url for p in FooterPage.objects.live()],
+        poll_urls = [p.full_url for p in Poll.objects.live()],
+        survey_urls = [p.full_url for p in Survey.objects.live()],
+        quiz_urls = [p.full_url for p in Quiz.objects.live()],
 
         sitemap = flatten(
             home_page_urls + section_urls + article_urls + footer_urls + poll_urls + survey_urls + quiz_urls)

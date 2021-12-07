@@ -8,6 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.files.images import get_image_dimensions
 from django.db import models
+from django.shortcuts import get_object_or_404
 from django.utils.deconstruct import deconstructible
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
@@ -41,12 +42,12 @@ from wagtailsvg.models import Svg
 from wagtailsvg.edit_handlers import SvgChooserPanel
 
 from messaging.blocks import ChatBotButtonBlock
-from comments.models import CommentableMixin
+from comments.models import CommentableMixin, CannedResponse
 from iogt.views import check_user_session
 from questionnaires.models import Survey, Poll, Quiz
 from .blocks import (
     MediaBlock, SocialMediaLinkBlock, SocialMediaShareButtonBlock, EmbeddedPollBlock, EmbeddedSurveyBlock,
-    EmbeddedQuizBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock, ArticleBlock,
+    EmbeddedQuizBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock, ArticleBlock, OfflineAppButtonBlock,
 )
 from .forms import SectionPageForm
 from .mixins import PageUtilsMixin, TitleIconMixin
@@ -79,14 +80,9 @@ class HomePage(Page):
         check_user_session(request)
         context = super().get_context(request)
         context['banners'] = [
-            home_page_banner.banner_page for home_page_banner in
-            self.home_page_banners.filter(banner_page__live=True)
+            home_page_banner.banner_page.specific
+            for home_page_banner in self.home_page_banners.filter(banner_page__live=True)
         ]
-        context['featured_content'] = [
-            featured_content.content for featured_content in
-            self.featured_content.filter(content__live=True)
-        ]
-        context["footer"] = FooterPage.objects.live()
         return context
 
 
@@ -130,11 +126,11 @@ class SectionIndexPage(Page):
     def get_top_level_sections(cls):
         section_index_page = cls.objects.filter(locale=Locale.get_active()).first()
         if section_index_page:
-            return section_index_page.get_children().live()
+            return section_index_page.get_children().live().specific()
         return cls.objects.none()
 
 
-class Section(Page, PageUtilsMixin, TitleIconMixin):
+class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
@@ -186,6 +182,13 @@ class Section(Page, PageUtilsMixin, TitleIconMixin):
         FieldPanel('show_progress_bar')
     ]
 
+    edit_handler = TabbedInterface([
+        ObjectList(content_panels, heading='Content'),
+        ObjectList(promote_panels, heading='Promote'),
+        ObjectList(settings_panels, heading='Settings'),
+        ObjectList(CommentableMixin.comments_panels, heading='Comments')
+    ])
+
     base_form_class = SectionPageForm
 
     def get_descendant_articles(self):
@@ -206,30 +209,18 @@ class Section(Page, PageUtilsMixin, TitleIconMixin):
             'width_': 100 / total_article_count if total_article_count else 0,
         }
 
-    def is_completed(self, request):
+    def is_complete(self, request):
         progress_manager = ProgressManager(request)
-        return progress_manager.is_section_completed(self)
+        return progress_manager.is_section_complete(self)
 
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
-        context['featured_content'] = [
-            featured_content.content for featured_content in
-            self.featured_content.all() if featured_content.content.live
+        context['featured_content_items'] = [
+            featured_content.content.specific
+            for featured_content in self.featured_content.filter(content__live=True)
         ]
-        context['sub_sections'] = self.get_children().live().type(Section)
-
-        context['articles'] = self.get_children().live().type(Article)
-
-        survey_page_ids = self.get_children().live().type(Survey).values_list('id', flat=True)
-        context['surveys'] = Survey.objects.filter(pk__in=survey_page_ids)
-
-        poll_page_ids = self.get_children().live().type(Poll).values_list('id', flat=True)
-        context['polls'] = Poll.objects.filter(pk__in=poll_page_ids)
-
-        quiz_page_ids = self.get_children().live().type(Quiz).values_list('id', flat=True)
-        context['quizzes'] = Quiz.objects.filter(pk__in=quiz_page_ids)
-
+        context['children'] = self.get_children().live().specific()
         context['user_progress'] = self.get_user_progress_dict(request)
 
         return context
@@ -267,7 +258,7 @@ class ArticleRecommendation(Orderable):
     ]
 
 
-class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
+class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
@@ -284,7 +275,6 @@ class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     )
     index_page_description = models.TextField(null=True, blank=True)
 
-    tags = ClusterTaggableManager(through='ArticleTaggedItem', blank=True)
     body = StreamField([
         ('heading', blocks.CharBlock(form_classname="full title")),
         ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
@@ -302,6 +292,11 @@ class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     ])
     show_in_menus_default = True
 
+    search_fields = Page.search_fields + [
+        index.SearchField('get_heading_values', partial_match=True, boost=1),
+        index.SearchField('get_paragraph_values', partial_match=True),
+    ]
+
     def _get_child_block_values(self, block_type):
         searchable_content = []
         for block in self.body:
@@ -318,34 +313,6 @@ class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         paragraph_values = self._get_child_block_values('paragraph')
         return '\n'.join(paragraph_values)
 
-    content_panels = Page.content_panels + [
-        ImageChooserPanel('lead_image'),
-        SvgChooserPanel('icon'),
-        StreamFieldPanel('body'),
-        FieldPanel('index_page_description'),
-        MultiFieldPanel([
-            InlinePanel('recommended_articles',
-                        label=_("Recommended Articles")),
-        ],
-            heading='Recommended Content')
-    ]
-
-    promote_panels = Page.promote_panels + [
-        MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
-    ]
-
-    search_fields = Page.search_fields + [
-        index.SearchField('get_heading_values', partial_match=True, boost=1),
-        index.SearchField('get_paragraph_values', partial_match=True),
-    ]
-
-    edit_handler = TabbedInterface([
-        ObjectList(content_panels, heading='Content'),
-        ObjectList(promote_panels, heading='Promote'),
-        ObjectList(Page.settings_panels, heading='Settings'),
-        ObjectList(CommentableMixin.comments_panels, heading='Comments')
-    ])
-
     def get_progress_enabled_section(self):
         """
         Returning .first() will bypass any discrepancies in settings show_progress_bar=True
@@ -358,12 +325,12 @@ class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
-        context['breadcrumbs'] = [crumb for crumb in self.get_ancestors() if
-                                  not crumb.is_root()]
-        context['sections'] = self.get_ancestors().type(Section)
+        context['recommended_articles'] = [
+            recommended_article.article.specific
+            for recommended_article in self.recommended_articles.filter(article__live=True)
+        ]
 
         progress_enabled_section = self.get_progress_enabled_section()
-
         if progress_enabled_section:
             context.update({
                 'user_progress': progress_enabled_section.get_user_progress_dict(
@@ -372,25 +339,98 @@ class Article(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
 
         return context
 
-    def serve(self, request):
-        response = super().serve(request)
-        if response.status_code == status.HTTP_200_OK:
-            User.record_article_read(request=request, article=self)
-        return response
-
     def description(self):
         for block in self.body:
             if block.block_type == 'paragraph':
                 return block
         return ''
 
-    def is_completed(self, request):
+    def is_complete(self, request):
         progress_manager = ProgressManager(request)
-        return progress_manager.is_article_completed(self)
+        return progress_manager.is_article_complete(self)
+
+    @property
+    def top_level_section(self):
+        return self.get_ancestors().filter(depth=4).first().specific
 
     class Meta:
+        abstract = True
         verbose_name = _("article")
         verbose_name_plural = _("articles")
+
+
+class Article(AbstractArticle):
+    tags = ClusterTaggableManager(through='ArticleTaggedItem', blank=True)
+
+    content_panels = AbstractArticle.content_panels + [
+        ImageChooserPanel('lead_image'),
+        SvgChooserPanel('icon'),
+        StreamFieldPanel('body'),
+        FieldPanel('index_page_description'),
+        MultiFieldPanel([
+            InlinePanel('recommended_articles',
+                        label=_("Recommended Articles")),
+        ],
+            heading='Recommended Content')
+    ]
+
+    promote_panels = AbstractArticle.promote_panels + [
+        MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
+    ]
+
+    edit_handler = TabbedInterface([
+        ObjectList(content_panels, heading='Content'),
+        ObjectList(promote_panels, heading='Promote'),
+        ObjectList(AbstractArticle.settings_panels, heading='Settings'),
+        ObjectList(CommentableMixin.comments_panels, heading='Comments')
+    ])
+
+    def serve(self, request):
+        response = super().serve(request)
+        if response.status_code == status.HTTP_200_OK:
+            User.record_article_read(request=request, article=self)
+        return response
+
+
+class MiscellaneousIndexPage(Page):
+    parent_page_types = ['home.HomePage']
+    subpage_types = ['home.OfflineAppPage']
+
+
+class OfflineAppPage(AbstractArticle):
+    template = 'home/article.html'
+    parent_page_types = ['home.MiscellaneousIndexPage']
+    subpage_types = []
+
+    body = StreamField([
+        ('heading', blocks.CharBlock(form_classname="full title")),
+        ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
+        ('markdown', MarkdownBlock(icon='code')),
+        ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
+        ('image', ImageChooserBlock()),
+        ('list', blocks.ListBlock(MarkdownBlock(icon='code'))),
+        ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
+        ('page_button', PageButtonBlock()),
+        ('embedded_poll', EmbeddedPollBlock()),
+        ('embedded_survey', EmbeddedSurveyBlock()),
+        ('embedded_quiz', EmbeddedQuizBlock()),
+        ('media', MediaBlock(icon='media')),
+        ('chat_bot', ChatBotButtonBlock()),
+        ('offline_app_button', OfflineAppButtonBlock()),
+    ])
+
+    content_panels = AbstractArticle.content_panels + [
+        ImageChooserPanel('lead_image'),
+        SvgChooserPanel('icon'),
+        StreamFieldPanel('body'),
+        FieldPanel('index_page_description'),
+    ]
+
+    edit_handler = TabbedInterface([
+        ObjectList(content_panels, heading='Content'),
+        ObjectList(AbstractArticle.settings_panels, heading='Settings'),
+        ObjectList(CommentableMixin.comments_panels, heading='Comments')
+    ])
 
 
 class BannerIndexPage(Page):
@@ -458,7 +498,10 @@ class FooterIndexPage(Page):
 
     @classmethod
     def get_active_footers(cls):
-        return cls.objects.filter(locale=Locale.get_active()).first().get_descendants().live()
+        footer_index_page = cls.objects.filter(locale=Locale.get_active()).first()
+        if footer_index_page:
+            return footer_index_page.get_children().live().specific()
+        return cls.objects.none()
 
     def __str__(self):
         return self.title
@@ -469,9 +512,13 @@ class FooterPage(Article, TitleIconMixin):
     subpage_types = []
     template = 'home/article.html'
 
+    class Meta:
+        verbose_name = _("footer")
+        verbose_name_plural = _("footers")
+
 
 class PageLinkPage(Page, TitleIconMixin):
-    parent_page_types = ['home.FooterIndexPage']
+    parent_page_types = ['home.FooterIndexPage', 'home.Section']
     subpage_types = []
 
     icon = models.ForeignKey(
@@ -490,7 +537,7 @@ class PageLinkPage(Page, TitleIconMixin):
     ]
 
     def get_page(self):
-        return self.page
+        return self.page.specific if self.page else self.page
 
     def get_icon_url(self):
         if self.icon:
@@ -867,16 +914,16 @@ class ManifestSettings(models.Model):
         help_text=_("Add PNG icon 512x512 px"),
         validators=[ImageValidator(width=512, height=512)],
     )
-    icon_196_196 = models.ForeignKey(
+    icon_192_192 = models.ForeignKey(
         "wagtailimages.Image",
         on_delete=models.SET_NULL,
         null=True,
         related_name="+",
-        verbose_name=_("Icon 196x196 (maskable)"),
+        verbose_name=_("Icon 192x192 (maskable)"),
         help_text=_(
-            "Add PNG icon 196x196 px (maskable image can be created using https://maskable.app/)"
+            "Add PNG icon 192x192 px (maskable image can be created using https://maskable.app/)"
         ),
-        validators=[ImageValidator(width=196, height=196)],
+        validators=[ImageValidator(width=192, height=192)],
     )
 
     panels = [
@@ -908,7 +955,7 @@ class ManifestSettings(models.Model):
             [
                 ImageChooserPanel("icon_96_96"),
                 ImageChooserPanel("icon_512_512"),
-                ImageChooserPanel("icon_196_196"),
+                ImageChooserPanel("icon_192_192"),
             ],
             heading="Icons",
         ),
@@ -928,7 +975,6 @@ class ManifestSettings(models.Model):
 
 @register_setting
 class ThemeSettings(BaseSetting):
-
     global_background_color = models.CharField(
         null=True, blank=True, help_text='The background color of the website',
         max_length=8, default='#FFFFFF')
@@ -950,6 +996,13 @@ class ThemeSettings(BaseSetting):
     section_listing_questionnaire_font_color = models.CharField(
         null=True, blank=True, help_text='The font color of the Questionnaire in section listing as a HEX code',
         max_length=8, default='#444')
+
+    section_card_font_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the sub section as a HEX code',
+        max_length=8, default='#444')
+    section_card_background_color = models.CharField(
+        null=True, blank=True, help_text='The background color of the sub section as a HEX code',
+        max_length=8, default='#ffffff')
 
     article_card_font_color = models.CharField(
         null=True, blank=True, help_text='The background color of the Embedded Article in Home > Featured Content'
@@ -982,11 +1035,6 @@ class V1ToV2ObjectMap(models.Model):
 
     def __str__(self):
         return f'{self.v1_object_id} -> {self.object_id}'
-
-    @classmethod
-    def create_map(cls, content_object, v1_object_id):
-        v1_to_v2_object_map = cls(content_object=content_object, v1_object_id=v1_object_id)
-        v1_to_v2_object_map.save()
 
     @classmethod
     def get_v1_id(cls, klass, object_id, extra=None):
@@ -1035,3 +1083,17 @@ class SVGToPNGMap(models.Model):
 
     class Meta:
         unique_together = ('svg_path', 'fill_color', 'stroke_color')
+
+
+class V1PageURLToV2PageMap(models.Model):
+    v1_page_url = models.CharField(max_length=255)
+    v2_page = models.ForeignKey(Page, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.v1_page_url} -> {self.v2_page.id}'
+
+    @classmethod
+    def create_map(cls, url, page):
+        obj, __ = cls.objects.get_or_create(v2_page=page, defaults={'v1_page_url': url})
+
+        return obj

@@ -18,8 +18,8 @@ class MediaBlock(AbstractMediaChooserBlock):
         if not value:
             return ''
 
-        video_not_supported_text = _("Your browser does not support the video tag.")
-        audio_not_supported_text = _("Your browser does not support the audio element.")
+        video_not_supported_text = _("Your browser does not support video playback.")
+        audio_not_supported_text = _("Your browser does not support audio playback.")
         # Translators: Part of this message (between %(start_link)s and %(end_link)s ) is a clickable download link
         download_video_text = _('If you cannot view the above video, perhaps would'
                 ' you like to %(start_link)s download it? %(end_link)s.') % {
@@ -79,58 +79,6 @@ class SocialMediaShareButtonBlock(blocks.StructBlock):
 
 
 class EmbeddedQuestionnaireChooserBlock(blocks.PageChooserBlock):
-
-    def render_basic(self, value, context=None):
-        from questionnaires.models import Poll
-
-        context.update({
-            'page': value,
-        })
-
-        request = context['request']
-        if request.session.session_key is None:
-            request.session.save()
-        self.session = request.session
-
-        form_class = value.get_form_class()
-
-        if isinstance(value, Poll):
-            template = 'blocks/embedded_poll.html'
-            context.update({
-                'results': value.get_results(),
-                'result_as_percentage': value.result_as_percentage,
-            })
-        else:
-            template = 'blocks/embedded_questionnaire.html'
-            paginator = SkipLogicPaginator(value.get_form_fields(), {}, {})
-            step = paginator.page(1)
-            if hasattr(value, 'multi_step') and value.multi_step:
-                form_class = value.get_form_class_for_step(step)
-            context.update({
-                'fields_step': step,
-            })
-
-        multiple_submission_filter = (
-            Q(session_key=request.session.session_key) if request.user.is_anonymous else Q(user__pk=request.user.pk)
-        )
-        multiple_submission_check = (
-            not value.allow_multiple_submissions
-            and value.get_submission_class().objects.filter(multiple_submission_filter, page=value).exists()
-        )
-        anonymous_user_submission_check = request.user.is_anonymous and not value.allow_anonymous_submissions
-        if multiple_submission_check or anonymous_user_submission_check:
-            context.update({
-                'form': None,
-            })
-            return render_to_string(template, context)
-
-        form = form_class(page=value, user=request.user)
-
-        context.update({
-            'form': form,
-        })
-        return render_to_string(template, context)
-
     class Meta:
         icon = 'form'
 
@@ -144,13 +92,14 @@ class EmbeddedPollBlock(EmbeddedQuestionnaireBlock):
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context)
-
-        context.update({'page': value['poll']})
-
+        context.update({
+            'direct_display': value['direct_display'],
+            'page': value['poll'].specific,
+        })
         return context
 
     class Meta:
-        template = 'blocks/embedded_questionnaire_block.html'
+        template = 'questionnaires/tags/questionnaire_wrapper.html'
 
 
 class EmbeddedSurveyBlock(EmbeddedQuestionnaireBlock):
@@ -158,13 +107,14 @@ class EmbeddedSurveyBlock(EmbeddedQuestionnaireBlock):
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context)
-
-        context.update({'page': value['survey']})
-
+        context.update({
+            'direct_display': value['direct_display'],
+            'page': value['survey'].specific,
+        })
         return context
 
     class Meta:
-        template = 'blocks/embedded_questionnaire_block.html'
+        template = 'questionnaires/tags/questionnaire_wrapper.html'
 
 
 class EmbeddedQuizBlock(EmbeddedQuestionnaireBlock):
@@ -172,13 +122,14 @@ class EmbeddedQuizBlock(EmbeddedQuestionnaireBlock):
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context)
-
-        context.update({'page': value['quiz']})
-
+        context.update({
+            'direct_display': value['direct_display'],
+            'page': value['quiz'].specific,
+        })
         return context
 
     class Meta:
-        template = 'blocks/embedded_questionnaire_block.html'
+        template = 'questionnaires/tags/questionnaire_wrapper.html'
 
 
 class PageButtonBlock(blocks.StructBlock):
@@ -189,17 +140,17 @@ class PageButtonBlock(blocks.StructBlock):
         template = 'blocks/page_button.html'
 
 
-class ArticleChooserBlock(PageChooserBlock):
-    def __init__(self, *args, **kwargs):
-        super().__init__(target_model='home.Article', *args, **kwargs)
-
-    class Meta:
-        template = 'blocks/article_page.html'
-
-
 class ArticleBlock(blocks.StructBlock):
     display_section_title = blocks.BooleanBlock(required=False)
     article = PageChooserBlock(target_model='home.Article')
+
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context)
+        context.update({
+            'display_section_title': value['display_section_title'],
+            'page': value['article'].specific,
+        })
+        return context
 
     class Meta:
         template = 'blocks/article.html'
@@ -223,3 +174,18 @@ class RawHTMLBlock(blocks.RawHTMLBlock):
         result = super(RawHTMLBlock, self).render_basic(value, context)
 
         return render_markdown(result)
+
+
+class OfflineAppButtonBlock(blocks.StructBlock):
+    smartphone_text = blocks.CharBlock(
+        help_text=_('This text appears when it is possible for the user to install the app on their phone.'))
+    feature_phone_text = blocks.CharBlock(required=False,
+        help_text=_('This text appears when the user is using a feature phone and thus cannot install the app '
+                    '(the button will be disabled in this case). [Currently not implemented]'))
+    offline_text = blocks.CharBlock(required=False,
+        help_text=_('This text appears when the user is navigating the site via the offline app and '
+                    'thus it doesn\'t make sense to install the offline app again '
+                    '(the button will be disabled in this case). [Currently not implemented]'))
+
+    class Meta:
+        template = 'blocks/offline_app_button.html'

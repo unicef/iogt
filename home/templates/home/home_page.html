@@ -7,23 +7,13 @@
 {% get_language_info_list for LANGUAGES as languages %}
 {% get_current_language as LANGUAGE_CODE %}
 
-{% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/home/home.css' %}">
-{% endblock extra_css %}
-
 {% block content %}
     <div class="home-page">
-        {% render_banners_list banners %}
+        {% include 'home/tags/banners_list.html' with pages=banners %}
         <div>
             {% if page.home_featured_content %}
                 {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
-                <section class='related-articles'>
-                    <ul>
-                        <li>
-                        {% include_block page.home_featured_content %}
-                        </li>
-                    </ul>
-                </section>  
+                {% include_block page.home_featured_content %}
             {% endif %}
         </div>
     </div>

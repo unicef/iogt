@@ -7,16 +7,6 @@ from wagtail.contrib.modeladmin.options import ModelAdminGroup, ModelAdmin, mode
 from .button_helpers import XtdCommentAdminButtonHelper
 from .filters import FlaggedFilter
 from .models import CannedResponse
-from .urls import urlpatterns as urls
-from wagtail.core import hooks
-from django.conf.urls import include, url
-
-
-@hooks.register('register_admin_urls')
-def register_admin_urls():
-    return [
-        url(r'^comments/', include(urls)),
-    ]
 
 
 class XtdCommentAdmin(ModelAdmin):

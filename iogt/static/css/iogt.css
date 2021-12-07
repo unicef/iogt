@@ -1843,3 +1843,16 @@ textarea:focus ~ .cust-input__length-text {
 .progress-list li.current .bar {
   background: #1A9090;
 }
+
+.canned-response-select {
+    margin-top: 20px;
+    display: block;
+    width: 100%;
+    padding: 15px 10px;
+    position: relative;
+    border: none;
+    background: white;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+}
