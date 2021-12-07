@@ -10,7 +10,7 @@ describe("Tests for comment section in articles", () => {
         cy.get(".dropdown-toggle").click()
         cy.get("[name=action-publish]").scrollIntoView().should("have.value", "action-publish").click()
         cy.visitUrl("/en/accounts/logout/")
-        cy.get(".cust-btn>span").contains("Log Out").click()
+        cy.get(".cust-btn>span").contains("Log out").click()
         cy.visitUrl(url)
         cy.get("[class=comments__submit] a").contains("Log in / Create account");
     })
