@@ -6,11 +6,13 @@ django-debug-toolbar==3.2.1
 django-extensions
 django-sass-processor==1.0.*
 django-translation-manager==1.1.1
+django==3.1.*
 elasticsearch>=7.0.0,<8.0.0
 factory-boy==3.2.*
 libsass==0.21.*
 lxml
 psycopg2==2.8.*
+redis~=3.0
 tqdm
 wagtail-localize~=0.9.5
 wagtail-markdown==0.7.0
