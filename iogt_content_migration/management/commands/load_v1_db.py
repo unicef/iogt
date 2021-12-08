@@ -1851,7 +1851,7 @@ class Command(BaseCommand):
         row = cur.fetchone()
 
         survey = Survey(
-            title='Registration Survey', live=True, allow_multiple_submissions=False,
+            title='Registration Survey', live=True, allow_multiple_submissions=True,
             allow_anonymous_submissions=False, submit_button_text='Register')
 
         self.survey_index_page.add_child(instance=survey)
