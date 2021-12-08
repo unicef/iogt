@@ -43,8 +43,7 @@ describe("Articles components tests", () => {
     })
 
     it("Test related article section", () => {
-
-        cy.get(".related-articles > ul:nth-child(2) > li:nth-child(1) > a:nth-child(1) > p:nth-child(1)")
+        cy.get(".related-articles .article-card .article-header")
             .contains("Where to get vaccinated in?")
     })
 })
