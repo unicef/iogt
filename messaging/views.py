@@ -42,7 +42,7 @@ class ThreadDetailView(View):
 
     def get_context(self, thread):
         num_results = int(self.request.GET.get('num_results', 20))
-        thread_messages = thread.messages.order_by('-sent_at')[:num_results]
+        thread_messages = thread.get_renderable_messages()[:num_results]
         most_recent_message = thread_messages.first()
 
         return {

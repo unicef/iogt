@@ -29,7 +29,7 @@ urlpatterns = [
         name=pwa_views.ServiceWorkerView.name,
     ),
     *i18n_patterns(path("external-link/", TransitionPageView.as_view(), name="external-link")),
-    *i18n_patterns(path('messaging/', include('messaging.urls'), name='messaging-urls')),
+    path('messaging/', include('messaging.urls'), name='messaging-urls'),
     path('wagtail-transfer/', include(wagtailtransfer_urls)),
     path('sitemap/', SitemapAPIView.as_view(), name='sitemap'),
     path("manifest.webmanifest", get_manifest, name="manifest"),
