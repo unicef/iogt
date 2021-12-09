@@ -527,7 +527,8 @@ class Command(BaseCommand):
         if row['description']:
             self.post_migration_report_messages['sections_with_description'].append(
                 f'title: {section.title}. URL: {section.full_url}. '
-                f'Admin URL: {self.get_admin_url(section.id)}.'
+                f'Admin URL: {self.get_admin_url(section.id)}. '
+                f'Description (not migrated): {row["description"]}.'
             )
 
     def migrate_articles(self):
@@ -1926,8 +1927,8 @@ class Command(BaseCommand):
                     field.save()
 
         self.post_migration_report_messages['other'].append(
-            'Title of registration survey (Pages > Home [Language] > Surveys > Registration Survey) '
-            'has not been translated.'
+            'Title of registration survey (Pages > Internet of Good Things [Language] > Surveys > Registration Survey) '
+            'has not been translated for any language.'
         )
 
     def get_admin_url(self, id):
