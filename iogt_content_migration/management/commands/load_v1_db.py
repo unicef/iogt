@@ -449,6 +449,7 @@ class Command(BaseCommand):
                     translated_section.commenting_ends_at = commenting_close_time
                     translated_section.latest_revision_created_at = row['latest_revision_created_at']
                     translated_section.save()
+                    self.add_warning_for_sections_with_description(row, section)
                     content_type = self.find_content_type_id('core', 'sectionpage')
                     tags = self.find_tags(content_type, row['page_ptr_id'])
                     if tags:
@@ -503,6 +504,7 @@ class Command(BaseCommand):
             latest_revision_created_at=row['latest_revision_created_at'],
         )
         section.save()
+        self.add_warning_for_sections_with_description(row, section)
         content_type = self.find_content_type_id('core', 'sectionpage')
         tags = self.find_tags(content_type, row['page_ptr_id'])
         if tags:
@@ -520,6 +522,13 @@ class Command(BaseCommand):
                 f'Admin URL: {self.get_admin_url(section.id)}.'
             )
         self.stdout.write(f"saved section, title={section.title}")
+
+    def add_warning_for_sections_with_description(self, row, section):
+        if row['description']:
+            self.post_migration_report_messages['sections_with_description'].append(
+                f'title: {section.title}. URL: {section.full_url}. '
+                f'Admin URL: {self.get_admin_url(section.id)}.'
+            )
 
     def migrate_articles(self):
         sql = f"select * " \
@@ -1915,6 +1924,11 @@ class Command(BaseCommand):
                         )
                         break
                     field.save()
+
+        self.post_migration_report_messages['other'].append(
+            'Title of registration survey (Pages > Home [Language] > Surveys > Registration Survey) '
+            'has not been translated.'
+        )
 
     def get_admin_url(self, id):
         site = Site.objects.filter(is_default_site=True).first()
