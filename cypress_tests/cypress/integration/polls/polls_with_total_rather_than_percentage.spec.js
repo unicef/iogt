@@ -11,7 +11,7 @@ describe("Polls with total rather than percentage tests", () => {
             .each(($el) => {
                 cy.wrap($el)
                     .should("be.visible")
-                    .contains(/^[0-9]*$/)
+                    .contains(/^\d+/)
             });
     });
 });

@@ -15,6 +15,12 @@ Cypress.Commands.add('login', (username, password) => {
     cy.get('.profile-form__btn>span').contains("Log in").click();
 });
 
+Cypress.Commands.add('adminLogin', (username, password) => {
+    cy.get('[name=username]').type(username);
+    cy.get('[name=password]').type(password);
+    cy.get('.button.button-longrunning>em').contains("Sign in").click();
+});
+
 Cypress.Commands.add("visitUrl", (url) => {
     cy.visit(url);
     cy.url().should("include", url);
