@@ -11,6 +11,7 @@ jobs:
       - run: make test
       - uses: actions/upload-artifact@v2
         with:
+          name: django-coverage-report
           path: htmlcov
 
   cypress-tests:
