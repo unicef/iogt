@@ -11,6 +11,7 @@ jobs:
       - run: make test
       - uses: actions/upload-artifact@v2
         with:
+          name: django-coverage-report
           path: htmlcov
 
   cypress-tests:
@@ -23,8 +24,10 @@ jobs:
       - uses: actions/upload-artifact@v2
         if: failure()
         with:
+          name: cypress-tests-screenshots
           path: cypress_tests/cypress/screenshots
       - uses: actions/upload-artifact@v2
         if: always()
         with:
+          name: cypress-tests-videos
           path: cypress_tests/cypress/videos
