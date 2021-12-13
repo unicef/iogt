@@ -325,10 +325,6 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
-        context['recommended_articles'] = [
-            recommended_article.article.specific
-            for recommended_article in self.recommended_articles.filter(article__live=True)
-        ]
 
         progress_enabled_section = self.get_progress_enabled_section()
         if progress_enabled_section:
@@ -384,6 +380,16 @@ class Article(AbstractArticle):
         ObjectList(AbstractArticle.settings_panels, heading='Settings'),
         ObjectList(CommentableMixin.comments_panels, heading='Comments')
     ])
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        context['recommended_articles'] = [
+            recommended_article.article.specific
+            for recommended_article in self.recommended_articles.filter(article__live=True)
+        ]
+
+        return context
+
 
     def serve(self, request):
         response = super().serve(request)
