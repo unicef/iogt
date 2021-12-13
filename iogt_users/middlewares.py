@@ -28,6 +28,7 @@ class RegistrationSurveyRedirectMiddleware:
 
         if is_registered_user and not request.user.has_filled_registration_survey \
                 and not is_url_allowed and site_settings.registration_survey:
+
             site_settings = SiteSettings.for_request(request)
             return redirect(site_settings.registration_survey.localized.url)
 

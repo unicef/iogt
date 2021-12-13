@@ -6,10 +6,12 @@ import requests
 from PIL import Image as PILImage, UnidentifiedImageError
 from django.contrib.auth import get_user_model
 from django.core.files import File
+from django.core.validators import URLValidator
 from django.db import models
 from django.urls import reverse
 from django_extensions.db.models import TimeStampedModel
 from rest_framework import status
+from django.core.exceptions import ValidationError
 from wagtail.images.models import Image
 
 from .querysets import ThreadQuerySet
@@ -35,6 +37,13 @@ class Thread(models.Model):
 
     objects = models.Manager()
     thread_objects = ThreadQuerySet.as_manager()
+
+    def get_renderable_messages(self):
+        for message in self.messages.filter(is_post_processed=False):
+            message.post_process()
+
+        return self.messages.order_by('-sent_at')
+
 
     @property
     def latest_message(self):
@@ -84,7 +93,39 @@ class Message(models.Model):
     thread = models.ForeignKey('Thread', related_name="messages", on_delete=models.CASCADE)
     sender = models.ForeignKey(get_user_model(), null=True, related_name="sent_messages", on_delete=models.CASCADE)
 
+    is_post_processed = models.BooleanField(default=False)
+
     attachments = models.ManyToManyField('Attachment', blank=True)
+
+    def _parse_attachments(self):
+        message_parts = self.text.split('\n')
+        attachments = []
+        cleaned_message = ""
+        for message in reversed(message_parts):
+            validator = URLValidator()
+            try:
+                validator(message)
+                attachments.append(message)
+            except ValidationError:
+                cleaned_message = f'{message}{cleaned_message}'
+        return cleaned_message, attachments
+
+    def process_attachments(self, attachment_links):
+        for link in attachment_links:
+            if not self.attachments.filter(external_link=link).exists():
+                attachment, created = Attachment.objects.get_or_create(external_link=link)
+                if not attachment.file:
+                    attachment.download_external_file()
+                self.attachments.add(attachment)
+
+    def post_process(self):
+        if self.is_post_processed:
+            return
+        text, attachments = self._parse_attachments()
+        self.text = text
+        self.process_attachments(attachments)
+        self.is_post_processed = True
+        self.save()
 
     def update_or_create_attachments(self, attachment_links):
         for link in attachment_links:

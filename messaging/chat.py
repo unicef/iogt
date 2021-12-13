@@ -27,6 +27,7 @@ class ChatManager:
                 'quick_replies': quick_replies,
                 'thread': self.thread,
             })
+
             if not created:
                 # If the message already exists, we concatenate the newly received
                 # messages with the existing message. An assumption here is that
@@ -34,8 +35,6 @@ class ChatManager:
                 # be confirmed with RapidPro
                 message.text = f'{message.text}{text}'
                 message.save(update_fields=['text'])
-
-            self._handle_attachments(message)
 
         else:
             Message.objects.create(
