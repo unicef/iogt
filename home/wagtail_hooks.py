@@ -12,7 +12,6 @@ from translation_manager.models import TranslationEntry
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from django.templatetags.static import static
 from django.utils.html import format_html
-from wagtail.contrib.redirects.models import Redirect
 from wagtail.core import hooks
 from wagtail.core.models import Page
 from wagtail.core.models import PageViewRestriction
@@ -21,7 +20,6 @@ from wagtail.core.rich_text import LinkHandler
 from home.models import FooterIndexPage, BannerIndexPage, Section, \
     SectionIndexPage
 from home.translatable_strings import translatable_strings
-from home.views import TranslationEditView
 
 
 class ExternalLinkHandler(LinkHandler, ABC):
@@ -160,7 +158,6 @@ class TranslationEntryAdmin(ModelAdmin):
     list_display = ('original', 'language', 'translation',)
     list_filter = ('language', LimitedTranslatableStringsFilter, MissingTranslationsFilter)
     search_fields = ('original', 'translation',)
-    edit_view_class = TranslationEditView
     index_template_name = 'modeladmin/translation_manager/translationentry/index.html'
     menu_order = 601
 
