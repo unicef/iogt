@@ -25,7 +25,7 @@ def _translate_node_render(self, context):
     translation_entry = TranslationEntry.objects.filter(
         original=self.filter_expression.var.literal, language=locale.language_code
     ).first()
-    if translation_entry:
+    if translation_entry and translation_entry.translation:
         return translation_entry.translation
 
     self.filter_expression.var.translate = not self.noop
