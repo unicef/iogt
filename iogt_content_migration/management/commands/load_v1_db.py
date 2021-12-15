@@ -187,6 +187,7 @@ class Command(BaseCommand):
         self.add_surveys_from_surveys_index_page_to_home_page_featured_content()
         self.move_footers_to_end_of_footer_index_page()
         self.migrate_article_related_sections()
+        self.migrate_social_media_links()
         self.sort_pages()
         self.populate_registration_survey_translations()
         self.migrate_post_registration_survey()
@@ -1651,6 +1652,26 @@ class Command(BaseCommand):
         page_ids_to_exclude += self.quiz_index_page.get_translations(inclusive=True).values_list('id', flat=True)
 
         Page.objects.filter(alias_of__isnull=False).exclude(id__in=page_ids_to_exclude).update(live=False)
+
+    def migrate_social_media_links(self):
+        self.footer_index_page.refresh_from_db()
+        sql = f'select * from core_sitesettings'
+        cur = self.db_query(sql)
+        for row in cur:
+            social_media_links = json.loads(row['social_media_links_on_footer_page'])
+            for social_media_link in social_media_links:
+                block_value = social_media_link.get('value')
+                if block_value:
+                    page_link_page_data = {
+                        'title': block_value.get('title'),
+                        'external_link': block_value.get('link'),
+                    }
+                    v2_image = self.image_map.get(block_value.get('image'))
+                    if v2_image:
+                        page_link_page_data.update({'image_id': v2_image.id})
+
+                    page_link_page = models.PageLinkPage(**page_link_page_data)
+                    self.footer_index_page.add_child(instance=page_link_page)
 
     def migrate_page_revisions(self):
         PageRevision.objects.all().delete()
