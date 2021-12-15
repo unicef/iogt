@@ -1861,7 +1861,7 @@ class Command(BaseCommand):
 
         survey = Survey(
             title='Registration Survey', live=True, allow_multiple_submissions=True,
-            allow_anonymous_submissions=False, submit_button_text='Register')
+            allow_anonymous_submissions=False, submit_button_text='Submit')
 
         self.survey_index_page.add_child(instance=survey)
 
@@ -1900,7 +1900,11 @@ class Command(BaseCommand):
                 )
                 continue
 
-            translated_survey.submit_button_text = self.registration_survey_translations['submit_button_text'][locale.language_code]
+            submit_button_text = self.registration_survey_translations['submit_button_text'][locale.language_code]
+            if submit_button_text and len(submit_button_text) > 40:
+                self.stdout.write(f"Truncated survey submit button text, title={translated_survey.title}")
+
+            translated_survey.submit_button_text = submit_button_text[:40] if submit_button_text else 'Submit'
             translated_survey.save()
             if translated_survey:
                 for (admin_label, label_identifier) in [
