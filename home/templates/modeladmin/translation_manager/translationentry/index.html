@@ -10,13 +10,6 @@
                 </div>
                 {% block search %}{% search_form %}{% endblock %}
             </div>
-            {% block header_extra %}
-                <div class="right">
-                     <div class="actionbutton" style="display:inline-block; margin-left: 20px">
-                            <a href="{% url 'load_translations' %}" class="button bicolor icon icon-repeat">{% translate 'Load Translations' %}</a>
-                     </div>
-                </div>
-            {% endblock %}
         </div>
     </header>
 {% endblock %}

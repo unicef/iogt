@@ -60,24 +60,3 @@ def get_manifest(request):
 class LogoutRedirectHackView(View):
     def get(self, request):
         return redirect(f'/{request.LANGUAGE_CODE}/')
-
-
-class TranslationEditView(EditView):
-    def post(self, request, *args, **kwargs):
-        super(TranslationEditView, self).post(request, *args, **kwargs)
-        patch_store_to_db()
-
-        manager = Manager()
-        for language, language_name in settings.LANGUAGES:
-            manager.update_po_from_db(lang=language)
-
-        return redirect(request.META['HTTP_REFERER'])
-
-
-class LoadTranslationsFromPOFiles(View):
-    def get(self, request):
-        call_command('reload_po_files')
-
-        messages.success(request, _('The translations have been loaded successfully!'))
-
-        return redirect(request.META['HTTP_REFERER'])
