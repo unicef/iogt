@@ -1853,7 +1853,6 @@ class Command(BaseCommand):
                 self.registration_survey_translations[str_key] = row
 
     def migrate_post_registration_survey(self):
-
         sql = 'select * from profiles_userprofilessettings pups ' \
               'inner join wagtailcore_site ws on pups.site_id = ws.id ' \
               'where is_default_site = true'
@@ -1901,6 +1900,8 @@ class Command(BaseCommand):
                 )
                 continue
 
+            translated_survey.submit_button_text = self.registration_survey_translations['submit_button_text'][locale.language_code]
+            translated_survey.save()
             if translated_survey:
                 for (admin_label, label_identifier) in [
                     ('date_of_birth', 'dob'),
