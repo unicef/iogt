@@ -189,6 +189,7 @@ class Command(BaseCommand):
         self.migrate_article_related_sections()
         self.sort_pages()
         self.populate_registration_survey_translations()
+        self.update_survey_submit_button_text()
         self.migrate_post_registration_survey()
         self.migrate_page_revisions()
         self.stop_translations()
@@ -1852,8 +1853,17 @@ class Command(BaseCommand):
                 str_key = self._get_iso_locale(row.pop('str'))
                 self.registration_survey_translations[str_key] = row
 
-    def migrate_post_registration_survey(self):
+    def update_survey_submit_button_text(self):
+        surveys = Survey.objects.all()
+        for survey in surveys:
+            submit_button_text = self.registration_survey_translations['submit_button_text'][survey.locale.language_code]
+            if submit_button_text and len(submit_button_text) > 40:
+                self.stdout.write(f"Truncated survey submit button text, title={survey.title}")
 
+            survey.submit_button_text = submit_button_text[:40] if submit_button_text else 'Submit'
+            survey.save()
+
+    def migrate_post_registration_survey(self):
         sql = 'select * from profiles_userprofilessettings pups ' \
               'inner join wagtailcore_site ws on pups.site_id = ws.id ' \
               'where is_default_site = true'
@@ -1901,6 +1911,12 @@ class Command(BaseCommand):
                 )
                 continue
 
+            submit_button_text = self.registration_survey_translations['register_button_text'][locale.language_code]
+            if submit_button_text and len(submit_button_text) > 40:
+                self.stdout.write(f"Truncated survey submit button text, title={translated_survey.title}")
+
+            translated_survey.submit_button_text = submit_button_text[:40] if submit_button_text else 'Register'
+            translated_survey.save()
             if translated_survey:
                 for (admin_label, label_identifier) in [
                     ('date_of_birth', 'dob'),
