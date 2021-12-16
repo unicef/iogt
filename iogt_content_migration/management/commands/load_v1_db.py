@@ -889,7 +889,8 @@ class Command(BaseCommand):
                 if translated_footer:
                     commenting_status, commenting_open_time, commenting_close_time = self._get_commenting_fields(row)
 
-                    translated_footer.lead_image = self.image_map.get(row['image_id'])
+                    image = self.image_map.get(row['image_id'])
+                    translated_footer.lead_image = image
                     translated_footer.title = row['title']
                     translated_footer.slug = row['slug']
                     translated_footer.draft_title = row['draft_title']
@@ -907,6 +908,12 @@ class Command(BaseCommand):
                     translated_footer.latest_revision_created_at = row['latest_revision_created_at']
                     translated_footer.save()
 
+                    if image:
+                        self.post_migration_report_messages['footers_with_image'].append(
+                            f'title: {translated_footer.title}. URL: {translated_footer.full_url}. '
+                            f'Admin URL: {self.get_admin_url(translated_footer.id)}.'
+                        )
+
                     V1ToV2ObjectMap.create_map(content_object=translated_footer, v1_object_id=row['page_ptr_id'])
                     V1PageURLToV2PageMap.create_map(url=row['url_path'], page=translated_footer)
 
@@ -920,8 +927,9 @@ class Command(BaseCommand):
     def create_footer(self, row):
         commenting_status, commenting_open_time, commenting_close_time = self._get_commenting_fields(row)
 
+        image = self.image_map.get(row['image_id'])
         footer = models.Article(
-            lead_image=self.image_map.get(row['image_id']),
+            lead_image=image,
             title=row['title'],
             draft_title=row['draft_title'],
             slug=row['slug'],
@@ -942,6 +950,11 @@ class Command(BaseCommand):
             latest_revision_created_at=row['latest_revision_created_at'],
         )
         footer.save()
+
+        if image:
+            self.post_migration_report_messages['footers_with_image'].append(
+                f'title: {footer.title}. URL: {footer.full_url}. Admin URL: {self.get_admin_url(footer.id)}.'
+            )
 
         V1ToV2ObjectMap.create_map(content_object=footer, v1_object_id=row['page_ptr_id'])
         V1PageURLToV2PageMap.create_map(url=row['url_path'], page=footer)
