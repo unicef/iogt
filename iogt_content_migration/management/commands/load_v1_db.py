@@ -232,6 +232,18 @@ class Command(BaseCommand):
             )
         else:
             raise Exception('Could not find site in v1 DB')
+
+        cur = self.db_query(f'select * '
+                            f'from core_sitesettings css, wagtailcore_site wcs '
+                            f'where css.site_id = wcs.id')
+        for row in cur:
+            social_media_links = json.loads(row['social_media_links_on_footer_page'])
+            if social_media_links:
+                self.post_migration_report_messages['social_media_links'].append(
+                    f'site: {row["site_name"]}, hostname: {row["hostname"]} has social media links.')
+
+        cur.close()
+
         return home
 
     def create_index_pages(self, homepage):
