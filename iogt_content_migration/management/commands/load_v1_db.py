@@ -239,8 +239,18 @@ class Command(BaseCommand):
         for row in cur:
             social_media_links = json.loads(row['social_media_links_on_footer_page'])
             if social_media_links:
+                links = []
+                for social_media_link in social_media_links:
+                    value = social_media_link.get('value')
+                    if value:
+                        links.append({
+                            'title': value.get('title'),
+                            'link': value.get('link'),
+                        })
+
                 self.post_migration_report_messages['social_media_links'].append(
-                    f'site: {row["site_name"]}, hostname: {row["hostname"]} has social media links.')
+                    f'site: {row["site_name"]}, hostname: {row["hostname"]} has following social media links '
+                    f'{[(link["title"], link["link"]) for link in links]}.')
 
         cur.close()
 
