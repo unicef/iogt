@@ -140,7 +140,7 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
         if multiple_submission_check or anonymous_user_submission_check:
             return render(request, self.template, self.get_context(request))
 
-        if hasattr(self, "multi_step") and self.multi_step:
+        if hasattr(self, "multi_step") and self.multi_step and self.get_form_fields():
             return self.serve_questions_separately(request)
 
         return super().serve(request, *args, **kwargs)
