@@ -232,6 +232,11 @@ class Command(BaseCommand):
             )
         else:
             raise Exception('Could not find site in v1 DB')
+
+        self.post_migration_report_messages['other'].append(
+            'A default favicon has been chosen for the site.'
+        )
+
         return home
 
     def create_index_pages(self, homepage):
