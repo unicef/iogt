@@ -160,10 +160,11 @@ class Command(BaseCommand):
         self.migrate_documents()
         self.migrate_media()
         self.migrate_images()
+        self.migrate_locales()
         self.load_page_translation_map()
         self.home_page = self.create_home_page(root)
-        self.translate_home_pages(self.home_page)
-        self.create_index_pages(self.home_page)
+        self.translate_home_pages()
+        self.create_index_pages()
         self.translate_index_pages()
         self.migrate_sections()
         self.migrate_articles()
@@ -198,7 +199,12 @@ class Command(BaseCommand):
         cur = self.db_query(sql)
         main = cur.fetchone()
         cur.close()
-        home = None
+        sql = 'select * from core_sitelanguage where is_main_language = true'
+        cur = self.db_query(sql)
+        language = cur.fetchone()
+        locale = Locale.objects.get(language_code=language['locale'])
+        cur.close()
+
         if main:
             home = models.HomePage(
                 title=main['title'],
@@ -212,6 +218,7 @@ class Command(BaseCommand):
                 last_published_at=main['last_published_at'],
                 search_description=main['search_description'],
                 seo_title=main['seo_title'],
+                locale=locale
             )
             root.add_child(instance=home)
             V1ToV2ObjectMap.create_map(content_object=home, v1_object_id=main['page_ptr_id'])
@@ -219,7 +226,7 @@ class Command(BaseCommand):
             raise Exception('Could not find a main page in v1 DB')
         cur.close()
 
-        cur = self.db_query('select * from wagtailcore_site')
+        cur = self.db_query('select * from wagtailcore_site is_default_site = true')
         v1_site = cur.fetchone()
         cur.close()
         if v1_site:
@@ -232,43 +239,30 @@ class Command(BaseCommand):
             )
         else:
             raise Exception('Could not find site in v1 DB')
+
         return home
 
-    def create_index_pages(self, homepage):
-        self.section_index_page = models.SectionIndexPage.objects.first()
-        if self.section_index_page is None:
-            self.section_index_page = models.SectionIndexPage(title='Sections')
-            homepage.add_child(instance=self.section_index_page)
+    def create_index_pages(self):
+        self.section_index_page = models.SectionIndexPage(title='Sections')
+        self.home_page.add_child(instance=self.section_index_page)
 
-        self.banner_index_page = models.BannerIndexPage.objects.first()
-        if self.banner_index_page is None:
-            self.banner_index_page = models.BannerIndexPage(title='Banners')
-            homepage.add_child(instance=self.banner_index_page)
+        self.banner_index_page = models.BannerIndexPage(title='Banners')
+        self.home_page.add_child(instance=self.banner_index_page)
 
-        self.footer_index_page = models.FooterIndexPage.objects.first()
-        if self.footer_index_page is None:
-            self.footer_index_page = models.FooterIndexPage(title='Footers')
-            homepage.add_child(instance=self.footer_index_page)
+        self.footer_index_page = models.FooterIndexPage(title='Footers')
+        self.home_page.add_child(instance=self.footer_index_page)
 
-        self.poll_index_page = PollIndexPage.objects.first()
-        if self.poll_index_page is None:
-            self.poll_index_page = PollIndexPage(title='Polls')
-            homepage.add_child(instance=self.poll_index_page)
+        self.poll_index_page = PollIndexPage(title='Polls')
+        self.home_page.add_child(instance=self.poll_index_page)
 
-        self.survey_index_page = SurveyIndexPage.objects.first()
-        if self.survey_index_page is None:
-            self.survey_index_page = SurveyIndexPage(title='Surveys')
-            homepage.add_child(instance=self.survey_index_page)
+        self.survey_index_page = SurveyIndexPage(title='Surveys')
+        self.home_page.add_child(instance=self.survey_index_page)
 
-        self.quiz_index_page = QuizIndexPage.objects.first()
-        if self.quiz_index_page is None:
-            self.quiz_index_page = QuizIndexPage(title='Quizzes')
-            homepage.add_child(instance=self.quiz_index_page)
+        self.quiz_index_page = QuizIndexPage(title='Quizzes')
+        self.home_page.add_child(instance=self.quiz_index_page)
 
-        self.miscellaneous_index_page = models.MiscellaneousIndexPage.objects.first()
-        if self.miscellaneous_index_page is None:
-            self.miscellaneous_index_page = models.MiscellaneousIndexPage(title='Miscellaneous')
-            homepage.add_child(instance=self.miscellaneous_index_page)
+        self.miscellaneous_index_page = models.MiscellaneousIndexPage(title='Miscellaneous')
+        self.home_page.add_child(instance=self.miscellaneous_index_page)
 
     def migrate_collections(self):
         cur = self.db_query('select * from wagtailcore_collection')
@@ -376,6 +370,14 @@ class Command(BaseCommand):
                 self.image_map.update({row['id']: image})
         cur.close()
         self.stdout.write('Images migrated')
+
+    def migrate_locales(self):
+        sql = f'select * ' \
+              f'from core_sitelanguage'
+        cur = self.db_query(sql)
+        for row in cur:
+            Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
+        cur.close()
 
     def find_content_type_id(self, app_label, model):
         cur = self.db_query(f"select id from django_content_type where app_label = '{app_label}' and model = '{model}'")
@@ -1339,30 +1341,22 @@ class Command(BaseCommand):
 
         return iso_locales_map.get(locale, locale)
 
-    def translate_home_pages(self, home):
-        cur = self.db_query(f'select * from core_sitelanguage')
-        for row in cur:
-            locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
-            self.translate_page(locale=locale, page=home)
-            translated_home_page = home.get_translation_or_none(locale)
-
+    def translate_home_pages(self):
+        locales = Locale.objects.all()
+        for locale in locales:
+            self.translate_page(locale=locale, page=self.home_page)
+            translated_home_page = self.home_page.get_translation_or_none(locale)
             if translated_home_page:
-                modified_title = f"{translated_home_page.title} [{str(locale)}]"
-                translated_home_page.title = modified_title
-                translated_home_page.draft_title = modified_title
+                translated_home_page.title = f"{translated_home_page.title} [{str(locale)}]"
+                translated_home_page.draft_title = f"{translated_home_page.draft_title} [{str(locale)}]"
                 translated_home_page.save()
 
     def translate_index_pages(self):
-        cur = self.db_query(f'select * from core_sitelanguage')
-        locales = []
-        for row in cur:
-            locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
-            locales.append(locale)
-
         index_pages = [
             self.section_index_page, self.banner_index_page, self.footer_index_page, self.poll_index_page,
             self.survey_index_page, self.quiz_index_page, self.miscellaneous_index_page,
         ]
+        locales = Locale.objects.all()
         for page in index_pages:
             for locale in locales:
                 self.translate_page(locale=locale, page=page)
