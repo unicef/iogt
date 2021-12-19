@@ -224,8 +224,8 @@ class Command(BaseCommand):
         cur.close()
         if v1_site:
             Site.objects.create(
-                hostname=v1_site['hostname'],
-                port=v1_site['port'],
+                hostname=self.v1_domains_list[0],
+                port=443,
                 root_page=home,
                 is_default_site=True,
                 site_name=v1_site['site_name'] if v1_site['site_name'] else 'Internet of Good Things',
