@@ -235,6 +235,11 @@ class Command(BaseCommand):
                 site_settings = models.SiteSettings.get_for_default_site()
                 site_settings.logo_id = logo.id
                 site_settings.save()
+            else:
+                self.post_migration_report_messages['other'].append(
+                    'Not site logo found. Using default site logo.'
+                )
+
         else:
             raise Exception('Could not find site in v1 DB')
 
