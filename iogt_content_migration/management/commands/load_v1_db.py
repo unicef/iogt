@@ -219,7 +219,7 @@ class Command(BaseCommand):
             raise Exception('Could not find a main page in v1 DB')
         cur.close()
 
-        cur = self.db_query('select * from wagtailcore_site')
+        cur = self.db_query('select * from wagtailcore_site wcs, core_sitesettings css where wcs.id = css.site_id')
         v1_site = cur.fetchone()
         cur.close()
         if v1_site:
@@ -230,6 +230,11 @@ class Command(BaseCommand):
                 is_default_site=True,
                 site_name=v1_site['site_name'] if v1_site['site_name'] else 'Internet of Good Things',
             )
+            logo = self.image_map.get(v1_site['logo_id'])
+            if logo:
+                site_settings = models.SiteSettings.get_for_default_site()
+                site_settings.logo_id = logo.id
+                site_settings.save()
         else:
             raise Exception('Could not find site in v1 DB')
 
@@ -253,6 +258,10 @@ class Command(BaseCommand):
                     f'{[(link["title"], link["link"]) for link in links]}.')
 
         cur.close()
+
+        self.post_migration_report_messages['other'].append(
+            'A default favicon has been chosen for the site.'
+        )
 
         return home
 
