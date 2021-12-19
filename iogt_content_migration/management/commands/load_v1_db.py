@@ -172,7 +172,7 @@ class Command(BaseCommand):
         self.migrate_surveys()
         self.migrate_banners()
         self.mark_pages_which_are_not_translated_in_v1_as_draft()
-        Page.fix_tree()
+        Page.fix_tree(fix_paths=True)
         self.mark_empty_sections_as_draft()
         self.fix_articles_body()
         self.fix_footers_body()
@@ -1584,6 +1584,7 @@ class Command(BaseCommand):
         for row in cur:
             v2_article = self.v1_to_v2_page_map.get(row['page_ptr_id'])
             if v2_article:
+                v2_article.refresh_from_db()
                 v2_article.body = self.map_article_body(row)
                 v2_article.save()
             else:
@@ -1605,6 +1606,7 @@ class Command(BaseCommand):
         for row in cur:
             v2_footer = self.v1_to_v2_page_map.get(row['page_ptr_id'])
             if v2_footer:
+                v2_footer.refresh_from_db()
                 v2_footer.body = self.map_article_body(row)
                 v2_footer.save()
         cur.close()
@@ -1620,6 +1622,7 @@ class Command(BaseCommand):
         for row in cur:
             v2_survey = self.v1_to_v2_page_map.get(row['page_ptr_id'])
             if v2_survey:
+                v2_survey.refresh_from_db()
                 v2_survey.description = self.map_survey_description(row)
                 v2_survey.save()
         cur.close()
@@ -1635,6 +1638,7 @@ class Command(BaseCommand):
         for row in cur:
             v2_banner = self.v1_to_v2_page_map.get(row['page_ptr_id'])
             if v2_banner:
+                v2_banner.refresh_from_db()
                 v2_banner.banner_link_page = self.map_banner_page(row)
                 v2_banner.save()
         cur.close()
@@ -1758,6 +1762,8 @@ class Command(BaseCommand):
                     f"Couldn't find v2 page for v1 section: {row['section_id']} and article: {row['page_id']}"
                 )
                 continue
+            section.refresh_from_db()
+            article.refresh_from_db()
             page_link_page = models.PageLinkPage(title=article.title, page=article, live=article.live)
             section.add_child(instance=page_link_page)
             page = Page.objects.get(id=page_link_page.id)
