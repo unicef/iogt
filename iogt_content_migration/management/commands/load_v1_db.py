@@ -173,7 +173,7 @@ class Command(BaseCommand):
         self.migrate_surveys()
         self.migrate_banners()
         self.mark_pages_which_are_not_translated_in_v1_as_draft()
-        Page.fix_tree()
+        Page.fix_tree(fix_paths=True)
         self.mark_empty_sections_as_draft()
         self.fix_articles_body()
         self.fix_footers_body()
@@ -226,19 +226,60 @@ class Command(BaseCommand):
             raise Exception('Could not find a main page in v1 DB')
         cur.close()
 
-        cur = self.db_query('select * from wagtailcore_site is_default_site = true')
+        sql = f'select * ' \
+              f'from wagtailcore_site wcs, core_sitesettings css ' \
+              f'where wcs.id = css.site_id ' \
+              f'and wcs.is_default_site = true'
+        cur = self.db_query(sql)
         v1_site = cur.fetchone()
         cur.close()
         if v1_site:
             Site.objects.create(
-                hostname=v1_site['hostname'],
-                port=v1_site['port'],
+                hostname=self.v1_domains_list[0],
+                port=443,
                 root_page=home,
                 is_default_site=True,
                 site_name=v1_site['site_name'] if v1_site['site_name'] else 'Internet of Good Things',
             )
+            logo = self.image_map.get(v1_site['logo_id'])
+            if logo:
+                site_settings = models.SiteSettings.get_for_default_site()
+                site_settings.logo_id = logo.id
+                site_settings.save()
+            else:
+                self.post_migration_report_messages['other'].append(
+                    'Not site logo found. Using default site logo.'
+                )
+
         else:
             raise Exception('Could not find site in v1 DB')
+
+        sql = f'select * ' \
+              f'from core_sitesettings css, wagtailcore_site wcs ' \
+              f'where css.site_id = wcs.id ' \
+              f'and wcs.is_default_site = true'
+        cur = self.db_query(sql)
+        for row in cur:
+            social_media_links = json.loads(row['social_media_links_on_footer_page'])
+            if social_media_links:
+                links = []
+                for social_media_link in social_media_links:
+                    value = social_media_link.get('value')
+                    if value:
+                        links.append({
+                            'title': value.get('title'),
+                            'link': value.get('link'),
+                        })
+
+                self.post_migration_report_messages['social_media_links'].append(
+                    f'site: {row["site_name"]}, hostname: {row["hostname"]} has following social media links '
+                    f'{[(link["title"], link["link"]) for link in links]}.')
+
+        cur.close()
+
+        self.post_migration_report_messages['other'].append(
+            'A default favicon has been chosen for the site.'
+        )
 
         return home
 
@@ -869,7 +910,8 @@ class Command(BaseCommand):
                 if translated_footer:
                     commenting_status, commenting_open_time, commenting_close_time = self._get_commenting_fields(row)
 
-                    translated_footer.lead_image = self.image_map.get(row['image_id'])
+                    image = self.image_map.get(row['image_id'])
+                    translated_footer.lead_image = image
                     translated_footer.title = row['title']
                     translated_footer.slug = row['slug']
                     translated_footer.draft_title = row['draft_title']
@@ -887,6 +929,12 @@ class Command(BaseCommand):
                     translated_footer.latest_revision_created_at = row['latest_revision_created_at']
                     translated_footer.save()
 
+                    if image:
+                        self.post_migration_report_messages['footers_with_image'].append(
+                            f'title: {translated_footer.title}. URL: {translated_footer.full_url}. '
+                            f'Admin URL: {self.get_admin_url(translated_footer.id)}.'
+                        )
+
                     V1ToV2ObjectMap.create_map(content_object=translated_footer, v1_object_id=row['page_ptr_id'])
                     V1PageURLToV2PageMap.create_map(url=row['url_path'], page=translated_footer)
 
@@ -900,8 +948,9 @@ class Command(BaseCommand):
     def create_footer(self, row):
         commenting_status, commenting_open_time, commenting_close_time = self._get_commenting_fields(row)
 
+        image = self.image_map.get(row['image_id'])
         footer = models.Article(
-            lead_image=self.image_map.get(row['image_id']),
+            lead_image=image,
             title=row['title'],
             draft_title=row['draft_title'],
             slug=row['slug'],
@@ -922,6 +971,11 @@ class Command(BaseCommand):
             latest_revision_created_at=row['latest_revision_created_at'],
         )
         footer.save()
+
+        if image:
+            self.post_migration_report_messages['footers_with_image'].append(
+                f'title: {footer.title}. URL: {footer.full_url}. Admin URL: {self.get_admin_url(footer.id)}.'
+            )
 
         V1ToV2ObjectMap.create_map(content_object=footer, v1_object_id=row['page_ptr_id'])
         V1PageURLToV2PageMap.create_map(url=row['url_path'], page=footer)
@@ -1543,6 +1597,7 @@ class Command(BaseCommand):
         for row in cur:
             v2_article = self.v1_to_v2_page_map.get(row['page_ptr_id'])
             if v2_article:
+                v2_article.refresh_from_db()
                 v2_article.body = self.map_article_body(row)
                 v2_article.save()
             else:
@@ -1564,6 +1619,7 @@ class Command(BaseCommand):
         for row in cur:
             v2_footer = self.v1_to_v2_page_map.get(row['page_ptr_id'])
             if v2_footer:
+                v2_footer.refresh_from_db()
                 v2_footer.body = self.map_article_body(row)
                 v2_footer.save()
         cur.close()
@@ -1579,6 +1635,7 @@ class Command(BaseCommand):
         for row in cur:
             v2_survey = self.v1_to_v2_page_map.get(row['page_ptr_id'])
             if v2_survey:
+                v2_survey.refresh_from_db()
                 v2_survey.description = self.map_survey_description(row)
                 v2_survey.save()
         cur.close()
@@ -1594,6 +1651,7 @@ class Command(BaseCommand):
         for row in cur:
             v2_banner = self.v1_to_v2_page_map.get(row['page_ptr_id'])
             if v2_banner:
+                v2_banner.refresh_from_db()
                 v2_banner.banner_link_page = self.map_banner_page(row)
                 v2_banner.save()
         cur.close()
@@ -1717,6 +1775,8 @@ class Command(BaseCommand):
                     f"Couldn't find v2 page for v1 section: {row['section_id']} and article: {row['page_id']}"
                 )
                 continue
+            section.refresh_from_db()
+            article.refresh_from_db()
             page_link_page = models.PageLinkPage(title=article.title, page=article, live=article.live)
             section.add_child(instance=page_link_page)
             page = Page.objects.get(id=page_link_page.id)
