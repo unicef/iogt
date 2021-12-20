@@ -43,9 +43,10 @@
                         {% user_listing_buttons user %}
                     </ul>
                 </td>
-                <td class="name" valign="top">{{ user.display_name |default_if_none:'-' }}</td>
-                <td class="name" valign="top">{{ user.first_name |default_if_none:'-' }}</td>
-                <td class="name" valign="top">{{ user.last_name |default_if_none:'-' }}</td>
+                <td class="name" valign="top">{{ user.display_name|default_if_none:'-' }}</td>
+                <td class="name" valign="top">{{ user.first_name|default_if_none:'-' }}</td>
+                <td class="name" valign="top">{{ user.last_name|default_if_none:'-' }}</td>
+
                 <td class="level" valign="top">{% if user.is_superuser %}{% translate "Admin" %}{% endif %}</td>
                 <td class="status" valign="top"><div class="status-tag {% if user.is_active %}primary{% endif %}">{% if user.is_active %}{% translate "Active" %}{% else %}{% translate "Inactive" %}{% endif %}</div></td>
                 <td {% if user.last_login %} class="human-readable-date" title="{{ user.last_login|date:"d M Y H:i" }}"{% endif %}>{% if user.last_login %}{% blocktranslate trimmed with time_period=user.last_login|timesince %}{{ time_period }} ago{% endblocktranslate %}{% endif %}</td>
