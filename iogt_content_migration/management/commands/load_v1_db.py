@@ -195,64 +195,62 @@ class Command(BaseCommand):
         self.stop_translations()
 
     def create_home_page(self, root):
-        sql = 'select * from core_main main join wagtailcore_page page on main.page_ptr_id = page.id'
+        sql = 'select * ' \
+              'from wagtailcore_site wcs, core_sitesettings css, core_main cm, wagtailcore_page wcp ' \
+              'where wcs.id = css.site_id ' \
+              'and wcs.root_page_id = cm.page_ptr_id ' \
+              'and cm.page_ptr_id = wcp.id ' \
+              'and wcs.is_default_site = true'
         cur = self.db_query(sql)
         main = cur.fetchone()
         cur.close()
-        sql = 'select * from core_sitelanguage where is_main_language = true'
+        if not main:
+            raise Exception('Could not find a main page in v1 DB')
+
+        sql = 'select * ' \
+              'from core_sitelanguage ' \
+              'where is_main_language = true'
         cur = self.db_query(sql)
         language = cur.fetchone()
-        locale = Locale.objects.get(language_code=language['locale'])
         cur.close()
+        if not language:
+            raise Exception('Could not find a main language in v1 DB')
 
-        if main:
-            home = models.HomePage(
-                title=main['title'],
-                draft_title=main['draft_title'],
-                slug=main['slug'],
-                live=main['live'],
-                locked=main['locked'],
-                go_live_at=main['go_live_at'],
-                expire_at=main['expire_at'],
-                first_published_at=main['first_published_at'],
-                last_published_at=main['last_published_at'],
-                search_description=main['search_description'],
-                seo_title=main['seo_title'],
-                locale=locale
-            )
-            root.add_child(instance=home)
-            V1ToV2ObjectMap.create_map(content_object=home, v1_object_id=main['page_ptr_id'])
+        locale = Locale.objects.get(language_code=self._get_iso_locale(language['locale']))
+
+        home = models.HomePage(
+            title=main['title'],
+            draft_title=main['draft_title'],
+            slug=main['slug'],
+            live=main['live'],
+            locked=main['locked'],
+            go_live_at=main['go_live_at'],
+            expire_at=main['expire_at'],
+            first_published_at=main['first_published_at'],
+            last_published_at=main['last_published_at'],
+            search_description=main['search_description'],
+            seo_title=main['seo_title'],
+            locale=locale
+        )
+        root.add_child(instance=home)
+        V1ToV2ObjectMap.create_map(content_object=home, v1_object_id=main['page_ptr_id'])
+
+        Site.objects.create(
+            hostname=self.v1_domains_list[0],
+            port=443,
+            root_page=home,
+            is_default_site=True,
+            site_name=main['site_name'] if main['site_name'] else 'Internet of Good Things',
+        )
+        logo = self.image_map.get(main['logo_id'])
+        if logo:
+            site_settings = models.SiteSettings.get_for_default_site()
+            site_settings.logo_id = logo.id
+            site_settings.save()
         else:
-            raise Exception('Could not find a main page in v1 DB')
-        cur.close()
-
-        sql = f'select * ' \
-              f'from wagtailcore_site wcs, core_sitesettings css ' \
-              f'where wcs.id = css.site_id ' \
-              f'and wcs.is_default_site = true'
-        cur = self.db_query(sql)
-        v1_site = cur.fetchone()
-        cur.close()
-        if v1_site:
-            Site.objects.create(
-                hostname=self.v1_domains_list[0],
-                port=443,
-                root_page=home,
-                is_default_site=True,
-                site_name=v1_site['site_name'] if v1_site['site_name'] else 'Internet of Good Things',
+            self.post_migration_report_messages['other'].append(
+                'Not site logo found. Using default site logo.'
             )
-            logo = self.image_map.get(v1_site['logo_id'])
-            if logo:
-                site_settings = models.SiteSettings.get_for_default_site()
-                site_settings.logo_id = logo.id
-                site_settings.save()
-            else:
-                self.post_migration_report_messages['other'].append(
-                    'Not site logo found. Using default site logo.'
-                )
-
-        else:
-            raise Exception('Could not find site in v1 DB')
 
         sql = f'select * ' \
               f'from core_sitesettings css, wagtailcore_site wcs ' \
