@@ -11,7 +11,7 @@ elasticsearch>=7.0.0,<8.0.0
 factory-boy==3.2.*
 libsass==0.21.*
 lxml
-psycopg2==2.8.*
+psycopg2-binary==2.8.*
 redis~=3.0
 tqdm
 wagtail-localize~=0.9.5
