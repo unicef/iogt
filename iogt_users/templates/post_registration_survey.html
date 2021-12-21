@@ -1,0 +1,13 @@
+{% extends 'account/base.html' %}
+{% load i18n static %}
+
+{% block allauth_content %}
+    <h1>{% translate "Post Registration Survey" %}</h1>
+    <h3>{% translate "Please fill this survey to keep using Internet of Good Things" %}</h3>
+
+    <form action="{% url 'post_registration_survey' %}?{{ query_params }}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="{% translate 'Simulate form completion' %}">
+    </form>
+
+{% endblock %}
