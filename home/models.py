@@ -731,28 +731,6 @@ class SiteSettings(BaseSetting):
         verbose_name_plural = _('Site Settings')
 
 
-@register_setting
-class CacheSettings(BaseSetting):
-    cache = models.BooleanField(
-        default=True,
-        verbose_name=_("Prompt users to download?"),
-        help_text=_(
-            "check to prompt first time users to download the website as an app"),
-    )
-
-    panels = [
-        MultiFieldPanel(
-            [
-                FieldPanel('cache'),
-            ],
-            heading="Cache settings",
-        )
-    ]
-
-    class Meta:
-        verbose_name = "Cache settings"
-
-
 class IogtFlatMenuItem(AbstractFlatMenuItem):
     menu = ParentalKey(
         'wagtailmenus.FlatMenu',
