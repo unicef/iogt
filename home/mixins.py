@@ -19,7 +19,7 @@ class PageUtilsMixin:
 
 class TitleIconMixin:
     """
-    This mixin is used for footers duck-typing
+    This mixin is used for duck-typing
     """
 
     def get_page(self):

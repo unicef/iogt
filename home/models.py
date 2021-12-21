@@ -785,7 +785,7 @@ class CacheSettings(BaseSetting):
         verbose_name = "Cache settings"
 
 
-class IogtFlatMenuItem(AbstractFlatMenuItem):
+class IogtFlatMenuItem(AbstractFlatMenuItem, TitleIconMixin):
     menu = ParentalKey(
         'wagtailmenus.FlatMenu',
         on_delete=models.CASCADE,
@@ -844,6 +844,14 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
         FieldPanel('background_color'),
         FieldPanel('font_color')
     ]
+
+    def get_icon_url(self):
+        icon_url = super().get_icon_url()
+        if not icon_url.url and self.link_page:
+            icon_url = self.link_page.get_icon_url()
+
+        return icon_url
+
 
 
 @deconstructible
