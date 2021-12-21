@@ -542,13 +542,6 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
     parent_page_types = ['home.FooterIndexPage', 'home.Section']
     subpage_types = []
 
-    image = models.ForeignKey(
-        'wagtailimages.Image',
-        on_delete=models.PROTECT,
-        related_name='+',
-        blank=True,
-        null=True
-    )
     icon = models.ForeignKey(
         Svg,
         related_name='+',
@@ -568,7 +561,6 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
     external_link = models.URLField(null=True, blank=True)
 
     content_panels = Page.content_panels + [
-        ImageChooserPanel('image'),
         SvgChooserPanel('icon'),
         ImageChooserPanel('image_icon'),
         PageChooserPanel('page'),
