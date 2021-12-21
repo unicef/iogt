@@ -27,8 +27,7 @@
         </a>
         <a href="{% url "account_logout" %}" class="icon-btn profile__btn">
             <span class="icon-btn__icon">
-                {% static "icons/arrow_icon_left.svg" as logout_url %}
-                {% render_png_from_svg  logout_url attrs='alt="lock icon"'%}
+                {% render_png_from_svg 'static/icons/arrow_icon_left.svg' attrs='alt="lock icon"'%}
             </span>
             <span class="icon-btn__title">{% translate "Log out" %}</span>
         </a>

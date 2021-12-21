@@ -26,6 +26,9 @@ WAGTAILTRANSFER_SOURCES = {
    },
 }
 
+STATIC_URL = os.environ.get('STATIC_URL', '/static/')
+MEDIA_URL = os.environ.get('MEDIA_URL', '/media/')
+
 try:
     from .local import *
 except ImportError:
