@@ -9,7 +9,7 @@ register = template.Library()
 
 
 @register.inclusion_tag('generic_components/primary_button.html')
-def primary_button(title, extra_classnames='', href=None, icon_path=None,
+def primary_button(title, extra_classnames='', href=None, icon=None, icon_path=None,
                    font_color=None, background_color=None, is_svg_icon=False):
     try:
         theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
@@ -17,8 +17,9 @@ def primary_button(title, extra_classnames='', href=None, icon_path=None,
         font_color = font_color or theme_settings.primary_button_font_color
         background_color = background_color or theme_settings.primary_button_background_color
 
-        if icon_path and is_svg_icon and font_color:
-            icon_path = svg_to_png_url(icon_path, fill_color=font_color)
+        if (icon or icon_path) and is_svg_icon and font_color:
+            relative_path = f"media/{icon.file}" if icon else f"static/{icon_path}"
+            icon_path = svg_to_png_url(relative_path, fill_color=font_color)
 
         return {
             'title': title,

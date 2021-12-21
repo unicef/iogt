@@ -34,10 +34,10 @@
             <div class="nav-bar__item">
                 {% url 'account_login' as login_url %}
                 {% if request.user.is_anonymous %}
-                    {% primary_button title="Log in / Create account" href=login_url icon_path='static/icons/login.svg' is_svg_icon=True %}
+                    {% primary_button title="Log in / Create account" href=login_url icon_path='icons/login.svg' is_svg_icon=True %}
                 {% else %}
                     {% url 'user_profile' as profile_url %}
-                    {% primary_button title="Profile" href=profile_url icon_path='static/icons/profile.svg' is_svg_icon=True %}
+                    {% primary_button title="Profile" href=profile_url icon_path='icons/profile.svg' is_svg_icon=True %}
                 {% endif %}
             </div>
         </div>

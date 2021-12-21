@@ -4,15 +4,14 @@
     <nav>
         {% for page in pages %}
             {% get_page_url page.get_page as page_url %}
-            {% get_icon_url page as icon_url %}
-            {% primary_button title=page.title href=page_url icon_path=icon_url.url is_svg_icon=icon_url.is_svg_icon %}
+            {% primary_button title=page.title href=page_url icon=page.icon is_svg_icon=icon_url.is_svg_icon %}
         {% endfor %}
         {% if request.user.is_anonymous %}
             {% url 'account_login' as login_url %}
-            {% primary_button title='Log in / Create account' href=login_url icon_path='static/icons/login.svg' is_svg_icon=True %}
+            {% primary_button title='Log in / Create account' href=login_url icon_path='icons/login.svg' is_svg_icon=True %}
         {% else %}
             {% url 'user_profile' as profile_url %}
-            {% primary_button title='Profile' href=profile_url icon_path='static/icons/profile.svg' is_svg_icon=True %}
+            {% primary_button title='Profile' href=profile_url icon_path='icons/profile.svg' is_svg_icon=True %}
         {% endif %}
     </nav>
 </footer>
