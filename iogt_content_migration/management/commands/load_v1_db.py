@@ -868,7 +868,7 @@ class Command(BaseCommand):
                 if translated_footer:
                     commenting_status, commenting_open_time, commenting_close_time = self._get_commenting_fields(row)
 
-                    translated_footer.lead_image = self.image_map.get(row['image_id'])
+                    translated_footer.image_icon = self.image_map.get(row['image_id'])
                     translated_footer.title = row['title']
                     translated_footer.slug = row['slug']
                     translated_footer.draft_title = row['draft_title']
@@ -900,7 +900,7 @@ class Command(BaseCommand):
         commenting_status, commenting_open_time, commenting_close_time = self._get_commenting_fields(row)
 
         footer = models.Article(
-            lead_image=self.image_map.get(row['image_id']),
+            image_icon=self.image_map.get(row['image_id']),
             title=row['title'],
             draft_title=row['draft_title'],
             slug=row['slug'],
