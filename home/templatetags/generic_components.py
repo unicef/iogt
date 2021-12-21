@@ -107,3 +107,8 @@ def menu_item_background_color(menu_item):
 @register.simple_tag
 def get_icon_url(obj):
     return obj.get_icon_url()
+
+
+@register.simple_tag
+def get_page_url(obj):
+    return obj.get_url()

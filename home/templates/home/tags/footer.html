@@ -3,7 +3,7 @@
 <footer class="bottom-level">
     <nav>
         {% for page in pages %}
-            {% pageurl page.get_page as page_url %}
+            {% get_page_url page.get_page as page_url %}
             {% get_icon_url page as icon_url %}
             {% primary_button title=page.title href=page_url icon_path=icon_url.url is_svg_icon=icon_url.is_svg_icon %}
         {% endfor %}

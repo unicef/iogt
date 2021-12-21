@@ -16,6 +16,9 @@ class PageUtilsMixin:
     def get_type(self):
         return self.__class__.__name__.lower()
 
+    def get_url(self):
+        return self.url
+
 
 class TitleIconMixin:
     """

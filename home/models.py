@@ -538,7 +538,7 @@ class FooterPage(Article, TitleIconMixin):
         verbose_name_plural = _("footers")
 
 
-class PageLinkPage(Page, TitleIconMixin):
+class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
     parent_page_types = ['home.FooterIndexPage', 'home.Section']
     subpage_types = []
 
@@ -576,7 +576,7 @@ class PageLinkPage(Page, TitleIconMixin):
     ]
 
     def get_page(self):
-        return self.page.specific if self.page else self.page
+        return self.page.specific if self.page else self
 
     def get_icon_url(self):
         icon_url = super().get_icon_url()
@@ -584,6 +584,15 @@ class PageLinkPage(Page, TitleIconMixin):
             icon_url = self.page.specific.get_icon_url()
 
         return icon_url
+
+    def get_url(self):
+        url = ''
+        if self.page:
+            url = self.page.specific.url
+        elif self.external_link:
+            url = self.external_link
+
+        return url
 
 
 @register_setting
