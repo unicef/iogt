@@ -25,25 +25,3 @@ class UserDetailEditView(UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
-
-
-class PostRegistrationSurveyView(TemplateView):
-    template_name = 'post_registration_survey.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        query_params = self.request.GET.urlencode()
-        context.update({'query_params': query_params})
-        return context
-
-    def post(self, request, *args, **kwargs):
-        user = request.user
-        user.has_filled_registration_survey = True
-        user.save(update_fields=['has_filled_registration_survey'])
-
-        next_url = request.GET.get('next')
-        if next_url:
-            return redirect(next_url)
-
-        context = self.get_context_data(**kwargs)
-        return self.render_to_response(context)
