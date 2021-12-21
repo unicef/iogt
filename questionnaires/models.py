@@ -12,6 +12,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
+from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail_localize.fields import TranslatableField
 from wagtailmarkdown.blocks import MarkdownBlock
 from wagtailsvg.edit_handlers import SvgChooserPanel
@@ -115,6 +116,13 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
+    )
+    image_icon = models.ForeignKey(
+        'wagtailimages.Image',
+        on_delete=models.PROTECT,
+        related_name='+',
+        blank=True,
+        null=True
     )
 
     settings_panels = Page.settings_panels + [
@@ -393,6 +401,7 @@ class Survey(QuestionnairePage, AbstractForm):
             heading="Terms and conditions",
         ),
         SvgChooserPanel('icon'),
+        ImageChooserPanel('image_icon'),
         InlinePanel("survey_form_fields", label="Form fields"),
     ]
 
@@ -568,6 +577,7 @@ class Poll(QuestionnairePage, AbstractForm):
             heading="Terms and conditions",
         ),
         SvgChooserPanel('icon'),
+        ImageChooserPanel('image_icon'),
         InlinePanel("poll_form_fields", label="Poll Form fields", min_num=1, max_num=1),
     ]
 
@@ -785,6 +795,7 @@ class Quiz(QuestionnairePage, AbstractForm):
             heading="Terms and conditions",
         ),
         SvgChooserPanel('icon'),
+        ImageChooserPanel('image_icon'),
         InlinePanel("quiz_form_fields", label="Form fields"),
     ]
 

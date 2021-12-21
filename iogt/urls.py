@@ -1,8 +1,9 @@
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.views.i18n import JavaScriptCatalog
+from wagtail.images.views.serve import ServeView
 
 from home.views import get_manifest, LogoutRedirectHackView, LoadTranslationsFromPOFiles
 from iogt_users import urls as users_urls
@@ -51,5 +52,6 @@ if settings.DEBUG:
     urlpatterns = urlpatterns + [path(r"__debug__/", include(debug_toolbar.urls))]
 
 urlpatterns = urlpatterns + i18n_patterns(
+    re_path(r'^images/([^/]*)/(\d*)/([^/]*)/[^/]*$', ServeView.as_view(), name='wagtailimages_serve'),
     path("", include(wagtail_urls)),
 )

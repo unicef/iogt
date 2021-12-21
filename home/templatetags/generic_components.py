@@ -102,3 +102,8 @@ def menu_item_font_color(menu_item):
 @register.simple_tag
 def menu_item_background_color(menu_item):
     return menu_item.background_color or navbar_background_color
+
+
+@register.simple_tag
+def get_icon_url(page):
+    return page.get_icon_url()

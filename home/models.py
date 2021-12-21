@@ -145,6 +145,13 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         blank=True,
         on_delete=models.PROTECT,
     )
+    image_icon = models.ForeignKey(
+        'wagtailimages.Image',
+        on_delete=models.PROTECT,
+        related_name='+',
+        blank=True,
+        null=True
+    )
     background_color = models.CharField(
         max_length=8,
         blank=True,
@@ -169,6 +176,7 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     content_panels = Page.content_panels + [
         ImageChooserPanel('lead_image'),
         SvgChooserPanel('icon'),
+        ImageChooserPanel('image_icon'),
         FieldPanel('background_color'),
         FieldPanel('font_color'),
         FieldPanel('larger_image_for_top_page_in_list_as_in_v1'),
@@ -273,6 +281,13 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         blank=True,
         on_delete=models.SET_NULL,
     )
+    image_icon = models.ForeignKey(
+        'wagtailimages.Image',
+        on_delete=models.PROTECT,
+        related_name='+',
+        blank=True,
+        null=True
+    )
     index_page_description = models.TextField(null=True, blank=True)
 
     body = StreamField([
@@ -361,6 +376,7 @@ class Article(AbstractArticle):
     content_panels = AbstractArticle.content_panels + [
         ImageChooserPanel('lead_image'),
         SvgChooserPanel('icon'),
+        ImageChooserPanel('image_icon'),
         StreamFieldPanel('body'),
         FieldPanel('index_page_description'),
         MultiFieldPanel([
@@ -389,7 +405,6 @@ class Article(AbstractArticle):
         ]
 
         return context
-
 
     def serve(self, request):
         response = super().serve(request)
@@ -540,6 +555,13 @@ class PageLinkPage(Page, TitleIconMixin):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
+    )
+    image_icon = models.ForeignKey(
+        'wagtailimages.Image',
+        on_delete=models.PROTECT,
+        related_name='+',
+        blank=True,
+        null=True
     )
 
     page = models.ForeignKey(Page, null=True, blank=True, related_name='page_link_pages', on_delete=models.PROTECT)
@@ -788,6 +810,13 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
         help_text=_('If Page link is a section page and icon is blank then the section icon will be used. '
                     'Specify an icon here to override this.')
     )
+    image_icon = models.ForeignKey(
+        'wagtailimages.Image',
+        on_delete=models.PROTECT,
+        related_name='+',
+        blank=True,
+        null=True
+    )
 
     background_color = models.CharField(
         max_length=255,
@@ -811,6 +840,7 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
         FieldPanel('handle'),
         FieldPanel('allow_subnav'),
         SvgChooserPanel('icon'),
+        ImageChooserPanel('image_icon'),
         FieldPanel('background_color'),
         FieldPanel('font_color')
     ]

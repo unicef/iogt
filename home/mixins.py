@@ -26,4 +26,21 @@ class TitleIconMixin:
         return self
 
     def get_icon_url(self):
-        return getattr(getattr(self, 'icon', object), 'url', '')
+        from wagtail.images.views.serve import generate_image_url
+
+        class Icon(object):
+            url = ''
+            is_svg_icon = False
+
+            def __init__(self, url='', is_svg_icon=False):
+                self.url = url
+                self.is_svg_icon = is_svg_icon
+
+        icon = Icon()
+        if hasattr(self, 'icon') and self.icon:
+            return Icon(self.icon.url, True)
+
+        if hasattr(self, 'image_icon') and self.image_icon:
+            return Icon(generate_image_url(self.image_icon, 'fill-32x32'), False)
+
+        return icon
