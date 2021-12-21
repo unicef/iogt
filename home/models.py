@@ -570,6 +570,7 @@ class PageLinkPage(Page, TitleIconMixin):
     content_panels = Page.content_panels + [
         ImageChooserPanel('image'),
         SvgChooserPanel('icon'),
+        ImageChooserPanel('image_icon'),
         PageChooserPanel('page'),
         FieldPanel('external_link'),
     ]
@@ -578,10 +579,11 @@ class PageLinkPage(Page, TitleIconMixin):
         return self.page.specific if self.page else self.page
 
     def get_icon_url(self):
-        if self.icon:
-            return self.icon.url
+        icon_url = super().get_icon_url()
+        if not icon_url.url and self.page:
+            icon_url = self.page.specific.get_icon_url()
 
-        return getattr(getattr(self.page.specific, 'icon', object), 'url', '')
+        return icon_url
 
 
 @register_setting
@@ -851,7 +853,6 @@ class IogtFlatMenuItem(AbstractFlatMenuItem, TitleIconMixin):
             icon_url = self.link_page.get_icon_url()
 
         return icon_url
-
 
 
 @deconstructible
