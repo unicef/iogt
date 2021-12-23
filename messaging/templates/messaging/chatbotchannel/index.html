@@ -1,0 +1,20 @@
+{% extends "modeladmin/index.html" %}
+{% load messaging_tags %}
+{% load i18n modeladmin_tags wagtailadmin_tags %}
+
+{% block header %}
+    <header class="nice-padding hasform">
+        <div class="row header-title">
+            <div class="left">
+                <div class="col">
+                    {% block h1 %}
+                        <h1 {% if view.header_icon %}class="icon icon-{{ view.header_icon }}"{% endif %}>{{ view.get_page_title }}</h1>
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+        <p style="text-transform: none; display: inline-block">
+            <span style="font-weight: bold">Chatbot Authentication Header:</span> {% chatbot_auth_header %}
+        </p>
+    </header>
+{% endblock %}
