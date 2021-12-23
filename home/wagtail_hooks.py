@@ -18,7 +18,7 @@ from wagtail.core.models import PageViewRestriction
 from wagtail.core.rich_text import LinkHandler
 
 from home.models import FooterIndexPage, BannerIndexPage, Section, \
-    SectionIndexPage
+    SectionIndexPage, LocaleDetail
 from home.translatable_strings import translatable_strings
 
 
@@ -162,4 +162,15 @@ class TranslationEntryAdmin(ModelAdmin):
     menu_order = 601
 
 
+class LocaleDetailAdmin(ModelAdmin):
+    model = LocaleDetail
+    menu_label = 'Local Detail'
+    menu_icon = 'site'
+    list_display = ('locale', 'is_active', 'is_main_language',)
+    list_filter = ('is_active', 'is_main_language',)
+    add_to_settings_menu = True
+    menu_order = 700
+
+
 modeladmin_register(TranslationEntryAdmin)
+modeladmin_register(LocaleDetailAdmin)

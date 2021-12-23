@@ -12,9 +12,9 @@ register = template.Library()
 def language_switcher(context, page):
     if page:
         context.update({
-            'translations': page.get_translations(inclusive=True).all(),
+            'translations': page.get_translations(inclusive=True).filter(locale__locale_detail__is_active=True),
         })
-    context.update({'default_locales': Locale.objects.all()})
+    context.update({'default_locales': Locale.objects.filter(locale_detail__is_active=True)})
 
     return context
 
