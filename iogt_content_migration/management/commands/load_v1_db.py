@@ -485,7 +485,6 @@ class Command(BaseCommand):
                     translated_section.commenting_ends_at = commenting_close_time
                     translated_section.latest_revision_created_at = row['latest_revision_created_at']
                     translated_section.save()
-                    self.add_warning_for_page_with_empty_image(row, 'image_id', translated_section)
                     self.add_warning_for_sections_with_description(row, section)
                     content_type = self.find_content_type_id('core', 'sectionpage')
                     tags = self.find_tags(content_type, row['page_ptr_id'])
@@ -541,7 +540,6 @@ class Command(BaseCommand):
             latest_revision_created_at=row['latest_revision_created_at'],
         )
         section.save()
-        self.add_warning_for_page_with_empty_image(row, 'image_id', section)
         self.add_warning_for_sections_with_description(row, section)
         content_type = self.find_content_type_id('core', 'sectionpage')
         tags = self.find_tags(content_type, row['page_ptr_id'])
@@ -567,15 +565,6 @@ class Command(BaseCommand):
                 f'title: {section.title}. URL: {section.full_url}. '
                 f'Admin URL: {self.get_admin_url(section.id)}. '
                 f'Description (not migrated): {row["description"]}.'
-            )
-
-    def add_warning_for_page_with_empty_image(self, row, key, page):
-        image = self.image_map.get(row[key])
-        if not image:
-            self.post_migration_report_messages['page_with_empty_image'].append(
-                f'title: {page.title}. URL: {page.full_url}. '
-                f'Admin URL: {self.get_admin_url(page.id)}. '
-                f'Image ID: {row[key]}'
             )
 
     def migrate_articles(self):
@@ -630,7 +619,7 @@ class Command(BaseCommand):
                     translated_article.commenting_ends_at = commenting_close_time
                     translated_article.latest_revision_created_at = row['latest_revision_created_at']
                     translated_article.save()
-                    self.add_warning_for_page_with_empty_image(row, 'image_id', translated_article)
+
                     content_type = self.find_content_type_id('core', 'articlepage')
                     tags = self.find_tags(content_type, row['page_ptr_id'])
                     if tags:
@@ -684,7 +673,6 @@ class Command(BaseCommand):
         )
         try:
             article.save()
-            self.add_warning_for_page_with_empty_image(row, 'image_id', article)
             content_type = self.find_content_type_id('core', 'articlepage')
             tags = self.find_tags(content_type, row['page_ptr_id'])
             if tags:
@@ -756,6 +744,10 @@ class Command(BaseCommand):
                             f'title: {page.title}. URL: {page.full_url}. '
                             f'Admin URL: {self.get_admin_url(page.id)}. '
                             f'Image ID: {block["value"]}'
+                        )
+                    else:
+                        self.post_migration_report_messages['invalid_image_id'].append(
+                            f"title={row['title']} has image with invalid id {block['value']}"
                         )
                     block['value'] = None
             elif block['type'] == 'media':
@@ -834,7 +826,7 @@ class Command(BaseCommand):
                     translated_banner.seo_title = row['seo_title']
                     translated_banner.latest_revision_created_at = row['latest_revision_created_at']
                     translated_banner.save()
-                    self.add_warning_for_page_with_empty_image(row, 'banner_id', translated_banner)
+
                     V1ToV2ObjectMap.create_map(content_object=translated_banner, v1_object_id=row['page_ptr_id'])
                     V1PageURLToV2PageMap.create_map(url=row['url_path'], page=translated_banner)
 
@@ -866,7 +858,7 @@ class Command(BaseCommand):
             latest_revision_created_at=row['latest_revision_created_at'],
         )
         banner.save()
-        self.add_warning_for_page_with_empty_image(row, 'banner_id', banner)
+
         V1ToV2ObjectMap.create_map(content_object=banner, v1_object_id=row['page_ptr_id'])
         V1PageURLToV2PageMap.create_map(url=row['url_path'], page=banner)
 
@@ -937,7 +929,7 @@ class Command(BaseCommand):
                     translated_footer.commenting_ends_at = commenting_close_time
                     translated_footer.latest_revision_created_at = row['latest_revision_created_at']
                     translated_footer.save()
-                    self.add_warning_for_page_with_empty_image(row, 'image_id', translated_footer)
+
                     if image:
                         self.post_migration_report_messages['footers_with_image'].append(
                             f'title: {translated_footer.title}. URL: {translated_footer.full_url}. '
@@ -980,7 +972,7 @@ class Command(BaseCommand):
             latest_revision_created_at=row['latest_revision_created_at'],
         )
         footer.save()
-        self.add_warning_for_page_with_empty_image(row, 'image_id', footer)
+
         if image:
             self.post_migration_report_messages['footers_with_image'].append(
                 f'title: {footer.title}. URL: {footer.full_url}. Admin URL: {self.get_admin_url(footer.id)}.'
@@ -1083,6 +1075,7 @@ class Command(BaseCommand):
                     translated_poll.allow_multiple_submissions = False
                     translated_poll.latest_revision_created_at = row['latest_revision_created_at']
                     translated_poll.save()
+
                     V1ToV2ObjectMap.create_map(content_object=translated_poll, v1_object_id=row['page_ptr_id'])
                     V1PageURLToV2PageMap.create_map(url=row['url_path'], page=translated_poll)
 
