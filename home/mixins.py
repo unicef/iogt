@@ -41,9 +41,9 @@ class TitleIconMixin:
 
         icon = Icon()
         if hasattr(self, 'icon') and self.icon:
-            return Icon(self.icon.url, True)
+            icon = Icon(self.icon.url, True)
 
         if hasattr(self, 'image_icon') and self.image_icon:
-            return Icon(generate_image_url(self.image_icon, 'fill-32x32'), False)
+            icon = Icon(generate_image_url(self.image_icon, 'fill-32x32'), False)
 
         return icon
