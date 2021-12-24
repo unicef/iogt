@@ -1718,7 +1718,7 @@ class Command(BaseCommand):
                     }
                     v2_image = self.image_map.get(block_value.get('image'))
                     if v2_image:
-                        page_link_page_data.update({'image_id': v2_image.id})
+                        page_link_page_data.update({'image_icon_id': v2_image.id})
 
                     page_link_page = models.PageLinkPage(**page_link_page_data)
                     self.footer_index_page.add_child(instance=page_link_page)
