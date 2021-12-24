@@ -160,10 +160,11 @@ class Command(BaseCommand):
         self.migrate_documents()
         self.migrate_media()
         self.migrate_images()
+        self.migrate_locales()
         self.load_page_translation_map()
         self.home_page = self.create_home_page(root)
-        self.translate_home_pages(self.home_page)
-        self.create_index_pages(self.home_page)
+        self.translate_home_pages()
+        self.create_index_pages()
         self.translate_index_pages()
         self.migrate_sections()
         self.migrate_articles()
@@ -172,7 +173,7 @@ class Command(BaseCommand):
         self.migrate_surveys()
         self.migrate_banners()
         self.mark_pages_which_are_not_translated_in_v1_as_draft()
-        Page.fix_tree()
+        Page.fix_tree(fix_paths=True)
         self.mark_empty_sections_as_draft()
         self.fix_articles_body()
         self.fix_footers_body()
@@ -195,81 +196,113 @@ class Command(BaseCommand):
         self.stop_translations()
 
     def create_home_page(self, root):
-        sql = 'select * from core_main main join wagtailcore_page page on main.page_ptr_id = page.id'
+        sql = 'select * ' \
+              'from wagtailcore_site wcs, core_sitesettings css, core_main cm, wagtailcore_page wcp ' \
+              'where wcs.id = css.site_id ' \
+              'and wcs.root_page_id = cm.page_ptr_id ' \
+              'and cm.page_ptr_id = wcp.id ' \
+              'and wcs.is_default_site = true'
         cur = self.db_query(sql)
         main = cur.fetchone()
         cur.close()
-        home = None
-        if main:
-            home = models.HomePage(
-                title=main['title'],
-                draft_title=main['draft_title'],
-                slug=main['slug'],
-                live=main['live'],
-                locked=main['locked'],
-                go_live_at=main['go_live_at'],
-                expire_at=main['expire_at'],
-                first_published_at=main['first_published_at'],
-                last_published_at=main['last_published_at'],
-                search_description=main['search_description'],
-                seo_title=main['seo_title'],
-            )
-            root.add_child(instance=home)
-            V1ToV2ObjectMap.create_map(content_object=home, v1_object_id=main['page_ptr_id'])
-        else:
+        if not main:
             raise Exception('Could not find a main page in v1 DB')
+
+        sql = 'select * ' \
+              'from core_sitelanguage ' \
+              'where is_main_language = true'
+        cur = self.db_query(sql)
+        language = cur.fetchone()
+        cur.close()
+        if not language:
+            raise Exception('Could not find a main language in v1 DB')
+
+        locale = Locale.objects.get(language_code=self._get_iso_locale(language['locale']))
+
+        home = models.HomePage(
+            title=main['title'],
+            draft_title=main['draft_title'],
+            slug=main['slug'],
+            live=main['live'],
+            locked=main['locked'],
+            go_live_at=main['go_live_at'],
+            expire_at=main['expire_at'],
+            first_published_at=main['first_published_at'],
+            last_published_at=main['last_published_at'],
+            search_description=main['search_description'],
+            seo_title=main['seo_title'],
+            locale=locale
+        )
+        root.add_child(instance=home)
+        V1ToV2ObjectMap.create_map(content_object=home, v1_object_id=main['page_ptr_id'])
+
+        Site.objects.create(
+            hostname=self.v1_domains_list[0],
+            port=443,
+            root_page=home,
+            is_default_site=True,
+            site_name=main['site_name'] if main['site_name'] else 'Internet of Good Things',
+        )
+        logo = self.image_map.get(main['logo_id'])
+        if logo:
+            site_settings = models.SiteSettings.get_for_default_site()
+            site_settings.logo_id = logo.id
+            site_settings.save()
+        else:
+            self.post_migration_report_messages['other'].append(
+                'Not site logo found. Using default site logo.'
+            )
+
+        sql = f'select * ' \
+              f'from core_sitesettings css, wagtailcore_site wcs ' \
+              f'where css.site_id = wcs.id ' \
+              f'and wcs.is_default_site = true'
+        cur = self.db_query(sql)
+        for row in cur:
+            social_media_links = json.loads(row['social_media_links_on_footer_page'])
+            if social_media_links:
+                links = []
+                for social_media_link in social_media_links:
+                    value = social_media_link.get('value')
+                    if value:
+                        links.append({
+                            'title': value.get('title'),
+                            'link': value.get('link'),
+                        })
+
+                self.post_migration_report_messages['social_media_links'].append(
+                    f'site: {row["site_name"]}, hostname: {row["hostname"]} has following social media links '
+                    f'{[(link["title"], link["link"]) for link in links]}.')
+
         cur.close()
 
-        cur = self.db_query('select * from wagtailcore_site')
-        v1_site = cur.fetchone()
-        cur.close()
-        if v1_site:
-            Site.objects.create(
-                hostname=v1_site['hostname'],
-                port=v1_site['port'],
-                root_page=home,
-                is_default_site=True,
-                site_name=v1_site['site_name'] if v1_site['site_name'] else 'Internet of Good Things',
-            )
-        else:
-            raise Exception('Could not find site in v1 DB')
+        self.post_migration_report_messages['other'].append(
+            'A default favicon has been chosen for the site.'
+        )
+
         return home
 
-    def create_index_pages(self, homepage):
-        self.section_index_page = models.SectionIndexPage.objects.first()
-        if self.section_index_page is None:
-            self.section_index_page = models.SectionIndexPage(title='Sections')
-            homepage.add_child(instance=self.section_index_page)
+    def create_index_pages(self):
+        self.section_index_page = models.SectionIndexPage(title='Sections')
+        self.home_page.add_child(instance=self.section_index_page)
 
-        self.banner_index_page = models.BannerIndexPage.objects.first()
-        if self.banner_index_page is None:
-            self.banner_index_page = models.BannerIndexPage(title='Banners')
-            homepage.add_child(instance=self.banner_index_page)
+        self.banner_index_page = models.BannerIndexPage(title='Banners')
+        self.home_page.add_child(instance=self.banner_index_page)
 
-        self.footer_index_page = models.FooterIndexPage.objects.first()
-        if self.footer_index_page is None:
-            self.footer_index_page = models.FooterIndexPage(title='Footers')
-            homepage.add_child(instance=self.footer_index_page)
+        self.footer_index_page = models.FooterIndexPage(title='Footers')
+        self.home_page.add_child(instance=self.footer_index_page)
 
-        self.poll_index_page = PollIndexPage.objects.first()
-        if self.poll_index_page is None:
-            self.poll_index_page = PollIndexPage(title='Polls')
-            homepage.add_child(instance=self.poll_index_page)
+        self.poll_index_page = PollIndexPage(title='Polls')
+        self.home_page.add_child(instance=self.poll_index_page)
 
-        self.survey_index_page = SurveyIndexPage.objects.first()
-        if self.survey_index_page is None:
-            self.survey_index_page = SurveyIndexPage(title='Surveys')
-            homepage.add_child(instance=self.survey_index_page)
+        self.survey_index_page = SurveyIndexPage(title='Surveys')
+        self.home_page.add_child(instance=self.survey_index_page)
 
-        self.quiz_index_page = QuizIndexPage.objects.first()
-        if self.quiz_index_page is None:
-            self.quiz_index_page = QuizIndexPage(title='Quizzes')
-            homepage.add_child(instance=self.quiz_index_page)
+        self.quiz_index_page = QuizIndexPage(title='Quizzes')
+        self.home_page.add_child(instance=self.quiz_index_page)
 
-        self.miscellaneous_index_page = models.MiscellaneousIndexPage.objects.first()
-        if self.miscellaneous_index_page is None:
-            self.miscellaneous_index_page = models.MiscellaneousIndexPage(title='Miscellaneous')
-            homepage.add_child(instance=self.miscellaneous_index_page)
+        self.miscellaneous_index_page = models.MiscellaneousIndexPage(title='Miscellaneous')
+        self.home_page.add_child(instance=self.miscellaneous_index_page)
 
     def migrate_collections(self):
         cur = self.db_query('select * from wagtailcore_collection')
@@ -377,6 +410,14 @@ class Command(BaseCommand):
                 self.image_map.update({row['id']: image})
         cur.close()
         self.stdout.write('Images migrated')
+
+    def migrate_locales(self):
+        sql = f'select * ' \
+              f'from core_sitelanguage'
+        cur = self.db_query(sql)
+        for row in cur:
+            Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
+        cur.close()
 
     def find_content_type_id(self, app_label, model):
         cur = self.db_query(f"select id from django_content_type where app_label = '{app_label}' and model = '{model}'")
@@ -868,7 +909,8 @@ class Command(BaseCommand):
                 if translated_footer:
                     commenting_status, commenting_open_time, commenting_close_time = self._get_commenting_fields(row)
 
-                    translated_footer.image_icon = self.image_map.get(row['image_id'])
+                    image = self.image_map.get(row['image_id'])
+                    translated_footer.image_icon = image
                     translated_footer.title = row['title']
                     translated_footer.slug = row['slug']
                     translated_footer.draft_title = row['draft_title']
@@ -886,6 +928,12 @@ class Command(BaseCommand):
                     translated_footer.latest_revision_created_at = row['latest_revision_created_at']
                     translated_footer.save()
 
+                    if image:
+                        self.post_migration_report_messages['footers_with_image'].append(
+                            f'title: {translated_footer.title}. URL: {translated_footer.full_url}. '
+                            f'Admin URL: {self.get_admin_url(translated_footer.id)}.'
+                        )
+
                     V1ToV2ObjectMap.create_map(content_object=translated_footer, v1_object_id=row['page_ptr_id'])
                     V1PageURLToV2PageMap.create_map(url=row['url_path'], page=translated_footer)
 
@@ -899,8 +947,9 @@ class Command(BaseCommand):
     def create_footer(self, row):
         commenting_status, commenting_open_time, commenting_close_time = self._get_commenting_fields(row)
 
+        image = self.image_map.get(row['image_id'])
         footer = models.Article(
-            image_icon=self.image_map.get(row['image_id']),
+            image_icon=image,
             title=row['title'],
             draft_title=row['draft_title'],
             slug=row['slug'],
@@ -921,6 +970,11 @@ class Command(BaseCommand):
             latest_revision_created_at=row['latest_revision_created_at'],
         )
         footer.save()
+
+        if image:
+            self.post_migration_report_messages['footers_with_image'].append(
+                f'title: {footer.title}. URL: {footer.full_url}. Admin URL: {self.get_admin_url(footer.id)}.'
+            )
 
         V1ToV2ObjectMap.create_map(content_object=footer, v1_object_id=row['page_ptr_id'])
         V1PageURLToV2PageMap.create_map(url=row['url_path'], page=footer)
@@ -1340,30 +1394,22 @@ class Command(BaseCommand):
 
         return iso_locales_map.get(locale, locale)
 
-    def translate_home_pages(self, home):
-        cur = self.db_query(f'select * from core_sitelanguage')
-        for row in cur:
-            locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
-            self.translate_page(locale=locale, page=home)
-            translated_home_page = home.get_translation_or_none(locale)
-
+    def translate_home_pages(self):
+        locales = Locale.objects.all()
+        for locale in locales:
+            self.translate_page(locale=locale, page=self.home_page)
+            translated_home_page = self.home_page.get_translation_or_none(locale)
             if translated_home_page:
-                modified_title = f"{translated_home_page.title} [{str(locale)}]"
-                translated_home_page.title = modified_title
-                translated_home_page.draft_title = modified_title
+                translated_home_page.title = f"{translated_home_page.title} [{str(locale)}]"
+                translated_home_page.draft_title = f"{translated_home_page.draft_title} [{str(locale)}]"
                 translated_home_page.save()
 
     def translate_index_pages(self):
-        cur = self.db_query(f'select * from core_sitelanguage')
-        locales = []
-        for row in cur:
-            locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
-            locales.append(locale)
-
         index_pages = [
             self.section_index_page, self.banner_index_page, self.footer_index_page, self.poll_index_page,
             self.survey_index_page, self.quiz_index_page, self.miscellaneous_index_page,
         ]
+        locales = Locale.objects.all()
         for page in index_pages:
             for locale in locales:
                 self.translate_page(locale=locale, page=page)
@@ -1406,12 +1452,12 @@ class Command(BaseCommand):
                 translated_from_page_id = self.page_translation_map.get(article_row['page_ptr_id'])
                 featured_in_homepage_start_date = article_row['featured_in_homepage_start_date']
                 if translated_from_page_id:
-                    eng_article_cur = self.db_query(
+                    translated_from_article_cur = self.db_query(
                         f'select * from core_articlepage where page_ptr_id = {translated_from_page_id}')
-                    eng_article_row = eng_article_cur.fetchone()
-                    eng_article_cur.close()
-                    # For translated articles, only the date of the English version matters
-                    featured_in_homepage_start_date = eng_article_row['featured_in_homepage_start_date']
+                    translated_from_article_row = translated_from_article_cur.fetchone()
+                    translated_from_article_cur.close()
+                    # For translated articles, only the date of the translated from matters
+                    featured_in_homepage_start_date = translated_from_article_row['featured_in_homepage_start_date']
 
                 if featured_in_homepage_start_date:
                     article = self.v1_to_v2_page_map.get(article_row['page_ptr_id'])
@@ -1550,6 +1596,7 @@ class Command(BaseCommand):
         for row in cur:
             v2_article = self.v1_to_v2_page_map.get(row['page_ptr_id'])
             if v2_article:
+                v2_article.refresh_from_db()
                 v2_article.body = self.map_article_body(row)
                 v2_article.save()
             else:
@@ -1571,6 +1618,7 @@ class Command(BaseCommand):
         for row in cur:
             v2_footer = self.v1_to_v2_page_map.get(row['page_ptr_id'])
             if v2_footer:
+                v2_footer.refresh_from_db()
                 v2_footer.body = self.map_article_body(row)
                 v2_footer.save()
         cur.close()
@@ -1586,6 +1634,7 @@ class Command(BaseCommand):
         for row in cur:
             v2_survey = self.v1_to_v2_page_map.get(row['page_ptr_id'])
             if v2_survey:
+                v2_survey.refresh_from_db()
                 v2_survey.description = self.map_survey_description(row)
                 v2_survey.save()
         cur.close()
@@ -1601,6 +1650,7 @@ class Command(BaseCommand):
         for row in cur:
             v2_banner = self.v1_to_v2_page_map.get(row['page_ptr_id'])
             if v2_banner:
+                v2_banner.refresh_from_db()
                 v2_banner.banner_link_page = self.map_banner_page(row)
                 v2_banner.save()
         cur.close()
@@ -1744,6 +1794,8 @@ class Command(BaseCommand):
                     f"Couldn't find v2 page for v1 section: {row['section_id']} and article: {row['page_id']}"
                 )
                 continue
+            section.refresh_from_db()
+            article.refresh_from_db()
             page_link_page = models.PageLinkPage(title=article.title, page=article, live=article.live)
             section.add_child(instance=page_link_page)
             page = Page.objects.get(id=page_link_page.id)

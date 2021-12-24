@@ -9,6 +9,7 @@ from django.core.files import File
 from django.core.validators import URLValidator
 from django.db import models
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from django_extensions.db.models import TimeStampedModel
 from rest_framework import status
 from django.core.exceptions import ValidationError
@@ -20,8 +21,12 @@ logger = logging.getLogger(__name__)
 
 
 class ChatbotChannel(models.Model):
-    display_name = models.CharField(max_length=80)
-    request_url = models.URLField(max_length=200)
+    display_name = models.CharField(
+        max_length=80, help_text=_('Name for the bot that the user will see when interacting with it'))
+    request_url = models.URLField(
+        max_length=200, help_text=_('To set up a chatbot channel on your RapidPro server and get a request URL, '
+                                    'follow the steps outline in the Section "Setting up a Chatbot channel" '
+                                    'here: https://github.com/unicef/iogt/blob/develop/messaging/README.md'))
 
     def __str__(self):
         return f"{self.display_name}, {self.request_url}"

@@ -1,3 +1,4 @@
+from django.templatetags import i18n
 from translation_manager import utils
 
 
@@ -13,8 +14,43 @@ def get_lang_from_dirname(dirname):
     return dirname
 
 
+def _translate_node_render(self, context):
+    from django.template.base import render_value_in_context
+    from django.utils.safestring import SafeData
+    from django.utils.safestring import mark_safe
+    from translation_manager.models import TranslationEntry
+    from wagtail.core.models import Locale
+
+    locale = Locale.get_active()
+    translation_entry = TranslationEntry.objects.filter(
+        original=self.filter_expression.var.literal, language=locale.language_code
+    ).first()
+    if translation_entry and translation_entry.translation:
+        return translation_entry.translation
+
+    self.filter_expression.var.translate = not self.noop
+    if self.message_context:
+        self.filter_expression.var.message_context = (
+            self.message_context.resolve(context))
+    output = self.filter_expression.resolve(context)
+
+
+    value = render_value_in_context(output, context)
+    # Restore percent signs. Percent signs in template text are doubled
+    # so they are not interpreted as string format flags.
+    is_safe = isinstance(value, SafeData)
+    value = value.replace('%%', '%')
+    value = mark_safe(value) if is_safe else value
+    if self.asvar:
+        context[self.asvar] = value
+        return ''
+    else:
+        return value
+
+
 utils.get_dirname_from_lang = get_dirname_from_lang
 utils.get_lang_from_dirname = get_lang_from_dirname
+i18n.TranslateNode.render = _translate_node_render
 
 
 def store_to_db(self, pofile, locale, store_translations=False):
@@ -88,79 +124,6 @@ def store_to_db(self, pofile, locale, store_translations=False):
     return translations_to_keep
 
 
-def update_po_from_db(self, lang):
-    import logging
-    import os
-    from datetime import datetime
-
-    import polib
-    from django.conf import settings
-    from translation_manager.models import TranslationEntry
-    from translation_manager.settings import get_settings
-
-    logger = logging.getLogger('translation_manager')
-
-
-    translations = TranslationEntry.objects.filter(
-        language=lang,
-        is_published=True
-    ).order_by("original")
-
-    locale_params = [('locale', 'django')]
-
-    for locale_path, domain in locale_params:
-        lang_dir_path = os.path.abspath(
-            os.path.join(get_settings('TRANSLATIONS_BASE_DIR'), locale_path, get_dirname_from_lang(lang)))
-        if not os.path.isdir(lang_dir_path):
-            os.mkdir(lang_dir_path)
-            os.mkdir(os.path.join(lang_dir_path, 'LC_MESSAGES'))
-
-        pofile_path = os.path.join(get_settings('TRANSLATIONS_BASE_DIR'), locale_path, get_dirname_from_lang(lang),
-                                   'LC_MESSAGES',
-                                           "%s.po" % domain)
-        mofile_path = os.path.join(get_settings('TRANSLATIONS_BASE_DIR'), locale_path, get_dirname_from_lang(lang),
-                                   'LC_MESSAGES',
-                                           "%s.mo" % domain)
-
-        if not os.path.exists(pofile_path):
-            logger.debug("Po file '{}' does't exists, it will be created".format(pofile_path))
-
-        now = datetime.now()
-        pofile = polib.POFile()
-        pofile.metadata = {
-            'Project-Id-Version': '0.1',
-            'Report-Msgid-Bugs-To': '%s' % settings.DEFAULT_FROM_EMAIL,
-            'POT-Creation-Date': now.strftime("%Y-%m-%d %H:%M:%S"),
-            'PO-Revision-Date': now.strftime("%Y-%m-%d %H:%M:%S"),
-            'Last-Translator': 'Server <%s>' % settings.SERVER_EMAIL,
-            'Language-Team': 'English <%s>' % settings.DEFAULT_FROM_EMAIL,
-            'MIME-Version': '1.0',
-            'Content-Type': 'text/plain; charset=utf-8',
-            'Content-Transfer-Encoding': '8bit',
-        }
-
-        for translation in translations:
-            flags = []
-            if translation.original.endswith('\n') or translation.translation.endswith('\n'):
-                flags.append('fuzzy')
-            elif ('{' in translation.original or
-                  '}' in translation.original or
-                  '{' in translation.translation or
-                  '}' in translation.translation):
-                flags.append('fuzzy')
-                flags.append('python-brace-format')
-            entry = polib.POEntry(
-                flags=flags,
-                msgid=translation.original,
-                msgstr=translation.translation,
-                occurrences=[occ.split(":") for occ in translation.occurrences.split()]
-            )
-            pofile.append(entry)
-
-        pofile.save(pofile_path)
-        pofile.save_as_mofile(mofile_path)
-
-
 def load_data_from_po(self):
     import os
     from glob import glob
@@ -187,4 +150,3 @@ def patch_store_to_db():
 
     Manager.store_to_db = store_to_db
     Manager.load_data_from_po = load_data_from_po
-    Manager.update_po_from_db = update_po_from_db
