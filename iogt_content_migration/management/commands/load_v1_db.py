@@ -744,9 +744,17 @@ class Command(BaseCommand):
                 if image:
                     block['value'] = image.id
                 else:
-                    self.post_migration_report_messages['invalid_image_id'].append(
-                        f"title={row['title']} has image with invalid id {block['value']}"
-                    )
+                    page = self.v1_to_v2_page_map.get(row['page_ptr_id'])
+                    if page:
+                        self.post_migration_report_messages['page_with_empty_image'].append(
+                            f'title: {page.title}. URL: {page.full_url}. '
+                            f'Admin URL: {self.get_admin_url(page.id)}. '
+                            f'Image ID: {block["value"]}'
+                        )
+                    else:
+                        self.post_migration_report_messages['invalid_image_id'].append(
+                            f"title={row['title']} has image with invalid id {block['value']}"
+                        )
                     block['value'] = None
             elif block['type'] == 'media':
                 media = self.media_map.get(block['value'])
