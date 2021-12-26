@@ -190,6 +190,7 @@ class Command(BaseCommand):
         self.migrate_article_related_sections()
         self.sort_pages()
         self.populate_registration_survey_translations()
+        self.translate_default_survey_submit_button_text()
         self.migrate_post_registration_survey()
         self.migrate_page_revisions()
         self.stop_translations()
@@ -1248,8 +1249,10 @@ class Command(BaseCommand):
                     translated_survey.save()
 
                     if row['submit_text'] and len(row['submit_text']) > 40:
-                        self.post_migration_report_messages['untranslated_surveys'].append(
-                            f"Truncated survey submit button text, title={row['title']}"
+                        self.post_migration_report_messages['truncated_submit_button_text'].append(
+                            f'title: {translated_survey.title}. URL: {translated_survey.full_url}. '
+                            f'Admin URL: {self.get_admin_url(translated_survey.id)}. '
+                            f'Full text: {row["submit_text"]}.'
                         )
 
                     V1ToV2ObjectMap.create_map(content_object=translated_survey, v1_object_id=row['page_ptr_id'])
@@ -1296,7 +1299,11 @@ class Command(BaseCommand):
         try:
             survey.save()
             if row['submit_text'] and len(row['submit_text']) > 40:
-                self.stdout.write(f"Truncated survey submit button text, title={row['title']}")
+                self.post_migration_report_messages['truncated_submit_button_text'].append(
+                    f'title: {survey.title}. URL: {survey.full_url}. '
+                    f'Admin URL: {self.get_admin_url(survey.id)}. '
+                    f'Full text: {row["submit_text"]}.'
+                )
             V1ToV2ObjectMap.create_map(content_object=survey, v1_object_id=row['page_ptr_id'])
             V1PageURLToV2PageMap.create_map(url=row['url_path'], page=survey)
         except Exception as e:
@@ -1904,8 +1911,27 @@ class Command(BaseCommand):
                 str_key = self._get_iso_locale(row.pop('str'))
                 self.registration_survey_translations[str_key] = row
 
-    def migrate_post_registration_survey(self):
+    def translate_default_survey_submit_button_text(self):
+        surveys = Survey.objects.all()
+        for survey in surveys:
+            if survey.submit_button_text == 'Submit':
+                # Technically, someone could have manually put 'Submit' on a non-English button,
+                # which we would now translate even though we shouldn't.
+                # This is quite unlikely though.
+                submit_button_text = self.registration_survey_translations['submit_button_text'][survey.locale.language_code]
+                if not submit_button_text:
+                    self.post_migration_report_messages['untranslated_survey_button'].append(
+                            f'title: {survey.title}. URL: {survey.full_url}. '
+                            f'Admin URL: {self.get_admin_url(survey.id)}.'
+                        )
+                if submit_button_text and len(submit_button_text) > 40:
+                    # This should never happen in practice as we provide submit_button_text
+                    self.stdout.write(f"Truncated default submit button text, title={survey.title}")
 
+                survey.submit_button_text = submit_button_text[:40] if submit_button_text else 'Submit'
+                survey.save()
+
+    def migrate_post_registration_survey(self):
         sql = 'select * from profiles_userprofilessettings pups ' \
               'inner join wagtailcore_site ws on pups.site_id = ws.id ' \
               'where is_default_site = true'
@@ -1953,6 +1979,17 @@ class Command(BaseCommand):
                 )
                 continue
 
+            submit_button_text = self.registration_survey_translations['register_button_text'][locale.language_code]
+            if not submit_button_text:
+                self.post_migration_report_messages['registration_survey_translation_not_found'].append(
+                    f'No translation for submit button of registration survey to locale: {locale}'
+                )
+            if submit_button_text and len(submit_button_text) > 40:
+                # This should never happen in practice as we provide submit_button_text
+                self.stdout.write(f"Truncated survey submit button text, title={translated_survey.title}")
+
+            translated_survey.submit_button_text = submit_button_text[:40] if submit_button_text else 'Register'
+            translated_survey.save()
             if translated_survey:
                 for (admin_label, label_identifier) in [
                     ('date_of_birth', 'dob'),
