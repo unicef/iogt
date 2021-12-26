@@ -84,17 +84,6 @@ def change_lang(context, lang=None, *args, **kwargs):
 
 
 @register.simple_tag
-def get_menu_icon(menu_item):
-    if hasattr(menu_item.icon, 'url'):
-        return menu_item.icon.url
-    elif hasattr(menu_item, 'link_page') and isinstance(menu_item.link_page, Section) and hasattr(
-            menu_item.link_page.icon, 'url'):
-        return menu_item.link_page.specific.icon.url
-
-    return ''
-
-
-@register.simple_tag
 def is_first_content(page, value):
     is_first_content = False
     if value == 0 and page.get_parent().specific.larger_image_for_top_page_in_list_as_in_v1:

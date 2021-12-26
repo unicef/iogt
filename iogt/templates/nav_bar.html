@@ -6,8 +6,8 @@
         {% for item in menu_items %}
             {% menu_item_background_color item as menu_item_background_color %}
             {% menu_item_font_color item as menu_item_font_color %}
-            {% get_menu_icon item as menu_icon %}
-            {% primary_button title=item.text icon_path=menu_icon href=item.href font_color=menu_item_font_color background_color=menu_item_background_color is_svg_icon=True %}
+            {% get_icon_url item as icon_url %}
+            {% primary_button title=item.text href=item.href font_color=menu_item_font_color background_color=menu_item_background_color icon_path=icon_url.url is_svg_icon=icon_url.is_svg_icon %}
         {% endfor %}
     </div>
 </nav>

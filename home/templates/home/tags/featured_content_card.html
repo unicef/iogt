@@ -1,8 +1,8 @@
+{% load generic_components %}
 {% load image_tags %}
 {% load static wagtailcore_tags wagtailimages_tags %}
 
-{% if page.icon %}
-    {% render_png_from_svg page.get_icon_url width=16 height=16 %}
-{% endif %}
+{% get_icon_url page as icon_url %}
+{% include 'home/tags/render_png.html' with image_url=icon_url.url width=16 height=16 %}
 <a href="{% pageurl page %}">{{ page.title }}</a>
 {% include 'home/tags/angle_bracket.html' %}
