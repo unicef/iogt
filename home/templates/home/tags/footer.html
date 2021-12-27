@@ -16,6 +16,15 @@
             {% url 'user_profile' as profile_url %}
             {% static 'icons/profile.svg' as profile_icon_path %}
             {% primary_button title='Profile' href=profile_url icon_path=profile_icon_path is_svg_icon=True %}
+            <div class="profile__btns">
+                <a href="{% url "account_logout" %}" class="icon-btn profile__btn">
+                    <span class="icon-btn__icon">
+                        {% static "icons/arrow_icon_left.svg" as logout_url %}
+                        {% render_png_from_svg  logout_url attrs='alt="lock icon"'%}
+                    </span>
+                    <span class="icon-btn__title">{% translate "Log out" %}</span>
+                </a>
+            </div>
         {% endif %}
     </nav>
 </footer>
