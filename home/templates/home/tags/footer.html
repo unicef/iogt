@@ -14,10 +14,11 @@
             {% primary_button title='Login / Create account' href=login_url icon_path=login_icon_path is_svg_icon=True %}
         {% else %}
             {% url 'user_profile' as profile_url %}
-            {% url 'account_logout' as logout_url %}
             {% static 'icons/profile.svg' as profile_icon_path %}
-            {% static 'icons/login.svg' as logout_icon_path %}
             {% primary_button title='Profile' href=profile_url icon_path=profile_icon_path is_svg_icon=True %}
+
+            {% url 'account_logout' as logout_url %}
+            {% static 'icons/login.svg' as logout_icon_path %}
             {% primary_button title='Logout' href=logout_url icon_path=logout_icon_path is_svg_icon=True %}
         {% endif %}
     </nav>
