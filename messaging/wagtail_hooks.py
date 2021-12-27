@@ -7,6 +7,7 @@ class ChatbotChannelAdmin(ModelAdmin):
     model = ChatbotChannel
     menu_label = 'Chatbot Channels'
     menu_icon = 'code'
+    index_template_name = 'messaging/chatbotchannel/index.html'
 
 
 class ChatbotGroup(ModelAdminGroup):

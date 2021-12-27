@@ -188,8 +188,10 @@ class Command(BaseCommand):
         self.add_surveys_from_surveys_index_page_to_home_page_featured_content()
         self.move_footers_to_end_of_footer_index_page()
         self.migrate_article_related_sections()
+        self.migrate_social_media_links()
         self.sort_pages()
         self.populate_registration_survey_translations()
+        self.translate_default_survey_submit_button_text()
         self.migrate_post_registration_survey()
         self.migrate_page_revisions()
         self.stop_translations()
@@ -743,9 +745,17 @@ class Command(BaseCommand):
                 if image:
                     block['value'] = image.id
                 else:
-                    self.post_migration_report_messages['invalid_image_id'].append(
-                        f"title={row['title']} has image with invalid id {block['value']}"
-                    )
+                    page = self.v1_to_v2_page_map.get(row['page_ptr_id'])
+                    if page:
+                        self.post_migration_report_messages['page_with_empty_image'].append(
+                            f'title: {page.title}. URL: {page.full_url}. '
+                            f'Admin URL: {self.get_admin_url(page.id)}. '
+                            f'Image ID: {block["value"]}'
+                        )
+                    else:
+                        self.post_migration_report_messages['invalid_image_id'].append(
+                            f"title={row['title']} has image with invalid id {block['value']}"
+                        )
                     block['value'] = None
             elif block['type'] == 'media':
                 media = self.media_map.get(block['value'])
@@ -909,7 +919,7 @@ class Command(BaseCommand):
                     commenting_status, commenting_open_time, commenting_close_time = self._get_commenting_fields(row)
 
                     image = self.image_map.get(row['image_id'])
-                    translated_footer.lead_image = image
+                    translated_footer.image_icon = image
                     translated_footer.title = row['title']
                     translated_footer.slug = row['slug']
                     translated_footer.draft_title = row['draft_title']
@@ -948,7 +958,7 @@ class Command(BaseCommand):
 
         image = self.image_map.get(row['image_id'])
         footer = models.Article(
-            lead_image=image,
+            image_icon=image,
             title=row['title'],
             draft_title=row['draft_title'],
             slug=row['slug'],
@@ -1248,8 +1258,10 @@ class Command(BaseCommand):
                     translated_survey.save()
 
                     if row['submit_text'] and len(row['submit_text']) > 40:
-                        self.post_migration_report_messages['untranslated_surveys'].append(
-                            f"Truncated survey submit button text, title={row['title']}"
+                        self.post_migration_report_messages['truncated_submit_button_text'].append(
+                            f'title: {translated_survey.title}. URL: {translated_survey.full_url}. '
+                            f'Admin URL: {self.get_admin_url(translated_survey.id)}. '
+                            f'Full text: {row["submit_text"]}.'
                         )
 
                     V1ToV2ObjectMap.create_map(content_object=translated_survey, v1_object_id=row['page_ptr_id'])
@@ -1296,7 +1308,11 @@ class Command(BaseCommand):
         try:
             survey.save()
             if row['submit_text'] and len(row['submit_text']) > 40:
-                self.stdout.write(f"Truncated survey submit button text, title={row['title']}")
+                self.post_migration_report_messages['truncated_submit_button_text'].append(
+                    f'title: {survey.title}. URL: {survey.full_url}. '
+                    f'Admin URL: {self.get_admin_url(survey.id)}. '
+                    f'Full text: {row["submit_text"]}.'
+                )
             V1ToV2ObjectMap.create_map(content_object=survey, v1_object_id=row['page_ptr_id'])
             V1PageURLToV2PageMap.create_map(url=row['url_path'], page=survey)
         except Exception as e:
@@ -1702,6 +1718,26 @@ class Command(BaseCommand):
 
         Page.objects.filter(alias_of__isnull=False).exclude(id__in=page_ids_to_exclude).update(live=False)
 
+    def migrate_social_media_links(self):
+        self.footer_index_page.refresh_from_db()
+        sql = f'select * from core_sitesettings'
+        cur = self.db_query(sql)
+        for row in cur:
+            social_media_links = json.loads(row['social_media_links_on_footer_page'])
+            for social_media_link in social_media_links:
+                block_value = social_media_link.get('value')
+                if block_value:
+                    page_link_page_data = {
+                        'title': block_value.get('title'),
+                        'external_link': block_value.get('link'),
+                    }
+                    v2_image = self.image_map.get(block_value.get('image'))
+                    if v2_image:
+                        page_link_page_data.update({'image_icon_id': v2_image.id})
+
+                    page_link_page = models.PageLinkPage(**page_link_page_data)
+                    self.footer_index_page.add_child(instance=page_link_page)
+
     def migrate_page_revisions(self):
         PageRevision.objects.all().delete()
         sql = f"select * " \
@@ -1904,8 +1940,27 @@ class Command(BaseCommand):
                 str_key = self._get_iso_locale(row.pop('str'))
                 self.registration_survey_translations[str_key] = row
 
-    def migrate_post_registration_survey(self):
+    def translate_default_survey_submit_button_text(self):
+        surveys = Survey.objects.all()
+        for survey in surveys:
+            if survey.submit_button_text == 'Submit':
+                # Technically, someone could have manually put 'Submit' on a non-English button,
+                # which we would now translate even though we shouldn't.
+                # This is quite unlikely though.
+                submit_button_text = self.registration_survey_translations['submit_button_text'][survey.locale.language_code]
+                if not submit_button_text:
+                    self.post_migration_report_messages['untranslated_survey_button'].append(
+                            f'title: {survey.title}. URL: {survey.full_url}. '
+                            f'Admin URL: {self.get_admin_url(survey.id)}.'
+                        )
+                if submit_button_text and len(submit_button_text) > 40:
+                    # This should never happen in practice as we provide submit_button_text
+                    self.stdout.write(f"Truncated default submit button text, title={survey.title}")
 
+                survey.submit_button_text = submit_button_text[:40] if submit_button_text else 'Submit'
+                survey.save()
+
+    def migrate_post_registration_survey(self):
         sql = 'select * from profiles_userprofilessettings pups ' \
               'inner join wagtailcore_site ws on pups.site_id = ws.id ' \
               'where is_default_site = true'
@@ -1953,6 +2008,17 @@ class Command(BaseCommand):
                 )
                 continue
 
+            submit_button_text = self.registration_survey_translations['register_button_text'][locale.language_code]
+            if not submit_button_text:
+                self.post_migration_report_messages['registration_survey_translation_not_found'].append(
+                    f'No translation for submit button of registration survey to locale: {locale}'
+                )
+            if submit_button_text and len(submit_button_text) > 40:
+                # This should never happen in practice as we provide submit_button_text
+                self.stdout.write(f"Truncated survey submit button text, title={translated_survey.title}")
+
+            translated_survey.submit_button_text = submit_button_text[:40] if submit_button_text else 'Register'
+            translated_survey.save()
             if translated_survey:
                 for (admin_label, label_identifier) in [
                     ('date_of_birth', 'dob'),

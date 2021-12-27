@@ -1,6 +1,3 @@
-import base64
-
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 
@@ -13,9 +10,6 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **options):
-        auth_str = f'{settings.RAPIDPRO_BOT_USER_USERNAME}:{settings.RAPIDPRO_BOT_USER_PASSWORD}'
-        message_bytes = auth_str.encode('ascii')
-        base64_bytes = base64.b64encode(message_bytes)
-        base64_auth_str = f'Basic {base64_bytes.decode("ascii")}'
+        auth_header = User.get_rapidpro_bot_auth_header()
 
-        self.stdout.write(self.style.SUCCESS(base64_auth_str))
+        self.stdout.write(self.style.SUCCESS(auth_header))

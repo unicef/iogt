@@ -145,6 +145,13 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         blank=True,
         on_delete=models.PROTECT,
     )
+    image_icon = models.ForeignKey(
+        'wagtailimages.Image',
+        on_delete=models.PROTECT,
+        related_name='+',
+        blank=True,
+        null=True
+    )
     background_color = models.CharField(
         max_length=8,
         blank=True,
@@ -169,6 +176,7 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     content_panels = Page.content_panels + [
         ImageChooserPanel('lead_image'),
         SvgChooserPanel('icon'),
+        ImageChooserPanel('image_icon'),
         FieldPanel('background_color'),
         FieldPanel('font_color'),
         FieldPanel('larger_image_for_top_page_in_list_as_in_v1'),
@@ -273,6 +281,13 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         blank=True,
         on_delete=models.SET_NULL,
     )
+    image_icon = models.ForeignKey(
+        'wagtailimages.Image',
+        on_delete=models.PROTECT,
+        related_name='+',
+        blank=True,
+        null=True
+    )
     index_page_description = models.TextField(null=True, blank=True)
 
     body = StreamField([
@@ -361,6 +376,7 @@ class Article(AbstractArticle):
     content_panels = AbstractArticle.content_panels + [
         ImageChooserPanel('lead_image'),
         SvgChooserPanel('icon'),
+        ImageChooserPanel('image_icon'),
         StreamFieldPanel('body'),
         FieldPanel('index_page_description'),
         MultiFieldPanel([
@@ -389,7 +405,6 @@ class Article(AbstractArticle):
         ]
 
         return context
-
 
     def serve(self, request):
         response = super().serve(request)
@@ -523,7 +538,7 @@ class FooterPage(Article, TitleIconMixin):
         verbose_name_plural = _("footers")
 
 
-class PageLinkPage(Page, TitleIconMixin):
+class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
     parent_page_types = ['home.FooterIndexPage', 'home.Section']
     subpage_types = []
 
@@ -534,22 +549,42 @@ class PageLinkPage(Page, TitleIconMixin):
         blank=True,
         on_delete=models.SET_NULL,
     )
+    image_icon = models.ForeignKey(
+        'wagtailimages.Image',
+        on_delete=models.PROTECT,
+        related_name='+',
+        blank=True,
+        null=True
+    )
 
-    page = models.ForeignKey(Page, related_name='page_link_pages', on_delete=models.PROTECT)
+    page = models.ForeignKey(Page, null=True, blank=True, related_name='page_link_pages', on_delete=models.PROTECT)
+    external_link = models.URLField(null=True, blank=True)
 
     content_panels = Page.content_panels + [
         SvgChooserPanel('icon'),
-        PageChooserPanel('page')
+        ImageChooserPanel('image_icon'),
+        PageChooserPanel('page'),
+        FieldPanel('external_link'),
     ]
 
     def get_page(self):
-        return self.page.specific if self.page else self.page
+        return self.page.specific if self.page else self
 
     def get_icon_url(self):
-        if self.icon:
-            return self.icon.url
+        icon_url = super().get_icon_url()
+        if not icon_url.url and self.page:
+            icon_url = self.page.specific.get_icon_url()
 
-        return getattr(getattr(self.page.specific, 'icon', object), 'url', '')
+        return icon_url
+
+    def get_url(self):
+        url = ''
+        if self.page:
+            url = self.page.specific.url
+        elif self.external_link:
+            url = self.external_link
+
+        return url
 
 
 @register_setting
@@ -731,29 +766,7 @@ class SiteSettings(BaseSetting):
         verbose_name_plural = _('Site Settings')
 
 
-@register_setting
-class CacheSettings(BaseSetting):
-    cache = models.BooleanField(
-        default=True,
-        verbose_name=_("Prompt users to download?"),
-        help_text=_(
-            "check to prompt first time users to download the website as an app"),
-    )
-
-    panels = [
-        MultiFieldPanel(
-            [
-                FieldPanel('cache'),
-            ],
-            heading="Cache settings",
-        )
-    ]
-
-    class Meta:
-        verbose_name = "Cache settings"
-
-
-class IogtFlatMenuItem(AbstractFlatMenuItem):
+class IogtFlatMenuItem(AbstractFlatMenuItem, TitleIconMixin):
     menu = ParentalKey(
         'wagtailmenus.FlatMenu',
         on_delete=models.CASCADE,
@@ -778,6 +791,13 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
         help_text=_('If Page link is a section page and icon is blank then the section icon will be used. '
                     'Specify an icon here to override this.')
     )
+    image_icon = models.ForeignKey(
+        'wagtailimages.Image',
+        on_delete=models.PROTECT,
+        related_name='+',
+        blank=True,
+        null=True
+    )
 
     background_color = models.CharField(
         max_length=255,
@@ -801,9 +821,17 @@ class IogtFlatMenuItem(AbstractFlatMenuItem):
         FieldPanel('handle'),
         FieldPanel('allow_subnav'),
         SvgChooserPanel('icon'),
+        ImageChooserPanel('image_icon'),
         FieldPanel('background_color'),
         FieldPanel('font_color')
     ]
+
+    def get_icon_url(self):
+        icon_url = super().get_icon_url()
+        if not icon_url.url and self.link_page:
+            icon_url = self.link_page.get_icon_url()
+
+        return icon_url
 
 
 @deconstructible

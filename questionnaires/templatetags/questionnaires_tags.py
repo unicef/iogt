@@ -85,20 +85,19 @@ def render_questionnaire_form(context, page):
 
     if isinstance(page, Poll):
         template = 'questionnaires/tags/embedded_poll.html'
-        # template = 'poll/poll.html'
         context.update({
             'results': page.get_results(),
             'result_as_percentage': page.result_as_percentage,
         })
     else:
         template = 'questionnaires/tags/embedded_questionnaire.html'
-        paginator = SkipLogicPaginator(page.get_form_fields(), {}, {})
-        step = paginator.page(1)
-        if hasattr(page, 'multi_step') and page.multi_step:
+        if hasattr(page, 'multi_step') and page.multi_step and page.get_form_fields():
+            paginator = SkipLogicPaginator(page.get_form_fields(), {}, {})
+            step = paginator.page(1)
             form_class = page.get_form_class_for_step(step)
-        context.update({
-            'fields_step': step,
-        })
+            context.update({
+                'fields_step': step,
+            })
 
     context.update({
         'template': template,

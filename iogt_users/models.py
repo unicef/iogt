@@ -1,3 +1,5 @@
+import base64
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
@@ -24,6 +26,13 @@ class User(AbstractUser):
     @classmethod
     def get_rapidpro_bot_user(cls):
         return cls.objects.get(pk=settings.RAPIDPRO_BOT_USER_ID)
+
+    @classmethod
+    def get_rapidpro_bot_auth_header(cls):
+        auth_str = f'{settings.RAPIDPRO_BOT_USER_USERNAME}:{settings.RAPIDPRO_BOT_USER_PASSWORD}'
+        message_bytes = auth_str.encode('ascii')
+        base64_bytes = base64.b64encode(message_bytes)
+        return f'Basic {base64_bytes.decode("ascii")}'
 
     read_articles = models.ManyToManyField(to='home.Article')
 

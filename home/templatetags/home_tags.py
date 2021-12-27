@@ -2,7 +2,7 @@ from django import template
 from django.urls import translate_url
 from wagtail.core.models import Locale, Site
 
-from home.models import SectionIndexPage, Section, Article, FooterIndexPage, LocaleDetail
+from home.models import SectionIndexPage, Section, Article, FooterIndexPage, PageLinkPage, LocaleDetail
 from iogt.settings.base import LANGUAGES
 
 register = template.Library()
@@ -40,8 +40,8 @@ def language_switcher(context, page):
 @register.inclusion_tag('home/tags/previous-next-buttons.html')
 def render_previous_next_buttons(page):
     return {
-        'next_sibling': page.get_next_siblings().live().first(),
-        'previous_sibling': page.get_prev_siblings().live().first()
+        'next_sibling': page.get_next_siblings().not_type(PageLinkPage).live().first(),
+        'previous_sibling': page.get_prev_siblings().not_type(PageLinkPage).live().first()
     }
 
 
@@ -99,17 +99,6 @@ def translated_home_page_url(language_code):
 def change_lang(context, lang=None, *args, **kwargs):
     path = context['request'].path
     return translate_url(path, lang)
-
-
-@register.simple_tag
-def get_menu_icon(menu_item):
-    if hasattr(menu_item.icon, 'url'):
-        return menu_item.icon.url
-    elif hasattr(menu_item, 'link_page') and isinstance(menu_item.link_page, Section) and hasattr(
-            menu_item.link_page.icon, 'url'):
-        return menu_item.link_page.specific.icon.url
-
-    return ''
 
 
 @register.simple_tag
