@@ -48,9 +48,12 @@ class LocaleMiddleware(DjangoLocaleMiddleware):
                 continue
 
             try:
-                return get_supported_language_variant(accept_lang)
+                lang_code = get_supported_language_variant(accept_lang)
             except LookupError:
                 continue
+
+            if Locale.objects.filter(language_code=lang_code, locale_detail__is_active=True).exists():
+                return lang_code
 
         locale = Locale.objects.filter(locale_detail__is_active=True, locale_detail__is_main_language=True).first()
         return locale.language_code if locale else settings.LANGUAGE_CODE
