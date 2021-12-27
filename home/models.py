@@ -1131,3 +1131,21 @@ class V1PageURLToV2PageMap(models.Model):
         obj, __ = cls.objects.get_or_create(v2_page=page, defaults={'v1_page_url': url})
 
         return obj
+
+
+class LocaleDetail(models.Model):
+    is_active = models.BooleanField(
+        default=True,
+        help_text=_('When active locale will be shown in the language selector'))
+    is_main_language = models.BooleanField(
+        default=False,
+        help_text=_('When active locale will be used as default language for the site'))
+
+    locale = models.OneToOneField('wagtailcore.Locale', related_name='locale_detail', on_delete=models.CASCADE)
+
+    def clean(self):
+        if self.is_main_language and LocaleDetail.objects.filter(is_main_language=True).exclude(id=self.id).exists():
+            raise ValidationError(_('There is already a main language for this site'))
+
+    def __str__(self):
+        return f'{self.locale}'
