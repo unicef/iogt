@@ -53,10 +53,7 @@ class LocaleMiddleware(DjangoLocaleMiddleware):
                 continue
 
         locale = Locale.objects.filter(locale_detail__is_active=True, locale_detail__is_main_language=True).first()
-        if locale:
-            return locale.language_code
-        else:
-            return settings.LANGUAGE_CODE
+        return locale.language_code if locale else settings.LANGUAGE_CODE
 
     def process_request(self, request):
         urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
