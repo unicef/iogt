@@ -52,7 +52,8 @@ class LocaleMiddleware(DjangoLocaleMiddleware):
             except LookupError:
                 continue
 
-        locale = Locale.objects.filter(locale_detail__is_main_language=True).first()
+        locale = Locale.objects.filter(
+            locale__locale_detail__is_active=True, locale_detail__is_main_language=True).first()
         if locale:
             return locale.language_code
         else:
