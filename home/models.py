@@ -1144,7 +1144,7 @@ class LocaleDetail(models.Model):
     locale = models.OneToOneField('wagtailcore.Locale', related_name='locale_detail', on_delete=models.CASCADE)
 
     def clean(self):
-        if self.is_main_language and LocaleDetail.objects.filter(is_main_language=True).exists():
+        if self.is_main_language and LocaleDetail.objects.filter(is_main_language=True).exclude(id=self.id).exists():
             raise ValidationError(_('There is already a main language for this site'))
 
     def __str__(self):
