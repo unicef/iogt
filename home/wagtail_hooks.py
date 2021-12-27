@@ -164,7 +164,7 @@ class TranslationEntryAdmin(ModelAdmin):
 
 class LocaleDetailAdmin(ModelAdmin):
     model = LocaleDetail
-    menu_label = 'Local Detail'
+    menu_label = 'Locale Detail'
     menu_icon = 'site'
     list_display = ('locale', 'is_active', 'is_main_language',)
     list_filter = ('is_active', 'is_main_language',)
