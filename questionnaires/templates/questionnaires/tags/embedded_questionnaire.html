@@ -4,7 +4,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/questionnaires.css' %}">
 {% endblock %}
 
-<div class="questionnaire-container container">
+<div class="questionnaire-container container" style="color:{{ font_color }}; background:{{ background_color }}; padding: 10px; border-radius: 8px; margin: 16px;">
     <h1 class="title {{ page.get_type }}-page__title">{{ page.title }}</h1>
     {% if user.is_authenticated or request.is_preview or page.allow_anonymous_submissions %}
         {% if form %}
