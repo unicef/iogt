@@ -1,8 +1,9 @@
 from django import template
+from django.core.exceptions import ObjectDoesNotExist
 from django.urls import translate_url
-from wagtail.core.models import Locale, Site
+from wagtail.core.models import Locale, Site, Page
 
-from home.models import SectionIndexPage, Section, Article, FooterIndexPage, PageLinkPage, LocaleDetail
+from home.models import SectionIndexPage, Section, Article, FooterIndexPage, PageLinkPage, LocaleDetail, HomePage
 from iogt.settings.base import LANGUAGES
 
 register = template.Library()
@@ -10,29 +11,26 @@ register = template.Library()
 
 @register.inclusion_tag('home/tags/language_switcher.html', takes_context=True)
 def language_switcher(context, page):
-    if page:
-        translations = []
-        pages = page.get_translations(inclusive=True).select_related('locale', 'locale__locale_detail')
-        for page in pages:
-            try:
-                if page.locale.locale_detail.is_active:
-                    translations.append(page)
-            except LocaleDetail.DoesNotExist:
-                translations.append(page)
-        context.update({
-            'translations': translations,
-        })
-
-
-    default_locales = []
+    switcher_locales = list()
     locales = Locale.objects.select_related('locale_detail').all()
     for locale in locales:
+        should_append = False
         try:
             if locale.locale_detail.is_active:
-                default_locales.append(locale)
+                should_append = True
         except LocaleDetail.DoesNotExist:
-            default_locales.append(locale)
-    context.update({'default_locales': default_locales})
+            should_append = True
+
+        if should_append:
+            try:
+                page_translation = page.get_translation(locale)
+                page_url = page_translation
+            except ObjectDoesNotExist:
+                page_url = HomePage.objects.get(locale=locale)
+
+            switcher_locales.append((locale, page_url))
+
+    context.update({'locales': switcher_locales})
 
     return context
 

@@ -7,26 +7,13 @@
         <span class="arrow"></span>
     </a>
     <ul class="drop">
-        {% if translations %}
-            {% for translation in translations %}
-                {% get_language_info for translation.locale.language_code as lang %}
-                <li class="{% if lang.code == LANGUAGE_CODE %}selected{% endif %}">
-                    <a href="{% pageurl translation %}" rel="alternate" hreflang="{{ language_code }}">
-                        {{ lang.name_local }}
-                    </a>
-                </li>
-            {% endfor %}
-
-        {% else %}
-            {% for locale in default_locales %}
+            {% for locale, page_url in switcher_locales %}
                 {% get_language_info for locale.language_code as lang %}
                 <li class="{% if lang.code == LANGUAGE_CODE %}selected{% endif %}">
-                    <a href="{% change_lang lang.code %}" rel="alternate" hreflang="{{ lang.code }}">
+                    <a href="{% pageurl page_url %}" rel="alternate" hreflang="{{ lang.code }}">
                         {{ lang.name_local }}
                     </a>
                 </li>
             {% endfor %}
-    {% endif %}
-
     </ul>
 </div>
