@@ -7,10 +7,10 @@
         <span class="arrow"></span>
     </a>
     <ul class="drop">
-            {% for locale, page_url in switcher_locales %}
+            {% for locale, translated_page_or_home in switcher_locales %}
                 {% get_language_info for locale.language_code as lang %}
                 <li class="{% if lang.code == LANGUAGE_CODE %}selected{% endif %}">
-                    <a href="{% pageurl page_url %}" rel="alternate" hreflang="{{ lang.code }}">
+                    <a href="{% pageurl translated_page_or_home %}" rel="alternate" hreflang="{{ lang.code }}">
                         {{ lang.name_local }}
                     </a>
                 </li>
