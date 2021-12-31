@@ -22,12 +22,7 @@ def language_switcher(context, page):
             should_append = True
 
         if should_append:
-            try:
-                page_translation = page.get_translation(locale)
-                translated_page_or_home = page_translation
-            except ObjectDoesNotExist:
-                translated_page_or_home = HomePage.objects.get(locale=locale)
-
+            translated_page_or_home = page.get_translation_or_none(locale) or HomePage.objects.get(locale=locale)
             switcher_locales.append((locale, translated_page_or_home))
 
     context.update({'locales': switcher_locales})
