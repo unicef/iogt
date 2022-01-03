@@ -224,10 +224,8 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
-        context['featured_content_items'] = [
-            featured_content.content.specific
-            for featured_content in self.featured_content.filter(content__live=True)
-        ]
+        featured_content = self.featured_content.filter(content__live=True).first()
+        context['featured_content'] = featured_content.content.specific if featured_content else None
         context['children'] = self.get_children().live().specific()
         context['user_progress'] = self.get_user_progress_dict(request)
 
