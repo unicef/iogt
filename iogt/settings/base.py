@@ -88,7 +88,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "iogt.middleware.LocaleMiddleware",
     "iogt.middleware.AdminLocaleMiddleware",
-    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+    'iogt.middleware.CustomRedirectMiddleware',
     'iogt_users.middlewares.RegistrationSurveyRedirectMiddleware',
     'external_links.middleware.RewriteExternalLinksMiddleware',
     'iogt.middleware.CacheControlMiddleware',

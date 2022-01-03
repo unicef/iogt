@@ -1132,6 +1132,11 @@ class V1PageURLToV2PageMap(models.Model):
 
         return obj
 
+    @classmethod
+    def get_page_or_none(cls, v1_page_url):
+        obj = cls.objects.filter(v1_page_url=v1_page_url).first()
+        return obj.v2_page if obj else None
+
 
 class LocaleDetail(models.Model):
     is_active = models.BooleanField(
