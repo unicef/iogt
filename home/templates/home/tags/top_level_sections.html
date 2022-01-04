@@ -4,7 +4,8 @@
     <nav>
         {% for page in pages %}
             {% get_page_url page as page_url %}
-            {% primary_button title=page.title font_color=page.font_color background_color=page.background_color icon=page.icon href=page_url is_svg_icon=icon_url.is_svg_icon %}
+            {% get_icon_url page as page_icon %}
+            {% primary_button title=page.title font_color=page.font_color background_color=page.background_color icon=page.icon href=page_url is_svg_icon=True %}
         {% endfor %}
     </nav>
 </section>

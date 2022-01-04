@@ -1,9 +1,7 @@
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
-from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.i18n import JavaScriptCatalog
 from wagtail.images.views.serve import ServeView
 
@@ -40,13 +38,16 @@ urlpatterns = [
     *i18n_patterns(path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog')),
 ]
 
-# Serve static and media files
-urlpatterns += staticfiles_urlpatterns()
-urlpatterns += static('/media/', document_root=settings.MEDIA_ROOT)
-
 if settings.DEBUG:
-    # add django debug toolbar links
     import debug_toolbar
+    from django.conf.urls.static import static
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+    # Serve static and media files from development server
+    urlpatterns += staticfiles_urlpatterns()
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+    # add django debug toolbar links
     urlpatterns = urlpatterns + [path(r"__debug__/", include(debug_toolbar.urls))]
 
 urlpatterns = urlpatterns + i18n_patterns(
