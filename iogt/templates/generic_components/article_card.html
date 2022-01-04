@@ -16,7 +16,11 @@
             {% endif %}
         </div>
         <div class="img-holder {% render_is_complete page %}">
-            {% image page.lead_image original class='' %}
+            {% if is_first_content %}
+                {% image page.lead_image width-560 class='' %}
+            {% else %}
+                {% image page.lead_image width-280 class='' %}
+            {% endif %}
         </div>
     </a>
 </div>

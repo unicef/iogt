@@ -5,7 +5,11 @@
        style="color:{{ font_color }}; background:{{ background_color }};">
         <p>{{ page.title }}</p>
         <div class="img-holder {% render_is_complete page %}">
-            {% image page.lead_image width-320 class='' %}
+            {% if is_first_content %}
+                {% image page.lead_image width-560 class='' %}
+            {% else %}
+                {% image page.lead_image width-280 class='' %}
+            {% endif %}
         </div>
     </a>
 </div>
