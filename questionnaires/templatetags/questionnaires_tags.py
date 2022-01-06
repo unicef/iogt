@@ -163,8 +163,8 @@ def render_questionnaire_wrapper(context, page, direct_display, background_color
 @register.simple_tag
 def get_answer_rendering_class(field, field_option, fields_info):
     label = field_option.choice_label
-    correct_answers = fields_info[field.name]['correct_answer_list']
-    is_selected = field_option.data['selected']
+    correct_answers = fields_info.get(field.name, {}).get('correct_answer_list', [])
+    is_selected = field_option.data.get('selected', False)
     rv = ''
     if is_selected and label in correct_answers:
         rv = 'success'
