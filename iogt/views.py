@@ -1,8 +1,10 @@
 from django.contrib.admin.utils import flatten
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import TemplateView
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from wagtail.core.models import Page
 
 from questionnaires.models import Poll, Survey, Quiz
 
@@ -24,6 +26,18 @@ class TransitionPageView(TemplateView):
         context = super().get_context_data()
         context["next"] = self.request.GET.get("next", "/")
         context["prev"] = self.request.META.get("HTTP_REFERER", "/")
+        return context
+
+
+class TranslationNotFoundPage(TemplateView):
+    template_name = "translation_not_found_page.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        # page = get_object_or_404(Page, pk=self.request.GET.get("page_id"))
+        # #
+        # context["page"] = page
+        # context["back"] = self.request.META.get("HTTP_REFERER", "/")
         return context
 
 
