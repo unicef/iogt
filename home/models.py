@@ -289,7 +289,7 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     index_page_description = models.TextField(null=True, blank=True)
 
     body = StreamField([
-        ('heading', blocks.CharBlock(form_classname="full title")),
+        ('heading', blocks.CharBlock(form_classname="full title", template='blocks/heading.html')),
         ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
         ('markdown', MarkdownBlock(icon='code')),
         ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
@@ -422,7 +422,7 @@ class OfflineAppPage(AbstractArticle):
     subpage_types = []
 
     body = StreamField([
-        ('heading', blocks.CharBlock(form_classname="full title")),
+        ('heading', blocks.CharBlock(form_classname="full title", template='blocks/heading.html')),
         ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
         ('markdown', MarkdownBlock(icon='code')),
         ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
