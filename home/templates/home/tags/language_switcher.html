@@ -10,7 +10,7 @@
             {% for locale, url in locales %}
                 {% get_language_info for locale.language_code as lang %}
                 <li class="{% if lang.code == LANGUAGE_CODE %}selected{% endif %}">
-                    <a href="{{ url }}" rel="alternate" hreflang="{{ lang.code }}">
+                    <a href="{{ url }}?prev={{ request.path }}" rel="alternate" hreflang="{{ lang.code }}">
                         {{ lang.name_local }}
                     </a>
                 </li>

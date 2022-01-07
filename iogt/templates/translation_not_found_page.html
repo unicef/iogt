@@ -1,12 +1,18 @@
 {% extends "base.html" %}
 
-{% load i18n wagtailimages_tags %}
+{% load i18n wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
-    <p>{% translate "Sorry, '[page title]' is not available in [language]. If you want to keep browsing in [langauge] you can click here to return the homepage." %}
+    <p>
+        {% blocktranslate with page_title=page.title language=lang.name_local %}
+            Sorry, {{ page_title }} is not available in {{ language }}. If you want to keep browsing in {{ language }} you can click below
+            to return to the homepage.
+        {% endblocktranslate %}
+
+
     </p>
     <p>
-        <a href="/">{% translate "Return to homoepage" %}</a>
+        <a href="{% pageurl home_page %}">{% translate "Return to homepage" %}</a>
     </p>
     <p>
         <a href="{{ prev }}">{% translate "Back" %}</a>

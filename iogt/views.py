@@ -34,10 +34,9 @@ class TranslationNotFoundPage(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        # page = get_object_or_404(Page, pk=self.request.GET.get("page_id"))
-        # #
-        # context["page"] = page
-        # context["back"] = self.request.META.get("HTTP_REFERER", "/")
+        from home.models import HomePage
+        context['home_page'] = HomePage.objects.first().localized
+        context['prev'] = self.request.GET.get('prev')
         return context
 
 
