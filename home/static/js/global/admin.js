@@ -8,6 +8,6 @@ $(document).ready(function () {
     $('#tab-content:contains("Download PO file and input translations offline")')
         .find('>:first-child')
         .prepend('<p style="margin-left: 50px; color: red; font-weight: bold;">' +
-            'Use the "Stop translation" option if you want to translate additional fields' +
+            'Use the "STOP TRANSLATION" option if you want to translate additional fields' +
             '</p>')
 });
