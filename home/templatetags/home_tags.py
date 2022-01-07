@@ -27,7 +27,10 @@ def language_switcher(context, page):
                 url = translate_url(reverse('translation-not-found'), locale.language_code)
             switcher_locales.append((locale, url))
 
-    context.update({'locales': switcher_locales})
+    context.update({
+            'locales': switcher_locales,
+            'page': page
+         })
 
     return context
 
