@@ -36,7 +36,7 @@ urlpatterns = [
     path("manifest.webmanifest", get_manifest, name="manifest"),
     path('comments/', include('comments.urls')),
     *i18n_patterns(path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog')),
-    path('ht/', include('health_check.urls')),
+    path('health-check/', include('health_check.urls')),
 ]
 
 if settings.DEBUG:
