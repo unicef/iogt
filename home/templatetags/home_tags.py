@@ -14,10 +14,8 @@ def language_switcher(context, page):
     switcher_locales = list()
     locales = Locale.objects.select_related('locale_detail').all()
     for locale in locales:
-        should_append = False
         try:
-            if locale.locale_detail.is_active:
-                should_append = True
+            should_append = locale.locale_detail.is_active
         except LocaleDetail.DoesNotExist:
             should_append = True
 
