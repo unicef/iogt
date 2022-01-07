@@ -219,6 +219,13 @@ class Command(BaseCommand):
             raise Exception('Could not find a main language in v1 DB')
 
         locale = Locale.objects.get(language_code=self._get_iso_locale(language['locale']))
+        models.LocaleDetail.objects.update_or_create(
+            locale=locale,
+            defaults={
+                'is_active': True,
+                'is_main_language': True,
+            }
+        )
 
         home = models.HomePage(
             title=main['title'],
@@ -417,7 +424,14 @@ class Command(BaseCommand):
               f'from core_sitelanguage'
         cur = self.db_query(sql)
         for row in cur:
-            Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
+            locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
+            models.LocaleDetail.objects.get_or_create(
+                locale=locale,
+                defaults={
+                    'is_active': True,
+                    'is_main_language': False,
+                }
+            )
         cur.close()
 
     def find_content_type_id(self, app_label, model):
