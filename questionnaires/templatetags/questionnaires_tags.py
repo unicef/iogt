@@ -148,6 +148,7 @@ def snake_case(text):
 def subtract(value, arg):
     return int(value) - int(arg)
 
+
 @register.inclusion_tag('questionnaires/tags/questionnaire_wrapper.html', takes_context=True)
 def render_questionnaire_wrapper(context, page, direct_display, background_color=None, font_color=None):
     context.update({
@@ -157,3 +158,21 @@ def render_questionnaire_wrapper(context, page, direct_display, background_color
         'font_color': font_color,
     })
     return context
+
+
+@register.simple_tag
+def get_answer_rendering_class(field, field_option, fields_info):
+    label = field_option.choice_label
+    correct_answers = fields_info.get(field.name, {}).get('correct_answer_list', [])
+    is_selected = field_option.data.get('selected', False)
+    rv = ''
+    if is_selected and label in correct_answers:
+        rv = 'success'
+    elif is_selected and label not in correct_answers:
+        rv = 'error'
+    elif not is_selected and label in correct_answers:
+        rv = 'clear-tick'
+    elif not is_selected and label not in correct_answers:
+        rv = 'clear-cross'
+
+    return rv

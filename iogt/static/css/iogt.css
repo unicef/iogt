@@ -384,6 +384,56 @@ textarea:focus ~ .cust-input__length-text {
     color: #fb3d24;
 }
 
+.cust-check--2.clear-cross .cust-check__title {
+    background-color: #f7f7f9;
+    color: #000;
+    border: none;
+}
+
+.cust-check--2.clear-cross .cust-check__title .cust-check__check {
+    -webkit-align-items: center;
+    align-items: center;
+    background-color: #f7f7f9;
+    background-image: none;
+    border-color: #fff;
+    display: -webkit-flex;
+    display: flex;
+    font-size: 7px;
+    -webkit-justify-content: center;
+    justify-content: center
+}
+
+.cust-check--2.clear-cross .cust-check__title .cust-check__check:after {
+    content: "x";
+    font-size: 12px;
+    color: #303030;
+}
+
+.cust-check--2.clear-tick .cust-check__title {
+    background-color: #f7f7f9;
+    color: #000;
+    border: none;
+}
+
+.cust-check--2.clear-tick .cust-check__title .cust-check__check {
+    -webkit-align-items: center;
+    align-items: center;
+    background-color: #f7f7f9;
+    background-image: none;
+    border-color: #fff;
+    display: -webkit-flex;
+    display: flex;
+    font-size: 7px;
+    -webkit-justify-content: center;
+    justify-content: center
+}
+
+.cust-check--2.clear-tick .cust-check__title .cust-check__check:after {
+    content: url("/static/icons/checked.svg");
+    font-size: 12px;
+    color: #000;
+}
+
 .cust-check__subtitle {
     color: #0094f4;
     font: 800 8px/12px Poppins, sans-serif
