@@ -16,6 +16,10 @@
             {% url 'user_profile' as profile_url %}
             {% static 'icons/profile.svg' as profile_icon_path %}
             {% primary_button title='Profile' href=profile_url icon_path=profile_icon_path is_svg_icon=True %}
+
+            {% url 'account_logout' as logout_url %}
+            {% static 'icons/arrow_icon_left.svg' as logout_icon_path %}
+            {% primary_button title='Log out' href=logout_url icon_path=logout_icon_path is_svg_icon=True %}
         {% endif %}
     </nav>
 </footer>
