@@ -212,19 +212,20 @@
   width: 100%;
 }
 
-.article__content h1 {
-  font-style: normal;
-  font-weight: bold;
-  font-size: 16px;
-  line-height: 20px;
-  margin-bottom: 16px;
-}
-
 .article__content p,
 .article__content ul li,
-.article__content ol li {
+.article__content ol li,
+.polls-widget__description p,
+.polls-widget__description ul li,
+.polls-widget__description ol li,
+.survey-page__description p,
+.survey-page__description ul li,
+.survey-page__description ol li,
+.quiz-page__description p,
+.quiz-page__description ul li,
+.quiz-page__description ol li {
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   font-size: 10px;
   line-height: 16px;
 }
@@ -265,17 +266,25 @@
   .article__content {
     padding: 0px 22px;
   }
-  .article__content h1 {
-    font-size: 24px;
-    line-height: 28px;
-    margin-bottom: 24px;
-  }
+
   .article__content p,
   .article__content ul li,
-  .article__content ol li {
+  .article__content ol li,
+  .polls-widget__description p,
+  .polls-widget__description ul li,
+  .polls-widget__description ol li,
+  .survey-page__description p,
+  .survey-page__description ul li,
+  .survey-page__description ol li,
+  .quiz-page__description p,
+  .quiz-page__description ul li,
+  .quiz-page__description ol li {
+    font-style: normal;
+    font-weight: 400;
     font-size: 16px;
     line-height: 24px;
   }
+
   .article__content__link-btn {
     font-size: 16px;
     line-height: 22px;
@@ -1703,27 +1712,39 @@ body.rtl {
     text-decoration: none;
 }
 
-#app .content-holder .content h1 {
-  font-size: 22px;
-  line-height: 26px;
+#app .content-holder .content h1.large {
   font-weight: bold;
+  font-size: 20px;
+  line-height: 22px;
+  margin: 18px 0;
+}
+
+#app .content-holder .content h1 {
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 20px;
+  margin: 16px 0;
+}
+
+#app .content-holder .content h2, .block-heading {
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 18px;
+  margin: 14px 0;
+}
+
+#app .content-holder .content h3 {
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 16px;
   margin: 12px 0;
 }
 
-#app .content-holder .content h1.large {
-  font-size: 28px;
-  line-height: 34px;
+#app .content-holder .content h4 {
   font-weight: bold;
-  margin: 15px 0;
-}
-
-.block-heading,
-#app .content-holder .content h2 {
-  font-style: normal;
-  font-weight: bold;
-  font-size: 16px;
-  line-height: 20px;
-  margin: 16px 0;
+  font-size: 12px;
+  line-height: 14px;
+  margin: 10px 0;
 }
 
 .btn-primary {
@@ -1755,23 +1776,6 @@ body.rtl {
   max-height: 100%;
 }
 
-
-#app .content-holder .content h3 {
-  font-style: normal;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 18px;
-  margin: 12px 0;
-}
-
-#app .content-holder .content h4 {
-  font-style: normal;
-  font-weight: bold;
-  font-size: 13px;
-  line-height: 16px;
-  margin: 10px 0;
-}
-
 @media screen and (max-width: 767px) {
   .btn-primary {
     font-size: 14px;
@@ -1800,9 +1804,38 @@ body.rtl {
     margin: 16px 0;
   }
 
-  #app .content-holder .content h1 {
-    font-size: 24px;
+  #app .content-holder .content h1.large {
+    font-weight: bold;
+    font-size: 26px;
     line-height: 28px;
+    margin: 24px 0;
+  }
+
+  #app .content-holder .content h1 {
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 26px;
+    margin: 22px 0;
+  }
+
+  #app .content-holder .content h2, .block-heading {
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 24px;
+    margin: 20px 0;
+  }
+
+  #app .content-holder .content h3 {
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 22px;
+    margin: 18px 0;
+  }
+
+  #app .content-holder .content h4 {
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 20px;
     margin: 16px 0;
   }
 
@@ -1814,12 +1847,6 @@ body.rtl {
 
   .btn-primary .icon-holder img {
     max-width: 16px;
-  }
-
-  #app .content-holder .content h1.large {
-    font-size: 33px;
-    line-height: 36px;
-    margin: 18px 0;
   }
 
   .content .nav-bar__wrap {

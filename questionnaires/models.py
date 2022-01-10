@@ -61,7 +61,7 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
 
     description = StreamField(
         [
-            ('heading', blocks.CharBlock(form_classname="full title")),
+            ('heading', blocks.CharBlock(form_classname="full title", template='blocks/heading.html')),
             ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
             ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
             ("image", ImageChooserBlock()),
