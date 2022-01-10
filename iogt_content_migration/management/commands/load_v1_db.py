@@ -438,7 +438,14 @@ class Command(BaseCommand):
             )
 
         if should_deactivate_en_locale:
-            models.LocaleDetail.objects.filter(locale__language_code='en').update(is_active=False)
+            locale, __ = Locale.objects.get_or_create(language_code='en')
+            models.LocaleDetail.objects.update_or_create(
+                locale=locale,
+                defaults={
+                    'is_active': False,
+                    'is_main_language': False,
+                }
+            )
         cur.close()
 
     def find_content_type_id(self, app_label, model):
