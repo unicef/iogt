@@ -224,8 +224,8 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
-        featured_content = self.featured_content.filter(content__live=True).first()
-        context['featured_content'] = featured_content.content.specific if featured_content else None
+        featured_content = self.featured_content.all().first()
+        context['featured_content'] = featured_content.content.specific if featured_content and featured_content.content.live else None
         context['children'] = self.get_children().live().specific()
         context['user_progress'] = self.get_user_progress_dict(request)
 
@@ -399,7 +399,7 @@ class Article(AbstractArticle):
         context = super().get_context(request)
         context['recommended_articles'] = [
             recommended_article.article.specific
-            for recommended_article in self.recommended_articles.filter(article__live=True)
+            for recommended_article in self.recommended_articles.all() if recommended_article.article.live
         ]
 
         return context
