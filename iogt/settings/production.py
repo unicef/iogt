@@ -1,7 +1,7 @@
 import os
 from .base import *
 
-DEBUG = True
+DEBUG = False
 SECRET_KEY = os.environ.get('SECRET_KEY')
 ALLOWED_HOSTS = ['*']
 DATABASES = {
