@@ -423,8 +423,12 @@ class Command(BaseCommand):
         sql = f'select * ' \
               f'from core_sitelanguage'
         cur = self.db_query(sql)
+        should_deactivate_en_locale = True
         for row in cur:
-            locale, __ = Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
+            language_code = self._get_iso_locale(row['locale'])
+            if language_code == 'en':
+                should_deactivate_en_locale = False
+            locale, __ = Locale.objects.get_or_create(language_code=language_code)
             models.LocaleDetail.objects.get_or_create(
                 locale=locale,
                 defaults={
@@ -432,6 +436,9 @@ class Command(BaseCommand):
                     'is_main_language': False,
                 }
             )
+
+        if should_deactivate_en_locale:
+            models.LocaleDetail.objects.filter(locale__language_code='en').update(is_active=False)
         cur.close()
 
     def find_content_type_id(self, app_label, model):
