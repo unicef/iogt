@@ -67,6 +67,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'sass_processor',
     'translation_manager',
+    'health_check',
+    'health_check.db',
+    'health_check.cache',
+    'health_check.storage',
+    'health_check.contrib.migrations',
 
     'django.contrib.admin',
     'django.contrib.auth',
