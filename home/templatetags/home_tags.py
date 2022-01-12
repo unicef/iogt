@@ -21,7 +21,7 @@ def language_switcher(context, page):
 
         if should_append:
             translated_page = page and page.get_translation_or_none(locale)
-            if translated_page:
+            if translated_page and translated_page.live:
                 url = translated_page.url
             else:
                 url = translate_url(reverse('translation-not-found'), locale.language_code)
