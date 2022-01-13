@@ -566,18 +566,18 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
     ]
 
     def get_page(self):
-        return self.page.specific if self.page else self
+        return self.page.specific if self.page and self.page.live else self
 
     def get_icon_url(self):
         icon_url = super().get_icon_url()
-        if not icon_url.url and self.page:
+        if not icon_url.url and self.page and self.page.live:
             icon_url = self.page.specific.get_icon_url()
 
         return icon_url
 
     def get_url(self):
         url = ''
-        if self.page:
+        if self.page and self.page.live:
             url = self.page.specific.url
         elif self.external_link:
             url = self.external_link
