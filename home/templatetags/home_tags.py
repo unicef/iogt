@@ -1,6 +1,7 @@
 from django import template
 from django.core.exceptions import ObjectDoesNotExist
-from django.urls import translate_url, reverse
+from django.shortcuts import get_object_or_404
+from django.urls import translate_url, reverse, resolve
 from wagtail.core.models import Locale, Site, Page
 
 from home.models import SectionIndexPage, Section, Article, FooterIndexPage, PageLinkPage, LocaleDetail, HomePage
@@ -13,6 +14,10 @@ register = template.Library()
 def language_switcher(context, page):
     switcher_locales = list()
     locales = Locale.objects.select_related('locale_detail').all()
+
+    if resolve(context.request.path_info).url_name == 'translation-not-found':
+        page = get_object_or_404(Page, pk=context.request.GET.get('page'), live=True)
+
     for locale in locales:
         try:
             should_append = locale.locale_detail.is_active
@@ -24,7 +29,8 @@ def language_switcher(context, page):
             if translated_page and translated_page.live:
                 url = translated_page.url
             else:
-                url = translate_url(reverse('translation-not-found'), locale.language_code)
+                translated_url = translate_url(reverse('translation-not-found'), locale.language_code)
+                url = f'{translated_url}?page={page.id}'
             switcher_locales.append((locale, url))
 
     context.update({
