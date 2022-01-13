@@ -12,6 +12,12 @@ register = template.Library()
 
 @register.inclusion_tag('home/tags/language_switcher.html', takes_context=True)
 def language_switcher(context, page):
+    """
+    This template tag has evolved over time. The current requirement for this is really tricky.
+    See https://github.com/unicef/iogt/pull/955#issuecomment-1008277982 for more context on why this logic is
+    complicated.
+    """
+
     switcher_locales = list()
     locales = Locale.objects.select_related('locale_detail').all()
 
