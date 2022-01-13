@@ -6,16 +6,16 @@
 {% endblock %}
 
 <div class="questionnaire-container container">
-    <h1 class="title polls-widget__title">{{ page.title }}</h1>
-    {% if user.is_authenticated or request.is_preview or page.allow_anonymous_submissions %}
+    <h1 class="title polls-widget__title">{{ questionnaire.title }}</h1>
+    {% if user.is_authenticated or request.is_preview or questionnaire.allow_anonymous_submissions %}
         {% if form %}
-            <form action="{% pageurl page %}?back_url={{ request.path }}" method="POST">
+            <form action="{% pageurl questionnaire %}?back_url={{ request.path }}" method="POST">
                 {% csrf_token %}
                     {% for field in form %}
                         <div class="quest-item">
                             <div class="quest-item__header">
                                 <div class="quest-item__header">
-                                    {% field_counter form forloop form_length fields_step page %}
+                                    {% field_counter form forloop form_length fields_step questionnaire %}
                                     {% field_description field %}
                                 </div>
                             </div>
@@ -29,12 +29,12 @@
                     {% endfor %}
                 {% include 'questionnaires/tags/terms_and_conditions.html' %}
                 <button type="submit" class="cust-btn cust-btn--dark polls-widget__submit">
-                    <span>{{ page.submit_button_text }}</span>
+                    <span>{{ questionnaire.submit_button_text }}</span>
                 </button>
             </form>
         {% else %}
             {% include 'questionnaires/tags/already_completed.html' %}
-            {% if page.show_results %}
+            {% if questionnaire.show_results %}
                 {% for question, answers in results.items %}
                     {% snake_case question as current_answer %}
                     {% for answer, count in answers.items %}

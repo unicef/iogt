@@ -81,7 +81,7 @@ class HomePage(Page):
         context = super().get_context(request)
         context['banners'] = [
             home_page_banner.banner_page.specific
-            for home_page_banner in self.home_page_banners.filter(banner_page__live=True)
+            for home_page_banner in self.home_page_banners.all() if home_page_banner.banner_page.live
         ]
         return context
 

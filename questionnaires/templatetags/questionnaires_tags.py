@@ -101,7 +101,7 @@ def render_questionnaire_form(context, page):
 
     context.update({
         'template': template,
-        'page': page,
+        'questionnaire': page,
     })
 
     multiple_submission_filter = (

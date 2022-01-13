@@ -1,5 +1,5 @@
 {% load wagtailcore_tags i18n %}
 
-<a href="{% pageurl value.page %}" class='article__content__link-btn'>
-    {{ value.text | default:value.page.title }}
-</a>
+{% if button_page %}
+    <a href="{% pageurl button_page %}" class='article__content__link-btn'>{{ text }}</a>
+{% endif %}

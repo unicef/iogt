@@ -1,3 +1,5 @@
 {% load generic_components %}
 
-{% render_article_card page=page display_section_title=display_section_title font_color=page.top_level_section.font_color %}
+{% if article %}
+    {% render_article_card article=article display_section_title=display_section_title font_color=page.top_level_section.font_color %}
+{% endif %}

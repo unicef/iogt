@@ -2,11 +2,11 @@
 
 <div class="questionnaire-components">
     <div class='questionnaire-components__component'>
-        <a href="{% pageurl page %}" style="color:{{ font_color }}; background:{{ background_color }};">
+        <a href="{% pageurl questionnaire %}" style="color:{{ font_color }}; background:{{ background_color }};">
             <div>
-                <p>{% translate page.get_type|upper %}</p>
-                <p>{{ page.title }}</p>
-                {% include 'questionnaires/tags/index_page_description_lines.html' with page=page %}
+                <p>{% translate questionnaire.get_type|upper %}</p>
+                <p>{{ questionnaire.title }}</p>
+                {% include 'questionnaires/tags/index_page_description_lines.html' with questionnaire=questionnaire %}
             </div>
             {% include 'home/tags/angle_bracket.html' %}
         </a>
