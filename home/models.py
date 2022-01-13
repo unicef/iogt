@@ -1130,6 +1130,16 @@ class V1PageURLToV2PageMap(models.Model):
 
         return obj
 
+    @classmethod
+    def get_page_or_none(cls, v1_page_url):
+        # See https://github.com/unicef/iogt/issues/850 for more details on why /home/ is prepended
+        urls_to_match = [
+            f'/home{v1_page_url}',
+            f'/home{v1_page_url}/'
+        ]
+        obj = cls.objects.filter(v1_page_url__in=urls_to_match).first()
+        return obj.v2_page if obj else None
+
 
 class LocaleDetail(models.Model):
     is_active = models.BooleanField(
