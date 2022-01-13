@@ -79,10 +79,12 @@ class HomePage(Page):
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
-        context['banners'] = [
-            home_page_banner.banner_page.specific
-            for home_page_banner in self.home_page_banners.all() if home_page_banner.banner_page.live
-        ]
+        banners = []
+        for home_page_banner in self.home_page_banners.all():
+            banner_page = home_page_banner.banner_page
+            if banner_page.live and banner_page.banner_link_page and banner_page.banner_link_page.live:
+                banners.append(banner_page.specific)
+        context['banners'] = banners
         return context
 
 
