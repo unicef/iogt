@@ -31,13 +31,18 @@ def language_switcher(context, page):
             should_append = True
 
         if should_append:
-            translated_page = page and page.get_translation_or_none(locale)
-            if translated_page and translated_page.live:
-                url = translated_page.url
-            else:
-                translated_url = translate_url(reverse('translation-not-found'), locale.language_code)
-                url = f'{translated_url}?page={page.id}'
+            if page:    # If the current URL belongs to a wagtail page
+                translated_page = page and page.get_translation_or_none(locale)
+                if translated_page and translated_page.live:
+                    url = translated_page.url
+                else:
+                    translated_url = translate_url(reverse('translation-not-found'), locale.language_code)
+                    url = f'{translated_url}?page={page.id}'
+            else:   # If the current URL belongs to a django view
+                url = translate_url(context.request.path_info, locale.language_code)
+
             switcher_locales.append((locale, url))
+
 
     context.update({
             'locales': switcher_locales,
