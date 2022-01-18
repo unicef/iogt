@@ -9,6 +9,7 @@
     <h1 class="title polls-widget__title">{{ questionnaire.title }}</h1>
     {% if user.is_authenticated or request.is_preview or questionnaire.allow_anonymous_submissions %}
         {% if form %}
+            {{ questionnaire.description }}
             <form action="{% pageurl questionnaire %}?back_url={{ request.path }}" method="POST">
                 {% csrf_token %}
                     {% for field in form %}

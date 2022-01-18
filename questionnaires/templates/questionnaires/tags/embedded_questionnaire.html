@@ -8,6 +8,7 @@
     <h1 class="title {{ questionnaire.get_type }}-page__title">{{ questionnaire.title }}</h1>
     {% if user.is_authenticated or request.is_preview or questionnaire.allow_anonymous_submissions %}
         {% if form %}
+            {{ questionnaire.description }}
             <form action="{% get_action_url questionnaire questionnaire fields_step request form %}" method="POST">
                 {% csrf_token %}
                 <div class="{{ questionnaire.get_type }}-page__content">
