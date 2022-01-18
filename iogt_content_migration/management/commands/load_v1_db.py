@@ -344,7 +344,7 @@ class Command(BaseCommand):
             if file:
                 document = Document.objects.create(
                     title=row['title'],
-                    file=File(file),
+                    file=File(file, name=row['file'].split('/')[-1]),
                     created_at=row['created_at'],
                     collection=self.collection_map.get(row['collection_id']),
                 )
@@ -371,10 +371,10 @@ class Command(BaseCommand):
                 thumbnail = self.open_file(row['thumbnail'])
                 media = Media.objects.create(
                     title=row['title'],
-                    file=File(file),
+                    file=File(file, name=row['file'].split('/')[-1]),
                     type=row['type'],
                     duration=row['duration'],
-                    thumbnail=File(thumbnail) if thumbnail else None,
+                    thumbnail=File(thumbnail, name=row['file'].split('/')[-1]) if thumbnail else None,
                     created_at=row['created_at'],
                     collection=self.collection_map.get(row['collection_id']),
                 )
