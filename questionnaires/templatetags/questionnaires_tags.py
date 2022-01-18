@@ -161,18 +161,30 @@ def render_questionnaire_wrapper(context, page, direct_display, background_color
 
 
 @register.simple_tag
-def get_answer_rendering_class(field, field_option, fields_info):
+def get_answer_options(field, field_option, fields_info):
     label = field_option.choice_label
     correct_answers = fields_info.get(field.name, {}).get('correct_answer_list', [])
     is_selected = field_option.data.get('selected', False)
     rv = ''
     if is_selected and label in correct_answers:
-        rv = 'success'
+        rv = {
+            'class': 'success',
+            'aria_label': 'Checkbox with tick, indicating correct and selected',
+        }
     elif is_selected and label not in correct_answers:
-        rv = 'error'
+        rv = {
+            'class': 'error',
+            'aria_label': 'Checkbox with X, indicating incorrect and selected',
+        }
     elif not is_selected and label in correct_answers:
-        rv = 'clear-tick'
+        rv = {
+            'class': 'clear-tick',
+            'aria_label': 'Checkbox with tick, indicating correct but not selected',
+        }
     elif not is_selected and label not in correct_answers:
-        rv = 'clear-cross'
+        rv = {
+            'class': 'clear-cross',
+            'aria_label': 'Checkbox with X, indicating incorrect and not selected',
+        }
 
     return rv
