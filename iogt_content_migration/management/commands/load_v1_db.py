@@ -374,7 +374,7 @@ class Command(BaseCommand):
                     file=File(file, name=row['file'].split('/')[-1]),
                     type=row['type'],
                     duration=row['duration'],
-                    thumbnail=File(thumbnail, name=row['file'].split('/')[-1]) if thumbnail else None,
+                    thumbnail=File(thumbnail, name=row['thumbnail'].split('/')[-1]) if thumbnail else None,
                     created_at=row['created_at'],
                     collection=self.collection_map.get(row['collection_id']),
                 )
