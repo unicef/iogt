@@ -79,10 +79,12 @@ class HomePage(Page):
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
-        context['banners'] = [
-            home_page_banner.banner_page.specific
-            for home_page_banner in self.home_page_banners.filter(banner_page__live=True)
-        ]
+        banners = []
+        for home_page_banner in self.home_page_banners.all():
+            banner_page = home_page_banner.banner_page
+            if banner_page.live and banner_page.banner_link_page and banner_page.banner_link_page.live:
+                banners.append(banner_page.specific)
+        context['banners'] = banners
         return context
 
 
@@ -566,18 +568,18 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
     ]
 
     def get_page(self):
-        return self.page.specific if self.page else self
+        return self.page.specific if self.page and self.page.live else self
 
     def get_icon_url(self):
         icon_url = super().get_icon_url()
-        if not icon_url.url and self.page:
+        if not icon_url.url and self.page and self.page.live:
             icon_url = self.page.specific.get_icon_url()
 
         return icon_url
 
     def get_url(self):
         url = ''
-        if self.page:
+        if self.page and self.page.live:
             url = self.page.specific.url
         elif self.external_link:
             url = self.external_link

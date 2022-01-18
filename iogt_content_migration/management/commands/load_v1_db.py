@@ -1975,7 +1975,7 @@ class Command(BaseCommand):
                 # Technically, someone could have manually put 'Submit' on a non-English button,
                 # which we would now translate even though we shouldn't.
                 # This is quite unlikely though.
-                submit_button_text = self.registration_survey_translations['submit_button_text'][survey.locale.language_code]
+                submit_button_text = self.registration_survey_translations['submit_button_text'].get(survey.locale.language_code)
                 if not submit_button_text:
                     self.post_migration_report_messages['untranslated_survey_button'].append(
                             f'title: {survey.title}. URL: {survey.full_url}. '
@@ -2036,7 +2036,7 @@ class Command(BaseCommand):
                 )
                 continue
 
-            submit_button_text = self.registration_survey_translations['register_button_text'][locale.language_code]
+            submit_button_text = self.registration_survey_translations['register_button_text'].get(locale.language_code)
             if not submit_button_text:
                 self.post_migration_report_messages['registration_survey_translation_not_found'].append(
                     f'No translation for submit button of registration survey to locale: {locale}'

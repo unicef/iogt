@@ -56,7 +56,7 @@
     <section class='related-articles'>
         {% if recommended_articles %}
             <h3>{% translate "Related Articles" %}</h3>
-            {% include 'home/tags/articles_list.html' with pages=recommended_articles %}
+            {% include 'home/tags/articles_list.html' with recommended_articles=recommended_articles %}
         {% endif %}
     </section>
 {% endblock content %}

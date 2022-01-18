@@ -2,10 +2,10 @@
 
 <footer class="bottom-level">
     <nav>
-        {% for page in pages %}
-            {% get_page_url page.get_page as page_url %}
-            {% get_icon_url page as icon_url %}
-            {% primary_button title=page.title href=page_url icon_path=icon_url.url is_svg_icon=icon_url.is_svg_icon %}
+        {% for footer in footers %}
+            {% get_page_url footer.get_page as page_url %}
+            {% get_icon_url footer as icon_url %}
+            {% primary_button title=footer.title href=page_url icon_path=icon_url.url is_svg_icon=icon_url.is_svg_icon %}
         {% endfor %}
         {% if request.user.is_anonymous %}
             {% url 'account_login' as login_url %}

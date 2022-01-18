@@ -3,7 +3,7 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 <section class='related-articles'>
-    {% for page in pages %}
-        {% render_article_card page=page %}
+    {% for recommended_article in recommended_articles %}
+        {% render_article_card recommended_article %}
     {% endfor %}
 </section>

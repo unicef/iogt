@@ -63,7 +63,7 @@ def render_previous_next_buttons(page):
 @register.inclusion_tag('home/tags/footer.html', takes_context=True)
 def render_footer(context):
     return {
-        'pages': FooterIndexPage.get_active_footers(),
+        'footers': FooterIndexPage.get_active_footers(),
         'request': context['request'],
     }
 
@@ -71,7 +71,7 @@ def render_footer(context):
 @register.inclusion_tag('home/tags/top_level_sections.html', takes_context=True)
 def render_top_level_sections(context):
     return {
-        'pages': SectionIndexPage.get_top_level_sections(),
+        'top_level_sections': SectionIndexPage.get_top_level_sections(),
         'request': context['request'],
     }
 

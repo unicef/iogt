@@ -101,7 +101,7 @@ def render_questionnaire_form(context, page):
 
     context.update({
         'template': template,
-        'page': page,
+        'questionnaire': page,
     })
 
     multiple_submission_filter = (
@@ -152,7 +152,7 @@ def subtract(value, arg):
 @register.inclusion_tag('questionnaires/tags/questionnaire_wrapper.html', takes_context=True)
 def render_questionnaire_wrapper(context, page, direct_display, background_color=None, font_color=None):
     context.update({
-        'page': page,
+        'questionnaire': page,
         'direct_display': direct_display,
         'background_color': background_color,
         'font_color': font_color,
