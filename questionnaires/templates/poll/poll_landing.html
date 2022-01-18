@@ -16,7 +16,7 @@
                         <h1 class="title polls-widget__title">{{ page.title }}</h1>
                         <div class="polls-widget__form">
                             {% if page.thank_you_text %}
-                                <div>{{ page.thank_you_text }}</div>
+                                <div class="polls-widget__description">{{ page.thank_you_text }}</div>
                             {% endif %}
                             {% for question, answers in results.items %}
                                 {% snake_case question as current_answer %}
