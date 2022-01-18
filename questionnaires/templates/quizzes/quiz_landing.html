@@ -104,11 +104,11 @@
                             {% if field|length > 1 %}
                                 {% for field_option in field %}
                                     <div class="quest-item__content" tabindex="0">
-                                        <label class="cust-check cust-check--2 quest-item__input
-                                                {% get_answer_rendering_class field field_option fields_info %}"
+                                        {% get_answer_options field field_option fields_info as answer_options %}
+                                        <label class="cust-check cust-check--2 quest-item__input {{ answer_options.class }}"
                                                tabindex="0">
                                             <div class="cust-check__title">
-                                                <span class="cust-check__check"></span>
+                                                <span class="cust-check__check" aria-label="{{ answer_options.aria_label }}"></span>
                                                 <span>{{ field_option.choice_label }}</span>
                                             </div>
                                         </label>
