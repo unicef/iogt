@@ -13,10 +13,11 @@
             <div class="polls-widget">
                 <div class="container">
                     <div class="polls-widget__wrap">
-                        <h1 class="title polls-widget__title">{{ page.title }}</h1>
+                        <h1 class="title">{{ page.title }}</h1>
                         <div class="polls-widget__form">
                             {% if page.thank_you_text %}
-                                <div class="polls-widget__form-title">{{ page.thank_you_text }}</div>{% endif %}
+                                <div class="polls-widget__description">{{ page.thank_you_text }}</div>
+                            {% endif %}
                             {% for question, answers in results.items %}
                                 {% snake_case question as current_answer %}
                                 {% for answer, count in answers.items %}
@@ -29,7 +30,7 @@
                                             </div>
                                             <div class="cust-check__title-right">
                                                 <span class="cust-check__percent">{{ count |floatformat:"0" }}
-                                                        {% if result_as_percentage %}%{% endif %}</span>
+                                                    {% if result_as_percentage %}%{% endif %}</span>
                                             </div>
                                             <div class="cust-check__percent-item"
                                                  style="width: {{ count |floatformat:"0" }}%"></div>

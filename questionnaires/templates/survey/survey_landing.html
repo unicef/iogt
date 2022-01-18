@@ -8,7 +8,8 @@
 
 {% block content %}
     <div class="container">
-        <div class="survey-page__desc">{{ page.thank_you_text }}</div>
+        <h1 class="title">{{ page.title }}</h1>
+        <div class="survey-page__description">{{ page.thank_you_text }}</div>
         <div class="survey-page__btns">
             <a href="{{ page.url }}"
                class="cust-btn cust-btn--dark survey-page__btn"><span>{% translate "Back" %}</span>
