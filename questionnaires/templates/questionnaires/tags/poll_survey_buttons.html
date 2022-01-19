@@ -1,0 +1,17 @@
+{% load home_tags static image_tags i18n %}
+
+<div class="questionnaire-footer">
+    <a href="{% translated_home_page_url LANGUAGE_CODE %}" class="icon-btn icon-btn--md icon-btn--white icon-btn--rounded">
+        <span class="icon-btn__title">
+            {% translate 'Go to Homepage' %}
+        </span>
+    </a>
+    <a href="{% if back_url != None %}{{ back_url }}{% else %}/{% endif %}"
+       class="icon-btn icon-btn--md icon-btn--dark icon-btn--rounded">
+        <span class="icon-btn__icon">
+            {% static "icons/questionnaire_back.svg" as back_url %}
+            <img src="{{ back_url }}" alt="Back icon"/>
+        </span>
+        <span class="icon-btn__title">{% translate "Back" %}</span>
+    </a>
+</div>

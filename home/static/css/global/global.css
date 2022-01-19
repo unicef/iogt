@@ -230,6 +230,10 @@
   line-height: 16px;
 }
 
+.quiz-page__description {
+  margin-bottom: 10px;
+}
+
 .article__content--video a, .article__content--audio a {
   color: #303030;
 }
