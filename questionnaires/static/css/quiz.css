@@ -141,16 +141,3 @@
     display: -webkit-flex;
     display: flex
 }
-
-.quiz-answer-banner__btns {
-    -webkit-justify-content: space-between;
-    justify-content: space-between;
-    padding: 12px 0
-}
-
-.quiz-answer-banner__btn {
-    -webkit-justify-content: center;
-    justify-content: center;
-    white-space: nowrap;
-    width: auto;
-}

@@ -53,3 +53,9 @@
 .survey-page__already-completed {
     color: #FF0000;
 }
+
+.questionnaire-footer {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
