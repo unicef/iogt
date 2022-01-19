@@ -58,6 +58,7 @@ User = get_user_model()
 
 
 class HomePage(Page):
+    parent_page_types = ['wagtailcore.page']
     template = 'home/home_page.html'
     show_in_menus_default = True
 
