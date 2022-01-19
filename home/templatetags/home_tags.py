@@ -1,7 +1,7 @@
 from django import template
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
-from django.urls import translate_url, reverse, resolve
+from django.urls import translate_url, reverse, resolve, Resolver404
 from wagtail.core.models import Locale, Site, Page
 
 from home.models import SectionIndexPage, Section, Article, FooterIndexPage, PageLinkPage, LocaleDetail, HomePage
@@ -21,8 +21,11 @@ def language_switcher(context, page):
     switcher_locales = list()
     locales = Locale.objects.select_related('locale_detail').all()
 
-    if resolve(context.request.path_info).url_name == 'translation-not-found':
-        page = get_object_or_404(Page, pk=context.request.GET.get('page'), live=True)
+    try:
+        if resolve(context.request.path_info).url_name == 'translation-not-found':
+            page = get_object_or_404(Page, pk=context.request.GET.get('page'), live=True)
+    except Resolver404:
+        pass
 
     for locale in locales:
         try:
@@ -31,23 +34,22 @@ def language_switcher(context, page):
             should_append = True
 
         if should_append:
-            if page:    # If the current URL belongs to a wagtail page
+            if page:  # If the current URL belongs to a wagtail page
                 translated_page = page and page.get_translation_or_none(locale)
                 if translated_page and translated_page.live:
                     url = translated_page.url
                 else:
                     translated_url = translate_url(reverse('translation-not-found'), locale.language_code)
                     url = f'{translated_url}?page={page.id}'
-            else:   # If the current URL belongs to a django view
+            else:  # If the current URL belongs to a django view
                 url = translate_url(context.request.path_info, locale.language_code)
 
             switcher_locales.append((locale, url))
 
-
     context.update({
-            'locales': switcher_locales,
-            'page': page
-         })
+        'locales': switcher_locales,
+        'page': page
+    })
 
     return context
 
