@@ -4,20 +4,21 @@
 
 {% block extra_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/polls.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/questionnaire.css' %}">
 {% endblock %}
 
 {% block content %}
     {% include 'back_button.html' with back_url=back_url %}
-    {% if page.show_results %}
-        <div class="polls">
-            <div class="polls-widget">
-                <div class="container">
-                    <div class="polls-widget__wrap">
-                        <h1 class="title">{{ page.title }}</h1>
-                        <div class="polls-widget__form">
-                            {% if page.thank_you_text %}
-                                <div class="polls-widget__description">{{ page.thank_you_text }}</div>
-                            {% endif %}
+    <div class="polls">
+        <div class="polls-widget">
+            <div class="container">
+                <div class="polls-widget__wrap">
+                    <h1 class="title">{{ page.title }}</h1>
+                    <div class="polls-widget__form">
+                        {% if page.thank_you_text %}
+                            <div class="polls-widget__description">{{ page.thank_you_text }}</div>
+                        {% endif %}
+                        {% if page.show_results %}
                             {% for question, answers in results.items %}
                                 {% snake_case question as current_answer %}
                                 {% for answer, count in answers.items %}
@@ -38,10 +39,11 @@
                                     </div>
                                 {% endfor %}
                             {% endfor %}
-                        </div>
+                        {% endif %}
                     </div>
+                    {% include 'questionnaires/tags/footer.html' %}
                 </div>
             </div>
         </div>
-    {% endif %}
+    </div>
 {% endblock %}

@@ -1,0 +1,31 @@
+{% load static %}
+{% load image_tags %}
+{% load i18n %}
+<div class="questionnaire-footer">
+    <a href="{{ page.url }}"
+       class="icon-btn icon-btn--md icon-btn--white icon-btn--rounded">
+    <span class="icon-btn__icon">
+        {% static "icons/replay.svg" as replay_url %}
+        <img src="{{ replay_url }}" alt="Replay icon"/>
+    </span>
+        <span class="icon-btn__title">
+            {% if page.get_type == 'poll' %}
+                {% translate 'Replay Poll' %}
+            {% elif page.get_type == 'survey' %}
+                {% translate 'Replay Survey' %}
+            {% elif page.get_type == 'quiz' %}
+                {% translate 'Replay Quiz' %}
+            {% else %}
+                {% translate 'Replay' %}
+            {% endif %}
+        </span>
+    </a>
+    <a href="{% if back_url != None %}{{ back_url }}{% else %}/{% endif %}"
+       class="icon-btn icon-btn--md icon-btn--dark icon-btn--rounded">
+        <span class="icon-btn__icon">
+            {% static "icons/questionnaire_back.svg" as back_url %}
+            <img src="{{ back_url }}" alt="Back icon"/>
+        </span>
+        <span class="icon-btn__title">{% translate "Back" %}</span>
+    </a>
+</div>
