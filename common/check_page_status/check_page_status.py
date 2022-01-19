@@ -12,6 +12,7 @@ def get_sitemap(url):
     req.add_header('Accept-Charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.3')
     req.add_header('Accept-Encoding', 'none')
     req.add_header('Accept-Language', 'en-US,en;q=0.8')
+    req.add_header('Cache-Control', 'no-cache')
     content = json.loads(urlopen(req).read().decode('utf-8'))
     return content
 
@@ -35,7 +36,7 @@ def main():
         if r.ok:
             logging.info(f"{r.status_code} {page}")
         else:
-            logging.warn(f"{r.status_code} {page}")
+            logging.warning(f"{r.status_code} {page}")
 
 
 if __name__ == '__main__':
