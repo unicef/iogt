@@ -8,7 +8,6 @@
 {% endblock %}
 
 {% block content %}
-    {% include 'back_button.html' with back_url=back_url %}
     <div class="polls">
         <div class="polls-widget">
             <div class="container">
@@ -41,7 +40,7 @@
                             {% endfor %}
                         {% endif %}
                     </div>
-                    {% include 'questionnaires/tags/footer.html' %}
+                    {% include 'questionnaires/tags/poll_survey_buttons.html' %}
                 </div>
             </div>
         </div>

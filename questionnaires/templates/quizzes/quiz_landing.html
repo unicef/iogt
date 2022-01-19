@@ -11,13 +11,15 @@
         <div class="container">
             <div class="quiz-page__banner quiz-answer-banner">
                 <h1 class="title">{{ page.title }}</h1>
-                {% if page.thank_you_text %}
-                    <div class="quiz-page__description">{{ page.thank_you_text }}</div>{% endif %}
                 <div class="quiz-answer-banner__content">
                     <p class="quiz-answer-banner__counter">{{ result|get_item:'total_correct' }}
                         / {{ result|get_item:'total' }}</p>
                     <p class="quiz-answer-banner__result-text">{% translate "Your results!" %}</p>
                 </div>
+                {% include 'questionnaires/tags/quiz_buttons.html' %}
+                {% if page.thank_you_text %}
+                    <div class="quiz-page__description">{{ page.thank_you_text }}</div>
+                {% endif %}
                 <div class="quiz-answer-banner__answers">
                     <div class="quiz-answer-banner__answer success">{{ result|get_item:'total_correct' }}
                         {% translate "Correct" %}
@@ -106,7 +108,7 @@
                         {% endif %}
                     </div>
                 {% endfor %}
-                {% include 'questionnaires/tags/footer.html' %}
+                {% include 'questionnaires/tags/quiz_buttons.html' %}
             </div>
         </div>
     </div>
