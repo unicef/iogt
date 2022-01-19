@@ -79,10 +79,12 @@ class HomePage(Page):
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
-        context['banners'] = [
-            home_page_banner.banner_page.specific
-            for home_page_banner in self.home_page_banners.filter(banner_page__live=True)
-        ]
+        banners = []
+        for home_page_banner in self.home_page_banners.all():
+            banner_page = home_page_banner.banner_page
+            if banner_page.live and banner_page.banner_link_page and banner_page.banner_link_page.live:
+                banners.append(banner_page.specific)
+        context['banners'] = banners
         return context
 
 
@@ -224,10 +226,8 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
-        context['featured_content_items'] = [
-            featured_content.content.specific
-            for featured_content in self.featured_content.filter(content__live=True)
-        ]
+        featured_content = self.featured_content.all().first()
+        context['featured_content'] = featured_content.content.specific if featured_content and featured_content.content.live else None
         context['children'] = self.get_children().live().specific()
         context['user_progress'] = self.get_user_progress_dict(request)
 
@@ -291,7 +291,7 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     index_page_description = models.TextField(null=True, blank=True)
 
     body = StreamField([
-        ('heading', blocks.CharBlock(form_classname="full title")),
+        ('heading', blocks.CharBlock(form_classname="full title", template='blocks/heading.html')),
         ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
         ('markdown', MarkdownBlock(icon='code')),
         ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
@@ -401,7 +401,7 @@ class Article(AbstractArticle):
         context = super().get_context(request)
         context['recommended_articles'] = [
             recommended_article.article.specific
-            for recommended_article in self.recommended_articles.filter(article__live=True)
+            for recommended_article in self.recommended_articles.all() if recommended_article.article.live
         ]
 
         return context
@@ -424,7 +424,7 @@ class OfflineAppPage(AbstractArticle):
     subpage_types = []
 
     body = StreamField([
-        ('heading', blocks.CharBlock(form_classname="full title")),
+        ('heading', blocks.CharBlock(form_classname="full title", template='blocks/heading.html')),
         ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
         ('markdown', MarkdownBlock(icon='code')),
         ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
@@ -568,18 +568,18 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
     ]
 
     def get_page(self):
-        return self.page.specific if self.page else self
+        return self.page.specific if self.page and self.page.live else self
 
     def get_icon_url(self):
         icon_url = super().get_icon_url()
-        if not icon_url.url and self.page:
+        if not icon_url.url and self.page and self.page.live:
             icon_url = self.page.specific.get_icon_url()
 
         return icon_url
 
     def get_url(self):
         url = ''
-        if self.page:
+        if self.page and self.page.live:
             url = self.page.specific.url
         elif self.external_link:
             url = self.external_link
@@ -1131,6 +1131,16 @@ class V1PageURLToV2PageMap(models.Model):
         obj, __ = cls.objects.get_or_create(v2_page=page, defaults={'v1_page_url': url})
 
         return obj
+
+    @classmethod
+    def get_page_or_none(cls, v1_page_url):
+        # See https://github.com/unicef/iogt/issues/850 for more details on why /home/ is prepended
+        urls_to_match = [
+            f'/home{v1_page_url}',
+            f'/home{v1_page_url}/'
+        ]
+        obj = cls.objects.filter(v1_page_url__in=urls_to_match).first()
+        return obj.v2_page if obj else None
 
 
 class LocaleDetail(models.Model):

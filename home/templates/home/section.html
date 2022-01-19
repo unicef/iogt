@@ -14,11 +14,8 @@
     {% if user_progress %}
         {% render_user_progress user_progress %}
     {% endif %}
-    {% if featured_content_items %}
-        <section class='featured-content'
-                 style="background-color:{{ page.background_color }}; color:{{ page.font_color }}">
-            {% include 'home/tags/featured_content_list.html' with featured_content_items=featured_content_items %}
-        </section>
+    {% if featured_content %}
+        {% include 'home/tags/section_featured_content_card.html' with featured_content=featured_content font_color=page.font_color background_color=page.background_color %}
     {% endif %}
     {% if children %}
         {% include 'home/tags/child_pages.html' with children=children %}

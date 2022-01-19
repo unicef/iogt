@@ -1,5 +1,6 @@
 from django.shortcuts import redirect
-from django.urls import resolve
+from django.urls import resolve, Resolver404, translate_url
+from django.utils import translation
 
 from home.models import SiteSettings
 
@@ -21,7 +22,11 @@ class RegistrationSurveyRedirectMiddleware:
             is_registration_survey_url = False
 
         allowed_url_names = ['account_logout']
-        current_url = resolve(request.path_info).url_name
+        try:
+            current_url = resolve(request.path_info).url_name
+        except Resolver404:
+            language = translation.get_language()
+            current_url = translate_url(request.path_info, language)
         is_url_allowed = current_url in allowed_url_names or is_registration_survey_url
 
         is_registered_user = not request.user.is_anonymous

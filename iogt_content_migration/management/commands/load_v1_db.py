@@ -219,6 +219,13 @@ class Command(BaseCommand):
             raise Exception('Could not find a main language in v1 DB')
 
         locale = Locale.objects.get(language_code=self._get_iso_locale(language['locale']))
+        models.LocaleDetail.objects.update_or_create(
+            locale=locale,
+            defaults={
+                'is_active': True,
+                'is_main_language': True,
+            }
+        )
 
         home = models.HomePage(
             title=main['title'],
@@ -337,7 +344,7 @@ class Command(BaseCommand):
             if file:
                 document = Document.objects.create(
                     title=row['title'],
-                    file=File(file),
+                    file=File(file, name=row['file'].split('/')[-1]),
                     created_at=row['created_at'],
                     collection=self.collection_map.get(row['collection_id']),
                 )
@@ -364,10 +371,10 @@ class Command(BaseCommand):
                 thumbnail = self.open_file(row['thumbnail'])
                 media = Media.objects.create(
                     title=row['title'],
-                    file=File(file),
+                    file=File(file, name=row['file'].split('/')[-1]),
                     type=row['type'],
                     duration=row['duration'],
-                    thumbnail=File(thumbnail) if thumbnail else None,
+                    thumbnail=File(thumbnail, name=row['thumbnail'].split('/')[-1]) if thumbnail else None,
                     created_at=row['created_at'],
                     collection=self.collection_map.get(row['collection_id']),
                 )
@@ -416,8 +423,29 @@ class Command(BaseCommand):
         sql = f'select * ' \
               f'from core_sitelanguage'
         cur = self.db_query(sql)
+        should_deactivate_en_locale = True
         for row in cur:
-            Locale.objects.get_or_create(language_code=self._get_iso_locale(row['locale']))
+            language_code = self._get_iso_locale(row['locale'])
+            if language_code == 'en':
+                should_deactivate_en_locale = False
+            locale, __ = Locale.objects.get_or_create(language_code=language_code)
+            models.LocaleDetail.objects.get_or_create(
+                locale=locale,
+                defaults={
+                    'is_active': True,
+                    'is_main_language': False,
+                }
+            )
+
+        if should_deactivate_en_locale:
+            locale, __ = Locale.objects.get_or_create(language_code='en')
+            models.LocaleDetail.objects.update_or_create(
+                locale=locale,
+                defaults={
+                    'is_active': False,
+                    'is_main_language': False,
+                }
+            )
         cur.close()
 
     def find_content_type_id(self, app_label, model):
@@ -1947,7 +1975,7 @@ class Command(BaseCommand):
                 # Technically, someone could have manually put 'Submit' on a non-English button,
                 # which we would now translate even though we shouldn't.
                 # This is quite unlikely though.
-                submit_button_text = self.registration_survey_translations['submit_button_text'][survey.locale.language_code]
+                submit_button_text = self.registration_survey_translations['submit_button_text'].get(survey.locale.language_code)
                 if not submit_button_text:
                     self.post_migration_report_messages['untranslated_survey_button'].append(
                             f'title: {survey.title}. URL: {survey.full_url}. '
@@ -2008,7 +2036,7 @@ class Command(BaseCommand):
                 )
                 continue
 
-            submit_button_text = self.registration_survey_translations['register_button_text'][locale.language_code]
+            submit_button_text = self.registration_survey_translations['register_button_text'].get(locale.language_code)
             if not submit_button_text:
                 self.post_migration_report_messages['registration_survey_translation_not_found'].append(
                     f'No translation for submit button of registration survey to locale: {locale}'

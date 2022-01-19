@@ -1,26 +1,28 @@
 {% load home_tags %}
 {% load wagtailcore_tags wagtailimages_tags %}
 
-<div class="article-card">
-    <a href="{% pageurl page %}" style="background:{{ background_color }};"
-       class="{% if is_first_content %}first-content{% endif %}">
-        <div class="article-header">
-            {% if display_section_title %}
-                <p class="sm-paragraph" style="color:{{ font_color }};">
-                    {{ page.top_level_section.title|upper }}
-                </p>
-            {% endif %}
-            <p class="article-title">{{ page.title }}</p>
-            {% if page.index_page_description %}
-                <p class="sm-paragraph">{{ page.index_page_description }}</p>
-            {% endif %}
-        </div>
-        <div class="img-holder {% render_is_complete page %}">
-            {% if is_first_content %}
-                {% image page.lead_image width-560 class='' %}
-            {% else %}
-                {% image page.lead_image width-280 class='' %}
-            {% endif %}
-        </div>
-    </a>
-</div>
+{% if article %}
+    <div class="article-card">
+        <a href="{% pageurl article %}" style="background:{{ background_color }};"
+           class="{% if is_first_content %}first-content{% endif %}">
+            <div class="article-header">
+                {% if display_section_title %}
+                    <p class="sm-paragraph" style="color:{{ font_color }};">
+                        {{ article.top_level_section.title|upper }}
+                    </p>
+                {% endif %}
+                <p class="article-title">{{ article.title }}</p>
+                {% if article.index_page_description %}
+                    <p class="sm-paragraph">{{ article.index_page_description }}</p>
+                {% endif %}
+            </div>
+            <div class="img-holder {% render_is_complete article %}">
+                {% if is_first_content %}
+                    {% image article.lead_image width-560 class='' %}
+                {% else %}
+                    {% image article.lead_image width-280 class='' %}
+                {% endif %}
+            </div>
+        </a>
+    </div>
+{% endif %}

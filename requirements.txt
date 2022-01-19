@@ -22,3 +22,4 @@ wagtailmedia==0.7.0
 wagtailmenus~=3.0
 wagtailsvg==0.0.14
 whitenoise==5.2.*
+django-health-check==3.16.5

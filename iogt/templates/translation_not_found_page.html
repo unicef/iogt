@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% load i18n wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+    <p>
+        {% blocktranslate with page_title=page_title language=lang.name_local %}
+            Sorry, {{ page_title }} is not available in {{ language }}. If you want to keep browsing in {{ language }}
+            you can click below
+            to return to the homepage.
+        {% endblocktranslate %}
+    </p>
+    <p>
+        <a href="{% pageurl home_page %}">{% translate "Return to homepage" %}</a>
+    </p>
+    <p>
+        <a href="{{ prev }}">{% translate "Back" %}</a>
+    </p>
+{% endblock %}

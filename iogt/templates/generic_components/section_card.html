@@ -3,12 +3,12 @@
 <div class="section-card">
     <a href="{% pageurl page %}" class='sub-section {% if is_first_content %}first-content{% endif %}'
        style="color:{{ font_color }}; background:{{ background_color }};">
-        <p>{{ page.title }}</p>
+        <p>{{ section.title }}</p>
         <div class="img-holder {% render_is_complete page %}">
             {% if is_first_content %}
-                {% image page.lead_image width-560 class='' %}
+                {% image section.lead_image width-560 class='' %}
             {% else %}
-                {% image page.lead_image width-280 class='' %}
+                {% image section.lead_image width-280 class='' %}
             {% endif %}
         </div>
     </a>

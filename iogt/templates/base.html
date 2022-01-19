@@ -66,12 +66,14 @@
                 <div class="other-links">
                     {% render_footer %}
                 </div>
-                <div class="content">
-                    {% include "messages.html" %}
-                    {% block content %}{% endblock %}
-                    <p class='footer__copyright'>{% translate "© The Internet of Good Things" %}</p>
-                </div>
-                {% include "footer.html" %}
+                {% with page_=page %}
+                    <div class="content">
+                        {% include "messages.html" %}
+                        {% block content %}{% endblock %}
+                        <p class='footer__copyright'>{% translate "© The Internet of Good Things" %}</p>
+                    </div>
+                    {% include "footer.html" with page=page_ %}
+                {% endwith %}
             </div>
         </div>
     </div>

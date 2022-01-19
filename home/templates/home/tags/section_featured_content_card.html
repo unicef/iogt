@@ -1,0 +1,16 @@
+{% load home_tags %}
+{% load generic_components %}
+{% load image_tags %}
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+<a href="{% pageurl featured_content %}" class='section-featured-content'>
+    <div class="section-featured-content-img img-holder {% render_is_complete page %}">
+        {% image featured_content.lead_image width-560 class='' %}
+    </div>
+    <div class='section-featured-content-title' style="color: {{ font_color }}; background: {{ background_color }};">
+        {% get_icon_url featured_content as icon_url %}
+        {% render_section_featured_content_icon icon=icon_url fill_color=font_color %}
+        <p>{{ featured_content.title }}</p>
+        {% include 'home/tags/angle_bracket.html' %}
+    </div>
+</a>
