@@ -150,7 +150,7 @@ def subtract(value, arg):
 
 
 @register.inclusion_tag('questionnaires/tags/questionnaire_wrapper.html', takes_context=True)
-def render_questionnaire_wrapper(context, page, direct_display, background_color=None, font_color=None):
+def render_questionnaire_wrapper(context, page, direct_display=False, background_color=None, font_color=None):
     context.update({
         'questionnaire': page,
         'direct_display': direct_display,
