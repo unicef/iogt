@@ -297,8 +297,7 @@ class Command(BaseCommand):
 
     def mark_user_registration_survey_required(self):
         users = get_user_model().objects.filter(groups__id__in=self.registration_survey_mandatory_group_ids)
-        users.update(has_filled_registration_survey=False)
-        users.update(has_viewed_registration_survey=False)
+        users.update(has_filled_registration_survey=False, has_viewed_registration_survey=False)
 
     def migrate_root_level_user_comments(self):
         sql = f'select dc.id as comment_id, wcp.id as wagtailpage_id, wcp.title, comment, * ' \

@@ -43,7 +43,7 @@ class RegistrationSurveyRedirectMiddleware:
             messages.add_message(
                 request, messages.ERROR, 'Please complete the questions marked as required to continue')
 
-        if (is_registered_user
+        elif (is_registered_user
                 and not user.has_filled_registration_survey
                 and not user.has_viewed_registration_survey
                 and not is_url_allowed
