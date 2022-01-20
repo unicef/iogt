@@ -551,6 +551,11 @@ img {
     padding: 5px;
 }
 
+.messages li.error {
+  color: #FFFFFF;
+  background-color: #FF0000;
+}
+
 input:focus, input:focus-visible {
     outline: none;
 }

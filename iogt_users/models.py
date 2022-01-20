@@ -18,6 +18,7 @@ class User(AbstractUser):
     terms_accepted = models.BooleanField(default=False)
 
     has_filled_registration_survey = models.BooleanField(default=False)
+    has_viewed_registration_survey = models.BooleanField(default=False)
 
     @property
     def is_rapidpro_bot_user(self):

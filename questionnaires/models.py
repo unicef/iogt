@@ -446,6 +446,9 @@ class Survey(QuestionnairePage, AbstractForm):
         context.update({'form_length': request.GET.get('form_length')})
         return context
 
+    def has_required_fields(self):
+        return self.survey_form_fields.filter(required=True).exists()
+
     class Meta:
         verbose_name = _("survey")
         verbose_name_plural = _("surveys")

@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import resolve, Resolver404, translate_url
 from django.utils import translation
@@ -15,9 +16,9 @@ class RegistrationSurveyRedirectMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        site_settings = SiteSettings.for_request(request)
-        if site_settings.registration_survey:
-            is_registration_survey_url = request.path_info == site_settings.registration_survey.localized.url
+        registration_survey = SiteSettings.for_request(request).registration_survey
+        if registration_survey:
+            is_registration_survey_url = request.path_info == registration_survey.localized.url
         else:
             is_registration_survey_url = False
 
@@ -29,12 +30,29 @@ class RegistrationSurveyRedirectMiddleware:
             current_url = translate_url(request.path_info, language)
         is_url_allowed = current_url in allowed_url_names or is_registration_survey_url
 
-        is_registered_user = not request.user.is_anonymous
+        user = request.user
+        is_registered_user = not user.is_anonymous
 
-        if is_registered_user and not request.user.has_filled_registration_survey \
-                and not is_url_allowed and site_settings.registration_survey:
+        should_redirect_to_registration_survey = False
+        if (is_registered_user
+                and not user.has_filled_registration_survey
+                and not is_url_allowed
+                and registration_survey
+                and registration_survey.has_required_fields()):
+            should_redirect_to_registration_survey = True
+            messages.add_message(
+                request, messages.ERROR, 'Please complete the questions marked as required to continue')
 
-            site_settings = SiteSettings.for_request(request)
-            return redirect(site_settings.registration_survey.localized.url)
+        if (is_registered_user
+                and not user.has_filled_registration_survey
+                and not user.has_viewed_registration_survey
+                and not is_url_allowed
+                and registration_survey):
+            should_redirect_to_registration_survey = True
+
+        if should_redirect_to_registration_survey:
+            user.has_viewed_registration_survey = True
+            user.save(update_fields=['has_viewed_registration_survey'])
+            return redirect(registration_survey.localized.url)
 
         return self.get_response(request)
