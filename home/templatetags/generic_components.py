@@ -105,6 +105,11 @@ def menu_item_background_color(menu_item):
 
 
 @register.simple_tag
+def menu_item_single_column_view(menu_item):
+    return 'single-column-view' if menu_item.display_only_in_single_column_view else ''
+
+
+@register.simple_tag
 def get_icon_url(obj):
     return obj.get_icon_url()
 
