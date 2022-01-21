@@ -16,9 +16,15 @@ class Command(BaseCommand):
             '--domain',
             help='The domain on which the website is deployed'
         )
+        parser.add_argument(
+            '--port',
+            type=int,
+            help='The port on which the website is deployed'
+        )
 
     def handle(self, *args, **options):
-        domain = options.get('domain') or 'localhost:8000'
+        domain = options.get('domain') or 'localhost'
+        port = options.get('port') or 8000
 
         __, created = DjangoSite.objects.update_or_create(pk=settings.SITE_ID, defaults={
             'domain': domain,
@@ -27,6 +33,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(f'Django Site object {"created" if created else "updated"}'))
         __, created = WagtailSite.objects.update_or_create(is_default_site=True, defaults={
             'hostname': domain,
+            'port': port,
             'site_name': 'default',
             'root_page': HomePage.objects.all().order_by('id').first()
         })
