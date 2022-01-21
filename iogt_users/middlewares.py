@@ -17,39 +17,40 @@ class RegistrationSurveyRedirectMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
+        request_path = request.path_info
         registration_survey = SiteSettings.for_request(request).registration_survey
         if registration_survey:
             registration_survey = registration_survey.localized
-            is_registration_survey_url = request.path_info == registration_survey.url
+            is_registration_survey_url = request_path == registration_survey.url
         else:
             is_registration_survey_url = False
 
         allowed_url_names = ['account_logout']
+        language = translation.get_language()
         try:
-            current_url = resolve(request.path_info).url_name
+            current_url = resolve(request_path).url_name
         except Resolver404:
-            language = translation.get_language()
-            current_url = translate_url(request.path_info, language)
+            current_url = translate_url(request_path, language)
         is_url_allowed = current_url in allowed_url_names or is_registration_survey_url
 
         user = request.user
         is_registered_user = not user.is_anonymous
 
+        language = translation.get_language()
+        if request_path.startswith(('/media/', f'/{language}/images/')) or is_url_allowed or not is_registered_user:
+            return self.get_response(request)
+
         should_redirect_to_registration_survey = False
-        if (is_registered_user
-                and not user.has_filled_registration_survey
-                and not is_url_allowed
+        if (not user.has_filled_registration_survey
                 and registration_survey
                 and registration_survey.has_required_fields()):
             should_redirect_to_registration_survey = True
-            if user.has_viewed_registration_survey:
+            if user.has_viewed_registration_survey and not user.has_filled_registration_survey:
                 messages.add_message(
                     request, messages.ERROR, _('Please complete the questions marked as required to continue'))
 
-        elif (is_registered_user
-                and not user.has_filled_registration_survey
+        elif (not user.has_filled_registration_survey
                 and not user.has_viewed_registration_survey
-                and not is_url_allowed
                 and registration_survey):
             should_redirect_to_registration_survey = True
 
