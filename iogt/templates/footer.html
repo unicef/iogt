@@ -14,7 +14,9 @@
     <div class='footer'>
         <div class="section-container">
             {% render_top_level_sections %}
-            {% render_footer %}
+            {% if show_footers %}
+                {% render_footer %}
+            {% endif %}
             <p class='footer__copyright'>{% translate "© The Internet of Good Things"%}</p>
         </div>
     </div>

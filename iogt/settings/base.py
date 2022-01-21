@@ -122,7 +122,8 @@ TEMPLATES = [
                 'wagtail.contrib.settings.context_processors.settings',
                 "home.processors.show_welcome_banner",
                 'django.template.context_processors.i18n',
-                'home.processors.commit_hash'
+                'home.processors.commit_hash',
+                'home.processors.show_footers',
             ],
         },
     },

@@ -64,7 +64,9 @@
         <div class="main-wrapper" style="background: {{ settings.home.ThemeSettings.global_background_color }}">
             <div class="content-holder">
                 <div class="other-links">
-                    {% render_footer %}
+                    {% if show_footers %}
+                        {% render_footer %}
+                    {% endif %}
                 </div>
                 {% with page_=page %}
                     <div class="content">
