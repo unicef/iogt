@@ -873,6 +873,13 @@ class Command(BaseCommand):
                     translated_banner.latest_revision_created_at = row['latest_revision_created_at']
                     translated_banner.save()
 
+                    if row['external_link']:
+                        self.post_migration_report_messages['banners_with_external_link'].append(
+                            f'title: {translated_banner.title}. URL: {translated_banner.full_url}. '
+                            f'Admin URL: {self.get_admin_url(translated_banner.id)}. '
+                            f'External link: {row["external_link"]}.'
+                        )
+
                     V1ToV2ObjectMap.create_map(content_object=translated_banner, v1_object_id=row['page_ptr_id'])
                     V1PageURLToV2PageMap.create_map(url=row['url_path'], page=translated_banner)
 
@@ -904,6 +911,13 @@ class Command(BaseCommand):
             latest_revision_created_at=row['latest_revision_created_at'],
         )
         banner.save()
+
+        if row['external_link']:
+            self.post_migration_report_messages['banners_with_external_link'].append(
+                f'title: {banner.title}. URL: {banner.full_url}. '
+                f'Admin URL: {self.get_admin_url(banner.id)}. '
+                f'External link: {row["external_link"]}.'
+            )
 
         V1ToV2ObjectMap.create_map(content_object=banner, v1_object_id=row['page_ptr_id'])
         V1PageURLToV2PageMap.create_map(url=row['url_path'], page=banner)
