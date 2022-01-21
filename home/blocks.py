@@ -63,7 +63,7 @@ class MediaBlock(AbstractMediaChooserBlock):
 class SocialMediaLinkBlock(blocks.StructBlock):
     title = blocks.CharBlock(max_length=255)
     link = blocks.URLBlock()
-    image = ImageChooserBlock()
+    image = ImageChooserBlock(template='blocks/image.html')
 
     class Meta:
         icon = 'site'
@@ -72,7 +72,7 @@ class SocialMediaLinkBlock(blocks.StructBlock):
 class SocialMediaShareButtonBlock(blocks.StructBlock):
     platform = blocks.CharBlock(max_length=255)
     is_active = blocks.BooleanBlock(required=False)
-    image = ImageChooserBlock(required=False)
+    image = ImageChooserBlock(template='blocks/image.html', required=False)
 
     class Meta:
         icon = 'site'
