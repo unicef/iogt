@@ -19,7 +19,8 @@ class RegistrationSurveyRedirectMiddleware:
     def __call__(self, request):
         registration_survey = SiteSettings.for_request(request).registration_survey
         if registration_survey:
-            is_registration_survey_url = request.path_info == registration_survey.localized.url
+            registration_survey = registration_survey.localized
+            is_registration_survey_url = request.path_info == registration_survey.url
         else:
             is_registration_survey_url = False
 
