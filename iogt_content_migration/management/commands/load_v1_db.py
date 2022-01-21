@@ -654,6 +654,11 @@ class Command(BaseCommand):
                     translated_article.commenting_ends_at = commenting_close_time
                     translated_article.latest_revision_created_at = row['latest_revision_created_at']
                     translated_article.save()
+                    if row['featured_in_latest']:
+                        self.post_migration_report_messages['articles_featured_in_latest'].append(
+                            f'title: {article.title}. URL: {article.full_url}. '
+                            f'Admin URL: {self.get_admin_url(article.id)}.'
+                        )
 
                     content_type = self.find_content_type_id('core', 'articlepage')
                     tags = self.find_tags(content_type, row['page_ptr_id'])
@@ -708,6 +713,12 @@ class Command(BaseCommand):
         )
         try:
             article.save()
+            if row['featured_in_latest']:
+                self.post_migration_report_messages['articles_featured_in_latest'].append(
+                    f'title: {article.title}. URL: {article.full_url}. '
+                    f'Admin URL: {self.get_admin_url(article.id)}.'
+                )
+
             content_type = self.find_content_type_id('core', 'articlepage')
             tags = self.find_tags(content_type, row['page_ptr_id'])
             if tags:
@@ -964,6 +975,11 @@ class Command(BaseCommand):
                     translated_footer.commenting_ends_at = commenting_close_time
                     translated_footer.latest_revision_created_at = row['latest_revision_created_at']
                     translated_footer.save()
+                    if row['featured_in_latest']:
+                        self.post_migration_report_messages['footers_featured_in_latest'].append(
+                            f'title: {translated_footer.title}. URL: {translated_footer.full_url}. '
+                            f'Admin URL: {self.get_admin_url(translated_footer.id)}.'
+                        )
 
                     if image:
                         self.post_migration_report_messages['footers_with_image'].append(
@@ -1007,6 +1023,11 @@ class Command(BaseCommand):
             latest_revision_created_at=row['latest_revision_created_at'],
         )
         footer.save()
+        if row['featured_in_latest']:
+            self.post_migration_report_messages['footers_featured_in_latest'].append(
+                f'title: {footer.title}. URL: {footer.full_url}. '
+                f'Admin URL: {self.get_admin_url(footer.id)}.'
+            )
 
         if image:
             self.post_migration_report_messages['footers_with_image'].append(
