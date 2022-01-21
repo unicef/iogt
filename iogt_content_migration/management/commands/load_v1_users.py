@@ -233,6 +233,7 @@ class Command(BaseCommand):
                 'date_joined': row['date_joined'],
                 'display_name': row['alias'],
                 'has_filled_registration_survey': True,
+                'has_viewed_registration_survey': True,
             }
 
             migrated_user = V1ToV2ObjectMap.get_v2_obj(get_user_model(), v1_user_id)
@@ -296,7 +297,7 @@ class Command(BaseCommand):
 
     def mark_user_registration_survey_required(self):
         users = get_user_model().objects.filter(groups__id__in=self.registration_survey_mandatory_group_ids)
-        users.update(has_filled_registration_survey=False)
+        users.update(has_filled_registration_survey=False, has_viewed_registration_survey=False)
 
     def migrate_root_level_user_comments(self):
         sql = f'select dc.id as comment_id, wcp.id as wagtailpage_id, wcp.title, comment, * ' \
