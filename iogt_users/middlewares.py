@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import resolve, Resolver404, translate_url
 from django.utils import translation
+from django.utils.translation import gettext as _
 
 from home.models import SiteSettings
 
@@ -40,8 +41,9 @@ class RegistrationSurveyRedirectMiddleware:
                 and registration_survey
                 and registration_survey.has_required_fields()):
             should_redirect_to_registration_survey = True
-            messages.add_message(
-                request, messages.ERROR, 'Please complete the questions marked as required to continue')
+            if user.has_viewed_registration_survey:
+                messages.add_message(
+                    request, messages.ERROR, _('Please complete the questions marked as required to continue'))
 
         elif (is_registered_user
                 and not user.has_filled_registration_survey
