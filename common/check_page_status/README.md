@@ -3,4 +3,4 @@ This is done by traversing the sitemap.
 
 Example usage:
 
-`./check_pages.py https://global.iogt.site/`
+`./check_page_status.py https://global.iogt.site`
