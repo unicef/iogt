@@ -393,7 +393,9 @@ class Command(BaseCommand):
 
             migrated_comment_flag = V1ToV2ObjectMap.get_v2_obj(CommentFlag, row['id'])
 
-            if not migrated_comment_flag:
+            if not migrated_comment:
+                self.stdout.write(f"Comment with ID {row['comment_id']} was flagged but doesn't exist.")
+            elif not migrated_comment_flag:
                 comment_flag = CommentFlag.objects.create(
                     flag=row['flag'], flag_date=row['flag_date'], comment_id=migrated_comment.id,
                     user_id=migrated_user.id)
