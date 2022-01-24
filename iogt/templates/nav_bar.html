@@ -2,7 +2,7 @@
 {% load static wagtailimages_tags menu_tags home_tags generic_components image_tags %}
 
 <nav class="nav-bar">
-        <div class="nav-bar__wrap" style="background-color:{{navbar_background_color}}">
+        <div class="nav-bar__wrap">
         {% for item in menu_items %}
             {% menu_item_background_color item as menu_item_background_color %}
             {% menu_item_font_color item as menu_item_font_color %}
