@@ -5,25 +5,27 @@ services:
   django:
     build:
       context: ./
-      dockerfile: Dockerfile.dev
-    container_name: dc01
+      dockerfile: Dockerfile
     environment:
+      COMMIT_HASH: asdfghjkl
       DB_NAME: postgres
       DB_USER: postgres
       DB_PASSWORD: iogt
       DB_HOST: db
-      DB_PORT: 5432
-      DJANGO_SETTINGS_MODULE: iogt.settings.docker_compose_dev
-      COMMIT_HASH: asdfghjkl
+      DB_PORT: "5432"
+      DB_SSL_MODE: allow
+      DJANGO_SETTINGS_MODULE: iogt.settings.production
+      LOG_LEVEL: DEBUG
       RAPIDPRO_BOT_USER_ID: 1
       RAPIDPRO_BOT_USER_USERNAME: rapidpro
+      SECRET_KEY: secret_key
       RAPIDPRO_BOT_USER_PASSWORD: 1234
       WAGTAILTRANSFER_SECRET_KEY: wagtailtransfer-secret-key
       WAGTAILTRANSFER_SOURCE_NAME: iogt_global
       WAGTAILTRANSFER_SOURCE_BASE_URL: https://example.com/wagtail-transfer/
       WAGTAILTRANSFER_SOURCE_SECRET_KEY: wagtailtransfer-source-secret-key
       BASE_URL: 'http://localhost:8000'
-    command: bash -c "python manage.py load_po_files && python manage.py compilemessages && python manage.py runserver 0.0.0.0:8000"
+    # command: bash -c "python manage.py load_po_files && python manage.py compilemessages && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./:/app/
     ports:
@@ -32,9 +34,19 @@ services:
       - elasticsearch
       - db
 
+  static:
+    image: nginx:1.20.2-alpine
+    ports:
+      - '9000:80'
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./static:/usr/share/nginx/html/static:ro
+      - ./media/images:/usr/share/nginx/html/media/images:ro
+      - ./media/media:/usr/share/nginx/html/media/media:ro
+      - ./media/svg-to-png-maps:/usr/share/nginx/html/media/svg-to-png-maps:ro
+
   elasticsearch:
     image: 'docker.elastic.co/elasticsearch/elasticsearch:7.12.1'
-    container_name: ec01
     environment:
       - discovery.type=single-node
     volumes:
@@ -44,7 +56,6 @@ services:
 
   db:
     image: postgres:alpine
-    container_name: pc01
     restart: unless-stopped
     environment:
       POSTGRES_PASSWORD: iogt
@@ -54,17 +65,17 @@ services:
     ports:
       - 5432:5432
 
-  legacy-db:
-    image: postgres:alpine
-    container_name: lc01
-    restart: unless-stopped
-    environment:
-      POSTGRES_PASSWORD: iogt
-    volumes:
-      - /var/lib/postgresql/data
-      - ./legacy-initdb.d:/docker-entrypoint-initdb.d
-    ports:
-      - 54321:5432
+  # legacy-db:
+  #   image: postgres:alpine
+  #   container_name: lc01
+  #   restart: unless-stopped
+  #   environment:
+  #     POSTGRES_PASSWORD: iogt
+  #   volumes:
+  #     - /var/lib/postgresql/data
+  #     - ./legacy-initdb.d:/docker-entrypoint-initdb.d
+  #   ports:
+  #     - 54321:5432
 
 volumes:
   es-data01:
