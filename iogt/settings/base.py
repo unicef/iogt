@@ -94,7 +94,7 @@ MIDDLEWARE = [
     "iogt.middleware.LocaleMiddleware",
     "iogt.middleware.AdminLocaleMiddleware",
     'iogt.middleware.CustomRedirectMiddleware',
-    'iogt_users.middlewares.RegistrationSurveyRedirectMiddleware',
+    # 'iogt_users.middlewares.RegistrationSurveyRedirectMiddleware',
     'external_links.middleware.RewriteExternalLinksMiddleware',
     'iogt.middleware.CacheControlMiddleware',
 ]
