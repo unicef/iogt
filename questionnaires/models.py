@@ -74,7 +74,7 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
     )
     thank_you_text = StreamField(
         [
-            ("paragraph", blocks.RichTextBlock()),
+            ("paragraph", blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
             ("media", MediaBlock(icon="media")),
             ("image", ImageChooserBlock(template='blocks/image.html')),
         ],
@@ -103,7 +103,7 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
 
     terms_and_conditions = StreamField(
         [
-            ("paragraph", blocks.RichTextBlock()),
+            ("paragraph", blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
             ('page_button', PageButtonBlock()),
         ],
         null=True,
