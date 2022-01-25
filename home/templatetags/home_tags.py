@@ -48,7 +48,6 @@ def language_switcher(context, page):
 
     context.update({
         'locales': switcher_locales,
-        'page': page
     })
 
     return context

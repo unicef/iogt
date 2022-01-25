@@ -27,7 +27,7 @@
                             {% render_field field %}
                         </div>
                     {% endfor %}
-                {% include 'questionnaires/tags/terms_and_conditions.html' %}
+                {% include 'questionnaires/tags/terms_and_conditions.html' with questionnaire=questionnaire %}
                 <button type="submit" class="cust-btn cust-btn--dark polls-widget__submit">
                     <span>{{ questionnaire.submit_button_text }}</span>
                 </button>

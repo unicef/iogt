@@ -98,6 +98,10 @@ class EmbeddedPollBlock(EmbeddedQuestionnaireBlock):
                 'direct_display': value['direct_display'],
                 'questionnaire': poll.specific,
             })
+        else:
+            context.update({
+                'questionnaire': None,
+            })
         return context
 
     class Meta:
@@ -115,6 +119,10 @@ class EmbeddedSurveyBlock(EmbeddedQuestionnaireBlock):
                 'direct_display': value['direct_display'],
                 'questionnaire': survey.specific,
             })
+        else:
+            context.update({
+                'questionnaire': None,
+            })
         return context
 
     class Meta:
@@ -131,6 +139,10 @@ class EmbeddedQuizBlock(EmbeddedQuestionnaireBlock):
             context.update({
                 'direct_display': value['direct_display'],
                 'questionnaire': quiz.specific,
+            })
+        else:
+            context.update({
+                'questionnaire': None,
             })
         return context
 
@@ -150,6 +162,10 @@ class PageButtonBlock(blocks.StructBlock):
                 'button_page': button_page.specific,
                 'text': value.get('text') or button_page.title
             })
+        else:
+            context.update({
+                'button_page': None,
+            })
         return context
 
     class Meta:
@@ -167,6 +183,10 @@ class ArticleBlock(blocks.StructBlock):
             context.update({
                 'display_section_title': value['display_section_title'],
                 'article': article.specific,
+            })
+        else:
+            context.update({
+                'article': None,
             })
         return context
 

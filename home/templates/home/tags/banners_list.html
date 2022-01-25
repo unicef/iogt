@@ -11,7 +11,9 @@
                 <a href="#">
             {% endif %}
             {% image banner.banner_image width-360 as banner_img %}
-            <img src="{{ banner_img.url }}">
+            {% if banner_img %}
+                <img src="{{ banner_img.url }}">
+            {% endif %}
             </a>
         </div>
     {% endfor %}

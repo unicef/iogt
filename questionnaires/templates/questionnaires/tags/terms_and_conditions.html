@@ -1,1 +1,3 @@
-{{ page.terms_and_conditions }}
+{% if questionnaire %}
+    {{ questionnaire.terms_and_conditions }}
+{% endif %}
