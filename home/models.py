@@ -813,6 +813,7 @@ class IogtFlatMenuItem(AbstractFlatMenuItem, TitleIconMixin):
         null=True,
         help_text=_('The font color of the flat menu item on Desktop + Mobile')
     )
+    display_only_in_single_column_view = models.BooleanField(default=False)
 
     panels = [
         PageChooserPanel('link_page'),
@@ -824,7 +825,8 @@ class IogtFlatMenuItem(AbstractFlatMenuItem, TitleIconMixin):
         SvgChooserPanel('icon'),
         ImageChooserPanel('image_icon'),
         FieldPanel('background_color'),
-        FieldPanel('font_color')
+        FieldPanel('font_color'),
+        FieldPanel('display_only_in_single_column_view'),
     ]
 
     def get_icon_url(self):

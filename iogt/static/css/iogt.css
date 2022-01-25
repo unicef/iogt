@@ -2363,3 +2363,13 @@ textarea:focus ~ .cust-input__length-text {
     -moz-border-radius: 8px;
     border-radius: 8px;
 }
+
+.single-column-view {
+  display: none;
+}
+
+@media only screen and (max-width: 767px) {
+  .single-column-view {
+    display: flex;
+  }
+}
