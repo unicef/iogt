@@ -6,7 +6,7 @@ from django.db import migrations
 
 def _fix_article_paragraph_image_format(apps, schema_editor):
     Article = apps.get_model('home', 'Article')
-    format_regex = re.compile('format=["|\'][\w|-]+["|\']')
+    format_regex = re.compile('format="(left|right)"')
     articles = Article.objects.all()
     for article in articles:
         for block in article.body.stream_data:
@@ -18,7 +18,7 @@ def _fix_article_paragraph_image_format(apps, schema_editor):
 
 def _fix_offline_app_paragraph_image_format(apps, schema_editor):
     OfflineAppPage = apps.get_model('home', 'OfflineAppPage')
-    format_regex = re.compile('format=["|\'][\w|-]+["|\']')
+    format_regex = re.compile('format="(left|right)"')
     offline_app_pages = OfflineAppPage.objects.all()
     for offline_app_page in offline_app_pages:
         for block in offline_app_page.body.stream_data:

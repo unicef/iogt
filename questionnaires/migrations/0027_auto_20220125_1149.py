@@ -7,7 +7,7 @@ from django.db import migrations
 
 def _fix_poll_paragraph_image_format(apps, schema_editor):
     Poll = apps.get_model('questionnaires', 'Poll')
-    format_regex = re.compile('format=["|\'][\w|-]+["|\']')
+    format_regex = re.compile('format="(left|right)"')
     polls = Poll.objects.all()
     for poll in polls:
         for block in poll.description.stream_data:
@@ -27,7 +27,7 @@ def _fix_poll_paragraph_image_format(apps, schema_editor):
 
 def _fix_survey_paragraph_image_format(apps, schema_editor):
     Survey = apps.get_model('questionnaires', 'Survey')
-    format_regex = re.compile('format=["|\'][\w|-]+["|\']')
+    format_regex = re.compile('format="(left|right)"')
     surveys = Survey.objects.all()
     for survey in surveys:
         for block in survey.description.stream_data:
@@ -47,7 +47,7 @@ def _fix_survey_paragraph_image_format(apps, schema_editor):
 
 def _fix_quiz_paragraph_image_format(apps, schema_editor):
     Quiz = apps.get_model('questionnaires', 'Quiz')
-    format_regex = re.compile('format=["|\'][\w|-]+["|\']')
+    format_regex = re.compile('format="(left|right)"')
     quizzes = Quiz.objects.all()
     for quiz in quizzes:
         for block in quiz.description.stream_data:
