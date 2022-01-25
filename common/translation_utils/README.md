@@ -85,3 +85,11 @@ TODO: Extra status: country office provide translations
 
 Move `translatable_strings.py` to `/home/translatable_strings.py`.
 Move `locale/*` to `/`.
+
+## New Process, to update `translations_status.csv` and the PO files
+
+From the root folder, run:
+```
+python3 manage.py translation_tracking
+
+```
