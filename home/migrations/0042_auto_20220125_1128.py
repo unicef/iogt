@@ -11,7 +11,7 @@ def _fix_article_paragraph_image_format(apps, schema_editor):
     for article in articles:
         for block in article.body.stream_data:
             if block.get('type') == 'paragraph':
-                block['value'] = format_regex.sub('format="full-width"', block.get('value'))
+                block['value'] = format_regex.sub('format="fullwidth"', block.get('value'))
 
     Article.objects.bulk_update(articles, fields=['body'], batch_size=100)
 
@@ -23,7 +23,7 @@ def _fix_offline_app_paragraph_image_format(apps, schema_editor):
     for offline_app_page in offline_app_pages:
         for block in offline_app_page.body.stream_data:
             if block.get('type') == 'paragraph':
-                block['value'] = format_regex.sub('format="full-width"', block.get('value'))
+                block['value'] = format_regex.sub('format="fullwidth"', block.get('value'))
 
     OfflineAppPage.objects.bulk_update(offline_app_pages, fields=['body'], batch_size=100)
 

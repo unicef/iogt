@@ -12,15 +12,15 @@ def _fix_poll_paragraph_image_format(apps, schema_editor):
     for poll in polls:
         for block in poll.description.stream_data:
             if block.get('type') in 'paragraph':
-                block['value'] = format_regex.sub('format="full-width"', block.get('value'))
+                block['value'] = format_regex.sub('format="fullwidth"', block.get('value'))
 
         for block in poll.thank_you_text.stream_data:
             if block.get('type') in 'paragraph':
-                block['value'] = format_regex.sub('format="full-width"', block.get('value'))
+                block['value'] = format_regex.sub('format="fullwidth"', block.get('value'))
 
         for block in poll.terms_and_conditions.stream_data:
             if block.get('type') in 'paragraph':
-                block['value'] = format_regex.sub('format="full-width"', block.get('value'))
+                block['value'] = format_regex.sub('format="fullwidth"', block.get('value'))
 
     Poll.objects.bulk_update(polls, fields=['description', 'thank_you_text', 'terms_and_conditions'], batch_size=100)
 
@@ -32,15 +32,15 @@ def _fix_survey_paragraph_image_format(apps, schema_editor):
     for survey in surveys:
         for block in survey.description.stream_data:
             if block.get('type') in 'paragraph':
-                block['value'] = format_regex.sub('format="full-width"', block.get('value'))
+                block['value'] = format_regex.sub('format="fullwidth"', block.get('value'))
 
         for block in survey.thank_you_text.stream_data:
             if block.get('type') in 'paragraph':
-                block['value'] = format_regex.sub('format="full-width"', block.get('value'))
+                block['value'] = format_regex.sub('format="fullwidth"', block.get('value'))
 
         for block in survey.terms_and_conditions.stream_data:
             if block.get('type') in 'paragraph':
-                block['value'] = format_regex.sub('format="full-width"', block.get('value'))
+                block['value'] = format_regex.sub('format="fullwidth"', block.get('value'))
 
     Survey.objects.bulk_update(surveys, fields=['description', 'thank_you_text', 'terms_and_conditions'], batch_size=100)
 
@@ -52,15 +52,15 @@ def _fix_quiz_paragraph_image_format(apps, schema_editor):
     for quiz in quizzes:
         for block in quiz.description.stream_data:
             if block.get('type') in 'paragraph':
-                block['value'] = format_regex.sub('format="full-width"', block.get('value'))
+                block['value'] = format_regex.sub('format="fullwidth"', block.get('value'))
 
         for block in quiz.thank_you_text.stream_data:
             if block.get('type') in 'paragraph':
-                block['value'] = format_regex.sub('format="full-width"', block.get('value'))
+                block['value'] = format_regex.sub('format="fullwidth"', block.get('value'))
 
         for block in quiz.terms_and_conditions.stream_data:
             if block.get('type') in 'paragraph':
-                block['value'] = format_regex.sub('format="full-width"', block.get('value'))
+                block['value'] = format_regex.sub('format="fullwidth"', block.get('value'))
 
     Quiz.objects.bulk_update(quizzes, fields=['description', 'thank_you_text', 'terms_and_conditions'], batch_size=100)
 
