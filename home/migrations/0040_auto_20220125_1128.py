@@ -12,7 +12,7 @@ import wagtailmarkdown.blocks
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('home', '0040_auto_20220121_1337'),
+        ('home', '0039_iogtflatmenuitem_display_only_in_single_column_view'),
     ]
 
     operations = [
