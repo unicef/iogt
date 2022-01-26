@@ -9,7 +9,8 @@ register = template.Library()
 @register.simple_tag
 def svg_to_png_url(svg_relative_path, fill_color=None, stroke_color=None,):
     absolute_path = f'{settings.BASE_DIR}{svg_relative_path}'
-    return SVGToPNGMap.get_png_image(absolute_path, fill_color=fill_color, stroke_color=stroke_color).url
+    image = SVGToPNGMap.get_png_image(absolute_path, fill_color=fill_color, stroke_color=stroke_color)
+    return image.url if image else ''
 
 
 @register.inclusion_tag('home/tags/render_png.html')

@@ -1,3 +1,4 @@
+import logging
 import os
 
 from django.conf import settings
@@ -8,7 +9,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.files.images import get_image_dimensions
 from django.db import models
-from django.shortcuts import get_object_or_404
 from django.utils.deconstruct import deconstructible
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
@@ -55,6 +55,7 @@ from .utils.image import convert_svg_to_png_bytes
 from .utils.progress_manager import ProgressManager
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 
 class HomePage(Page):
@@ -1121,7 +1122,12 @@ class SVGToPNGMap(models.Model):
         try:
             obj = cls.objects.get(svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color)
         except cls.DoesNotExist:
-            png_image = convert_svg_to_png_bytes(svg_path, fill_color=fill_color, stroke_color=stroke_color, width=32)
+            try:
+                png_image = convert_svg_to_png_bytes(
+                    svg_path, fill_color=fill_color, stroke_color=stroke_color, width=32)
+            except:
+                logger.warning(f"Failed to convert SVG to PNG, file={svg_path}")
+                return None
             obj = cls.objects.create(
                 svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color, png_image_file=png_image)
         return obj.png_image_file
