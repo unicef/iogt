@@ -28,7 +28,7 @@ class TitleIconMixin:
     def get_page(self):
         return self
 
-    def get_icon_url(self):
+    def get_icon(self):
         from wagtail.images.views.serve import generate_image_url
 
         class Icon(object):

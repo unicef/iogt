@@ -571,10 +571,10 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
     def get_page(self):
         return self.page.specific if self.page and self.page.live else self
 
-    def get_icon_url(self):
-        icon_url = super().get_icon_url()
+    def get_icon(self):
+        icon_url = super().get_icon()
         if not icon_url.url and self.page and self.page.live:
-            icon_url = self.page.specific.get_icon_url()
+            icon_url = self.page.specific.get_icon()
 
         return icon_url
 
@@ -829,12 +829,23 @@ class IogtFlatMenuItem(AbstractFlatMenuItem, TitleIconMixin):
         FieldPanel('display_only_in_single_column_view'),
     ]
 
-    def get_icon_url(self):
-        icon_url = super().get_icon_url()
+    def get_icon(self):
+        icon_url = super().get_icon()
         if not icon_url.url and self.link_page:
-            icon_url = self.link_page.get_icon_url()
+            icon_url = self.link_page.get_icon()
 
         return icon_url
+
+    def get_background_color(self):
+        theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
+        return self.background_color or theme_settings.navbar_background_color
+
+    def get_font_color(self):
+        theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
+        return self.font_color or theme_settings.navbar_font_color
+
+    def get_single_column_view(self):
+        return 'single-column-view' if self.display_only_in_single_column_view else ''
 
 
 @deconstructible

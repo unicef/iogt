@@ -1,10 +1,9 @@
-{% load static wagtailcore_tags i18n %}
+{% load static wagtailcore_tags i18n image_tags %}
+
 <a href="{{ href }}" class="btn-primary {{ extra_classnames }}"
    style="color:{{ font_color }}; background:{{ background_color }};">
     <span class="icon-holder">
-        {% if icon_path %}
-            <img src="{{ icon_path }}" alt="Icon">
-        {% endif %}
+        {% render_icon icon_path=icon_path icon=icon fill_color=font_color %}
     </span>
     {% translate title %}
 </a>
