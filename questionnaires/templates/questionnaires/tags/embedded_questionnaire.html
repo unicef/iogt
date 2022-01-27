@@ -4,7 +4,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/questionnaires.css' %}">
 {% endblock %}
 
-<div class="questionnaire-container container">
+<div class="questionnaire-container container"
+     style="color:{{ font_color }}; background:{{ background_color }};">
     <h1 class="title {{ questionnaire.get_type }}-page__title">{{ questionnaire.title }}</h1>
     {% if user.is_authenticated or request.is_preview or questionnaire.allow_anonymous_submissions %}
         {% if form %}
@@ -28,7 +29,7 @@
                         </div>
                     {% endfor %}
                 </div>
-                {% include 'questionnaires/tags/terms_and_conditions.html' %}
+                {% include 'questionnaires/tags/terms_and_conditions.html' with page=questionnaire %}
                 <button type="submit" class="cust-btn cust-btn--dark {{ questionnaire.get_type }}-page__btn">
                     <span>{{ questionnaire.submit_button_text }}</span>
                 </button>

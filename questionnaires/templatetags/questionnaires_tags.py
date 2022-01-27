@@ -108,6 +108,8 @@ def render_questionnaire_form(context, page, background_color=None, font_color=N
 
     context.update({
         'template': template,
+        'font_color': font_color,
+        'background_color': background_color,
         'questionnaire': page,
     })
 

@@ -2373,3 +2373,9 @@ textarea:focus ~ .cust-input__length-text {
     display: flex;
   }
 }
+
+.questionnaire-container {
+  padding: 10px;
+  margin-top: 16px;
+  border-radius: 8px;
+}
