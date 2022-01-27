@@ -22,7 +22,6 @@
                         {% for field in form %}
                             <div class="quest-item">
                                 <div class="quest-item__header">
-                                    {% field_counter form forloop form_length fields_step page %}
                                     {% field_description field %}
                                 </div>
                                 {% if field.widget_type != "checkbox" %}

@@ -1,16 +1,16 @@
 {% load static wagtailcore_tags wagtailimages_tags i18n %}
 
 <section class='banner-holder'>
-    {% for page in pages %}
+    {% for banner in banners %}
         <div>
-            {% if page.banner_link_page %}
-                <a href="{% pageurl page.banner_link_page %}">
-            {% elif page.external_link %}
-                <a href="{{ page.external_link }}" target="_blank">
+            {% if banner.banner_link_page %}
+                <a href="{% pageurl banner.banner_link_page %}">
+            {% elif banner.external_link %}
+                <a href="{{ banner.external_link }}" target="_blank">
             {% else %}
                 <a href="#">
             {% endif %}
-            {% image page.banner_image original as banner_img %}
+            {% image banner.banner_image width-360 as banner_img %}
             <img src="{{ banner_img.url }}">
             </a>
         </div>

@@ -58,6 +58,7 @@ User = get_user_model()
 
 
 class HomePage(Page):
+    parent_page_types = ['wagtailcore.page']
     template = 'home/home_page.html'
     show_in_menus_default = True
 
@@ -79,10 +80,12 @@ class HomePage(Page):
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
-        context['banners'] = [
-            home_page_banner.banner_page.specific
-            for home_page_banner in self.home_page_banners.filter(banner_page__live=True)
-        ]
+        banners = []
+        for home_page_banner in self.home_page_banners.all():
+            banner_page = home_page_banner.banner_page
+            if banner_page.live and banner_page.banner_link_page and banner_page.banner_link_page.live:
+                banners.append(banner_page.specific)
+        context['banners'] = banners
         return context
 
 
@@ -224,10 +227,8 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
-        context['featured_content_items'] = [
-            featured_content.content.specific
-            for featured_content in self.featured_content.filter(content__live=True)
-        ]
+        featured_content = self.featured_content.all().first()
+        context['featured_content'] = featured_content.content.specific if featured_content and featured_content.content.live else None
         context['children'] = self.get_children().live().specific()
         context['user_progress'] = self.get_user_progress_dict(request)
 
@@ -291,11 +292,11 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     index_page_description = models.TextField(null=True, blank=True)
 
     body = StreamField([
-        ('heading', blocks.CharBlock(form_classname="full title")),
+        ('heading', blocks.CharBlock(form_classname="full title", template='blocks/heading.html')),
         ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
         ('markdown', MarkdownBlock(icon='code')),
         ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
-        ('image', ImageChooserBlock()),
+        ('image', ImageChooserBlock(template='blocks/image.html')),
         ('list', blocks.ListBlock(MarkdownBlock(icon='code'))),
         ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
         ('page_button', PageButtonBlock()),
@@ -401,7 +402,7 @@ class Article(AbstractArticle):
         context = super().get_context(request)
         context['recommended_articles'] = [
             recommended_article.article.specific
-            for recommended_article in self.recommended_articles.filter(article__live=True)
+            for recommended_article in self.recommended_articles.all() if recommended_article.article.live
         ]
 
         return context
@@ -424,11 +425,11 @@ class OfflineAppPage(AbstractArticle):
     subpage_types = []
 
     body = StreamField([
-        ('heading', blocks.CharBlock(form_classname="full title")),
+        ('heading', blocks.CharBlock(form_classname="full title", template='blocks/heading.html')),
         ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
         ('markdown', MarkdownBlock(icon='code')),
         ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
-        ('image', ImageChooserBlock()),
+        ('image', ImageChooserBlock(template='blocks/image.html')),
         ('list', blocks.ListBlock(MarkdownBlock(icon='code'))),
         ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
         ('page_button', PageButtonBlock()),
@@ -568,18 +569,18 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
     ]
 
     def get_page(self):
-        return self.page.specific if self.page else self
+        return self.page.specific if self.page and self.page.live else self
 
     def get_icon_url(self):
         icon_url = super().get_icon_url()
-        if not icon_url.url and self.page:
+        if not icon_url.url and self.page and self.page.live:
             icon_url = self.page.specific.get_icon_url()
 
         return icon_url
 
     def get_url(self):
         url = ''
-        if self.page:
+        if self.page and self.page.live:
             url = self.page.specific.url
         elif self.external_link:
             url = self.external_link
@@ -812,6 +813,7 @@ class IogtFlatMenuItem(AbstractFlatMenuItem, TitleIconMixin):
         null=True,
         help_text=_('The font color of the flat menu item on Desktop + Mobile')
     )
+    display_only_in_single_column_view = models.BooleanField(default=False)
 
     panels = [
         PageChooserPanel('link_page'),
@@ -823,7 +825,8 @@ class IogtFlatMenuItem(AbstractFlatMenuItem, TitleIconMixin):
         SvgChooserPanel('icon'),
         ImageChooserPanel('image_icon'),
         FieldPanel('background_color'),
-        FieldPanel('font_color')
+        FieldPanel('font_color'),
+        FieldPanel('display_only_in_single_column_view'),
     ]
 
     def get_icon_url(self):
@@ -1131,3 +1134,31 @@ class V1PageURLToV2PageMap(models.Model):
         obj, __ = cls.objects.get_or_create(v2_page=page, defaults={'v1_page_url': url})
 
         return obj
+
+    @classmethod
+    def get_page_or_none(cls, v1_page_url):
+        # See https://github.com/unicef/iogt/issues/850 for more details on why /home/ is prepended
+        urls_to_match = [
+            f'/home{v1_page_url}',
+            f'/home{v1_page_url}/'
+        ]
+        obj = cls.objects.filter(v1_page_url__in=urls_to_match).first()
+        return obj.v2_page if obj else None
+
+
+class LocaleDetail(models.Model):
+    is_active = models.BooleanField(
+        default=True,
+        help_text=_('When active locale will be shown in the language selector'))
+    is_main_language = models.BooleanField(
+        default=False,
+        help_text=_('When active locale will be used as default language for the site'))
+
+    locale = models.OneToOneField('wagtailcore.Locale', related_name='locale_detail', on_delete=models.CASCADE)
+
+    def clean(self):
+        if self.is_main_language and LocaleDetail.objects.filter(is_main_language=True).exclude(id=self.id).exists():
+            raise ValidationError(_('There is already a main language for this site'))
+
+    def __str__(self):
+        return f'{self.locale}'

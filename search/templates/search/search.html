@@ -6,7 +6,6 @@
 {% block body_class %}template-searchresults{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/section.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/search.css' %}">
 {% endblock extra_css %}
 
@@ -29,7 +28,7 @@
                     <!--  <button class="search-results__text search-results__view">All {{ value.search_results_count }} result</button> -->
                 </div>
             </div>
-                {% include 'home/tags/articles_list.html' with pages=results.search_results %}
+                {% include 'search/tags/search_result_cards.html' with results=results.search_results %}
 
             <div class="page-controls-container">
                 <div class="container">

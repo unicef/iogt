@@ -13,7 +13,7 @@ from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 from home import views as pwa_views
 from wagtail_transfer import urls as wagtailtransfer_urls
-from iogt.views import TransitionPageView, SitemapAPIView
+from iogt.views import TransitionPageView, SitemapAPIView, TranslationNotFoundPage
 
 urlpatterns = [
     path('django-admin/', admin.site.urls),
@@ -30,12 +30,15 @@ urlpatterns = [
         name=pwa_views.ServiceWorkerView.name,
     ),
     *i18n_patterns(path("external-link/", TransitionPageView.as_view(), name="external-link")),
+    *i18n_patterns(path("translation-not-found/", TranslationNotFoundPage.as_view(), name="translation-not-found")),
+
     path('messaging/', include('messaging.urls'), name='messaging-urls'),
     path('wagtail-transfer/', include(wagtailtransfer_urls)),
     path('sitemap/', SitemapAPIView.as_view(), name='sitemap'),
     path("manifest.webmanifest", get_manifest, name="manifest"),
     path('comments/', include('comments.urls')),
     *i18n_patterns(path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog')),
+    path('health-check/', include('health_check.urls')),
 ]
 
 if settings.DEBUG:

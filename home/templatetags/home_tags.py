@@ -1,8 +1,10 @@
 from django import template
-from django.urls import translate_url
-from wagtail.core.models import Locale, Site
+from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import get_object_or_404
+from django.urls import translate_url, reverse, resolve, Resolver404
+from wagtail.core.models import Locale, Site, Page
 
-from home.models import SectionIndexPage, Section, Article, FooterIndexPage, PageLinkPage
+from home.models import SectionIndexPage, Section, Article, FooterIndexPage, PageLinkPage, LocaleDetail, HomePage
 from iogt.settings.base import LANGUAGES
 
 register = template.Library()
@@ -10,11 +12,44 @@ register = template.Library()
 
 @register.inclusion_tag('home/tags/language_switcher.html', takes_context=True)
 def language_switcher(context, page):
-    if page:
-        context.update({
-            'translations': page.get_translations(inclusive=True).all(),
-        })
-    context.update({'default_locales': Locale.objects.all()})
+    """
+    This template tag has evolved over time. The current requirement for this is really tricky.
+    See https://github.com/unicef/iogt/pull/955#issuecomment-1008277982 for more context on why this logic is
+    complicated.
+    """
+
+    switcher_locales = list()
+    locales = Locale.objects.select_related('locale_detail').all()
+
+    try:
+        if resolve(context.request.path_info).url_name == 'translation-not-found':
+            page = get_object_or_404(Page, pk=context.request.GET.get('page'), live=True)
+    except Resolver404:
+        pass
+
+    for locale in locales:
+        try:
+            should_append = locale.locale_detail.is_active
+        except LocaleDetail.DoesNotExist:
+            should_append = True
+
+        if should_append:
+            if page:  # If the current URL belongs to a wagtail page
+                translated_page = page and page.get_translation_or_none(locale)
+                if translated_page and translated_page.live:
+                    url = translated_page.url
+                else:
+                    translated_url = translate_url(reverse('translation-not-found'), locale.language_code)
+                    url = f'{translated_url}?page={page.id}'
+            else:  # If the current URL belongs to a django view
+                url = translate_url(context.request.path_info, locale.language_code)
+
+            switcher_locales.append((locale, url))
+
+    context.update({
+        'locales': switcher_locales,
+        'page': page
+    })
 
     return context
 
@@ -30,7 +65,7 @@ def render_previous_next_buttons(page):
 @register.inclusion_tag('home/tags/footer.html', takes_context=True)
 def render_footer(context):
     return {
-        'pages': FooterIndexPage.get_active_footers(),
+        'footers': FooterIndexPage.get_active_footers(),
         'request': context['request'],
     }
 
@@ -38,7 +73,7 @@ def render_footer(context):
 @register.inclusion_tag('home/tags/top_level_sections.html', takes_context=True)
 def render_top_level_sections(context):
     return {
-        'pages': SectionIndexPage.get_top_level_sections(),
+        'top_level_sections': SectionIndexPage.get_top_level_sections(),
         'request': context['request'],
     }
 

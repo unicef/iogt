@@ -13,8 +13,8 @@ describe("Section tests", () => {
     })
 
     it("Tests for featured content in section", () => {
-        cy.get(".featured-content").should("have.css", "color", "rgb(238, 56, 81)");
-        cy.get(".featured-content").should("have.css", "background-color", "rgb(253, 235, 238)");
-        cy.get(".featured-content > a").contains("How to encourage friends for vaccination?")
+        cy.get(".section-featured-content-title").should("have.css", "color", "rgb(238, 56, 81)");
+        cy.get(".section-featured-content-title").should("have.css", "background-color", "rgb(253, 235, 238)");
+        cy.get(".section-featured-content-title").contains("How to encourage friends for vaccination?")
     })
 })

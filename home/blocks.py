@@ -63,7 +63,7 @@ class MediaBlock(AbstractMediaChooserBlock):
 class SocialMediaLinkBlock(blocks.StructBlock):
     title = blocks.CharBlock(max_length=255)
     link = blocks.URLBlock()
-    image = ImageChooserBlock()
+    image = ImageChooserBlock(template='blocks/image.html')
 
     class Meta:
         icon = 'site'
@@ -72,7 +72,7 @@ class SocialMediaLinkBlock(blocks.StructBlock):
 class SocialMediaShareButtonBlock(blocks.StructBlock):
     platform = blocks.CharBlock(max_length=255)
     is_active = blocks.BooleanBlock(required=False)
-    image = ImageChooserBlock(required=False)
+    image = ImageChooserBlock(template='blocks/image.html', required=False)
 
     class Meta:
         icon = 'site'
@@ -92,10 +92,12 @@ class EmbeddedPollBlock(EmbeddedQuestionnaireBlock):
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context)
-        context.update({
-            'direct_display': value['direct_display'],
-            'page': value['poll'].specific,
-        })
+        poll = value.get('poll')
+        if poll and poll.live:
+            context.update({
+                'direct_display': value['direct_display'],
+                'questionnaire': poll.specific,
+            })
         return context
 
     class Meta:
@@ -107,10 +109,12 @@ class EmbeddedSurveyBlock(EmbeddedQuestionnaireBlock):
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context)
-        context.update({
-            'direct_display': value['direct_display'],
-            'page': value['survey'].specific,
-        })
+        survey = value.get('survey')
+        if survey and survey.live:
+            context.update({
+                'direct_display': value['direct_display'],
+                'questionnaire': survey.specific,
+            })
         return context
 
     class Meta:
@@ -122,10 +126,12 @@ class EmbeddedQuizBlock(EmbeddedQuestionnaireBlock):
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context)
-        context.update({
-            'direct_display': value['direct_display'],
-            'page': value['quiz'].specific,
-        })
+        quiz = value.get('quiz')
+        if quiz and quiz.live:
+            context.update({
+                'direct_display': value['direct_display'],
+                'questionnaire': quiz.specific,
+            })
         return context
 
     class Meta:
@@ -135,6 +141,16 @@ class EmbeddedQuizBlock(EmbeddedQuestionnaireBlock):
 class PageButtonBlock(blocks.StructBlock):
     page = blocks.PageChooserBlock()
     text = blocks.CharBlock(required=False, max_length=255)
+
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context)
+        button_page = value.get('page')
+        if button_page and button_page.live:
+            context.update({
+                'button_page': button_page.specific,
+                'text': value.get('text') or button_page.title
+            })
+        return context
 
     class Meta:
         template = 'blocks/page_button.html'
@@ -146,10 +162,12 @@ class ArticleBlock(blocks.StructBlock):
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context)
-        context.update({
-            'display_section_title': value['display_section_title'],
-            'page': value['article'].specific,
-        })
+        article = value.get('article')
+        if article and article.live:
+            context.update({
+                'display_section_title': value['display_section_title'],
+                'article': article.specific,
+            })
         return context
 
     class Meta:

@@ -1,4 +1,5 @@
 from django import template
+from django_comments_xtd.models import LIKEDIT_FLAG, DISLIKEDIT_FLAG
 
 register = template.Library()
 
@@ -34,3 +35,8 @@ def get_current_num_records(request):
 def get_next_num_records(request):
     current_num_records = int(request.GET.get('num_records', 5))
     return current_num_records + 5
+
+
+@register.simple_tag
+def get_comment_report_count(comment):
+    return comment.flags.exclude(flag__in=[LIKEDIT_FLAG, DISLIKEDIT_FLAG]).count()

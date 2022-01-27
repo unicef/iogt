@@ -5,27 +5,27 @@
 {% get_available_languages as LANGUAGES %}
 {% get_language_info_list for LANGUAGES as languages %}
 
-<header id="header" style="background: {{settings.home.ThemeSettings.header_background_color}}">
+<header id="header" style="background: {{ settings.home.ThemeSettings.header_background_color }}">
     <div class="header-holder">
         <div class="header-content">
             <div class="logo-holder">
-                <a href="{% translated_home_page_url LANGUAGE_CODE %}" >
-                    {% image settings.home.SiteSettings.logo width-60 class='xs-image' %}
+                <a href="{% translated_home_page_url LANGUAGE_CODE %}">
+                    {% image settings.home.SiteSettings.logo width-120 class='xs-image' %}
                 </a>
             </div>
             <div class="language__select">
-                    {% language_switcher page %}
+                {% language_switcher page %}
             </div>
         </div>
         <div class="form-holder">
             <a class="js-search-btn" href="{% url "search" %}">
                 {% static "icons/search.svg" as search_icon_url %}
-                {% render_png_from_svg search_icon_url attrs="alt='Search' class='xs-home-header__search'"%}
+                {% render_png_from_svg search_icon_url attrs="alt='Search' class='xs-home-header__search'" %}
             </a>
             <form class='search__form' action="{% url 'search' %}">
-                <label >
+                <label>
                     {% static 'icons/search.svg' as search_icon_url %}
-                    <span >
+                    <span>
                         {% render_png_from_svg search_icon_url width=18 height=18 stroke_color='#9A9A9A' %}
                     </span>
                     <input type="text" name="query" placeholder="{% translate 'Search the site...' %}" pattern="\S+.*"/>

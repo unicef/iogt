@@ -42,12 +42,12 @@
     <link rel="apple-touch-icon" type="image/jpg" href="{{ apple_touch_icon.url }}"/>
 
     {# Global stylesheets #}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/iogt.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/chatbot.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/header/header.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/footer/footer.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/navbar/navbar.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/global/global.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/iogt.css' %}">
 
     {% block extra_css %}
         {# Override this in templates to add extra stylesheets #}
@@ -64,14 +64,18 @@
         <div class="main-wrapper" style="background: {{ settings.home.ThemeSettings.global_background_color }}">
             <div class="content-holder">
                 <div class="other-links">
-                    {% render_footer %}
+                    {% if show_footers %}
+                        {% render_footer %}
+                    {% endif %}
                 </div>
-                <div class="content">
-                    {% include "messages.html" %}
-                    {% block content %}{% endblock %}
-                    <p class='footer__copyright'>{% translate "© The Internet of Good Things" %}</p>
-                </div>
-                {% include "footer.html" %}
+                {% with page_=page %}
+                    <div class="content">
+                        {% include "messages.html" %}
+                        {% block content %}{% endblock %}
+                        <p class='footer__copyright'>{% translate "© The Internet of Good Things" %}</p>
+                    </div>
+                    {% include "footer.html" with page=page_ %}
+                {% endwith %}
             </div>
         </div>
     </div>

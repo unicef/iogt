@@ -37,7 +37,7 @@ def render_article_card(context, page, display_section_title=False, background_c
     background_color = background_color or theme_settings.article_card_background_color
 
     context.update({
-        'page': page,
+        'article': page,
         'display_section_title': display_section_title,
         'background_color': background_color,
         'font_color': font_color
@@ -53,7 +53,7 @@ def render_section_card(context, page, background_color=None, font_color=None):
     background_color = background_color or theme_settings.section_card_background_color
 
     context.update({
-        'page': page,
+        'section': page,
         'background_color': background_color,
         'font_color': font_color
     })
@@ -68,7 +68,7 @@ def render_questionnaire_card(context, page, background_color=None, font_color=N
     background_color = background_color or theme_settings.section_listing_questionnaire_background_color
 
     context.update({
-        'page': page,
+        'questionnaire': page,
         'background_color': background_color,
         'font_color': font_color
     })
@@ -102,6 +102,11 @@ def menu_item_font_color(menu_item):
 @register.simple_tag
 def menu_item_background_color(menu_item):
     return menu_item.background_color or navbar_background_color
+
+
+@register.simple_tag
+def menu_item_single_column_view(menu_item):
+    return 'single-column-view' if menu_item.display_only_in_single_column_view else ''
 
 
 @register.simple_tag

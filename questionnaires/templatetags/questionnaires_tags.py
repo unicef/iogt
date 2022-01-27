@@ -108,9 +108,7 @@ def render_questionnaire_form(context, page, background_color=None, font_color=N
 
     context.update({
         'template': template,
-        'page': page,
-        'background_color': background_color,
-        'font_color': font_color
+        'questionnaire': page,
     })
 
     multiple_submission_filter = (
@@ -157,12 +155,43 @@ def snake_case(text):
 def subtract(value, arg):
     return int(value) - int(arg)
 
+
 @register.inclusion_tag('questionnaires/tags/questionnaire_wrapper.html', takes_context=True)
-def render_questionnaire_wrapper(context, page, direct_display, background_color=None, font_color=None):
+def render_questionnaire_wrapper(context, page, direct_display=False, background_color=None, font_color=None):
     context.update({
-        'page': page,
+        'questionnaire': page,
         'direct_display': direct_display,
         'background_color': background_color,
         'font_color': font_color,
     })
     return context
+
+
+@register.simple_tag
+def get_answer_options(field, field_option, fields_info):
+    label = field_option.choice_label
+    correct_answers = fields_info.get(field.name, {}).get('correct_answer_list', [])
+    is_selected = field_option.data.get('selected', False)
+    rv = ''
+    if is_selected and label in correct_answers:
+        rv = {
+            'class': 'success',
+            'aria_label': 'Checkbox with tick, indicating correct and selected',
+        }
+    elif is_selected and label not in correct_answers:
+        rv = {
+            'class': 'error',
+            'aria_label': 'Checkbox with X, indicating incorrect and selected',
+        }
+    elif not is_selected and label in correct_answers:
+        rv = {
+            'class': 'clear-tick',
+            'aria_label': 'Checkbox with tick, indicating correct but not selected',
+        }
+    elif not is_selected and label not in correct_answers:
+        rv = {
+            'class': 'clear-cross',
+            'aria_label': 'Checkbox with X, indicating incorrect and not selected',
+        }
+
+    return rv

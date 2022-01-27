@@ -20,3 +20,22 @@ def render_png_from_svg(svg_relative_path, height=None, width=None, fill_color=N
 def svg_to_png_url(svg_relative_path, fill_color=None, stroke_color=None,):
     absolute_path = f'{settings.BASE_DIR}{svg_relative_path}'
     return SVGToPNGMap.get_png_image(absolute_path, fill_color=fill_color, stroke_color=stroke_color).url
+
+
+@register.inclusion_tag('home/tags/render_png.html')
+def render_section_featured_content_icon(icon, height=None, width=None, fill_color=None, stroke_color=None, attrs=None):
+    context = {
+        'height': height,
+        'width': width,
+        'attrs': attrs,
+    }
+    if icon.is_svg_icon:
+        absolute_path = f'{settings.BASE_DIR}{icon.url}'
+        context.update({
+            'image_url': SVGToPNGMap.get_png_image(absolute_path, fill_color=fill_color, stroke_color=stroke_color).url,
+        })
+    else:
+        context.update({
+            'image_url': icon.url,
+        })
+    return context

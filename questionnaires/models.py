@@ -61,10 +61,10 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
 
     description = StreamField(
         [
-            ('heading', blocks.CharBlock(form_classname="full title")),
+            ('heading', blocks.CharBlock(form_classname="full title", template='blocks/heading.html')),
             ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
             ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
-            ("image", ImageChooserBlock()),
+            ("image", ImageChooserBlock(template='blocks/image.html')),
             ('list', MarkdownBlock(icon='code')),
             ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
             ('page_button', PageButtonBlock()),
@@ -74,9 +74,9 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
     )
     thank_you_text = StreamField(
         [
-            ("paragraph", blocks.RichTextBlock()),
+            ("paragraph", blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
             ("media", MediaBlock(icon="media")),
-            ("image", ImageChooserBlock()),
+            ("image", ImageChooserBlock(template='blocks/image.html')),
         ],
         null=True,
         blank=True,
@@ -103,7 +103,7 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
 
     terms_and_conditions = StreamField(
         [
-            ("paragraph", blocks.RichTextBlock()),
+            ("paragraph", blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
             ('page_button', PageButtonBlock()),
         ],
         null=True,
@@ -445,6 +445,9 @@ class Survey(QuestionnairePage, AbstractForm):
         context.update({'back_url': request.GET.get('back_url')})
         context.update({'form_length': request.GET.get('form_length')})
         return context
+
+    def has_required_fields(self):
+        return self.survey_form_fields.filter(required=True).exists()
 
     class Meta:
         verbose_name = _("survey")

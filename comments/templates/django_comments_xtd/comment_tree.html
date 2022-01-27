@@ -77,18 +77,18 @@
                         uses the django_comments.can_moderate permission to populate flags. This is a hack for
                         the original bug because we'd rather not fork it
                         {% endcomment %}
-                        {% with flagged_count=item.comment.flags.count %}
-                        {% if flagged_count %}
+                        {%  get_comment_report_count item.comment as comment_report_count %}
+                        {% if comment_report_count %}
                             <span class="report-comment">
                                     {# Translators: Count refers to the number of people that reported a comment. #}
-                                {% blocktranslate trimmed count count=flagged_count %}
-                                    Reported by {{ count }} user
+                                {% blocktranslate trimmed count count=comment_report_count %}
+                                    Reported by {{ comment_report_count }} user
                                     {% plural %}
-                                    Reported by {{ count }} users
+                                    Reported by {{ comment_report_count }} users
                                 {% endblocktranslate %}
                             </span>
                         {% endif %}
-                        {% endwith %}
+
                     {% endif %}
 
                     <div class="comment__children">

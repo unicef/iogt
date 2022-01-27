@@ -1,4 +1,12 @@
 {% load i18n %}
 
 {# use page type when we have translations for poll and quiz #}
-<p class="survey-page__already-completed">{% translate 'You have already completed this survey.' %}</p>
+<p class="survey-page__already-completed">
+    {% if page.get_type == 'survey' %}
+        {% translate 'You have already completed this survey.' %}
+    {% elif page.get_type == 'quiz' %}
+        {% translate 'You have already completed this quiz.' %}
+    {% elif page.get_type == 'poll' %}
+        {% translate 'You have already completed this poll.' %}
+    {% endif %}
+</p>
