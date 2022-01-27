@@ -3,9 +3,7 @@
 <section class="top-level">
     <nav>
         {% for top_level_section in top_level_sections %}
-            {% get_page_url top_level_section as page_url %}
-            {% get_icon_url top_level_section as icon_url %}
-            {% primary_button title=top_level_section.title href=page_url font_color=top_level_section.font_color background_color=top_level_section.background_color icon_path=icon_url.url is_svg_icon=icon_url.is_svg_icon %}
+            {% primary_button title=top_level_section.title href=top_level_section.url font_color=top_level_section.font_color background_color=top_level_section.background_color icon=top_level_section.get_icon %}
         {% endfor %}
     </nav>
 </section>

@@ -6,15 +6,16 @@
 {% block content %}
     <section class='child-pages'>
         {% for child in children %}
-            {% get_page child as child %}
-            {% is_first_content child forloop.counter0 as is_first_content %}
-            {% if child.get_type == 'section' %}
-                {% render_section_card child %}
-            {% elif child.get_type == 'article' %}
-                {% render_article_card child %}
-            {% elif child.get_type == 'poll' or child.get_type == 'survey' or child.get_type == 'quiz' %}
-                {% render_questionnaire_wrapper child child.direct_display %}
-            {% endif %}
+            {% with child=child.get_page %}
+                {% is_first_content child forloop.counter0 as is_first_content %}
+                {% if child.get_type == 'section' %}
+                    {% render_section_card child %}
+                {% elif child.get_type == 'article' %}
+                    {% render_article_card child %}
+                {% elif child.get_type == 'poll' or child.get_type == 'survey' or child.get_type == 'quiz' %}
+                    {% render_questionnaire_wrapper child child.direct_display %}
+                {% endif %}
+            {% endwith %}
         {% endfor %}
     </section>
 {% endblock content %}
