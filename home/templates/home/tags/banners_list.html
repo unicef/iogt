@@ -2,17 +2,8 @@
 
 <section class='banner-holder'>
     {% for banner in banners %}
-        <div>
-            {% if banner.banner_link_page %}
-                <a href="{% pageurl banner.banner_link_page %}">
-            {% elif banner.external_link %}
-                <a href="{{ banner.external_link }}" target="_blank">
-            {% else %}
-                <a href="#">
-            {% endif %}
-            {% image banner.banner_image width-360 as banner_img %}
-            <img src="{{ banner_img.url }}">
-            </a>
-        </div>
+        <a href="{% pageurl banner.banner_link_page %}">
+            {% image banner.banner_image width-360 %}
+        </a>
     {% endfor %}
 </section>
