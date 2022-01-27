@@ -1961,6 +1961,7 @@ body.rtl {
 }
 
 .survey-page__description img {
+  width: 100%;
   height: auto;
 }
 /* questionnaires end */

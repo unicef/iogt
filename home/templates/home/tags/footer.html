@@ -3,23 +3,20 @@
 <footer class="bottom-level">
     <nav>
         {% for footer in footers %}
-            {% get_page_url footer.get_page as page_url %}
-            {% get_icon_url footer as icon_url %}
-            {% primary_button title=footer.title href=page_url icon_path=icon_url.url is_svg_icon=icon_url.is_svg_icon %}
+            {% primary_button title=footer.title href=footer.url icon=footer.get_icon %}
         {% endfor %}
         {% if request.user.is_anonymous %}
             {% url 'account_login' as login_url %}
             {% static 'icons/login.svg' as login_icon_path %}
-
-            {% primary_button title='Log in / Create account' href=login_url icon_path=login_icon_path is_svg_icon=True %}
+            {% primary_button title='Log in / Create account' href=login_url icon_path=login_icon_path %}
         {% else %}
             {% url 'user_profile' as profile_url %}
             {% static 'icons/profile.svg' as profile_icon_path %}
-            {% primary_button title='Profile' href=profile_url icon_path=profile_icon_path is_svg_icon=True %}
+            {% primary_button title='Profile' href=profile_url icon_path=profile_icon_path %}
 
             {% url 'account_logout' as logout_url %}
             {% static 'icons/arrow_icon_left.svg' as logout_icon_path %}
-            {% primary_button title='Log out' href=logout_url icon_path=logout_icon_path is_svg_icon=True %}
+            {% primary_button title='Log out' href=logout_url icon_path=logout_icon_path %}
         {% endif %}
     </nav>
 </footer>
