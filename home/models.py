@@ -570,7 +570,7 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
     ]
 
     def get_page(self):
-        return self.page.specific if self.page and self.page.live else self
+        return self.page.specific if self.page and self.page.live else None
 
     def get_icon(self):
         icon = super().get_icon()
