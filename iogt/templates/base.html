@@ -23,12 +23,10 @@
     <meta charset="utf-8"/>
     <title>
         {% block title %}
-            {% if page %}
-                {% if page.seo_title %}
-                    {{ page.seo_title }}
-                {% else %}
-                    {{ page.title }}
-                {% endif %}
+            {% if page.seo_title %}
+                {{ page.seo_title }}
+            {% else %}
+                {{ page.title }}
             {% endif %}
         {% endblock %}
         {% block title_suffix %}
@@ -38,17 +36,13 @@
         {% endblock %}
     </title>
     {% image settings.home.SiteSettings.favicon width-60 as favicon_img %}
-    {% if favicon_img %}
-        <link rel="shortcut icon" type="image/jpg" href="{{ favicon_img.url }}"/>
-    {% endif %}
+    <link rel="shortcut icon" type="image/jpg" href="{{ favicon_img.url }}"/>
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="theme-color" content="#493174">
     <link rel="manifest" href="{% url 'manifest' %}">
     {% image settings.home.SiteSettings.apple_touch_icon width-120 as apple_touch_icon %}
-    {% if apple_touch_icon %}
-        <link rel="apple-touch-icon" type="image/jpg" href="{{ apple_touch_icon.url }}"/>
-    {% endif %}
+    <link rel="apple-touch-icon" type="image/jpg" href="{{ apple_touch_icon.url }}"/>
 
     {# Global stylesheets #}
     <link rel="stylesheet" type="text/css" href="{% static 'css/chatbot.css' %}">
