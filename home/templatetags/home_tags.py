@@ -117,15 +117,6 @@ def change_lang(context, lang=None, *args, **kwargs):
     return translate_url(path, lang)
 
 
-@register.simple_tag
-def is_first_content(page, value):
-    is_first_content = False
-    if value == 0 and page.get_parent().specific.larger_image_for_top_page_in_list_as_in_v1:
-        is_first_content = True
-
-    return is_first_content
-
-
 @register.inclusion_tag('wagtailadmin/shared/field_as_li.html')
 def render_external_link_with_help_text(field):
     field.help_text = f'If you are linking back to a URL on your own IoGT site, be sure to remove the domain and ' \
