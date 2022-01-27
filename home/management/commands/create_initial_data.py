@@ -99,8 +99,8 @@ class Command(BaseCommand):
         footer_index_page = models.FooterIndexPage(title='Footers')
         home.add_child(instance=footer_index_page)
 
-        footer = models.FooterPage(
-            title='Footer1?',
+        footer = models.Article(
+            title='Footer1',
             body=[('paragraph',
                    RichText('Footer1 paragraph1'))],
             owner=owner,

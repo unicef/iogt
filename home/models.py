@@ -514,7 +514,7 @@ class BannerPage(Page):
 class FooterIndexPage(Page):
     parent_page_types = ['home.HomePage']
     subpage_types = [
-        'home.Section', 'home.Article', 'home.FooterPage', 'home.PageLinkPage', 'questionnaires.Poll',
+        'home.Section', 'home.Article', 'home.PageLinkPage', 'questionnaires.Poll',
         'questionnaires.Survey', 'questionnaires.Quiz',
     ]
 
@@ -527,16 +527,6 @@ class FooterIndexPage(Page):
 
     def __str__(self):
         return self.title
-
-
-class FooterPage(Article, TitleIconMixin):
-    parent_page_types = ['home.FooterIndexPage']
-    subpage_types = []
-    template = 'home/article.html'
-
-    class Meta:
-        verbose_name = _("footer")
-        verbose_name_plural = _("footers")
 
 
 class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):

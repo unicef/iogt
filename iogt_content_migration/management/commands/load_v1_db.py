@@ -115,7 +115,6 @@ class Command(BaseCommand):
         Quiz.objects.all().delete()
         models.FeaturedContent.objects.all().delete()
         models.ArticleRecommendation.objects.all().delete()
-        models.FooterPage.objects.all().delete()
         models.FooterIndexPage.objects.all().delete()
         models.BannerPage.objects.all().delete()
         models.BannerIndexPage.objects.all().delete()
