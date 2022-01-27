@@ -573,13 +573,13 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
         return self.page.specific if self.page and self.page.live else self
 
     def get_icon(self):
-        icon_url = super().get_icon()
-        if not icon_url.url and self.page and self.page.live:
-            icon_url = self.page.specific.get_icon()
+        icon = super().get_icon()
+        if not icon.url and self.page and self.page.live:
+            icon = self.page.specific.get_icon()
 
-        return icon_url
+        return icon
 
-    def get_url(self):
+    def get_url(self, request=None, current_site=None):
         url = ''
         if self.page and self.page.live:
             url = self.page.specific.url
@@ -587,6 +587,8 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
             url = self.external_link
 
         return url
+
+    url = property(get_url)
 
 
 @register_setting
@@ -831,11 +833,11 @@ class IogtFlatMenuItem(AbstractFlatMenuItem, TitleIconMixin):
     ]
 
     def get_icon(self):
-        icon_url = super().get_icon()
-        if not icon_url.url and self.link_page:
-            icon_url = self.link_page.get_icon()
+        icon = super().get_icon()
+        if not icon.url and self.link_page:
+            icon = self.link_page.get_icon()
 
-        return icon_url
+        return icon
 
     def get_background_color(self):
         theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
