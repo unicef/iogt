@@ -523,7 +523,8 @@ class FooterIndexPage(Page):
     def get_active_footers(cls):
         footer_index_page = cls.objects.filter(locale=Locale.get_active()).first()
         if footer_index_page:
-            return footer_index_page.get_children().live().specific()
+            footers = footer_index_page.get_children().live().specific()
+            return [footer for footer in footers if footer.get_page()]
         return cls.objects.none()
 
     def __str__(self):
