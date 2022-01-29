@@ -486,7 +486,7 @@ class BannerPage(Page):
 class FooterIndexPage(Page):
     parent_page_types = ['home.HomePage']
     subpage_types = [
-        'home.Section', 'home.Article', 'home.FooterPage', 'home.PageLinkPage', 'questionnaires.Poll',
+        'home.Section', 'home.Article', 'home.PageLinkPage', 'questionnaires.Poll',
         'questionnaires.Survey', 'questionnaires.Quiz',
     ]
 
@@ -503,7 +503,7 @@ class FooterIndexPage(Page):
 
 
 class FooterPage(Article, TitleIconMixin):
-    parent_page_types = ['home.FooterIndexPage']
+    parent_page_types = []
     subpage_types = []
     template = 'home/article.html'
 
