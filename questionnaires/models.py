@@ -282,6 +282,10 @@ class SurveyFormField(AbstractFormField):
         default='',
         help_text=_('Safe name of the form field, the label converted to ascii_snake_case')
     )
+    label = models.TextField(
+        verbose_name=_('label'),
+        help_text=_('The label of the form field')
+    )
     field_type = models.CharField(
         verbose_name=_('field type'),
         max_length=16,
@@ -485,6 +489,10 @@ class PollFormField(AbstractFormField):
         default='',
         help_text=_('Safe name of the form field, the label converted to ascii_snake_case')
     )
+    label = models.TextField(
+        verbose_name=_('label'),
+        help_text=_('The label of the form field')
+    )
     field_type = models.CharField(
         verbose_name=_('field type'),
         max_length=16,
@@ -660,6 +668,10 @@ class QuizFormField(AbstractFormField):
         default='',
         help_text=_('Safe name of the form field, the label converted to ascii_snake_case')
     )
+    label = models.TextField(
+        verbose_name=_('label'),
+        help_text=_('The label of the form field')
+    )
     field_type = models.CharField(
         verbose_name=_('field type'),
         max_length=16,
@@ -692,11 +704,12 @@ class QuizFormField(AbstractFormField):
         help_text=_('The correct answer/choice(s). '
                     'If multiple choices are correct, separate choices with a pipe (|) symbol. '
                     'For checkbox: Either "true" or "false".'))
-    feedback = models.CharField(verbose_name=_('Feedback'),
-                                max_length=255,
-                                help_text=_('Feedback message for user answer.'),
-                                null=True,
-                                blank=True)
+    feedback = models.TextField(
+        verbose_name=_('Feedback'),
+        null=True,
+        blank=True,
+        help_text=_('Feedback message for user answer.')
+    )
 
     panels = [
         FieldPanel('label'),
