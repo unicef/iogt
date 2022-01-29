@@ -465,8 +465,6 @@ class BannerPage(Page):
     parent_page_types = ['home.BannerIndexPage']
     subpage_types = []
 
-    banner_description = RichTextField(null=True, blank=True)
-
     banner_image = models.ForeignKey(
         'wagtailimages.Image',
         related_name='+',
@@ -474,41 +472,14 @@ class BannerPage(Page):
         null=True, blank=True,
         help_text=_('Image to display as the banner')
     )
-    banner_background_image = models.ForeignKey(
-        'wagtailimages.Image',
-        related_name='+',
-        null=True, blank=True,
-        on_delete=models.PROTECT,
-        help_text=_('Background image')
-    )
-
     banner_link_page = models.ForeignKey(
         Page, null=True, blank=True, related_name='banners',
         on_delete=models.SET_NULL,
         help_text=_('Optional page to which the banner will link to'))
 
-    banner_button_text = models.CharField(
-        null=True, blank=True,
-        max_length=35,
-        help_text=_('The title for a button')
-    )
-    banner_icon_button = models.ForeignKey(
-        'wagtailimages.Image',
-        related_name='+',
-        on_delete=models.PROTECT,
-        null=True, blank=True,
-        help_text=_('Icon Button')
-    )
-    align_center = BooleanField(default=False)
-
     content_panels = Page.content_panels + [
-        FieldPanel('banner_description'),
         ImageChooserPanel('banner_image'),
-        # ImageChooserPanel('banner_background_image'),
         PageChooserPanel('banner_link_page'),
-        # FieldPanel('banner_button_text'),
-        # ImageChooserPanel('banner_icon_button'),
-        # FieldPanel('align_center')
     ]
 
 

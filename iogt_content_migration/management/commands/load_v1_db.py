@@ -900,7 +900,6 @@ class Command(BaseCommand):
             depth=row['depth'],
             numchild=row['numchild'],
             live=row['live'],
-            banner_description='',
             locked=row['locked'],
             go_live_at=row['go_live_at'],
             expire_at=row['expire_at'],
