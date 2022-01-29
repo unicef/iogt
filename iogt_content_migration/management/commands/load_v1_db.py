@@ -1431,8 +1431,12 @@ class Command(BaseCommand):
             ])
 
     def migrate_survey_questions(self, survey, survey_row):
+        self._migrate_survey_questions(survey, survey_row, 'surveys_molosurveyformfield')
+        self._migrate_survey_questions(survey, survey_row, 'surveys_personalisablesurveyformfield')
+
+    def _migrate_survey_questions(self, survey, survey_row, formfield_table):
         sql = f'select *, smsff.id as smsffid ' \
-              f'from surveys_molosurveyformfield smsff, surveys_molosurveypage smsp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl ' \
+              f'from {formfield_table} smsff, surveys_molosurveypage smsp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl ' \
               f'where smsff.page_id = smsp.page_ptr_id ' \
               f'and smsp.page_ptr_id = wcp.id ' \
               f'and wcp.id = clr.page_id ' \
