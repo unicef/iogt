@@ -2031,7 +2031,11 @@ class Command(BaseCommand):
 
         survey = Survey(
             title='Registration Survey', live=True, allow_multiple_submissions=True,
-            allow_anonymous_submissions=False, submit_button_text='Register')
+            allow_anonymous_submissions=False, submit_button_text='Register',
+            thank_you_text=json.dumps([{
+                'type': 'paragraph',
+                'value': self.registration_survey_translations['thank_you_text']['en'],
+            }]))
 
         self.survey_index_page.add_child(instance=survey)
 
@@ -2070,16 +2074,24 @@ class Command(BaseCommand):
                 )
                 continue
 
+            translation_is_incomplete = False
             submit_button_text = self.registration_survey_translations['register_button_text'].get(locale.language_code)
             if not submit_button_text:
-                self.post_migration_report_messages['registration_survey_translation_not_found'].append(
-                    f'No translation for submit button of registration survey to locale: {locale}'
-                )
+                translation_is_incomplete = True
             if submit_button_text and len(submit_button_text) > 40:
                 # This should never happen in practice as we provide submit_button_text
                 self.stdout.write(f"Truncated survey submit button text, title={translated_survey.title}")
-
             translated_survey.submit_button_text = submit_button_text[:40] if submit_button_text else 'Register'
+
+            translated_thank_you_text = self.registration_survey_translations['thank_you_text'].get(locale.language_code)
+            if translated_thank_you_text:
+                translated_survey.thank_you_text = json.dumps([{
+                        'type': 'paragraph',
+                        'value': translated_thank_you_text,
+                    }])
+            else:
+                translation_is_incomplete = True
+
             translated_survey.save()
             if translated_survey:
                 for (admin_label, label_identifier) in [
@@ -2095,16 +2107,18 @@ class Command(BaseCommand):
                     except SurveyFormField.DoesNotExist:
                         # This field is not marked as required in the registration survey
                         continue
-                    try:
-                        field.label = self.registration_survey_translations[label_identifier][locale.language_code]
-                        field.help_text = self.registration_survey_translations[
-                            f'{label_identifier}_helptext'][locale.language_code]
-                    except KeyError:
-                        self.post_migration_report_messages['registration_survey_translation_not_found'].append(
-                            f'Incomplete translation for registration survey to locale: {locale}'
-                        )
-                        break
+                    label = self.registration_survey_translations[label_identifier].get(locale.language_code)
+                    help_text = self.registration_survey_translations[
+                        f'{label_identifier}_helptext'].get(locale.language_code)
+                    if not label or not help_text:
+                        translation_is_incomplete = True
+                    field.label = label or self.registration_survey_translations[label_identifier]['en']
+                    field.help_text = help_text or self.registration_survey_translations[
+                        f'{label_identifier}_helptext']['en']
                     field.save()
+            if translation_is_incomplete:
+                self.post_migration_report_messages['registration_survey_translation_not_found'].append(
+                    f'Incomplete translation for registration survey to locale: {locale}')
 
         self.post_migration_report_messages['other'].append(
             'Title of registration survey (Pages > Internet of Good Things [Language] > Surveys > Registration Survey) '
