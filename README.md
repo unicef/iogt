@@ -1,6 +1,6 @@
 # IoGT
 
-Internet of Good Things ([IoGT][2]) is developed as a public good under a [BSD-2][3] open-source licence.
+Internet of Good Things ([IoGT][2]) is developed as a public good under a [BSD-2][3] open-source license.
 
 The development uses the Python programming language, building on the [Django][4] server-side web framework combined with the [Wagtail][5] content management system.
 
