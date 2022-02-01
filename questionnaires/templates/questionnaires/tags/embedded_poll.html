@@ -5,7 +5,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/polls.css' %}">
 {% endblock %}
 
-<div class="questionnaire-container container">
+<div class="questionnaire-container container"
+     style="color:{{ font_color }}; background:{{ background_color }};">
     <h1 class="title polls-widget__title">{{ questionnaire.title }}</h1>
     {% if user.is_authenticated or request.is_preview or questionnaire.allow_anonymous_submissions %}
         {% if form %}

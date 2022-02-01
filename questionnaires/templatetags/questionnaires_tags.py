@@ -1,7 +1,9 @@
 from django import template
 from django.db.models import Q
 from wagtail.core.models import Page
+from wagtail.core.models import Site
 
+from home.models import ThemeSettings
 from questionnaires.models import Poll
 from questionnaires.utils import SkipLogicPaginator
 
@@ -78,7 +80,12 @@ def get_action_url(page, self, fields_step, request, form):
 
 
 @register.inclusion_tag('questionnaires/tags/questionnaire_template_wrapper.html', takes_context=True)
-def render_questionnaire_form(context, page):
+def render_questionnaire_form(context, page, background_color=None, font_color=None):
+    theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
+
+    font_color = font_color or theme_settings.section_listing_questionnaire_font_color
+    background_color = background_color or theme_settings.section_listing_questionnaire_background_color
+
     request = context['request']
 
     form_class = page.get_form_class()
@@ -101,6 +108,8 @@ def render_questionnaire_form(context, page):
 
     context.update({
         'template': template,
+        'font_color': font_color,
+        'background_color': background_color,
         'questionnaire': page,
     })
 
