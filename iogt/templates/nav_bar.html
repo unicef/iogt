@@ -1,7 +1,7 @@
 {% load static wagtailimages_tags menu_tags home_tags image_tags generic_components %}
 
 <nav class="nav-bar">
-    <div class="nav-bar__wrap" style="background-color:{{ navbar_background_color }}">
+        <div class="nav-bar__wrap">
         {% for item in menu_items %}
             {% primary_button title=item.text href=item.href font_color=item.get_font_color background_color=item.get_background_color icon=item.get_icon extra_classnames=item.get_single_column_view %}
         {% endfor %}

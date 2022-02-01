@@ -37,7 +37,9 @@ class RegistrationSurveyRedirectMiddleware:
         is_registered_user = not user.is_anonymous
 
         language = translation.get_language()
-        if request_path.startswith(('/media/', f'/{language}/images/')) or is_url_allowed or not is_registered_user:
+        if (request_path.startswith(('/media/', f'/{language}/images/', f'/{language}/jsi18n/'))
+                or is_url_allowed
+                or not is_registered_user):
             return self.get_response(request)
 
         should_redirect_to_registration_survey = False

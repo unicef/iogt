@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.core.management import call_command
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
+from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import TemplateView
@@ -20,7 +21,7 @@ class ServiceWorkerView(TemplateView):
 
 
 def get_manifest(request):
-    language = request.LANGUAGE_CODE
+    language = translation.get_language()
     manifest = get_object_or_404(ManifestSettings, language=language)
     response = {
         "name": manifest.name,

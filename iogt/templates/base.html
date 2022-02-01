@@ -23,11 +23,14 @@
     <meta charset="utf-8"/>
     <title>
         {% block title %}
-            {% if self.seo_title %}{{ self.seo_title }}{% else %}
-                {{ self.title }}{% endif %}
+            {% if page.seo_title %}
+                {{ page.seo_title }}
+            {% else %}
+                {{ page.title }}
+            {% endif %}
         {% endblock %}
         {% block title_suffix %}
-            {% with self.get_site.site_name as site_name %}
+            {% with page.get_site.site_name as site_name %}
                 {% if site_name %}- {{ site_name }}{% endif %}
             {% endwith %}
         {% endblock %}
@@ -38,7 +41,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="theme-color" content="#493174">
     <link rel="manifest" href="{% url 'manifest' %}">
-{% image settings.home.SiteSettings.apple_touch_icon width-120 as apple_touch_icon %}
+    {% image settings.home.SiteSettings.apple_touch_icon width-120 as apple_touch_icon %}
     <link rel="apple-touch-icon" type="image/jpg" href="{{ apple_touch_icon.url }}"/>
 
     {# Global stylesheets #}
