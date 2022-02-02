@@ -815,6 +815,13 @@ class Command(BaseCommand):
                     self.post_migration_report_messages['invalid_page_id'].append(
                         f'Unable to attach v2 page for {type_[:-1]}, title={row["title"]}'
                     )
+            elif block['type'] == 'list':
+                value = ''
+                for li in block['value']:
+                    value += f'* {li}\r\n'
+                block['type'] = 'markdown'
+                block['value'] = value
+
         return v2_body
 
     def map_article_body(self, row):
