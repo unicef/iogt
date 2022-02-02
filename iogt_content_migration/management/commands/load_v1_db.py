@@ -821,6 +821,12 @@ class Command(BaseCommand):
                     value += f'* {li}\r\n'
                 block['type'] = 'markdown'
                 block['value'] = value
+            elif block['type'] == 'numbered_list':
+                value = ''
+                for i,li in enumerate(block['value']):
+                    value += f'{i+1}. {li}\r\n'
+                block['type'] = 'markdown'
+                block['value'] = value
 
         return v2_body
 
