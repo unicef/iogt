@@ -1776,6 +1776,10 @@ body.rtl {
   align-items: center;
 }
 
+.btn-primary.menu-item .icon-holder {
+  justify-content: center;
+}
+
 .btn-primary .icon-holder img {
   max-width: 14px;
   max-height: 100%;
