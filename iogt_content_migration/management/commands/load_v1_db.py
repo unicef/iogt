@@ -1448,10 +1448,14 @@ class Command(BaseCommand):
         cur.close()
 
     def create_survey_question(self, survey, survey_row, cur):
-        SurveyFormField.objects.filter(page=survey).delete()
-
         for row in cur:
             field_type = 'positivenumber' if row['field_type'] == 'positive_number' else row['field_type']
+            if row['skip_logic']:
+                skip_logics = json.loads(row['skip_logic'])
+                for skip_logic in skip_logics:
+                    skip_logic.get('value', {}).pop('survey')
+                row['skip_logic'] = json.dumps(skip_logics)
+
             survey_form_field = SurveyFormField.objects.create(
                 page=survey, sort_order=row['sort_order'], label=row['label'], required=row['required'],
                 default_value=row['default_value'], help_text=row['help_text'], field_type=field_type,
