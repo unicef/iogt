@@ -24,7 +24,6 @@ from iogt_users.models import User
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (FieldPanel, InlinePanel,
                                          MultiFieldPanel, StreamFieldPanel)
-from wagtail.contrib.forms.edit_handlers import FormSubmissionsPanel
 from wagtail.contrib.forms.models import (AbstractForm, AbstractFormField,
                                           AbstractFormSubmission)
 from wagtail.core import blocks
@@ -33,6 +32,7 @@ from wagtail.core.models import Page
 from wagtail.images.blocks import ImageChooserBlock
 
 from questionnaires.blocks import SkipState, SkipLogicField
+from questionnaires.edit_handlers import FormSubmissionsPanel
 from questionnaires.forms import CustomFormBuilder, SurveyForm, QuizForm
 from questionnaires.utils import SkipLogicPaginator, FormHelper
 from questionnaires.views import CustomSubmissionsListView
