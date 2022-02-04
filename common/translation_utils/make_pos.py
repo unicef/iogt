@@ -133,4 +133,5 @@ def make_pos_run():
         translation.pofile.save(filename)
 
     with open("home/translatable_strings.py", 'w') as f:
-        f.write('translatable_strings = ' + str(translatable_strings))
+        content = "\n    ".join(e.__repr__() for e in translatable_strings)
+        f.write(f'translatable_strings = [\n    {content}\n]')
