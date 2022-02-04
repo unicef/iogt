@@ -2,32 +2,22 @@ import polib
 import csv
 import copy
 import os
+from common.translation_utils.po_template import get_po_metadata_template
 
 class Translation(object):
     pass
 
+def make_translation():
+
+    po_metadata_template = get_po_metadata_template()
+
+    translation = Translation()
+    po = polib.POFile()
+    po.metadata = copy.deepcopy(po_metadata_template)
+    translation.pofile = po
+    return translation
+
 def make_pos_run():
-
-    def make_translation():
-            translation = Translation()
-            po = polib.POFile()
-            po.metadata = copy.deepcopy(po_metadata_template)
-            translation.pofile = po
-            return translation
-
-    po_metadata_template = {
-        "Report-Msgid-Bugs-To": "",
-        "POT-Creation-Date": "2021-07-31 09:38+0000",
-        "PO-Revision-Date": "2021-07-31 09:38+0000",
-        "Last-Translator": "FULL NAME <EMAIL@ADDRESS>",
-        "Language-Team": "LANGUAGE <LL@li.org>",
-        "Language": "",
-        "MIME-Version": "1.0",
-        "Content-Type": "text/plain; charset=UTF-8",
-        "Content-Transfer-Encoding": "8bit",
-        "Project-Id-Version": "PACKAGE VERSION",
-        "Plural-Forms": "nplurals=2; plural=(n > 1);",
-    }
 
     sheet0 = open("common/translation_utils/translation_status.csv", newline='')
     status_data = list(csv.reader(sheet0))

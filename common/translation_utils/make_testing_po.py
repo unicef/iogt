@@ -2,23 +2,11 @@ import polib
 import csv
 import copy
 import os
+from common.translation_utils.po_template import get_po_metadata_template
 
 def make_testing_po_run():
 
-    po_metadata_template = {
-        "Report-Msgid-Bugs-To": "",
-        "POT-Creation-Date": "2021-07-31 09:38+0000",
-        "PO-Revision-Date": "2021-07-31 09:38+0000",
-        "Last-Translator": "FULL NAME <EMAIL@ADDRESS>",
-        "Language-Team": "LANGUAGE <LL@li.org>",
-        "Language": "",
-        "MIME-Version": "1.0",
-        "Content-Type": "text/plain; charset=UTF-8",
-        "Content-Transfer-Encoding": "8bit",
-        "Project-Id-Version": "PACKAGE VERSION",
-        "Plural-Forms": "nplurals=2; plural=(n > 1);",
-    }
-
+    po_metadata_template = get_po_metadata_template()
 
     sheet = open("common/translation_utils/translation_status.csv", newline='')
     reader = csv.reader(sheet)

@@ -1,8 +1,8 @@
 from django.core.management.base import BaseCommand
 from django.core.management import call_command
-from common.translation_utils.update_status import *
-from common.translation_utils.make_testing_po import *
-from common.translation_utils.make_pos import *
+from common.translation_utils.update_status import update_status_run
+from common.translation_utils.make_testing_po import make_testing_po_run
+from common.translation_utils.make_pos import make_pos_run
 import polib
 import csv
 import copy
