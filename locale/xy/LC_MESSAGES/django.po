@@ -53,16 +53,16 @@ msgid "Image to display as the banner"
 msgstr "([not-needed]-Image to display as the banner)"
 
 msgid "Background image"
-msgstr "([not-needed]-Background image)"
+msgstr "([unused]-Background image)"
 
 msgid "Optional page to which the banner will link to"
 msgstr "([not-needed]-Optional page to which the banner will link to)"
 
 msgid "The title for a button"
-msgstr "([not-needed]-The title for a button)"
+msgstr "([unused]-The title for a button)"
 
 msgid "Icon Button"
-msgstr "([not-needed]-Icon Button)"
+msgstr "([unused]-Icon Button)"
 
 msgid ""
 "When selecting this option, untranslated pages will not be visible to the "
@@ -373,7 +373,7 @@ msgid "Page URL"
 msgstr "([not-needed]-Page URL)"
 
 msgid "survey"
-msgstr "([needs-translation]-survey)"
+msgstr "([TODO]-survey)"
 
 msgid "surveys"
 msgstr "([not-needed]-surveys)"
@@ -398,7 +398,7 @@ msgid "Description at poll page"
 msgstr "([not-needed]-Description at poll page)"
 
 msgid "poll"
-msgstr "([needs-translation]-poll)"
+msgstr "([TODO]-poll)"
 
 msgid "polls"
 msgstr "([not-needed]-polls)"
@@ -646,15 +646,15 @@ msgid ""
 "If you cannot view the above video, perhaps would you like to %(start_link)s"
 " download it? %(end_link)s."
 msgstr ""
-"([TODO]-If you cannot view the above video, perhaps would you like to "
+"([unused]-If you cannot view the above video, perhaps would you like to "
 "%(start_link)s download it? %(end_link)s.)"
 
 msgid ""
 "If you cannot listen to the above audio, perhaps would you like to "
 "%(start_link)s download it? %(end_link)s."
 msgstr ""
-"([TODO]-If you cannot listen to the above audio, perhaps would you like to "
-"%(start_link)s download it? %(end_link)s.)"
+"([unused]-If you cannot listen to the above audio, perhaps would you like to"
+" %(start_link)s download it? %(end_link)s.)"
 
 msgid "[This page is not available in English]"
 msgstr "([unused]-[This page is not available in English])"
@@ -750,7 +750,7 @@ msgstr ""
 " address you registered with, and check your spam folder. )"
 
 msgid "quiz"
-msgstr "([needs-translation]-quiz)"
+msgstr "([TODO]-quiz)"
 
 msgid "quizzes"
 msgstr "([has-translation]-quizzes)"
@@ -833,7 +833,7 @@ msgid "BACK"
 msgstr "([has-translation]-BACK)"
 
 msgid "© The Internet of Good Things"
-msgstr "([needs-translation]-© The Internet of Good Things)"
+msgstr "([has-translation]-© The Internet of Good Things)"
 
 msgid ""
 "This appears to be your first visit here. Our website is also available as a"
@@ -1306,7 +1306,7 @@ msgid "Are you sure you want to log out?"
 msgstr "([needs-translation]-Are you sure you want to log out?)"
 
 msgid " The Internet of Good Things"
-msgstr "([not-needed]- The Internet of Good Things)"
+msgstr "([unused]- The Internet of Good Things)"
 
 msgid "Add an external link"
 msgstr "([not-needed]-Add an external link)"
@@ -1577,3 +1577,32 @@ msgstr "([not-needed]-Replay Survey)"
 
 msgid "Replay"
 msgstr "([not-needed]-Replay)"
+
+msgid ""
+"If you cannot view the above video, you can instead %(start_link)sdownload "
+"it%(end_link)s."
+msgstr ""
+"([needs-translation]-If you cannot view the above video, you can instead "
+"%(start_link)sdownload it%(end_link)s.)"
+
+msgid ""
+"If you cannot listen to the above audio, you can instead "
+"%(start_link)sdownload it%(end_link)s."
+msgstr ""
+"([needs-translation]-If you cannot listen to the above audio, you can "
+"instead %(start_link)sdownload it%(end_link)s.)"
+
+msgid "Full width"
+msgstr "([not-needed]-Full width)"
+
+msgid "Left-aligned"
+msgstr "([not-needed]-Left-aligned)"
+
+msgid "Right-aligned"
+msgstr "([not-needed]-Right-aligned)"
+
+msgid "label"
+msgstr "([not-needed]-label)"
+
+msgid "The label of the form field"
+msgstr "([not-needed]-The label of the form field)"

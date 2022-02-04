@@ -26,9 +26,13 @@ translatable_strings = [
     'Anonymous',
     'Report this comment?',
     'Display name',
+    'Reported by %(comment_report_count)s user',
+    'Reported by %(comment_report_count)s users',
     'Sorry, %(page_title)s is not available in %(language)s. If you want to keep browsing in %(language)s you can click below to return to the homepage.',
     'Username not available.',
     'Display name not available.',
     'You have already completed this quiz.',
-    'You have already completed this poll.'
+    'You have already completed this poll.',
+    'If you cannot view the above video, you can instead %(start_link)sdownload it%(end_link)s.',
+    'If you cannot listen to the above audio, you can instead %(start_link)sdownload it%(end_link)s.'
 ]
