@@ -8,7 +8,7 @@
 
 {% block content %}
     <article class='article'>
-        {% image page.lead_image width-320 class='article__lead-img-featured' %}
+        {% image page.lead_image width-360 class='article__lead-img-featured' %}
         {% if user_progress %}
             {% render_user_progress user_progress False %}
         {% endif %}
@@ -56,7 +56,7 @@
     <section class='related-articles'>
         {% if recommended_articles %}
             <h3>{% translate "Related Articles" %}</h3>
-            {% include 'home/tags/articles_list.html' with pages=recommended_articles %}
+            {% include 'home/tags/articles_list.html' with recommended_articles=recommended_articles %}
         {% endif %}
     </section>
 {% endblock content %}

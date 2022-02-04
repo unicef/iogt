@@ -1,3 +1,4 @@
+import logging
 import os
 
 from django.conf import settings
@@ -8,7 +9,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.files.images import get_image_dimensions
 from django.db import models
-from django.shortcuts import get_object_or_404
 from django.utils.deconstruct import deconstructible
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
@@ -55,9 +55,11 @@ from .utils.image import convert_svg_to_png_bytes
 from .utils.progress_manager import ProgressManager
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 
 class HomePage(Page):
+    parent_page_types = ['wagtailcore.page']
     template = 'home/home_page.html'
     show_in_menus_default = True
 
@@ -79,10 +81,12 @@ class HomePage(Page):
     def get_context(self, request):
         check_user_session(request)
         context = super().get_context(request)
-        context['banners'] = [
-            home_page_banner.banner_page.specific
-            for home_page_banner in self.home_page_banners.filter(banner_page__live=True)
-        ]
+        banners = []
+        for home_page_banner in self.home_page_banners.all():
+            banner_page = home_page_banner.banner_page
+            if banner_page.live and banner_page.banner_link_page and banner_page.banner_link_page.live:
+                banners.append(banner_page.specific)
+        context['banners'] = banners
         return context
 
 
@@ -293,7 +297,7 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
         ('markdown', MarkdownBlock(icon='code')),
         ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
-        ('image', ImageChooserBlock()),
+        ('image', ImageChooserBlock(template='blocks/image.html')),
         ('list', blocks.ListBlock(MarkdownBlock(icon='code'))),
         ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
         ('page_button', PageButtonBlock()),
@@ -426,7 +430,7 @@ class OfflineAppPage(AbstractArticle):
         ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
         ('markdown', MarkdownBlock(icon='code')),
         ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
-        ('image', ImageChooserBlock()),
+        ('image', ImageChooserBlock(template='blocks/image.html')),
         ('list', blocks.ListBlock(MarkdownBlock(icon='code'))),
         ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
         ('page_button', PageButtonBlock()),
@@ -461,8 +465,6 @@ class BannerPage(Page):
     parent_page_types = ['home.BannerIndexPage']
     subpage_types = []
 
-    banner_description = RichTextField(null=True, blank=True)
-
     banner_image = models.ForeignKey(
         'wagtailimages.Image',
         related_name='+',
@@ -470,48 +472,21 @@ class BannerPage(Page):
         null=True, blank=True,
         help_text=_('Image to display as the banner')
     )
-    banner_background_image = models.ForeignKey(
-        'wagtailimages.Image',
-        related_name='+',
-        null=True, blank=True,
-        on_delete=models.PROTECT,
-        help_text=_('Background image')
-    )
-
     banner_link_page = models.ForeignKey(
         Page, null=True, blank=True, related_name='banners',
         on_delete=models.SET_NULL,
         help_text=_('Optional page to which the banner will link to'))
 
-    banner_button_text = models.CharField(
-        null=True, blank=True,
-        max_length=35,
-        help_text=_('The title for a button')
-    )
-    banner_icon_button = models.ForeignKey(
-        'wagtailimages.Image',
-        related_name='+',
-        on_delete=models.PROTECT,
-        null=True, blank=True,
-        help_text=_('Icon Button')
-    )
-    align_center = BooleanField(default=False)
-
     content_panels = Page.content_panels + [
-        FieldPanel('banner_description'),
         ImageChooserPanel('banner_image'),
-        # ImageChooserPanel('banner_background_image'),
         PageChooserPanel('banner_link_page'),
-        # FieldPanel('banner_button_text'),
-        # ImageChooserPanel('banner_icon_button'),
-        # FieldPanel('align_center')
     ]
 
 
 class FooterIndexPage(Page):
     parent_page_types = ['home.HomePage']
     subpage_types = [
-        'home.Section', 'home.Article', 'home.FooterPage', 'home.PageLinkPage', 'questionnaires.Poll',
+        'home.Section', 'home.Article', 'home.PageLinkPage', 'questionnaires.Poll',
         'questionnaires.Survey', 'questionnaires.Quiz',
     ]
 
@@ -519,7 +494,8 @@ class FooterIndexPage(Page):
     def get_active_footers(cls):
         footer_index_page = cls.objects.filter(locale=Locale.get_active()).first()
         if footer_index_page:
-            return footer_index_page.get_children().live().specific()
+            footers = footer_index_page.get_children().live().specific()
+            return [footer for footer in footers if footer.get_page()]
         return cls.objects.none()
 
     def __str__(self):
@@ -527,7 +503,7 @@ class FooterIndexPage(Page):
 
 
 class FooterPage(Article, TitleIconMixin):
-    parent_page_types = ['home.FooterIndexPage']
+    parent_page_types = []
     subpage_types = []
     template = 'home/article.html'
 
@@ -566,23 +542,25 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
     ]
 
     def get_page(self):
-        return self.page.specific if self.page else self
+        return self.page.specific if self.page and self.page.live else None
 
-    def get_icon_url(self):
-        icon_url = super().get_icon_url()
-        if not icon_url.url and self.page:
-            icon_url = self.page.specific.get_icon_url()
+    def get_icon(self):
+        icon = super().get_icon()
+        if not icon.url and self.page and self.page.live:
+            icon = self.page.specific.get_icon()
 
-        return icon_url
+        return icon
 
-    def get_url(self):
+    def get_url(self, request=None, current_site=None):
         url = ''
-        if self.page:
+        if self.page and self.page.live:
             url = self.page.specific.url
         elif self.external_link:
             url = self.external_link
 
         return url
+
+    url = property(get_url)
 
 
 @register_setting
@@ -810,6 +788,7 @@ class IogtFlatMenuItem(AbstractFlatMenuItem, TitleIconMixin):
         null=True,
         help_text=_('The font color of the flat menu item on Desktop + Mobile')
     )
+    display_only_in_single_column_view = models.BooleanField(default=False)
 
     panels = [
         PageChooserPanel('link_page'),
@@ -821,15 +800,27 @@ class IogtFlatMenuItem(AbstractFlatMenuItem, TitleIconMixin):
         SvgChooserPanel('icon'),
         ImageChooserPanel('image_icon'),
         FieldPanel('background_color'),
-        FieldPanel('font_color')
+        FieldPanel('font_color'),
+        FieldPanel('display_only_in_single_column_view'),
     ]
 
-    def get_icon_url(self):
-        icon_url = super().get_icon_url()
-        if not icon_url.url and self.link_page:
-            icon_url = self.link_page.get_icon_url()
+    def get_icon(self):
+        icon = super().get_icon()
+        if not icon.url and self.link_page:
+            icon = self.link_page.get_icon()
 
-        return icon_url
+        return icon
+
+    def get_background_color(self):
+        theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
+        return self.background_color or theme_settings.navbar_background_color
+
+    def get_font_color(self):
+        theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
+        return self.font_color or theme_settings.navbar_font_color
+
+    def get_single_column_view(self):
+        return 'single-column-view' if self.display_only_in_single_column_view else ''
 
 
 @deconstructible
@@ -1105,7 +1096,12 @@ class SVGToPNGMap(models.Model):
         try:
             obj = cls.objects.get(svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color)
         except cls.DoesNotExist:
-            png_image = convert_svg_to_png_bytes(svg_path, fill_color=fill_color, stroke_color=stroke_color, width=32)
+            try:
+                png_image = convert_svg_to_png_bytes(
+                    svg_path, fill_color=fill_color, stroke_color=stroke_color, width=32)
+            except:
+                logger.warning(f"Failed to convert SVG to PNG, file={svg_path}")
+                return None
             obj = cls.objects.create(
                 svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color, png_image_file=png_image)
         return obj.png_image_file
@@ -1129,6 +1125,16 @@ class V1PageURLToV2PageMap(models.Model):
         obj, __ = cls.objects.get_or_create(v2_page=page, defaults={'v1_page_url': url})
 
         return obj
+
+    @classmethod
+    def get_page_or_none(cls, v1_page_url):
+        # See https://github.com/unicef/iogt/issues/850 for more details on why /home/ is prepended
+        urls_to_match = [
+            f'/home{v1_page_url}',
+            f'/home{v1_page_url}/'
+        ]
+        obj = cls.objects.filter(v1_page_url__in=urls_to_match).first()
+        return obj.v2_page if obj else None
 
 
 class LocaleDetail(models.Model):

@@ -1,13 +1,17 @@
+from urllib.parse import unquote
+
 from django.conf import settings
 from django.conf.urls.i18n import is_language_prefix_patterns_used
+from django.http.response import HttpResponsePermanentRedirect
 from django.middleware.locale import LocaleMiddleware as DjangoLocaleMiddleware
 from django.utils import translation
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.translation import get_language_from_path, check_for_language, get_supported_language_variant
 from django.utils.translation.trans_real import get_languages, parse_accept_lang_header, language_code_re
+from wagtail.contrib.redirects.middleware import RedirectMiddleware
 from wagtail.core.models import Locale
 
-from home.models import SiteSettings
+from home.models import SiteSettings, V1PageURLToV2PageMap
 
 
 class CacheControlMiddleware:
@@ -72,3 +76,23 @@ class AdminLocaleMiddleware(MiddlewareMixin):
     def process_request(self, request):
         if request.path.startswith('/admin/') or request.path.startswith('/django-admin/'):
             translation.activate(settings.LANGUAGE_CODE)
+
+
+class CustomRedirectMiddleware(RedirectMiddleware):
+    def process_response(self, request, response):
+        """
+        This custom middleware is written to mitigate broken links from IOGT v1.
+        See https://github.com/unicef/iogt/issues/850 for more details.
+        """
+        return_value = super().process_response(request, response)
+
+        # If the page is not found by wagtail RedirectMiddleware, look for the page in V1PageURLToV2PageMap.
+        # If you find the page, redirect the user to the new page.
+        if return_value.status_code == 404:
+            url = unquote(request.get_full_path())
+            page = V1PageURLToV2PageMap.get_page_or_none(url)
+
+            if page:
+                return HttpResponsePermanentRedirect(page.url)
+
+        return return_value

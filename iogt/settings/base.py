@@ -93,7 +93,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "iogt.middleware.LocaleMiddleware",
     "iogt.middleware.AdminLocaleMiddleware",
-    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+    'iogt.middleware.CustomRedirectMiddleware',
     'iogt_users.middlewares.RegistrationSurveyRedirectMiddleware',
     'external_links.middleware.RewriteExternalLinksMiddleware',
     'iogt.middleware.CacheControlMiddleware',
@@ -122,7 +122,8 @@ TEMPLATES = [
                 'wagtail.contrib.settings.context_processors.settings',
                 "home.processors.show_welcome_banner",
                 'django.template.context_processors.i18n',
-                'home.processors.commit_hash'
+                'home.processors.commit_hash',
+                'home.processors.show_footers',
             ],
         },
     },
@@ -418,3 +419,5 @@ WAGTAILMARKDOWN = {
 TRANSLATIONS_PROJECT_BASE_DIR = BASE_DIR
 
 from iogt.patch import *
+
+WAGTAILTRANSFER_UPDATE_RELATED_MODELS = ['wagtailimages.image', 'wagtailsvg.svg',]

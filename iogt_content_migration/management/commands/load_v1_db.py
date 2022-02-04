@@ -344,7 +344,7 @@ class Command(BaseCommand):
             if file:
                 document = Document.objects.create(
                     title=row['title'],
-                    file=File(file),
+                    file=File(file, name=row['file'].split('/')[-1]),
                     created_at=row['created_at'],
                     collection=self.collection_map.get(row['collection_id']),
                 )
@@ -371,10 +371,10 @@ class Command(BaseCommand):
                 thumbnail = self.open_file(row['thumbnail'])
                 media = Media.objects.create(
                     title=row['title'],
-                    file=File(file),
+                    file=File(file, name=row['file'].split('/')[-1]),
                     type=row['type'],
                     duration=row['duration'],
-                    thumbnail=File(thumbnail) if thumbnail else None,
+                    thumbnail=File(thumbnail, name=row['thumbnail'].split('/')[-1]) if thumbnail else None,
                     created_at=row['created_at'],
                     collection=self.collection_map.get(row['collection_id']),
                 )
@@ -654,6 +654,11 @@ class Command(BaseCommand):
                     translated_article.commenting_ends_at = commenting_close_time
                     translated_article.latest_revision_created_at = row['latest_revision_created_at']
                     translated_article.save()
+                    if row['featured_in_latest']:
+                        self.post_migration_report_messages['articles_featured_in_latest'].append(
+                            f'title: {article.title}. URL: {article.full_url}. '
+                            f'Admin URL: {self.get_admin_url(article.id)}.'
+                        )
 
                     content_type = self.find_content_type_id('core', 'articlepage')
                     tags = self.find_tags(content_type, row['page_ptr_id'])
@@ -708,6 +713,12 @@ class Command(BaseCommand):
         )
         try:
             article.save()
+            if row['featured_in_latest']:
+                self.post_migration_report_messages['articles_featured_in_latest'].append(
+                    f'title: {article.title}. URL: {article.full_url}. '
+                    f'Admin URL: {self.get_admin_url(article.id)}.'
+                )
+
             content_type = self.find_content_type_id('core', 'articlepage')
             tags = self.find_tags(content_type, row['page_ptr_id'])
             if tags:
@@ -862,6 +873,13 @@ class Command(BaseCommand):
                     translated_banner.latest_revision_created_at = row['latest_revision_created_at']
                     translated_banner.save()
 
+                    if row['external_link']:
+                        self.post_migration_report_messages['banners_with_external_link'].append(
+                            f'title: {translated_banner.title}. URL: {translated_banner.full_url}. '
+                            f'Admin URL: {self.get_admin_url(translated_banner.id)}. '
+                            f'External link: {row["external_link"]}.'
+                        )
+
                     V1ToV2ObjectMap.create_map(content_object=translated_banner, v1_object_id=row['page_ptr_id'])
                     V1PageURLToV2PageMap.create_map(url=row['url_path'], page=translated_banner)
 
@@ -882,7 +900,6 @@ class Command(BaseCommand):
             depth=row['depth'],
             numchild=row['numchild'],
             live=row['live'],
-            banner_description='',
             locked=row['locked'],
             go_live_at=row['go_live_at'],
             expire_at=row['expire_at'],
@@ -893,6 +910,13 @@ class Command(BaseCommand):
             latest_revision_created_at=row['latest_revision_created_at'],
         )
         banner.save()
+
+        if row['external_link']:
+            self.post_migration_report_messages['banners_with_external_link'].append(
+                f'title: {banner.title}. URL: {banner.full_url}. '
+                f'Admin URL: {self.get_admin_url(banner.id)}. '
+                f'External link: {row["external_link"]}.'
+            )
 
         V1ToV2ObjectMap.create_map(content_object=banner, v1_object_id=row['page_ptr_id'])
         V1PageURLToV2PageMap.create_map(url=row['url_path'], page=banner)
@@ -964,6 +988,11 @@ class Command(BaseCommand):
                     translated_footer.commenting_ends_at = commenting_close_time
                     translated_footer.latest_revision_created_at = row['latest_revision_created_at']
                     translated_footer.save()
+                    if row['featured_in_latest']:
+                        self.post_migration_report_messages['footers_featured_in_latest'].append(
+                            f'title: {translated_footer.title}. URL: {translated_footer.full_url}. '
+                            f'Admin URL: {self.get_admin_url(translated_footer.id)}.'
+                        )
 
                     if image:
                         self.post_migration_report_messages['footers_with_image'].append(
@@ -1007,6 +1036,11 @@ class Command(BaseCommand):
             latest_revision_created_at=row['latest_revision_created_at'],
         )
         footer.save()
+        if row['featured_in_latest']:
+            self.post_migration_report_messages['footers_featured_in_latest'].append(
+                f'title: {footer.title}. URL: {footer.full_url}. '
+                f'Admin URL: {self.get_admin_url(footer.id)}.'
+            )
 
         if image:
             self.post_migration_report_messages['footers_with_image'].append(
@@ -1397,8 +1431,12 @@ class Command(BaseCommand):
             ])
 
     def migrate_survey_questions(self, survey, survey_row):
+        self._migrate_survey_questions(survey, survey_row, 'surveys_molosurveyformfield')
+        self._migrate_survey_questions(survey, survey_row, 'surveys_personalisablesurveyformfield')
+
+    def _migrate_survey_questions(self, survey, survey_row, formfield_table):
         sql = f'select *, smsff.id as smsffid ' \
-              f'from surveys_molosurveyformfield smsff, surveys_molosurveypage smsp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl ' \
+              f'from {formfield_table} smsff, surveys_molosurveypage smsp, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl ' \
               f'where smsff.page_id = smsp.page_ptr_id ' \
               f'and smsp.page_ptr_id = wcp.id ' \
               f'and wcp.id = clr.page_id ' \
@@ -1410,10 +1448,14 @@ class Command(BaseCommand):
         cur.close()
 
     def create_survey_question(self, survey, survey_row, cur):
-        SurveyFormField.objects.filter(page=survey).delete()
-
         for row in cur:
             field_type = 'positivenumber' if row['field_type'] == 'positive_number' else row['field_type']
+            if row['skip_logic']:
+                skip_logics = json.loads(row['skip_logic'])
+                for skip_logic in skip_logics:
+                    skip_logic.get('value', {}).pop('survey')
+                row['skip_logic'] = json.dumps(skip_logics)
+
             survey_form_field = SurveyFormField.objects.create(
                 page=survey, sort_order=row['sort_order'], label=row['label'], required=row['required'],
                 default_value=row['default_value'], help_text=row['help_text'], field_type=field_type,
@@ -1975,7 +2017,7 @@ class Command(BaseCommand):
                 # Technically, someone could have manually put 'Submit' on a non-English button,
                 # which we would now translate even though we shouldn't.
                 # This is quite unlikely though.
-                submit_button_text = self.registration_survey_translations['submit_button_text'][survey.locale.language_code]
+                submit_button_text = self.registration_survey_translations['submit_button_text'].get(survey.locale.language_code)
                 if not submit_button_text:
                     self.post_migration_report_messages['untranslated_survey_button'].append(
                             f'title: {survey.title}. URL: {survey.full_url}. '
@@ -1997,7 +2039,11 @@ class Command(BaseCommand):
 
         survey = Survey(
             title='Registration Survey', live=True, allow_multiple_submissions=True,
-            allow_anonymous_submissions=False, submit_button_text='Register')
+            allow_anonymous_submissions=False, submit_button_text='Register',
+            thank_you_text=json.dumps([{
+                'type': 'paragraph',
+                'value': self.registration_survey_translations['thank_you_text']['en'],
+            }]))
 
         self.survey_index_page.add_child(instance=survey)
 
@@ -2036,16 +2082,24 @@ class Command(BaseCommand):
                 )
                 continue
 
-            submit_button_text = self.registration_survey_translations['register_button_text'][locale.language_code]
+            translation_is_incomplete = False
+            submit_button_text = self.registration_survey_translations['register_button_text'].get(locale.language_code)
             if not submit_button_text:
-                self.post_migration_report_messages['registration_survey_translation_not_found'].append(
-                    f'No translation for submit button of registration survey to locale: {locale}'
-                )
+                translation_is_incomplete = True
             if submit_button_text and len(submit_button_text) > 40:
                 # This should never happen in practice as we provide submit_button_text
                 self.stdout.write(f"Truncated survey submit button text, title={translated_survey.title}")
-
             translated_survey.submit_button_text = submit_button_text[:40] if submit_button_text else 'Register'
+
+            translated_thank_you_text = self.registration_survey_translations['thank_you_text'].get(locale.language_code)
+            if translated_thank_you_text:
+                translated_survey.thank_you_text = json.dumps([{
+                        'type': 'paragraph',
+                        'value': translated_thank_you_text,
+                    }])
+            else:
+                translation_is_incomplete = True
+
             translated_survey.save()
             if translated_survey:
                 for (admin_label, label_identifier) in [
@@ -2061,16 +2115,18 @@ class Command(BaseCommand):
                     except SurveyFormField.DoesNotExist:
                         # This field is not marked as required in the registration survey
                         continue
-                    try:
-                        field.label = self.registration_survey_translations[label_identifier][locale.language_code]
-                        field.help_text = self.registration_survey_translations[
-                            f'{label_identifier}_helptext'][locale.language_code]
-                    except KeyError:
-                        self.post_migration_report_messages['registration_survey_translation_not_found'].append(
-                            f'Incomplete translation for registration survey to locale: {locale}'
-                        )
-                        break
+                    label = self.registration_survey_translations[label_identifier].get(locale.language_code)
+                    help_text = self.registration_survey_translations[
+                        f'{label_identifier}_helptext'].get(locale.language_code)
+                    if not label or not help_text:
+                        translation_is_incomplete = True
+                    field.label = label or self.registration_survey_translations[label_identifier]['en']
+                    field.help_text = help_text or self.registration_survey_translations[
+                        f'{label_identifier}_helptext']['en']
                     field.save()
+            if translation_is_incomplete:
+                self.post_migration_report_messages['registration_survey_translation_not_found'].append(
+                    f'Incomplete translation for registration survey to locale: {locale}')
 
         self.post_migration_report_messages['other'].append(
             'Title of registration survey (Pages > Internet of Good Things [Language] > Surveys > Registration Survey) '

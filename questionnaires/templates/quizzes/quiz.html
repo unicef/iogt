@@ -22,7 +22,6 @@
                         {% for field in form %}
                             <div class="quest-item">
                                 <div class="quest-item__header">
-                                    {% field_counter form forloop form_length fields_step page %}
                                     {% field_description field %}
                                 </div>
                                 {% if field.widget_type != "checkbox" %}
@@ -35,7 +34,7 @@
                                 </div>
                             </div>
                         {% endfor %}
-                        {% include 'questionnaires/tags/terms_and_conditions.html' %}
+                        {% include 'questionnaires/tags/terms_and_conditions.html' with questionnaire=page %}
                         <div class="survey-page__btns">
                             {% render_submit_button fields_step page %}
                         </div>

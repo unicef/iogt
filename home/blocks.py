@@ -20,15 +20,15 @@ class MediaBlock(AbstractMediaChooserBlock):
 
         video_not_supported_text = _("Your browser does not support video playback.")
         audio_not_supported_text = _("Your browser does not support audio playback.")
-        # Translators: Part of this message (between %(start_link)s and %(end_link)s ) is a clickable download link
-        download_video_text = _('If you cannot view the above video, perhaps would'
-                ' you like to %(start_link)s download it? %(end_link)s.') % {
+        # Translators: Translators: This message appears below embedded video and audio on the site. Many feature phones won't be able to play embedded video/audio, so the site offers an opportunity to download the file. Part of this message (between %(start_link)s and %(end_link)s ) is a clickable download link.
+        download_video_text = _('If you cannot view the above video, you can'
+                ' instead %(start_link)sdownload it%(end_link)s.') % {
                         'start_link': '<a href={1} download>',
                         'end_link': '</a>'
                 }
-        # Translators: Part of this message (between %(start_link)s and %(end_link)s ) is a clickable download link
-        download_audio_text = _('If you cannot listen to the above audio, perhaps would'
-                ' you like to %(start_link)s download it? %(end_link)s.') % {
+        # Translators: Translators: This message appears below embedded video and audio on the site. Many feature phones won't be able to play embedded video/audio, so the site offers an opportunity to download the file. Part of this message (between %(start_link)s and %(end_link)s ) is a clickable download link.
+        download_audio_text = _('If you cannot listen to the above audio, you can'
+                ' instead %(start_link)sdownload it%(end_link)s.') % {
                         'start_link': '<a href={1} download>', 
                         'end_link': '</a>'
                 }
@@ -63,7 +63,7 @@ class MediaBlock(AbstractMediaChooserBlock):
 class SocialMediaLinkBlock(blocks.StructBlock):
     title = blocks.CharBlock(max_length=255)
     link = blocks.URLBlock()
-    image = ImageChooserBlock()
+    image = ImageChooserBlock(template='blocks/image.html')
 
     class Meta:
         icon = 'site'
@@ -72,7 +72,7 @@ class SocialMediaLinkBlock(blocks.StructBlock):
 class SocialMediaShareButtonBlock(blocks.StructBlock):
     platform = blocks.CharBlock(max_length=255)
     is_active = blocks.BooleanBlock(required=False)
-    image = ImageChooserBlock(required=False)
+    image = ImageChooserBlock(template='blocks/image.html', required=False)
 
     class Meta:
         icon = 'site'
@@ -92,10 +92,12 @@ class EmbeddedPollBlock(EmbeddedQuestionnaireBlock):
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context)
-        context.update({
-            'direct_display': value['direct_display'],
-            'page': value['poll'].specific,
-        })
+        poll = value.get('poll')
+        if poll and poll.live:
+            context.update({
+                'direct_display': value['direct_display'],
+                'questionnaire': poll.specific,
+            })
         return context
 
     class Meta:
@@ -107,10 +109,12 @@ class EmbeddedSurveyBlock(EmbeddedQuestionnaireBlock):
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context)
-        context.update({
-            'direct_display': value['direct_display'],
-            'page': value['survey'].specific,
-        })
+        survey = value.get('survey')
+        if survey and survey.live:
+            context.update({
+                'direct_display': value['direct_display'],
+                'questionnaire': survey.specific,
+            })
         return context
 
     class Meta:
@@ -122,10 +126,12 @@ class EmbeddedQuizBlock(EmbeddedQuestionnaireBlock):
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context)
-        context.update({
-            'direct_display': value['direct_display'],
-            'page': value['quiz'].specific,
-        })
+        quiz = value.get('quiz')
+        if quiz and quiz.live:
+            context.update({
+                'direct_display': value['direct_display'],
+                'questionnaire': quiz.specific,
+            })
         return context
 
     class Meta:
@@ -135,6 +141,16 @@ class EmbeddedQuizBlock(EmbeddedQuestionnaireBlock):
 class PageButtonBlock(blocks.StructBlock):
     page = blocks.PageChooserBlock()
     text = blocks.CharBlock(required=False, max_length=255)
+
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context)
+        button_page = value.get('page')
+        if button_page and button_page.live:
+            context.update({
+                'button_page': button_page.specific,
+                'text': value.get('text') or button_page.title
+            })
+        return context
 
     class Meta:
         template = 'blocks/page_button.html'
@@ -146,10 +162,12 @@ class ArticleBlock(blocks.StructBlock):
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context)
-        context.update({
-            'display_section_title': value['display_section_title'],
-            'page': value['article'].specific,
-        })
+        article = value.get('article')
+        if article and article.live:
+            context.update({
+                'display_section_title': value['display_section_title'],
+                'article': article.specific,
+            })
         return context
 
     class Meta:

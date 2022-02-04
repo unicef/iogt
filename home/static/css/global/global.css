@@ -37,6 +37,7 @@
 .lead-img {
   width: 100%;
   height: auto;
+  border-radius: 8px;
 }
 
 .featured-content {
@@ -228,6 +229,10 @@
   font-weight: 400;
   font-size: 10px;
   line-height: 16px;
+}
+
+.quiz-page__description {
+  margin-bottom: 10px;
 }
 
 .article__content--video a, .article__content--audio a {
@@ -1771,6 +1776,10 @@ body.rtl {
   align-items: center;
 }
 
+.btn-primary.menu-item .icon-holder {
+  justify-content: center;
+}
+
 .btn-primary .icon-holder img {
   max-width: 14px;
   max-height: 100%;
@@ -1956,6 +1965,7 @@ body.rtl {
 }
 
 .survey-page__description img {
+  width: 100%;
   height: auto;
 }
 /* questionnaires end */

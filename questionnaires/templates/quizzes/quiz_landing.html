@@ -3,62 +3,29 @@
 
 {% block extra_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/quiz.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/questionnaire.css' %}">
 {% endblock %}
 
 {% block content %}
     <div class="quiz-page">
         <div class="container">
             <div class="quiz-page__banner quiz-answer-banner">
-                {% if page.thank_you_text %}
-                    <div class="quiz-answer__description">{{ page.thank_you_text }}</div>{% endif %}
+                <h1 class="title">{{ page.title }}</h1>
                 <div class="quiz-answer-banner__content">
                     <p class="quiz-answer-banner__counter">{{ result|get_item:'total_correct' }}
                         / {{ result|get_item:'total' }}</p>
                     <p class="quiz-answer-banner__result-text">{% translate "Your results!" %}</p>
                 </div>
+                {% include 'questionnaires/tags/quiz_buttons.html' %}
+                {% if page.thank_you_text %}
+                    <div class="quiz-page__description">{{ page.thank_you_text }}</div>
+                {% endif %}
                 <div class="quiz-answer-banner__answers">
                     <div class="quiz-answer-banner__answer success">{{ result|get_item:'total_correct' }}
                         {% translate "Correct" %}
                     </div>
                     <div class="quiz-answer-banner__answer error">
                         {% subtract result|get_item:'total' result|get_item:'total_correct' %} {% translate "Incorrect" %}</div>
-                </div>
-                <div class="quiz-answer-banner__btns">
-                    <a href="{% if back_url != None %}{{ back_url }}{% else %}/{% endif %}"
-                       class="icon-btn icon-btn--md icon-btn--white icon-btn--rounded quiz-answer-banner__btn">
-                        <span class="icon-btn__icon">
-                            <svg width="4" height="8" viewBox="0 0 8 14"
-                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M7 13L1 7.0005L7 1" stroke="#303030"
-                                      stroke-width="1.5" stroke-linecap="round"
-                                      stroke-linejoin="round"></path>
-                            </svg>
-                        </span>
-                        <span class="icon-btn__title">{% translate "Back" %}</span>
-                    </a><a href="{{ page.url }}"
-                           class="icon-btn icon-btn--md icon-btn--dark icon-btn--rounded quiz-answer-banner__btn">
-                    <span class="icon-btn__icon">
-                        <svg width="10" height="10" viewBox="0 0 10 10"
-                             fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M8.98163 2.10416V4.27603H6.80975"
-                                  stroke="white" stroke-width="1.1456"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"></path>
-                            <path d="M1.01837 7.89584V5.72397H3.19025"
-                                  stroke="white" stroke-width="1.1456"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"></path>
-                            <path d="M1.92694 3.91391C2.11052 3.39511 2.42254 2.93128 2.83387 2.56569C3.2452 2.20009 3.74243 1.94466 4.27918 1.82321C4.81593 1.70176 5.3747 1.71827 5.90335 1.87118C6.432 2.02409 6.91329 2.30843 7.30233 2.69766L8.98191 4.27589M1.01837 5.7238L2.69795 7.30203C3.08699 7.69126 3.56829 7.9756 4.09694 8.12851C4.62558 8.28143 5.18435 8.29793 5.7211 8.17648C6.25785 8.05503 6.75509 7.7996 7.16642 7.434C7.57775 7.06841 7.88976 6.60458 8.07335 6.08578"
-                                  stroke="white" stroke-width="1.1456"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"></path>
-                            <clipPath>
-                                <rect width="8.6875" height="8.6875"
-                                      fill="white"
-                                      transform="translate(0.65625 0.65625)"></rect></clipPath></svg>
-                    </span>
-                    <span class="icon-btn__title">{% translate "Replay Quiz" %}</span>
-                </a>
                 </div>
             </div>
             <div class="quiz-page__content" tabindex="0">
@@ -69,11 +36,6 @@
                                 {% if fields_info|get_item:field.name|get_item:'is_correct' %}
                                     {% translate "Correct" %}{% else %}
                                     {% translate "Incorrect" %}{% endif %}</p>
-                            <p class="quest-item__number">
-                                {% blocktranslate trimmed with counter=forloop.counter total=form.fields|length %}
-                                    {{ counter }} of {{ total }} questions
-                                {% endblocktranslate %}
-                            </p>
                         </div>
                         <div class="quest-item__desc">
                             <p>{{ field.label }}</p>
@@ -104,11 +66,12 @@
                             {% if field|length > 1 %}
                                 {% for field_option in field %}
                                     <div class="quest-item__content" tabindex="0">
-                                        <label class="cust-check cust-check--2 quest-item__input
-                                                {% get_answer_rendering_class field field_option fields_info %}"
+                                        {% get_answer_options field field_option fields_info as answer_options %}
+                                        <label class="cust-check cust-check--2 quest-item__input {{ answer_options.class }}"
                                                tabindex="0">
                                             <div class="cust-check__title">
-                                                <span class="cust-check__check"></span>
+                                                <span class="cust-check__check"
+                                                      aria-label="{{ answer_options.aria_label }}"></span>
                                                 <span>{{ field_option.choice_label }}</span>
                                             </div>
                                         </label>
@@ -145,6 +108,7 @@
                         {% endif %}
                     </div>
                 {% endfor %}
+                {% include 'questionnaires/tags/quiz_buttons.html' %}
             </div>
         </div>
     </div>

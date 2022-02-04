@@ -26,6 +26,23 @@ WAGTAILTRANSFER_SOURCES = {
    },
 }
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.environ.get('LOG_LEVEL', 'INFO')
+        }
+    },
+}
+
+
 try:
     from .local import *
 except ImportError:
