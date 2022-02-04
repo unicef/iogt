@@ -20,15 +20,15 @@ class MediaBlock(AbstractMediaChooserBlock):
 
         video_not_supported_text = _("Your browser does not support video playback.")
         audio_not_supported_text = _("Your browser does not support audio playback.")
-        # Translators: Part of this message (between %(start_link)s and %(end_link)s ) is a clickable download link
-        download_video_text = _('If you cannot view the above video, perhaps would'
-                ' you like to %(start_link)s download it? %(end_link)s.') % {
+        # Translators: Translators: This message appears below embedded video and audio on the site. Many feature phones won't be able to play embedded video/audio, so the site offers an opportunity to download the file. Part of this message (between %(start_link)s and %(end_link)s ) is a clickable download link.
+        download_video_text = _('If you cannot view the above video, you can'
+                ' instead %(start_link)sdownload it%(end_link)s.') % {
                         'start_link': '<a href={1} download>',
                         'end_link': '</a>'
                 }
-        # Translators: Part of this message (between %(start_link)s and %(end_link)s ) is a clickable download link
-        download_audio_text = _('If you cannot listen to the above audio, perhaps would'
-                ' you like to %(start_link)s download it? %(end_link)s.') % {
+        # Translators: Translators: This message appears below embedded video and audio on the site. Many feature phones won't be able to play embedded video/audio, so the site offers an opportunity to download the file. Part of this message (between %(start_link)s and %(end_link)s ) is a clickable download link.
+        download_audio_text = _('If you cannot listen to the above audio, you can'
+                ' instead %(start_link)sdownload it%(end_link)s.') % {
                         'start_link': '<a href={1} download>', 
                         'end_link': '</a>'
                 }
