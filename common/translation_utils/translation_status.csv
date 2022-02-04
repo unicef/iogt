@@ -100,14 +100,14 @@ Description at survey page,BE,not needed,,not needed,,,
 User,BE,not needed,,not needed,,,
 Submission Date,BE,not needed,,not needed,,,
 Page URL,BE,not needed,,not needed,,,
-survey,,translate,,has translation (improvised),ok,Surveys,
+survey,,translate,,TODO,ok,Surveys,
 surveys,BE,not needed,,not needed,,,
 Dropdown,BE,not needed,,not needed,,,
 This option allows the users to see the results.,BE,not needed,,not needed,,,
 "If not checked, the results will be shown as a total instead of a percentage.",BE,not needed,,not needed,,,
 General settings for poll,BE,not needed,,not needed,,,
 Description at poll page,BE,not needed,,not needed,,,
-poll,,translate,,has translation (improvised),ok,Polls,
+poll,,translate,,TODO,ok,Polls,
 polls,BE,not needed,,not needed,,,
 correct_answer,BE,not needed,,not needed,,,
 "The correct answer/choice(s). For checkboxes: a comma separated list of choices. For checkbox: Either ""on"" or ""off"".",BE,not needed,,unused,,,
@@ -181,8 +181,8 @@ The comment has been updated successfully!,Comment,not needed,,unused,,,
 Sent Reply successfully,Comment,not needed,,not needed,,,
 Your browser does not support the video tag.,,remove,,unused,,,redundant?
 Your browser does not support the audio element.,,remove,,unused,,,redundant?
-"If you cannot view the above video, perhaps would you like to %(start_link)s download it? %(end_link)s.",FE,remove,,TODO,,,rephrase?
-"If you cannot listen to the above audio, perhaps would you like to %(start_link)s download it? %(end_link)s.",FE,remove,,TODO,,,rephrase?
+"If you cannot view the above video, perhaps would you like to %(start_link)s download it? %(end_link)s.",FE,remove,,unused,,,rephrase?
+"If you cannot listen to the above audio, perhaps would you like to %(start_link)s download it? %(end_link)s.",FE,remove,,unused,,,rephrase?
 [This page is not available in English],FE,translate,,unused,,,"v1 has: That page is not translatable (missing: mg, ru, zu, ti, tg, uz, kaa)"
 sections,FE,translate,,needs translation,,,
 articles,FE,translate,,has translation,,,
@@ -212,7 +212,7 @@ Password Reset,FE,translate,,unused,,Reset PIN,
 Reset My Password,FE,translate,,unused,,Reset PIN,
 Please contact us if you have any trouble resetting your password.,,remove,,TODO,,,We don’t really want to get contacted?
 "If you don’t receive an email, please make sure you've entered the address you registered with, and check your spam folder. ",FE,translate,,unused,,"If you don’t receive an email, please make sure you've entered the address you registered with, and check your spam folder. ",
-quiz,FE,translate,,has translation (improvised),ok,Quizzes,
+quiz,FE,translate,,TODO,ok,Quizzes,
 quizzes,FE,translate,,has translation,,,
 Your answer,FE,translate,,has translation,,,
 POLL,FE,translate,,unused,ok,Polls,
@@ -430,3 +430,5 @@ Replay Survey,,not needed,,unused,,,
 Replay,,not needed,,unused,,,
 pop,,,js,needs translation,,,
 shift,,,js,needs translation,,,
+"If you cannot view the above video, you can instead %(start_link)sdownload it%(end_link)s.",,,,needs translation,,,
+"If you cannot listen to the above audio, you can instead %(start_link)sdownload it%(end_link)s.",,,,needs translation,,,
