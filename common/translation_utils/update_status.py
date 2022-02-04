@@ -57,6 +57,9 @@ def update_status_run():
 
     def process_po(po, is_js=False):
         for entry in po:
+            # Dirty fix because makemessages produces garbage from UTF-8
+            if entry.msgid == " The Internet of Good Things":
+                entry.msgid = "© The Internet of Good Things"
             if entry.obsolete:
                 continue
             process_message(entry.msgid, is_js)
@@ -72,9 +75,9 @@ def update_status_run():
     po_msgs = set()
 
     # process those rows that are in the PO file
-    po = polib.pofile('locale/xy/LC_MESSAGES/django.po')
+    po = polib.pofile('locale/xy/LC_MESSAGES/django.po', encoding='UTF-8')
     process_po(po)
-    pojs = polib.pofile('locale/xy/LC_MESSAGES/djangojs.po')
+    pojs = polib.pofile('locale/xy/LC_MESSAGES/djangojs.po', encoding='UTF-8')
     process_po(pojs, is_js=True)
 
     # Process the remaining rows
