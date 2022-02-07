@@ -91,12 +91,11 @@ def store_to_db(self, pofile, locale, store_translations=False):
         else:
             locale_dir_name = get_locale_parent_dirname(pofile)
 
-        if not m.msgstr:
-            t = TranslationEntry.objects.filter(original=m.msgid, language=language, domain=domain).first()
-            if t:
-                if t.translation:
-                    translations_to_keep.append(m.msgid)
-                    continue
+        t = TranslationEntry.objects.filter(original=m.msgid, language=language, domain=domain).first()
+        if t:
+            if t.translation:
+                translations_to_keep.append(m.msgid)
+                continue
 
         t, created = TranslationEntry.objects.update_or_create(
             original=m.msgid,
