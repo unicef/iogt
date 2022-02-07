@@ -1,9 +1,8 @@
-import urllib
 from urllib.parse import unquote
 
 from django.conf import settings
 from django.conf.urls.i18n import is_language_prefix_patterns_used
-from django.http.response import HttpResponseRedirect
+from django.http.response import HttpResponsePermanentRedirect
 from django.middleware.locale import LocaleMiddleware as DjangoLocaleMiddleware
 from django.utils import translation
 from django.utils.deprecation import MiddlewareMixin
@@ -94,6 +93,6 @@ class CustomRedirectMiddleware(RedirectMiddleware):
             page = V1PageURLToV2PageMap.get_page_or_none(url)
 
             if page:
-                return HttpResponseRedirect(page.url)
+                return HttpResponsePermanentRedirect(page.url)
 
         return return_value

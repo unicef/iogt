@@ -551,6 +551,11 @@ img {
     padding: 5px;
 }
 
+.messages li.error {
+  color: #FFFFFF;
+  background-color: #FF0000;
+}
+
 input:focus, input:focus-visible {
     outline: none;
 }
@@ -2357,4 +2362,20 @@ textarea:focus ~ .cust-input__length-text {
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;
     border-radius: 8px;
+}
+
+.single-column-view {
+  display: none;
+}
+
+@media only screen and (max-width: 767px) {
+  .single-column-view {
+    display: flex;
+  }
+}
+
+.questionnaire-container {
+  padding: 10px;
+  margin-top: 16px;
+  border-radius: 8px;
 }

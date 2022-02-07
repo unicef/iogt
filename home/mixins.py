@@ -13,11 +13,22 @@ class PageUtilsMixin:
         return Section.objects.parent_of(self).type(Section).first()
 
     @cached_property
+    def is_first_content(self):
+        from .models import Article, Section, PageLinkPage
+
+        rv = False
+        if isinstance(self, (Section, Article, PageLinkPage)):
+            parent = self.get_parent().specific
+            children = list(parent.get_children().live().specific().order_by('path'))
+            index = children.index(self)
+            if index == 0 and parent.larger_image_for_top_page_in_list_as_in_v1:
+                rv = True
+
+        return rv
+
+    @cached_property
     def get_type(self):
         return self.__class__.__name__.lower()
-
-    def get_url(self):
-        return self.url
 
 
 class TitleIconMixin:
@@ -28,7 +39,7 @@ class TitleIconMixin:
     def get_page(self):
         return self
 
-    def get_icon_url(self):
+    def get_icon(self):
         from wagtail.images.views.serve import generate_image_url
 
         class Icon(object):

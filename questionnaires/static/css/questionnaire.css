@@ -20,7 +20,6 @@
 .quest-item__step-desc {
     -webkit-align-items: center;
     align-items: center;
-    border-left: 1px solid #efefef;
     color: #9a9a9a;
     display: -webkit-flex;
     display: flex;
@@ -28,9 +27,11 @@
     font-weight: 500;
     letter-spacing: .1em;
     line-height: 12px;
-    margin-left: 8px;
-    padding-left: 8px;
-    text-transform: uppercase
+    text-transform: uppercase;
+    /*TODO: uncomment after fixing counter*/
+    /*border-left: 1px solid #efefef;*/
+    /*margin-left: 8px;*/
+    /*padding-left: 8px;*/
 }
 
 .quest-item__step-desc:before {
@@ -51,4 +52,10 @@
 
 .survey-page__already-completed {
     color: #FF0000;
+}
+
+.questionnaire-footer {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
 }

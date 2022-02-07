@@ -24,7 +24,6 @@ from iogt_users.models import User
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (FieldPanel, InlinePanel,
                                          MultiFieldPanel, StreamFieldPanel)
-from wagtail.contrib.forms.edit_handlers import FormSubmissionsPanel
 from wagtail.contrib.forms.models import (AbstractForm, AbstractFormField,
                                           AbstractFormSubmission)
 from wagtail.core import blocks
@@ -33,6 +32,7 @@ from wagtail.core.models import Page
 from wagtail.images.blocks import ImageChooserBlock
 
 from questionnaires.blocks import SkipState, SkipLogicField
+from questionnaires.edit_handlers import FormSubmissionsPanel
 from questionnaires.forms import CustomFormBuilder, SurveyForm, QuizForm
 from questionnaires.utils import SkipLogicPaginator, FormHelper
 from questionnaires.views import CustomSubmissionsListView
@@ -64,7 +64,7 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
             ('heading', blocks.CharBlock(form_classname="full title", template='blocks/heading.html')),
             ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
             ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
-            ("image", ImageChooserBlock()),
+            ("image", ImageChooserBlock(template='blocks/image.html')),
             ('list', MarkdownBlock(icon='code')),
             ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
             ('page_button', PageButtonBlock()),
@@ -74,9 +74,9 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
     )
     thank_you_text = StreamField(
         [
-            ("paragraph", blocks.RichTextBlock()),
+            ("paragraph", blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
             ("media", MediaBlock(icon="media")),
-            ("image", ImageChooserBlock()),
+            ("image", ImageChooserBlock(template='blocks/image.html')),
         ],
         null=True,
         blank=True,
@@ -103,7 +103,7 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
 
     terms_and_conditions = StreamField(
         [
-            ("paragraph", blocks.RichTextBlock()),
+            ("paragraph", blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
             ('page_button', PageButtonBlock()),
         ],
         null=True,
@@ -282,6 +282,10 @@ class SurveyFormField(AbstractFormField):
         default='',
         help_text=_('Safe name of the form field, the label converted to ascii_snake_case')
     )
+    label = models.TextField(
+        verbose_name=_('label'),
+        help_text=_('The label of the form field')
+    )
     field_type = models.CharField(
         verbose_name=_('field type'),
         max_length=16,
@@ -446,6 +450,9 @@ class Survey(QuestionnairePage, AbstractForm):
         context.update({'form_length': request.GET.get('form_length')})
         return context
 
+    def has_required_fields(self):
+        return self.survey_form_fields.filter(required=True).exists()
+
     class Meta:
         verbose_name = _("survey")
         verbose_name_plural = _("surveys")
@@ -481,6 +488,10 @@ class PollFormField(AbstractFormField):
         blank=True,
         default='',
         help_text=_('Safe name of the form field, the label converted to ascii_snake_case')
+    )
+    label = models.TextField(
+        verbose_name=_('label'),
+        help_text=_('The label of the form field')
     )
     field_type = models.CharField(
         verbose_name=_('field type'),
@@ -657,6 +668,10 @@ class QuizFormField(AbstractFormField):
         default='',
         help_text=_('Safe name of the form field, the label converted to ascii_snake_case')
     )
+    label = models.TextField(
+        verbose_name=_('label'),
+        help_text=_('The label of the form field')
+    )
     field_type = models.CharField(
         verbose_name=_('field type'),
         max_length=16,
@@ -689,11 +704,12 @@ class QuizFormField(AbstractFormField):
         help_text=_('The correct answer/choice(s). '
                     'If multiple choices are correct, separate choices with a pipe (|) symbol. '
                     'For checkbox: Either "true" or "false".'))
-    feedback = models.CharField(verbose_name=_('Feedback'),
-                                max_length=255,
-                                help_text=_('Feedback message for user answer.'),
-                                null=True,
-                                blank=True)
+    feedback = models.TextField(
+        verbose_name=_('Feedback'),
+        null=True,
+        blank=True,
+        help_text=_('Feedback message for user answer.')
+    )
 
     panels = [
         FieldPanel('label'),

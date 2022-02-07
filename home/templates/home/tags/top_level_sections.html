@@ -2,10 +2,8 @@
 
 <section class="top-level">
     <nav>
-        {% for page in pages %}
-            {% get_page_url page as page_url %}
-            {% get_icon_url page as icon_url %}
-            {% primary_button title=page.title href=page_url font_color=page.font_color background_color=page.background_color icon_path=icon_url.url is_svg_icon=icon_url.is_svg_icon %}
+        {% for top_level_section in top_level_sections %}
+            {% primary_button title=top_level_section.title href=top_level_section.url font_color=top_level_section.font_color background_color=top_level_section.background_color icon=top_level_section.get_icon %}
         {% endfor %}
     </nav>
 </section>

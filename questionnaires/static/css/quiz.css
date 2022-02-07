@@ -111,10 +111,11 @@
 }
 
 .quest-item__status {
-    border-right: 1px solid #efefef;
-    font-size: 8px;
+    /*TODO: uncomment after fixing counter*/
+    /*border-right: 1px solid #efefef;*/
+    font-size: 12px;
     font-weight: 800;
-    line-height: 12px;
+    line-height: 18px;
     margin: 0;
     margin-right: 8px;
     padding-right: 8px
@@ -140,17 +141,4 @@
     align-items: center;
     display: -webkit-flex;
     display: flex
-}
-
-.quiz-answer-banner__btns {
-    -webkit-justify-content: space-between;
-    justify-content: space-between;
-    padding: 12px 0
-}
-
-.quiz-answer-banner__btn {
-    -webkit-justify-content: center;
-    justify-content: center;
-    white-space: nowrap;
-    width: auto;
 }

@@ -1,8 +1,10 @@
 from django import template
-from django.urls import translate_url
-from wagtail.core.models import Locale, Site
+from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import get_object_or_404
+from django.urls import translate_url, reverse, resolve, Resolver404
+from wagtail.core.models import Locale, Site, Page
 
-from home.models import SectionIndexPage, Section, Article, FooterIndexPage, PageLinkPage, LocaleDetail
+from home.models import SectionIndexPage, Section, Article, FooterIndexPage, PageLinkPage, LocaleDetail, HomePage
 from iogt.settings.base import LANGUAGES
 
 register = template.Library()
@@ -10,29 +12,43 @@ register = template.Library()
 
 @register.inclusion_tag('home/tags/language_switcher.html', takes_context=True)
 def language_switcher(context, page):
-    if page:
-        translations = []
-        pages = page.get_translations(inclusive=True).select_related('locale', 'locale__locale_detail')
-        for page in pages:
-            try:
-                if page.locale.locale_detail.is_active:
-                    translations.append(page)
-            except LocaleDetail.DoesNotExist:
-                translations.append(page)
-        context.update({
-            'translations': translations,
-        })
+    """
+    This template tag has evolved over time. The current requirement for this is really tricky.
+    See https://github.com/unicef/iogt/pull/955#issuecomment-1008277982 for more context on why this logic is
+    complicated.
+    """
 
-
-    default_locales = []
+    switcher_locales = list()
     locales = Locale.objects.select_related('locale_detail').all()
+
+    try:
+        if resolve(context.request.path_info).url_name == 'translation-not-found':
+            page = get_object_or_404(Page, pk=context.request.GET.get('page'), live=True)
+    except Resolver404:
+        pass
+
     for locale in locales:
         try:
-            if locale.locale_detail.is_active:
-                default_locales.append(locale)
+            should_append = locale.locale_detail.is_active
         except LocaleDetail.DoesNotExist:
-            default_locales.append(locale)
-    context.update({'default_locales': default_locales})
+            should_append = True
+
+        if should_append:
+            if page:  # If the current URL belongs to a wagtail page
+                translated_page = page and page.get_translation_or_none(locale)
+                if translated_page and translated_page.live:
+                    url = translated_page.url
+                else:
+                    translated_url = translate_url(reverse('translation-not-found'), locale.language_code)
+                    url = f'{translated_url}?page={page.id}'
+            else:  # If the current URL belongs to a django view
+                url = translate_url(context.request.path_info, locale.language_code)
+
+            switcher_locales.append((locale, url))
+
+    context.update({
+        'locales': switcher_locales,
+    })
 
     return context
 
@@ -48,7 +64,7 @@ def render_previous_next_buttons(page):
 @register.inclusion_tag('home/tags/footer.html', takes_context=True)
 def render_footer(context):
     return {
-        'pages': FooterIndexPage.get_active_footers(),
+        'footers': FooterIndexPage.get_active_footers(),
         'request': context['request'],
     }
 
@@ -56,7 +72,7 @@ def render_footer(context):
 @register.inclusion_tag('home/tags/top_level_sections.html', takes_context=True)
 def render_top_level_sections(context):
     return {
-        'pages': SectionIndexPage.get_top_level_sections(),
+        'top_level_sections': SectionIndexPage.get_top_level_sections(),
         'request': context['request'],
     }
 
@@ -99,20 +115,6 @@ def translated_home_page_url(language_code):
 def change_lang(context, lang=None, *args, **kwargs):
     path = context['request'].path
     return translate_url(path, lang)
-
-
-@register.simple_tag
-def is_first_content(page, value):
-    is_first_content = False
-    if value == 0 and page.get_parent().specific.larger_image_for_top_page_in_list_as_in_v1:
-        is_first_content = True
-
-    return is_first_content
-
-
-@register.simple_tag
-def get_page(page):
-    return page.get_page()
 
 
 @register.inclusion_tag('wagtailadmin/shared/field_as_li.html')

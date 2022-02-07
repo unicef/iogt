@@ -4,18 +4,19 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/questionnaires.css' %}">
 {% endblock %}
 
-<div class="questionnaire-container container">
-    <h1 class="title {{ page.get_type }}-page__title">{{ page.title }}</h1>
-    {% if user.is_authenticated or request.is_preview or page.allow_anonymous_submissions %}
+<div class="questionnaire-container container"
+     style="color:{{ font_color }}; background:{{ background_color }};">
+    <h1 class="title {{ questionnaire.get_type }}-page__title">{{ questionnaire.title }}</h1>
+    {% if user.is_authenticated or request.is_preview or questionnaire.allow_anonymous_submissions %}
         {% if form %}
-            <form action="{% get_action_url page page fields_step request form %}" method="POST">
+            {{ questionnaire.description }}
+            <form action="{% get_action_url questionnaire questionnaire fields_step request form %}" method="POST">
                 {% csrf_token %}
-                <div class="{{ page.get_type }}-page__content">
+                <div class="{{ questionnaire.get_type }}-page__content">
                     {% for field in form %}
                         <div class="quest-item">
                             <div class="quest-item__header">
                                 <div class="quest-item__header">
-                                    {% field_counter form forloop form_length fields_step page %}
                                     {% field_description field %}
                                 </div>
                             </div>
@@ -28,9 +29,9 @@
                         </div>
                     {% endfor %}
                 </div>
-                {% include 'questionnaires/tags/terms_and_conditions.html' %}
-                <button type="submit" class="cust-btn cust-btn--dark {{ page.get_type }}-page__btn">
-                    <span>{{ page.submit_button_text }}</span>
+                {% include 'questionnaires/tags/terms_and_conditions.html' with questionnaire=questionnaire %}
+                <button type="submit" class="cust-btn cust-btn--dark {{ questionnaire.get_type }}-page__btn">
+                    <span>{{ questionnaire.submit_button_text }}</span>
                 </button>
             </form>
         {% else %}

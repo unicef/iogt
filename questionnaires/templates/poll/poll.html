@@ -25,7 +25,6 @@
                                 {% for field in form %}
                                     <div class="quest-item" tabindex="0">
                                         <div class="quest-item__header">
-                                            {% field_counter form forloop form_length fields_step page %}
                                             {% field_description field %}
                                         </div>
                                         <div class="quest-item__desc">
@@ -36,7 +35,7 @@
                                         {% render_field field %}
                                     </div>
                                 {% endfor %}
-                                {% include 'questionnaires/tags/terms_and_conditions.html' %}
+                                {% include 'questionnaires/tags/terms_and_conditions.html' with questionnaire=page %}
                                 {% render_submit_button fields_step page %}
                             </form>
                         {% else %}

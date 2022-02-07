@@ -13,18 +13,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-msgid "POLL"
-msgstr "UTAFITI"
-
-msgid "SURVEY"
-msgstr "UCHUNGUZI"
-
-msgid "QUIZ"
-msgstr "MASWALI"
-
-msgid "quiz"
-msgstr "maswali"
-
 msgid "quizzes"
 msgstr "maswali"
 
@@ -182,27 +170,18 @@ msgstr "Samahani, ukurasa huu haukuweza kupatikana."
 msgid "Internal server error"
 msgstr "Hitilafu ya seva ya ndani"
 
-msgid "4-digit PIN"
-msgstr "Namba ya siri ya tarakimu 4"
-
-msgid "Confirm new 4-digit PIN"
-msgstr "Thibitisha PINI"
-
-msgid "Old 4-digit PIN"
-msgstr "Nenosiri ya zamani"
-
-msgid "New 4-digit PIN"
-msgstr "Unda pini ya tarakimu 4"
-
 msgid "1 result"
 msgid_plural "%(counter)s results"
 msgstr[0] "Matokeo yote ya 1"
 msgstr[1] "Matokeo yote ya %(counter)s"
 
-msgid "Correct answer"
-msgstr "Sahihi"
-
 msgid "This field is required."
+msgstr ""
+
+msgid "survey"
+msgstr ""
+
+msgid "poll"
 msgstr ""
 
 msgid "Send"
@@ -229,6 +208,12 @@ msgstr ""
 msgid "New comments have been disabled for this page."
 msgstr ""
 
+msgid "quiz"
+msgstr ""
+
+msgid "Correct answer"
+msgstr ""
+
 msgid "Download"
 msgstr ""
 
@@ -240,13 +225,19 @@ msgstr ""
 msgid "Continue to external site"
 msgstr ""
 
+msgid "4-digit PIN"
+msgstr ""
+
+msgid "Old 4-digit PIN"
+msgstr ""
+
+msgid "New 4-digit PIN"
+msgstr ""
+
+msgid "Confirm new 4-digit PIN"
+msgstr ""
+
 msgid "Log out"
-msgstr ""
-
-msgid "Reported by %(count)s user"
-msgstr ""
-
-msgid "Reported by %(count)s users"
 msgstr ""
 
 msgid "section"
@@ -318,4 +309,37 @@ msgid "Report this comment?"
 msgstr ""
 
 msgid "Display name"
+msgstr ""
+
+msgid "Reported by %(comment_report_count)s user"
+msgstr ""
+
+msgid "Reported by %(comment_report_count)s users"
+msgstr ""
+
+msgid ""
+"Sorry, %(page_title)s is not available in %(language)s. If you want to keep "
+"browsing in %(language)s you can click below to return to the homepage."
+msgstr ""
+
+msgid "Username not available."
+msgstr ""
+
+msgid "Display name not available."
+msgstr ""
+
+msgid "You have already completed this quiz."
+msgstr ""
+
+msgid "You have already completed this poll."
+msgstr ""
+
+msgid ""
+"If you cannot view the above video, you can instead %(start_link)sdownload "
+"it%(end_link)s."
+msgstr ""
+
+msgid ""
+"If you cannot listen to the above audio, you can instead "
+"%(start_link)sdownload it%(end_link)s."
 msgstr ""
