@@ -13,25 +13,25 @@
             {{ questionnaire.description }}
             <form action="{% pageurl questionnaire %}?back_url={{ request.path }}" method="POST">
                 {% csrf_token %}
-                    {% for field in form %}
-                        <div class="quest-item">
+                {% for field in form %}
+                    <div class="quest-item">
+                        <div class="quest-item__header">
                             <div class="quest-item__header">
-                                <div class="quest-item__header">
-                                    {% field_description field %}
-                                </div>
+                                {% field_description field %}
                             </div>
-                            <div class="quest-item__desc">
-                                {% if field.widget_type != "checkbox" %}
-                                    <p>{{ field.label }}</p>
-                                {% endif %}
-                            </div>
-                            {% render_field field %}
                         </div>
-                    {% endfor %}
+                        <div class="quest-item__desc">
+                            {% if field.widget_type != "checkbox" %}
+                                <p>{{ field.label }}</p>
+                            {% endif %}
+                        </div>
+                        {% render_field field %}
+                    </div>
+                {% endfor %}
                 {% include 'questionnaires/tags/terms_and_conditions.html' with questionnaire=questionnaire %}
-                <button type="submit" class="cust-btn cust-btn--dark polls-widget__submit">
-                    <span>{{ questionnaire.submit_button_text }}</span>
-                </button>
+                <div class="survey-page__btns">
+                    {% render_submit_button fields_step questionnaire %}
+                </div>
             </form>
         {% else %}
             {% include 'questionnaires/tags/already_completed.html' %}
@@ -45,7 +45,8 @@
                                     <span>{{ answer }}</span>
                                 </div>
                                 <div class="cust-check__title-right">
-                                    <span class="cust-check__percent">{{ count|floatformat:"0" }}{% if result_as_percentage %}%{% endif %}</span>
+                                    <span class="cust-check__percent">{{ count|floatformat:"0" }}
+                                            {% if result_as_percentage %}%{% endif %}</span>
                                 </div>
                                 <div class="cust-check__percent-item"
                                      style="width: {{ count |floatformat:"0" }}%"></div>
