@@ -31,3 +31,9 @@ msgstr ""
 "choose 'Add to home screen' and you should be all set! If you are using a "
 "iOS device, you can install it by clicking 'Share', scrolling down and "
 "tapping 'Add to Home Screen.)"
+
+msgid "pop"
+msgstr "([not-needed]-pop)"
+
+msgid "shift"
+msgstr "([not-needed]-shift)"

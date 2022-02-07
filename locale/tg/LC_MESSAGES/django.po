@@ -13,15 +13,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-msgid "poll"
-msgstr "назарсанҷиҳо"
-
-msgid "survey"
-msgstr "пурсишҳо"
-
-msgid "quiz"
-msgstr "тестҳои кӯтоҳ"
-
 msgid "quizzes"
 msgstr "тестҳои кӯтоҳ"
 
@@ -188,6 +179,12 @@ msgstr[1] "Натиҷаи ҳамаи %(counter)s"
 msgid "This field is required."
 msgstr ""
 
+msgid "survey"
+msgstr ""
+
+msgid "poll"
+msgstr ""
+
 msgid "Send"
 msgstr ""
 
@@ -210,6 +207,9 @@ msgid "Check if applies"
 msgstr ""
 
 msgid "New comments have been disabled for this page."
+msgstr ""
+
+msgid "quiz"
 msgstr ""
 
 msgid "Correct answer"
@@ -333,4 +333,14 @@ msgid "You have already completed this quiz."
 msgstr ""
 
 msgid "You have already completed this poll."
+msgstr ""
+
+msgid ""
+"If you cannot view the above video, you can instead %(start_link)sdownload "
+"it%(end_link)s."
+msgstr ""
+
+msgid ""
+"If you cannot listen to the above audio, you can instead "
+"%(start_link)sdownload it%(end_link)s."
 msgstr ""
