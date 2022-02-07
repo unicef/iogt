@@ -218,7 +218,7 @@ ACCOUNT_FORMS = {
 
 # Wagtail settings
 
-WAGTAIL_SITE_NAME = "iogt"
+WAGTAIL_SITE_NAME = "IoGT"
 ACCOUNT_ADAPTER = 'iogt_users.adapters.AccountAdapter'
 
 WAGTAIL_USER_EDIT_FORM = 'iogt_users.forms.WagtailAdminUserEditForm'
