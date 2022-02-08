@@ -2,8 +2,12 @@
 
 <section class='banner-holder'>
     {% for banner in banners %}
-        <a href="{% pageurl banner.banner_link_page %}">
-            {% image banner.banner_image width-360 %}
-        </a>
+        {% if banner.banner_link_page == None %}
+            <a>{% image banner.banner_image width-360 %}</a>
+        {% else %}
+            <a href="{% pageurl banner.banner_link_page %}">
+                {% image banner.banner_image width-360 %}
+            </a>
+        {% endif %}
     {% endfor %}
 </section>
