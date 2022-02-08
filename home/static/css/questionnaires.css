@@ -28,7 +28,7 @@
     margin-bottom: 0
 }
 
-.survey-page__btns {
+.poll-page__btns, .survey-page__btns, .quiz-page__btns {
     padding-bottom: 32px
 }
 
