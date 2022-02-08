@@ -32,9 +32,11 @@ $(document).ready(() => {
     const commentReplyLinks = $('.reply-link');
     const chatbotBtnContainers = $('.chatbot-button-container');
     const offlineAppBtns = $('.block-offline_app_button');
-    const changeDigitalPinBtn = $('.change-digital-pin');
     const questionnaireSubmitBtns = $('.survey-page__btn');
     const progressHolder = $('.progress-holder');
+    const changeDigitalPinBtn = $('.change-digital-pin');
+    const loginCreateAccountBtns = $('.login-create-account-btn');
+    const logoutBtn = $('.logout-btn');
 
     const disableForOfflineAccess = () => {
         searchFormHolder.hide();
@@ -46,6 +48,8 @@ $(document).ready(() => {
         questionnaireSubmitBtns.hide();
         progressHolder.hide();
         changeDigitalPinBtn.hide();
+        loginCreateAccountBtns.hide();
+        logoutBtn.hide();
     };
 
     const enableForOnlineAccess = () => {
@@ -58,6 +62,8 @@ $(document).ready(() => {
         questionnaireSubmitBtns.show();
         progressHolder.show();
         changeDigitalPinBtn.show();
+        loginCreateAccountBtns.show();
+        logoutBtn.show();
     };
 
     $(window).on('offline', () => disableForOfflineAccess());
