@@ -32,7 +32,7 @@ $(document).ready(() => {
     const commentReplyLinks = $('.reply-link');
     const chatbotBtnContainers = $('.chatbot-button-container');
     const offlineAppBtns = $('.block-offline_app_button');
-    const questionnaireSubmitBtns = $('.survey-page__btn');
+    const questionnaireSubmitBtns = $('.questionnaire-submit-btn');
     const progressHolder = $('.progress-holder');
     const changeDigitalPinBtn = $('.change-digital-pin');
     const loginCreateAccountBtns = $('.login-create-account-btn');
@@ -45,7 +45,12 @@ $(document).ready(() => {
         commentReplyLinks.hide();
         chatbotBtnContainers.hide();
         offlineAppBtns.hide();
-        questionnaireSubmitBtns.hide();
+        questionnaireSubmitBtns.each((index, btn) => {
+            btn = $(btn);
+            btn.css('pointer-events', 'none');
+            const span = btn.find('span')
+            span.html(`${span.html()} (You cannot submit when offline)`);
+        });
         progressHolder.hide();
         changeDigitalPinBtn.hide();
         loginCreateAccountBtns.hide();
@@ -59,7 +64,12 @@ $(document).ready(() => {
         commentReplyLinks.show();
         chatbotBtnContainers.show();
         offlineAppBtns.show();
-        questionnaireSubmitBtns.show();
+        questionnaireSubmitBtns.each((index, btn) => {
+            btn = $(btn);
+            btn.css('pointer-events', 'all');
+            const span = btn.find('span')
+            span.html(`${span.html().split('(You cannot submit when offline)')[0]}`);
+        });
         progressHolder.show();
         changeDigitalPinBtn.show();
         loginCreateAccountBtns.show();
