@@ -25,162 +25,45 @@ function validateFreeBasicsFileUpload(fileInput, file_size_threshold) {
     return true;
 }
 
-const failMsg = gettext('Sorry, there seems to be an error. Please try again soon.');
-const successMsg = gettext("Your app is now ready to install. If using Android, choose 'Add to home screen' and you should be all set! If you are using a iOS device, you can install it by clicking 'Share', scrolling down and tapping 'Add to Home Screen.");
-
-const cache = async () => {
-    if ('serviceWorker' in navigator && confirm(gettext("Install this website as an app on your device?")) === true) {
-        try {
-            await navigator.serviceWorker.register(serviceWorkerURL, {scope: '/'});
-            alert(successMsg)
-        } catch {
-            alert(failMsg);
-        }
-    }
-}
-
-
 $(document).ready(() => {
-    const searchInput = $('.search-input');
-    const searchBtn = $('.js-search-btn');
-    const commentTextArea = $('#id_comment');
-    const postAnonymouslyCheckbox = $('#id_post_anonymously');
-    const cannedResponsesDropdown = $('#id_canned_responses');
-    const addCannedResponseInput = $('#id_add_canned_response');
-    const leaveCommentInput = $('#id_leave_comment');
-    const commentReplyBtns = $('.reply-link');
-    const commentLikeBtns = $('.comment-like-btn');
-    const changeDigitalPinBtns = $('.change-digital-pin');
-    const chatbotBtns = $('.chatbot-btn');
-    const downloadAppBtns = $('.download-app-btn');
+    const searchFormHolder = $('.search-form-holder');
+    const commentForm = $('.comments__form');
+    const commentLikeHolders = $('.like-holder');
+    const commentReplyLinks = $('.reply-link');
+    const chatbotBtnContainers = $('.chatbot-button-container');
+    const offlineAppBtns = $('.block-offline_app_button');
+    const changeDigitalPinBtn = $('.change-digital-pin');
     const questionnaireSubmitBtns = $('.survey-page__btn');
     const progressHolder = $('.progress-holder');
 
     const disableForOfflineAccess = () => {
-        searchInput.each((index, value) => {
-            $(value).attr('disabled', true);
-        });
-        searchBtn.each((index, value) => {
-            $(value).unbind();
-            $(value).click(() => {
-                return false;
-            })
-        });
-        commentTextArea.attr('disabled', true);
-        postAnonymouslyCheckbox.attr('disabled', true);
-        cannedResponsesDropdown.attr('disabled', true);
-        addCannedResponseInput.attr('disabled', true);
-        leaveCommentInput.attr('disabled', true);
-        commentReplyBtns.each((index, value) => {
-            $(value).unbind();
-            $(value).click(() => {
-                return false;
-            });
-        });
-        commentLikeBtns.each((index, value) => {
-            $(value).unbind();
-            $(value).click(() => {
-                return false;
-            });
-        });
-        changeDigitalPinBtns.each((index, value) => {
-            $(value).unbind();
-            $(value).click(() => {
-                return false;
-            });
-        });
-        chatbotBtns.each((index, value) => {
-            $(value).unbind();
-            $(value).click(() => {
-                return false;
-            });
-        });
-        downloadAppBtns.each((index, value) => {
-            $(value).unbind();
-            $(value).click(() => {
-                return false;
-            });
-        });
-        questionnaireSubmitBtns.each((index, value) => {
-            $(value).unbind();
-            $(value).click(() => {
-                return false;
-            });
-        });
+        searchFormHolder.hide();
+        commentForm.hide();
+        commentLikeHolders.attr('style', 'display: none !important');
+        commentReplyLinks.hide();
+        chatbotBtnContainers.hide();
+        offlineAppBtns.hide();
+        questionnaireSubmitBtns.hide();
         progressHolder.hide();
+        changeDigitalPinBtn.hide();
     };
 
     const enableForOnlineAccess = () => {
-        searchInput.each((index, value) => {
-            $(value).attr('disabled', false);
-        });
-        searchBtn.each((index, value) => {
-            $(value).unbind();
-            $(value).click(() => {
-                return true;
-            })
-        });
-        commentTextArea.attr('disabled', false);
-        postAnonymouslyCheckbox.attr('disabled', false);
-        cannedResponsesDropdown.attr('disabled', false);
-        addCannedResponseInput.attr('disabled', false);
-        leaveCommentInput.attr('disabled', false);
-        commentReplyBtns.each((index, value) => {
-            $(value).unbind();
-            $(value).click(() => {
-                return true;
-            });
-        });
-        commentLikeBtns.each((index, value) => {
-            $(value).unbind();
-            $(value).click(() => {
-                return true;
-            });
-        });
-        changeDigitalPinBtns.each((index, value) => {
-            $(value).unbind();
-            $(value).click(() => {
-                return true;
-            });
-        });
-        chatbotBtns.each((index, value) => {
-            $(value).unbind();
-            $(value).click(() => {
-                cache();
-            });
-        });
-        downloadAppBtns.each((index, value) => {
-            $(value).unbind();
-            $(value).click(() => {
-                return true;
-            });
-        });
-        questionnaireSubmitBtns.each((index, value) => {
-            $(value).unbind();
-            $(value).click(() => {
-                return true;
-            });
-        });
+        searchFormHolder.show();
+        commentForm.show();
+        commentLikeHolders.attr('style', 'display: inline-block !important');
+        commentReplyLinks.show();
+        chatbotBtnContainers.show();
+        offlineAppBtns.show();
+        questionnaireSubmitBtns.show();
         progressHolder.show();
+        changeDigitalPinBtn.show();
     };
 
-    window.addEventListener('offline', e => {
-        disableForOfflineAccess();
-    });
-
-
-    window.addEventListener('online', e => {
-        enableForOnlineAccess();
-    });
+    $(window).on('offline', () => disableForOfflineAccess());
+    $(window).on('online', () => enableForOnlineAccess());
 
     if (!window.navigator.onLine) {
         disableForOfflineAccess();
     }
-
-    downloadAppBtns.each((index, value) => {
-        $(value).unbind();
-        $(value).click(() => {
-            cache();
-        });
-    });
 });
