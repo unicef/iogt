@@ -62,11 +62,11 @@
     <div class='comments__input-holder'>
         {% if perms.django_comments_xtd.can_moderate %}
         <div class="comments__submit">
-            <input type="submit" class="reply-comment" formaction="{% url 'process_canned_response' %}#id_comment" name="post" value="{% translate 'Add Canned Response' %}" id="id_add_canned_response"/>
+            <input type="submit" class="reply-comment" formaction="{% url 'process_canned_response' %}#id_comment" name="post" value="{% translate 'Add Canned Response' %}"/>
         </div>
         {% endif %}
         <div class="comments__submit">
-            <input type="submit" class="reply-comment" formaction="{% comment_form_target %}" name="post" value="{% translate 'Leave comment' %}" id="id_leave_comment"/>
+            <input type="submit" class="reply-comment" formaction="{% comment_form_target %}" name="post" value="{% translate 'Leave comment' %}"/>
         </div>
     </div>
 </form>
