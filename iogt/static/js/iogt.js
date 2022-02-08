@@ -66,10 +66,16 @@ $(document).ready(() => {
         logoutBtn.show();
     };
 
-    $(window).on('offline', () => disableForOfflineAccess());
-    $(window).on('online', () => enableForOnlineAccess());
+    const isPWA = () => {
+        return ["fullscreen", "standalone", "minimal-ui"].some(
+            displayMode => window.matchMedia(`(display-mode: ${displayMode})`).matches
+        );
+    };
 
-    if (!window.navigator.onLine) {
-        disableForOfflineAccess();
+    if (isPWA()) {
+        $(window).on('offline', () => disableForOfflineAccess());
+        $(window).on('online', () => enableForOnlineAccess());
+
+        window.navigator.onLine ? enableForOnlineAccess() : disableForOfflineAccess();
     }
 });
