@@ -69,7 +69,7 @@ class HomePage(Page):
         ('embedded_survey', EmbeddedSurveyBlock()),
         ('embedded_quiz', EmbeddedQuizBlock()),
         ('article', ArticleBlock()),
-    ], null=True)
+    ], null=True, blank=True)
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
