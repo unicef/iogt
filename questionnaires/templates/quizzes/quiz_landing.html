@@ -30,7 +30,7 @@
             </div>
             <div class="quiz-page__content" tabindex="0">
                 {% for field in form.visible_fields %}
-                    <div class="quest-item{% if fields_info|get_item:field.name|get_item:'is_correct' %} success{% else %} error{% endif %}">
+                    <div class="quest-item{% if fields_info|get_item:field.name|get_item:'is_correct' %} successquestionnaires/templates/questionnaires/tags/submit_button.html{% else %} error{% endif %}">
                         <div class="quest-item__header">
                             <p class="quest-item__status">
                                 {% if fields_info|get_item:field.name|get_item:'is_correct' %}
