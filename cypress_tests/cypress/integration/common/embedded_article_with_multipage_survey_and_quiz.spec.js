@@ -1,4 +1,4 @@
-describe("Tests for embedded with article multi pages", () => {
+describe.skip("Tests for embedded with article multi pages", () => {
     const url = "/en/sections/questionnaire-testing/article-with-multi-page-survey-and-quiz/";
 
     it("Visits the site", () => {

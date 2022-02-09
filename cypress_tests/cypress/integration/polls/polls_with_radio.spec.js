@@ -26,7 +26,7 @@ describe("Polls with radio tests", () => {
             });
     });
 
-    it("Checks for multiple allowed submission", () => {
+    it.skip("Checks for multiple allowed submission", () => {
         cy.submit(".btn-back__title", "BACK");
         cy.get("[id=id_poll_radio_1]").click();
         cy.submit(".survey-page__btn", "Submit");

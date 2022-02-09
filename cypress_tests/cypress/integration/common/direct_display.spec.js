@@ -15,7 +15,7 @@ describe("Direct display tests for all types", () => {
         }
     ];
 
-    it("Visits the site questionnaires page", () => {
+    it.skip("Visits the site questionnaires page", () => {
         cy.visitUrl(url);
         titles.forEach(title => {
             cy.testTitle(title.text, title.selector);

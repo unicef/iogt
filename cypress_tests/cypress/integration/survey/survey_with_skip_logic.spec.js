@@ -1,4 +1,4 @@
-describe("Survey skip logic tests", () => {
+describe.skip("Survey skip logic tests", () => {
     const url = "/en/sections/questionnaire-testing/multi-page-survey-with-skip-logic/";
 
     it("Visits the survey and check for 'survey end' logic", () => {

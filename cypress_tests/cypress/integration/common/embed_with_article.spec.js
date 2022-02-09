@@ -1,4 +1,4 @@
-describe("Tests for embedded poll, survey, and quiz", () => {
+describe.skip("Tests for embedded poll, survey, and quiz", () => {
     const url = "/en/sections/questionnaire-testing/article-with-poll-survey-and-quiz/";
 
     it("Visits the article page", () => {
