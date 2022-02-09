@@ -19,9 +19,9 @@ update_elasticsearch_index:
 	docker-compose run django python manage.py update_index
 test:
 	docker-compose -f docker-compose.test.yml up --build -d django
-	docker-compose exec django python manage.py collectstatic --noinput
-	docker-compose exec django coverage run --source='.' manage.py test --settings=iogt.settings.test
-	docker-compose exec django coverage html
+	docker-compose exec -T django python manage.py collectstatic --noinput
+	docker-compose exec -T django coverage run --source='.' manage.py test --settings=iogt.settings.test
+	docker-compose exec -T django coverage html
 	docker-compose -f docker-compose.test.yml down --remove-orphans
 cypress:
 	docker-compose -f docker-compose.cypress.yml up --build -d django
