@@ -48,6 +48,7 @@ class RegistrationSurveyRedirectMiddleware:
                 and registration_survey.has_required_fields()):
             should_redirect_to_registration_survey = True
             if user.has_viewed_registration_survey and not user.has_filled_registration_survey:
+                list(messages.get_messages(request))
                 messages.add_message(
                     request, messages.ERROR, _('Please complete the questions marked as required to continue'))
 
