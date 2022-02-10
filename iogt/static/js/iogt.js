@@ -26,11 +26,15 @@ function validateFreeBasicsFileUpload(fileInput, file_size_threshold) {
 }
 
 $(document).ready(() => {
+    const submitWhenOffline = gettext('You cannot submit when offline');
+
     const searchFormHolder = $('.search-form-holder');
+    const readContent = $('.complete')
     const commentForm = $('.comments__form');
     const commentLikeHolders = $('.like-holder');
+    const reportComment = $('.report-comment');
     const commentReplyLinks = $('.reply-link');
-    const chatbotBtnContainers = $('.chatbot-button-container');
+    const chatbotBtns = $('.chatbot-btn');
     const offlineAppBtns = $('.block-offline_app_button');
     const questionnaireSubmitBtns = $('.questionnaire-submit-btn');
     const progressHolder = $('.progress-holder');
@@ -40,16 +44,22 @@ $(document).ready(() => {
 
     const disableForOfflineAccess = () => {
         searchFormHolder.hide();
+        readContent.removeClass('complete');
         commentForm.hide();
         commentLikeHolders.attr('style', 'display: none !important');
+        reportComment.hide();
         commentReplyLinks.hide();
-        chatbotBtnContainers.hide();
+        chatbotBtns.each((index, btn) => {
+            btn = $(btn);
+            btn.css('pointer-events', 'none');
+            btn.css('background', '#808080');
+        });
         offlineAppBtns.hide();
         questionnaireSubmitBtns.each((index, btn) => {
             btn = $(btn);
             btn.css('pointer-events', 'none');
             const span = btn.find('span')
-            span.html(`${span.html()} (You cannot submit when offline)`);
+            span.html(`${span.html()} (${submitWhenOffline})`);
         });
         progressHolder.hide();
         changeDigitalPinBtn.hide();
@@ -59,16 +69,22 @@ $(document).ready(() => {
 
     const enableForOnlineAccess = () => {
         searchFormHolder.show();
+        readContent.addClass('complete');
         commentForm.show();
         commentLikeHolders.attr('style', 'display: inline-block !important');
+        reportComment.hide();
         commentReplyLinks.show();
-        chatbotBtnContainers.show();
+        chatbotBtns.each((index, btn) => {
+            btn = $(btn);
+            btn.css('pointer-events', 'all');
+            btn.css('background', '#F7F7F9');
+        });
         offlineAppBtns.show();
         questionnaireSubmitBtns.each((index, btn) => {
             btn = $(btn);
             btn.css('pointer-events', 'all');
             const span = btn.find('span')
-            span.html(`${span.html().split('(You cannot submit when offline)')[0]}`);
+            span.html(`${span.html().split(`(${submitWhenOffline})`)[0]}`);
         });
         progressHolder.show();
         changeDigitalPinBtn.show();
