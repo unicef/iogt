@@ -1,4 +1,4 @@
-describe('Survey submission tests', () => {
+describe.skip('Survey submission tests', () => {
 
     const url = "/en/surveys/survey-title/";
 

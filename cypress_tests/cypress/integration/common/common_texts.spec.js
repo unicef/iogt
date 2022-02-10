@@ -1,4 +1,4 @@
-describe("Checks for all the text present on quiz, polls, and surveys", () => {
+describe.skip("Checks for all the text present on quiz, polls, and surveys", () => {
 
     it("Check polls commons", () => {
         cy.visitUrl("/en/sections/questionnaire-testing/poll-with-checkboxes/");

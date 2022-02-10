@@ -1,4 +1,4 @@
-describe("Tests for multi-page embedded forms", () => {
+describe.skip("Tests for multi-page embedded forms", () => {
 
     const url = "/en/sections/questionnaire-testing/";
 
