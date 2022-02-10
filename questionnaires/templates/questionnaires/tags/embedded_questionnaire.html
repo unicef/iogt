@@ -30,7 +30,7 @@
                     {% endfor %}
                 </div>
                 {% include 'questionnaires/tags/terms_and_conditions.html' with questionnaire=questionnaire %}
-                <div class="survey-page__btns">
+                <div class="{{ questionnaire.get_type }}-page__btns">
                     {% render_submit_button fields_step questionnaire %}
                 </div>
             </form>

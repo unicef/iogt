@@ -73,9 +73,11 @@
                 </div>
                 {% with page_=page %}
                     <div class="content">
-                        {% include "messages.html" %}
-                        {% block content %}{% endblock %}
-                        <p class='footer__copyright'>{% translate "© The Internet of Good Things" %}</p>
+                        <div class="content-container">
+                            {% include "messages.html" %}
+                            {% block content %}{% endblock %}
+                            <p class='footer__copyright'>{% translate "© The Internet of Good Things" %}</p>
+                        </div>
                     </div>
                     {% include "footer.html" with page=page_ %}
                 {% endwith %}

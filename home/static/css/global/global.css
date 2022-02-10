@@ -1052,8 +1052,7 @@ body.rtl {
 .content .footer__copyright {display: none;}
 
 @media screen and (max-width: 767px) and (min-width: 414px) {
-  .footer,
-  .content {
+  .footer {
       padding-left: 32px;
       padding-right: 32px;
   }
@@ -1076,7 +1075,6 @@ body.rtl {
   .content-holder .content {
     width: 60%;
     max-width: 600px;
-    padding: 16px;
   }
 
   .footer-main {
@@ -1189,9 +1187,12 @@ body.rtl {
   .content {
     max-width: 600px;
     width: 40%;
-    padding: 20px;
     flex: 1;
   }
+}
+
+.content-container {
+  margin: 0 3.7%;
 }
 
 .content .footer-main {
@@ -1563,7 +1564,7 @@ body.rtl {
   }
 
   #content-wrap .content {
-    padding: 16px 20px;
+    padding: 16px 0;
   }
 
   .footer {
@@ -1590,7 +1591,7 @@ body.rtl {
 }
 @media screen and (max-width: 767px) {
   .content {
-    padding: 16px 32px;
+    padding: 16px 0;
   }
 }
 .rtl .language_drop > a {
