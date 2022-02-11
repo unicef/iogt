@@ -36,7 +36,7 @@ describe("Quiz with text fields tests", () => {
         cy.get("[id=id_checkboxes_0]").check();
     });
 
-    it("Submits the form and check for not allowed multiple submission", () => {
+    it.skip("Submits the form and check for not allowed multiple submission", () => {
         cy.get("[name=checkbox]").check();
         cy.get("[id=id_checkboxes_0]").check();
         cy.get(".survey-page__btns > .cust-btn > span").click();

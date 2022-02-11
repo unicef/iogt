@@ -1,4 +1,4 @@
-describe("Articles components tests", () => {
+describe.skip("Articles components tests", () => {
     const url = "/en/sections/covid-19/odd-story/"
 
     it("Test lead image and title", () => {

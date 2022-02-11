@@ -1,4 +1,4 @@
-describe("Poll with checkboxes test", () => {
+describe.skip("Poll with checkboxes test", () => {
     const url = "/en/sections/questionnaire-testing/poll-with-checkboxes/";
 
     it("Visits poll with checkboxes submits it", () => {

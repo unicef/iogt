@@ -21,7 +21,7 @@ describe("Survey with text field tests", () => {
         cy.get("[name=dropdown]").should("be.visible");
     });
 
-    it("Fills the form  and submits it", () => {
+    it.skip("Fills the form and submits it", () => {
         cy.get("[name=single]").scrollIntoView().type("example text");
         cy.get("[name=multiline]").scrollIntoView().type("this is multiline text");
         cy.get("[name=email]").scrollIntoView().type("abc@xyz.com");
