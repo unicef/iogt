@@ -1,5 +1,5 @@
 {% extends 'account/base.html' %}
-{% load i18n static image_tags %}
+{% load i18n static image_tags generic_components %}
 
 {% block title %}{% translate "Profile" %}{% endblock %}
 
@@ -19,18 +19,12 @@
         </h1>
     {% endif %}
     <div class="profile__btns">
-        <a href="{% url 'account_change_password' %}" class="icon-btn profile__btn">
-            <span class="icon-btn__icon">
-                <img src="{% static "icons/lock.png" %}" alt="lock icon">
-            </span>
-            <span class="icon-btn__title">{% translate "Change Digital Pin" %}</span>
-        </a>
-        <a href="{% url "account_logout" %}" class="icon-btn profile__btn">
-            <span class="icon-btn__icon">
-                {% static "icons/arrow_icon_left.svg" as logout_url %}
-                {% render_icon icon_path=logout_url attrs='alt="lock icon"'%}
-            </span>
-            <span class="icon-btn__title">{% translate "Log out" %}</span>
-        </a>
+        {% url 'account_change_password' as change_password_url %}
+        {% static 'icons/lock.svg' as lock_icon_path %}
+        {% primary_button title='Change Digital Pin' href=change_password_url icon_path=lock_icon_path extra_classnames='change-digital-pin' %}
+
+        {% url 'account_logout' as logout_url %}
+        {% static 'icons/arrow_icon_left.svg' as logout_icon_path %}
+        {% primary_button title='Log out' href=logout_url icon_path=logout_icon_path extra_classnames='logout-btn' %}
     </div>
 {% endblock %}
