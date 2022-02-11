@@ -1,4 +1,4 @@
-describe.skip("Section tests", () => {
+describe("Section tests", () => {
     const url = "/en/sections/covid-19/"
 
     it("Tests for lead image and title in section", () => {

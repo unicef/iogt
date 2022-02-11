@@ -1,4 +1,4 @@
-describe.skip("Related articles tests in section", () => {
+describe("Related articles tests in section", () => {
     const url = "/en/sections/covid-19/"
 
     it("Test for related article 'Where to get vaccinated in?'", () => {

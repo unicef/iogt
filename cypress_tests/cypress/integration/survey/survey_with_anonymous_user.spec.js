@@ -21,7 +21,7 @@ describe("Survey with text field tests", () => {
         cy.get("[name=dropdown]").should("be.visible");
     });
 
-    it.skip("Fills the form and submits it", () => {
+    it("Fills the form and submits it", () => {
         cy.get("[name=single]").scrollIntoView().type("example text");
         cy.get("[name=multiline]").scrollIntoView().type("this is multiline text");
         cy.get("[name=email]").scrollIntoView().type("abc@xyz.com");
@@ -36,7 +36,7 @@ describe("Survey with text field tests", () => {
         cy.submit(".survey-page__btn>span", "Submit");
         cy.url().should("include", `/?back_url=${url}&form_length=12`);
 
-        cy.submit(".survey-page__btn>span", "Back");
+        cy.submit(".icon-btn__title", "Back");
         cy.wait(500);
         cy.get(".survey-page__already-completed").contains('You have already completed this survey.').should("be.visible")
         cy.url().should("include", url);
