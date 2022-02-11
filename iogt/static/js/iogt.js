@@ -74,7 +74,7 @@ $(document).ready(() => {
         readContent.addClass('complete');
         commentForm.show();
         commentLikeHolders.attr('style', 'display: inline-block !important');
-        reportComment.hide();
+        reportComment.show();
         commentReplyLinks.show();
         downloadAppBtns.show();
         offlineAppBtns.hide();
