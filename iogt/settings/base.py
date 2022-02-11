@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'iogt_content_migration',
     'questionnaires',
     'messaging',
+    'common',
     'django.contrib.humanize',
     'wagtail_localize',
     'wagtail_localize.locales',
