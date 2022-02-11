@@ -26,3 +26,6 @@ msgid ""
 "install it by clicking 'Share', scrolling down and tapping 'Add to Home "
 "Screen."
 msgstr ""
+
+msgid "You cannot submit when offline"
+msgstr ""
