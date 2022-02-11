@@ -36,6 +36,7 @@ $(document).ready(() => {
     const commentReplyLinks = $('.reply-link');
     const downloadAppBtns = $('.block-offline_app_button .download-app-btn');
     const offlineAppBtns = $('.block-offline_app_button .offline-app-btn');
+    const chatbotBtns = $('.chatbot-btn');
     const questionnaireSubmitBtns = $('.questionnaire-submit-btn');
     const progressHolder = $('.progress-holder');
     const changeDigitalPinBtn = $('.change-digital-pin');
@@ -51,6 +52,11 @@ $(document).ready(() => {
         commentReplyLinks.hide();
         downloadAppBtns.hide();
         offlineAppBtns.show();
+        chatbotBtns.each((index, btn) => {
+            btn = $(btn);
+            btn.css('pointer-events', 'none');
+            btn.css('background', '#808080');
+        });
         questionnaireSubmitBtns.each((index, btn) => {
             btn = $(btn);
             btn.css('pointer-events', 'none');
@@ -72,6 +78,11 @@ $(document).ready(() => {
         commentReplyLinks.show();
         downloadAppBtns.show();
         offlineAppBtns.hide();
+        chatbotBtns.each((index, btn) => {
+            btn = $(btn);
+            btn.css('pointer-events', 'all');
+            btn.css('background', '#F7F7F9');
+        });
         questionnaireSubmitBtns.each((index, btn) => {
             btn = $(btn);
             btn.css('pointer-events', 'all');
