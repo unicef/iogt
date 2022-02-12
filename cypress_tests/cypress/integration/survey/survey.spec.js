@@ -1,4 +1,4 @@
-describe.skip('Survey submission tests', () => {
+describe('Survey submission tests', () => {
 
     const url = "/en/surveys/survey-title/";
 
@@ -8,7 +8,7 @@ describe.skip('Survey submission tests', () => {
             .type('A1')
             .should('have.value', 'A1');
         cy.get('button[type=submit]').click();
-        cy.get('.cust-btn.cust-btn--dark.survey-page__btn').click();
+        cy.get('.icon-btn.icon-btn--md.icon-btn--dark.icon-btn--rounded').click();
         cy.url().should('include', url);
     });
 

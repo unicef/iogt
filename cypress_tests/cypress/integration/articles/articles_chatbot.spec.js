@@ -5,7 +5,7 @@ describe("Tests for chat bots in articles", () => {
         cy.visitUrl("/en/accounts/login/");
         cy.login("mbilal", "mbilal");
         cy.visitUrl(url);
-        cy.get("#content-wrap > div.main-wrapper > div > div.content > article > section > div.block-chat_bot > div > form > button").click({force: true})
+        cy.submit(".chatbot-btn","chat bot button");
         cy.url().should("include", "/messaging/message/");
     });
 
