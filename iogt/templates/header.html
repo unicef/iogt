@@ -17,7 +17,7 @@
                 {% language_switcher page %}
             </div>
         </div>
-        <div class="form-holder">
+        <div class="form-holder search-form-holder">
             <a class="js-search-btn" href="{% url "search" %}">
                 {% static "icons/search.svg" as search_icon_path %}
                 {% render_icon icon_path=search_icon_path attrs="alt='Search' class='xs-home-header__search'" %}
@@ -37,7 +37,7 @@
                 {% url 'account_login' as login_url %}
                 {% static 'icons/login.svg' as login_icon %}
                 {% if request.user.is_anonymous %}
-                    {% primary_button title="Log in / Create account" href=login_url icon_path=login_icon %}
+                    {% primary_button title="Log in / Create account" href=login_url icon_path=login_icon extra_classnames='login-create-account-btn' %}
                 {% else %}
                     {% url 'user_profile' as profile_url %}
                     {% static 'icons/profile.svg' as profile_icon %}

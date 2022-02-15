@@ -2379,3 +2379,8 @@ textarea:focus ~ .cust-input__length-text {
   margin-top: 16px;
   border-radius: 8px;
 }
+
+.block-offline_app_button .offline-app-btn {
+  background-color: #808080;
+  pointer-events: none;
+}

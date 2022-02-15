@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'iogt_content_migration',
     'questionnaires',
     'messaging',
+    'common',
     'django.contrib.humanize',
     'wagtail_localize',
     'wagtail_localize.locales',
@@ -219,7 +220,7 @@ ACCOUNT_FORMS = {
 
 # Wagtail settings
 
-WAGTAIL_SITE_NAME = "iogt"
+WAGTAIL_SITE_NAME = "IoGT"
 ACCOUNT_ADAPTER = 'iogt_users.adapters.AccountAdapter'
 
 WAGTAIL_USER_EDIT_FORM = 'iogt_users.forms.WagtailAdminUserEditForm'

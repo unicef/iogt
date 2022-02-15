@@ -16,10 +16,10 @@ describe("Poll with checkboxes test", () => {
 
         cy.checkPollResults(".cust-check__percent");
 
-        cy.submit(".btn-back__title", "BACK");
+        cy.submit(".icon-btn__title", "Back");
         cy.wait(500);
         cy.get(".survey-page__already-completed")
-            .contains("You have already completed this survey.").should("be.visible");
+            .contains("You have already completed this poll.").should("be.visible");
 
         cy.checkPollResults(".cust-check__percent");
 

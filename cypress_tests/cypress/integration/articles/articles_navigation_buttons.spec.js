@@ -3,14 +3,13 @@ describe("Tests for navigation buttons in articles", () => {
 
     it("Test previous buttons", () => {
         cy.visit(url);
-        cy.get(".article__navigation > .article__navigation--previous").click();
-        cy.url().should("include", "/en/sections/covid-19/where-to-get-vaccination/")
+        cy.get("a[class=article__navigation--previous]").click();
+        cy.url().should("include", "/en/sections/covid-19/where-to-get-vaccination/");
+    });
 
-    })
-
-    it("Test next butto n", () => {
+    it("Test next button", () => {
         cy.visit(url);
         cy.get("a[class=article__navigation--next]").click();
-        cy.url().should("include", "/en/sections/covid-19/early-life-tips-quick-survey/")
-    })
-})
+        cy.url().should("include", "/en/sections/covid-19/early-life-tips-quick-survey/");
+    });
+});

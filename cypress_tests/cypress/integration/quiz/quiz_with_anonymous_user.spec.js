@@ -39,7 +39,7 @@ describe("Quiz with text fields tests", () => {
     it("Submits the form and check for not allowed multiple submission", () => {
         cy.get("[name=checkbox]").check();
         cy.get("[id=id_checkboxes_0]").check();
-        cy.get(".survey-page__btns > .cust-btn > span").click();
+        cy.get(".quiz-page__btns > .cust-btn > span").click();
         cy.url().should("include", `/?back_url=${url}&form_length=12`);
 
         cy.get(".quiz-answer-banner__counter").contains("7 / 12");
@@ -49,7 +49,7 @@ describe("Quiz with text fields tests", () => {
         cy.submit(".icon-btn__title", "Replay Quiz");
 
         cy.get(".survey-page__already-completed")
-            .contains("You have already completed this survey.").should("be.visible");
+            .contains("You have already completed this quiz.").should("be.visible");
 
         cy.url().should("include", url)
 

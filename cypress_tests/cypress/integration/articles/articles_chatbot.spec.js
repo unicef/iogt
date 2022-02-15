@@ -5,8 +5,8 @@ describe("Tests for chat bots in articles", () => {
         cy.visitUrl("/en/accounts/login/");
         cy.login("mbilal", "mbilal");
         cy.visitUrl(url);
-        cy.get("#content-wrap > div.main-wrapper > div > div.content > article > section > div.block-chat_bot > div > form > button").click({force: true})
-        cy.url().should("include", "/en/messaging/message/");
+        cy.submit(".chatbot-btn","chat bot button");
+        cy.url().should("include", "/messaging/message/");
     });
 
 
@@ -14,6 +14,6 @@ describe("Tests for chat bots in articles", () => {
         cy.visitUrl(url);
         cy.get("div.block-chat_bot > div > form > button").click({force: true});
         cy.login("mbilal", "mbilal");
-        cy.url().should("include", "/en/messaging/message/create");
+        cy.url().should("include", "/messaging/message/create");
     })
 })
