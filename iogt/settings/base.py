@@ -422,3 +422,4 @@ TRANSLATIONS_PROJECT_BASE_DIR = BASE_DIR
 from iogt.patch import *
 
 WAGTAILTRANSFER_UPDATE_RELATED_MODELS = ['wagtailimages.image', 'wagtailsvg.svg',]
+SHOW_ERROR_FOR_REFERENCED_PAGES = True
