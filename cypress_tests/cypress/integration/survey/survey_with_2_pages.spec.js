@@ -9,7 +9,7 @@ describe("2 pages survey tests", () => {
             .type("test");
     });
 
-    it.skip("Goes to next page", () => {
+    it("Goes to next page", () => {
         cy.submit("button", "Next");
         cy.url().should("include", `/?p=2&back_url=${url}&form_length=1`);
         cy.get("[name=checkboxes]").each($el => {
@@ -19,6 +19,6 @@ describe("2 pages survey tests", () => {
         cy.submit(".survey-page__btn>span", "Submit");
         cy.url().should("include", `/?p=3&back_url=${url}&form_length=1`);
 
-        cy.submit(".survey-page__btn>span", "Back")
+        cy.submit(".icon-btn__title", "Back")
     });
 });

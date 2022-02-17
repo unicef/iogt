@@ -15,24 +15,24 @@ describe("Direct display tests for all types", () => {
         }
     ];
 
-    it.skip("Visits the site questionnaires page", () => {
+    it("Visits the site questionnaires page", () => {
         cy.visitUrl(url);
         titles.forEach(title => {
             cy.testTitle(title.text, title.selector);
         });
 
-        cy.get(".quest-item__number").contains("1 of 1 question");
+        //cy.get(".quest-item__number").contains("1 of 1 question");
 
         cy.get("[id=id_poll_multiline]").type("Example text test");
-        cy.submit(".polls-widget__submit", "Submit");
-        cy.submit(".btn-back__title", "BACK");
+        cy.submit(".poll-page__btns>.survey-page__btn", "Submit");
+        cy.submit(".icon-btn__title", "Back");
 
         cy.get("[name=text_field]").type("test");
-        cy.submit(".survey-page__btn>span", "Submit");
+        cy.submit(".survey-page__btn", "Next");
         cy.visitUrl(url);
 
         cy.get(".quiz-page__content>div>label>input").check();
-        cy.submit(".quiz-page__btn>span", "Submit");
+        cy.submit(".quiz-page__btns>.survey-page__btn", "Submit");
     });
 
 });
