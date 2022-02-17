@@ -14,4 +14,3 @@ class Command(BaseCommand):
             section = Section(title='Sandbox', live=False)
             home_page.add_child(instance=section)
             self.stdout.write(self.style.SUCCESS('Sandbox Section added.'))
-
