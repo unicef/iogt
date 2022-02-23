@@ -1114,7 +1114,7 @@ class SVGToPNGMap(models.Model):
 
 
 class V1PageURLToV2PageMap(models.Model):
-    v1_page_url = models.CharField(max_length=255)
+    v1_page_url = models.TextField()
     v2_page = models.ForeignKey(Page, on_delete=models.CASCADE)
 
     def __str__(self):
