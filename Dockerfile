@@ -24,6 +24,7 @@ RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-r
     libwebp-dev \
     gettext \
     libpango1.0-0 \
+    git \
  && rm -rf /var/lib/apt/lists/*
 
 # Install the application server.
