@@ -24,8 +24,8 @@ RUN apt-get update --yes --quiet \
     gettext \
     libpango1.0-0 \
     git \
- && pip install --upgrade pip \
- && pip install "gunicorn==20.0.4" \
+ && pip install --no-cache-dir --upgrade pip \
+ && pip install --no-cache-dir "gunicorn==20.0.4" \
  && pip install --no-cache-dir -r /requirements.txt \
  && apt remove --yes --quiet git build-essential libpq-dev \
  && apt autoremove --yes --quiet \
