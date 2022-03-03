@@ -66,5 +66,14 @@ services:
     ports:
       - 54321:5432
 
+  tag-manager:
+    image: gcr.io/cloud-tagging-10302018/gtm-cloud-image:stable
+    container_name: tm01
+    restart: unless-stopped
+    environment:
+      CONTAINER_CONFIG: '<server-side gtm container config>'
+    ports:
+      - 8080:8080
+
 volumes:
   es-data01:
