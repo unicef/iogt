@@ -423,3 +423,8 @@ from iogt.patch import *
 
 WAGTAILTRANSFER_UPDATE_RELATED_MODELS = ['wagtailimages.image', 'wagtailsvg.svg',]
 WAGTAILTRANSFER_SHOW_ERROR_FOR_REFERENCED_PAGES = True
+WAGTAILTRANSFER_LOOKUP_FIELDS = {
+    'taggit.tag': ['slug'],
+    'wagtailcore.locale': ["language_code"],
+    'iogt_users.user': ["username"],
+}
