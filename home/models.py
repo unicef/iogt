@@ -53,6 +53,7 @@ from .forms import SectionPageForm
 from .mixins import PageUtilsMixin, TitleIconMixin
 from .utils.image import convert_svg_to_png_bytes
 from .utils.progress_manager import ProgressManager
+import iogt.iogt_globals as globals_
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -82,7 +83,7 @@ class HomePage(Page):
         check_user_session(request)
         context = super().get_context(request)
         banners = []
-        for home_page_banner in self.home_page_banners.all():
+        for home_page_banner in self.home_page_banners.select_related('banner_page', 'banner_page__banner_link_page').all():
             banner_page = home_page_banner.banner_page
             if banner_page.live and banner_page.banner_link_page and banner_page.banner_link_page.live:
                 banners.append(banner_page.specific)
@@ -812,11 +813,11 @@ class IogtFlatMenuItem(AbstractFlatMenuItem, TitleIconMixin):
         return icon
 
     def get_background_color(self):
-        theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
+        theme_settings = globals_.theme_settings
         return self.background_color or theme_settings.navbar_background_color
 
     def get_font_color(self):
-        theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
+        theme_settings = globals_.theme_settings
         return self.font_color or theme_settings.navbar_font_color
 
     def get_single_column_view(self):

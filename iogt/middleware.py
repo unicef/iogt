@@ -9,9 +9,10 @@ from django.utils.deprecation import MiddlewareMixin
 from django.utils.translation import get_language_from_path, check_for_language, get_supported_language_variant
 from django.utils.translation.trans_real import get_languages, parse_accept_lang_header, language_code_re
 from wagtail.contrib.redirects.middleware import RedirectMiddleware
-from wagtail.core.models import Locale
+from wagtail.core.models import Locale, Site
 
-from home.models import SiteSettings, V1PageURLToV2PageMap
+from home.models import SiteSettings, V1PageURLToV2PageMap, ThemeSettings
+import iogt.iogt_globals as globals_
 
 
 class CacheControlMiddleware:
@@ -96,3 +97,18 @@ class CustomRedirectMiddleware(RedirectMiddleware):
                 return HttpResponsePermanentRedirect(page.url)
 
         return return_value
+
+
+class GlobalContextMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        site = Site.objects.filter(is_default_site=True).first()
+        globals_.site = site
+        globals_.site_settings = SiteSettings.for_request(request)
+        globals_.theme_settings = ThemeSettings.for_site(site)
+
+        response = self.get_response(request)
+
+        return response
