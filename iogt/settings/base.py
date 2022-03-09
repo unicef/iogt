@@ -424,3 +424,14 @@ from iogt.patch import *
 
 WAGTAILTRANSFER_UPDATE_RELATED_MODELS = ['wagtailimages.image', 'wagtailsvg.svg',]
 WAGTAILTRANSFER_SHOW_ERROR_FOR_REFERENCED_PAGES = True
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/1", # TODO: use env. vars for host and port
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "IGNORE_EXCEPTIONS": True,
+        }
+    }
+}

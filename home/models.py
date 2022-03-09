@@ -8,6 +8,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.files.images import get_image_dimensions
+from django.core.cache import cache
 from django.db import models
 from django.utils.deconstruct import deconstructible
 from django.utils.encoding import force_str
@@ -1096,7 +1097,7 @@ class SVGToPNGMap(models.Model):
     def get_png_image(cls, svg_path, fill_color, stroke_color=None):
         try:
             try:
-                obj = globals_.svg_to_png_map[(svg_path, fill_color, stroke_color)]
+                obj = cache.get('svg_to_png_map').svg_to_png_map[(svg_path, fill_color, stroke_color)]
             except KeyError:
                 obj = cls.objects.get(svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color)
         except cls.DoesNotExist:

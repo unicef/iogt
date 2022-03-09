@@ -13,6 +13,7 @@ libsass==0.21.*
 lxml
 psycopg2==2.8.*
 redis~=3.0
+django-redis==5.2.0
 tqdm
 wagtail-localize~=0.9.5
 wagtail-markdown==0.7.0

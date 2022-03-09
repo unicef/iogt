@@ -2,6 +2,7 @@ from urllib.parse import unquote
 
 from django.conf import settings
 from django.conf.urls.i18n import is_language_prefix_patterns_used
+from django.core.cache import cache
 from django.http.response import HttpResponsePermanentRedirect
 from django.middleware.locale import LocaleMiddleware as DjangoLocaleMiddleware
 from django.utils import translation
@@ -115,14 +116,14 @@ class GlobalContextMiddleware:
             map.update({
                 (svg_to_png_map.svg_path, svg_to_png_map.fill_color, svg_to_png_map.stroke_color): svg_to_png_map,
             })
-        globals_.svg_to_png_map = map
+        cache.set('svg_to_png_mag', map, timeout=300000)
         globals_.locale = locale
         map = {}
         for translation_entry in TranslationEntry.objects.filter(language=locale.language_code):
             map.update({
                 (translation_entry.original, translation_entry.language): translation_entry.translation
             })
-        globals_.translation_map = map
+        cache.set('translation_map', map, timeout=300000)
 
         response = self.get_response(request)
 

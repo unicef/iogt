@@ -54,6 +54,11 @@ services:
     ports:
       - 5432:5432
 
+  redis:
+    image: redis:6.2-buster
+    volumes:
+      - /var/lib/redis/data
+
   legacy-db:
     image: postgres:alpine
     container_name: lc01

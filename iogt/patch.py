@@ -19,8 +19,10 @@ def _translate_node_render(self, context):
     from django.template.base import render_value_in_context
     from django.utils.safestring import SafeData
     from django.utils.safestring import mark_safe
+    from django.core.cache import cache
 
-    translation_entry = globals_.translation_map.get((self.filter_expression.var.literal, globals_.locale.language_code))
+    translation_entry = cache.get('translation_map').translation_map.get(
+        (self.filter_expression.var.literal, globals_.locale.language_code))
     if translation_entry and translation_entry.translation:
         return translation_entry.translation
 
