@@ -1095,7 +1095,10 @@ class SVGToPNGMap(models.Model):
     @classmethod
     def get_png_image(cls, svg_path, fill_color, stroke_color=None):
         try:
-            obj = cls.objects.get(svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color)
+            try:
+                obj = globals_.svg_to_png_map[(svg_path, fill_color, stroke_color)]
+            except KeyError:
+                obj = cls.objects.get(svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color)
         except cls.DoesNotExist:
             try:
                 png_image = convert_svg_to_png_bytes(

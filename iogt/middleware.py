@@ -11,7 +11,7 @@ from django.utils.translation.trans_real import get_languages, parse_accept_lang
 from wagtail.contrib.redirects.middleware import RedirectMiddleware
 from wagtail.core.models import Locale, Site
 
-from home.models import SiteSettings, V1PageURLToV2PageMap, ThemeSettings
+from home.models import SiteSettings, V1PageURLToV2PageMap, ThemeSettings, SVGToPNGMap
 import iogt.iogt_globals as globals_
 
 
@@ -108,6 +108,12 @@ class GlobalContextMiddleware:
         globals_.site = site
         globals_.site_settings = SiteSettings.for_request(request)
         globals_.theme_settings = ThemeSettings.for_site(site)
+        map = {}
+        for svg_to_png_map in SVGToPNGMap.objects.all():
+            map.update({
+                (svg_to_png_map.svg_path, svg_to_png_map.fill_color, svg_to_png_map.stroke_color): svg_to_png_map,
+            })
+        globals_.svg_to_png_map = map
 
         response = self.get_response(request)
 
