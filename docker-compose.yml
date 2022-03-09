@@ -31,6 +31,7 @@ services:
     depends_on:
       - elasticsearch
       - db
+      - redis
 
   elasticsearch:
     image: 'docker.elastic.co/elasticsearch/elasticsearch:7.12.1'

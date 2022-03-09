@@ -1097,7 +1097,7 @@ class SVGToPNGMap(models.Model):
     def get_png_image(cls, svg_path, fill_color, stroke_color=None):
         try:
             try:
-                obj = cache.get('svg_to_png_map').svg_to_png_map[(svg_path, fill_color, stroke_color)]
+                obj = cache.get('svg_to_png_map')[(svg_path, fill_color, stroke_color)]
             except KeyError:
                 obj = cls.objects.get(svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color)
         except cls.DoesNotExist:

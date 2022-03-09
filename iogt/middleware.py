@@ -108,22 +108,25 @@ class GlobalContextMiddleware:
     def __call__(self, request):
         site = Site.objects.filter(is_default_site=True).first()
         locale = Locale.get_active()
+        language_code = locale.language_code
         globals_.site = site
         globals_.site_settings = SiteSettings.for_request(request)
         globals_.theme_settings = ThemeSettings.for_site(site)
-        map = {}
-        for svg_to_png_map in SVGToPNGMap.objects.all():
-            map.update({
-                (svg_to_png_map.svg_path, svg_to_png_map.fill_color, svg_to_png_map.stroke_color): svg_to_png_map,
-            })
-        cache.set('svg_to_png_mag', map, timeout=300000)
         globals_.locale = locale
-        map = {}
-        for translation_entry in TranslationEntry.objects.filter(language=locale.language_code):
-            map.update({
-                (translation_entry.original, translation_entry.language): translation_entry.translation
-            })
-        cache.set('translation_map', map, timeout=300000)
+        if not cache.get('svg_to_png_map'):
+            map = {}
+            for svg_to_png_map in SVGToPNGMap.objects.all():
+                map.update({
+                    (svg_to_png_map.svg_path, svg_to_png_map.fill_color, svg_to_png_map.stroke_color): svg_to_png_map,
+                })
+            cache.set('svg_to_png_map', map, timeout=300000)
+        if not cache.get(f'{language_code}_translation_map'):
+            map = {}
+            for translation_entry in TranslationEntry.objects.filter(language=language_code):
+                map.update({
+                    (translation_entry.original, language_code): translation_entry
+                })
+            cache.set(f'{language_code}_translation_map', map, timeout=300000)
 
         response = self.get_response(request)
 
