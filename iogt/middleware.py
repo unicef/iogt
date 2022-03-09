@@ -8,6 +8,7 @@ from django.utils import translation
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.translation import get_language_from_path, check_for_language, get_supported_language_variant
 from django.utils.translation.trans_real import get_languages, parse_accept_lang_header, language_code_re
+from translation_manager.models import TranslationEntry
 from wagtail.contrib.redirects.middleware import RedirectMiddleware
 from wagtail.core.models import Locale, Site
 
@@ -105,6 +106,7 @@ class GlobalContextMiddleware:
 
     def __call__(self, request):
         site = Site.objects.filter(is_default_site=True).first()
+        locale = Locale.get_active()
         globals_.site = site
         globals_.site_settings = SiteSettings.for_request(request)
         globals_.theme_settings = ThemeSettings.for_site(site)
@@ -114,6 +116,13 @@ class GlobalContextMiddleware:
                 (svg_to_png_map.svg_path, svg_to_png_map.fill_color, svg_to_png_map.stroke_color): svg_to_png_map,
             })
         globals_.svg_to_png_map = map
+        globals_.locale = locale
+        map = {}
+        for translation_entry in TranslationEntry.objects.filter(language=locale.language_code):
+            map.update({
+                (translation_entry.original, translation_entry.language): translation_entry.translation
+            })
+        globals_.translation_map = map
 
         response = self.get_response(request)
 
