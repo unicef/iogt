@@ -13,6 +13,7 @@ services:
       DB_PASSWORD: iogt
       DB_HOST: db
       DB_PORT: 5432
+      DB_CONN_MAX_AGE: 600
       DJANGO_SETTINGS_MODULE: iogt.settings.docker_compose_dev
       COMMIT_HASH: asdfghjkl
       RAPIDPRO_BOT_USER_ID: 1
