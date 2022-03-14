@@ -431,17 +431,34 @@ WAGTAILTRANSFER_LOOKUP_FIELDS = {
     'iogt_users.user': ['username'],
 }
 
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f"redis://{os.environ.get('CACHE_HOST')}:{os.environ.get('CACHE_PORT')}/1",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "IGNORE_EXCEPTIONS": True,
+
+CACHE_BACKEND = os.environ.get('cache_backend', 'db')
+if CACHE_BACKEND == 'db':
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+            "LOCATION": "iogt_cache_table",
         },
-    },
-    'renditions': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://redis:6379/1',
-    },
-}
+        'renditions': {
+            'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+            'LOCATION': 'iogt_cache_table',
+        },
+    }
+elif CACHE_BACKEND == 'redis':
+    CACHE_HOST = os.environ.get('REDIS_CACHE_HOST')
+    CACHE_PORT = os.environ.get('REDIS_CACHE_PORT')
+
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": f"redis://{CACHE_HOST}:{CACHE_PORT}/1",
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+                "IGNORE_EXCEPTIONS": True,
+            },
+        },
+        'renditions': {
+            'BACKEND': 'django_redis.cache.RedisCache',
+            'LOCATION': 'redis://redis:6379/1',
+        },
+    }
