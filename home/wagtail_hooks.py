@@ -1,12 +1,9 @@
-from abc import ABC
-from urllib.parse import urlparse, urlunparse, urlencode
+from urllib.parse import urlparse
 
 from django.contrib.admin import SimpleListFilter
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
-from django.urls import resolve, Resolver404
-from django.urls import reverse
-from django.utils.html import escape
+from django.urls import resolve
 from django.utils.translation import gettext_lazy as _
 from translation_manager.models import TranslationEntry
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
@@ -15,32 +12,10 @@ from django.utils.html import format_html
 from wagtail.core import hooks
 from wagtail.core.models import Page
 from wagtail.core.models import PageViewRestriction
-from wagtail.core.rich_text import LinkHandler
 
 from home.models import FooterIndexPage, BannerIndexPage, Section, \
     SectionIndexPage, LocaleDetail
 from home.translatable_strings import translatable_strings
-
-
-class ExternalLinkHandler(LinkHandler, ABC):
-    identifier = "external"
-
-    @classmethod
-    def expand_db_attributes(cls, attrs):
-        next_page = escape(attrs["href"])
-        parsed_url = urlparse(next_page)
-        try:
-            resolve(parsed_url.path)
-            unparsed_url = urlunparse(('', '', parsed_url.path, parsed_url.params, parsed_url.query, parsed_url.fragment))
-            return f'<a href="{unparsed_url}">'
-        except Resolver404:
-            external_link_page = reverse("external-link")
-            return f'<a href="{external_link_page}?{urlencode({"next": next_page})}">'
-
-
-@hooks.register("register_rich_text_features")
-def register_external_link(features):
-    features.register_link_type(ExternalLinkHandler)
 
 
 @hooks.register('before_serve_page', order=-1)

@@ -37,3 +37,6 @@ msgstr "([not-needed]-pop)"
 
 msgid "shift"
 msgstr "([not-needed]-shift)"
+
+msgid "You cannot submit when offline"
+msgstr "([needs-translation]-You cannot submit when offline)"

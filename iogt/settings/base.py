@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'iogt_content_migration',
     'questionnaires',
     'messaging',
+    'common',
     'django.contrib.humanize',
     'wagtail_localize',
     'wagtail_localize.locales',
@@ -221,7 +222,7 @@ ACCOUNT_FORMS = {
 
 # Wagtail settings
 
-WAGTAIL_SITE_NAME = "iogt"
+WAGTAIL_SITE_NAME = "IoGT"
 ACCOUNT_ADAPTER = 'iogt_users.adapters.AccountAdapter'
 
 WAGTAIL_USER_EDIT_FORM = 'iogt_users.forms.WagtailAdminUserEditForm'
@@ -417,7 +418,13 @@ TRANSLATIONS_PROJECT_BASE_DIR = BASE_DIR
 
 from iogt.patch import *
 
-WAGTAILTRANSFER_UPDATE_RELATED_MODELS = ['wagtailimages.image', 'wagtailsvg.svg', ]
+WAGTAILTRANSFER_UPDATE_RELATED_MODELS = ['wagtailimages.image', 'wagtailsvg.svg',]
+WAGTAILTRANSFER_SHOW_ERROR_FOR_REFERENCED_PAGES = True
+WAGTAILTRANSFER_LOOKUP_FIELDS = {
+    'taggit.tag': ['slug'],
+    'wagtailcore.locale': ['language_code'],
+    'iogt_users.user': ['username'],
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

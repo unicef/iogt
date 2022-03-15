@@ -69,7 +69,7 @@ class HomePage(Page):
         ('embedded_survey', EmbeddedSurveyBlock()),
         ('embedded_quiz', EmbeddedQuizBlock()),
         ('article', ArticleBlock()),
-    ], null=True)
+    ], null=True, blank=True)
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
@@ -571,7 +571,7 @@ class SiteSettings(BaseSetting):
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
-        help_text="Upload an image file (.jpg, .png). The ideal size is 100px x 40px"
+        help_text="Upload an image file (.jpg, .png). The ideal size is 120px x 48px"
     )
     favicon = models.ForeignKey(
         'wagtailimages.Image',
@@ -1114,7 +1114,7 @@ class SVGToPNGMap(models.Model):
 
 
 class V1PageURLToV2PageMap(models.Model):
-    v1_page_url = models.CharField(max_length=255)
+    v1_page_url = models.TextField()
     v2_page = models.ForeignKey(Page, on_delete=models.CASCADE)
 
     def __str__(self):

@@ -8,7 +8,7 @@
         {% if request.user.is_anonymous %}
             {% url 'account_login' as login_url %}
             {% static 'icons/login.svg' as login_icon_path %}
-            {% primary_button title='Log in / Create account' href=login_url icon_path=login_icon_path %}
+            {% primary_button title='Log in / Create account' href=login_url icon_path=login_icon_path extra_classnames='login-create-account-btn' %}
         {% else %}
             {% url 'user_profile' as profile_url %}
             {% static 'icons/profile.svg' as profile_icon_path %}
@@ -16,7 +16,7 @@
 
             {% url 'account_logout' as logout_url %}
             {% static 'icons/arrow_icon_left.svg' as logout_icon_path %}
-            {% primary_button title='Log out' href=logout_url icon_path=logout_icon_path %}
+            {% primary_button title='Log out' href=logout_url icon_path=logout_icon_path extra_classnames='logout-btn' %}
         {% endif %}
     </nav>
 </footer>

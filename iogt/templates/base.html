@@ -73,9 +73,11 @@
                 </div>
                 {% with page_=page %}
                     <div class="content">
-                        {% include "messages.html" %}
-                        {% block content %}{% endblock %}
-                        <p class='footer__copyright'>{% translate "© The Internet of Good Things" %}</p>
+                        <div class="content-container">
+                            {% include "messages.html" %}
+                            {% block content %}{% endblock %}
+                            <p class='footer__copyright'>{% translate "© The Internet of Good Things" %}</p>
+                        </div>
                     </div>
                     {% include "footer.html" with page=page_ %}
                 {% endwith %}
@@ -90,6 +92,8 @@
 </script>
 <script src="{% url 'javascript-catalog' %}"></script>
 <script src="{% static 'js/sw-init.js' %}"></script>
+<script src="{% static 'third_party/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'js/iogt.js' %}"></script>
 <noscript>
     <style type="text/css">
         #hideOnNonJSDevice, .hideOnNonJSDevice {

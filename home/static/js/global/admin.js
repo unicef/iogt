@@ -12,6 +12,10 @@ $(document).ready(function () {
             'such as: survey/poll/quiz answers, index page description, recommended content, ' +
             'search engine friendly title, search description, lead image, icon.' +
             '</p>')
+
+    $('.transfer.list-container:last + div')
+        .prepend('<h4 style="color: #FF0000; font-weight: bold; margin: 5px;">We strongly recommend choosing a ' +
+            'destination within the sandbox, to allow checking the transferred content for errors before going ' +
+            'live. You can then move the content to the desired final destination.</h4>')
+
 });
-
-

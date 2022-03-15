@@ -19,6 +19,6 @@ describe("2 pages survey tests", () => {
         cy.submit(".survey-page__btn>span", "Submit");
         cy.url().should("include", `/?p=3&back_url=${url}&form_length=1`);
 
-        cy.submit(".survey-page__btn>span", "Back")
+        cy.submit(".icon-btn__title", "Back")
     });
 });

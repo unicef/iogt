@@ -16,11 +16,11 @@ redis~=3.0
 tqdm
 wagtail-localize~=0.9.5
 wagtail-markdown==0.7.0
-wagtail-transfer~=0.7.0
 wagtail==2.11.*
 wagtailmedia==0.7.0
 wagtailmenus~=3.0
 wagtailsvg==0.0.14
 whitenoise==5.2.*
 django-health-check==3.16.5
+git+git://github.com/IDEMSInternational/wagtail-transfer.git@enh/show-error-for-unimported-referenced-pages#egg=wagtail-transfer
 djangorestframework-simplejwt==5.0.0
