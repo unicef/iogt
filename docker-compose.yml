@@ -15,9 +15,6 @@ services:
       DB_PORT: 5432
       DJANGO_SETTINGS_MODULE: iogt.settings.docker_compose_dev
       COMMIT_HASH: asdfghjkl
-      RAPIDPRO_BOT_USER_ID: 1
-      RAPIDPRO_BOT_USER_USERNAME: rapidpro
-      RAPIDPRO_BOT_USER_PASSWORD: 1234
       WAGTAILTRANSFER_SECRET_KEY: wagtailtransfer-secret-key
       WAGTAILTRANSFER_SOURCE_NAME: iogt_global
       WAGTAILTRANSFER_SOURCE_BASE_URL: https://example.com/wagtail-transfer/
