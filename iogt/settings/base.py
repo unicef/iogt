@@ -85,6 +85,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -100,6 +101,7 @@ MIDDLEWARE = [
     'iogt_users.middlewares.RegistrationSurveyRedirectMiddleware',
     'external_links.middleware.RewriteExternalLinksMiddleware',
     'iogt.middleware.CacheControlMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 # Prevent Wagtail's built in menu from showing in Admin > Settings

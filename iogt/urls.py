@@ -1,12 +1,8 @@
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
-from django.contrib.auth import views as auth_views
 from django.urls import include, path, re_path
-from django.views.decorators.cache import cache_page
 from django.views.i18n import JavaScriptCatalog
-from wagtail.core import views as wagtail_views
-from wagtail.core.urls import serve_pattern, WAGTAIL_FRONTEND_LOGIN_TEMPLATE
 from wagtail.images.views.serve import ServeView
 
 from home.views import get_manifest, LogoutRedirectHackView
@@ -59,16 +55,5 @@ if settings.DEBUG:
 
 urlpatterns = urlpatterns + i18n_patterns(
     re_path(r'^images/([^/]*)/(\d*)/([^/]*)/[^/]*$', ServeView.as_view(), name='wagtailimages_serve'),
-    path(
-        '_util/authenticate_with_password/<int:page_view_restriction_id>/<int:page_id>/',
-        wagtail_views.authenticate_with_password,
-        name='wagtailcore_authenticate_with_password'),
-    path(
-        '_util/login/',
-        auth_views.LoginView.as_view(template_name=WAGTAIL_FRONTEND_LOGIN_TEMPLATE),
-        name='wagtailcore_login'),
-
-    # Front-end page views are handled through Wagtail's core.views.serve
-    # mechanism
-    re_path(serve_pattern, cache_page(300)(wagtail_views.serve), name='wagtail_serve'),
+    path("", include(wagtail_urls)),
 )
