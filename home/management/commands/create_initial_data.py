@@ -45,7 +45,7 @@ class Command(BaseCommand):
         homepage, __ = models.HomePage.objects.update_or_create(slug='home', defaults={
             'title': "Home",
             'draft_title': "Home",
-            'cntent_type': homepage_content_type,
+            'content_type': homepage_content_type,
             'path': '00010001',
             'depth': 2,
             'numchild': 0,

@@ -273,7 +273,7 @@ WAGTAIL_I18N_ENABLED = True
 
 WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('ar', _('Arabic')),
-    ('ny', _('Chichewa')),  # previously 'ch'
+    ('ny', _('Chichewa')), # previously 'ch'
     ('en', _('English')),
     ('fr', _('French')),
     ('id', _('Indonesian')),
@@ -288,7 +288,7 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('pt', _('Portuguese')),
     ('qu', _('Quechua')),
     ('ru', _('Russian')),
-    ('sn', _('Shona')),  # previously 'sho'
+    ('sn', _('Shona')), # previously 'sho'
     ('es', _('Spanish')),
     ('sw', _('Swahili')),
     ('tg', _('Tajik')),
