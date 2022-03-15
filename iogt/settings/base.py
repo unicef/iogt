@@ -14,6 +14,7 @@ import os
 
 import allauth
 from django.contrib import auth
+from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import gettext_lazy as _
 
 import django.conf.locale
@@ -92,7 +93,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'iogt.middleware.GlobalContextMiddleware',
+    'iogt.middleware.GlobalDataMiddleware',
     "iogt.middleware.LocaleMiddleware",
     "iogt.middleware.AdminLocaleMiddleware",
     'iogt.middleware.CustomRedirectMiddleware',
@@ -424,13 +425,11 @@ from iogt.patch import *
 
 WAGTAILTRANSFER_UPDATE_RELATED_MODELS = ['wagtailimages.image', 'wagtailsvg.svg',]
 WAGTAILTRANSFER_SHOW_ERROR_FOR_REFERENCED_PAGES = True
-
 WAGTAILTRANSFER_LOOKUP_FIELDS = {
     'taggit.tag': ['slug'],
     'wagtailcore.locale': ['language_code'],
     'iogt_users.user': ['username'],
 }
-
 
 CACHE_BACKEND = os.environ.get('cache_backend', 'db')
 if CACHE_BACKEND == 'db':
@@ -462,3 +461,5 @@ elif CACHE_BACKEND == 'redis':
             'LOCATION': 'redis://redis:6379/1',
         },
     }
+else:
+    raise ImproperlyConfigured('Set the CACHE_BACKEND environment variable.')

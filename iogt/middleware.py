@@ -101,7 +101,7 @@ class CustomRedirectMiddleware(RedirectMiddleware):
         return return_value
 
 
-class GlobalContextMiddleware:
+class GlobalDataMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
