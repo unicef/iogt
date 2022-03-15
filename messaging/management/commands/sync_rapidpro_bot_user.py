@@ -13,9 +13,9 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **options):
-        user, created = User.objects.get_or_create(username=settings.RAPIDPRO_BOT_USER_USERNAME,
-                                                   defaults={'first_name': 'RapidPro', 'last_name': 'Bot'})
-        group, created = Group.objects.get_or_create(name='rapidpro')
+        user, created = User.objects.get_or_create(
+            username=settings.RAPIDPRO_BOT_USER_USERNAME, defaults={'first_name': 'RapidPro', 'last_name': 'Bot'})
+        group, created = Group.objects.get_or_create(name=settings.RAPIDPRO_BOT_GROUP_NAME)
         user.groups.add(group)
 
         if created:

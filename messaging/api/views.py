@@ -21,6 +21,7 @@ class RapidProWebhook(APIView):
     def post(self, request):
         serializer = RapidProMessageSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+
         rapidpro_message_id = serializer.validated_data['id']
         thread_uuid = serializer.validated_data['to']
         text = serializer.validated_data['text']
