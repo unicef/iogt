@@ -24,7 +24,7 @@ def _translate_node_render(self, context):
     try:
         translation_entry = cache.get(f'{globals_.locale.language_code}_translation_map')[
             (self.filter_expression.var.literal, globals_.locale.language_code)]
-    except KeyError:
+    except (KeyError, TypeError):
         translation_entry = None
 
     if translation_entry and translation_entry.translation:
