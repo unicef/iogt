@@ -40,7 +40,5 @@ In order to communicate with the IoGT website, RapidPro needs an IoGT user accou
 This user needs to be set up on the IoGT side. Once that is done, you can set up a channel on your RapidPro server,
 and add this channel to the IoGT site so you can start communicating with it.
 
-1. Set the values of `RAPIDPRO_BOT_USER_USERNAME` and `RAPIDPRO_BOT_USER_PASSWORD` in docker-compose (`docker-compose.yml`) file
-2. Run the command `python manage.py sync_rapidpro_bot_user` in django container (to go inside django container run `make ssh`)
-3. Running the command should return a user_id. Set the User ID in the docker-compose (`docker-compose.yml`) file `RAPIDPRO_BOT_USER_ID=...`
-4. Optional: Run the command `python manage.py get_rapidpro_authentication_header_value` in django container to get the **Authorization Header Value** for RapidPro server. (This value should also be displayed in the admin panel.)
+1. Run the command `python manage.py sync_rapidpro_bot_user` in django container (to go inside django container run `make ssh`)
+2. Optional: Run the command `python manage.py get_rapidpro_authentication_header_value` in django container to get the **Authorization Header Value** for RapidPro server. (This value should also be displayed in the admin panel.)
