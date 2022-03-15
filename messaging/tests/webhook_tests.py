@@ -11,7 +11,7 @@ from messaging.models import Message, Attachment
 
 
 class RapidProWebhookTest(APITestCase):
-    @override_settings(RAPIDPRO_BOT_USER_USERNAME='rb1', RAPIDPRO_BOT_USER_PASSWORD='rapidpassword1')
+    @override_settings(RAPIDPRO_BOT_USER_USERNAME='rb1')
     def setUp(self) -> None:
         management.call_command('sync_rapidpro_bot_user')
         self.bot_user = User.objects.first()
@@ -21,8 +21,6 @@ class RapidProWebhookTest(APITestCase):
 
     @override_settings(
         RAPIDPRO_BOT_USER_USERNAME='rb1',
-        RAPIDPRO_BOT_USER_PASSWORD='rapidpassword1',
-        RAPIDPRO_BOT_USER_ID=1
     )
     def test_webhook_stitches_messages(self):
         thread = ThreadFactory()
@@ -65,8 +63,6 @@ class RapidProWebhookTest(APITestCase):
 
     @override_settings(
         RAPIDPRO_BOT_USER_USERNAME='rb1',
-        RAPIDPRO_BOT_USER_PASSWORD='rapidpassword1',
-        RAPIDPRO_BOT_USER_ID=1
     )
     def test_webhook_parses_attachments(self):
         thread = ThreadFactory()
@@ -98,8 +94,6 @@ class RapidProWebhookTest(APITestCase):
 
     @override_settings(
         RAPIDPRO_BOT_USER_USERNAME='rb1',
-        RAPIDPRO_BOT_USER_PASSWORD='rapidpassword1',
-        RAPIDPRO_BOT_USER_ID=1
     )
     def test_stitched_attachment_parsing(self):
         thread = ThreadFactory()
@@ -144,8 +138,6 @@ class RapidProWebhookTest(APITestCase):
 
     @override_settings(
         RAPIDPRO_BOT_USER_USERNAME='rb1',
-        RAPIDPRO_BOT_USER_PASSWORD='rapidpassword1',
-        RAPIDPRO_BOT_USER_ID=1
     )
     def test_single_download(self):
         thread = ThreadFactory()
