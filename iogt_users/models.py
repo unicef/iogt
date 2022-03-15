@@ -23,15 +23,15 @@ class User(AbstractUser):
 
     @property
     def is_rapidpro_bot_user(self):
-        return self.pk == settings.RAPIDPRO_BOT_USER_ID
+        return self.groups.filter(name=settings.RAPIDPRO_BOT_GROUP_NAME).exists()
 
     @classmethod
     def get_rapidpro_bot_user(cls):
-        return cls.objects.get(pk=settings.RAPIDPRO_BOT_USER_ID)
+        return cls.objects.get(username=settings.RAPIDPRO_BOT_USER_USERNAME)
 
     @classmethod
     def get_rapidpro_bot_auth_header(cls):
-        user = User.objects.get(username=settings.RAPIDPRO_BOT_USER_USERNAME)
+        user = cls.get_rapidpro_bot_user()
         token = RefreshToken.for_user(user)
         return f'Bearer {token.access_token}'
 
