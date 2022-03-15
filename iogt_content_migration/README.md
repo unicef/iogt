@@ -18,7 +18,7 @@ Create a directory called 'legacy-initdb.d'.
 Add the v1 database backup (SQL) file in 'legacy-initdb.d'. It will be automatically loaded from this location when the legacy database is started.
 Start the legacy database with docker-compose:
 ```
-docker-compose -f docker-compose-legacy-db.yml up
+docker-compose -f docker-compose-legcy-db.yml up
 ```
 Execute the migration commands in the following order:
 

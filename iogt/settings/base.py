@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from datetime import timedelta
 
 import allauth
 from django.contrib import auth
@@ -72,6 +73,7 @@ INSTALLED_APPS = [
     'health_check.cache',
     'health_check.storage',
     'health_check.contrib.migrations',
+    'rest_framework_simplejwt',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -257,8 +259,6 @@ COMMENTS_XTD_CONFIRM_EMAIL = False
 
 COMMENTS_XTD_FORM_CLASS = 'comments.forms.CommentForm'
 
-
-
 COMMENTS_XTD_APP_MODEL_OPTIONS = {
     'default': {
         'allow_flagging': True,
@@ -272,7 +272,7 @@ WAGTAIL_I18N_ENABLED = True
 
 WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('ar', _('Arabic')),
-    ('ny', _('Chichewa')), # previously 'ch'
+    ('ny', _('Chichewa')),  # previously 'ch'
     ('en', _('English')),
     ('fr', _('French')),
     ('id', _('Indonesian')),
@@ -287,7 +287,7 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('pt', _('Portuguese')),
     ('qu', _('Quechua')),
     ('ru', _('Russian')),
-    ('sn', _('Shona')), # previously 'sho'
+    ('sn', _('Shona')),  # previously 'sho'
     ('es', _('Spanish')),
     ('sw', _('Swahili')),
     ('tg', _('Tajik')),
@@ -382,9 +382,7 @@ LOCALE_PATHS = [
 TRANSLATIONS_BASE_DIR = BASE_DIR
 
 # ========= Rapid Pro =================
-RAPIDPRO_BOT_USER_ID = os.getenv('RAPIDPRO_BOT_USER_ID')
-RAPIDPRO_BOT_USER_USERNAME = os.getenv('RAPIDPRO_BOT_USER_USERNAME')
-RAPIDPRO_BOT_USER_PASSWORD = os.getenv('RAPIDPRO_BOT_USER_PASSWORD')
+RAPIDPRO_BOT_USER_USERNAME = 'rapidpro_user'
 
 # Wagtail transfer default values. Override these in local.py
 WAGTAILTRANSFER_SECRET_KEY = os.getenv('WAGTAILTRANSFER_SECRET_KEY')
@@ -405,7 +403,6 @@ WAGTAIL_RICH_TEXT_FIELD_FEATURES = [
 # Search results
 SEARCH_RESULTS_PER_PAGE = 10
 
-
 COMMIT_HASH = os.getenv('COMMIT_HASH')
 
 from .profanity_settings import *
@@ -420,4 +417,14 @@ TRANSLATIONS_PROJECT_BASE_DIR = BASE_DIR
 
 from iogt.patch import *
 
-WAGTAILTRANSFER_UPDATE_RELATED_MODELS = ['wagtailimages.image', 'wagtailsvg.svg',]
+WAGTAILTRANSFER_UPDATE_RELATED_MODELS = ['wagtailimages.image', 'wagtailsvg.svg', ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=365),
+}
