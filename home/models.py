@@ -9,6 +9,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.files.images import get_image_dimensions
 from django.db import models
+from django.db.models import Q
+from django.db.models.constraints import UniqueConstraint
 from django.utils.deconstruct import deconstructible
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
@@ -1110,7 +1112,15 @@ class SVGToPNGMap(models.Model):
         return f'{self.svg_path} (F={self.fill_color}) (S={self.stroke_color}) -> {self.png_image_file}'
 
     class Meta:
-        unique_together = ('svg_path', 'fill_color', 'stroke_color')
+        constraints = [
+            UniqueConstraint(fields=('svg_path', 'fill_color', 'stroke_color'), name='unique_path_fill_stroke'),
+            UniqueConstraint(fields=('svg_path', 'fill_color'), condition=Q(stroke_color=None),
+                             name='unique_without_stroke'),
+            UniqueConstraint(fields=('svg_path', 'stroke_color'), condition=Q(fill_color=None),
+                             name='unique_without_fill'),
+            UniqueConstraint(fields=('svg_path',), condition=Q(fill_color=None, stroke_color=None),
+                             name='unique_without_fill_stroke'),
+        ]
 
 
 class V1PageURLToV2PageMap(models.Model):
