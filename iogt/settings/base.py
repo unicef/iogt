@@ -433,6 +433,8 @@ WAGTAILTRANSFER_LOOKUP_FIELDS = {
     'iogt_users.user': ['username'],
 }
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+
 CACHE_BACKEND = os.environ.get('cache_backend', 'db')
 if CACHE_BACKEND == 'db':
     CACHES = {
