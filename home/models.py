@@ -8,7 +8,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.files.images import get_image_dimensions
-from django.db import models
+from django.db import models, IntegrityError
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
 from django.utils.deconstruct import deconstructible
@@ -1104,8 +1104,11 @@ class SVGToPNGMap(models.Model):
             except:
                 logger.warning(f"Failed to convert SVG to PNG, file={svg_path}")
                 return None
-            obj = cls.objects.create(
-                svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color, png_image_file=png_image)
+            try:
+                obj = cls.objects.create(
+                    svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color, png_image_file=png_image)
+            except IntegrityError:
+                return None
         return obj.png_image_file
 
     def __str__(self):
