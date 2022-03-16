@@ -94,13 +94,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'iogt.middleware.GlobalDataMiddleware',
     "iogt.middleware.LocaleMiddleware",
     "iogt.middleware.AdminLocaleMiddleware",
     'iogt.middleware.CustomRedirectMiddleware',
     'iogt_users.middlewares.RegistrationSurveyRedirectMiddleware',
     'external_links.middleware.RewriteExternalLinksMiddleware',
     'iogt.middleware.CacheControlMiddleware',
+    'iogt.middleware.GlobalDataMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
@@ -441,10 +441,12 @@ if CACHE_BACKEND == 'db':
         "default": {
             "BACKEND": "django.core.cache.backends.db.DatabaseCache",
             "LOCATION": "iogt_cache_table",
+            "TIMEOUT": 300,
         },
         'renditions': {
             'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
             'LOCATION': 'iogt_cache_table',
+            'TIMEOUT': 300,
         },
     }
 elif CACHE_BACKEND == 'redis':
@@ -455,6 +457,7 @@ elif CACHE_BACKEND == 'redis':
         "default": {
             "BACKEND": "django_redis.cache.RedisCache",
             "LOCATION": f"redis://{CACHE_HOST}:{CACHE_PORT}/1",
+            'TIMEOUT': 300,
             "OPTIONS": {
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
                 "IGNORE_EXCEPTIONS": True,
@@ -463,6 +466,7 @@ elif CACHE_BACKEND == 'redis':
         'renditions': {
             'BACKEND': 'django_redis.cache.RedisCache',
             'LOCATION': 'redis://redis:6379/1',
+            'TIMEOUT': 300,
         },
     }
 else:
