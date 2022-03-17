@@ -1606,3 +1606,12 @@ msgstr "([not-needed]-label)"
 
 msgid "The label of the form field"
 msgstr "([not-needed]-The label of the form field)"
+
+msgid ""
+"Original Size (Can use LARGE amounts of user data package, not recommended)"
+msgstr ""
+"([not-needed]-Original Size (Can use LARGE amounts of user data package, not"
+" recommended))"
+
+msgid "Required"
+msgstr "([unused]-Required)"
