@@ -1095,8 +1095,10 @@ class SVGToPNGMap(models.Model):
 
     @classmethod
     def get_png_image(cls, svg_path, fill_color=None, stroke_color=None):
+        db_fill_color = fill_color or ''
+        db_stroke_color = stroke_color or ''
         try:
-            obj = cls.objects.get(svg_path=svg_path, fill_color=fill_color or '', stroke_color=stroke_color or '')
+            obj = cls.objects.get(svg_path=svg_path, fill_color=db_fill_color, stroke_color=db_stroke_color)
         except cls.DoesNotExist:
             try:
                 png_image = convert_svg_to_png_bytes(
@@ -1106,7 +1108,7 @@ class SVGToPNGMap(models.Model):
                 return None
             try:
                 obj = cls.objects.create(
-                    svg_path=svg_path, fill_color=fill_color or '',  stroke_color=stroke_color or '',
+                    svg_path=svg_path, fill_color=db_fill_color,  stroke_color=db_stroke_color,
                     png_image_file=png_image)
             except IntegrityError:
                 return None
