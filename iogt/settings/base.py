@@ -85,7 +85,6 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -101,7 +100,6 @@ MIDDLEWARE = [
     'external_links.middleware.RewriteExternalLinksMiddleware',
     'iogt.middleware.CacheControlMiddleware',
     'iogt.middleware.GlobalDataMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 # Prevent Wagtail's built in menu from showing in Admin > Settings
@@ -435,7 +433,7 @@ WAGTAILTRANSFER_LOOKUP_FIELDS = {
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
-CACHE_BACKEND = os.environ.get('cache_backend', 'db')
+CACHE_BACKEND = os.environ.get('cache_backend')
 if CACHE_BACKEND == 'db':
     CACHES = {
         "default": {
@@ -470,4 +468,15 @@ elif CACHE_BACKEND == 'redis':
         },
     }
 else:
-    raise ImproperlyConfigured('Set the CACHE_BACKEND environment variable.')
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'iogt_cache',
+            'TIMEOUT': 300,
+        },
+        'renditions': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'iogt_cache',
+            'TIMEOUT': 300,
+        },
+    }
