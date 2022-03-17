@@ -13,6 +13,7 @@
         question.questionSelectors = () => question.find('[id$="-question_1"]');
         question.questionSelectors = () => question.find('[id$="-question_1"]');
         question.answerHelpText = () => question.choices().find('.help');
+        question.questionHelpText = () => question.find('[id$=-help_text]');
         question.addBlockLabel = () => question.find('.action-add-block-skip_logic').children('span');
         question.filterSelectors = sortOrder => question.questionSelectors().find(`option[value=${sortOrder}]`);
         question.hasSelected = sortOrder => {
@@ -26,7 +27,12 @@
             question.choices().find('.struct-block').each((index, element) => {
                 $(element).find('label').first().html(newAnswerChoiceLabel)
             })
-        }
+        };
+        question.setQuestionHelpText = (helpText) => {
+            if (!question.questionHelpText().val()) {
+                question.questionHelpText().val(helpText);
+            }
+        };
         question.updateAnswerOptionLabel = () => {
             if (['checkboxes', 'dropdown', 'radio'].includes(question.fieldSelect().val())) {
                 question.setAnswerLabel('Answer Options', 'Choice')
@@ -34,9 +40,15 @@
                 question.setAnswerLabel('Skip Logic Options', 'Skip Value')
             }
         };
+        question.updateQuestionHelpText = () => {
+            if (question.fieldSelect().val() ==='date') {
+                question.setQuestionHelpText('Date must be in this (YYYY-MM-DD) format');
+            } else if (question.fieldSelect().val() === 'datetime') {
+                question.setQuestionHelpText('Datetime must be in this YYYY-MM-DDTHH:SS format');
+            }
+        };
         return question;
     };
-
 
     window.question = function(id) {
         this.fieldID = id;
@@ -99,9 +111,11 @@
             };
 
             updateAnswerDisplay(0);
+            thisQuestion.updateQuestionHelpText();
 
             thisQuestion.fieldSelect().change( function () {
                 updateAnswerDisplay(250);
+                thisQuestion.updateQuestionHelpText();
             });
 
             var wrapAction = function (element, cb) {
