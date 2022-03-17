@@ -1089,14 +1089,14 @@ class V1ToV2ObjectMap(models.Model):
 
 class SVGToPNGMap(models.Model):
     svg_path = models.TextField()
-    fill_color = models.TextField(null=True)
-    stroke_color = models.TextField(null=True)
+    fill_color = models.TextField(default='')
+    stroke_color = models.TextField(default='')
     png_image_file = models.ImageField(upload_to='svg-to-png-maps/')
 
     @classmethod
-    def get_png_image(cls, svg_path, fill_color, stroke_color=None):
+    def get_png_image(cls, svg_path, fill_color=None, stroke_color=None):
         try:
-            obj = cls.objects.get(svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color)
+            obj = cls.objects.get(svg_path=svg_path, fill_color=fill_color or '', stroke_color=stroke_color or '')
         except cls.DoesNotExist:
             try:
                 png_image = convert_svg_to_png_bytes(
@@ -1106,7 +1106,8 @@ class SVGToPNGMap(models.Model):
                 return None
             try:
                 obj = cls.objects.create(
-                    svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color, png_image_file=png_image)
+                    svg_path=svg_path, fill_color=fill_color or '',  stroke_color=stroke_color or '',
+                    png_image_file=png_image)
             except IntegrityError:
                 return None
         return obj.png_image_file
@@ -1115,15 +1116,7 @@ class SVGToPNGMap(models.Model):
         return f'{self.svg_path} (F={self.fill_color}) (S={self.stroke_color}) -> {self.png_image_file}'
 
     class Meta:
-        constraints = [
-            UniqueConstraint(fields=('svg_path', 'fill_color', 'stroke_color'), name='unique_path_fill_stroke'),
-            UniqueConstraint(fields=('svg_path', 'fill_color'), condition=Q(stroke_color=None),
-                             name='unique_without_stroke'),
-            UniqueConstraint(fields=('svg_path', 'stroke_color'), condition=Q(fill_color=None),
-                             name='unique_without_fill'),
-            UniqueConstraint(fields=('svg_path',), condition=Q(fill_color=None, stroke_color=None),
-                             name='unique_without_fill_stroke'),
-        ]
+        unique_together = ('svg_path', 'fill_color', 'stroke_color')
 
 
 class V1PageURLToV2PageMap(models.Model):
