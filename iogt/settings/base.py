@@ -433,7 +433,7 @@ WAGTAILTRANSFER_LOOKUP_FIELDS = {
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
-CACHE_BACKEND = os.environ.get('cache_backend')
+CACHE_BACKEND = os.environ.get('CACHE_BACKEND')
 if CACHE_BACKEND == 'db':
     CACHES = {
         "default": {
