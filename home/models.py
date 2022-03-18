@@ -1089,8 +1089,8 @@ class V1ToV2ObjectMap(models.Model):
 
 class SVGToPNGMap(models.Model):
     svg_path = models.TextField()
-    fill_color = models.TextField(default='')
-    stroke_color = models.TextField(default='')
+    fill_color = models.TextField(null=True)
+    stroke_color = models.TextField(null=True)
     png_image_file = models.ImageField(upload_to='svg-to-png-maps/')
 
     @classmethod
