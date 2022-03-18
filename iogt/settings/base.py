@@ -295,6 +295,7 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('ti', _('Tigrinya')),
     ('ur', _('Urdu')),
     ('uz', _('Uzbek')),
+    ('wo', _('Wolof')),
     ('zu', _('Zulu')),
     ('xy', _('Testing')),
 ]
@@ -359,6 +360,12 @@ EXTRA_LANG_INFO = {
         'code': 'ti',
         'name': 'Tigrinya',
         'name_local': 'Tigrinya',
+    },
+    'wo': {
+        'bidi': False,
+        'code': 'wo',
+        'name': 'Wolof',
+        'name_local': 'Wolof',
     },
     'zu': {
         'bidi': False,
