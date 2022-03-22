@@ -20,10 +20,11 @@ COPY requirements.txt /
 RUN apt-get update --yes --quiet \
   && apt-get install --yes --quiet --no-install-recommends \
     build-essential \
-    libpq-dev \
     gettext \
-    libpango1.0-0 \
     git \
+    libpq5 \
+    libpq-dev \
+    libpango1.0-0 \
  && pip install --no-cache-dir --upgrade pip \
  && pip install --no-cache-dir "gunicorn==20.0.4" \
  && pip install --no-cache-dir -r /requirements.txt \
