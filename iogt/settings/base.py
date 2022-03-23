@@ -14,7 +14,6 @@ import os
 
 import allauth
 from django.contrib import auth
-from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import gettext_lazy as _
 
 import django.conf.locale
