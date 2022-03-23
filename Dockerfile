@@ -14,25 +14,23 @@ EXPOSE 8000
 ENV PYTHONUNBUFFERED=1 \
     PORT=8000
 
-# Install system packages required by Wagtail and Django.
-RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-recommends \
-    build-essential \
-    libpq-dev \
-    libmariadbclient-dev \
-    libjpeg62-turbo-dev \
-    zlib1g-dev \
-    libwebp-dev \
-    gettext \
-    libpango1.0-0 \
-    git \
- && rm -rf /var/lib/apt/lists/*
-
-# Install the application server.
-RUN pip install "gunicorn==20.0.4"
-
-# Install the project requirements.
 COPY requirements.txt /
-RUN pip install -r /requirements.txt
+
+# Install system packages required by Wagtail and Django.
+RUN apt-get update --yes --quiet \
+  && apt-get install --yes --quiet --no-install-recommends \
+    build-essential \
+    gettext \
+    git \
+    libpq5 \
+    libpq-dev \
+    libpango1.0-0 \
+ && pip install --no-cache-dir --upgrade pip \
+ && pip install --no-cache-dir "gunicorn==20.0.4" \
+ && pip install --no-cache-dir -r /requirements.txt \
+ && apt remove --yes --quiet git build-essential libpq-dev \
+ && apt autoremove --yes --quiet \
+ && rm -rf /var/lib/apt/lists/*
 
 # Use /app folder as a directory where the source code is stored.
 WORKDIR /app
