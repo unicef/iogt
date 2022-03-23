@@ -15,8 +15,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         #Extracts message content from codebase and stores in locale/xy/LC_MESSAGES
-        call_command('makemessages', '-l' 'xy', '-d django')
-        call_command('makemessages', '-l' 'xy', '-d djangojs')
+        call_command('makemessages', '-l' 'xy', '-d django', '--keep-pot')
+        call_command('makemessages', '-l' 'xy', '-d djangojs', '--keep-pot')
 
         # Processes messages from locale/xy/LC_MESSAGES, looks through ‘translation_status.csv’ and ‘translations.csv’ 
         # and creates an up to date log of translation which are present and their status
@@ -26,4 +26,6 @@ class Command(BaseCommand):
         # Also creates a file ‘translatable_strings’ with translations that we need but don’t have
         make_testing_po_run()
         make_pos_run()
-        
+
+        os.remove('locale/django.pot')
+        os.remove('locale/djangojs.pot')
