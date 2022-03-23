@@ -24,9 +24,9 @@ services:
       WAGTAILTRANSFER_SOURCE_BASE_URL: https://example.com/wagtail-transfer/
       WAGTAILTRANSFER_SOURCE_SECRET_KEY: wagtailtransfer-source-secret-key
       BASE_URL: 'http://localhost:8000'
-      CACHE_BACKEND: db
-      REDIS_CACHE_HOST: redis
-      REDIS_CACHE_PORT: 6379
+      CACHE_BACKEND: django.core.cache.backends.redis.RedisCache
+      CACHE_LOCATION: redis://redis:6379/1
+      CACHE_TIMEOUT: 300
     command: bash -c "python manage.py load_po_files && python manage.py compilemessages && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./:/app/

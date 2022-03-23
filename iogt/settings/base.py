@@ -434,49 +434,17 @@ WAGTAILTRANSFER_LOOKUP_FIELDS = {
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 CACHE_BACKEND = os.environ.get('CACHE_BACKEND')
-if CACHE_BACKEND == 'db':
-    CACHES = {
-        "default": {
-            "BACKEND": "django.core.cache.backends.db.DatabaseCache",
-            "LOCATION": "iogt_cache_table",
-            "TIMEOUT": 300,
-        },
-        'renditions': {
-            'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-            'LOCATION': 'iogt_cache_table',
-            'TIMEOUT': 300,
-        },
-    }
-elif CACHE_BACKEND == 'redis':
-    CACHE_HOST = os.environ.get('REDIS_CACHE_HOST')
-    CACHE_PORT = os.environ.get('REDIS_CACHE_PORT')
-
-    CACHES = {
-        "default": {
-            "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": f"redis://{CACHE_HOST}:{CACHE_PORT}/1",
-            'TIMEOUT': 300,
-            "OPTIONS": {
-                "CLIENT_CLASS": "django_redis.client.DefaultClient",
-                "IGNORE_EXCEPTIONS": True,
-            },
-        },
-        'renditions': {
-            'BACKEND': 'django_redis.cache.RedisCache',
-            'LOCATION': 'redis://redis:6379/1',
-            'TIMEOUT': 300,
-        },
-    }
-else:
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-            'LOCATION': 'iogt_cache',
-            'TIMEOUT': 300,
-        },
-        'renditions': {
-            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-            'LOCATION': 'iogt_cache',
-            'TIMEOUT': 300,
-        },
-    }
+CACHE_LOCATION = os.environ.get('CACHE_LOCATION')
+CACHE_TIMEOUT = os.environ.get('CACHE_TIMEOUT')
+CACHES = {
+    "default": {
+        "BACKEND": CACHE_BACKEND,
+        "LOCATION": CACHE_LOCATION,
+        "TIMEOUT": CACHE_TIMEOUT,
+    },
+    'renditions': {
+        'BACKEND': CACHE_BACKEND,
+        'LOCATION': CACHE_LOCATION,
+        'TIMEOUT': CACHE_TIMEOUT,
+    },
+}
