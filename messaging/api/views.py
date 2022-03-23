@@ -31,7 +31,7 @@ class RapidProWebhook(APIView):
 
         chat_manager = ChatManager(thread)
         chat_manager.record_reply(
-            sender=User.get_rapidpro_bot_user(), text=text, quick_replies=quick_replies,
+            sender=request.user, text=text, quick_replies=quick_replies,
             rapidpro_message_id=rapidpro_message_id)
 
         return Response(data='ok', status=status.HTTP_200_OK)

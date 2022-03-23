@@ -26,14 +26,14 @@ class User(AbstractUser):
         return self.groups.filter(name=settings.RAPIDPRO_BOT_GROUP_NAME).exists()
 
     @classmethod
-    def get_rapidpro_bot_user(cls):
-        return cls.objects.get(username=settings.RAPIDPRO_BOT_USER_USERNAME)
+    def get_rapidpro_bot_auth_tokens(cls):
+        users = cls.objects.filter(groups__name=settings.RAPIDPRO_BOT_GROUP_NAME)
 
-    @classmethod
-    def get_rapidpro_bot_auth_header(cls):
-        user = cls.get_rapidpro_bot_user()
-        token = RefreshToken.for_user(user)
-        return f'Bearer {token.access_token}'
+        tokens = {}
+        for user in users:
+            tokens[user.username] = f'Bearer {RefreshToken.for_user(user).access_token}'
+
+        return tokens
 
 
     read_articles = models.ManyToManyField(to='home.Article')
