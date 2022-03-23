@@ -73,6 +73,11 @@ class Command(BaseCommand):
             help="IoGT V1 domains for manually inserted internal links, --v1-domains domain1 domain2 ..."
         )
         parser.add_argument(
+            '--v2-domain',
+            required=False,
+            help="IoGT V2 domains to be used for URLs in the migration report"
+        )
+        parser.add_argument(
             '--sort',
             required=True,
             help='Sort page by "type1" or "type2"'
@@ -84,7 +89,6 @@ class Command(BaseCommand):
         self.v1_domains_list = options.get('v1_domains')
         self.sort = options.get('sort')
         self.v2_domain = options.get('v2_domain')
-        self.v2_site_port = options.get('v2_site_port')
 
         self.collection_map = {}
         self.document_map = {}
@@ -245,7 +249,7 @@ class Command(BaseCommand):
         V1ToV2ObjectMap.create_map(content_object=home, v1_object_id=main['page_ptr_id'])
 
         Site.objects.create(
-            hostname=self.v1_domains_list[0],
+            hostname=self.v2_domain or self.v1_domains_list[0],
             port=443,
             root_page=home,
             is_default_site=True,
