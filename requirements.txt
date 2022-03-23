@@ -3,17 +3,16 @@ django-allauth~=0.44
 django-comments-xtd==2.9.*
 django-compressor==2.4.*
 django-debug-toolbar==3.2.1
-django-extensions
+django-extensions==3.1.*
 django-sass-processor==1.0.*
 django-translation-manager==1.1.1
 django==3.1.*
-elasticsearch>=7.0.0,<8.0.0
-factory-boy==3.2.*
+elasticsearch~=7.16
 libsass==0.21.*
-lxml
+lxml==4.8.*
 psycopg2==2.8.*
 redis~=3.0
-tqdm
+tqdm==4.62.*
 wagtail-localize~=0.9.5
 wagtail-markdown==0.7.0
 wagtail==2.11.*
@@ -22,4 +21,4 @@ wagtailmenus~=3.0
 wagtailsvg==0.0.14
 whitenoise==5.2.*
 django-health-check==3.16.5
-git+git://github.com/IDEMSInternational/wagtail-transfer.git@enh/show-error-for-unimported-referenced-pages#egg=wagtail-transfer
+git+https://github.com/IDEMSInternational/wagtail-transfer.git@enh/show-error-for-unimported-referenced-pages#egg=wagtail-transfer
