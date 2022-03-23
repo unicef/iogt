@@ -50,7 +50,7 @@ class MediaBlock(AbstractMediaChooserBlock):
             <p class='article__content--audio'>''' + download_audio_text + '''</p>
             '''
 
-        thumbnail = f'poster="{value.thumbnail.url}"' if value.thumbnail else ''
+        thumbnail = f'poster={value.thumbnail.url}' if value.thumbnail else ''
 
         return format_html(player_code, format_html_join(
             '\n', "<source{0}>",
