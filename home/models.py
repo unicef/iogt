@@ -1092,18 +1092,26 @@ class SVGToPNGMap(models.Model):
     png_image_file = models.ImageField(upload_to='svg-to-png-maps/')
 
     @classmethod
-    def get_png_image(cls, svg_path, fill_color, stroke_color=None):
+    def get_png_image(cls, svg_path, fill_color=None, stroke_color=None):
+        db_fill_color = fill_color or ''
+        db_stroke_color = stroke_color or ''
         try:
-            obj = cls.objects.get(svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color)
-        except cls.DoesNotExist:
+            obj = cls.objects.get(svg_path=svg_path, fill_color=db_fill_color, stroke_color=db_stroke_color)
+        except Exception as e:
+            logger.warning(f"Failed to fetch SVG to PNG, file={svg_path}, exception: {e}")
             try:
                 png_image = convert_svg_to_png_bytes(
                     svg_path, fill_color=fill_color, stroke_color=stroke_color, width=32)
-            except:
-                logger.warning(f"Failed to convert SVG to PNG, file={svg_path}")
+            except Exception as e:
+                logger.warning(f"Failed to convert SVG to PNG, file={svg_path}, exception: {e}")
                 return None
-            obj = cls.objects.create(
-                svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color, png_image_file=png_image)
+            try:
+                obj = cls.objects.create(
+                    svg_path=svg_path, fill_color=db_fill_color,  stroke_color=db_stroke_color,
+                    png_image_file=png_image)
+            except Exception as e:
+                logger.warning(f"Failed to create SVG to PNG, file={svg_path}, exception: {e}")
+                return None
         return obj.png_image_file
 
     def __str__(self):
