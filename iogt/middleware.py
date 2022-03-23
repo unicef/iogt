@@ -119,14 +119,14 @@ class GlobalDataMiddleware:
                 map.update({
                     (svg_to_png_map.svg_path, svg_to_png_map.fill_color, svg_to_png_map.stroke_color): svg_to_png_map,
                 })
-            cache.set('svg_to_png_map', map, timeout=300)
+            cache.set('svg_to_png_map', map)
         if not cache.get(f'{language_code}_translation_map'):
             map = {}
             for translation_entry in TranslationEntry.objects.filter(language=language_code):
                 map.update({
                     (translation_entry.original, language_code): translation_entry
                 })
-            cache.set(f'{language_code}_translation_map', map, timeout=300)
+            cache.set(f'{language_code}_translation_map', map)
 
         response = self.get_response(request)
 
