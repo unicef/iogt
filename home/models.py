@@ -1097,19 +1097,20 @@ class SVGToPNGMap(models.Model):
         db_stroke_color = stroke_color or ''
         try:
             obj = cls.objects.get(svg_path=svg_path, fill_color=db_fill_color, stroke_color=db_stroke_color)
-        except:
+        except Exception as e:
+            logger.warning(f"Failed to fetch SVG to PNG, file={svg_path}, exception: {e}")
             try:
                 png_image = convert_svg_to_png_bytes(
                     svg_path, fill_color=fill_color, stroke_color=stroke_color, width=32)
-            except:
-                logger.warning(f"Failed to convert SVG to PNG, file={svg_path}")
+            except Exception as e:
+                logger.warning(f"Failed to convert SVG to PNG, file={svg_path}, exception: {e}")
                 return None
             try:
                 obj = cls.objects.create(
                     svg_path=svg_path, fill_color=db_fill_color,  stroke_color=db_stroke_color,
                     png_image_file=png_image)
-            except:
-                logger.warning(f"Failed to create SVG to PNG, file={svg_path}")
+            except Exception as e:
+                logger.warning(f"Failed to create SVG to PNG, file={svg_path}, exception: {e}")
                 return None
         return obj.png_image_file
 
