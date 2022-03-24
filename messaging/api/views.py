@@ -7,17 +7,16 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 
+from .permissions import IsRapidProGroupUser
 from .serializers import RapidProMessageSerializer
 from ..chat import ChatManager
 from ..models import Thread
-from iogt_users.authentication import RapidProBasicAuthentication
 
 User = get_user_model()
 
 
 class RapidProWebhook(APIView):
-    authentication_classes = [RapidProBasicAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsRapidProGroupUser]
 
     def post(self, request):
         serializer = RapidProMessageSerializer(data=request.data)
@@ -32,7 +31,7 @@ class RapidProWebhook(APIView):
 
         chat_manager = ChatManager(thread)
         chat_manager.record_reply(
-            sender=User.get_rapidpro_bot_user(), text=text, quick_replies=quick_replies,
+            sender=request.user, text=text, quick_replies=quick_replies,
             rapidpro_message_id=rapidpro_message_id)
 
         return Response(data='ok', status=status.HTTP_200_OK)

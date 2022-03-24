@@ -6,6 +6,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class User(AbstractUser):
@@ -22,18 +23,18 @@ class User(AbstractUser):
 
     @property
     def is_rapidpro_bot_user(self):
-        return self.pk == settings.RAPIDPRO_BOT_USER_ID
+        return self.groups.filter(name=settings.RAPIDPRO_BOT_GROUP_NAME).exists()
 
     @classmethod
-    def get_rapidpro_bot_user(cls):
-        return cls.objects.get(pk=settings.RAPIDPRO_BOT_USER_ID)
+    def get_rapidpro_bot_auth_tokens(cls):
+        users = cls.objects.filter(groups__name=settings.RAPIDPRO_BOT_GROUP_NAME)
 
-    @classmethod
-    def get_rapidpro_bot_auth_header(cls):
-        auth_str = f'{settings.RAPIDPRO_BOT_USER_USERNAME}:{settings.RAPIDPRO_BOT_USER_PASSWORD}'
-        message_bytes = auth_str.encode('ascii')
-        base64_bytes = base64.b64encode(message_bytes)
-        return f'Basic {base64_bytes.decode("ascii")}'
+        tokens = {}
+        for user in users:
+            tokens[user.username] = f'Bearer {RefreshToken.for_user(user).access_token}'
+
+        return tokens
+
 
     read_articles = models.ManyToManyField(to='home.Article')
 
