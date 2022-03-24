@@ -1,9 +1,9 @@
-from base64 import b64encode
+from uuid import uuid4
 
 from django.core import management
-from django.test import override_settings
 from django.urls import reverse
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIClient
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from home.models import User
 from messaging.factories import ThreadFactory
@@ -11,17 +11,13 @@ from messaging.models import Message, Attachment
 
 
 class RapidProWebhookTest(APITestCase):
-    @override_settings(RAPIDPRO_BOT_USER_USERNAME='rb1')
     def setUp(self) -> None:
-        management.call_command('sync_rapidpro_bot_user')
-        self.bot_user = User.objects.first()
-        self.client.credentials(HTTP_AUTHORIZATION="Basic {}".format(
-            b64encode(bytes(f"rb1:rapidpassword1", "utf-8")).decode("ascii")
-        ))
+        username = uuid4()
+        management.call_command('sync_rapidpro_bot_user', username=username)
+        self.bot_user = User.objects.get(username=username)
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {RefreshToken.for_user(self.bot_user).access_token}')
 
-    @override_settings(
-        RAPIDPRO_BOT_USER_USERNAME='rb1',
-    )
     def test_webhook_stitches_messages(self):
         thread = ThreadFactory()
 
@@ -61,9 +57,6 @@ class RapidProWebhookTest(APITestCase):
                                        ' First part ends at the exclamation mark!The second part starts here')
         self.assertEqual(len(message.quick_replies), 3)
 
-    @override_settings(
-        RAPIDPRO_BOT_USER_USERNAME='rb1',
-    )
     def test_webhook_parses_attachments(self):
         thread = ThreadFactory()
 
@@ -92,16 +85,13 @@ class RapidProWebhookTest(APITestCase):
                          '3de4f80a-1eab-42db-8b7e-d7c35edecd06.bin')
         self.assertIsNotNone(attachment.file)
 
-    @override_settings(
-        RAPIDPRO_BOT_USER_USERNAME='rb1',
-    )
     def test_stitched_attachment_parsing(self):
         thread = ThreadFactory()
 
         rapidpro_data_list = [
             {
                 "id": "1",
-                "text": "Some message with a stitched url.\nhttp://www.internet.com/12345",
+                "text": "Some message with a stitched url. \nhttps://via.placeholder.com/200",
                 "to": str(thread.uuid),
                 "from": "abcd",
                 "channel": "bd3577c6-65b1-4bb7-9611-306c11b1dcc5",
@@ -131,14 +121,11 @@ class RapidProWebhookTest(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         self.assertEqual(Message.objects.count(), 1)
-        self.assertEqual(message.text, 'Some message with a stitched url.')
+        self.assertEqual(message.text, 'Some message with a stitched url. ')
         self.assertEqual(message.attachments.count(), 1)
-        self.assertEqual(attachment.external_link, 'http://www.internet.com/12345678910.jpg')
+        self.assertEqual(attachment.external_link, 'https://via.placeholder.com/200678910.jpg')
         self.assertEqual(len(message.quick_replies), 3)
 
-    @override_settings(
-        RAPIDPRO_BOT_USER_USERNAME='rb1',
-    )
     def test_single_download(self):
         thread = ThreadFactory()
 
@@ -182,4 +169,3 @@ class RapidProWebhookTest(APITestCase):
         self.assertEqual('https://via.placeholder.com/200', attachment.external_link)
 
         self.assertIsNotNone(attachment.image)
-

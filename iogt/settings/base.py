@@ -383,8 +383,7 @@ LOCALE_PATHS = [
 TRANSLATIONS_BASE_DIR = BASE_DIR
 
 # ========= Rapid Pro =================
-RAPIDPRO_BOT_USER_USERNAME = 'rapidpro_user'
-RAPIDPRO_BOT_GROUP_NAME = 'rapidpro'
+RAPIDPRO_BOT_GROUP_NAME = os.getenv('RAPIDPRO_BOT_GROUP_NAME', 'rapidpro_chatbot')
 
 # Wagtail transfer default values. Override these in local.py
 WAGTAILTRANSFER_SECRET_KEY = os.getenv('WAGTAILTRANSFER_SECRET_KEY')
