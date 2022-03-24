@@ -140,6 +140,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'CONN_MAX_AGE': int(os.environ.get('DB_CONN_MAX_AGE', 0)),
     }
 }
 
@@ -432,9 +433,9 @@ WAGTAILTRANSFER_LOOKUP_FIELDS = {
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
-CACHE_BACKEND = os.environ.get('CACHE_BACKEND')
-CACHE_LOCATION = os.environ.get('CACHE_LOCATION')
-CACHE_TIMEOUT = os.environ.get('CACHE_TIMEOUT')
+CACHE_BACKEND = os.environ.get('CACHE_BACKEND', 'django.core.cache.backends.locmem.LocMemCache')
+CACHE_LOCATION = os.environ.get('CACHE_LOCATION', 'iogt')
+CACHE_TIMEOUT = os.environ.get('CACHE_TIMEOUT', 300)
 CACHES = {
     "default": {
         "BACKEND": CACHE_BACKEND,
