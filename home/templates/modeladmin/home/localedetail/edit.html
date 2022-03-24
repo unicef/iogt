@@ -1,0 +1,9 @@
+{% extends "modeladmin/edit.html" %}
+
+{% block header %}
+    {% if view.get_page_subtitle.locale.language_code == 'wo' %}
+        {% include "wagtailadmin/shared/header.html" with title=view.get_page_title subtitle=view.get_page_subtitle.locale.get_display_name|add:' (Not Yet Translated)'  icon=view.header_icon tabbed=1 merged=1 %}
+    {% else %}
+        {% include "wagtailadmin/shared/header.html" with title=view.get_page_title subtitle=view.get_page_subtitle icon=view.header_icon tabbed=1 merged=1 %}
+    {% endif %}
+{% endblock %}

@@ -143,6 +143,7 @@ class LocaleDetailAdmin(ModelAdmin):
     menu_icon = 'site'
     list_display = ('locale', 'is_active', 'is_main_language',)
     list_filter = ('is_active', 'is_main_language',)
+    eidt_template_name = 'modeladmin/home/localedetail/edit.html'
     add_to_settings_menu = True
     menu_order = 700
 
