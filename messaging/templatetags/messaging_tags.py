@@ -21,6 +21,8 @@ def render_quick_reply_form(thread, user, text):
     }
 
 
-@register.simple_tag
-def chatbot_auth_header():
-    return User.get_rapidpro_bot_auth_header()
+@register.inclusion_tag('messaging/tags/chatbot_auth_tokens.html')
+def render_chatbot_auth_tokens():
+    return {
+        'tokens': User.get_rapidpro_bot_auth_tokens(),
+    }
