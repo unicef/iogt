@@ -18,7 +18,7 @@ describe("Direct components tests", () => {
         cy.visitUrl(url)
         cy.get("[href=\"/en/footer/about-internet-of-good-thins/\"]")
             .contains("About Internet of Good Things")
-        cy.get("[href=\"/en/footer/about-internet-of-good-thins/\"] img[src=\"/media/svg-to-png-maps/svg-to-png_kNkvY4b.png\"").should("be.visible")
+        cy.get("[href=\"/en/footer/about-internet-of-good-thins/\"] img[src=\"/media/svg-to-png-maps/svg-to-png_gxn0V4r.png\"").should("be.visible")
             .and(($img) => {
             expect($img[0].naturalWidth).to.be.greaterThan(0)
         });
@@ -127,7 +127,7 @@ describe("Page link page components tests", () => {
         cy.visitUrl(url)
         cy.get("[href=\"/en/sections/covid-19/\"]")
             .contains("Covid 19 Section page link")
-        cy.get("[href=\"/en/sections/covid-19/\"] img[src=\"/media/svg-to-png-maps/svg-to-png_kNkvY4b.png\"").should("be.visible")
+        cy.get("[href=\"/en/sections/covid-19/\"] img[src=\"/media/svg-to-png-maps/svg-to-png_gxn0V4r.png\"").should("be.visible")
             .and(($img) => {
             expect($img[0].naturalWidth).to.be.greaterThan(0)
         });

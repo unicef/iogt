@@ -1,6 +1,4 @@
-from django.db.models import Q
 from django.forms.utils import flatatt
-from django.template.loader import render_to_string
 from django.utils.html import format_html, format_html_join
 from django.utils.translation import gettext as _
 
@@ -9,8 +7,6 @@ from wagtail.core.blocks import PageChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtailmarkdown.utils import render_markdown
 from wagtailmedia.blocks import AbstractMediaChooserBlock
-
-from questionnaires.utils import SkipLogicPaginator
 
 
 class MediaBlock(AbstractMediaChooserBlock):
@@ -36,7 +32,7 @@ class MediaBlock(AbstractMediaChooserBlock):
         if value.type == 'video':
             player_code = '''
             <div>
-                <video width="320" height="240" controls>
+                <video width="320" height="240" {1} controls>
                     {0}
                     ''' + video_not_supported_text + '''
                 </video>
@@ -54,10 +50,12 @@ class MediaBlock(AbstractMediaChooserBlock):
             <p class='article__content--audio'>''' + download_audio_text + '''</p>
             '''
 
+        thumbnail = f'poster={value.thumbnail.url}' if value.thumbnail else ''
+
         return format_html(player_code, format_html_join(
             '\n', "<source{0}>",
             [[flatatt(s)] for s in value.sources]
-        ), value.url)
+        ), thumbnail)
 
 
 class SocialMediaLinkBlock(blocks.StructBlock):

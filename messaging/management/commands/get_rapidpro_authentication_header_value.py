@@ -10,6 +10,6 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **options):
-        auth_header = User.get_rapidpro_bot_auth_header()
-
-        self.stdout.write(self.style.SUCCESS(auth_header))
+        tokens = User.get_rapidpro_bot_auth_tokens()
+        for username, token in tokens.items():
+            self.stdout.write(self.style.SUCCESS(f'{username}: {token}'))

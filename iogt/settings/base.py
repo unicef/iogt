@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from datetime import timedelta
 
 import allauth
 from django.contrib import auth
@@ -73,6 +74,7 @@ INSTALLED_APPS = [
     'health_check.cache',
     'health_check.storage',
     'health_check.contrib.migrations',
+    'rest_framework_simplejwt',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -260,8 +262,6 @@ COMMENTS_XTD_CONFIRM_EMAIL = False
 
 COMMENTS_XTD_FORM_CLASS = 'comments.forms.CommentForm'
 
-
-
 COMMENTS_XTD_APP_MODEL_OPTIONS = {
     'default': {
         'allow_flagging': True,
@@ -385,9 +385,7 @@ LOCALE_PATHS = [
 TRANSLATIONS_BASE_DIR = BASE_DIR
 
 # ========= Rapid Pro =================
-RAPIDPRO_BOT_USER_ID = os.getenv('RAPIDPRO_BOT_USER_ID')
-RAPIDPRO_BOT_USER_USERNAME = os.getenv('RAPIDPRO_BOT_USER_USERNAME')
-RAPIDPRO_BOT_USER_PASSWORD = os.getenv('RAPIDPRO_BOT_USER_PASSWORD')
+RAPIDPRO_BOT_GROUP_NAME = os.getenv('RAPIDPRO_BOT_GROUP_NAME', 'rapidpro_chatbot')
 
 # Wagtail transfer default values. Override these in local.py
 WAGTAILTRANSFER_SECRET_KEY = os.getenv('WAGTAILTRANSFER_SECRET_KEY')
@@ -407,7 +405,6 @@ WAGTAIL_RICH_TEXT_FIELD_FEATURES = [
 
 # Search results
 SEARCH_RESULTS_PER_PAGE = 10
-
 
 COMMIT_HASH = os.getenv('COMMIT_HASH')
 
@@ -429,6 +426,16 @@ WAGTAILTRANSFER_LOOKUP_FIELDS = {
     'taggit.tag': ['slug'],
     'wagtailcore.locale': ['language_code'],
     'iogt_users.user': ['username'],
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=365),
 }
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
