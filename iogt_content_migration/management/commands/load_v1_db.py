@@ -1698,7 +1698,7 @@ class Command(BaseCommand):
         for row in cur:
             v2_article = self.v1_to_v2_page_map.get(row['page_ptr_id'])
             if v2_article:
-                v2_article.refresh_from_db()
+                v2_article = models.Article.objects.get(id=v2_article.id)
                 v2_article.body = self.map_article_body(row)
                 v2_article.save()
             else:
