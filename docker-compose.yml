@@ -21,7 +21,7 @@ services:
       WAGTAILTRANSFER_SOURCE_SECRET_KEY: wagtailtransfer-source-secret-key
       BASE_URL: 'http://localhost:8000'
       CACHE_BACKEND: django.core.cache.backends.dummy.DummyCache
-      CACHE_LOCATION: redis://redis:6379/1
+      CACHE_LOCATION: ''
       CACHE_TIMEOUT: 300
     command: python manage.py runserver 0.0.0.0:8000
     volumes:

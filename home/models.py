@@ -1101,7 +1101,7 @@ class SVGToPNGMap(models.Model):
             try:
                 obj = cache.get('svg_to_png_map')[(svg_path, db_fill_color, db_stroke_color)]
             except (KeyError, TypeError):
-                obj = cls.objects.get(svg_path=svg_path, fill_color=db_fill_color, stroke_color=stroke_color)
+                obj = cls.objects.get(svg_path=svg_path, fill_color=db_fill_color, stroke_color=db_stroke_color)
         except Exception as e:
             logger.warning(f"Failed to fetch SVG to PNG, file={svg_path}, exception: {e}")
             try:

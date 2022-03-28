@@ -441,8 +441,8 @@ SIMPLE_JWT = {
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 CACHE_BACKEND = os.environ.get('CACHE_BACKEND', 'django.core.cache.backends.dummy.DummyCache')
-CACHE_LOCATION = os.environ.get('CACHE_LOCATION', 'iogt')
-CACHE_TIMEOUT = os.environ.get('CACHE_TIMEOUT', 300)
+CACHE_LOCATION = os.environ.get('CACHE_LOCATION', '')
+CACHE_TIMEOUT = os.environ.get('CACHE_TIMEOUT', 0)
 CACHES = {
     "default": {
         "BACKEND": CACHE_BACKEND,
