@@ -541,6 +541,10 @@ class Command(BaseCommand):
                             f'title: {translated_section.title}. URL: {translated_section.full_url}. '
                             f'Admin URL: {self.get_admin_url(translated_section.id)}.'
                         )
+                    self.post_migration_report_messages['disabled_larger_image_for_top_page_in_list_as_in_v1'].append(
+                        f'title: {translated_section.title}. URL: {translated_section.full_url}. '
+                        f'Admin URL: {self.get_admin_url(translated_section.id)}.'
+                    )
 
                 self.stdout.write(f"Translated section, title={row['title']}")
         cur.close()
@@ -596,6 +600,10 @@ class Command(BaseCommand):
                 f'title: {section.title}. URL: {section.full_url}. '
                 f'Admin URL: {self.get_admin_url(section.id)}.'
             )
+        self.post_migration_report_messages['disabled_larger_image_for_top_page_in_list_as_in_v1'].append(
+            f'title: {section.title}. URL: {section.full_url}. '
+            f'Admin URL: {self.get_admin_url(section.id)}.'
+        )
         self.stdout.write(f"saved section, title={section.title}")
 
     def add_warning_for_sections_with_description(self, row, section):
