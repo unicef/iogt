@@ -1025,7 +1025,7 @@ class Command(BaseCommand):
                     translated_footer.last_published_at = row['last_published_at']
                     translated_footer.search_description = row['search_description']
                     translated_footer.seo_title = row['seo_title']
-                    translated_footer.commenting_status = commenting_status
+                    translated_footer.commenting_status = CommentStatus.DISABLED
                     translated_footer.commenting_starts_at = commenting_open_time
                     translated_footer.commenting_ends_at = commenting_close_time
                     translated_footer.latest_revision_created_at = row['latest_revision_created_at']
@@ -1048,6 +1048,11 @@ class Command(BaseCommand):
                     self.v1_to_v2_page_map.update({
                         row['page_ptr_id']: translated_footer
                     })
+
+                    self.post_migration_report_messages['disabled_comments_for_pages_which_has_other_settings'].append(
+                        f'title: {translated_footer.title}. URL: {translated_footer.full_url}. '
+                        f'Admin URL: {self.get_admin_url(translated_footer.id)}. Original Setting: {commenting_status}.'
+                    )
 
                 self.stdout.write(f"Translated footer, title={row['title']}")
         cur.close()
@@ -1072,7 +1077,7 @@ class Command(BaseCommand):
             last_published_at=row['last_published_at'],
             search_description=row['search_description'],
             seo_title=row['seo_title'],
-            commenting_status=commenting_status,
+            commenting_status=CommentStatus.DISABLED,
             commenting_starts_at=commenting_open_time,
             commenting_ends_at=commenting_close_time,
             latest_revision_created_at=row['latest_revision_created_at'],
@@ -1095,6 +1100,12 @@ class Command(BaseCommand):
         self.v1_to_v2_page_map.update({
             row['page_ptr_id']: footer
         })
+
+        self.post_migration_report_messages['disabled_comments_for_pages_which_has_other_settings'].append(
+            f'title: {footer.title}. URL: {footer.full_url}. '
+            f'Admin URL: {self.get_admin_url(footer.id)}. Original Setting: {commenting_status}.'
+        )
+
         self.stdout.write(f"saved footer, title={footer.title}")
 
     def load_page_translation_map(self):
