@@ -1623,8 +1623,9 @@ class Command(BaseCommand):
                             f'featured since: {article.featured_in_homepage_start_date}.'
                         )
 
-                section = models.Section.objects.get(path=k)
-                self.add_section_as_featured_content_in_home_page(section)
+                section = models.Section.objects.filter(path=k).first()
+                if section:
+                    self.add_section_as_featured_content_in_home_page(section)
 
         locale_cur.close()
 
