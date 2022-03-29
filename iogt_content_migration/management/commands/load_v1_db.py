@@ -519,7 +519,7 @@ class Command(BaseCommand):
                     translated_section.seo_title = row['seo_title']
                     translated_section.font_color = self.get_color_hex(row['extra_style_hints']) or section.font_color
                     translated_section.larger_image_for_top_page_in_list_as_in_v1 = False
-                    translated_section.commenting_status = commenting_status
+                    translated_section.commenting_status = CommentStatus.DISABLED
                     translated_section.commenting_starts_at = commenting_open_time
                     translated_section.commenting_ends_at = commenting_close_time
                     translated_section.latest_revision_created_at = row['latest_revision_created_at']
@@ -544,6 +544,10 @@ class Command(BaseCommand):
                     self.post_migration_report_messages['disabled_larger_image_for_top_page_in_list_as_in_v1'].append(
                         f'title: {translated_section.title}. URL: {translated_section.full_url}. '
                         f'Admin URL: {self.get_admin_url(translated_section.id)}.'
+                    )
+                    self.post_migration_report_messages['disabled_comments_for_pages_which_has_other_settings'].append(
+                        f'title: {translated_section.title}. URL: {translated_section.full_url}. '
+                        f'Admin URL: {self.get_admin_url(translated_section.id)}. Original Setting: {commenting_status}.'
                     )
 
                 self.stdout.write(f"Translated section, title={row['title']}")
@@ -573,7 +577,7 @@ class Command(BaseCommand):
             expire_at=row['expire_at'],
             first_published_at=row['first_published_at'],
             last_published_at=row['last_published_at'],
-            commenting_status=commenting_status,
+            commenting_status=CommentStatus.DISABLED,
             commenting_starts_at=commenting_open_time,
             commenting_ends_at=commenting_close_time,
             search_description=row['search_description'],
@@ -603,6 +607,10 @@ class Command(BaseCommand):
         self.post_migration_report_messages['disabled_larger_image_for_top_page_in_list_as_in_v1'].append(
             f'title: {section.title}. URL: {section.full_url}. '
             f'Admin URL: {self.get_admin_url(section.id)}.'
+        )
+        self.post_migration_report_messages['disabled_comments_for_pages_which_has_other_settings'].append(
+            f'title: {section.title}. URL: {section.full_url}. '
+            f'Admin URL: {self.get_admin_url(section.id)}. Original Setting: {commenting_status}.'
         )
         self.stdout.write(f"saved section, title={section.title}")
 
@@ -661,7 +669,7 @@ class Command(BaseCommand):
                     translated_article.search_description = row['search_description']
                     translated_article.seo_title = row['seo_title']
                     translated_article.index_page_description = row['subtitle']
-                    translated_article.commenting_status = commenting_status
+                    translated_article.commenting_status = CommentStatus.DISABLED
                     translated_article.commenting_starts_at = commenting_open_time
                     translated_article.commenting_ends_at = commenting_close_time
                     translated_article.latest_revision_created_at = row['latest_revision_created_at']
@@ -683,6 +691,11 @@ class Command(BaseCommand):
                     self.v1_to_v2_page_map.update({
                         row['page_ptr_id']: translated_article
                     })
+
+                    self.post_migration_report_messages['disabled_comments_for_pages_which_has_other_settings'].append(
+                        f'title: {translated_article.title}. URL: {translated_article.full_url}. '
+                        f'Admin URL: {self.get_admin_url(translated_article.id)}. Original Setting: {commenting_status}.'
+                    )
 
                 self.stdout.write(f"Translated article, title={row['title']}")
         cur.close()
@@ -715,7 +728,7 @@ class Command(BaseCommand):
             expire_at=row['expire_at'],
             first_published_at=row['first_published_at'],
             last_published_at=row['last_published_at'],
-            commenting_status=commenting_status,
+            commenting_status=CommentStatus.DISABLED,
             commenting_starts_at=commenting_open_time,
             commenting_ends_at=commenting_close_time,
             search_description=row['search_description'],
@@ -742,6 +755,10 @@ class Command(BaseCommand):
             self.v1_to_v2_page_map.update({
                 row['page_ptr_id']: article
             })
+            self.post_migration_report_messages['disabled_comments_for_pages_which_has_other_settings'].append(
+                f'title: {article.title}. URL: {article.full_url}. '
+                f'Admin URL: {self.get_admin_url(article.id)}. Original Setting: {commenting_status}.'
+            )
         except Page.DoesNotExist:
             self.post_migration_report_messages['articles'].append(
                 f"Skipping article with missing parent: title={row['title']}"
