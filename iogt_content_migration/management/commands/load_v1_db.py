@@ -518,7 +518,7 @@ class Command(BaseCommand):
                     translated_section.search_description = row['search_description']
                     translated_section.seo_title = row['seo_title']
                     translated_section.font_color = self.get_color_hex(row['extra_style_hints']) or section.font_color
-                    translated_section.larger_image_for_top_page_in_list_as_in_v1 = True
+                    translated_section.larger_image_for_top_page_in_list_as_in_v1 = False
                     translated_section.commenting_status = commenting_status
                     translated_section.commenting_starts_at = commenting_open_time
                     translated_section.commenting_ends_at = commenting_close_time
@@ -575,7 +575,7 @@ class Command(BaseCommand):
             search_description=row['search_description'],
             seo_title=row['seo_title'],
             font_color=self.get_color_hex(row['extra_style_hints']),
-            larger_image_for_top_page_in_list_as_in_v1=True,
+            larger_image_for_top_page_in_list_as_in_v1=False,
             latest_revision_created_at=row['latest_revision_created_at'],
         )
         section.save()
