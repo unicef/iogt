@@ -142,7 +142,6 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        'CONN_MAX_AGE': int(os.environ.get('DB_CONN_MAX_AGE', 0)),
     }
 }
 
@@ -447,9 +446,12 @@ SIMPLE_JWT = {
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
-CACHE_BACKEND = os.environ.get('CACHE_BACKEND', 'django.core.cache.backends.dummy.DummyCache')
-CACHE_LOCATION = os.environ.get('CACHE_LOCATION', '')
-CACHE_TIMEOUT = os.environ.get('CACHE_TIMEOUT', 0)
+CACHE_BACKEND = os.getenv(
+    'CACHE_BACKEND',
+    'django.core.cache.backends.dummy.DummyCache'
+)
+CACHE_LOCATION = os.getenv('CACHE_LOCATION', '')
+CACHE_TIMEOUT = int(os.getenv('CACHE_TIMEOUT', '0'))
 CACHES = {
     "default": {
         "BACKEND": CACHE_BACKEND,

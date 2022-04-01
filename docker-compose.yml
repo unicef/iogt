@@ -11,8 +11,7 @@ services:
       DB_USER: postgres
       DB_PASSWORD: iogt
       DB_HOST: db
-      DB_PORT: 5432
-      DB_CONN_MAX_AGE: 600
+      DB_PORT: '5432'
       DJANGO_SETTINGS_MODULE: iogt.settings.docker_compose_dev
       COMMIT_HASH: asdfghjkl
       WAGTAILTRANSFER_SECRET_KEY: wagtailtransfer-secret-key
@@ -20,9 +19,6 @@ services:
       WAGTAILTRANSFER_SOURCE_BASE_URL: https://example.com/wagtail-transfer/
       WAGTAILTRANSFER_SOURCE_SECRET_KEY: wagtailtransfer-source-secret-key
       BASE_URL: 'http://localhost:8000'
-      CACHE_BACKEND: django.core.cache.backends.dummy.DummyCache
-      CACHE_LOCATION: ''
-      CACHE_TIMEOUT: 300
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./:/app/
