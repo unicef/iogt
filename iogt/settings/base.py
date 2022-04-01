@@ -100,6 +100,7 @@ MIDDLEWARE = [
     'iogt_users.middlewares.RegistrationSurveyRedirectMiddleware',
     'external_links.middleware.RewriteExternalLinksMiddleware',
     'iogt.middleware.CacheControlMiddleware',
+    'iogt.middleware.GlobalDataMiddleware',
 ]
 
 # Prevent Wagtail's built in menu from showing in Admin > Settings
@@ -141,6 +142,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'CONN_MAX_AGE': int(os.environ.get('DB_CONN_MAX_AGE', 0)),
     }
 }
 
@@ -441,4 +443,22 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=365),
+}
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+
+CACHE_BACKEND = os.environ.get('CACHE_BACKEND', 'django.core.cache.backends.dummy.DummyCache')
+CACHE_LOCATION = os.environ.get('CACHE_LOCATION', '')
+CACHE_TIMEOUT = os.environ.get('CACHE_TIMEOUT', 0)
+CACHES = {
+    "default": {
+        "BACKEND": CACHE_BACKEND,
+        "LOCATION": CACHE_LOCATION,
+        "TIMEOUT": CACHE_TIMEOUT,
+    },
+    'renditions': {
+        'BACKEND': CACHE_BACKEND,
+        'LOCATION': CACHE_LOCATION,
+        'TIMEOUT': CACHE_TIMEOUT,
+    },
 }

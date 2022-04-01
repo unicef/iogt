@@ -2,16 +2,19 @@ from urllib.parse import unquote
 
 from django.conf import settings
 from django.conf.urls.i18n import is_language_prefix_patterns_used
+from django.core.cache import cache
 from django.http.response import HttpResponsePermanentRedirect
 from django.middleware.locale import LocaleMiddleware as DjangoLocaleMiddleware
 from django.utils import translation
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.translation import get_language_from_path, check_for_language, get_supported_language_variant
 from django.utils.translation.trans_real import get_languages, parse_accept_lang_header, language_code_re
+from translation_manager.models import TranslationEntry
 from wagtail.contrib.redirects.middleware import RedirectMiddleware
-from wagtail.core.models import Locale
+from wagtail.core.models import Locale, Site
 
-from home.models import SiteSettings, V1PageURLToV2PageMap
+from home.models import SiteSettings, V1PageURLToV2PageMap, ThemeSettings, SVGToPNGMap
+import iogt.iogt_globals as globals_
 
 
 class CacheControlMiddleware:
@@ -96,3 +99,35 @@ class CustomRedirectMiddleware(RedirectMiddleware):
                 return HttpResponsePermanentRedirect(page.url)
 
         return return_value
+
+
+class GlobalDataMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        site = Site.objects.filter(is_default_site=True).first()
+        locale = Locale.get_active()
+        language_code = locale.language_code
+        globals_.site = site
+        globals_.site_settings = SiteSettings.for_request(request)
+        globals_.theme_settings = ThemeSettings.for_site(site)
+        globals_.locale = locale
+        if not cache.get('svg_to_png_map'):
+            map = {}
+            for svg_to_png_map in SVGToPNGMap.objects.all():
+                map.update({
+                    (svg_to_png_map.svg_path, svg_to_png_map.fill_color, svg_to_png_map.stroke_color): svg_to_png_map,
+                })
+            cache.set('svg_to_png_map', map)
+        if not cache.get(f'{language_code}_translation_map'):
+            map = {}
+            for translation_entry in TranslationEntry.objects.filter(language=language_code):
+                map.update({
+                    (translation_entry.original, language_code): translation_entry
+                })
+            cache.set(f'{language_code}_translation_map', map)
+
+        response = self.get_response(request)
+
+        return response

@@ -12,6 +12,7 @@ services:
       DB_PASSWORD: iogt
       DB_HOST: db
       DB_PORT: 5432
+      DB_CONN_MAX_AGE: 600
       DJANGO_SETTINGS_MODULE: iogt.settings.test
       COMMIT_HASH: asdfghjkl
       WAGTAILTRANSFER_SECRET_KEY: wagtailtransfer-secret-key
