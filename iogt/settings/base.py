@@ -273,6 +273,7 @@ WAGTAIL_I18N_ENABLED = True
 
 WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('ar', _('Arabic')),
+    ('bn', _('Bengali')),
     ('ny', _('Chichewa')), # previously 'ch'
     ('en', _('English')),
     ('fr', _('French')),
@@ -300,6 +301,12 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
 ]
 
 EXTRA_LANG_INFO = {
+    'bn': {
+        'bidi': False,
+        'code': 'bn',
+        'name': 'Bengali',
+        'name_local': 'Bengali'
+    },
     'ku': {
         'bidi': False,
         'code': 'ku',
