@@ -1,6 +1,45 @@
 describe("Tests for comment section in articles", () => {
     const url = "/en/sections/covid-19/odd-story/"
+    const url2 = "/en/footer/footer-article/"
     const adminLoginUrl = "/admin/login/"
+
+    it("Add and remove a comment to an article - with user details", () => {
+        cy.visitUrl(adminLoginUrl)
+        cy.adminLogin("mbilal", "mbilal");
+        cy.visitUrl(url2)
+        cy.get("[name=comment]").type("test comment");
+        cy.submit("[type=submit]", "Leave comment");
+        cy.get(".individual-comment>div").contains("test comment");
+        cy.get(".individual-comment__moderator").contains("moderator");
+        cy.get(".individual-comment__data").contains("mbilal"); 
+        cy.get(".reply-link").contains("Remove").click();            
+    })
+
+    it("Add and remove a comment to an article - without user details", () => {
+        cy.visitUrl(adminLoginUrl)
+        cy.adminLogin("mbilal", "mbilal");
+        cy.visitUrl(url2)
+        cy.get("[name=comment]").type("hello1234");
+        cy.get("[name=post_anonymously]").click();
+        cy.submit("[type=submit]", "Leave comment");
+        cy.get(".individual-comment__data").contains("Anonymous");
+        cy.get(".individual-comment>div").contains("hello1234"); 
+        cy.get(".reply-link").contains("Remove").click();            
+    })
+
+    it("Add a comment and reply to comment and delete", () => {
+        cy.visitUrl(adminLoginUrl)
+        cy.adminLogin("mbilal", "mbilal");
+        cy.visitUrl(url2)
+        cy.get("[name=comment]").type("test comment");
+        cy.submit("[type=submit]", "Leave comment");
+        cy.get(".individual-comment>div>div").contains("test comment");
+        cy.get(".reply-link").contains("Reply").click();
+        cy.get("[name=comment]").type("test reply");
+        cy.submit("[type=submit]", "Leave comment");
+        cy.get(".individual-comment>div>div").contains("test comment");    
+        cy.get(".reply-link").contains("Remove").click();            
+    })
 
     it("Test article comments when user is logged out and comments are open", () => {
         cy.visitUrl(adminLoginUrl)
