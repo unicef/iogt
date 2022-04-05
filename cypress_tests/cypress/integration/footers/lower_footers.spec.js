@@ -15,7 +15,7 @@ describe('Direct components tests', () => {
         cy.url().should('include', '/en/footer/are-you-a-fan-of-iogt/');
     });
 
-    it('Test footer page with image icon', () => {
+    it.skip('Test footer page with image icon', () => {
         cy.visit(home);
         const link = '.footer .bottom-level [href$="about-internet-of-good-thins/"]';
         cy.get(link)
@@ -110,7 +110,7 @@ describe('Direct components tests', () => {
 describe('Page link page components tests', () => {
     const home = '/en/';
 
-    it('Test PageLink section with icon', () => {
+    it.skip('Test PageLink section with icon', () => {
         cy.visit(home);
         const link = '.footer .bottom-level [href="/en/sections/youth/"]';
         cy.get(link).contains('Youth section page link')
