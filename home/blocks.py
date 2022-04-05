@@ -19,13 +19,13 @@ class MediaBlock(AbstractMediaChooserBlock):
         # Translators: Translators: This message appears below embedded video and audio on the site. Many feature phones won't be able to play embedded video/audio, so the site offers an opportunity to download the file. Part of this message (between %(start_link)s and %(end_link)s ) is a clickable download link.
         download_video_text = _('If you cannot view the above video, you can'
                 ' instead %(start_link)sdownload it%(end_link)s.') % {
-                        'start_link': '<a href={1} download>',
+                        'start_link': '<a href={2} download>',
                         'end_link': '</a>'
                 }
         # Translators: Translators: This message appears below embedded video and audio on the site. Many feature phones won't be able to play embedded video/audio, so the site offers an opportunity to download the file. Part of this message (between %(start_link)s and %(end_link)s ) is a clickable download link.
         download_audio_text = _('If you cannot listen to the above audio, you can'
                 ' instead %(start_link)sdownload it%(end_link)s.') % {
-                        'start_link': '<a href={1} download>', 
+                        'start_link': '<a href={2} download>',
                         'end_link': '</a>'
                 }
 
@@ -55,7 +55,7 @@ class MediaBlock(AbstractMediaChooserBlock):
         return format_html(player_code, format_html_join(
             '\n', "<source{0}>",
             [[flatatt(s)] for s in value.sources]
-        ), thumbnail)
+        ), thumbnail, value.url)
 
 
 class SocialMediaLinkBlock(blocks.StructBlock):
