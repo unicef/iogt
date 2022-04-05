@@ -1094,16 +1094,16 @@ class SVGToPNGMap(models.Model):
     png_image_file = models.ImageField(upload_to='svg-to-png-maps/')
 
     @classmethod
-    def get_png_image(cls, svg_path, fill_color=None, stroke_color=None):
+    def get_png_image(cls, svg_path, fill_color='', stroke_color=''):
         try:
-            cache_key = (svg_path, fill_color or '', stroke_color or '');
+            cache_key = (svg_path, fill_color, stroke_color);
             return cache.get('svg_to_png_map')[cache_key].png_image_file
         except (KeyError, TypeError):
             try:
                 return cls.objects.get(
                     svg_path=svg_path,
-                    fill_color=fill_color or '',
-                    stroke_color=stroke_color or ''
+                    fill_color=fill_color,
+                    stroke_color=stroke_color
                 ).png_image_file
             except Exception as e:
                 logger.info(f"PNG not found, file={svg_path}, exception: {e}")
@@ -1118,7 +1118,7 @@ class SVGToPNGMap(models.Model):
                     return None
 
     @classmethod
-    def create(cls, svg_path, fill_color=None, stroke_color=None):
+    def create(cls, svg_path, fill_color='', stroke_color=''):
         png_image = convert_svg_to_png_bytes(
             svg_path,
             fill_color=fill_color,
@@ -1127,8 +1127,8 @@ class SVGToPNGMap(models.Model):
         )
         return cls.objects.create(
             svg_path=svg_path,
-            fill_color=fill_color or '',
-            stroke_color=stroke_color or '',
+            fill_color=fill_color,
+            stroke_color=stroke_color,
             png_image_file=png_image
         )
 
