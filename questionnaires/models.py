@@ -275,7 +275,6 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
 
 class SurveyFormField(AbstractFormField):
     page = ParentalKey("Survey", on_delete=models.CASCADE, related_name="survey_form_fields")
-    required = models.BooleanField(verbose_name=_('required'), default=False)
     clean_name = models.TextField(
         verbose_name=_('name'),
         blank=True,
@@ -661,7 +660,6 @@ class Poll(QuestionnairePage, AbstractForm):
 
 class QuizFormField(AbstractFormField):
     page = ParentalKey("Quiz", on_delete=models.CASCADE, related_name="quiz_form_fields")
-    required = models.BooleanField(verbose_name=_('required'), default=True)
     clean_name = models.TextField(
         verbose_name=_('name'),
         blank=True,
