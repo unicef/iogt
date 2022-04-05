@@ -100,6 +100,7 @@ MIDDLEWARE = [
     'iogt_users.middlewares.RegistrationSurveyRedirectMiddleware',
     'external_links.middleware.RewriteExternalLinksMiddleware',
     'iogt.middleware.CacheControlMiddleware',
+    'iogt.middleware.GlobalDataMiddleware',
 ]
 
 # Prevent Wagtail's built in menu from showing in Admin > Settings
@@ -273,6 +274,7 @@ WAGTAIL_I18N_ENABLED = True
 
 WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('ar', _('Arabic')),
+    ('bn', _('Bengali')),
     ('ny', _('Chichewa')), # previously 'ch'
     ('en', _('English')),
     ('fr', _('French')),
@@ -300,6 +302,12 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
 ]
 
 EXTRA_LANG_INFO = {
+    'bn': {
+        'bidi': False,
+        'code': 'bn',
+        'name': 'Bengali',
+        'name_local': 'Bengali'
+    },
     'ku': {
         'bidi': False,
         'code': 'ku',
@@ -434,4 +442,25 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=365),
+}
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+
+CACHE_BACKEND = os.getenv(
+    'CACHE_BACKEND',
+    'django.core.cache.backends.dummy.DummyCache'
+)
+CACHE_LOCATION = os.getenv('CACHE_LOCATION', '')
+CACHE_TIMEOUT = int(os.getenv('CACHE_TIMEOUT', '0'))
+CACHES = {
+    "default": {
+        "BACKEND": CACHE_BACKEND,
+        "LOCATION": CACHE_LOCATION,
+        "TIMEOUT": CACHE_TIMEOUT,
+    },
+    'renditions': {
+        'BACKEND': CACHE_BACKEND,
+        'LOCATION': CACHE_LOCATION,
+        'TIMEOUT': CACHE_TIMEOUT,
+    },
 }

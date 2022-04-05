@@ -85,7 +85,7 @@ Optionally, create the main menu automatically as well.
 
 ### Running Tests
 ```
-./manage.py test --settings=iogt.settings.test
+./manage.py test --settings=iogt.settings.production
 ```
 
 ## Setup with Docker Compose

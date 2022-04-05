@@ -7,23 +7,27 @@ services:
       context: ./
       dockerfile: Dockerfile.dev
     environment:
-      DB_NAME: iogt
-      DB_USER: iogt
-      DB_PASSWORD: iogt
+      BASE_URL: 'http://localhost:8000'
+      DB_CONN_MAX_AGE: '600'
       DB_HOST: db
-      DB_PORT: 5432
-      DJANGO_SETTINGS_MODULE: iogt.settings.test
+      DB_NAME: iogt
+      DB_PASSWORD: iogt
+      DB_PORT: '5432'
+      DB_USER: iogt
+      DB_SSL_MODE: allow
+      DEBUG: enable
+      DJANGO_SETTINGS_MODULE: iogt.settings.production
       COMMIT_HASH: asdfghjkl
+      SECRET_KEY: secret_key
       WAGTAILTRANSFER_SECRET_KEY: wagtailtransfer-secret-key
       WAGTAILTRANSFER_SOURCE_NAME: iogt_global
       WAGTAILTRANSFER_SOURCE_BASE_URL: https://example.com/wagtail-transfer/
       WAGTAILTRANSFER_SOURCE_SECRET_KEY: wagtailtransfer-source-secret-key
-      BASE_URL: 'http://localhost:8000'
-    command: bash -c "python manage.py runserver 0.0.0.0:8000"
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./:/app/
     ports:
-      - "8000:8000"
+      - '8000:8000'
     depends_on:
       - elasticsearch
       - db

@@ -11,7 +11,7 @@ services:
       DB_USER: postgres
       DB_PASSWORD: iogt
       DB_HOST: db
-      DB_PORT: 5432
+      DB_PORT: '5432'
       DJANGO_SETTINGS_MODULE: iogt.settings.docker_compose_dev
       COMMIT_HASH: asdfghjkl
       WAGTAILTRANSFER_SECRET_KEY: wagtailtransfer-secret-key
@@ -27,6 +27,7 @@ services:
     depends_on:
       - elasticsearch
       - db
+      - redis
 
   elasticsearch:
     image: 'docker.elastic.co/elasticsearch/elasticsearch:7.12.1'
@@ -47,6 +48,11 @@ services:
       - ./initdb.d:/docker-entrypoint-initdb.d
     ports:
       - 5432:5432
+
+  redis:
+    image: redis:6.2-buster
+    volumes:
+      - /var/lib/redis/data
 
 volumes:
   es-data01:
