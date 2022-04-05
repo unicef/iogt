@@ -86,7 +86,8 @@ class HomePage(Page):
         banners = []
         for home_page_banner in self.home_page_banners.select_related('banner_page', 'banner_page__banner_link_page').all():
             banner_page = home_page_banner.banner_page
-            if banner_page.live and banner_page.banner_link_page and banner_page.banner_link_page.live:
+            if banner_page.live and ((banner_page.banner_link_page and banner_page.banner_link_page.live) or
+                                     banner_page.banner_link_page == None):
                 banners.append(banner_page.specific)
         context['banners'] = banners
         return context
