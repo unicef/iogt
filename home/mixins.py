@@ -45,6 +45,7 @@ class TitleIconMixin:
         class Icon(object):
             url = ''
             is_svg_icon = False
+            path = ''
 
             def __init__(self, url='', is_svg_icon=False):
                 self.url = url
@@ -53,6 +54,7 @@ class TitleIconMixin:
         icon = Icon()
         if hasattr(self, 'icon') and self.icon:
             icon = Icon(self.icon.url, True)
+            icon.path = self.icon.file.name
         elif hasattr(self, 'image_icon') and self.image_icon:
             icon = Icon(generate_image_url(self.image_icon, 'fill-32x32'), False)
 
