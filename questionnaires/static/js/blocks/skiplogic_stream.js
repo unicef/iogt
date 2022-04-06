@@ -42,9 +42,9 @@
         };
         question.updateQuestionHelpText = () => {
             if (question.fieldSelect().val() ==='date') {
-                question.setQuestionHelpText('Date must be in this (YYYY-MM-DD) format');
+                question.setQuestionHelpText(gettext('Date must be in this (YYYY-MM-DD) format'));
             } else if (question.fieldSelect().val() === 'datetime') {
-                question.setQuestionHelpText('Datetime must be in this YYYY-MM-DDTHH:SS format');
+                question.setQuestionHelpText(gettext('Datetime must be in this YYYY-MM-DDTHH:SS format'));
             }
         };
         return question;
