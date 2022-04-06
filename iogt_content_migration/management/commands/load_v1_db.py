@@ -545,10 +545,11 @@ class Command(BaseCommand):
                         f'title: {translated_section.title}. URL: {translated_section.full_url}. '
                         f'Admin URL: {self.get_admin_url(translated_section.id)}.'
                     )
-                    self.post_migration_report_messages['disabled_comments_for_pages_which_has_other_settings'].append(
-                        f'title: {translated_section.title}. URL: {translated_section.full_url}. '
-                        f'Admin URL: {self.get_admin_url(translated_section.id)}. Original Setting: {commenting_status}.'
-                    )
+                    if commenting_status != CommentStatus.DISABLED:
+                        self.post_migration_report_messages['disabled_comments_for_pages_which_has_other_settings'].append(
+                            f'title: {translated_section.title}. URL: {translated_section.full_url}. '
+                            f'Admin URL: {self.get_admin_url(translated_section.id)}. Original Setting: {commenting_status}.'
+                        )
 
                 self.stdout.write(f"Translated section, title={row['title']}")
         cur.close()
@@ -608,10 +609,11 @@ class Command(BaseCommand):
             f'title: {section.title}. URL: {section.full_url}. '
             f'Admin URL: {self.get_admin_url(section.id)}.'
         )
-        self.post_migration_report_messages['disabled_comments_for_pages_which_has_other_settings'].append(
-            f'title: {section.title}. URL: {section.full_url}. '
-            f'Admin URL: {self.get_admin_url(section.id)}. Original Setting: {commenting_status}.'
-        )
+        if commenting_status != CommentStatus.DISABLED:
+            self.post_migration_report_messages['disabled_comments_for_pages_which_has_other_settings'].append(
+                f'title: {section.title}. URL: {section.full_url}. '
+                f'Admin URL: {self.get_admin_url(section.id)}. Original Setting: {commenting_status}.'
+            )
         self.stdout.write(f"saved section, title={section.title}")
 
     def add_warning_for_sections_with_description(self, row, section):
@@ -692,10 +694,11 @@ class Command(BaseCommand):
                         row['page_ptr_id']: translated_article
                     })
 
-                    self.post_migration_report_messages['disabled_comments_for_pages_which_has_other_settings'].append(
-                        f'title: {translated_article.title}. URL: {translated_article.full_url}. '
-                        f'Admin URL: {self.get_admin_url(translated_article.id)}. Original Setting: {commenting_status}.'
-                    )
+                    if commenting_status != CommentStatus.DISABLED:
+                        self.post_migration_report_messages['disabled_comments_for_pages_which_has_other_settings'].append(
+                            f'title: {translated_article.title}. URL: {translated_article.full_url}. '
+                            f'Admin URL: {self.get_admin_url(translated_article.id)}. Original Setting: {commenting_status}.'
+                        )
 
                 self.stdout.write(f"Translated article, title={row['title']}")
         cur.close()
@@ -755,10 +758,11 @@ class Command(BaseCommand):
             self.v1_to_v2_page_map.update({
                 row['page_ptr_id']: article
             })
-            self.post_migration_report_messages['disabled_comments_for_pages_which_has_other_settings'].append(
-                f'title: {article.title}. URL: {article.full_url}. '
-                f'Admin URL: {self.get_admin_url(article.id)}. Original Setting: {commenting_status}.'
-            )
+            if commenting_status != CommentStatus.DISABLED:
+                self.post_migration_report_messages['disabled_comments_for_pages_which_has_other_settings'].append(
+                    f'title: {article.title}. URL: {article.full_url}. '
+                    f'Admin URL: {self.get_admin_url(article.id)}. Original Setting: {commenting_status}.'
+                )
         except Page.DoesNotExist:
             self.post_migration_report_messages['articles'].append(
                 f"Skipping article with missing parent: title={row['title']}"
@@ -1049,10 +1053,11 @@ class Command(BaseCommand):
                         row['page_ptr_id']: translated_footer
                     })
 
-                    self.post_migration_report_messages['disabled_comments_for_pages_which_has_other_settings'].append(
-                        f'title: {translated_footer.title}. URL: {translated_footer.full_url}. '
-                        f'Admin URL: {self.get_admin_url(translated_footer.id)}. Original Setting: {commenting_status}.'
-                    )
+                    if commenting_status != CommentStatus.DISABLED:
+                        self.post_migration_report_messages['disabled_comments_for_pages_which_has_other_settings'].append(
+                            f'title: {translated_footer.title}. URL: {translated_footer.full_url}. '
+                            f'Admin URL: {self.get_admin_url(translated_footer.id)}. Original Setting: {commenting_status}.'
+                        )
 
                 self.stdout.write(f"Translated footer, title={row['title']}")
         cur.close()
@@ -1101,10 +1106,11 @@ class Command(BaseCommand):
             row['page_ptr_id']: footer
         })
 
-        self.post_migration_report_messages['disabled_comments_for_pages_which_has_other_settings'].append(
-            f'title: {footer.title}. URL: {footer.full_url}. '
-            f'Admin URL: {self.get_admin_url(footer.id)}. Original Setting: {commenting_status}.'
-        )
+        if commenting_status != CommentStatus.DISABLED:
+            self.post_migration_report_messages['disabled_comments_for_pages_which_has_other_settings'].append(
+                f'title: {footer.title}. URL: {footer.full_url}. '
+                f'Admin URL: {self.get_admin_url(footer.id)}. Original Setting: {commenting_status}.'
+            )
 
         self.stdout.write(f"saved footer, title={footer.title}")
 
