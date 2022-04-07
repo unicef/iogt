@@ -1,4 +1,5 @@
 from django import template
+import django.utils.translation as translation
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 from django.urls import translate_url, reverse, resolve, Resolver404
@@ -13,13 +14,14 @@ register = template.Library()
 @register.inclusion_tag('home/tags/language_switcher.html', takes_context=True)
 def language_switcher(context, page):
     """
-    This template tag has evolved over time. The current requirement for this is really tricky.
-    See https://github.com/unicef/iogt/pull/955#issuecomment-1008277982 for more context on why this logic is
-    complicated.
+    The current requirement for this is really tricky.
+    See https://github.com/unicef/iogt/pull/955#issuecomment-1008277982 for more
+    context on why this logic is complicated.
     """
 
-    switcher_locales = list()
+    language_options = list()
     locales = Locale.objects.select_related('locale_detail').all()
+    current_language = translation.get_language_info(translation.get_language())
 
     try:
         if resolve(context.request.path_info).url_name == 'translation-not-found':
@@ -28,6 +30,14 @@ def language_switcher(context, page):
         pass
 
     for locale in locales:
+        option = {}
+        try:
+            language = translation.get_language_info(locale.language_code)
+            option['language'] = language
+            option['selected'] = locale.language_code == current_language.get('code')
+        except:
+            continue
+
         try:
             should_append = locale.locale_detail.is_active
         except LocaleDetail.DoesNotExist:
@@ -44,10 +54,12 @@ def language_switcher(context, page):
             else:  # If the current URL belongs to a django view
                 url = translate_url(context.request.path_info, locale.language_code)
 
-            switcher_locales.append((locale, url))
+            option['url'] = url
+            language_options.append(option)
 
     context.update({
-        'locales': switcher_locales,
+        'language_options': language_options,
+        'current_language': current_language,
     })
 
     return context
