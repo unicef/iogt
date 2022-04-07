@@ -19,14 +19,12 @@
         </div>
         <div class="form-holder search-form-holder">
             <a class="js-search-btn" href="{% url "search" %}">
-                {% static "icons/search.svg" as search_icon_path %}
-                {% render_icon icon_path=search_icon_path attrs="alt='Search' class='xs-home-header__search'" %}
+                {% render_icon icon_path='icons/search.svg' attrs="alt='Search' class='xs-home-header__search'" %}
             </a>
             <form class='search__form' action="{% url 'search' %}">
                 <label>
-                    {% static 'icons/search.svg' as search_icon_path %}
                     <span>
-                        {% render_icon icon_path=search_icon_path width=18 height=18 stroke_color='#9A9A9A' %}
+                        {% render_icon icon_path='icons/search.svg' width=18 height=18 stroke_color='#9A9A9A' %}
                     </span>
                     <input type="text" name="query" placeholder="{% translate 'Search the site...' %}" pattern="\S+.*"/>
                 </label>
@@ -35,13 +33,11 @@
         <div class="btn-holder">
             <div class="nav-bar__item">
                 {% url 'account_login' as login_url %}
-                {% static 'icons/login.svg' as login_icon %}
                 {% if request.user.is_anonymous %}
-                    {% primary_button title="Log in / Create account" href=login_url icon_path=login_icon extra_classnames='login-create-account-btn' %}
+                    {% primary_button title="Log in / Create account" href=login_url icon_path='icons/login.svg' extra_classnames='login-create-account-btn' %}
                 {% else %}
                     {% url 'user_profile' as profile_url %}
-                    {% static 'icons/profile.svg' as profile_icon %}
-                    {% primary_button title="Profile" href=profile_url icon_path=profile_icon %}
+                {% primary_button title="Profile" href=profile_url icon_path='icons/profile.svg' %}
                 {% endif %}
             </div>
         </div>
