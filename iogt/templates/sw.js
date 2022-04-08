@@ -27,7 +27,7 @@ self.addEventListener('install', event => {
         })
         .then(() => {
             // Passing in event is required in Workbox v6+
-            precacheController.install(event)
+            precacheController.install(event);
         });
     event.waitUntil(resp);
 });
