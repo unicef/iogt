@@ -64,7 +64,7 @@ class SitemapAPIView(APIView):
         for image in Image.objects.all():
             image_urls.append(request.build_absolute_uri(generate_image_url(image, 'width-360')))
 
-        css_paths = [
+        static_paths = [
             'css/report-page/report-page.css',
             'css/global/global.css',
             'css/questionnaires.css',
@@ -82,13 +82,14 @@ class SitemapAPIView(APIView):
             'css/questionnaire.css',
             'css/quiz.css',
             'css/survey.css',
+            'js/iogt.js',
         ]
-        css_urls = []
-        for css_path in css_paths:
-            css_urls.append(request.build_absolute_uri(static(css_path)))
+        static_urls = []
+        for static_path in static_paths:
+            static_urls.append(request.build_absolute_uri(static(static_path)))
 
         sitemap = flatten(
-            tuple(image_urls) + tuple(css_urls) +
+            tuple(image_urls) + tuple(static_urls) +
             home_page_urls + section_urls + article_urls + footer_urls + poll_urls + survey_urls + quiz_urls
         )
 
