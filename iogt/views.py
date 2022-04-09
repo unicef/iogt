@@ -1,12 +1,12 @@
+from django.conf import settings
 from django.contrib.admin.utils import flatten
 from django.shortcuts import get_object_or_404
-from django.templatetags.static import static
 from django.urls import reverse
 from django.views.generic import TemplateView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from wagtail.core.models import Page
-from wagtail.images.models import Image
+from wagtail.images.models import Rendition
 
 from questionnaires.models import Poll, Survey, Quiz
 
@@ -48,21 +48,22 @@ class TranslationNotFoundPage(TemplateView):
 
 class SitemapAPIView(APIView):
     def get(self, request):
-        from home.models import HomePage, Section, Article, FooterPage
-        from wagtail.images.views.serve import generate_image_url
+        from home.models import HomePage, Section, Article, FooterPage, SVGToPNGMap
 
-
-        home_page_urls = [p.full_url for p in HomePage.objects.live()],
-        section_urls = [p.full_url for p in Section.objects.live()],
-        article_urls = [p.full_url for p in Article.objects.live()],
-        footer_urls = [p.full_url for p in FooterPage.objects.live()],
-        poll_urls = [p.full_url for p in Poll.objects.live()],
-        survey_urls = [p.full_url for p in Survey.objects.live()],
-        quiz_urls = [p.full_url for p in Quiz.objects.live()],
+        home_page_urls = [p.url for p in HomePage.objects.live()],
+        section_urls = [p.url for p in Section.objects.live()],
+        article_urls = [p.url for p in Article.objects.live()],
+        footer_urls = [p.url for p in FooterPage.objects.live()],
+        poll_urls = [p.url for p in Poll.objects.live()],
+        survey_urls = [p.url for p in Survey.objects.live()],
+        quiz_urls = [p.url for p in Quiz.objects.live()],
 
         image_urls = []
-        for image in Image.objects.all():
-            image_urls.append(request.build_absolute_uri(generate_image_url(image, 'width-360')))
+        for image in Rendition.objects.all():
+            image_urls.append(f'{settings.MEDIA_URL}{image.file.name}')
+
+        for image in SVGToPNGMap.objects.all():
+            image_urls.append(f'{settings.MEDIA_URL}{image.png_image_file.name}')
 
         static_paths = [
             'css/report-page/report-page.css',
@@ -86,11 +87,17 @@ class SitemapAPIView(APIView):
         ]
         static_urls = []
         for static_path in static_paths:
-            static_urls.append(request.build_absolute_uri(static(static_path)))
+            static_urls.append(f'{settings.STATIC_URL}{static_path}')
 
         sitemap = flatten(
-            tuple(image_urls) + tuple(static_urls) +
-            home_page_urls + section_urls + article_urls + footer_urls + poll_urls + survey_urls + quiz_urls
+            home_page_urls +
+            section_urls +
+            article_urls +
+            footer_urls +
+            poll_urls +
+            survey_urls +
+            quiz_urls +
+            tuple(static_urls) +
+            tuple(image_urls)
         )
-
         return Response(sitemap)
