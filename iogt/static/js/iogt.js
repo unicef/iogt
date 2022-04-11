@@ -106,5 +106,7 @@ $(document).ready(() => {
         $(window).on('online', () => enableForOnlineAccess());
 
         window.navigator.onLine ? enableForOnlineAccess() : disableForOfflineAccess();
+    } else {
+        offlineAppBtns.hide();
     }
 });
