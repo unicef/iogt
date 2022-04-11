@@ -1,4 +1,4 @@
-importScripts('../static/third_party/workbox/workbox-v6.1.5/workbox-sw.js');
+importScripts('../../static/js/workbox/workbox-v6.1.5/workbox-sw.js');
 
 // Below we are using a custom dimension to track online vs. offline interactions. So make
 // sure to create a custom dimension on GA
