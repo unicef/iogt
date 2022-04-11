@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from wagtail.core.models import Page
 from wagtail.images.models import Rendition
+from wagtailmedia.models import Media
 
 from questionnaires.models import Poll, Survey, Quiz
 
@@ -64,6 +65,12 @@ class SitemapAPIView(APIView):
 
         for image in SVGToPNGMap.objects.all():
             image_urls.append(f'{settings.MEDIA_URL}{image.png_image_file.name}')
+
+        media_urls = []
+        for media in Media.objects.all():
+            media_urls.append(f'{settings.MEDIA_URL}{media.file.name}')
+            if media.thumbnail:
+                image_urls.append(f'{settings.MEDIA_URL}{media.thumbnail.name}')
 
         static_paths = [
             'css/report-page/report-page.css',
@@ -145,6 +152,7 @@ class SitemapAPIView(APIView):
             survey_urls +
             quiz_urls +
             tuple(static_urls) +
-            tuple(image_urls)
+            tuple(image_urls) +
+            tuple(media_urls)
         )
         return Response(sitemap)
