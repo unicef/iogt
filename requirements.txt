@@ -13,7 +13,7 @@ lxml==4.8.*
 psycopg2==2.8.*
 redis~=3.0
 tqdm==4.62.*
-wagtail-localize~=0.9.5
+wagtail-localize==1.1.1
 wagtail-markdown==0.7.0
 wagtail==2.11.*
 wagtailmedia==0.7.0

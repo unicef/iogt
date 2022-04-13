@@ -86,7 +86,8 @@ class HomePage(Page):
         banners = []
         for home_page_banner in self.home_page_banners.select_related('banner_page', 'banner_page__banner_link_page').all():
             banner_page = home_page_banner.banner_page
-            if banner_page.live and banner_page.banner_link_page and banner_page.banner_link_page.live:
+            if banner_page.live and ((banner_page.banner_link_page and banner_page.banner_link_page.live) or
+                                     banner_page.banner_link_page == None):
                 banners.append(banner_page.specific)
         context['banners'] = banners
         return context
@@ -1094,30 +1095,43 @@ class SVGToPNGMap(models.Model):
     png_image_file = models.ImageField(upload_to='svg-to-png-maps/')
 
     @classmethod
-    def get_png_image(cls, svg_path, fill_color=None, stroke_color=None):
-        db_fill_color = fill_color or ''
-        db_stroke_color = stroke_color or ''
+    def get_png_image(cls, svg_path, fill_color='', stroke_color=''):
         try:
+            cache_key = (svg_path, fill_color, stroke_color);
+            return cache.get('svg_to_png_map')[cache_key].png_image_file
+        except (KeyError, TypeError):
             try:
-                obj = cache.get('svg_to_png_map')[(svg_path, db_fill_color, db_stroke_color)]
-            except (KeyError, TypeError):
-                obj = cls.objects.get(svg_path=svg_path, fill_color=db_fill_color, stroke_color=db_stroke_color)
-        except Exception as e:
-            logger.warning(f"Failed to fetch SVG to PNG, file={svg_path}, exception: {e}")
-            try:
-                png_image = convert_svg_to_png_bytes(
-                    svg_path, fill_color=fill_color, stroke_color=stroke_color, width=32)
+                return cls.objects.get(
+                    svg_path=svg_path,
+                    fill_color=fill_color,
+                    stroke_color=stroke_color
+                ).png_image_file
             except Exception as e:
-                logger.warning(f"Failed to convert SVG to PNG, file={svg_path}, exception: {e}")
-                return None
-            try:
-                obj = cls.objects.create(
-                    svg_path=svg_path, fill_color=db_fill_color,  stroke_color=db_stroke_color,
-                    png_image_file=png_image)
-            except Exception as e:
-                logger.warning(f"Failed to create SVG to PNG, file={svg_path}, exception: {e}")
-                return None
-        return obj.png_image_file
+                logger.info(f"PNG not found, file={svg_path}, exception: {e}")
+                try:
+                    return cls.create(
+                        svg_path,
+                        fill_color,
+                        stroke_color
+                    ).png_image_file
+                except Exception as e:
+                    logger.error(f"Failed to create SVG to PNG, file={svg_path}, exception: {e}")
+                    return None
+
+    @classmethod
+    def create(cls, svg_path, fill_color='', stroke_color=''):
+        png_image = convert_svg_to_png_bytes(
+            svg_path,
+            fill_color=fill_color,
+            stroke_color=stroke_color,
+            width=32
+        )
+        return cls.objects.create(
+            svg_path=svg_path,
+            fill_color=fill_color,
+            stroke_color=stroke_color,
+            png_image_file=png_image
+        )
 
     def __str__(self):
         return f'{self.svg_path} (F={self.fill_color}) (S={self.stroke_color}) -> {self.png_image_file}'
