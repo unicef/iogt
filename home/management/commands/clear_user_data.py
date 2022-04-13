@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.core.management import BaseCommand
+from django_comments_xtd.models import XtdComment
 
 
 class Command(BaseCommand):
@@ -15,4 +16,5 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         user_ids = options.get('exclude_user_ids') or []
         get_user_model().objects.exclude(pk__in=user_ids).delete()
+        XtdComment.objects.all().delete()
         self.stdout.write('User data cleared.')
