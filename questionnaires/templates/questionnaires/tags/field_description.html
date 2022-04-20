@@ -7,7 +7,6 @@
         {% if not field.field.required %}
             {% translate "Optional" %} <br>
         {% endif %}
-
         {% if field.help_text %}
             {% translate field.help_text %}
         {% elif field.widget_type == "radioselect" or field.widget_type == "select" %}
