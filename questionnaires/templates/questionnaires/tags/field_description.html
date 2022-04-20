@@ -1,11 +1,15 @@
 {% load i18n %}
 
+{% with type=field.widget_type %}
+{% if not field.field.required or type == "radioselect" or type == "select" or type == "checkboxselectmultiple" or type == "selectmultiple" or type == "checkbox" %}
 <p class="quest-item__step-desc">
     <span>
+        {% if not field.field.required %}
+            {% translate "Optional" %} <br>
+        {% endif %}
+
         {% if field.help_text %}
-          {% translate field.help_text %}
-        {% elif not field.field.required %}
-            {% translate "Optional" %}
+            {% translate field.help_text %}
         {% elif field.widget_type == "radioselect" or field.widget_type == "select" %}
             {% translate "Select one" %}
         {% elif  field.widget_type == "checkboxselectmultiple" or field.widget_type == "selectmultiple" %}
@@ -15,3 +19,5 @@
         {% endif %}
     </span>
 </p>
+{% endif %}
+{% endwith %}

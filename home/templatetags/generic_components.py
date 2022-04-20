@@ -1,7 +1,6 @@
 from django import template
-from wagtail.core.models import Site
 
-from home.models import ThemeSettings
+import iogt.iogt_globals as globals_
 
 
 register = template.Library()
@@ -10,7 +9,7 @@ register = template.Library()
 @register.inclusion_tag('generic_components/primary_button.html')
 def primary_button(title, extra_classnames='', href=None, icon_path=None, icon=None, font_color=None,
                    background_color=None):
-    theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
+    theme_settings = globals_.theme_settings
 
     font_color = font_color or theme_settings.primary_button_font_color
     background_color = background_color or theme_settings.primary_button_background_color
@@ -28,7 +27,7 @@ def primary_button(title, extra_classnames='', href=None, icon_path=None, icon=N
 
 @register.inclusion_tag('generic_components/article_card.html', takes_context=True)
 def render_article_card(context, page, is_first_content=False, display_section_title=False, background_color=None, font_color=None):
-    theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
+    theme_settings = globals_.theme_settings
 
     font_color = font_color or theme_settings.article_card_font_color
     background_color = background_color or theme_settings.article_card_background_color
@@ -45,7 +44,7 @@ def render_article_card(context, page, is_first_content=False, display_section_t
 
 @register.inclusion_tag('generic_components/section_card.html', takes_context=True)
 def render_section_card(context, page, is_first_content=False, background_color=None, font_color=None):
-    theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
+    theme_settings = globals_.theme_settings
 
     font_color = font_color or theme_settings.section_card_font_color
     background_color = background_color or theme_settings.section_card_background_color
@@ -61,7 +60,7 @@ def render_section_card(context, page, is_first_content=False, background_color=
 
 @register.inclusion_tag('generic_components/questionnaire_card.html', takes_context=True)
 def render_questionnaire_card(context, page, background_color=None, font_color=None):
-    theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
+    theme_settings = globals_.theme_settings
 
     font_color = font_color or theme_settings.section_listing_questionnaire_font_color
     background_color = background_color or theme_settings.section_listing_questionnaire_background_color
@@ -76,6 +75,6 @@ def render_questionnaire_card(context, page, background_color=None, font_color=N
 
 @register.simple_tag
 def language_picker_style():
-    theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
+    theme_settings = globals_.theme_settings
     return f"color:{theme_settings.language_picker_font_color};background-color:" \
            f"{theme_settings.language_picker_background_color}"

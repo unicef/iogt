@@ -114,6 +114,9 @@ GitHub.sublime-settings
 # Data dir for postgres with docker-compose
 legacy-initdb.d/
 
+# Local overrides for Docker Compose
+docker-compose.override.yml
+
 !iogt/templates/wagtailmedia/media/
 .vscode/
 
