@@ -896,6 +896,11 @@ textarea:focus ~ .cust-input__length-text {
     font: 800 8px/12px Poppins, sans-serif
 }
 
+input[type=checkbox], input[type=radio] {
+  width: 16px;
+  flex: 0 0 16px;
+}
+
 .cust-btn {
     background: none;
     border: 1px solid #303030;

@@ -8,6 +8,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.files.images import get_image_dimensions
+from django.core.cache import cache
 from django.db import models
 from django.utils.deconstruct import deconstructible
 from django.utils.encoding import force_str
@@ -53,6 +54,7 @@ from .forms import SectionPageForm
 from .mixins import PageUtilsMixin, TitleIconMixin
 from .utils.image import convert_svg_to_png_bytes
 from .utils.progress_manager import ProgressManager
+import iogt.iogt_globals as globals_
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -82,9 +84,10 @@ class HomePage(Page):
         check_user_session(request)
         context = super().get_context(request)
         banners = []
-        for home_page_banner in self.home_page_banners.all():
+        for home_page_banner in self.home_page_banners.select_related('banner_page', 'banner_page__banner_link_page').all():
             banner_page = home_page_banner.banner_page
-            if banner_page.live and banner_page.banner_link_page and banner_page.banner_link_page.live:
+            if banner_page.live and ((banner_page.banner_link_page and banner_page.banner_link_page.live) or
+                                     banner_page.banner_link_page == None):
                 banners.append(banner_page.specific)
         context['banners'] = banners
         return context
@@ -812,11 +815,11 @@ class IogtFlatMenuItem(AbstractFlatMenuItem, TitleIconMixin):
         return icon
 
     def get_background_color(self):
-        theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
+        theme_settings = globals_.theme_settings
         return self.background_color or theme_settings.navbar_background_color
 
     def get_font_color(self):
-        theme_settings = ThemeSettings.for_site(Site.objects.filter(is_default_site=True).first())
+        theme_settings = globals_.theme_settings
         return self.font_color or theme_settings.navbar_font_color
 
     def get_single_column_view(self):
@@ -1092,19 +1095,43 @@ class SVGToPNGMap(models.Model):
     png_image_file = models.ImageField(upload_to='svg-to-png-maps/')
 
     @classmethod
-    def get_png_image(cls, svg_path, fill_color, stroke_color=None):
+    def get_png_image(cls, svg_path, fill_color='', stroke_color=''):
         try:
-            obj = cls.objects.get(svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color)
-        except cls.DoesNotExist:
+            cache_key = (svg_path, fill_color, stroke_color);
+            return cache.get('svg_to_png_map')[cache_key].png_image_file
+        except (KeyError, TypeError):
             try:
-                png_image = convert_svg_to_png_bytes(
-                    svg_path, fill_color=fill_color, stroke_color=stroke_color, width=32)
-            except:
-                logger.warning(f"Failed to convert SVG to PNG, file={svg_path}")
-                return None
-            obj = cls.objects.create(
-                svg_path=svg_path, fill_color=fill_color, stroke_color=stroke_color, png_image_file=png_image)
-        return obj.png_image_file
+                return cls.objects.get(
+                    svg_path=svg_path,
+                    fill_color=fill_color,
+                    stroke_color=stroke_color
+                ).png_image_file
+            except Exception as e:
+                logger.info(f"PNG not found, file={svg_path}, exception: {e}")
+                try:
+                    return cls.create(
+                        svg_path,
+                        fill_color,
+                        stroke_color
+                    ).png_image_file
+                except Exception as e:
+                    logger.error(f"Failed to create SVG to PNG, file={svg_path}, exception: {e}")
+                    return None
+
+    @classmethod
+    def create(cls, svg_path, fill_color='', stroke_color=''):
+        png_image = convert_svg_to_png_bytes(
+            svg_path,
+            fill_color=fill_color,
+            stroke_color=stroke_color,
+            width=32
+        )
+        return cls.objects.create(
+            svg_path=svg_path,
+            fill_color=fill_color,
+            stroke_color=stroke_color,
+            png_image_file=png_image
+        )
 
     def __str__(self):
         return f'{self.svg_path} (F={self.fill_color}) (S={self.stroke_color}) -> {self.png_image_file}'

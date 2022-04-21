@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from datetime import timedelta
 
 import allauth
 from django.contrib import auth
@@ -73,6 +74,7 @@ INSTALLED_APPS = [
     'health_check.cache',
     'health_check.storage',
     'health_check.contrib.migrations',
+    'rest_framework_simplejwt',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -98,6 +100,7 @@ MIDDLEWARE = [
     'iogt_users.middlewares.RegistrationSurveyRedirectMiddleware',
     'external_links.middleware.RewriteExternalLinksMiddleware',
     'iogt.middleware.CacheControlMiddleware',
+    'iogt.middleware.GlobalDataMiddleware',
 ]
 
 # Prevent Wagtail's built in menu from showing in Admin > Settings
@@ -258,8 +261,6 @@ COMMENTS_XTD_CONFIRM_EMAIL = False
 
 COMMENTS_XTD_FORM_CLASS = 'comments.forms.CommentForm'
 
-
-
 COMMENTS_XTD_APP_MODEL_OPTIONS = {
     'default': {
         'allow_flagging': True,
@@ -273,6 +274,7 @@ WAGTAIL_I18N_ENABLED = True
 
 WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('ar', _('Arabic')),
+    ('bn', _('Bengali')),
     ('ny', _('Chichewa')), # previously 'ch'
     ('en', _('English')),
     ('fr', _('French')),
@@ -300,6 +302,12 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
 ]
 
 EXTRA_LANG_INFO = {
+    'bn': {
+        'bidi': False,
+        'code': 'bn',
+        'name': 'Bengali',
+        'name_local': 'Bengali'
+    },
     'ku': {
         'bidi': False,
         'code': 'ku',
@@ -383,9 +391,7 @@ LOCALE_PATHS = [
 TRANSLATIONS_BASE_DIR = BASE_DIR
 
 # ========= Rapid Pro =================
-RAPIDPRO_BOT_USER_ID = os.getenv('RAPIDPRO_BOT_USER_ID')
-RAPIDPRO_BOT_USER_USERNAME = os.getenv('RAPIDPRO_BOT_USER_USERNAME')
-RAPIDPRO_BOT_USER_PASSWORD = os.getenv('RAPIDPRO_BOT_USER_PASSWORD')
+RAPIDPRO_BOT_GROUP_NAME = os.getenv('RAPIDPRO_BOT_GROUP_NAME', 'rapidpro_chatbot')
 
 # Wagtail transfer default values. Override these in local.py
 WAGTAILTRANSFER_SECRET_KEY = os.getenv('WAGTAILTRANSFER_SECRET_KEY')
@@ -405,7 +411,6 @@ WAGTAIL_RICH_TEXT_FIELD_FEATURES = [
 
 # Search results
 SEARCH_RESULTS_PER_PAGE = 10
-
 
 COMMIT_HASH = os.getenv('COMMIT_HASH')
 
@@ -428,3 +433,32 @@ WAGTAILTRANSFER_LOOKUP_FIELDS = {
     'wagtailcore.locale': ['language_code'],
     'iogt_users.user': ['username'],
 }
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=365),
+}
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+
+CACHE_BACKEND = os.getenv('CACHE_BACKEND')
+if CACHE_BACKEND:
+    CACHE_LOCATION = os.getenv('CACHE_LOCATION', '')
+    CACHE_TIMEOUT = int(os.getenv('CACHE_TIMEOUT', '0'))
+    CACHES = {
+        "default": {
+            "BACKEND": CACHE_BACKEND,
+            "LOCATION": CACHE_LOCATION,
+            "TIMEOUT": CACHE_TIMEOUT,
+        },
+        'renditions': {
+            'BACKEND': CACHE_BACKEND,
+            'LOCATION': CACHE_LOCATION,
+            'TIMEOUT': CACHE_TIMEOUT,
+        },
+    }

@@ -13,7 +13,7 @@ lxml==4.8.*
 psycopg2==2.8.*
 redis~=3.0
 tqdm==4.62.*
-wagtail-localize~=0.9.5
+wagtail-localize==1.1.1
 wagtail-markdown==0.7.0
 wagtail==2.11.*
 wagtailmedia==0.7.0
@@ -21,4 +21,6 @@ wagtailmenus~=3.0
 wagtailsvg==0.0.14
 whitenoise==5.2.*
 django-health-check==3.16.5
+djangorestframework-simplejwt==5.0.0
+django-redis==5.2.0
 git+https://github.com/IDEMSInternational/wagtail-transfer.git@enh/show-error-for-unimported-referenced-pages#egg=wagtail-transfer

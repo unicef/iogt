@@ -1,19 +1,16 @@
-{% load wagtailcore_tags i18n home_tags generic_components %}
-{% get_current_language as LANGUAGE_CODE %}
-{% get_language_info for LANGUAGE_CODE as current_language %}
+{% load generic_components %}
 <div class="language_drop">
     <a href="#" style="{% language_picker_style %}">
         {{ current_language.name_local }}
         <span class="arrow"></span>
     </a>
     <ul class="drop">
-            {% for locale, url in locales %}
-                {% get_language_info for locale.language_code as lang %}
-                <li class="{% if lang.code == LANGUAGE_CODE %}selected{% endif %}">
-                    <a href="{{ url }}" rel="alternate" hreflang="{{ lang.code }}">
-                        {{ lang.name_local }}
-                    </a>
-                </li>
-            {% endfor %}
+    {% for option in language_options %}
+        <li class="{% if option.selected %}selected{% endif %}">
+            <a href="{{ option.url }}" rel="alternate" hreflang="{{ option.language.code }}">
+                {{ option.language.name_local }}
+            </a>
+        </li>
+    {% endfor %}
     </ul>
 </div>

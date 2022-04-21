@@ -1,5 +1,6 @@
 from django.templatetags import i18n
 from translation_manager import utils
+import iogt.iogt_globals as globals_
 
 
 def get_dirname_from_lang(lang):
@@ -18,13 +19,14 @@ def _translate_node_render(self, context):
     from django.template.base import render_value_in_context
     from django.utils.safestring import SafeData
     from django.utils.safestring import mark_safe
-    from translation_manager.models import TranslationEntry
-    from wagtail.core.models import Locale
+    from django.core.cache import cache
 
-    locale = Locale.get_active()
-    translation_entry = TranslationEntry.objects.filter(
-        original=self.filter_expression.var.literal, language=locale.language_code
-    ).first()
+    try:
+        translation_entry = cache.get(f'{globals_.locale.language_code}_translation_map')[
+            (self.filter_expression.var.literal, globals_.locale.language_code)]
+    except (KeyError, TypeError):
+        translation_entry = None
+
     if translation_entry and translation_entry.translation:
         return translation_entry.translation
 

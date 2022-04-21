@@ -1,7 +1,7 @@
 import os
 from .base import *
 
-DEBUG = False
+DEBUG = os.getenv('DEBUG') == 'enable'
 SECRET_KEY = os.environ.get('SECRET_KEY')
 ALLOWED_HOSTS = ['*']
 DATABASES = {
@@ -12,6 +12,7 @@ DATABASES = {
         'PASSWORD': os.environ.get('DB_PASSWORD'),
         'HOST': os.environ.get('DB_HOST'),
         'PORT': os.environ.get('DB_PORT'),
+        'CONN_MAX_AGE': int(os.getenv('DB_CONN_MAX_AGE', '0')),
         'OPTIONS': {
             'sslmode': os.environ.get('DB_SSL_MODE', 'require')
         }
@@ -34,14 +35,11 @@ LOGGING = {
             'class': 'logging.StreamHandler',
         },
     },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': os.environ.get('LOG_LEVEL', 'INFO')
-        }
+    'root': {
+        'handlers': ['console'],
+        'level': os.getenv('LOG_LEVEL', 'INFO')
     },
 }
-
 
 try:
     from .local import *

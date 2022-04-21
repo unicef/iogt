@@ -6,24 +6,20 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.dev
-    container_name: dc01
     environment:
       DB_NAME: postgres
       DB_USER: postgres
       DB_PASSWORD: iogt
       DB_HOST: db
-      DB_PORT: 5432
+      DB_PORT: '5432'
       DJANGO_SETTINGS_MODULE: iogt.settings.docker_compose_dev
       COMMIT_HASH: asdfghjkl
-      RAPIDPRO_BOT_USER_ID: 1
-      RAPIDPRO_BOT_USER_USERNAME: rapidpro
-      RAPIDPRO_BOT_USER_PASSWORD: 1234
       WAGTAILTRANSFER_SECRET_KEY: wagtailtransfer-secret-key
       WAGTAILTRANSFER_SOURCE_NAME: iogt_global
       WAGTAILTRANSFER_SOURCE_BASE_URL: https://example.com/wagtail-transfer/
       WAGTAILTRANSFER_SOURCE_SECRET_KEY: wagtailtransfer-source-secret-key
       BASE_URL: 'http://localhost:8000'
-    command: bash -c "python manage.py load_po_files && python manage.py compilemessages && python manage.py runserver 0.0.0.0:8000"
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./:/app/
     ports:
@@ -31,10 +27,10 @@ services:
     depends_on:
       - elasticsearch
       - db
+      - redis
 
   elasticsearch:
     image: 'docker.elastic.co/elasticsearch/elasticsearch:7.12.1'
-    container_name: ec01
     environment:
       - discovery.type=single-node
     volumes:
@@ -44,7 +40,6 @@ services:
 
   db:
     image: postgres:alpine
-    container_name: pc01
     restart: unless-stopped
     environment:
       POSTGRES_PASSWORD: iogt
@@ -54,17 +49,10 @@ services:
     ports:
       - 5432:5432
 
-  legacy-db:
-    image: postgres:alpine
-    container_name: lc01
-    restart: unless-stopped
-    environment:
-      POSTGRES_PASSWORD: iogt
+  redis:
+    image: redis:6.2-buster
     volumes:
-      - /var/lib/postgresql/data
-      - ./legacy-initdb.d:/docker-entrypoint-initdb.d
-    ports:
-      - 54321:5432
+      - /var/lib/redis/data
 
   tag-manager:
     image: gcr.io/cloud-tagging-10302018/gtm-cloud-image:stable
