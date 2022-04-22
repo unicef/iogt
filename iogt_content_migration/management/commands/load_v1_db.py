@@ -1119,9 +1119,10 @@ class Command(BaseCommand):
               "from core_pagetranslation"
         cur = self.db_query(sql)
         for row in cur:
-            self.page_translation_map.update({
-                row['translated_page_id']: row['page_id'],
-            })
+            if row['translated_page_id'] != row['page_id']:
+                self.page_translation_map.update({
+                    row['translated_page_id']: row['page_id'],
+                })
         cur.close()
         self.stdout.write('Page translation map loaded.')
 
