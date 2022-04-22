@@ -17,7 +17,7 @@ msgid "Sorry, there seems to be an error. Please try again soon."
 msgstr ""
 "Désolé, il semble qu'il y ait une erreur. Veuillez réessayer sous peu."
 
-msgid "Install this website as an app on your device?"
+msgid "You cannot submit when offline"
 msgstr ""
 
 msgid ""
@@ -27,5 +27,5 @@ msgid ""
 "Screen."
 msgstr ""
 
-msgid "You cannot submit when offline"
+msgid "Install this website as an app on your device?"
 msgstr ""

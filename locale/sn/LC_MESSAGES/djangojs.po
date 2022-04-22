@@ -18,7 +18,7 @@ msgstr ""
 "Tine hurombo, panenge pane zviri kukanganisika. Tapota edza zvakare mushure "
 "mechinguva chipfupi."
 
-msgid "Install this website as an app on your device?"
+msgid "You cannot submit when offline"
 msgstr ""
 
 msgid ""
@@ -28,5 +28,5 @@ msgid ""
 "Screen."
 msgstr ""
 
-msgid "You cannot submit when offline"
+msgid "Install this website as an app on your device?"
 msgstr ""
