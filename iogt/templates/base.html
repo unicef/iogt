@@ -21,6 +21,7 @@
         gtag('config', '{{ settings.home.SiteSettings.global_ga_tracking_code }}');
     </script>
     <meta charset="utf-8"/>
+    <meta name="vapid-key" content="{{ vapid_public_key }}">
     <title>
         {% block title %}
             {% if page.seo_title %}
@@ -89,11 +90,13 @@
 {# Global javascript #}
 <script>
     var serviceWorkerURL = '{% url "sw.js" %}'
+    var pushNotificationServiceWorkerURL = '{% url "push-notification-sw.js" %}'
 </script>
 <script src="{% url 'javascript-catalog' %}"></script>
 <script src="{% static 'js/sw-init.js' %}"></script>
 <script src="{% static 'third_party/jquery-3.6.0.min.js' %}"></script>
 <script src="{% static 'js/iogt.js' %}"></script>
+<script src="{% static 'js/push-notification-sw-init.js' %}"></script>
 <noscript>
     <style type="text/css">
         #hideOnNonJSDevice, .hideOnNonJSDevice {

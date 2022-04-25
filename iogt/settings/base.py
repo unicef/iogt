@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     'health_check.storage',
     'health_check.contrib.migrations',
     'rest_framework_simplejwt',
+    'webpush',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -128,6 +129,7 @@ TEMPLATES = [
                 'django.template.context_processors.i18n',
                 'home.processors.commit_hash',
                 'home.processors.show_footers',
+                'home.processors.add_vapid_public_key',
             ],
         },
     },
@@ -462,3 +464,11 @@ if CACHE_BACKEND:
             'TIMEOUT': CACHE_TIMEOUT,
         },
     }
+
+WEBPUSH_SETTINGS = {
+   "VAPID_PUBLIC_KEY": os.getenv('VAPID_PUBLIC_KEY'),
+   "VAPID_PRIVATE_KEY": os.getenv('VAPID_PRIVATE_KEY'),
+   "VAPID_ADMIN_EMAIL": os.getenv('VAPID_ADMIN_EMAIL'),
+}
+
+APPEND_SLASH = False

@@ -60,3 +60,9 @@ class SitemapAPIView(APIView):
             home_page_urls + section_urls + article_urls + footer_urls + poll_urls + survey_urls + quiz_urls)
 
         return Response(sitemap)
+
+
+class PushNotificationServiceWorkerView(TemplateView):
+    template_name = "push-notification-sw.js"
+    content_type = "application/javascript"
+    name = "push-notification-sw.js"
