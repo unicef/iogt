@@ -10,7 +10,7 @@ django==3.1.*
 elasticsearch~=7.16
 libsass==0.21.*
 lxml==4.8.*
-psycopg2==2.8.*
+psycopg2-binary==2.8.*
 redis~=3.0
 tqdm==4.62.*
 wagtail-localize~=0.9.5
@@ -23,4 +23,5 @@ whitenoise==5.2.*
 django-health-check==3.16.5
 djangorestframework-simplejwt==5.0.0
 django-redis==5.2.0
+django-webpush==0.3.4
 git+https://github.com/IDEMSInternational/wagtail-transfer.git@enh/show-error-for-unimported-referenced-pages#egg=wagtail-transfer

@@ -19,3 +19,9 @@ def show_footers(request):
     if start_link:
         show_footers_ = False
     return {'show_footers': show_footers_}
+
+
+def add_vapid_public_key(request):
+    return {
+        'vapid_public_key': settings.WEBPUSH_SETTINGS.get('VAPID_PUBLIC_KEY'),
+    }
