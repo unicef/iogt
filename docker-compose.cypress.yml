@@ -12,3 +12,15 @@ services:
       - ./:/app/
     ports:
       - "8000:8000"
+
+  test:
+    build:
+      context: ./
+      dockerfile: Dockerfile.dev
+    environment:
+      DJANGO_SETTINGS_MODULE: iogt.settings.cypress2
+    command: bash -c "python manage.py runserver 0.0.0.0:5000"
+    volumes:
+      - ./:/app/
+    ports:
+      - "5000:5000"

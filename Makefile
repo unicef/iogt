@@ -24,4 +24,10 @@ test:
 	docker-compose exec -T django coverage html
 	docker-compose -f docker-compose.test.yml down --remove-orphans
 cypress:
+	python manage.py migrate
+	python manage.py loaddata fixtures/testfixture.json
 	docker-compose -f docker-compose.cypress.yml up --build -d django
+	docker-compose -f docker-compose.cypress.yml up --build -d test
+
+
+

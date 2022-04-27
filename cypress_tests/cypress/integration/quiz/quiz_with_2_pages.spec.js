@@ -1,8 +1,9 @@
 describe("2 pages quizes tests", () => {
+    const fullurl = "http://localhost:5000/en/sections/questionnaire-testing/quiz-2-pages/";
     const url = "/en/sections/questionnaire-testing/quiz-2-pages/";
 
     it("Visits the quiz page", () => {
-        cy.visitUrl(url);
+        cy.visitUrl(fullurl);
         cy.testTitle("Quiz (2 pages)", ".quiz-page__title");
         cy.get(".quest-item__step-desc>span").contains("Select one");
     });
