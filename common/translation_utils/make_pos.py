@@ -77,7 +77,7 @@ def make_pos_run():
                 translation.sg_buffer = phrase
                 translation.sg_buffer_eng = phrase_eng
             if row[0] == 'pl':
-                if not translation.sg_buffer:
+                if not hasattr(translation, "sg_buffer"):
                     print("Warning: Row {} has no matching singular.".format(i))
                     continue
                 entry = polib.POEntry(
@@ -97,20 +97,21 @@ def make_pos_run():
         phrase = row[0]
         if i == 0:
             continue
-        if row[2] == 'translate' and row[4] != 'unused' and phrase not in processed_phrases:
-            assert not row[4].startswith('has translation')
-            translation_list = translations
-            if row[3] == 'js':
-                translation_list = translationsjs
-            for translation in translation_list:
-                entry = polib.POEntry(
-                    msgid=phrase,
-                    msgstr='',
-                )
-                translation.pofile.append(entry)
-            
-            processed_phrases.add(phrase)
-            if row[4] == 'needs translation':
+        if row[2] == 'translate' and row[4] != 'unused':
+            if phrase not in processed_phrases:
+                assert not row[4].startswith('has translation')
+                translation_list = translations
+                if row[3] == 'js':
+                    translation_list = translationsjs
+                for translation in translation_list:
+                    entry = polib.POEntry(
+                        msgid=phrase,
+                        msgstr='',
+                    )
+                    translation.pofile.append(entry)                
+                processed_phrases.add(phrase)
+
+            if row[4] == 'needs translation' or row[4] == 'has partial translation':
                 translatable_strings.append(phrase)
 
     # Write output

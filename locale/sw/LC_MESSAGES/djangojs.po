@@ -17,7 +17,7 @@ msgid "Sorry, there seems to be an error. Please try again soon."
 msgstr ""
 "Samahani, inaonekana kuna hitilafu. Tafadhali jaribu tena hivi karibuni."
 
-msgid "Install this website as an app on your device?"
+msgid "You cannot submit when offline"
 msgstr ""
 
 msgid ""
@@ -27,5 +27,5 @@ msgid ""
 "Screen."
 msgstr ""
 
-msgid "You cannot submit when offline"
+msgid "Install this website as an app on your device?"
 msgstr ""

@@ -9,12 +9,12 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/search.css' %}">
 {% endblock extra_css %}
 
-{% block title %}{% translate "Search results for: " %} {{ search_query }}{% endblock %}
+{% block title %}{% translate "Search results for:" %} {{ search_query }}{% endblock %}
 
 {% block content %}
     <div class="search-container">
     {% if search_query %}
-        <h2>{% translate "Search results for: " %} "{{ search_query }}"</h2>
+        <h2>{% translate "Search results for:" %} "{{ search_query }}"</h2>
     {% endif %}
     <div class="search-results js-search-result search__results">
         {% if search_groups %}

@@ -178,3 +178,6 @@ After adding new strings to the code base that are user-facing (see https://docs
 3. Rerun `./manage.py translation_tracking`
 
 This process updates PO files as necessary and compiles a list of strings that appear in the translation manager in the admin backend.
+
+**Remark:** The file `common/translation_utils/translations.csv` is NOT updated in the process.
+Even though it has a column "is in use", its data is currently not updated automatically, and similarly, new strings are not added automatically.
