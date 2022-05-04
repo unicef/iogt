@@ -1,5 +1,4 @@
 version: '3.5'
-
 services:
 
   django:
@@ -54,5 +53,36 @@ services:
     volumes:
       - /var/lib/redis/data
 
+  selenium-hub:
+    image: selenium/hub:3.141.59-20210929
+    container_name: selenium-hub
+    ports:
+      - "4444:4444"
+
+  chrome:
+    image: selenium/node-chrome-debug:3.141.59-20210929
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+    ports:
+      - 5900:5900
+
+  firefox:
+    image: selenium/node-firefox-debug:3.141.59-20210929
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+    ports:
+      - 5901:5900
+  
+    
 volumes:
   es-data01:

@@ -14,6 +14,9 @@ WAGTAILSEARCH_BACKENDS = {
     }
 }
 
+# SECURITY WARNING: define the correct hosts in production!
+ALLOWED_HOSTS = ['*']
+
 
 WAGTAILTRANSFER_SECRET_KEY = os.environ.get('WAGTAILTRANSFER_SECRET_KEY')
 WAGTAILTRANSFER_SOURCES = {
