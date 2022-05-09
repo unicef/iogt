@@ -30,10 +30,9 @@ self.addEventListener('activate', (event) => {
     event.waitUntil(precacheController.activate(event));
 });
 
-self.addEventListener('fetch', function(event) {
+self.addEventListener('fetch', (event) => {
     event.respondWith(
-        fetch(event.request).catch(function() {
-            return caches.match(event.request);
-        })
+        fetch(event.request)
+            .catch(() => caches.match(event.request))
     );
 });
