@@ -115,7 +115,6 @@ const getItem = (key, defaultValue) => {
     return JSON.parse(localStorage.getItem(key, defaultValue));
 };
 
-
 const setItem = (key, value) => {
     localStorage.setItem(key, JSON.stringify(value));
 };

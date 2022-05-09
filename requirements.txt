@@ -10,7 +10,7 @@ django==3.1.*
 elasticsearch~=7.16
 libsass==0.21.*
 lxml==4.8.*
-psycopg2-binary==2.8.*
+psycopg2==2.8.*
 redis~=3.0
 tqdm==4.62.*
 wagtail-localize~=0.9.5
