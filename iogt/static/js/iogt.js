@@ -110,3 +110,79 @@ $(document).ready(() => {
         offlineAppBtns.hide();
     }
 });
+
+const getItem = (key, defaultValue) => {
+    return JSON.parse(localStorage.getItem(key, defaultValue));
+};
+
+
+const setItem = (key, value) => {
+    localStorage.setItem(key, JSON.stringify(value));
+};
+
+function initialiseState(reg) {
+    if (!reg.showNotification) {
+        alert("Showing notifications isn't supported.");
+        return
+    }
+    if (Notification.permission === 'denied') {
+        alert('You prevented us from showing notifications.');
+        return
+    }
+    if (!'PushManager' in window) {
+        alert("Push isn't allowed in your browser.");
+        return
+    }
+    subscribe(reg);
+}
+
+function urlB64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+        .replace(/\-/g, '+')
+        .replace(/_/g, '/');
+
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+    const outputData = outputArray.map((output, index) => rawData.charCodeAt(index));
+
+    return outputData;
+}
+
+async function subscribe(reg) {
+    const subscription = await reg.pushManager.getSubscription();
+    if (subscription) {
+        sendSubData(subscription);
+        return;
+    }
+
+    const vapidMeta = document.querySelector('meta[name="vapid-key"]');
+    const key = vapidMeta.content;
+    const options = {
+        userVisibleOnly: true,
+        // if key exists, create applicationServerKey property
+        ...(key && {applicationServerKey: urlB64ToUint8Array(key)})
+    };
+
+    const sub = await reg.pushManager.subscribe(options);
+    sendSubData(sub)
+}
+
+async function sendSubData(subscription) {
+    const browser = navigator.userAgent.match(/(firefox|msie|chrome|safari|trident)/ig)[0].toLowerCase();
+    const data = {
+        status_type: 'subscribe',
+        subscription: subscription.toJSON(),
+        browser: browser,
+    };
+
+    await fetch('/webpush/save_information', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            'content-type': 'application/json'
+        },
+        credentials: "include"
+    });
+    setItem('pushRegistered', true);
+}

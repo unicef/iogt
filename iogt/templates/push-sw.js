@@ -1,4 +1,3 @@
-// Register event listener for the 'push' event.
 self.addEventListener('push', function(event) {
     // Retrieve the textual payload from event.data (a PushMessageData object).
     // Other formats are supported (ArrayBuffer, Blob, JSON), check out the documentation

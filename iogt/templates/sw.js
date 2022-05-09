@@ -30,10 +30,13 @@ self.addEventListener('activate', (event) => {
     event.waitUntil(precacheController.activate(event));
 });
 
-// self.addEventListener('fetch', (event) => {
-//     const cacheKey = precacheController.getCacheKeyForURL(event.request.url);
-//     event.respondWith(caches.match(cacheKey));
-// });
+self.addEventListener('fetch', function(event) {
+  event.respondWith(
+    fetch(event.request).catch(function() {
+      return caches.match(event.request);
+    })
+  );
+});
 
 // Register event listener for the 'push' event.
 self.addEventListener('push', function(event) {
