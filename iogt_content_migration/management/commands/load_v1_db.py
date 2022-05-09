@@ -624,6 +624,14 @@ class Command(BaseCommand):
                 f'Description (not migrated): {row["description"]}.'
             )
 
+    def add_warning_for_articles_with_subtitle(self, row, article):
+        if row['subtitle']:
+            self.post_migration_report_messages['articles_with_subtitle'].append(
+                f'title: {article.title}. URL: {article.full_url}. '
+                f'Admin URL: {self.get_admin_url(article.id)}. '
+                f'Subtitle (not migrated): {row["subtitle"]}.'
+            )
+
     def migrate_articles(self):
         sql = f"select * " \
               f"from core_articlepage cap, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
@@ -670,12 +678,13 @@ class Command(BaseCommand):
                     translated_article.last_published_at = row['last_published_at']
                     translated_article.search_description = row['search_description']
                     translated_article.seo_title = row['seo_title']
-                    translated_article.index_page_description = row['subtitle']
+                    # translated_article.index_page_description = row['subtitle']
                     translated_article.commenting_status = CommentStatus.DISABLED
                     translated_article.commenting_starts_at = commenting_open_time
                     translated_article.commenting_ends_at = commenting_close_time
                     translated_article.latest_revision_created_at = row['latest_revision_created_at']
                     translated_article.save()
+                    self.add_warning_for_articles_with_subtitle(row, translated_article)
                     if row['featured_in_latest']:
                         self.post_migration_report_messages['articles_featured_in_latest'].append(
                             f'title: {article.title}. URL: {article.full_url}. '
@@ -736,11 +745,12 @@ class Command(BaseCommand):
             commenting_ends_at=commenting_close_time,
             search_description=row['search_description'],
             seo_title=row['seo_title'],
-            index_page_description=row['subtitle'],
+            # index_page_description=row['subtitle'],
             latest_revision_created_at=row['latest_revision_created_at'],
         )
         try:
             article.save()
+            self.add_warning_for_articles_with_subtitle(row, article)
             if row['featured_in_latest']:
                 self.post_migration_report_messages['articles_featured_in_latest'].append(
                     f'title: {article.title}. URL: {article.full_url}. '
