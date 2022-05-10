@@ -7,3 +7,9 @@
 .red-help-text p.help {
     color: red;
 }
+
+.disabled-clean-name textarea {
+    pointer-events: none;
+    background-color: #e6e6e6;
+    color: #4d4d4d;
+}

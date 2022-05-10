@@ -310,6 +310,7 @@ class SurveyFormField(AbstractFormField):
     )
     panels = [
         FieldPanel('label'),
+        FieldPanel('clean_name', classname='disabled-clean-name'),
         FieldPanel('help_text'),
         FieldPanel('required'),
         FieldPanel('field_type', classname="formbuilder-type"),
@@ -515,8 +516,14 @@ class PollFormField(AbstractFormField):
         null=True
     )
 
-    panels = AbstractFormField.panels + [
-        FieldPanel('admin_label', classname="formbuilder-default"),
+    panels = [
+        FieldPanel('label'),
+        FieldPanel('clean_name', classname='disabled-clean-name'),
+        FieldPanel('help_text'),
+        FieldPanel('required'),
+        FieldPanel('field_type', classname="formbuilder-type"),
+        FieldPanel('default_value', classname="formbuilder-default"),
+        FieldPanel('admin_label'),
     ]
 
 
@@ -711,6 +718,7 @@ class QuizFormField(AbstractFormField):
 
     panels = [
         FieldPanel('label'),
+        FieldPanel('clean_name', classname='disabled-clean-name'),
         FieldPanel('help_text'),
         FieldPanel('required'),
         FieldPanel('field_type', classname="formbuilder-type"),
