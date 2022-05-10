@@ -3,6 +3,7 @@ from django.core.management import BaseCommand
 from django_comments_xtd.models import XtdComment
 
 from messaging.models import Thread
+from questionnaires.models import UserSubmission
 
 
 class Command(BaseCommand):
@@ -20,4 +21,5 @@ class Command(BaseCommand):
         get_user_model().objects.exclude(pk__in=user_ids).delete()
         XtdComment.objects.all().delete()
         Thread.objects.all().delete()
+        UserSubmission.objects.all().delete()
         self.stdout.write('User data cleared.')
