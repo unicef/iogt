@@ -4,9 +4,16 @@ import socket
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 class MySeleniumTests(StaticLiveServerTestCase):
+
+     # We need the following to get Selenium to communicate with our
+    # Live Server, which needs to work for us to be able to
+# authenticate users in the test.
+    host = '172.18.0.6'  # TODO: bring in argument properly
+    port = 5000   # Would yield: self.live_server_url = "http://172.17.0.2:5000"
     
     @classmethod
     def setUpClass(cls):
