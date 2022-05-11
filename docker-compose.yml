@@ -17,18 +17,16 @@ services:
       WAGTAILTRANSFER_SOURCE_NAME: iogt_global
       WAGTAILTRANSFER_SOURCE_BASE_URL: https://example.com/wagtail-transfer/
       WAGTAILTRANSFER_SOURCE_SECRET_KEY: wagtailtransfer-source-secret-key
-      BASE_URL: 'http://localhost:8000'
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./:/app/
-    links:
-      - selenium-hub
     ports:
       - "8000:8000"
     depends_on:
       - elasticsearch
       - db
       - redis
+      - selenium-hub
 
   elasticsearch:
     image: 'docker.elastic.co/elasticsearch/elasticsearch:7.12.1'
@@ -55,12 +53,14 @@ services:
     volumes:
       - /var/lib/redis/data
 
+
   selenium-hub:
     image: selenium/hub:3.141.59-20210929
     container_name: selenium-hub
     ports:
       - "4444:4444"
 
+  
   chrome:
     image: selenium/node-chrome-debug:3.141.59-20210929
     volumes:

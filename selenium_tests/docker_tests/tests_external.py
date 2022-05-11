@@ -7,7 +7,6 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
 class SeleniumTest(TestCase):
-
     
     def setUp(self):
         self.chrome = webdriver.Remote(
