@@ -77,7 +77,7 @@ msgstr "लेखहरू"
 msgid "Search the site..."
 msgstr "साइट खोज्नुहोस् …"
 
-msgid "Search results for: "
+msgid "Search results for:"
 msgstr "खोजीको परिणामहरू:"
 
 msgid "No search results were found for"
@@ -172,174 +172,184 @@ msgstr "आन्तरिक सर्भरमा त्रुटि"
 
 msgid "1 result"
 msgid_plural "%(counter)s results"
-msgstr[0] "सबै 1 परिणाम"
-msgstr[1] "सबै %(counter)s परिणाम"
-
-msgid "This field is required."
-msgstr ""
-
-msgid "survey"
-msgstr ""
+msgstr[0] "१ नतिजा"
+msgstr[1] "%(counter)s नतिजाहरु"
 
 msgid "poll"
-msgstr ""
+msgstr "मतदान"
 
-msgid "Send"
-msgstr ""
-
-msgid "Remove this comment?"
-msgstr ""
-
-msgid "Remove"
-msgstr ""
-
-msgid "This comment has been removed."
-msgstr ""
-
-msgid "moderator"
-msgstr ""
-
-msgid "sections"
-msgstr ""
-
-msgid "Check if applies"
-msgstr ""
-
-msgid "New comments have been disabled for this page."
-msgstr ""
+msgid "survey"
+msgstr "सर्वेक्षण"
 
 msgid "quiz"
-msgstr ""
+msgstr "कुइज़"
+
+msgid "This field is required."
+msgstr "यो क्षेत्र भर्न आवश्यक छ"
+
+msgid "Send"
+msgstr "पठाउनुहोस्"
+
+msgid "Remove this comment?"
+msgstr "यो कमेन्ट हटाउनुहोस्"
+
+msgid "Remove"
+msgstr "हटाउनुहोस्"
+
+msgid "This comment has been removed."
+msgstr "यो कमेन्ट हटाइएको छ ।"
+
+msgid "moderator"
+msgstr "मध्यस्थकर्ता"
+
+msgid "sections"
+msgstr "भागहरू"
+
+msgid "Check if applies"
+msgstr "यदि लागू हुन्छ भने टिक गर्नुहोस्"
+
+msgid "New comments have been disabled for this page."
+msgstr "पेजमा भएका कमेन्टहरू असक्षम गरिएको छ"
 
 msgid "Correct answer"
-msgstr ""
+msgstr "सही जवाफ"
 
 msgid "Download"
-msgstr ""
+msgstr "डाउनलोड "
 
 msgid ""
 "You are leaving the <b>Internet of Good Things</b> to visit an external "
 "website and standard data charges by your network provider might apply"
 msgstr ""
+"तपाईं <b>इन्टरनेट अफ गुड थिन्ग्स (Internet of Good Things)</b> को वेबसाइट "
+"छोड्दै हुनुहुन्छ र डेटा प्रयोग भए अनुसार शुल्क लाग्न सक्नेछ ।"
 
 msgid "Continue to external site"
-msgstr ""
+msgstr "बाहिरी साइटमा जारी राख्नुहोस्"
 
 msgid "4-digit PIN"
-msgstr ""
+msgstr "४- अंकको पिन"
 
 msgid "Old 4-digit PIN"
-msgstr ""
+msgstr "पुरानो ४-अंक"
 
 msgid "New 4-digit PIN"
-msgstr ""
+msgstr "नयाँ ४- अंकको पिन"
 
 msgid "Confirm new 4-digit PIN"
-msgstr ""
+msgstr "नयाँ ४-अंकको पिन पुष्टि गर्नुहोस्"
 
 msgid "Log out"
-msgstr ""
+msgstr "लगआउट गर्नुहोस्"
 
 msgid "section"
-msgstr ""
+msgstr "भाग"
 
 msgid "article"
-msgstr ""
+msgstr "लेख"
 
 msgid "Remember me"
-msgstr ""
+msgstr "मेरो विवरण याद होस"
 
 msgid "You have signed out."
-msgstr ""
+msgstr "तपाईंले साइन आउट गर्नुभएको छ"
 
 msgid ""
 "Enter a valid username. This value may contain only letters, numbers, and "
 "@/./+/-/_ characters."
 msgstr ""
+"मान्य प्रयोगकर्ता नाम टाईप गर्नुहोस्। यसमा अक्षरहरू, सङ्ख्याहरू र @/./+/-/_ "
+"वर्णहरू मात्र हुन सक्छन्।"
 
 msgid "You must type the same password each time."
-msgstr ""
+msgstr "तपाईंले प्रत्येक पटक एउटै पासवर्ड टाइप गर्नुपर्छ।"
 
 msgid "This password is too short. It must contain at least 4 characters."
-msgstr ""
+msgstr "यो पासवर्ड धेरै छोटो छ। यसमा कम्तिमा ४ वर्णहरू हुनुपर्छ।"
 
 msgid "Please type your current password."
-msgstr ""
+msgstr "कृपया आफ्नो हालको पासवर्ड टाइप गर्नुहोस्।"
 
 msgid "Password successfully changed."
-msgstr ""
+msgstr "पासवर्ड सफलतापूर्वक परिवर्तन भएकोछ।"
 
 msgid "Enter a valid date/time."
-msgstr ""
+msgstr "मान्य मिति/समय टाइप गर्नुहोस्।"
 
 msgid "Enter a valid date."
-msgstr ""
+msgstr "मान्य मिति टाइप गर्नुहोस्।"
 
 msgid "Enter a valid URL."
-msgstr ""
+msgstr "मान्य युआरएल (URL) टाइप गर्नुहोस्।"
 
 msgid "Enter a valid email address."
-msgstr ""
+msgstr "मान्य इमेल अड्ड्रेस टाइप गर्नुहोस्।"
 
 msgid "Enter a valid integer."
-msgstr ""
+msgstr "मान्य पूर्णांक टाइप गर्नुहोस्।"
 
 msgid "Ensure this value is greater than or equal to %(limit_value)s."
-msgstr ""
+msgstr "यो %(limit_value)s भन्दा ठूलो वा बराबर छ भनी सुनिश्चित गर्नुहोस्।"
 
 msgid "Your comment"
-msgstr ""
+msgstr "तपाईको कमेन्ट"
 
 msgid "Are you sure you want to log out?"
-msgstr ""
+msgstr "के तपाई लगआउट गर्न चाहनु हुन्छ ?"
 
 msgid "Your browser does not support video playback."
-msgstr ""
+msgstr "तपाईँको ब्राउजरले भिडियो प्लेब्याक समर्थन गर्दैन"
 
 msgid "Your browser does not support audio playback."
-msgstr ""
+msgstr "तपाईँको ब्राउजरले अडियो प्लेब्याक समर्थन गर्दैन"
 
 msgid "Don't display my username next to my comment"
-msgstr ""
+msgstr "मेरो कमेन्टसंगै मेरो प्रयोगकर्ताको नाम (username) नदेखाउनुहोस्"
 
 msgid "Anonymous"
-msgstr ""
+msgstr "अज्ञात"
 
 msgid "Report this comment?"
-msgstr ""
+msgstr "यो कमेन्ट रिपोर्ट गर्नुहोस्"
 
 msgid "Display name"
-msgstr ""
+msgstr "नाम देखाउनुहोस्"
 
 msgid "Reported by %(comment_report_count)s user"
-msgstr ""
-
-msgid "Reported by %(comment_report_count)s users"
-msgstr ""
+msgid_plural "Reported by %(comment_report_count)s users"
+msgstr[0] "%(comment_report_count) प्रयोगकर्ताद्धारा रिपोर्ट गरिएको"
+msgstr[1] "%(comment_report_count) प्रयोगकर्ताहरू द्वारा रिपोर्ट गरिएको"
 
 msgid ""
 "Sorry, %(page_title)s is not available in %(language)s. If you want to keep "
 "browsing in %(language)s you can click below to return to the homepage."
 msgstr ""
+"माफ गर्नुहोस्, %s (page_title)s %(language)s मा उपलब्ध छैन । यदि तपाईँ "
+"%(language)s मा ब्राउजिङ गरिराख्न चाहनुहुन्छ भने गृहपृष्ठमा फर्कन तल क्लिक "
+"गर्न सक्नुहुन्छ ।"
 
 msgid "Username not available."
-msgstr ""
+msgstr "प्रयोगकर्ताको नाम (username) उपलब्ध छैन "
 
 msgid "Display name not available."
-msgstr ""
+msgstr "नाम उपलब्ध छैन"
 
 msgid "You have already completed this quiz."
-msgstr ""
+msgstr "तपाईँले यो हाजिरजवाफ पहिले नै पूरा गरिसक्नुभएको छ"
 
 msgid "You have already completed this poll."
-msgstr ""
+msgstr "तपाईँले यो सर्वेक्षण पहिल्यै पूरा गरिसक्नु भएको छ "
 
 msgid ""
 "If you cannot view the above video, you can instead %(start_link)sdownload "
 "it%(end_link)s."
 msgstr ""
+"यदि तपाईँले माथिको भिडियो हेर्न सक्नु भएन भने, %(start_link)s तपाईँले यसलाई "
+"डाउनलोड गर्न %(end_link)s. गर्नुहोस् "
 
 msgid ""
 "If you cannot listen to the above audio, you can instead "
 "%(start_link)sdownload it%(end_link)s."
 msgstr ""
+"यदि तपाईँले माथिको अडियो सुन्न सक्नु भएन भने, %(start_link)s डाउनलोड "
+"%(end_link)s.गर्न सक्नुहुन्छ"

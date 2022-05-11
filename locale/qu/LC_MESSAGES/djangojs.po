@@ -16,7 +16,7 @@ msgstr ""
 msgid "Sorry, there seems to be an error. Please try again soon."
 msgstr "Kishpichiway, ñallami kutin yaikuy."
 
-msgid "Install this website as an app on your device?"
+msgid "You cannot submit when offline"
 msgstr ""
 
 msgid ""
@@ -26,5 +26,11 @@ msgid ""
 "Screen."
 msgstr ""
 
-msgid "You cannot submit when offline"
+msgid "Install this website as an app on your device?"
+msgstr ""
+
+msgid "Date must be in this (YYYY-MM-DD) format"
+msgstr ""
+
+msgid "Datetime must be in this YYYY-MM-DDTHH:SS format"
 msgstr ""

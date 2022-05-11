@@ -77,7 +77,7 @@ msgstr "chikan temakuna"
 msgid "Search the site..."
 msgstr "Kaypi mashkay..."
 
-msgid "Search results for: "
+msgid "Search results for:"
 msgstr "Kan mashkakushka temakunapi mashkay:"
 
 msgid "No search results were found for"
@@ -172,16 +172,19 @@ msgstr "Internetta mana valinchu"
 
 msgid "1 result"
 msgid_plural "%(counter)s results"
-msgstr[0] "Kaymi tiyan 1 temakuna"
-msgstr[1] "Kaymi tiyan %(counter)s temakuna"
+msgstr[0] ""
+msgstr[1] ""
 
-msgid "This field is required."
+msgid "poll"
 msgstr ""
 
 msgid "survey"
 msgstr ""
 
-msgid "poll"
+msgid "quiz"
+msgstr ""
+
+msgid "This field is required."
 msgstr ""
 
 msgid "Send"
@@ -206,9 +209,6 @@ msgid "Check if applies"
 msgstr ""
 
 msgid "New comments have been disabled for this page."
-msgstr ""
-
-msgid "quiz"
 msgstr ""
 
 msgid "Correct answer"
@@ -312,10 +312,9 @@ msgid "Display name"
 msgstr ""
 
 msgid "Reported by %(comment_report_count)s user"
-msgstr ""
-
-msgid "Reported by %(comment_report_count)s users"
-msgstr ""
+msgid_plural "Reported by %(comment_report_count)s users"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid ""
 "Sorry, %(page_title)s is not available in %(language)s. If you want to keep "
