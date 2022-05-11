@@ -21,6 +21,8 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./:/app/
+    links:
+      - selenium-hub
     ports:
       - "8000:8000"
     depends_on:
