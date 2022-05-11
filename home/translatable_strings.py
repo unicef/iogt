@@ -56,5 +56,9 @@ translatable_strings = [
     'You have already completed this poll.',
     'If you cannot view the above video, you can instead %(start_link)sdownload it%(end_link)s.',
     'If you cannot listen to the above audio, you can instead %(start_link)sdownload it%(end_link)s.',
-    'You cannot submit when offline'
+    'You cannot submit when offline',
+    'Date must be in this (YYYY-MM-DD) format',
+    'Datetime must be in this YYYY-MM-DDTHH:SS format',
+    'Date must be in this (YYYY-MM-DD) format',
+    'Datetime must be in this YYYY-MM-DDTHH:SS format'
 ]
