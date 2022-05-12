@@ -3,16 +3,6 @@
 from django.db import migrations
 
 
-def _fill_has_viewed_registration_survey(apps, schema_editor):
-    User = apps.get_model('iogt_users', 'User')
-    User.objects.filter(has_filled_registration_survey=True).update(has_viewed_registration_survey=True)
-
-
-def _unfill_has_viewed_registration_survey(apps, schema_editor):
-    User = apps.get_model('iogt_users', 'User')
-    User.objects.filter(has_filled_registration_survey=False).update(has_viewed_registration_survey=False)
-
-
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -20,5 +10,4 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(_fill_has_viewed_registration_survey, _unfill_has_viewed_registration_survey)
     ]
