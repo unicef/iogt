@@ -11,7 +11,7 @@ from questionnaires.models import Poll, Quiz, Survey
 def search(request):
     search_groups = (Article, Poll, Quiz, Section, Survey)
 
-    search_query = request.GET.get("query")
+    search_query = request.GET.get("q")
     page = int(request.GET.get("page", 1))
 
     results = {"search_query": search_query, "search_groups": {}}
