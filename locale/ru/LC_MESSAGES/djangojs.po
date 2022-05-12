@@ -28,3 +28,9 @@ msgstr ""
 
 msgid "Install this website as an app on your device?"
 msgstr ""
+
+msgid "Date must be in this (YYYY-MM-DD) format"
+msgstr ""
+
+msgid "Datetime must be in this YYYY-MM-DDTHH:SS format"
+msgstr ""

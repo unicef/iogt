@@ -21,9 +21,12 @@ def _translate_node_render(self, context):
     from django.utils.safestring import mark_safe
     from django.core.cache import cache
 
+    lookup = (self.filter_expression.var.literal or 
+                self.filter_expression.var._resolve_lookup(context))
+
     try:
         translation_entry = cache.get(f'{globals_.locale.language_code}_translation_map')[
-            (self.filter_expression.var.literal, globals_.locale.language_code)]
+            (lookup, globals_.locale.language_code)]
     except (KeyError, TypeError):
         translation_entry = None
 

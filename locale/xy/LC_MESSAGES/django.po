@@ -1624,10 +1624,29 @@ msgid "Required"
 msgstr "([unused]-Required)"
 
 msgid "Bengali"
-msgstr "([needs-translation]-Bengali)"
+msgstr "([not-needed]-Bengali)"
 
 msgid "Sinhala"
-msgstr "([needs-translation]-Sinhala)"
+msgstr "([not-needed]-Sinhala)"
 
 msgid "Search results for:"
 msgstr "([has-translation]-Search results for:)"
+
+msgid "Dari"
+msgstr "([not-needed]-Dari)"
+
+msgid "Hindi"
+msgstr "([not-needed]-Hindi)"
+
+msgid "Pashto"
+msgstr "([not-needed]-Pashto)"
+
+msgid "Tamil"
+msgstr "([not-needed]-Tamil)"
+
+msgid "Date must be in this (YYYY-MM-DD) format"
+msgstr "([needs-translation]-Date must be in this (YYYY-MM-DD) format)"
+
+msgid "Datetime must be in this YYYY-MM-DDTHH:SS format"
+msgstr ""
+"([needs-translation]-Datetime must be in this YYYY-MM-DDTHH:SS format)"
