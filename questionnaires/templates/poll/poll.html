@@ -19,7 +19,7 @@
                     {% if user.is_authenticated or request.is_preview or page.allow_anonymous_submissions %}
                         {% if form %}
                             <form class="polls-widget__form"
-                                  action="{% pageurl page %}?back_url={{ request.path }}"
+                                  action="{% pageurl page %}?back_url={{ request.path }}&ga_formsubmit"
                                   method="POST">
                                 {% csrf_token %}
                                 {% for field in form %}
