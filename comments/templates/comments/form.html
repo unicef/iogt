@@ -66,7 +66,7 @@
         </div>
         {% endif %}
         <div class="comments__submit">
-            <input type="submit" class="reply-comment" formaction="{% comment_form_target %}" name="post" value="{% translate 'Leave comment' %}"/>
+            <input type="submit" class="reply-comment" formaction="{% comment_form_target %}?ga_commentsubmit" name="post" value="{% translate 'Leave comment' %}"/>
         </div>
     </div>
 </form>
