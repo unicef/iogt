@@ -12,14 +12,22 @@ from home.models import IogtFlatMenuItem, HomePage
 
 
 class Command(BaseCommand):
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--homepage-slug',
+            default='home',
+            help='Slug for existing homepage (if any).'
+        )
+
     def handle(self, *args, **options):
+        self.homepage_slug = options.get('homepage_slug')
         site = Site.objects.get(is_default_site=True)
         if not site:
             self.stdout.write(self.style.SUCCESS('Default site not found.'))
 
         home_page_content_type, __ = ContentType.objects.get_or_create(
             model='homepage', app_label='home')
-        home_page, __ = HomePage.objects.get_or_create(slug='home', defaults={
+        home_page, __ = HomePage.objects.get_or_create(slug=self.homepage_slug, defaults={
             'title': "Home",
             'draft_title': "Home",
             'content_type': home_page_content_type,
@@ -42,12 +50,24 @@ class Command(BaseCommand):
 
             translated_home_page = home_page.get_translation_or_none(locale)
             if translated_home_page:
-                IogtFlatMenuItem.objects.create(link_page=translated_home_page, menu=menu, url_append='#home')
+                IogtFlatMenuItem.objects.create(
+                    link_page=translated_home_page,
+                    link_text=translated_home_page.title.split(' ')[0],
+                    menu=menu
+                )
 
             IogtFlatMenuItem.objects.create(
-                link_url='#', menu=menu, link_text='Sections', url_append='top-level-sections')
-            IogtFlatMenuItem.objects.get_or_create(link_url='#menu', menu=menu, defaults={
-                'link_text': 'Menu',
-                'icon': icon,
-                'display_only_in_single_column_view': True,
-            })
+                link_url='#',
+                menu=menu,
+                link_text='Sections',
+                url_append='top-level-sections'
+            )
+            IogtFlatMenuItem.objects.get_or_create(
+                link_url='#menu',
+                menu=menu,
+                defaults={
+                    'link_text': 'Menu',
+                    'icon': icon,
+                    'display_only_in_single_column_view': True,
+                }
+            )
