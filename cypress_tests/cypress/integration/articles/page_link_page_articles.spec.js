@@ -24,7 +24,7 @@ describe("Page link page article tests", () => {
     it("Test PLP sections", () => {
 
         cy.visitUrl(url);
-        cy.get(".section-card>[href=\"/en/sections/covid-19/\"]>p").contains("Covid-19")
+        cy.get(".section-card>[href=\"/en/sections/covid-19/\"]>div>p").contains("Covid-19")
         cy.get(".section-card>[href=\"/en/sections/covid-19/\"]>div.img-holder>[alt='solid-dark-green.png']")
                 
     })
