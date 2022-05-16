@@ -18,4 +18,8 @@ $(document).ready(function () {
             'destination within the sandbox, to allow checking the transferred content for errors before going ' +
             'live. You can then move the content to the desired final destination.</h4>')
 
+    $('#id_page_permissions-ADD').parent().prepend('<h4 style="color: #FF0000; font-weight: bold; margin: 5px;">' +
+        'Giving a Group the EDIT permission will also allow them to download data for Polls, Surveys, and Quizzes ' +
+        'for the Pages they can access.</h4>')
+
 });
