@@ -1,4 +1,4 @@
-importScripts('../static/js/workbox/workbox-v6.1.5/workbox-sw.js');
+importScripts('../../static/js/workbox/workbox-v6.1.5/workbox-sw.js');
 
 // Below we are using a custom dimension to track online vs. offline interactions. So make
 // sure to create a custom dimension on GA
@@ -30,12 +30,11 @@ self.addEventListener('activate', (event) => {
     event.waitUntil(precacheController.activate(event));
 });
 
-self.addEventListener('fetch', function(event) {
-  event.respondWith(
-    fetch(event.request).catch(function() {
-      return caches.match(event.request);
-    })
-  );
+self.addEventListener('fetch', (event) => {
+    event.respondWith(
+        fetch(event.request)
+            .catch(() => caches.match(event.request))
+    );
 });
 
 // Register event listener for the 'push' event.
@@ -64,10 +63,10 @@ self.addEventListener('push', function(event) {
     );
 });
   
-self.addEventListener('notificationclick', function (event) {
+self.addEventListener('notificationclick', event => {
     event.waitUntil(
         event.preventDefault(),
         event.notification.close(),
         self.clients.openWindow(event.notification.data.url)
     );
-});
+})

@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.views.generic import TemplateView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from wagtail.core.models import Page
+from wagtail.core.models import Page, Locale
 from wagtail.images.models import Rendition
 from wagtailmedia.models import Media
 
@@ -52,7 +52,7 @@ class TranslationNotFoundPage(TemplateView):
 
 class SitemapAPIView(APIView):
     def get(self, request):
-        from home.models import HomePage, Section, Article, FooterPage, SVGToPNGMap
+        from home.models import HomePage, Section, Article, FooterPage, OfflineAppPage, SVGToPNGMap
 
         home_page_urls = [p.url for p in HomePage.objects.live()],
         section_urls = [p.url for p in Section.objects.live()],
@@ -61,6 +61,11 @@ class SitemapAPIView(APIView):
         poll_urls = [p.url for p in Poll.objects.live()],
         survey_urls = [p.url for p in Survey.objects.live()],
         quiz_urls = [p.url for p in Quiz.objects.live()],
+        offline_app_page_urls = [p.url for p in OfflineAppPage.objects.live()],
+
+        jsi18n_urls = []
+        for locale in Locale.objects.all():
+            jsi18n_urls.append(f'/{locale.language_code}/jsi18n/')
 
         image_urls = []
         for image in Rendition.objects.all():
@@ -96,8 +101,10 @@ class SitemapAPIView(APIView):
             poll_urls +
             survey_urls +
             quiz_urls +
+            offline_app_page_urls +
             tuple(static_urls) +
             tuple(image_urls) +
-            tuple(media_urls)
+            tuple(media_urls) +
+            tuple(jsi18n_urls)
         )
         return Response(sitemap)

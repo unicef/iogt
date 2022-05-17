@@ -9,8 +9,8 @@ class Translation:
         self.tag = row[0]
         self.translations = row[3:]
 
-    def needs_improvement(self):
-        return self.bad_source_phrase != ''
+    def is_complete(self):
+        return all(bool(entry) for entry in self.translations)
 
     def is_phrase(row):
         return row[0] in ['', 'sg', 'pl']
@@ -19,10 +19,10 @@ def lookup_status(msg, translations, replacement_strings=[]):
     status = 'needs translation'
     if msg in translations:
         tr = translations[msg]
-        if tr.needs_improvement():
-            status = 'has translation (improvised)'
-        else:
+        if tr.is_complete():
             status = 'has translation'
+        else:
+            status = 'has partial translation'
     else:
         for replacement_string in replacement_strings:
             if replacement_string:
