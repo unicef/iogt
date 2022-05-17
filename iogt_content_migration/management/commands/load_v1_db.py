@@ -98,6 +98,7 @@ class Command(BaseCommand):
         self.v1_to_v2_page_map = {}
         self.post_migration_report_messages = defaultdict(list)
         self.registration_survey_translations = defaultdict()
+        self.home_page_seo_title = ''
 
         self.clear()
         self.stdout.write('Existing site structure cleared')
@@ -230,6 +231,8 @@ class Command(BaseCommand):
                 'is_main_language': True,
             }
         )
+
+        self.home_page_seo_title = main['seo_title']
 
         home = models.HomePage(
             title=main['title'],
@@ -624,6 +627,14 @@ class Command(BaseCommand):
                 f'Description (not migrated): {row["description"]}.'
             )
 
+    def add_warning_for_articles_with_subtitle(self, row, article):
+        if row['subtitle']:
+            self.post_migration_report_messages['articles_with_subtitle'].append(
+                f'title: {article.title}. URL: {article.full_url}. '
+                f'Admin URL: {self.get_admin_url(article.id)}. '
+                f'Subtitle (not migrated): {row["subtitle"]}.'
+            )
+
     def migrate_articles(self):
         sql = f"select * " \
               f"from core_articlepage cap, wagtailcore_page wcp, core_languagerelation clr, core_sitelanguage csl " \
@@ -670,12 +681,13 @@ class Command(BaseCommand):
                     translated_article.last_published_at = row['last_published_at']
                     translated_article.search_description = row['search_description']
                     translated_article.seo_title = row['seo_title']
-                    translated_article.index_page_description = row['subtitle']
+                    # translated_article.index_page_description = row['subtitle']
                     translated_article.commenting_status = CommentStatus.DISABLED
                     translated_article.commenting_starts_at = commenting_open_time
                     translated_article.commenting_ends_at = commenting_close_time
                     translated_article.latest_revision_created_at = row['latest_revision_created_at']
                     translated_article.save()
+                    self.add_warning_for_articles_with_subtitle(row, translated_article)
                     if row['featured_in_latest']:
                         self.post_migration_report_messages['articles_featured_in_latest'].append(
                             f'title: {article.title}. URL: {article.full_url}. '
@@ -736,11 +748,12 @@ class Command(BaseCommand):
             commenting_ends_at=commenting_close_time,
             search_description=row['search_description'],
             seo_title=row['seo_title'],
-            index_page_description=row['subtitle'],
+            # index_page_description=row['subtitle'],
             latest_revision_created_at=row['latest_revision_created_at'],
         )
         try:
             article.save()
+            self.add_warning_for_articles_with_subtitle(row, article)
             if row['featured_in_latest']:
                 self.post_migration_report_messages['articles_featured_in_latest'].append(
                     f'title: {article.title}. URL: {article.full_url}. '
@@ -1119,9 +1132,10 @@ class Command(BaseCommand):
               "from core_pagetranslation"
         cur = self.db_query(sql)
         for row in cur:
-            self.page_translation_map.update({
-                row['translated_page_id']: row['page_id'],
-            })
+            if row['translated_page_id'] != row['page_id']:
+                self.page_translation_map.update({
+                    row['translated_page_id']: row['page_id'],
+                })
         cur.close()
         self.stdout.write('Page translation map loaded.')
 
@@ -1539,14 +1553,31 @@ class Command(BaseCommand):
         return iso_locales_map.get(locale, locale)
 
     def translate_home_pages(self):
+        self.post_migration_report_messages['homepage'].append(
+            f'A language indicator was added to your Homepages Title so that it\'s easier to identify '
+            f'which Homepage is for which language. For example "IoGT" becomes "IoGT [French]". '
+            f'This Title is shown to users in their browser tab\'s title, unless the "Page Title" is set, '
+            f'which can be found in the Promote tab when editing the Homepage.')
+
         locales = Locale.objects.all()
         for locale in locales:
             self.translate_page(locale=locale, page=self.home_page)
             translated_home_page = self.home_page.get_translation_or_none(locale)
             if translated_home_page:
+                translated_home_page.seo_title = self.home_page_seo_title or translated_home_page.title
                 translated_home_page.title = f"{translated_home_page.title} [{str(locale)}]"
                 translated_home_page.draft_title = f"{translated_home_page.draft_title} [{str(locale)}]"
                 translated_home_page.save()
+
+                if not self.home_page_seo_title:
+                    self.post_migration_report_messages['homepage'].append(
+                        f'title: {translated_home_page.title}. URL: {translated_home_page.full_url}. '
+                        f'Admin URL: {self.get_admin_url(translated_home_page.id)}.'
+                    )
+        self.post_migration_report_messages['homepage'].append(
+            'Copied the Homepage\'s original Title from IoGT V1 to the Page Title in IoGT V2, so that the Homepage '
+            'appears without eg "[English]" in users\' browser tab titles. To change the way your Homepage appears in '
+            'users\' browser tab titles you can change the Page Title in the Promote tab when editing the Homepage.')
 
     def translate_index_pages(self):
         index_pages = [

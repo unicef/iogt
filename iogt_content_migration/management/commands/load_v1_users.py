@@ -541,6 +541,8 @@ class Command(BaseCommand):
                     migrated_page = V1ToV2ObjectMap.get_v2_obj(klass, row['page_id'])
                     if migrated_page:
                         break
+                else:
+                    continue
 
                 pvr = PageViewRestriction.objects.create(
                     page=migrated_page, restriction_type=row['restriction_type'], password=row['password'])

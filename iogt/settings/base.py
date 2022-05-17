@@ -18,6 +18,7 @@ from django.contrib import auth
 from django.utils.translation import gettext_lazy as _
 
 import django.conf.locale
+import django.conf.global_settings
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -276,8 +277,10 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('ar', _('Arabic')),
     ('bn', _('Bengali')),
     ('ny', _('Chichewa')), # previously 'ch'
+    ('prs', _('Dari')),
     ('en', _('English')),
     ('fr', _('French')),
+    ('hi', _('Hindi')),
     ('id', _('Indonesian')),
     ('kaa', _('Karakalpak')),
     ('km', _('Khmer')),
@@ -287,13 +290,16 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('mg', _('Malagasy')),
     ('ne', _('Nepali')),
     ('nr', _('Ndebele')),
+    ('ps', _('Pashto')),
     ('pt', _('Portuguese')),
     ('qu', _('Quechua')),
     ('ru', _('Russian')),
     ('sn', _('Shona')), # previously 'sho'
+    ('si', _('Sinhala')),
     ('es', _('Spanish')),
     ('sw', _('Swahili')),
     ('tg', _('Tajik')),
+    ('ta', _('Tamil')),
     ('ti', _('Tigrinya')),
     ('ur', _('Urdu')),
     ('uz', _('Uzbek')),
@@ -344,6 +350,18 @@ EXTRA_LANG_INFO = {
         'name': 'Quechua',
         'name_local': 'Quechua',
     },
+    'prs': {
+        'bidi': True,
+        'code': 'prs',
+        'name': 'Dari',
+        'name_local': 'Dari',
+    },
+    'ps': {
+        'bidi': True,
+        'code': 'ps',
+        'name': 'Pashto',
+        'name_local': 'Pashto',
+    },
     'rn': {
         'bidi': False,
         'code': 'rn',
@@ -361,6 +379,12 @@ EXTRA_LANG_INFO = {
         'code': 'sn',
         'name': 'Shona',
         'name_local': 'Shona',
+    },
+    'si': {
+        'bidi': False,
+        'code': 'si',
+        'name': 'Sinhala',
+        'name_local': 'Sinhala',
     },
     'ti': {
         'bidi': False,
@@ -383,6 +407,8 @@ EXTRA_LANG_INFO = {
 }
 
 django.conf.locale.LANG_INFO.update(EXTRA_LANG_INFO)
+
+LANGUAGES_BIDI = django.conf.global_settings.LANGUAGES_BIDI + ["ps", "prs"]
 
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, "locale"),
@@ -446,21 +472,19 @@ SIMPLE_JWT = {
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
-CACHE_BACKEND = os.getenv(
-    'CACHE_BACKEND',
-    'django.core.cache.backends.dummy.DummyCache'
-)
-CACHE_LOCATION = os.getenv('CACHE_LOCATION', '')
-CACHE_TIMEOUT = int(os.getenv('CACHE_TIMEOUT', '0'))
-CACHES = {
-    "default": {
-        "BACKEND": CACHE_BACKEND,
-        "LOCATION": CACHE_LOCATION,
-        "TIMEOUT": CACHE_TIMEOUT,
-    },
-    'renditions': {
-        'BACKEND': CACHE_BACKEND,
-        'LOCATION': CACHE_LOCATION,
-        'TIMEOUT': CACHE_TIMEOUT,
-    },
-}
+CACHE_BACKEND = os.getenv('CACHE_BACKEND')
+if CACHE_BACKEND:
+    CACHE_LOCATION = os.getenv('CACHE_LOCATION', '')
+    CACHE_TIMEOUT = int(os.getenv('CACHE_TIMEOUT', '0'))
+    CACHES = {
+        "default": {
+            "BACKEND": CACHE_BACKEND,
+            "LOCATION": CACHE_LOCATION,
+            "TIMEOUT": CACHE_TIMEOUT,
+        },
+        'renditions': {
+            'BACKEND': CACHE_BACKEND,
+            'LOCATION': CACHE_LOCATION,
+            'TIMEOUT': CACHE_TIMEOUT,
+        },
+    }

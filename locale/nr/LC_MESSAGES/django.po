@@ -77,7 +77,7 @@ msgstr "imibhalo"
 msgid "Search the site..."
 msgstr "Dinga ku sayiti..."
 
-msgid "Search results for: "
+msgid "Search results for:"
 msgstr "Imiphumelo yokusetsha mayelana le:"
 
 msgid "No search results were found for"
@@ -172,16 +172,19 @@ msgstr "Kule phutha ku seva yethu"
 
 msgid "1 result"
 msgid_plural "%(counter)s results"
-msgstr[0] "Imiphumelo yonke eyi 1"
-msgstr[1] "Imiphumelo yonke eyi %(counter)s"
+msgstr[0] ""
+msgstr[1] ""
 
-msgid "This field is required."
+msgid "poll"
 msgstr ""
 
 msgid "survey"
 msgstr ""
 
-msgid "poll"
+msgid "quiz"
+msgstr ""
+
+msgid "This field is required."
 msgstr ""
 
 msgid "Send"
@@ -206,9 +209,6 @@ msgid "Check if applies"
 msgstr ""
 
 msgid "New comments have been disabled for this page."
-msgstr ""
-
-msgid "quiz"
 msgstr ""
 
 msgid "Correct answer"
@@ -312,10 +312,9 @@ msgid "Display name"
 msgstr ""
 
 msgid "Reported by %(comment_report_count)s user"
-msgstr ""
-
-msgid "Reported by %(comment_report_count)s users"
-msgstr ""
+msgid_plural "Reported by %(comment_report_count)s users"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid ""
 "Sorry, %(page_title)s is not available in %(language)s. If you want to keep "
