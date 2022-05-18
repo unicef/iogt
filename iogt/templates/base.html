@@ -45,7 +45,8 @@
 {% get_current_language_bidi as LANGUAGE_BIDI %}
 <body class="{% if LANGUAGE_BIDI %}rtl{% endif %} {% block body_class %}{% endblock %}">
 <div style="display:none">
-    <img src="{% google_analytics %}" width="0" height="0" />
+    <img src="{% google_analytics tracking_code=settings.home.SiteSettings.local_ga_tracking_code %}" width="0" height="0" />
+    <img src="{% google_analytics tracking_code=settings.home.SiteSettings.global_ga_tracking_code %}" width="0" height="0" />
 </div>
 {% wagtailuserbar %}
 
