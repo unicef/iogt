@@ -488,3 +488,5 @@ if CACHE_BACKEND:
             'TIMEOUT': CACHE_TIMEOUT,
         },
     }
+
+SITE_VERSION = os.getenv('SITE_VERSION', 'unknown')
