@@ -489,4 +489,4 @@ if CACHE_BACKEND:
         },
     }
 
-SITE_VERSION = os.getenv('SITE_VERSION')
+SITE_VERSION = os.getenv('SITE_VERSION', 'unknown')
