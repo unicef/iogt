@@ -489,7 +489,3 @@ if CACHE_BACKEND:
             'TIMEOUT': CACHE_TIMEOUT,
         },
     }
-
-GOOGLE_ANALYTICS = {
-    'google_analytics_id': os.getenv('GOOGLE_ANALYTICS_ID'),
-}
