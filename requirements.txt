@@ -13,7 +13,6 @@ lxml==4.8.*
 psycopg2==2.8.*
 redis~=3.0
 tqdm==4.62.*
-wagtail-localize==1.1.1
 wagtail-markdown==0.7.0
 wagtail==2.11.*
 wagtailmedia==0.7.0
@@ -24,3 +23,4 @@ django-health-check==3.16.5
 djangorestframework-simplejwt==5.0.0
 django-redis==5.2.0
 git+https://github.com/IDEMSInternational/wagtail-transfer.git@enh/show-error-for-unimported-referenced-pages#egg=wagtail-transfer
+git+https://github.com/sheralim012/wagtail-localize.git@bug/multiple-translation-sources-cascade-locale-translation#egg=wagtail-localize
