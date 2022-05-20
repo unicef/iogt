@@ -27,8 +27,9 @@ class MySeleniumTests(LiveServerTestCase):
 
 class LoginTest(MySeleniumTests):
 
-    def login_page_load(self):
+    def test_login_page_load(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
+        time.sleep(10)
         assert 'Log in' in self.selenium.title
 
     def test_login(self): 
@@ -43,7 +44,7 @@ class LoginTest(MySeleniumTests):
         submit.send_keys(Keys.RETURN)
         time.sleep(1)
 
-    def login_result(self):
+    def test_login_result(self):
         assert 'tester' in self.selenium.page_source
 
 
