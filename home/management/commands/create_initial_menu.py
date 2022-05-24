@@ -8,35 +8,33 @@ from wagtail.core.models import Site, Locale
 from wagtailmenus.models import FlatMenu
 from wagtailsvg.models import Svg
 
-from home.models import IogtFlatMenuItem, HomePage
+from home.models import IogtFlatMenuItem, HomePage, LocaleDetail
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
-        parser.add_argument(
-            '--homepage-slug',
-            default='home',
-            help='Slug for existing homepage (if any).'
-        )
-
     def handle(self, *args, **options):
-        self.homepage_slug = options.get('homepage_slug')
-        site = Site.objects.get(is_default_site=True)
+        site = Site.objects.filter(is_default_site=True).first()
         if not site:
             self.stdout.write(self.style.SUCCESS('Default site not found.'))
 
-        home_page_content_type, __ = ContentType.objects.get_or_create(
-            model='homepage', app_label='home')
-        home_page, __ = HomePage.objects.get_or_create(slug=self.homepage_slug, defaults={
-            'title': "Home",
-            'draft_title': "Home",
-            'content_type': home_page_content_type,
-            'path': '00010001',
-            'depth': 2,
-            'numchild': 0,
-            'url_path': '/home/',
-            'show_in_menus': True,
-        })
+        locale_detail = LocaleDetail.objects.filter(is_main_language=True).first()
+        if not locale_detail:
+            self.stdout.write(self.style.SUCCESS('Main language not found.'))
+
+        home_page = HomePage.objects.filter(locale=locale_detail.locale).first()
+        if not home_page:
+            home_page_content_type, __ = ContentType.objects.get_or_create(
+                model='homepage', app_label='home')
+            home_page, __ = HomePage.objects.get_or_create(slug='home', defaults={
+                'title': "Home",
+                'draft_title': "Home",
+                'content_type': home_page_content_type,
+                'path': '00010001',
+                'depth': 2,
+                'numchild': 0,
+                'url_path': '/home/',
+                'show_in_menus': True,
+            })
 
         locales = Locale.objects.all()
         file = File(open(Path(settings.BASE_DIR) / 'iogt/static/icons/burger.svg'), name='burger.svg')
@@ -50,17 +48,21 @@ class Command(BaseCommand):
 
             translated_home_page = home_page.get_translation_or_none(locale)
             if translated_home_page:
-                IogtFlatMenuItem.objects.create(
+                IogtFlatMenuItem.objects.get_or_create(
                     link_page=translated_home_page,
-                    link_text=translated_home_page.title.split(' ')[0],
-                    menu=menu
+                    menu=menu,
+                    defaults={
+                        'link_text': translated_home_page.title.split(' ')[0],
+                    }
                 )
 
-            IogtFlatMenuItem.objects.create(
+            IogtFlatMenuItem.objects.get_or_create(
                 link_url='#',
                 menu=menu,
-                link_text='Sections',
-                url_append='top-level-sections'
+                url_append='top-level-sections',
+                defaults={
+                    'link_text': 'Sections',
+                }
             )
             IogtFlatMenuItem.objects.get_or_create(
                 link_url='#menu',
