@@ -15,11 +15,11 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         site = Site.objects.filter(is_default_site=True).first()
         if not site:
-            self.stdout.write(self.style.SUCCESS('Default site not found.'))
+            self.stdout.write(self.style.ERROR('Default site not found.'))
 
         locale_detail = LocaleDetail.objects.filter(is_main_language=True).first()
         if not locale_detail:
-            self.stdout.write(self.style.SUCCESS('Main language not found.'))
+            self.stdout.write(self.style.ERROR('Main language not found.'))
 
         home_page = HomePage.objects.filter(locale=locale_detail.locale).first()
         if not home_page:
@@ -73,3 +73,5 @@ class Command(BaseCommand):
                     'display_only_in_single_column_view': True,
                 }
             )
+
+        self.stdout.write(self.style.SUCCESS('Menu items created.'))
