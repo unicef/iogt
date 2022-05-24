@@ -55,5 +55,6 @@ if settings.DEBUG:
 
 urlpatterns = urlpatterns + i18n_patterns(
     re_path(r'^images/([^/]*)/(\d*)/([^/]*)/[^/]*$', ServeView.as_view(), name='wagtailimages_serve'),
+    re_path('djga/', include('google_analytics.urls')),
     path("", include(wagtail_urls)),
 )

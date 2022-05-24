@@ -1,0 +1,11 @@
+{% load wagtailsettings_tags google_analytics_tags %}
+{% get_settings %}
+
+<div style="display:none">
+    {% if settings.home.SiteSettings.local_ga_tracking_code %}
+        <img src="{% google_analytics tracking_code=settings.home.SiteSettings.local_ga_tracking_code %}" width="0" height="0" />
+    {% endif %}
+    {% if settings.home.SiteSettings.global_ga_tracking_code %}
+        <img src="{% google_analytics tracking_code=settings.home.SiteSettings.global_ga_tracking_code %}" width="0" height="0" />
+    {% endif %}
+</div>

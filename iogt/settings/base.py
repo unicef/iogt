@@ -76,6 +76,7 @@ INSTALLED_APPS = [
     'health_check.storage',
     'health_check.contrib.migrations',
     'rest_framework_simplejwt',
+    'google_analytics',
 
     'django.contrib.admin',
     'django.contrib.auth',
