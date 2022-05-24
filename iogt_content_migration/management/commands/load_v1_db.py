@@ -107,7 +107,7 @@ class Command(BaseCommand):
         root = Page.get_first_root_node()
         self.migrate(root)
         self.print_post_migration_report()
-        self.create_initial_menu()
+        call_command('create_initial_menu')
 
     def clear(self):
         PageRevision.objects.all().delete()
@@ -2238,6 +2238,3 @@ class Command(BaseCommand):
         for k, v in self.post_migration_report_messages.items():
             self.stdout.write(self.style.ERROR(f"===> {k.replace('_', ' ').upper()}"))
             self.stdout.write(self.style.ERROR('\n'.join(v)))
-
-    def create_initial_menu(self):
-        call_command('create_initial_menu')
