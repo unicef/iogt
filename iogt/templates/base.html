@@ -1,35 +1,11 @@
-{% load static wagtailuserbar home_tags sass_tags wagtailsettings_tags menu_tags generic_components i18n wagtailimages_tags google_analytics_tags %}
+{% load static wagtailuserbar home_tags sass_tags wagtailsettings_tags menu_tags generic_components i18n wagtailimages_tags %}
 {% get_settings %}
 
 <!--  Commit Hash: {{commit_hash}} -->
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 <head>
-    {% if settings.home.SiteSettings.local_ga_tracking_code %}
-        <script async
-            src="https://www.googletagmanager.com/gtag/js?id={{ settings.home.SiteSettings.local_ga_tracking_code }}"></script>
-    {% endif %}
-    <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            window.dataLayer.push(arguments);
-        }
-
-        gtag('js', new Date());
-        {% if settings.home.SiteSettings.local_ga_tag_manager %}
-            gtag('config', '{{ settings.home.SiteSettings.local_ga_tag_manager }}');
-        {% endif %}
-        {% if settings.home.SiteSettings.global_ga_tag_manager %}
-            gtag('config', '{{ settings.home.SiteSettings.global_ga_tag_manager }}');
-        {% endif %}
-        {% if settings.home.SiteSettings.local_ga_tracking_code %}
-            gtag('config', '{{ settings.home.SiteSettings.local_ga_tracking_code }}');
-        {% endif %}
-        {% if settings.home.SiteSettings.global_ga_tracking_code %}
-            gtag('config', '{{ settings.home.SiteSettings.global_ga_tracking_code }}');
-        {% endif %}
-    </script>
+    {% include 'google_analytics_tag_manager.html' %}
     <meta charset="utf-8"/>
     <title>
         {% block title %}
@@ -69,14 +45,7 @@
 
 {% get_current_language_bidi as LANGUAGE_BIDI %}
 <body class="{% if LANGUAGE_BIDI %}rtl{% endif %} {% block body_class %}{% endblock %}">
-<div style="display:none">
-    {% if settings.home.SiteSettings.local_ga_tracking_code %}
-        <img src="{% google_analytics tracking_code=settings.home.SiteSettings.local_ga_tracking_code %}" width="0" height="0" />
-    {% endif %}
-    {% if settings.home.SiteSettings.global_ga_tracking_code %}
-        <img src="{% google_analytics tracking_code=settings.home.SiteSettings.global_ga_tracking_code %}" width="0" height="0" />
-    {% endif %}
-</div>
+{% include 'google_analytics_pixel_tracking.html' %}
 {% wagtailuserbar %}
 
 <main id="app">
