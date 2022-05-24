@@ -16,10 +16,12 @@ class Command(BaseCommand):
         site = Site.objects.filter(is_default_site=True).first()
         if not site:
             self.stdout.write(self.style.ERROR('Default site not found.'))
+            return
 
         locale_detail = LocaleDetail.objects.filter(is_main_language=True).first()
         if not locale_detail:
             self.stdout.write(self.style.ERROR('Main language not found.'))
+            return
 
         home_page = HomePage.objects.filter(locale=locale_detail.locale).first()
         if not home_page:
