@@ -76,6 +76,7 @@ INSTALLED_APPS = [
     'health_check.storage',
     'health_check.contrib.migrations',
     'rest_framework_simplejwt',
+    'google_analytics',
     'webpush',
 
     'django.contrib.admin',
@@ -490,5 +491,7 @@ if CACHE_BACKEND:
             'TIMEOUT': CACHE_TIMEOUT,
         },
     }
+
+SITE_VERSION = os.getenv('SITE_VERSION', 'unknown')
 
 APPEND_SLASH = False

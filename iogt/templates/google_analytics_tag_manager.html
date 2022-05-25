@@ -1,0 +1,22 @@
+{% load wagtailsettings_tags %}
+{% get_settings %}
+
+{% if settings.home.SiteSettings.local_ga_tag_manager or settings.home.SiteSettings.global_ga_tag_manager %}
+    <script async
+            src="https://www.googletagmanager.com/gtag/js?id={% firstof settings.home.SiteSettings.local_ga_tag_manager settings.home.SiteSettings.global_ga_tag_manager %}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            window.dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+        {% if settings.home.SiteSettings.local_ga_tag_manager %}
+            gtag('config', '{{ settings.home.SiteSettings.local_ga_tag_manager }}');
+        {% endif %}
+        {% if settings.home.SiteSettings.global_ga_tag_manager %}
+            gtag('config', '{{ settings.home.SiteSettings.global_ga_tag_manager }}');
+        {% endif %}
+    </script>
+{% endif %}
