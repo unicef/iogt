@@ -1,25 +1,25 @@
 import time
 from django.test import LiveServerTestCase
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
-from home.factories import ArticleFactory, SectionFactory
+from selenium.webdriver.chrome.options import Options
+from home.factories import ArticleFactory
 from home.models import HomePage
 from iogt_users.factories import UserFactory
 from comments.models import CommentStatus
 from django.conf import settings
-from django.contrib.contenttypes.models import ContentType
-from wagtail.core.models import Page, Site
-from home.models import HomePage, Article, Section
-from home.wagtail_hooks import limit_page_chooser
+from home.models import HomePage 
 
 class MySeleniumTests(LiveServerTestCase):
 
     @classmethod
-    def setUpClass(cls):  
-        cls.selenium = webdriver.Chrome()
+    def setUpClass(cls): 
+        options = Options()
+        options.add_argument("--window-size=1920,1080")
+        options.add_argument("--start-maximized")
+        options.add_argument("--headless")
+        cls.selenium = webdriver.Chrome(chrome_options=options)
         super(MySeleniumTests, cls).setUpClass()
+        
 
     @classmethod
     def tearDownClass(cls):
