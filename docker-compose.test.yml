@@ -59,7 +59,6 @@ services:
     container_name: selenium-hub
     ports:
       - "4444:4444"
-
   
   chrome:
     image: selenium/node-chrome-debug:3.141.59-20210929
