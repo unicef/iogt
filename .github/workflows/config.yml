@@ -11,9 +11,6 @@ on:
 jobs:
 
   django-UI-tests:
-    services:
-      selenium:
-        image:selenium/standalone-chrome
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

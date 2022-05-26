@@ -14,10 +14,12 @@ class MySeleniumTests(LiveServerTestCase):
     @classmethod
     def setUpClass(cls): 
         options = Options()
+        options.add_argument('--ignore-ssl-errors=yes')
+        options.add_argument('--ignore-certificate-errors')
         options.add_argument("--window-size=1920,1080")
         options.add_argument("--start-maximized")
         options.add_argument("--headless")
-        cls.selenium = webdriver.Chrome(chrome_options=options)
+        cls.selenium = webdriver.Remote(command_executor='http://localhost:4444/wd/hub', options=options)
         super(MySeleniumTests, cls).setUpClass()
         
 
