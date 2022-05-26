@@ -31,6 +31,7 @@ services:
     depends_on:
       - elasticsearch
       - db
+      - selenium-hub
 
   db:
     image: postgres:alpine
@@ -52,6 +53,25 @@ services:
       - iogt_elasticsearch_data:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
+
+  selenium-hub:
+    image: selenium/hub:3.141.59-20210929
+    container_name: selenium-hub
+    ports:
+      - "4444:4444"
+
+  
+  chrome:
+    image: selenium/node-chrome-debug:3.141.59-20210929
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+    ports:
+      - 5900:5900
 
 volumes:
   iogt_postgres_data:

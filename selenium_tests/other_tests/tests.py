@@ -2,6 +2,7 @@ import time
 from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from home.factories import ArticleFactory
 from home.models import HomePage
 from iogt_users.factories import UserFactory
@@ -19,7 +20,7 @@ class MySeleniumTests(LiveServerTestCase):
         options.add_argument("--window-size=1920,1080")
         options.add_argument("--start-maximized")
         options.add_argument("--headless")
-        cls.selenium = webdriver.Remote(command_executor='http://localhost:4444/wd/hub', options=options)
+        cls.selenium = webdriver.Remote(command_executor='http://selenium-hub:4444/wd/hub',desired_capabilities=DesiredCapabilities.CHROME,options=options)
         super(MySeleniumTests, cls).setUpClass()
         
 
