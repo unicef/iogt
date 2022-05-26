@@ -24,7 +24,7 @@ test:
 	docker-compose exec -T django coverage html
 	docker-compose -f docker-compose.test.yml down --remove-orphans
 test2:
-	docker-compose -f docker-compose.test.yml up --build -d django
+	docker-compose -f docker-compose.test.yml up --build -d 
 # docker pull selenium/standalone-chrome
 # docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome
 	docker-compose exec -T django python manage.py collectstatic --noinput
