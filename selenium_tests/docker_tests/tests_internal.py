@@ -7,6 +7,9 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
 class SeleniumTest(LiveServerTestCase):
+
+    host = 'django'
+    port = 9000
     
     def setUp(self):
         options = webdriver.ChromeOptions()
@@ -24,6 +27,7 @@ class SeleniumTest(LiveServerTestCase):
       )
        
     def test_homepage(self):
+        print(self.live_server_url)
         browser = self.chrome
         browser.get(self.live_server_url)
         time.sleep(4)

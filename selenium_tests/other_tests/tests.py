@@ -1,4 +1,5 @@
 import time
+import django
 from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -12,6 +13,9 @@ from home.models import HomePage
 
 class MySeleniumTests(LiveServerTestCase):
 
+    host = 'django'
+    port = 9000
+
     @classmethod
     def setUpClass(cls): 
         options = webdriver.ChromeOptions()
@@ -22,8 +26,7 @@ class MySeleniumTests(LiveServerTestCase):
         options.add_argument("--headless")
         #use webdriver
         cls.selenium = webdriver.Remote(command_executor='http://selenium-hub:4444/wd/hub',desired_capabilities=DesiredCapabilities.CHROME,options=options)
-        super(MySeleniumTests, cls).setUpClass()
-        
+        super(MySeleniumTests, cls).setUpClass()        
 
     @classmethod
     def tearDownClass(cls):
@@ -37,25 +40,26 @@ class MySeleniumTests(LiveServerTestCase):
         self.home_page.add_child(instance=self.article01)
 
     def test_article_comment(self):
-        self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
-        time.sleep(1)
-        username_input = self.selenium.find_element_by_name("login")
-        username_input.send_keys(self.user.username)
-        time.sleep(1)
-        password_input = self.selenium.find_element_by_name("password")
-        password_input.send_keys('test@123')
-        time.sleep(1)
-        self.selenium.find_element_by_xpath('//button[@type="submit"]').click()
-        time.sleep(1)
-        body_text = self.selenium.find_element_by_tag_name('body').text
-        assert self.user.username in body_text
-        self.selenium.get('%s%s' % (self.live_server_url, '/article0/'))
-        time.sleep(1)
-        comment_input = self.selenium.find_element_by_name("comment")
-        comment_input.send_keys('Test comment')
-        time.sleep(1)
-        self.selenium.find_element_by_xpath('//input[@value="Leave comment"]').click()
-        time.sleep(1)
+        self.selenium.get(self.live_server_url)
+        # self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
+        # time.sleep(1)
+        # username_input = self.selenium.find_element_by_name("login")
+        # username_input.send_keys(self.user.username)
+        # time.sleep(1)
+        # password_input = self.selenium.find_element_by_name("password")
+        # password_input.send_keys('test@123')
+        # time.sleep(1)
+        # self.selenium.find_element_by_xpath('//button[@type="submit"]').click()
+        # time.sleep(1)
+        # body_text = self.selenium.find_element_by_tag_name('body').text
+        # assert self.user.username in body_text
+        # self.selenium.get('%s%s' % (self.live_server_url, '/article0/'))
+        # time.sleep(1)
+        # comment_input = self.selenium.find_element_by_name("comment")
+        # comment_input.send_keys('Test comment')
+        # time.sleep(1)
+        # self.selenium.find_element_by_xpath('//input[@value="Leave comment"]').click()
+        # time.sleep(1)
 
         
     
