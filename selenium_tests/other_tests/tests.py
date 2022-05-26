@@ -13,7 +13,7 @@ class MySeleniumTests(LiveServerTestCase):
 
     @classmethod
     def setUpClass(cls): 
-        options = Options()
+        options = webdriver.ChromeOptions()
         options.add_argument('--ignore-ssl-errors=yes')
         options.add_argument('--ignore-certificate-errors')
         options.add_argument("--window-size=1920,1080")
