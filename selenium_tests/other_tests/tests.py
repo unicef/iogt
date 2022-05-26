@@ -30,15 +30,9 @@ class MySeleniumTests(LiveServerTestCase):
         self.user = UserFactory()
         self.home_page = HomePage.objects.first()
         self.article01 = ArticleFactory.build(owner=self.user, commenting_status=CommentStatus.OPEN)
-        self.section01 = SectionFactory.build(owner=self.user)
         self.home_page.add_child(instance=self.article01)
-        self.home_page.add_child(instance=self.section01)
-        self.section02 = SectionFactory.build(owner=self.user)
-        self.article02 = ArticleFactory.build(owner=self.user, commenting_status=CommentStatus.OPEN)
-        self.section01.add_child(instance=self.section02)
-        self.section01.add_child(instance=self.article02)
 
-    def test_login(self):              
+    def test_article_comment(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
         time.sleep(1)
         username_input = self.selenium.find_element_by_name("login")
@@ -51,10 +45,13 @@ class MySeleniumTests(LiveServerTestCase):
         time.sleep(1)
         body_text = self.selenium.find_element_by_tag_name('body').text
         assert self.user.username in body_text
-
-    # def test_survey(self):
-    #     self.selenium.get(self.live_server_url)
-    #     time.sleep(20)
+        self.selenium.get('%s%s' % (self.live_server_url, '/article0/'))
+        time.sleep(1)
+        comment_input = self.selenium.find_element_by_name("comment")
+        comment_input.send_keys('Test comment')
+        time.sleep(1)
+        self.selenium.find_element_by_xpath('//input[@value="Leave comment"]').click()
+        time.sleep(1)
 
         
     

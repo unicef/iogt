@@ -11,6 +11,8 @@ class UserFactory(DjangoModelFactory):
     username = factory.Sequence(lambda n: f'user{n}@example.com')
     password = factory.LazyFunction(lambda: make_password('test@123'))
     has_filled_registration_survey = True
+    is_superuser = True
+    
 
     class Meta:
         model = get_user_model()
