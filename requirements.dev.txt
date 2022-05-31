@@ -5,4 +5,5 @@ Faker
 beautifulsoup4
 django-test-plus>=1.4.0
 coverage
+selenium==3.141.0
 factory-boy==3.2.*
