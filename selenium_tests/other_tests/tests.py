@@ -13,6 +13,8 @@ from home.models import HomePage
 
 class MySeleniumTests(LiveServerTestCase):
 
+    #test change
+
     host = 'django'
     port = 9000
 
