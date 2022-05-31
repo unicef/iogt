@@ -24,9 +24,9 @@ test:
 	docker-compose exec -T django coverage html
 	docker-compose -f docker-compose.test.yml down --remove-orphans
 selenium-test:
-	docker-compose -f docker-compose.test2.yml up --build -d 
+	docker-compose -f docker-compose.selenium.yml up --build -d 
 	docker-compose exec -T django python manage.py collectstatic --noinput
 	docker-compose exec -T django python manage.py test selenium_tests/basic_tests
-	docker-compose -f docker-compose.test2.yml down --remove-orphans
+	docker-compose -f docker-compose.selenium.yml down --remove-orphans
 cypress:
 	docker-compose -f docker-compose.cypress.yml up --build -d django
