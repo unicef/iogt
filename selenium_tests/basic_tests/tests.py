@@ -4,7 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from home.factories import ArticleFactory
 from home.models import HomePage
-from iogt_users.factories import UserFactory
+from iogt_users.factories import AdminUserFactory
 from comments.models import CommentStatus
 from django.conf import settings
 from home.models import HomePage 
@@ -34,7 +34,7 @@ class MySeleniumTests(LiveServerTestCase):
         super(MySeleniumTests, cls).tearDownClass()
 
     def setUp(self):
-        self.user = UserFactory()
+        self.user = AdminUserFactory()
         self.home_page = HomePage.objects.first()
         self.article01 = ArticleFactory.build(owner=self.user, commenting_status=CommentStatus.OPEN)
         self.home_page.add_child(instance=self.article01)
