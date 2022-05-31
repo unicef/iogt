@@ -177,7 +177,7 @@ After adding new strings to the code base that are user-facing (see https://docs
 2. Review and update `common/translation_utils/translation_status.csv`. Strings that only appear in the admin backend don't need to be tagged as `translate`, only those that face users. See [here](common/translation_utils/README.md) for details.
 3. Rerun `./manage.py translation_tracking`
 
-This process updates PO files as necessary and compiles a list of strings that appear in the translation manager in the admin backend.
+This process updates PO files as necessary and compiles a list of strings that appear in the translation manager in the admin backend. 
 
 **Remark:** The file `common/translation_utils/translations.csv` is NOT updated in the process.
 Even though it has a column "is in use", its data is currently not updated automatically, and similarly, new strings are not added automatically.
