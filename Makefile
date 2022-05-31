@@ -28,5 +28,5 @@ test:
 # 	docker-compose exec -T django python manage.py collectstatic --noinput
 # 	docker-compose exec -T django python manage.py test selenium_tests/basic_tests
 # 	docker-compose -f docker-compose.selenium.yml down --remove-orphans
-cypress:
-	docker-compose -f docker-compose.cypress.yml up --build -d django
+# cypress:
+# 	docker-compose -f docker-compose.cypress.yml up --build -d django
