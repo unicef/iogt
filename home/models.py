@@ -809,7 +809,7 @@ class IogtFlatMenuItem(AbstractFlatMenuItem, TitleIconMixin):
 
     def get_icon(self):
         icon = super().get_icon()
-        if not icon.url and self.link_page:
+        if not icon.url and self.link_page and hasattr(self.link_page, 'get_icon'):
             icon = self.link_page.get_icon()
 
         return icon

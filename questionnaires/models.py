@@ -279,7 +279,8 @@ class SurveyFormField(AbstractFormField):
         verbose_name=_('name'),
         blank=True,
         default='',
-        help_text=_('Safe name of the form field, the label converted to ascii_snake_case')
+        help_text=_('Safe name of the form field, the label converted to ascii_snake_case. '
+                    'This will appear in the HTML but will not be visible to the user')
     )
     label = models.TextField(
         verbose_name=_('label'),
@@ -310,6 +311,7 @@ class SurveyFormField(AbstractFormField):
     )
     panels = [
         FieldPanel('label'),
+        FieldPanel('clean_name', classname='disabled-clean-name'),
         FieldPanel('help_text'),
         FieldPanel('required'),
         FieldPanel('field_type', classname="formbuilder-type"),
@@ -486,7 +488,8 @@ class PollFormField(AbstractFormField):
         verbose_name=_('name'),
         blank=True,
         default='',
-        help_text=_('Safe name of the form field, the label converted to ascii_snake_case')
+        help_text=_('Safe name of the form field, the label converted to ascii_snake_case. '
+                    'This will appear in the HTML but will not be visible to the user')
     )
     label = models.TextField(
         verbose_name=_('label'),
@@ -515,8 +518,14 @@ class PollFormField(AbstractFormField):
         null=True
     )
 
-    panels = AbstractFormField.panels + [
-        FieldPanel('admin_label', classname="formbuilder-default"),
+    panels = [
+        FieldPanel('label'),
+        FieldPanel('clean_name', classname='disabled-clean-name'),
+        FieldPanel('help_text'),
+        FieldPanel('required'),
+        FieldPanel('field_type', classname="formbuilder-type"),
+        FieldPanel('default_value', classname="formbuilder-default"),
+        FieldPanel('admin_label'),
     ]
 
 
@@ -664,7 +673,8 @@ class QuizFormField(AbstractFormField):
         verbose_name=_('name'),
         blank=True,
         default='',
-        help_text=_('Safe name of the form field, the label converted to ascii_snake_case')
+        help_text=_('Safe name of the form field, the label converted to ascii_snake_case. '
+                    'This will appear in the HTML but will not be visible to the user')
     )
     label = models.TextField(
         verbose_name=_('label'),
@@ -711,6 +721,7 @@ class QuizFormField(AbstractFormField):
 
     panels = [
         FieldPanel('label'),
+        FieldPanel('clean_name', classname='disabled-clean-name'),
         FieldPanel('help_text'),
         FieldPanel('required'),
         FieldPanel('field_type', classname="formbuilder-type"),
