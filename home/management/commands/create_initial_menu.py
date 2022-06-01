@@ -1,14 +1,13 @@
 from pathlib import Path
 
 from django.conf import settings
-from django.contrib.contenttypes.models import ContentType
 from django.core.files import File
 from django.core.management.base import BaseCommand
 from wagtail.core.models import Site, Locale
 from wagtailmenus.models import FlatMenu
 from wagtailsvg.models import Svg
 
-from home.models import IogtFlatMenuItem, HomePage, LocaleDetail
+from home.models import IogtFlatMenuItem, HomePage
 
 
 class Command(BaseCommand):
@@ -18,25 +17,10 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR('Default site not found.'))
             return
 
-        locale_detail = LocaleDetail.objects.filter(is_main_language=True).first()
-        if not locale_detail:
-            self.stdout.write(self.style.ERROR('Main language not found.'))
-            return
-
-        home_page = HomePage.objects.filter(locale=locale_detail.locale).first()
+        home_page = HomePage.objects.first()
         if not home_page:
-            home_page_content_type, __ = ContentType.objects.get_or_create(
-                model='homepage', app_label='home')
-            home_page, __ = HomePage.objects.get_or_create(slug='home', defaults={
-                'title': "Home",
-                'draft_title': "Home",
-                'content_type': home_page_content_type,
-                'path': '00010001',
-                'depth': 2,
-                'numchild': 0,
-                'url_path': '/home/',
-                'show_in_menus': True,
-            })
+            self.stdout.write(self.style.ERROR('Homepage not found.'))
+            return
 
         locales = Locale.objects.all()
         file = File(open(Path(settings.BASE_DIR) / 'iogt/static/icons/burger.svg'), name='burger.svg')
