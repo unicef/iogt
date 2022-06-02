@@ -1,4 +1,5 @@
 from django import template
+from django.conf import settings
 
 import iogt.iogt_globals as globals_
 
@@ -78,3 +79,8 @@ def language_picker_style():
     theme_settings = globals_.theme_settings
     return f"color:{theme_settings.language_picker_font_color};background-color:" \
            f"{theme_settings.language_picker_background_color}"
+
+
+@register.simple_tag
+def site_version():
+    return settings.SITE_VERSION

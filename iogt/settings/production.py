@@ -41,6 +41,8 @@ LOGGING = {
     },
 }
 
+SITE_VERSION = '2.0.19'
+
 try:
     from .local import *
 except ImportError:

@@ -1,0 +1,49 @@
+version: '3.5'
+
+services:
+
+  django:
+    build:
+      context: ./
+      dockerfile: Dockerfile.dev
+    environment:
+      DJANGO_SETTINGS_MODULE: iogt.settings.docker_compose_dev
+      COMMIT_HASH: asdfghjkl
+      WAGTAILTRANSFER_SECRET_KEY: wagtailtransfer-secret-key
+      WAGTAILTRANSFER_SOURCE_NAME: iogt_global
+      WAGTAILTRANSFER_SOURCE_BASE_URL: https://example.com/wagtail-transfer/
+      WAGTAILTRANSFER_SOURCE_SECRET_KEY: wagtailtransfer-source-secret-key
+      BASE_URL: 'http://localhost:8000'
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./:/app/
+    ports:
+      - "8000:8000"
+    depends_on:
+      - elasticsearch
+      - selenium-hub
+
+  elasticsearch:
+    image: 'docker.elastic.co/elasticsearch/elasticsearch:7.12.1'
+    environment:
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+
+  selenium-hub:
+    image: selenium/hub:3.141.59-20210929
+    container_name: selenium-hub
+    ports:
+      - "4444:4444"
+
+  chrome:
+    image: selenium/node-chrome-debug:3.141.59-20210929
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+    ports:
+      - 5900:5900

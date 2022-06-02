@@ -761,7 +761,7 @@ body.rtl {
   padding: 0;
 }
 
-.article-card p.article-title {
+.article-card p.article-title, .section-card p.section-title {
   width: 40%;
   font-weight: bold;
   margin-right: 5px;
@@ -770,13 +770,13 @@ body.rtl {
   letter-spacing: 0.01em;
 }
 
-.article-card .article-header {
+.article-card .article-header, .section-card .section-header {
   width: 50%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.article-card .article-header p {
+.article-card .article-header p, .section-card .section-header p {
   width: 100%;
 }
 
@@ -846,17 +846,17 @@ body.rtl {
     font-size: 24px;
     line-height: 28px;
   }
-  .article-card p.article-title {
+  .article-card p.article-title, .section-card p.section-title {
     width: 50%;
     font-size: 16px;
     margin-right: 5px;
     line-height: 24px;
   }
-  .article-card .article-header {
+  .article-card .article-header, .section-card .section-header {
     width: 50%;
   }
 
-  .article-card .article-header p {
+  .article-card .article-header p, .section-card .section-header p {
     width: 100%;
   }
   .article-card a {
@@ -1956,7 +1956,7 @@ body.rtl {
   width: 100% !important;
 }
 
-#content-wrap .first-content .img-holder, #content-wrap .first-content .article-header {
+#content-wrap .first-content .img-holder, #content-wrap .first-content .article-header, #content-wrap .first-content .section-header {
     width: 100%;
 }
 

@@ -5,21 +5,7 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 <head>
-    <script async
-            src="https://www.googletagmanager.com/gtag/js?id={{ settings.home.SiteSettings.local_ga_tracking_code }}"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            window.dataLayer.push(arguments);
-        }
-
-        gtag('js', new Date());
-        gtag('config', '{{ settings.home.SiteSettings.local_ga_tag_manager }}');
-        gtag('config', '{{ settings.home.SiteSettings.global_ga_tag_manager }}');
-        gtag('config', '{{ settings.home.SiteSettings.local_ga_tracking_code }}');
-        gtag('config', '{{ settings.home.SiteSettings.global_ga_tracking_code }}');
-    </script>
+    {% include 'google_analytics_tag_manager.html' %}
     <meta charset="utf-8"/>
     <title>
         {% block title %}
@@ -59,6 +45,7 @@
 
 {% get_current_language_bidi as LANGUAGE_BIDI %}
 <body class="{% if LANGUAGE_BIDI %}rtl{% endif %} {% block body_class %}{% endblock %}">
+{% include 'google_analytics_pixel_tracking.html' %}
 {% wagtailuserbar %}
 
 <main id="app">
@@ -92,7 +79,7 @@
 </script>
 <script src="{% url 'javascript-catalog' %}"></script>
 <script src="{% static 'js/sw-init.js' %}"></script>
-<script src="{% static 'third_party/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
 <script src="{% static 'js/iogt.js' %}"></script>
 <noscript>
     <style type="text/css">
