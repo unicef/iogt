@@ -25,3 +25,5 @@ test:
 	docker-compose -f docker-compose.test.yml down --remove-orphans
 cypress:
 	docker-compose -f docker-compose.cypress.yml up --build -d django
+	docker-compose exec -T django python manage.py clear_svg_to_png_map
+	docker-compose exec -T django python manage.py collectstatic --noinput
