@@ -20,6 +20,12 @@ class ServiceWorkerView(TemplateView):
     name = "sw.js"
 
 
+class PWASWView(TemplateView):
+    template_name = "pwa-sw.js"
+    content_type = "application/javascript"
+    name = "pwa-sw.js"
+
+
 def get_manifest(request):
     language = translation.get_language()
     manifest = get_object_or_404(ManifestSettings, language=language)

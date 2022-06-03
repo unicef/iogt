@@ -29,6 +29,11 @@ urlpatterns = [
         pwa_views.ServiceWorkerView.as_view(),
         name=pwa_views.ServiceWorkerView.name,
     ),
+    path(
+        'pwa-sw.js',
+        pwa_views.PWASWView.as_view(),
+        name=pwa_views.PWASWView.name,
+    ),
     *i18n_patterns(path("external-link/", TransitionPageView.as_view(), name="external-link")),
     *i18n_patterns(path("translation-not-found/", TranslationNotFoundPage.as_view(), name="translation-not-found")),
 

@@ -75,12 +75,14 @@
 
 {# Global javascript #}
 <script>
-    var serviceWorkerURL = '{% url "sw.js" %}'
+    var serviceWorkerURL = '{% url "sw.js" %}';
+    var PWA_SW_URL = '{% url "pwa-sw.js" %}';
 </script>
 <script src="{% url 'javascript-catalog' %}"></script>
-<script src="{% static 'js/sw-init.js' %}"></script>
 <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
 <script src="{% static 'js/iogt.js' %}"></script>
+<script src="{% static 'js/pwa-sw-init.js' %}"></script>
+<script src="{% static 'js/sw-init.js' %}"></script>
 <noscript>
     <style type="text/css">
         #hideOnNonJSDevice, .hideOnNonJSDevice {
