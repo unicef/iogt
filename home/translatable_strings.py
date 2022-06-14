@@ -52,6 +52,7 @@ translatable_strings = [
     'Sorry, %(page_title)s is not available in %(language)s. If you want to keep browsing in %(language)s you can click below to return to the homepage.',
     'Username not available.',
     'Display name not available.',
+    'Please complete the questions marked as required to continue',
     'You have already completed this quiz.',
     'You have already completed this poll.',
     'If you cannot view the above video, you can instead %(start_link)sdownload it%(end_link)s.',
