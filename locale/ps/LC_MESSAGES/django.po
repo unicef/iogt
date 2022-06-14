@@ -1,0 +1,356 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-07-31 09:38+0000\n"
+"PO-Revision-Date: 2021-07-31 09:38+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "quizzes"
+msgstr "امتحان"
+
+msgid "Log in to participate"
+msgstr "د ګډون لپاره ننوتل"
+
+msgid "Log in / Create account"
+msgstr "ننوتل / حساب جوړ کړئ"
+
+msgid "© The Internet of Good Things"
+msgstr "© The Internet of Good Things"
+
+msgid "Profile"
+msgstr "پروفایل"
+
+msgid "Chat"
+msgstr "چیټ"
+
+msgid "More"
+msgstr "نور"
+
+msgid "Log in"
+msgstr "د ننه کیدل"
+
+msgid "Back"
+msgstr "شاته"
+
+msgid "BACK"
+msgstr "شاته"
+
+msgid "Previous"
+msgstr "مخکینی"
+
+msgid "Next"
+msgstr "بل"
+
+msgid "Comments"
+msgstr "تبصرې"
+
+msgid "Please log in or create your account"
+msgstr "مهرباني، ننوځئ او یا یو ګڼون جوړ کړئ"
+
+msgid "Report"
+msgstr "راپور"
+
+msgid "Related Articles"
+msgstr "اړونده مقالې"
+
+msgid "This comment has been reported."
+msgstr "دا تبصره راپور شوې ده"
+
+msgid ""
+"It will be reviewed by the team and may be removed if it breaks our Platform"
+" Rules"
+msgstr ""
+"دا به د ټیم لخوا بیاکتل کیږي او که چیرې دا زموږ د پلیټ فارم قواعد مات کړي، "
+"ممکن لیرې شي"
+
+msgid "articles"
+msgstr "مقالې"
+
+msgid "Search the site..."
+msgstr "سایټ وپلټئ…"
+
+msgid "Search results for:"
+msgstr "د لټون پایلې:"
+
+msgid "No search results were found for"
+msgstr "د لټون پایلې ونه موندل شوې"
+
+msgid "Username"
+msgstr "کارن نوم"
+
+msgid "Create your account"
+msgstr "خپل حساب جوړ کړئ"
+
+msgid "Forgot PIN"
+msgstr "PIN هېر شوی"
+
+msgid "Cancel"
+msgstr "لغوه کړئ"
+
+msgid "Hey, %(username)s"
+msgstr "سلام، %(username)s"
+
+msgid "Change Digital Pin"
+msgstr "ډیجیټل پن بدل کړئ"
+
+msgid "Personal Details"
+msgstr "شخصي توضیحات"
+
+msgid "Save changes"
+msgstr "بدلونونه خوندي کړئ"
+
+msgid "Reset PIN"
+msgstr "پن بیا تنظیم کړئ"
+
+msgid "Your PIN has been changed successfully."
+msgstr "په بریالیتوب سره بدل شوی PINستاسو "
+
+msgid "I accept the Terms and Conditions."
+msgstr "زه اصول او شرایط منم."
+
+msgid "You have read %(read)s out of %(total)s"
+msgstr "تاسو د (%ټول) څخه %(لوستل) لوستلی دی"
+
+msgid "%(counter)s of %(total)s questions"
+msgstr "د ٪ (ټول) پوښتنو څخه %(کاونټر)s"
+
+msgid "Select one"
+msgstr "یو انتخاب کړئ"
+
+msgid "Optional"
+msgstr "اختیاری"
+
+msgid "No limit"
+msgstr "هیڅ حد نشته"
+
+msgid "Go to homepage"
+msgstr "د کور پاڼې ته لاړ شئ"
+
+msgid "You have already completed this survey."
+msgstr "تاسو لا دمخه دا سروې بشپړه کړې ده."
+
+msgid "Check all that apply"
+msgstr "ټول هغه وګورئ چې پلي کیږي"
+
+msgid "Your results!"
+msgstr "ستاسو پایلې"
+
+msgid "Replay Quiz"
+msgstr "مسابقه بیا تکرار کړئ"
+
+msgid "Incorrect"
+msgstr "ناسم"
+
+msgid "Correct"
+msgstr "سم"
+
+msgid "Your answer"
+msgstr "ستاسو ځواب"
+
+msgid "Leave comment"
+msgstr "نظر ورکړئ"
+
+msgid "Reply"
+msgstr "ځواب ورکړئ"
+
+msgid "Page not found"
+msgstr "پاڼه ونه موندل شوه"
+
+msgid "Sorry, this page could not be found."
+msgstr "بخښنه غواړم، دا پاڼه ونه موندل شوه"
+
+msgid "Internal server error"
+msgstr "د داخلي سرور تېروتنه"
+
+msgid "1 result"
+msgid_plural "%(counter)s results"
+msgstr[0] "۱ نتیجه"
+msgstr[1] "%(counter)s نتیجه "
+
+msgid "poll"
+msgstr "ټولپوښتنه"
+
+msgid "survey"
+msgstr "سروې"
+
+msgid "quiz"
+msgstr "امتحان"
+
+msgid "This field is required."
+msgstr "دا ډګر په کار دی "
+
+msgid "Send"
+msgstr "واستوی"
+
+msgid "Remove this comment?"
+msgstr "آیا دغه نظر لرې شي؟"
+
+msgid "Remove"
+msgstr "لرې کول"
+
+msgid "This comment has been removed."
+msgstr "دغه نظر لرې شوی."
+
+msgid "moderator"
+msgstr "منځګړی"
+
+msgid "sections"
+msgstr "برخې"
+
+msgid "Check if applies"
+msgstr "وګورئ چې آیا پلی کېږي"
+
+msgid "New comments have been disabled for this page."
+msgstr "د دې پاڼې لپاره د نویو نظرونو ورکړه غیر فعال شوي دي. "
+
+msgid "Correct answer"
+msgstr "سم ځواب"
+
+msgid "Download"
+msgstr "ښکته کول یا ډونلوډ"
+
+msgid ""
+"You are leaving the <b>Internet of Good Things</b> to visit an external "
+"website and standard data charges by your network provider might apply"
+msgstr ""
+"تاسو د یوه نوي وېب سایټ کتلو لپاره د <b>Internet of Good Things</b> پرېښودو "
+"په حال کې یاست او ښايي د شبکې چمتو کونکي له خوا ستندرد معلوماتي لګښت در "
+"باندې ولګېږي"
+
+msgid "Continue to external site"
+msgstr "بهرني وېب سایټ ته د وتلو ادامه"
+
+msgid "4-digit PIN"
+msgstr "4 رقمي پېن کوډ"
+
+msgid "Old 4-digit PIN"
+msgstr "پخوانی 4 رقمي پېن کوډ"
+
+msgid "New 4-digit PIN"
+msgstr "نوی 4 رقمي پېن کوډ"
+
+msgid "Confirm new 4-digit PIN"
+msgstr "4 رقمي نوی پېن کوډ تایید کړئ"
+
+msgid "Log out"
+msgstr "وتل "
+
+msgid "section"
+msgstr "برخه"
+
+msgid "article"
+msgstr "مقاله"
+
+msgid "Remember me"
+msgstr "ما په یاد ولره"
+
+msgid "You have signed out."
+msgstr "تاسو لاسلیک کړی"
+
+msgid ""
+"Enter a valid username. This value may contain only letters, numbers, and "
+"@/./+/-/_ characters."
+msgstr ""
+"یو معتبر کارن نوم داخل کړئ. دا ممکن یوازې لیکونه، شمیرې، او @ /./ +/-/_ حروف"
+" ولري."
+
+msgid "You must type the same password each time."
+msgstr "تاسو باید هر ځل ورته پاسورډ ټایپ کړئ."
+
+msgid "This password is too short. It must contain at least 4 characters."
+msgstr "دا پټنوم ډیر لنډ دی. باید لږترلږه 4 حروف ولري."
+
+msgid "Please type your current password."
+msgstr "مهرباني، خپل اوسنی پټنوم ولیکئ."
+
+msgid "Password successfully changed."
+msgstr "پټنوم په بریالیتوب سره بدل شو."
+
+msgid "Enter a valid date/time."
+msgstr "د اعتبار وړ نیټه / وخت دننه کړئ."
+
+msgid "Enter a valid date."
+msgstr "د اعتبار وړ نیټه دننه کړئ."
+
+msgid "Enter a valid URL."
+msgstr "یو معتبر URL داخل کړئ."
+
+msgid "Enter a valid email address."
+msgstr "یو معتبر بریښنالیک پته دننه کړئ."
+
+msgid "Enter a valid integer."
+msgstr "یو معتبر عدد داخل کړئ."
+
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr "ډاډه اوسئ چې دا اندازه له دې %( limit_ value )s لویه یا مساوي وي."
+
+msgid "Your comment"
+msgstr "ستاسو نظر"
+
+msgid "Are you sure you want to log out?"
+msgstr "آیا ډاډه یاست چې غواړئ ووځئ یا لاګ اوټ شئ؟"
+
+msgid "Your browser does not support video playback."
+msgstr "ستاسو د انټرنېټ براوزر د ویډیو له خپرولو ملاتړ نه کوي."
+
+msgid "Your browser does not support audio playback."
+msgstr "ستاسو د انټرنېټ براوزر د غږ له خپرولو ملاتړ نه کوي."
+
+msgid "Don't display my username next to my comment"
+msgstr "زما د کارونې نوم زما د نظر ترڅنګ ونه ښودل شي"
+
+msgid "Anonymous"
+msgstr "بې نوم"
+
+msgid "Report this comment?"
+msgstr "آیا د دې نظر راپور ورکړل شي؟"
+
+msgid "Display name"
+msgstr "د نوم ښودنه"
+
+msgid "Reported by %(comment_report_count)s user"
+msgid_plural "Reported by %(comment_report_count)s users"
+msgstr[0] "د %(comment_report_count)s  کاروونکي له خوا راپور ورکړل شوی"
+msgstr[1] "%( comment_report_ شمیره ) لخوا راپور شوی کاروونکي"
+
+msgid ""
+"Sorry, %(page_title)s is not available in %(language)s. If you want to keep "
+"browsing in %(language)s you can click below to return to the homepage."
+msgstr ""
+"بښه غواړو،%(page_title)s په %(language)s کې شته. که چېرې غواړئ په "
+"%(language)s  کې لټون ته ادامه ورکړئ، اصلي پاڼې ته د ګرځېدو لپاره لاندې کلیک"
+" وکړئ. "
+
+msgid "Username not available."
+msgstr "یوزر نوم نه شته."
+
+msgid "Display name not available."
+msgstr "د نوم ښوودنه د لاسرسي وړ نه ده"
+
+msgid "You have already completed this quiz."
+msgstr "تاسو له دې وړاندې دغه ازموینه بشپړه کړې ده"
+
+msgid "You have already completed this poll."
+msgstr "تاسو له دې وړاندې دغه نظر پوښتنه بشپړه کړې ده."
+
+msgid ""
+"If you cannot view the above video, you can instead %(start_link)sdownload "
+"it%(end_link)s."
+msgstr ""
+"که چېرې پورته ویډیو نه شئ کتلی، پرځای یې کولی شئ %(start_link)s ډونلوډ کړئ "
+"%(end_link)s."
+
+msgid ""
+"If you cannot listen to the above audio, you can instead "
+"%(start_link)sdownload it%(end_link)s."
+msgstr ""
+"که چېرې پورته غږ نه شئ اورېدلی، پرځای یې کولای شئ %(start_link)s ډونلوډ کړئ "
+"%(end_link)s."

@@ -41,3 +41,1066 @@ msgstr "([not-needed]-shift)"
 
 msgid "You cannot submit when offline"
 msgstr "([has-partial-translation]-You cannot submit when offline)"
+
+msgid "sourceType: \"module\""
+msgstr "([needs-translation]-sourceType: \"module\")"
+
+msgid "import"
+msgstr "([needs-translation]-import)"
+
+msgid "'arguments' is only allowed in functions and class methods."
+msgstr ""
+"([needs-translation]-'arguments' is only allowed in functions and class "
+"methods.)"
+
+msgid ""
+"Async functions can only be declared at the top level or inside a block."
+msgstr ""
+"([needs-translation]-Async functions can only be declared at the top level "
+"or inside a block.)"
+
+msgid "Can not use 'await' as identifier inside an async function."
+msgstr ""
+"([needs-translation]-Can not use 'await' as identifier inside an async "
+"function.)"
+
+msgid "Can not use 'await' as identifier inside a static block."
+msgstr ""
+"([needs-translation]-Can not use 'await' as identifier inside a static "
+"block.)"
+
+msgid "'await' is not allowed in async function parameters."
+msgstr ""
+"([needs-translation]-'await' is not allowed in async function parameters.)"
+
+msgid ""
+"'await' is only allowed within async functions and at the top levels of "
+"modules."
+msgstr ""
+"([needs-translation]-'await' is only allowed within async functions and at "
+"the top levels of modules.)"
+
+msgid "'await' is only allowed within async functions."
+msgstr "([needs-translation]-'await' is only allowed within async functions.)"
+
+msgid "A 'get' accesor must not have any formal parameters."
+msgstr ""
+"([needs-translation]-A 'get' accesor must not have any formal parameters.)"
+
+msgid "A 'set' accesor must have exactly one formal parameter."
+msgstr ""
+"([needs-translation]-A 'set' accesor must have exactly one formal "
+"parameter.)"
+
+msgid "A 'set' accesor function argument must not be a rest parameter."
+msgstr ""
+"([needs-translation]-A 'set' accesor function argument must not be a rest "
+"parameter.)"
+
+msgid "Classes may not have a field named 'constructor'."
+msgstr ""
+"([needs-translation]-Classes may not have a field named 'constructor'.)"
+
+msgid "Classes may not have a private field named '#constructor'."
+msgstr ""
+"([needs-translation]-Classes may not have a private field named "
+"'#constructor'.)"
+
+msgid "Class constructor may not be an accessor."
+msgstr "([needs-translation]-Class constructor may not be an accessor.)"
+
+msgid "Constructor can't be an async function."
+msgstr "([needs-translation]-Constructor can't be an async function.)"
+
+msgid "Constructor can't be a generator."
+msgstr "([needs-translation]-Constructor can't be a generator.)"
+
+msgid ""
+"Decorators must be placed *before* the 'export' keyword. You can set the "
+"'decoratorsBeforeExport' option to false to use the 'export @decorator class"
+" {}' syntax."
+msgstr ""
+"([needs-translation]-Decorators must be placed *before* the 'export' "
+"keyword. You can set the 'decoratorsBeforeExport' option to false to use the"
+" 'export @decorator class {}' syntax.)"
+
+msgid ""
+"Decorators can't be used with a constructor. Did you mean '@dec class { ... "
+"}'?"
+msgstr ""
+"([needs-translation]-Decorators can't be used with a constructor. Did you "
+"mean '@dec class { ... }'?)"
+
+msgid ""
+"Using the export keyword between a decorator and a class is not allowed. "
+"Please use `export @dec class` instead."
+msgstr ""
+"([needs-translation]-Using the export keyword between a decorator and a "
+"class is not allowed. Please use `export @dec class` instead.)"
+
+msgid "Decorators must not be followed by a semicolon."
+msgstr "([needs-translation]-Decorators must not be followed by a semicolon.)"
+
+msgid "Decorators can't be used with a static block."
+msgstr "([needs-translation]-Decorators can't be used with a static block.)"
+
+msgid "Deleting a private field is not allowed."
+msgstr "([needs-translation]-Deleting a private field is not allowed.)"
+
+msgid ""
+"ES2015 named imports do not destructure. Use another statement for "
+"destructuring after the import."
+msgstr ""
+"([needs-translation]-ES2015 named imports do not destructure. Use another "
+"statement for destructuring after the import.)"
+
+msgid "Duplicate constructor in the same class."
+msgstr "([needs-translation]-Duplicate constructor in the same class.)"
+
+msgid "Only one default export allowed per module."
+msgstr "([needs-translation]-Only one default export allowed per module.)"
+
+msgid "Redefinition of __proto__ property."
+msgstr "([needs-translation]-Redefinition of __proto__ property.)"
+
+msgid "Duplicate regular expression flag."
+msgstr "([needs-translation]-Duplicate regular expression flag.)"
+
+msgid "Rest element must be last element."
+msgstr "([needs-translation]-Rest element must be last element.)"
+
+msgid "Invalid Unicode escape."
+msgstr "([needs-translation]-Invalid Unicode escape.)"
+
+msgid "${localName}"
+msgstr "([needs-translation]-${localName})"
+
+msgid "'from' is not allowed as an identifier after 'export default'."
+msgstr ""
+"([needs-translation]-'from' is not allowed as an identifier after 'export "
+"default'.)"
+
+msgid "${type === \"ForInStatement\" ? \"for-in\" : \"for-of\"}"
+msgstr "([needs-translation]-${type === \"ForInStatement\" ? \"for-in\" : \"for-of\"})"
+
+msgid "The left-hand side of a for-of loop may not be 'async'."
+msgstr ""
+"([needs-translation]-The left-hand side of a for-of loop may not be "
+"'async'.)"
+
+msgid "The left-hand side of a for-of loop may not start with 'let'."
+msgstr ""
+"([needs-translation]-The left-hand side of a for-of loop may not start with "
+"'let'.)"
+
+msgid "Generators can only be declared at the top level or inside a block."
+msgstr ""
+"([needs-translation]-Generators can only be declared at the top level or "
+"inside a block.)"
+
+msgid "BreakStatement"
+msgstr "([needs-translation]-BreakStatement)"
+
+msgid ""
+"Illegal 'use strict' directive in function with non-simple parameter list."
+msgstr ""
+"([needs-translation]-Illegal 'use strict' directive in function with non-"
+"simple parameter list.)"
+
+msgid "'return' outside of function."
+msgstr "([needs-translation]-'return' outside of function.)"
+
+msgid "${importName}"
+msgstr "([needs-translation]-${importName})"
+
+msgid "Trailing comma is disallowed inside import(...) arguments."
+msgstr ""
+"([needs-translation]-Trailing comma is disallowed inside import(...) "
+"arguments.)"
+
+msgid "one argument"
+msgstr "([needs-translation]-one argument)"
+
+msgid "Cannot use new with import(...)."
+msgstr "([needs-translation]-Cannot use new with import(...).)"
+
+msgid "`...` is not allowed in `import()`."
+msgstr "([needs-translation]-`...` is not allowed in `import()`.)"
+
+msgid ""
+"The 'u' and 'v' regular expression flags cannot be enabled at the same time."
+msgstr ""
+"([needs-translation]-The 'u' and 'v' regular expression flags cannot be "
+"enabled at the same time.)"
+
+msgid "Invalid BigIntLiteral."
+msgstr "([needs-translation]-Invalid BigIntLiteral.)"
+
+msgid "Code point out of bounds."
+msgstr "([needs-translation]-Code point out of bounds.)"
+
+msgid "Invalid shorthand property initializer."
+msgstr "([needs-translation]-Invalid shorthand property initializer.)"
+
+msgid "Invalid decimal."
+msgstr "([needs-translation]-Invalid decimal.)"
+
+msgid "Bad character escape sequence."
+msgstr "([needs-translation]-Bad character escape sequence.)"
+
+msgid "Invalid escape sequence in template."
+msgstr "([needs-translation]-Invalid escape sequence in template.)"
+
+msgid "Invalid number."
+msgstr "([needs-translation]-Invalid number.)"
+
+msgid "Floating-point numbers require a valid exponent after the 'e'."
+msgstr ""
+"([needs-translation]-Floating-point numbers require a valid exponent after "
+"the 'e'.)"
+
+msgid "${unexpected}"
+msgstr "([needs-translation]-${unexpected})"
+
+msgid "Invalid parenthesized assignment pattern."
+msgstr "([needs-translation]-Invalid parenthesized assignment pattern.)"
+
+msgid "Binding member expression."
+msgstr "([needs-translation]-Binding member expression.)"
+
+msgid "Only properties and spread elements are allowed in record definitions."
+msgstr ""
+"([needs-translation]-Only properties and spread elements are allowed in "
+"record definitions.)"
+
+msgid "Invalid rest operator's argument."
+msgstr "([needs-translation]-Invalid rest operator's argument.)"
+
+msgid "${labelName}"
+msgstr "([needs-translation]-${labelName})"
+
+msgid ""
+"'let' is not allowed to be used as a name in 'let' or 'const' declarations."
+msgstr ""
+"([needs-translation]-'let' is not allowed to be used as a name in 'let' or "
+"'const' declarations.)"
+
+msgid "No line break is allowed before '=>'."
+msgstr "([needs-translation]-No line break is allowed before '=>'.)"
+
+msgid "Invalid regular expression flag."
+msgstr "([needs-translation]-Invalid regular expression flag.)"
+
+msgid "A class name is required."
+msgstr "([needs-translation]-A class name is required.)"
+
+msgid "Only '=' operator can be used for specifying default value."
+msgstr ""
+"([needs-translation]-Only '=' operator can be used for specifying default "
+"value.)"
+
+msgid "Missing semicolon."
+msgstr "([needs-translation]-Missing semicolon.)"
+
+msgid "Expecting Unicode escape sequence \\uXXXX."
+msgstr "([needs-translation]-Expecting Unicode escape sequence \\uXXXX.)"
+
+msgid ""
+"Nullish coalescing operator(??) requires parens when mixing with logical "
+"operators."
+msgstr ""
+"([needs-translation]-Nullish coalescing operator(??) requires parens when "
+"mixing with logical operators.)"
+
+msgid "The only accepted module attribute is `type`."
+msgstr "([needs-translation]-The only accepted module attribute is `type`.)"
+
+msgid "Only string literals are allowed as module attribute values."
+msgstr ""
+"([needs-translation]-Only string literals are allowed as module attribute "
+"values.)"
+
+msgid "${key}"
+msgstr "([needs-translation]-${key})"
+
+msgid "Multiple default clauses."
+msgstr "([needs-translation]-Multiple default clauses.)"
+
+msgid "Illegal newline after throw."
+msgstr "([needs-translation]-Illegal newline after throw.)"
+
+msgid "Missing catch or finally clause."
+msgstr "([needs-translation]-Missing catch or finally clause.)"
+
+msgid "Identifier directly after number."
+msgstr "([needs-translation]-Identifier directly after number.)"
+
+msgid ""
+"Numeric separators are not allowed inside unicode escape sequences or hex "
+"escape sequences."
+msgstr ""
+"([needs-translation]-Numeric separators are not allowed inside unicode "
+"escape sequences or hex escape sequences.)"
+
+msgid ""
+"'await*' has been removed from the async functions proposal. Use "
+"Promise.all() instead."
+msgstr ""
+"([needs-translation]-'await*' has been removed from the async functions "
+"proposal. Use Promise.all() instead.)"
+
+msgid "Constructors in/after an Optional Chain are not allowed."
+msgstr ""
+"([needs-translation]-Constructors in/after an Optional Chain are not "
+"allowed.)"
+
+msgid "Tagged Template Literals are not allowed in optionalChain."
+msgstr ""
+"([needs-translation]-Tagged Template Literals are not allowed in "
+"optionalChain.)"
+
+msgid "'override' modifier cannot appear on a constructor declaration."
+msgstr ""
+"([needs-translation]-'override' modifier cannot appear on a constructor "
+"declaration.)"
+
+msgid "Argument name clash."
+msgstr "([needs-translation]-Argument name clash.)"
+
+msgid "Object pattern can't contain getter or setter."
+msgstr "([needs-translation]-Object pattern can't contain getter or setter.)"
+
+msgid "Object pattern can't contain methods."
+msgstr "([needs-translation]-Object pattern can't contain methods.)"
+
+msgid ""
+"Record expressions ending with '|}' are only allowed when the 'syntaxType' "
+"option of the 'recordAndTuple' plugin is set to 'bar'."
+msgstr ""
+"([needs-translation]-Record expressions ending with '|}' are only allowed "
+"when the 'syntaxType' option of the 'recordAndTuple' plugin is set to "
+"'bar'.)"
+
+msgid ""
+"Record expressions starting with '{|' are only allowed when the 'syntaxType'"
+" option of the 'recordAndTuple' plugin is set to 'bar'."
+msgstr ""
+"([needs-translation]-Record expressions starting with '{|' are only allowed "
+"when the 'syntaxType' option of the 'recordAndTuple' plugin is set to "
+"'bar'.)"
+
+msgid ""
+"Record expressions starting with '#{' are only allowed when the 'syntaxType'"
+" option of the 'recordAndTuple' plugin is set to 'hash'."
+msgstr ""
+"([needs-translation]-Record expressions starting with '#{' are only allowed "
+"when the 'syntaxType' option of the 'recordAndTuple' plugin is set to "
+"'hash'.)"
+
+msgid "'__proto__' is not allowed in Record expressions."
+msgstr ""
+"([needs-translation]-'__proto__' is not allowed in Record expressions.)"
+
+msgid "Unexpected trailing comma after rest element."
+msgstr "([needs-translation]-Unexpected trailing comma after rest element.)"
+
+msgid ""
+"In non-strict mode code, functions can only be declared at top level, inside"
+" a block, or as the body of an if statement."
+msgstr ""
+"([needs-translation]-In non-strict mode code, functions can only be declared"
+" at top level, inside a block, or as the body of an if statement.)"
+
+msgid "Classes may not have static property named prototype."
+msgstr ""
+"([needs-translation]-Classes may not have static property named prototype.)"
+
+msgid ""
+"`super()` is only valid inside a class constructor of a subclass. Maybe a "
+"typo in the method name ('constructor') or not extending another class?"
+msgstr ""
+"([needs-translation]-`super()` is only valid inside a class constructor of a"
+" subclass. Maybe a typo in the method name ('constructor') or not extending "
+"another class?)"
+
+msgid "Private fields can't be accessed on super."
+msgstr "([needs-translation]-Private fields can't be accessed on super.)"
+
+msgid "Decorators must be attached to a class element."
+msgstr "([needs-translation]-Decorators must be attached to a class element.)"
+
+msgid ""
+"Tuple expressions ending with '|]' are only allowed when the 'syntaxType' "
+"option of the 'recordAndTuple' plugin is set to 'bar'."
+msgstr ""
+"([needs-translation]-Tuple expressions ending with '|]' are only allowed "
+"when the 'syntaxType' option of the 'recordAndTuple' plugin is set to "
+"'bar'.)"
+
+msgid ""
+"Tuple expressions starting with '[|' are only allowed when the 'syntaxType' "
+"option of the 'recordAndTuple' plugin is set to 'bar'."
+msgstr ""
+"([needs-translation]-Tuple expressions starting with '[|' are only allowed "
+"when the 'syntaxType' option of the 'recordAndTuple' plugin is set to "
+"'bar'.)"
+
+msgid ""
+"Tuple expressions starting with '#[' are only allowed when the 'syntaxType' "
+"option of the 'recordAndTuple' plugin is set to 'hash'."
+msgstr ""
+"([needs-translation]-Tuple expressions starting with '#[' are only allowed "
+"when the 'syntaxType' option of the 'recordAndTuple' plugin is set to "
+"'hash'.)"
+
+msgid "Unexpected argument placeholder."
+msgstr "([needs-translation]-Unexpected argument placeholder.)"
+
+msgid ""
+"Unexpected \"await\" after pipeline body; await must have parentheses in "
+"minimal proposal."
+msgstr ""
+"([needs-translation]-Unexpected \"await\" after pipeline body; await must "
+"have parentheses in minimal proposal.)"
+
+msgid "Unexpected digit after hash token."
+msgstr "([needs-translation]-Unexpected digit after hash token.)"
+
+msgid "'import' and 'export' may only appear at the top level."
+msgstr ""
+"([needs-translation]-'import' and 'export' may only appear at the top "
+"level.)"
+
+msgid "${keyword}"
+msgstr "([needs-translation]-${keyword})"
+
+msgid "Leading decorators must be attached to a class declaration."
+msgstr ""
+"([needs-translation]-Leading decorators must be attached to a class "
+"declaration.)"
+
+msgid "Lexical declaration cannot appear in a single-statement context."
+msgstr ""
+"([needs-translation]-Lexical declaration cannot appear in a single-statement"
+" context.)"
+
+msgid "`new.target` can only be used in functions or class properties."
+msgstr ""
+"([needs-translation]-`new.target` can only be used in functions or class "
+"properties.)"
+
+msgid "A numeric separator is only allowed between two digits."
+msgstr ""
+"([needs-translation]-A numeric separator is only allowed between two "
+"digits.)"
+
+msgid "Unexpected private name."
+msgstr "([needs-translation]-Unexpected private name.)"
+
+msgid "${reservedWord}"
+msgstr "([needs-translation]-${reservedWord})"
+
+msgid "'super' is only allowed in object methods and classes."
+msgstr ""
+"([needs-translation]-'super' is only allowed in object methods and classes.)"
+
+msgid ""
+"Illegal expression. Wrap left hand side or entire exponentiation in "
+"parentheses."
+msgstr ""
+"([needs-translation]-Illegal expression. Wrap left hand side or entire "
+"exponentiation in parentheses.)"
+
+msgid "Binding should be performed on object property."
+msgstr "([needs-translation]-Binding should be performed on object property.)"
+
+msgid "A decorated export must export a class declaration."
+msgstr ""
+"([needs-translation]-A decorated export must export a class declaration.)"
+
+msgid ""
+"Only expressions, functions or classes are allowed as the `default` export."
+msgstr ""
+"([needs-translation]-Only expressions, functions or classes are allowed as "
+"the `default` export.)"
+
+msgid "`import` can only be used in `import()` or `import.meta`."
+msgstr ""
+"([needs-translation]-`import` can only be used in `import()` or "
+"`import.meta`.)"
+
+msgid "Decorators cannot be used to decorate parameters."
+msgstr ""
+"([needs-translation]-Decorators cannot be used to decorate parameters.)"
+
+msgid "Decorators cannot be used to decorate object literal properties."
+msgstr ""
+"([needs-translation]-Decorators cannot be used to decorate object literal "
+"properties.)"
+
+msgid ""
+"'super' can only be used with function calls (i.e. super()) or in property "
+"accesses (i.e. super.prop or super[prop])."
+msgstr ""
+"([needs-translation]-'super' can only be used with function calls (i.e. "
+"super()) or in property accesses (i.e. super.prop or super[prop]).)"
+
+msgid "Unterminated comment."
+msgstr "([needs-translation]-Unterminated comment.)"
+
+msgid "Unterminated regular expression."
+msgstr "([needs-translation]-Unterminated regular expression.)"
+
+msgid "Unterminated string constant."
+msgstr "([needs-translation]-Unterminated string constant.)"
+
+msgid "Unterminated template."
+msgstr "([needs-translation]-Unterminated template.)"
+
+msgid "${identifierName}"
+msgstr "([needs-translation]-${identifierName})"
+
+msgid "Can not use 'yield' as identifier inside a generator."
+msgstr ""
+"([needs-translation]-Can not use 'yield' as identifier inside a generator.)"
+
+msgid "Yield expression is not allowed in formal parameters."
+msgstr ""
+"([needs-translation]-Yield expression is not allowed in formal parameters.)"
+
+msgid "Numeric separator can not be used after leading 0."
+msgstr ""
+"([needs-translation]-Numeric separator can not be used after leading 0.)"
+
+msgid "Deleting local variable in strict mode."
+msgstr "([needs-translation]-Deleting local variable in strict mode.)"
+
+msgid "${referenceName}"
+msgstr "([needs-translation]-${referenceName})"
+
+msgid "${bindingName}"
+msgstr "([needs-translation]-${bindingName})"
+
+msgid ""
+"In strict mode code, functions can only be declared at top level or inside a"
+" block."
+msgstr ""
+"([needs-translation]-In strict mode code, functions can only be declared at "
+"top level or inside a block.)"
+
+msgid "The only valid numeric escape in strict mode is '\\0'."
+msgstr ""
+"([needs-translation]-The only valid numeric escape in strict mode is '\\0'.)"
+
+msgid "Legacy octal literals are not allowed in strict mode."
+msgstr ""
+"([needs-translation]-Legacy octal literals are not allowed in strict mode.)"
+
+msgid "'with' in strict mode."
+msgstr "([needs-translation]-'with' in strict mode.)"
+
+msgid ""
+"Unexpected yield after pipeline body; any yield expression acting as Hack-"
+"style pipe body must be parenthesized due to its loose operator precedence."
+msgstr ""
+"([needs-translation]-Unexpected yield after pipeline body; any yield "
+"expression acting as Hack-style pipe body must be parenthesized due to its "
+"loose operator precedence.)"
+
+msgid ""
+"Topic reference is used, but the pipelineOperator plugin was not passed a "
+"\"proposal\": \"hack\" or \"smart\" option."
+msgstr ""
+"([needs-translation]-Topic reference is used, but the pipelineOperator "
+"plugin was not passed a \"proposal\": \"hack\" or \"smart\" option.)"
+
+msgid "Topic reference is unbound; it must be inside a pipe body."
+msgstr ""
+"([needs-translation]-Topic reference is unbound; it must be inside a pipe "
+"body.)"
+
+msgid ""
+"Hack-style pipe body does not contain a topic reference; Hack-style pipes "
+"must use topic at least once."
+msgstr ""
+"([needs-translation]-Hack-style pipe body does not contain a topic "
+"reference; Hack-style pipes must use topic at least once.)"
+
+msgid ""
+"Unexpected arrow \"=>\" after pipeline body; arrow function in pipeline body"
+" must be parenthesized."
+msgstr ""
+"([needs-translation]-Unexpected arrow \"=>\" after pipeline body; arrow "
+"function in pipeline body must be parenthesized.)"
+
+msgid "Pipeline body may not be a comma-separated sequence expression."
+msgstr ""
+"([needs-translation]-Pipeline body may not be a comma-separated sequence "
+"expression.)"
+
+msgid "Pipeline head should not be a comma-separated sequence expression."
+msgstr ""
+"([needs-translation]-Pipeline head should not be a comma-separated sequence "
+"expression.)"
+
+msgid "Pipeline is in topic style but does not use topic reference."
+msgstr ""
+"([needs-translation]-Pipeline is in topic style but does not use topic "
+"reference.)"
+
+msgid "Topic reference was used in a lexical context without topic binding."
+msgstr ""
+"([needs-translation]-Topic reference was used in a lexical context without "
+"topic binding.)"
+
+msgid ""
+"Ambiguous expression: wrap the arrow functions in parentheses to "
+"disambiguate."
+msgstr ""
+"([needs-translation]-Ambiguous expression: wrap the arrow functions in "
+"parentheses to disambiguate.)"
+
+msgid ""
+"Found both `declare module.exports` and `declare export` in the same module."
+" Modules can only have 1 since they are either an ES module or they are a "
+"CommonJS module."
+msgstr ""
+"([needs-translation]-Found both `declare module.exports` and `declare "
+"export` in the same module. Modules can only have 1 since they are either an"
+" ES module or they are a CommonJS module.)"
+
+msgid "The `declare` modifier can only appear on class fields."
+msgstr ""
+"([needs-translation]-The `declare` modifier can only appear on class "
+"fields.)"
+
+msgid "Initializers are not allowed in fields with the `declare` modifier."
+msgstr ""
+"([needs-translation]-Initializers are not allowed in fields with the "
+"`declare` modifier.)"
+
+msgid "Duplicate `declare module.exports` statement."
+msgstr "([needs-translation]-Duplicate `declare module.exports` statement.)"
+
+msgid "a"
+msgstr "([needs-translation]-a)"
+
+msgid "A getter cannot have a `this` parameter."
+msgstr "([needs-translation]-A getter cannot have a `this` parameter.)"
+
+msgid ""
+"The `type` and `typeof` keywords on named imports can only be used on "
+"regular `import` statements. It cannot be used with `import type` or `import"
+" typeof` statements."
+msgstr ""
+"([needs-translation]-The `type` and `typeof` keywords on named imports can "
+"only be used on regular `import` statements. It cannot be used with `import "
+"type` or `import typeof` statements.)"
+
+msgid ""
+"Explicit inexact syntax cannot appear inside an explicit exact object type."
+msgstr ""
+"([needs-translation]-Explicit inexact syntax cannot appear inside an "
+"explicit exact object type.)"
+
+msgid ""
+"Explicit inexact syntax cannot appear in class or interface definitions."
+msgstr ""
+"([needs-translation]-Explicit inexact syntax cannot appear in class or "
+"interface definitions.)"
+
+msgid "Explicit inexact syntax cannot have variance."
+msgstr "([needs-translation]-Explicit inexact syntax cannot have variance.)"
+
+msgid ""
+"Imports within a `declare module` body must always be `import type` or "
+"`import typeof`."
+msgstr ""
+"([needs-translation]-Imports within a `declare module` body must always be "
+"`import type` or `import typeof`.)"
+
+msgid ""
+"Type parameter declaration needs a default, since a preceding type parameter"
+" declaration has a default."
+msgstr ""
+"([needs-translation]-Type parameter declaration needs a default, since a "
+"preceding type parameter declaration has a default.)"
+
+msgid "`declare module` cannot be used inside another `declare module`."
+msgstr ""
+"([needs-translation]-`declare module` cannot be used inside another `declare"
+" module`.)"
+
+msgid "Cannot have a flow comment inside another flow comment."
+msgstr ""
+"([needs-translation]-Cannot have a flow comment inside another flow "
+"comment.)"
+
+msgid ""
+"A binding pattern parameter cannot be optional in an implementation "
+"signature."
+msgstr ""
+"([needs-translation]-A binding pattern parameter cannot be optional in an "
+"implementation signature.)"
+
+msgid "A setter cannot have a `this` parameter."
+msgstr "([needs-translation]-A setter cannot have a `this` parameter.)"
+
+msgid "Spread properties cannot have variance."
+msgstr "([needs-translation]-Spread properties cannot have variance.)"
+
+msgid "A type annotation is required for the `this` parameter."
+msgstr ""
+"([needs-translation]-A type annotation is required for the `this` "
+"parameter.)"
+
+msgid ""
+"Constructors cannot have a `this` parameter; constructors don't bind `this` "
+"like other functions."
+msgstr ""
+"([needs-translation]-Constructors cannot have a `this` parameter; "
+"constructors don't bind `this` like other functions.)"
+
+msgid "The `this` parameter cannot be optional."
+msgstr "([needs-translation]-The `this` parameter cannot be optional.)"
+
+msgid "The `this` parameter must be the first function parameter."
+msgstr ""
+"([needs-translation]-The `this` parameter must be the first function "
+"parameter.)"
+
+msgid "The `this` parameter may not have a default value."
+msgstr ""
+"([needs-translation]-The `this` parameter may not have a default value.)"
+
+msgid ""
+"Type annotations must come before default assignments, e.g. instead of `age "
+"= 25: number` use `age: number = 25`."
+msgstr ""
+"([needs-translation]-Type annotations must come before default assignments, "
+"e.g. instead of `age = 25: number` use `age: number = 25`.)"
+
+msgid "The type cast expression is expected to be wrapped with parenthesis."
+msgstr ""
+"([needs-translation]-The type cast expression is expected to be wrapped with"
+" parenthesis.)"
+
+msgid "Explicit inexact syntax must appear at the end of an inexact object."
+msgstr ""
+"([needs-translation]-Explicit inexact syntax must appear at the end of an "
+"inexact object.)"
+
+msgid "`_` is only allowed as a type argument to call or new."
+msgstr ""
+"([needs-translation]-`_` is only allowed as a type argument to call or new.)"
+
+msgid "Spaces between `%` and `checks` are not allowed here."
+msgstr ""
+"([needs-translation]-Spaces between `%` and `checks` are not allowed here.)"
+
+msgid "Spread operator cannot appear in class or interface definitions."
+msgstr ""
+"([needs-translation]-Spread operator cannot appear in class or interface "
+"definitions.)"
+
+msgid "Unexpected token, expected \"number\" or \"bigint\"."
+msgstr "([needs-translation]-Unexpected token, expected \"number\" or \"bigint\".)"
+
+msgid "Expected an arrow function after this type parameter declaration."
+msgstr ""
+"([needs-translation]-Expected an arrow function after this type parameter "
+"declaration.)"
+
+msgid ""
+"Type parameters must come after the async keyword, e.g. instead of `<T> "
+"async () => {}`, use `async <T>() => {}`."
+msgstr ""
+"([needs-translation]-Type parameters must come after the async keyword, e.g."
+" instead of `<T> async () => {}`, use `async <T>() => {}`.)"
+
+msgid "Only declares and type imports are allowed inside declare module."
+msgstr ""
+"([needs-translation]-Only declares and type imports are allowed inside "
+"declare module.)"
+
+msgid "Unterminated flow-comment."
+msgstr "([needs-translation]-Unterminated flow-comment.)"
+
+msgid "JSX attributes must only be assigned a non-empty expression."
+msgstr ""
+"([needs-translation]-JSX attributes must only be assigned a non-empty "
+"expression.)"
+
+msgid "Expected corresponding JSX closing tag for <>."
+msgstr "([needs-translation]-Expected corresponding JSX closing tag for <>.)"
+
+msgid ""
+"Sequence expressions cannot be directly nested inside JSX. Did you mean to "
+"wrap it in parentheses (...)?"
+msgstr ""
+"([needs-translation]-Sequence expressions cannot be directly nested inside "
+"JSX. Did you mean to wrap it in parentheses (...)?)"
+
+msgid "JSX value should be either an expression or a quoted JSX text."
+msgstr ""
+"([needs-translation]-JSX value should be either an expression or a quoted "
+"JSX text.)"
+
+msgid "Unterminated JSX contents."
+msgstr "([needs-translation]-Unterminated JSX contents.)"
+
+msgid ""
+"Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a "
+"JSX fragment <>...</>?"
+msgstr ""
+"([needs-translation]-Adjacent JSX elements must be wrapped in an enclosing "
+"tag. Did you want a JSX fragment <>...</>?)"
+
+msgid "${methodName}"
+msgstr "([needs-translation]-${methodName})"
+
+msgid "${propertyName}"
+msgstr "([needs-translation]-${propertyName})"
+
+msgid "'get' and 'set' accessors cannot declare 'this' parameters."
+msgstr ""
+"([needs-translation]-'get' and 'set' accessors cannot declare 'this' "
+"parameters.)"
+
+msgid "An accessor cannot have type parameters."
+msgstr "([needs-translation]-An accessor cannot have type parameters.)"
+
+msgid "${name}"
+msgstr "([needs-translation]-${name})"
+
+msgid "Class methods cannot have the 'declare' modifier."
+msgstr ""
+"([needs-translation]-Class methods cannot have the 'declare' modifier.)"
+
+msgid "Class methods cannot have the 'readonly' modifier."
+msgstr ""
+"([needs-translation]-Class methods cannot have the 'readonly' modifier.)"
+
+msgid ""
+"A 'const' initializer in an ambient context must be a string or numeric "
+"literal or literal enum reference."
+msgstr ""
+"([needs-translation]-A 'const' initializer in an ambient context must be a "
+"string or numeric literal or literal enum reference.)"
+
+msgid "Type parameters cannot appear on a constructor declaration."
+msgstr ""
+"([needs-translation]-Type parameters cannot appear on a constructor "
+"declaration.)"
+
+msgid "declare"
+msgstr "([needs-translation]-declare)"
+
+msgid "Initializers are not allowed in ambient contexts."
+msgstr ""
+"([needs-translation]-Initializers are not allowed in ambient contexts.)"
+
+msgid "An implementation cannot be declared in ambient contexts."
+msgstr ""
+"([needs-translation]-An implementation cannot be declared in ambient "
+"contexts.)"
+
+msgid "${modifier}"
+msgstr "([needs-translation]-${modifier})"
+
+msgid "${token}"
+msgstr "([needs-translation]-${token})"
+
+msgid "Type argument list cannot be empty."
+msgstr "([needs-translation]-Type argument list cannot be empty.)"
+
+msgid "Type parameter list cannot be empty."
+msgstr "([needs-translation]-Type parameter list cannot be empty.)"
+
+msgid "'export declare' must be followed by an ambient declaration."
+msgstr ""
+"([needs-translation]-'export declare' must be followed by an ambient "
+"declaration.)"
+
+msgid "An import alias can not use 'import type'."
+msgstr "([needs-translation]-An import alias can not use 'import type'.)"
+
+msgid "${modifiers[0]}"
+msgstr "([needs-translation]-${modifiers[0]})"
+
+msgid "Index signatures cannot have the 'abstract' modifier."
+msgstr ""
+"([needs-translation]-Index signatures cannot have the 'abstract' modifier.)"
+
+msgid "Index signatures cannot have the 'declare' modifier."
+msgstr ""
+"([needs-translation]-Index signatures cannot have the 'declare' modifier.)"
+
+msgid "'override' modifier cannot appear on an index signature."
+msgstr ""
+"([needs-translation]-'override' modifier cannot appear on an index "
+"signature.)"
+
+msgid "Index signatures cannot have the 'static' modifier."
+msgstr ""
+"([needs-translation]-Index signatures cannot have the 'static' modifier.)"
+
+msgid "${orderedModifiers[0]}"
+msgstr "([needs-translation]-${orderedModifiers[0]})"
+
+msgid "Tuple members must be labeled with a simple identifier."
+msgstr ""
+"([needs-translation]-Tuple members must be labeled with a simple "
+"identifier.)"
+
+msgid "'interface' declarations must be followed by an identifier."
+msgstr ""
+"([needs-translation]-'interface' declarations must be followed by an "
+"identifier.)"
+
+msgid "Tuple members must all have names or all not have names."
+msgstr ""
+"([needs-translation]-Tuple members must all have names or all not have "
+"names.)"
+
+msgid "Abstract methods can only appear within an abstract class."
+msgstr ""
+"([needs-translation]-Abstract methods can only appear within an abstract "
+"class.)"
+
+msgid ""
+"'abstract' modifier can only appear on a class, method, or property "
+"declaration."
+msgstr ""
+"([needs-translation]-'abstract' modifier can only appear on a class, method,"
+" or property declaration.)"
+
+msgid "A required element cannot follow an optional element."
+msgstr ""
+"([needs-translation]-A required element cannot follow an optional element.)"
+
+msgid ""
+"This member cannot have an 'override' modifier because its containing class "
+"does not extend another class."
+msgstr ""
+"([needs-translation]-This member cannot have an 'override' modifier because "
+"its containing class does not extend another class.)"
+
+msgid "Private elements cannot have the 'abstract' modifier."
+msgstr ""
+"([needs-translation]-Private elements cannot have the 'abstract' modifier.)"
+
+msgid ""
+"'readonly' modifier can only appear on a property declaration or index "
+"signature."
+msgstr ""
+"([needs-translation]-'readonly' modifier can only appear on a property "
+"declaration or index signature.)"
+
+msgid ""
+"This syntax is reserved in files with the .mts or .cts extension. Add a "
+"trailing comma, as in `<T,>() => ...`."
+msgstr ""
+"([needs-translation]-This syntax is reserved in files with the .mts or .cts "
+"extension. Add a trailing comma, as in `<T,>() => ...`.)"
+
+msgid ""
+"This syntax is reserved in files with the .mts or .cts extension. Use an "
+"`as` expression instead."
+msgstr ""
+"([needs-translation]-This syntax is reserved in files with the .mts or .cts "
+"extension. Use an `as` expression instead.)"
+
+msgid "A 'set' accessor cannot have an optional parameter."
+msgstr ""
+"([needs-translation]-A 'set' accessor cannot have an optional parameter.)"
+
+msgid "A 'set' accessor cannot have rest parameter."
+msgstr "([needs-translation]-A 'set' accessor cannot have rest parameter.)"
+
+msgid "A 'set' accessor cannot have a return type annotation."
+msgstr ""
+"([needs-translation]-A 'set' accessor cannot have a return type annotation.)"
+
+msgid "Static class blocks cannot have any modifier."
+msgstr "([needs-translation]-Static class blocks cannot have any modifier.)"
+
+msgid ""
+"A type-only import can specify a default import or named bindings, but not "
+"both."
+msgstr ""
+"([needs-translation]-A type-only import can specify a default import or "
+"named bindings, but not both.)"
+
+msgid ""
+"The 'type' modifier cannot be used on a named export when 'export type' is "
+"used on its export statement."
+msgstr ""
+"([needs-translation]-The 'type' modifier cannot be used on a named export "
+"when 'export type' is used on its export statement.)"
+
+msgid ""
+"The 'type' modifier cannot be used on a named import when 'import type' is "
+"used on its import statement."
+msgstr ""
+"([needs-translation]-The 'type' modifier cannot be used on a named import "
+"when 'import type' is used on its import statement.)"
+
+msgid "A parameter property is only allowed in a constructor implementation."
+msgstr ""
+"([needs-translation]-A parameter property is only allowed in a constructor "
+"implementation.)"
+
+msgid ""
+"'readonly' type modifier is only permitted on array and tuple literal types."
+msgstr ""
+"([needs-translation]-'readonly' type modifier is only permitted on array and"
+" tuple literal types.)"
+
+msgid "Did not expect a type annotation here."
+msgstr "([needs-translation]-Did not expect a type annotation here.)"
+
+msgid "Unexpected type cast in parameter position."
+msgstr "([needs-translation]-Unexpected type cast in parameter position.)"
+
+msgid "Argument in a type import must be a string literal."
+msgstr ""
+"([needs-translation]-Argument in a type import must be a string literal.)"
+
+msgid "A parameter property may not be declared using a binding pattern."
+msgstr ""
+"([needs-translation]-A parameter property may not be declared using a "
+"binding pattern.)"
+
+msgid "Unexpected space in placeholder."
+msgstr "([needs-translation]-Unexpected space in placeholder.)"
+
+msgid "is not a finite number"
+msgstr "([needs-translation]-is not a finite number)"
+
+msgid "is not a finite floating-point value"
+msgstr "([needs-translation]-is not a finite floating-point value)"
+
+msgid "is outside the range of a single-precision floating-point value"
+msgstr ""
+"([needs-translation]-is outside the range of a single-precision floating-"
+"point value)"
+
+msgid "is a symbol, which cannot be converted to a string"
+msgstr ""
+"([needs-translation]-is a symbol, which cannot be converted to a string)"
+
+msgid "is not a valid ByteString"
+msgstr "([needs-translation]-is not a valid ByteString)"
+
+msgid "is not an object"
+msgstr "([needs-translation]-is not an object)"
+
+msgid "is not a function"
+msgstr "([needs-translation]-is not a function)"
+
+msgid "is not a view on an ArrayBuffer object"
+msgstr "([needs-translation]-is not a view on an ArrayBuffer object)"
+
+msgid "is not an ArrayBuffer object or a view on one"
+msgstr "([needs-translation]-is not an ArrayBuffer object or a view on one)"

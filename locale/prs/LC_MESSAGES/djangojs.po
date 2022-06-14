@@ -1,0 +1,41 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-07-31 09:38+0000\n"
+"PO-Revision-Date: 2021-07-31 09:38+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: Dari\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "Sorry, there seems to be an error. Please try again soon."
+msgstr ""
+"با عرض پوزش، به نظر می رسد خطایی وجود دارد. لطفا به زودی دوباره امتحان کنید."
+
+msgid "You cannot submit when offline"
+msgstr "در حالت آفلاین نمی توانید درخواست را ارائه کنید"
+
+msgid ""
+"Your app is now ready to install. If using Android, choose 'Add to home "
+"screen' and you should be all set! If you are using a iOS device, you can "
+"install it by clicking 'Share', scrolling down and tapping 'Add to Home "
+"Screen."
+msgstr ""
+"اپلیکیشن شما اکنون آمادۀ نصب است. اگر از اندروید استفاده می کنید، گزینۀ “add to home screen” را انتخاب کنید و باید آمادگی کامل داشته باشید.\n"
+"\n"
+"\n"
+"اگر از دستگاه ios استفاده می کنید، می توانید آن را با کلیک کردن بالای Share نصب کنید. برای این کار به قسمت پایین رفته و بر روی Add to Home Screen کلیک کنید."
+
+msgid "Install this website as an app on your device?"
+msgstr "آیا این ویب سایت به عنوان یک اپلیکیشن در دستگاه¬تان نصب شود؟"
+
+msgid "Date must be in this (YYYY-MM-DD) format"
+msgstr ""
+
+msgid "Datetime must be in this YYYY-MM-DDTHH:SS format"
+msgstr ""

@@ -1,0 +1,352 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-07-31 09:38+0000\n"
+"PO-Revision-Date: 2021-07-31 09:38+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "quizzes"
+msgstr "පැන විසඳුම්"
+
+msgid "Log in to participate"
+msgstr "සහභාගී වීමට ඇතුල් වන්න"
+
+msgid "Log in / Create account"
+msgstr "ඇතුල් වන්න / ගිණුමක් සාදන්න"
+
+msgid "© The Internet of Good Things"
+msgstr "© The Internet of Good Things"
+
+msgid "Profile"
+msgstr "ගිණුම"
+
+msgid "Chat"
+msgstr "කතාබස්"
+
+msgid "More"
+msgstr "තව"
+
+msgid "Log in"
+msgstr "ඇතුල් වන්න"
+
+msgid "Back"
+msgstr "ආපසු"
+
+msgid "BACK"
+msgstr "ආපසු"
+
+msgid "Previous"
+msgstr "පෙර"
+
+msgid "Next"
+msgstr "ඊළඟ"
+
+msgid "Comments"
+msgstr "අදහස්"
+
+msgid "Please log in or create your account"
+msgstr "කරුණාකර ඇතුල් වන්න හෝ ඔබගේ ගිණුම සාදන්න"
+
+msgid "Report"
+msgstr "වාර්තා කරන්න"
+
+msgid "Related Articles"
+msgstr "අදාළ ලිපි "
+
+msgid "This comment has been reported."
+msgstr "මෙම අදහස වාර්තා කර ඇත"
+
+msgid ""
+"It will be reviewed by the team and may be removed if it breaks our Platform"
+" Rules"
+msgstr ""
+"එය කණ්ඩායම විසින් සමාලෝචනය (review) කරනු ලබන අතර එය අපගේ නීති කඩ කළහොත් ඉවත්"
+" කරනු ඇත"
+
+msgid "articles"
+msgstr "ලිපි "
+
+msgid "Search the site..."
+msgstr "වෙබ් අඩවියේ සොයන්න…"
+
+msgid "Search results for:"
+msgstr "සෙවුම් ප්‍රතිඵල "
+
+msgid "No search results were found for"
+msgstr "සෙවුම් ප්‍රතිඵල කිසිවක් හමු නොවීය"
+
+msgid "Username"
+msgstr "පරිශීලක නම"
+
+msgid "Create your account"
+msgstr "ඔබගේ ගිණුම සාදන්න"
+
+msgid "Forgot PIN"
+msgstr "පෞද්ගලික හැඳුනුම් අංකය  අමතක විය"
+
+msgid "Cancel"
+msgstr "අවලංගු කරන්න"
+
+msgid "Hey, %(username)s"
+msgstr "ආයුබෝවන් %(username)s,"
+
+msgid "Change Digital Pin"
+msgstr "ඩිජිටල් පෞද්ගලික හැඳුනුම් අංකය  වෙනස් කරන්න"
+
+msgid "Personal Details"
+msgstr "පුද්ගලික තොරතුරු"
+
+msgid "Save changes"
+msgstr "වෙනස්කම් සුරකින්න"
+
+msgid "Reset PIN"
+msgstr "පෞද්ගලික හැඳුනුම් අංකය අළුතින් ඇතුළත් කරන්න"
+
+msgid "Your PIN has been changed successfully."
+msgstr "ඔබගේ පෞද්ගලික හැඳුනුම් අංකය සාර්ථකව වෙනස් කර ඇත"
+
+msgid "I accept the Terms and Conditions."
+msgstr "මම නියමයන් සහ කොන්දේසි පිළිගනිමි."
+
+msgid "You have read %(read)s out of %(total)s"
+msgstr "ඔබ ප්‍රශ්න %(total)s න් %(read)s ක් කියවා ඇත"
+
+msgid "%(counter)s of %(total)s questions"
+msgstr "ප්‍රශ්න %(total)s  න් %(counter)"
+
+msgid "Select one"
+msgstr "එකක් තෝරගන්න"
+
+msgid "Optional"
+msgstr "විකල්ප"
+
+msgid "No limit"
+msgstr "සීමාවක් නැත"
+
+msgid "Go to homepage"
+msgstr "මුල් පිටුවට යන්න"
+
+msgid "You have already completed this survey."
+msgstr "ඔබ දැනටමත් මෙම සමීක්ෂණය සම්පූර්ණ කර ඇත."
+
+msgid "Check all that apply"
+msgstr "අදාළ වන සියල්ල ලකුණු කරන්න"
+
+msgid "Your results!"
+msgstr "ඔබේ ප්‍රතිඵල!"
+
+msgid "Replay Quiz"
+msgstr "පැන විසඳුම නැවත ක්‍රියාකරන්න"
+
+msgid "Incorrect"
+msgstr "වැරදියි"
+
+msgid "Correct"
+msgstr "නිවැරදි"
+
+msgid "Your answer"
+msgstr "ඔබේ පිළිතුර"
+
+msgid "Leave comment"
+msgstr "අදහස් දක්වන්න"
+
+msgid "Reply"
+msgstr "පිළිතුරු දෙන්න"
+
+msgid "Page not found"
+msgstr "පිටුව හමු නොවීය"
+
+msgid "Sorry, this page could not be found."
+msgstr "සමාවන්න, මෙම පිටුව සොයාගත නොහැකි විය"
+
+msgid "Internal server error"
+msgstr "පද්ධති දෝෂයක් (server error)"
+
+msgid "1 result"
+msgid_plural "%(counter)s results"
+msgstr[0] "1 ප්‍රතිඵලය"
+msgstr[1] "%(counter)s  ප්‍රතිඵල"
+
+msgid "poll"
+msgstr "මත විමසුම"
+
+msgid "survey"
+msgstr "සමීක්ෂණය"
+
+msgid "quiz"
+msgstr "පැන විසඳුම"
+
+msgid "This field is required."
+msgstr "මෙම කොටස අවශ්‍යයි"
+
+msgid "Send"
+msgstr "යවන්න"
+
+msgid "Remove this comment?"
+msgstr "මෙම අදහස ඉවත් කරන්නද?"
+
+msgid "Remove"
+msgstr "ඉවත් කරන්න"
+
+msgid "This comment has been removed."
+msgstr "මෙම අදහස ඉවත් කර ඇත."
+
+msgid "moderator"
+msgstr "මැදිහත්කරු"
+
+msgid "sections"
+msgstr "කොටස්"
+
+msgid "Check if applies"
+msgstr "අදාළ දැයි පරීක්ෂා කරන්න"
+
+msgid "New comments have been disabled for this page."
+msgstr "මෙම පිටුව සඳහා නව අදහස් භාරගනු නොලැබේ"
+
+msgid "Correct answer"
+msgstr "නිවැරදි පිළිතුර"
+
+msgid "Download"
+msgstr "බාගත කරන්න"
+
+msgid ""
+"You are leaving the <b>Internet of Good Things</b> to visit an external "
+"website and standard data charges by your network provider might apply"
+msgstr ""
+"ඔබ බාහිර වෙබ් අඩවියකට පිවිසීමට <b>Internet of Good Things</b>  හැර යන අතර "
+"ඔබේ ජාල සපයන්නා විසින් නියම කරනු ලැබූ සම්මත දත්ත ගාස්තු අදාළ විය හැක"
+
+msgid "Continue to external site"
+msgstr "බාහිර වෙබ් අඩවියට පිවිසෙන්න"
+
+msgid "4-digit PIN"
+msgstr "ඉලක්කම් හතරේ කේතය"
+
+msgid "Old 4-digit PIN"
+msgstr "ඉලක්කම් හතරේ පැරණි කේතය"
+
+msgid "New 4-digit PIN"
+msgstr "ඉලක්කම් හතරේ නව කේතය"
+
+msgid "Confirm new 4-digit PIN"
+msgstr "ඉලක්කම් හතරේ නව කේතය තහවුරු කරන්න"
+
+msgid "Log out"
+msgstr "ඉවත්වන්න"
+
+msgid "section"
+msgstr "කොටස"
+
+msgid "article"
+msgstr "ලිපිය"
+
+msgid "Remember me"
+msgstr "මාව මතක තබා ගන්න"
+
+msgid "You have signed out."
+msgstr "ඔබ ඉවත් වී ඇත"
+
+msgid ""
+"Enter a valid username. This value may contain only letters, numbers, and "
+"@/./+/-/_ characters."
+msgstr ""
+"වලංගු පරිශීලක නාමයක් (Username) ඇතුළත් කරන්න. මෙම අගයෙහි අකුරු, අංක, සහ "
+"@/./+/-/_ පමණක් අඩංගු විය හැක."
+
+msgid "You must type the same password each time."
+msgstr "ඔබ සෑම අවස්ථාවකම එකම මුරපදය ටයිප් කළ යුතුය."
+
+msgid "This password is too short. It must contain at least 4 characters."
+msgstr "මෙම මුරපදය කෙටි වැඩිය. එහි අවම වශයෙන් අංග 4ක්වත් අඩංගු විය යුතුය"
+
+msgid "Please type your current password."
+msgstr "කරුණාකර ඔබගේ දැනට භාවිත කරන මුරපදය ටයිප් කරන්න."
+
+msgid "Password successfully changed."
+msgstr "මුරපදය සාර්ථකව වෙනස් විය."
+
+msgid "Enter a valid date/time."
+msgstr "වලංගු දිනයක්/වේලාවක් ඇතුළත් කරන්න."
+
+msgid "Enter a valid date."
+msgstr "වලංගු දිනයක් ඇතුළත් කරන්න."
+
+msgid "Enter a valid URL."
+msgstr "වලංගු ලින්ක් එකක් (URL) ඇතුලත් කරන්න."
+
+msgid "Enter a valid email address."
+msgstr "වලංගු විද්යුත් - තැපැල් (email) ලිපිනයක් ඇතුලත් කරන්න."
+
+msgid "Enter a valid integer."
+msgstr "වලංගු පූර්ණ සංඛ්‍යාවක් ඇතුළත් කරන්න."
+
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr "මෙම අගය %(limit_value)s ට වඩා වැඩි හෝ සමාන බව සහතික කර ගන්න."
+
+msgid "Your comment"
+msgstr "ඔබගේ අදහස"
+
+msgid "Are you sure you want to log out?"
+msgstr "ඔබට ඉවත්වීමට අවශ්‍ය බව විශ්වාසද?"
+
+msgid "Your browser does not support video playback."
+msgstr "ඔබගේ බ්‍රවුසරය වීඩියෝව බැලීමට සහය නොදක්වයි"
+
+msgid "Your browser does not support audio playback."
+msgstr "ඔබගේ බ්‍රවුසරය හඬ පටය ඇසීමට සහය නොදක්වයි."
+
+msgid "Don't display my username next to my comment"
+msgstr "මගේ අදහස සමඟ මගේ නම ප්‍රදර්ශනය නොකරන්න"
+
+msgid "Anonymous"
+msgstr "නිර්නාමික"
+
+msgid "Report this comment?"
+msgstr "මෙම අදහස වාර්තා කරන්නද?"
+
+msgid "Display name"
+msgstr "නම "
+
+msgid "Reported by %(comment_report_count)s user"
+msgid_plural "Reported by %(comment_report_count)s users"
+msgstr[0] "වාර්තා කළේ %(comment_report_count)s භාවිත කරන්නා"
+msgstr[1] "පරිශීලකයන්  %(comment_report_count)s විසින් වාර්තා කරන ලදී"
+
+msgid ""
+"Sorry, %(page_title)s is not available in %(language)s. If you want to keep "
+"browsing in %(language)s you can click below to return to the homepage."
+msgstr ""
+"සමාවන්න. %(page_title)s , %(language)s නොමැත. ඔබට දිගටම %(language)s ගනු "
+"දෙනු කිරීමට අවශ්‍ය නම්, මුල් පිටුවට ආපසු යාමට පහත ක්ලික් කළ හැක."
+
+msgid "Username not available."
+msgstr "නම නොමැත."
+
+msgid "Display name not available."
+msgstr "නම නොමැත"
+
+msgid "You have already completed this quiz."
+msgstr "ඔබ දැනටමත් මෙම ප්‍රශ්නාවලිය සම්පූර්ණ කර ඇත"
+
+msgid "You have already completed this poll."
+msgstr "ඔබ දැනටමත් මෙම මත විමසුම සම්පූර්ණ කර ඇත"
+
+msgid ""
+"If you cannot view the above video, you can instead %(start_link)sdownload "
+"it%(end_link)s."
+msgstr ""
+"ඔබට ඉහත හඬ පටයට සවන් දීමට නොහැකි නම් %(start_link)s, ඔබට එය බාගත කළ හැකිය "
+"%(end_link)s."
+
+msgid ""
+"If you cannot listen to the above audio, you can instead "
+"%(start_link)sdownload it%(end_link)s."
+msgstr "ඔබට ඉහත ශ්‍රව්‍යයට සවන් දීමට නොහැකි නම්, ඔබට එය බාගත කළ හැකිය"
