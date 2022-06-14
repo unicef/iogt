@@ -354,3 +354,6 @@ msgid ""
 msgstr ""
 "উপরের অডিও শুনতে না পেলে %(start_link)s এর পরিবর্তে এটা %(end_link)s ডাউনলোড"
 " করুন"
+
+msgid "Please complete the questions marked as required to continue"
+msgstr ""

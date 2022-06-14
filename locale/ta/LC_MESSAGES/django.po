@@ -359,3 +359,6 @@ msgid ""
 msgstr ""
 "மேலுள்ள ஓடியோவுக்கு செவிமடுக்க முடியாதெனின், அதற்குப் பதிலாக, %(start_link) "
 "அதை பதிவிறக்கம் செய்ய முடியும். %(end_link)s.. "
+
+msgid "Please complete the questions marked as required to continue"
+msgstr ""

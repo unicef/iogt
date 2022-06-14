@@ -350,3 +350,6 @@ msgid ""
 "If you cannot listen to the above audio, you can instead "
 "%(start_link)sdownload it%(end_link)s."
 msgstr "ඔබට ඉහත ශ්‍රව්‍යයට සවන් දීමට නොහැකි නම්, ඔබට එය බාගත කළ හැකිය"
+
+msgid "Please complete the questions marked as required to continue"
+msgstr ""

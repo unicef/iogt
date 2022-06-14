@@ -353,3 +353,6 @@ msgid ""
 msgstr ""
 "اگر صدای فوق را شنیده نمی توانید، به جای آن می توانید %(start_link)s آن را "
 "دانلود کنید %(end_link)s."
+
+msgid "Please complete the questions marked as required to continue"
+msgstr ""

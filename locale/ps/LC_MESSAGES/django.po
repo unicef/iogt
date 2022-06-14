@@ -354,3 +354,6 @@ msgid ""
 msgstr ""
 "که چېرې پورته غږ نه شئ اورېدلی، پرځای یې کولای شئ %(start_link)s ډونلوډ کړئ "
 "%(end_link)s."
+
+msgid "Please complete the questions marked as required to continue"
+msgstr ""
