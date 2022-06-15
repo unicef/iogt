@@ -1,0 +1,358 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-07-31 09:38+0000\n"
+"PO-Revision-Date: 2021-07-31 09:38+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "quizzes"
+msgstr "امتحانات"
+
+msgid "Log in to participate"
+msgstr "برای شرکت وارد شوید"
+
+msgid "Log in / Create account"
+msgstr "وارد شوید / ایجاد حساب کاربری"
+
+msgid "© The Internet of Good Things"
+msgstr "© The Internet of Good Things"
+
+msgid "Profile"
+msgstr "مشخصات"
+
+msgid "Chat"
+msgstr "چت کنید"
+
+msgid "More"
+msgstr "بیشتر"
+
+msgid "Log in"
+msgstr "وارد شدن"
+
+msgid "Back"
+msgstr "بازگشت"
+
+msgid "BACK"
+msgstr "بازگشت"
+
+msgid "Previous"
+msgstr "قبلی"
+
+msgid "Next"
+msgstr "بعدی"
+
+msgid "Comments"
+msgstr "نظریات"
+
+msgid "Please log in or create your account"
+msgstr "لطفا وارد شوید یا حساب کاربری خود را ایجاد کنید"
+
+msgid "Report"
+msgstr "گزارش"
+
+msgid "Related Articles"
+msgstr "مقالات مرتبط"
+
+msgid "This comment has been reported."
+msgstr "این نظر قبلا گزارش شده است"
+
+msgid ""
+"It will be reviewed by the team and may be removed if it breaks our Platform"
+" Rules"
+msgstr ""
+"این توسط تیم بررسی خواهد شد و در صورت نقض قوانین پلتفرم ما ممکن است حذف شود"
+
+msgid "articles"
+msgstr "مقالات"
+
+msgid "Search the site..."
+msgstr "جستجو در سایت…"
+
+msgid "Search results for:"
+msgstr "نتایج جستجو برای:"
+
+msgid "No search results were found for"
+msgstr "هیچ موردی در این ارتباط پیدا نشد"
+
+msgid "Username"
+msgstr "نام کاربری"
+
+msgid "Create your account"
+msgstr "حساب کاربری برای خود بسازید"
+
+msgid "Forgot PIN"
+msgstr "پین را فراموش کرده اید"
+
+msgid "Cancel"
+msgstr "لغو کنید"
+
+msgid "Hey, %(username)s"
+msgstr "سلام، %(username)s"
+
+msgid "Change Digital Pin"
+msgstr "پین دیجیتال را تغییر دهید"
+
+msgid "Personal Details"
+msgstr "جزئیات شخصی"
+
+msgid "Save changes"
+msgstr "ذخیره تغییرات"
+
+msgid "Reset PIN"
+msgstr "تنظیم دوباره پین"
+
+msgid "Your PIN has been changed successfully."
+msgstr "پین شما با موفقیت تغییر کرده است"
+
+msgid "I accept the Terms and Conditions."
+msgstr "من ضوابط و شرایط را می پذیرم."
+
+msgid "You have read %(read)s out of %(total)s"
+msgstr "را خوانده اید (total)s% از (read)s% شما "
+
+msgid "%(counter)s of %(total)s questions"
+msgstr "%(counter)s از %(total)s سوال"
+
+msgid "Select one"
+msgstr "یکی را انتخاب کن"
+
+msgid "Optional"
+msgstr "اختیاری"
+
+msgid "No limit"
+msgstr "بدون محدودیت"
+
+msgid "Go to homepage"
+msgstr "به صفحه اصلی بروید"
+
+msgid "You have already completed this survey."
+msgstr "شما قبلاً این سروی را تکمیل کرده اید."
+
+msgid "Check all that apply"
+msgstr "همه موارد که صدق می کند را انتخاب نمایید"
+
+msgid "Your results!"
+msgstr "نتایج شما"
+
+msgid "Replay Quiz"
+msgstr "تکرار امتحان"
+
+msgid "Incorrect"
+msgstr "غلط"
+
+msgid "Correct"
+msgstr "درست"
+
+msgid "Your answer"
+msgstr "جواب شما"
+
+msgid "Leave comment"
+msgstr "نظر بدهید"
+
+msgid "Reply"
+msgstr "پاسخ"
+
+msgid "Page not found"
+msgstr "صفحه یافت نشد"
+
+msgid "Sorry, this page could not be found."
+msgstr "با عرض پوزش، این صفحه یافت نشد"
+
+msgid "Internal server error"
+msgstr "خطای سرور داخلی"
+
+msgid "1 result"
+msgid_plural "%(counter)s results"
+msgstr[0] "1 نتیجه"
+msgstr[1] "%(counter)s نتیجه "
+
+msgid "poll"
+msgstr "نظرسنجی"
+
+msgid "survey"
+msgstr "سروی"
+
+msgid "quiz"
+msgstr "امتحان"
+
+msgid "This field is required."
+msgstr "این زمینه مورد نیاز است"
+
+msgid "Send"
+msgstr "ارسال "
+
+msgid "Remove this comment?"
+msgstr "آیا این کامنت/نظر حذف شود؟"
+
+msgid "Remove"
+msgstr "حذف"
+
+msgid "This comment has been removed."
+msgstr "این کامنت/نظر حذف شده است."
+
+msgid "moderator"
+msgstr "گرداننده"
+
+msgid "sections"
+msgstr "بخش ها"
+
+msgid "Check if applies"
+msgstr "اگر صدق می کند لطفا انتخاب نمایید"
+
+msgid "New comments have been disabled for this page."
+msgstr "گزینۀ نظریات و کامنت های جدید در این صفحه غیرفعال شده است"
+
+msgid "Correct answer"
+msgstr "جواب صحیح"
+
+msgid "Download"
+msgstr "دانلود "
+
+msgid ""
+"You are leaving the <b>Internet of Good Things</b> to visit an external "
+"website and standard data charges by your network provider might apply"
+msgstr ""
+"شما در حال خروج از <b>Internet of Good Things</b> برای بازدید از یک ویب سایت"
+" جدید هستید و هزینۀ معلوماتی استندرد ممکن است توسط فراهم کنندۀ انترنت بالای "
+"شما وضع گردد. "
+
+msgid "Continue to external site"
+msgstr "ادامه به ویب سایت بیرونی"
+
+msgid "4-digit PIN"
+msgstr "پین کود  (PIN) چهار رقمی   "
+
+msgid "Old 4-digit PIN"
+msgstr "پین کود چهارقمی قدیمی"
+
+msgid "New 4-digit PIN"
+msgstr "پین کود چهاررقمی جدید"
+
+msgid "Confirm new 4-digit PIN"
+msgstr "پـین کود 4 رقمی جدید را تأیید کنید"
+
+msgid "Log out"
+msgstr "خروج"
+
+msgid "section"
+msgstr "بخش"
+
+msgid "article"
+msgstr "مقاله"
+
+msgid "Remember me"
+msgstr "مرا به خاطر بسپار"
+
+msgid "You have signed out."
+msgstr "شما از سیستم خارج شده اید"
+
+msgid ""
+"Enter a valid username. This value may contain only letters, numbers, and "
+"@/./+/-/_ characters."
+msgstr ""
+"یک نام کاربری معتبر وارد کنید. شما میتوانید از حروف، اعداد و نویسه های @ /./"
+" +/-/_استفاده نمایید."
+
+msgid "You must type the same password each time."
+msgstr "هر بار باید همان رمز عبور را تایپ کنید."
+
+msgid "This password is too short. It must contain at least 4 characters."
+msgstr "این رمز عبور خیلی کوتاه است. باید حداقل 4 حرف داشته باشد."
+
+msgid "Please type your current password."
+msgstr "لطفا رمز عبور فعلی خود را تایپ کنید"
+
+msgid "Password successfully changed."
+msgstr "رمز با موفقیت تغییر یافت."
+
+msgid "Enter a valid date/time."
+msgstr "تاریخ/زمان درست را وارد کنید."
+
+msgid "Enter a valid date."
+msgstr "یک تاریخ دقیق را وارد کنید."
+
+msgid "Enter a valid URL."
+msgstr "یک URL درست را وارد کنید."
+
+msgid "Enter a valid email address."
+msgstr "یک آدرس ایمیل درست را وارد کنید."
+
+msgid "Enter a valid integer."
+msgstr "یک عدد درست را وارد کنید."
+
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr "مطمئن شوید که این مقدار بزرگتر یا برابر با %( limit_ value )s باشد."
+
+msgid "Your comment"
+msgstr "نظر شما"
+
+msgid "Are you sure you want to log out?"
+msgstr "آیا مطمئن هستید که می خواهید خارج شوید؟"
+
+msgid "Your browser does not support video playback."
+msgstr "مرورگر انترنت یا براوزر شما از برنامۀ نشر ویدیویی پشتیبانی نمی کند."
+
+msgid "Your browser does not support audio playback."
+msgstr "مرورگر انترنت یا براوزر شما از برنامۀ نشر صوتی پشتیبانی نمی کند."
+
+msgid "Don't display my username next to my comment"
+msgstr "نام ام در کنار نظرم نشان داده نشود"
+
+msgid "Anonymous"
+msgstr "بی¬نام"
+
+msgid "Report this comment?"
+msgstr "آیا این کامنت گزارش داده شود؟"
+
+msgid "Display name"
+msgstr "نمایش نام"
+
+msgid "Reported by %(comment_report_count)s user"
+msgid_plural "Reported by %(comment_report_count)s users"
+msgstr[0] "گزارش داده شده توسط %(comment_report_count)s کاربر"
+msgstr[1] "گزارش شده توسط %( comment_report_ count )s کاربران"
+
+msgid ""
+"Sorry, %(page_title)s is not available in %(language)s. If you want to keep "
+"browsing in %(language)s you can click below to return to the homepage."
+msgstr ""
+"با معذرت، %(page_title)s به %(language)s  موجود نیست. اگر می خواهید به جستجو"
+" در%(language)s ادامه دهید ادامه دهید، می توانید برای بازگشت به صفحۀ اصلی در"
+" قسمت ذیل کلیک کنید."
+
+msgid "Username not available."
+msgstr "این اسم کاربردی موجود نیست."
+
+msgid "Display name not available."
+msgstr "نمایش نام در دسترس نیست"
+
+msgid "You have already completed this quiz."
+msgstr "شما این آزمون را قبلاً تکمیل نموده اید."
+
+msgid "You have already completed this poll."
+msgstr "شما این نظرسنجی را قبلاً تکمیل نموده اید"
+
+msgid ""
+"If you cannot view the above video, you can instead %(start_link)sdownload "
+"it%(end_link)s."
+msgstr ""
+"اگر ویدیوی بالا را دیده نمی توانید، به جای آن می توانید %(start_link)s آن را"
+" دانلود کنید %(end_link)s."
+
+msgid ""
+"If you cannot listen to the above audio, you can instead "
+"%(start_link)sdownload it%(end_link)s."
+msgstr ""
+"اگر صدای فوق را شنیده نمی توانید، به جای آن می توانید %(start_link)s آن را "
+"دانلود کنید %(end_link)s."
+
+msgid "Please complete the questions marked as required to continue"
+msgstr ""

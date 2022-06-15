@@ -1,0 +1,364 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-07-31 09:38+0000\n"
+"PO-Revision-Date: 2021-07-31 09:38+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "quizzes"
+msgstr "புதிர்கள்"
+
+msgid "Log in to participate"
+msgstr "பங்கேற்க உற்புகு"
+
+msgid "Log in / Create account"
+msgstr "உள்நுழைய / கணக்கை உருவாக்கு"
+
+msgid "© The Internet of Good Things"
+msgstr "© The Internet of Good Things"
+
+msgid "Profile"
+msgstr "முகக்குறிப்பு"
+
+msgid "Chat"
+msgstr "அரட்டை"
+
+msgid "More"
+msgstr "மேலும்"
+
+msgid "Log in"
+msgstr "உள்நுழைய"
+
+msgid "Back"
+msgstr "முந்தைய "
+
+msgid "BACK"
+msgstr "முந்தைய "
+
+msgid "Previous"
+msgstr "முந்தையது"
+
+msgid "Next"
+msgstr "அடுத்தது"
+
+msgid "Comments"
+msgstr "கருத்துரைகள்/ பின்னூட்டங்கள்"
+
+msgid "Please log in or create your account"
+msgstr "தயவுசெய்து உள்நுழையவும் அல்லது உங்களின் கணக்கை உருவாக்கவும்."
+
+msgid "Report"
+msgstr "தகவலைப் புகாரளிக்கவும்"
+
+msgid "Related Articles"
+msgstr "தொடர்புடைய பொதுவிதிகள் / தொடர்புடைய கட்டுரைகள்"
+
+msgid "This comment has been reported."
+msgstr "இக்கருத்துரை புகாரளிக்கப்பட்டுள்ளது "
+
+msgid ""
+"It will be reviewed by the team and may be removed if it breaks our Platform"
+" Rules"
+msgstr ""
+"இது குழுவினால் மீளாய்வு செய்யப்படுவதுடன் எமது தளத்தின் விதிமுறைகளை மீறினால் "
+"அது நீக்கப்படும்."
+
+msgid "articles"
+msgstr "கட்டுரைகள் / விதிமுறைகள் / உட்பிரிவுகள்"
+
+msgid "Search the site..."
+msgstr "வலைத்தளத்தில் தேடவும்"
+
+msgid "Search results for:"
+msgstr "தேடல் பெறுபேறுகள்"
+
+msgid "No search results were found for"
+msgstr "தேடல் பெறுபேறுகள் கிடைக்கவில்லை"
+
+msgid "Username"
+msgstr "பயனர் பெயர்"
+
+msgid "Create your account"
+msgstr "உங்களின் கணக்கை உருவாக்கவும்"
+
+msgid "Forgot PIN"
+msgstr "தனிநபர் அடையாள எண்ணை மறந்துவிட்டேன்"
+
+msgid "Cancel"
+msgstr "இரத்துச் செய்யவும்"
+
+msgid "Hey, %(username)s"
+msgstr "ஹாய், %(username)s"
+
+msgid "Change Digital Pin"
+msgstr "டிஜிடல் தனிநபர் அடையாள எண்ணை மாற்றவும்"
+
+msgid "Personal Details"
+msgstr "தனிப்பட்ட விபரங்கள்"
+
+msgid "Save changes"
+msgstr "மாற்றங்களை சேமிக்கவும்"
+
+msgid "Reset PIN"
+msgstr "தனிநபர் அடையாள எண்ணை மீளமைக்கவும்"
+
+msgid "Your PIN has been changed successfully."
+msgstr "உங்கள் தனிநபர் அடையாள எண் வெற்றிகரமாக மாற்றப்பட்டுள்ளது."
+
+msgid "I accept the Terms and Conditions."
+msgstr "நான் குறிப்பீட்டு நியதிகளையும் நிபந்தனைகளையும் ஏற்றுக்கொள்கிறேன்."
+
+msgid "You have read %(read)s out of %(total)s"
+msgstr "நீங்கள் %(total)s  இல் %(read)s இனை வாசித்துள்ளீர்கள்"
+
+msgid "%(counter)s of %(total)s questions"
+msgstr "%(total)s வினாக்களில் %(counter)s"
+
+msgid "Select one"
+msgstr "ஒன்றினைத் தெரிவுசெய்யவும்"
+
+msgid "Optional"
+msgstr "விருப்பத்துக்குரியது"
+
+msgid "No limit"
+msgstr "வரையறை இல்லை"
+
+msgid "Go to homepage"
+msgstr "முகப்பக்கத்துக்குச் செல்லவும்"
+
+msgid "You have already completed this survey."
+msgstr "நீங்கள் தற்போது இந்த ஆய்வினைப் பூர்த்திசெய்துள்ளீர்கள்."
+
+msgid "Check all that apply"
+msgstr "பொருந்தும் அனைத்தையும் சரிபார்க்கவும்."
+
+msgid "Your results!"
+msgstr "உங்கள் பெறுபேறுகள்!"
+
+msgid "Replay Quiz"
+msgstr "புதிரினை மீண்டும் செயற்படுத்தவும் / விளையாடவும் "
+
+msgid "Incorrect"
+msgstr "தவறு"
+
+msgid "Correct"
+msgstr "சரி"
+
+msgid "Your answer"
+msgstr "உங்கள் விடை"
+
+msgid "Leave comment"
+msgstr "கருத்துக் கூறவும்."
+
+msgid "Reply"
+msgstr "விடையளிக்கவும்."
+
+msgid "Page not found"
+msgstr "பக்கம் கிடைக்கவில்லை. "
+
+msgid "Sorry, this page could not be found."
+msgstr "மன்னிக்கவும். இப்பக்கத்தினை கண்டுபிடிக்க முடியவில்லை. "
+
+msgid "Internal server error"
+msgstr "உள்ளக சேவையக வழு"
+
+msgid "1 result"
+msgid_plural "%(counter)s results"
+msgstr[0] "1 பெறுபேறு"
+msgstr[1] "%(counter)s  பெறுபேறுகள்"
+
+msgid "poll"
+msgstr "கருத்துக்கணிப்பு"
+
+msgid "survey"
+msgstr "ஆய்வு"
+
+msgid "quiz"
+msgstr "புதிர்"
+
+msgid "This field is required."
+msgstr "இப்புலம் அவசியமானது."
+
+msgid "Send"
+msgstr "அனுப்பவும்"
+
+msgid "Remove this comment?"
+msgstr "இக்கருத்தை நீக்கவும்."
+
+msgid "Remove"
+msgstr "நீக்கவும்"
+
+msgid "This comment has been removed."
+msgstr "இக்கருத்து நீக்கப்பட்டுள்ளது."
+
+msgid "moderator"
+msgstr "நடுவர் / மதிப்பீட்டாளர்"
+
+msgid "sections"
+msgstr "பகுதிகள்"
+
+msgid "Check if applies"
+msgstr "பொருந்துமா என சரிபார்க்கவும்"
+
+msgid "New comments have been disabled for this page."
+msgstr "இப்பக்கத்தில் புதிய கருத்துக்களைப் பதிவிடுவது நிறுத்தப்பட்டுள்ளது.  "
+
+msgid "Correct answer"
+msgstr "சரியான விடை."
+
+msgid "Download"
+msgstr "பதிவிறக்கம்"
+
+msgid ""
+"You are leaving the <b>Internet of Good Things</b> to visit an external "
+"website and standard data charges by your network provider might apply"
+msgstr ""
+"நீங்கள் வெளி வலைத்தளமொன்றை பார்வையிட <b>Internet of Good Things</b>  "
+"இலிருந்து வெளியே செல்கிறீர்கள். உங்கள் இணையவசதி வழங்குநரால் ஏற்புடைய தரவுக் "
+"கட்டணங்கள் அறவிடப்படலாம். "
+
+msgid "Continue to external site"
+msgstr "வெளிப்புற தளத்திற்கு தொடரவும்"
+
+msgid "4-digit PIN"
+msgstr "4 – இலக்க (டிஜிடல்) குறியீடு"
+
+msgid "Old 4-digit PIN"
+msgstr "பழைய 4 இலக்க (டிஜிடல்) குறியீடு"
+
+msgid "New 4-digit PIN"
+msgstr "புதிய 4 எண்ணியல் (டிஜிடல்) தனிநபர் அடையாள இலக்கம்."
+
+msgid "Confirm new 4-digit PIN"
+msgstr "புதிய 4 இலக்க (டிஜிடல்) தனிநபர் அடையாள இலக்கத்தை உறுதிப்படுத்தவும். "
+
+msgid "Log out"
+msgstr "வெளியேறு"
+
+msgid "section"
+msgstr "பகுதி"
+
+msgid "article"
+msgstr "கட்டுரை /வாசகம்"
+
+msgid "Remember me"
+msgstr "என்னை நினைவில் வைத்திருக்கவும்."
+
+msgid "You have signed out."
+msgstr "நீங்கள் வெளியேறிவிட்டீர்கள்"
+
+msgid ""
+"Enter a valid username. This value may contain only letters, numbers, and "
+"@/./+/-/_ characters."
+msgstr ""
+"சரியான பயனர் பெயரை நுழைக்கவும். இப்பெறுமானத்தில் எழுத்துக்கள், இலக்கங்கள் "
+"மற்றும் வரியுருக்கள் @/./+/-/_  உள்ளடங்கி இருக்கலாம்."
+
+msgid "You must type the same password each time."
+msgstr "நீங்கள் ஒவ்வொரு தடவையும் ஒரே கடவுச் சொல்லை டய்ப் செய்யவும்."
+
+msgid "This password is too short. It must contain at least 4 characters."
+msgstr ""
+"இக்கடவுச்சொல் நீளம் குறைந்தது. அதில் குறைந்தபட்சம் 4 எழுத்துகள்  இருக்க "
+"வேண்டும்."
+
+msgid "Please type your current password."
+msgstr "தயவுசெய்து உங்களின் தற்போதைய கடவுச்சொல்லை டய்ப் செய்யவும்."
+
+msgid "Password successfully changed."
+msgstr "கடவுச்சொல் வெற்றிகரமாக மாறிவிட்டது."
+
+msgid "Enter a valid date/time."
+msgstr "செல்லுபடியாகும் ஒரு திகதியை / நேரத்தை உட்புகுத்தவும்."
+
+msgid "Enter a valid date."
+msgstr "செல்லுபடியாகும் ஒரு திகதியை உட்புகுத்தவும்."
+
+msgid "Enter a valid URL."
+msgstr ""
+"செல்லுபடியாகும் ஒரு சீர்மை வள இருப்பிடங்காட்டியை (URL) உட்புகுத்தவும்."
+
+msgid "Enter a valid email address."
+msgstr "செல்லுபடியாகும் மின்னஞ்சல் முகவரி ஒன்றினை உட்புகுத்தவும்."
+
+msgid "Enter a valid integer."
+msgstr "செல்லுபடியாகும் முழு எண் ஒன்றை உட்புகுத்தவும்."
+
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+"இந்த மதிப்பு %(limit_value)s ஐ விட அதிகமாகவோ அல்லது சமமாகவோ இருப்பதை "
+"உறுதிசெய்யவும்."
+
+msgid "Your comment"
+msgstr "உங்கள் கருத்து / பின்னூட்டம்."
+
+msgid "Are you sure you want to log out?"
+msgstr "வெளியேற விரும்புகிறீர்களா?"
+
+msgid "Your browser does not support video playback."
+msgstr "உங்களின் உலாவி காணொளி பின்னணியுடன் ஒத்துழைப்பதில்லை"
+
+msgid "Your browser does not support audio playback."
+msgstr "உங்களின் உலாவி ஓடியோ பின்னணியுடன் ஒத்துழைப்பதில்லை."
+
+msgid "Don't display my username next to my comment"
+msgstr "எனது கருத்துக்கு எதிரே எனது பயனர் பெயரைக் காட்சிப்படுத்த வேண்டாம்."
+
+msgid "Anonymous"
+msgstr "அநாமதேயம்."
+
+msgid "Report this comment?"
+msgstr "இக்கருத்தை புகார் செய்யவும்?"
+
+msgid "Display name"
+msgstr "காட்சிப்படுத்தல் பெயர்."
+
+msgid "Reported by %(comment_report_count)s user"
+msgid_plural "Reported by %(comment_report_count)s users"
+msgstr[0] "பயனரால் %(comment_report_count)s புகார் செய்யப்பட்டுள்ளது."
+msgstr[1] "%(comment_report_count)s பயனர்களால் புகாரளிக்கப்பட்டுள்ளது."
+
+msgid ""
+"Sorry, %(page_title)s is not available in %(language)s. If you want to keep "
+"browsing in %(language)s you can click below to return to the homepage."
+msgstr ""
+"மன்னிக்கவும். %(page_title)s இல் கிடைக்கவில்லை. உங்களுக்கு தொடர்ந்து  "
+"%(language)s உலாவ வேண்டுமெனின் மீண்டும் முகப் பக்கத்துக்குச் செல்ல இங்கே "
+"கிளிக் செய்யவும். "
+
+msgid "Username not available."
+msgstr "பயனர் பெயர் (username) கிடைக்கவில்லை."
+
+msgid "Display name not available."
+msgstr "காட்சிப்படுத்தல் பெயர் இல்லை."
+
+msgid "You have already completed this quiz."
+msgstr "நீங்கள் ஏற்கனவே இந்த புதிரைப் பூர்த்திசெய்துள்ளீர்கள்."
+
+msgid "You have already completed this poll."
+msgstr "நீங்கள் ஏற்கனவே இக்கருத்துக் கணிப்பீட்டினை பூர்த்திசெய்துள்ளீர்கள்."
+
+msgid ""
+"If you cannot view the above video, you can instead %(start_link)sdownload "
+"it%(end_link)s."
+msgstr ""
+"மேலுள்ள காணொளியைப் பார்வையிட முடியாதெனின், அதற்குப் பதிலாக உங்களுக்கு அதை "
+"பதிவிறக்கம் செய்ய முடியும்."
+
+msgid ""
+"If you cannot listen to the above audio, you can instead "
+"%(start_link)sdownload it%(end_link)s."
+msgstr ""
+"மேலுள்ள ஓடியோவுக்கு செவிமடுக்க முடியாதெனின், அதற்குப் பதிலாக, %(start_link) "
+"அதை பதிவிறக்கம் செய்ய முடியும். %(end_link)s.. "
+
+msgid "Please complete the questions marked as required to continue"
+msgstr ""

@@ -353,3 +353,6 @@ msgid ""
 msgstr ""
 "यदि तपाईँले माथिको अडियो सुन्न सक्नु भएन भने, %(start_link)s डाउनलोड "
 "%(end_link)s.गर्न सक्नुहुन्छ"
+
+msgid "Please complete the questions marked as required to continue"
+msgstr ""
