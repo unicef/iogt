@@ -205,3 +205,8 @@ class OfflineAppButtonBlock(blocks.StructBlock):
 
     class Meta:
         template = 'blocks/offline_app_button.html'
+
+
+class DownloadButtonBlock(blocks.StructBlock):
+    class Meta:
+        template = 'blocks/download_button.html'

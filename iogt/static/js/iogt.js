@@ -110,3 +110,17 @@ $(document).ready(() => {
         offlineAppBtns.hide();
     }
 });
+
+const download = pageId => {
+    fetch(`/page-tree/${pageId}/`)
+        .then(resp => resp.json())
+        .then(urls => {
+            caches.open('iogt')
+                .then(cache => {
+                    cache.addAll(urls);
+                });
+        })
+        .catch(error => {
+            console.log('Error while fetching page tree.', pageId);
+        });
+};

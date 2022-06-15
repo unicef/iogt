@@ -49,6 +49,7 @@ from questionnaires.models import Survey, Poll, Quiz
 from .blocks import (
     MediaBlock, SocialMediaLinkBlock, SocialMediaShareButtonBlock, EmbeddedPollBlock, EmbeddedSurveyBlock,
     EmbeddedQuizBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock, ArticleBlock, OfflineAppButtonBlock,
+    DownloadButtonBlock,
 )
 from .forms import SectionPageForm
 from .mixins import PageUtilsMixin, TitleIconMixin
@@ -71,6 +72,7 @@ class HomePage(Page):
         ('embedded_survey', EmbeddedSurveyBlock()),
         ('embedded_quiz', EmbeddedQuizBlock()),
         ('article', ArticleBlock()),
+        ('download', DownloadButtonBlock()),
     ], null=True, blank=True)
 
     content_panels = Page.content_panels + [
@@ -169,6 +171,9 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         blank=True,
         null=True,
     )
+    body = StreamField([
+        ('download', DownloadButtonBlock()),
+    ], null=True, blank=True)
 
     tags = ClusterTaggableManager(through='SectionTaggedItem', blank=True)
     show_progress_bar = models.BooleanField(default=False)
@@ -191,6 +196,7 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
             InlinePanel('featured_content', max_num=1,
                         label=_("Featured Content")),
         ], heading=_('Featured Content')),
+        StreamFieldPanel('body'),
     ]
 
     settings_panels = Page.settings_panels + [
@@ -309,6 +315,7 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         ('embedded_quiz', EmbeddedQuizBlock()),
         ('media', MediaBlock(icon='media')),
         ('chat_bot', ChatBotButtonBlock()),
+        ('download', DownloadButtonBlock()),
     ])
     show_in_menus_default = True
 

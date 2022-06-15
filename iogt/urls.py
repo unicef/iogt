@@ -13,7 +13,7 @@ from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 from home import views as pwa_views
 from wagtail_transfer import urls as wagtailtransfer_urls
-from iogt.views import TransitionPageView, SitemapAPIView, TranslationNotFoundPage
+from iogt.views import TransitionPageView, SitemapAPIView, TranslationNotFoundPage, PageTreeAPIView
 
 urlpatterns = [
     path('django-admin/', admin.site.urls),
@@ -39,6 +39,7 @@ urlpatterns = [
     path('comments/', include('comments.urls')),
     *i18n_patterns(path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog')),
     path('health-check/', include('health_check.urls')),
+    path('page-tree/<int:page_id>/', PageTreeAPIView.as_view(), name='page_tree'),
 ]
 
 if settings.DEBUG:

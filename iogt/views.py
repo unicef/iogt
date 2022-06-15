@@ -108,3 +108,34 @@ class SitemapAPIView(APIView):
             tuple(jsi18n_urls)
         )
         return Response(sitemap)
+
+
+class PageTreeAPIView(APIView):
+    def get(self, request, page_id):
+        from home.models import HomePage, Section, Article, OfflineAppPage, SVGToPNGMap
+        page = get_object_or_404(Page, id=page_id)
+        pages = page.get_descendants(inclusive=True).live().specific()
+        page_urls = []
+        image_urls = []
+        for page in pages:
+            if isinstance(page, (HomePage, Section, Article, OfflineAppPage, Poll, Survey, Quiz)):
+                page_urls.append(page.url)
+
+                if isinstance(page, (Section, Article)):
+                    if page.lead_image:
+                        for rendition in page.lead_image.renditions.all():
+                            image_urls.append(f'{settings.MEDIA_URL}{rendition.file.name}')
+
+                if isinstance(page, (Section, Article, Poll, Survey, Quiz)):
+                    if page.image_icon:
+                        for rendition in page.image_icon.renditions.all():
+                            image_urls.append(f'{settings.MEDIA_URL}{rendition.file.name}')
+
+        for svg_to_png_map in SVGToPNGMap.objects.all():
+            image_urls.append(f'{settings.MEDIA_URL}{svg_to_png_map.png_image_file.name}')
+
+        urls = set(flatten(
+            page_urls +
+            image_urls
+        ))
+        return Response(urls)
