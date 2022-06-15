@@ -9,20 +9,35 @@ workbox.googleAnalytics.initialize({
 });
 
 self.addEventListener('install', event => {
-    console.log('Service worker installed.');
+    console.log('Service worker installing.');
 });
 
 self.addEventListener('activate', event => {
-    console.log('Service worker activated.');
+    console.log('Service worker activating.');
 });
 
 self.addEventListener('fetch', event => {
+    if (event.request.method !== 'GET')
+        return;
+
     console.log('Responding to', event.request.url);
+
     event.respondWith(
         fetch(event.request)
             .then(resp => {
                 console.log('Fetched successfully.', event.request.url);
-                return resp;
+                return caches.open('iogt')
+                    .then(cache => {
+                        const match = cache.match(event.request);
+                        if (match) {
+                            console.log('Match found, updating cache.', event.request.url);
+                            cache.delete(event.request);
+                            cache.put(event.request, resp.clone());
+                        } else {
+                            console.log('No match found.', event.request.url);
+                        }
+                        return resp;
+                    });
             })
             .catch(error => {
                 console.log('Unable to fetch.', event.request.url, error);
