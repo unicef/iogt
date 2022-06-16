@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib.admin.utils import flatten
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
+from django.utils import translation
 from django.views.generic import TemplateView
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -131,11 +132,54 @@ class PageTreeAPIView(APIView):
                         for rendition in page.image_icon.renditions.all():
                             image_urls.append(f'{settings.MEDIA_URL}{rendition.file.name}')
 
+                if isinstance(page, (Article, Poll, Survey, Quiz)):
+
+                    if isinstance(page, Article):
+                        for block in page.body.stream_data:
+                            if block['type'] == 'image':
+                                print(page.__class__.__name__, block)
+                                for rendition in Rendition.objects.filter(image_id=block['value']):
+                                    image_urls.append(f'{settings.MEDIA_URL}{rendition.file.name}')
+
+                    if isinstance(page, (Poll, Survey, Quiz)):
+                        for block in page.description.stream_data:
+                            if block['type'] == 'image':
+                                print(page.__class__.__name__, block)
+                                for rendition in Rendition.objects.filter(image_id=block['value']):
+                                    image_urls.append(f'{settings.MEDIA_URL}{rendition.file.name}')
+
+                        for block in page.thank_you_text.stream_data:
+                            if block['type'] == 'image':
+                                print(page.__class__.__name__, block)
+                                for rendition in Rendition.objects.filter(image_id=block['value']):
+                                    image_urls.append(f'{settings.MEDIA_URL}{rendition.file.name}')
+
         for svg_to_png_map in SVGToPNGMap.objects.all():
             image_urls.append(f'{settings.MEDIA_URL}{svg_to_png_map.png_image_file.name}')
 
+        language = translation.get_language()
+        jsi18n_urls = [
+            f'/{language}/jsi18n/'
+        ]
+
+        static_urls = []
+        static_dirs = [
+            {'name': 'css', 'extensions': ('.css',)},
+            {'name': 'js', 'extensions': ('.js',)},
+            {'name': 'fonts', 'extensions': ('.woff', '.woff2',)},
+            {'name': 'icons', 'extensions': ('.svg',)},
+        ]
+        for static_dir in static_dirs:
+            for root, dirs, files in os.walk(Path(settings.STATIC_ROOT) / static_dir['name']):
+                for file in files:
+                    if file.endswith(static_dir['extensions']):
+                        static_urls.append(f'{settings.STATIC_URL}{root.split("/static/")[-1]}/{file}')
+
+
         urls = set(flatten(
             page_urls +
-            image_urls
+            image_urls +
+            jsi18n_urls +
+            static_urls
         ))
         return Response(urls)
