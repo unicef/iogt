@@ -48,7 +48,7 @@ $(document).ready(() => {
     const changeDigitalPinBtn = $('.change-digital-pin');
     const loginCreateAccountBtns = $('.login-create-account-btn');
     const logoutBtn = $('.logout-btn');
-    const externalLinks = $('a[href*="external-link"]')
+    const externalLinks = $('a[href*="/external-link/?next="]')
 
     const disableForOfflineAccess = () => {
         searchFormHolder.hide();
