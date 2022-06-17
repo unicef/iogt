@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+from bs4 import BeautifulSoup
 from django.conf import settings
 from django.contrib.admin.utils import flatten
 from django.shortcuts import get_object_or_404
@@ -112,6 +113,59 @@ class SitemapAPIView(APIView):
 
 
 class PageTreeAPIView(APIView):
+    def _get_renditions(self, image_id):
+        image_urls = []
+        for rendition in Rendition.objects.filter(image_id=image_id):
+            image_urls.append(f'{settings.MEDIA_URL}{rendition.file.name}')
+        return image_urls
+
+    def _get_banner_image_urls(self, page):
+        image_urls = []
+        if page.banner_image:
+            image_urls += self._get_renditions(page.banner_image)
+        return image_urls
+
+    def _get_lead_image_urls(self, page):
+        image_urls = []
+        if page.lead_image:
+            image_urls += self._get_renditions(page.lead_image)
+        return image_urls
+
+    def _get_image_icon_urls(self, page):
+        image_urls = []
+        if page.image_icon:
+            image_urls += self._get_renditions(page.image_icon)
+        return image_urls
+
+    def _get_stream_data_image_urls(self, stream_data):
+        image_urls = []
+        for block in stream_data:
+            if block['type'] == 'image':
+                image_urls += self._get_renditions(block['value'])
+            if block['type'] == 'paragraph':
+                tags = BeautifulSoup(block['value'], "html.parser").find_all('embed')
+                for tag in tags:
+                    if tag.attrs['embedtype'] == 'image':
+                        image_urls += self._get_renditions(tag.attrs['id'])
+        return image_urls
+
+    def _get_page_image_urls(self, page):
+        from home.models import BannerPage, Section, Article, OfflineAppPage
+
+        image_urls = []
+        if isinstance(page, (BannerPage,)):
+            image_urls += self._get_banner_image_urls(page)
+        if isinstance(page, (Section, Article, OfflineAppPage)):
+            image_urls += self._get_lead_image_urls(page)
+        if isinstance(page, (Section, Article, OfflineAppPage, Poll, Survey, Quiz)):
+            image_urls += self._get_image_icon_urls(page)
+        if isinstance(page, (Article, OfflineAppPage)):
+            image_urls += self._get_stream_data_image_urls(page.body.stream_data)
+        if isinstance(page, (Poll, Survey, Quiz)):
+            image_urls += self._get_stream_data_image_urls(page.description.stream_data)
+            image_urls += self._get_stream_data_image_urls(page.thank_you_text.stream_data)
+        return image_urls
+
     def get(self, request, page_id):
         from home.models import HomePage, Section, Article, OfflineAppPage, SVGToPNGMap
         page = get_object_or_404(Page, id=page_id)
@@ -121,38 +175,7 @@ class PageTreeAPIView(APIView):
         for page in pages:
             if isinstance(page, (HomePage, Section, Article, OfflineAppPage, Poll, Survey, Quiz)):
                 page_urls.append(page.url)
-
-                if isinstance(page, (Section, Article)):
-                    if page.lead_image:
-                        for rendition in page.lead_image.renditions.all():
-                            image_urls.append(f'{settings.MEDIA_URL}{rendition.file.name}')
-
-                if isinstance(page, (Section, Article, Poll, Survey, Quiz)):
-                    if page.image_icon:
-                        for rendition in page.image_icon.renditions.all():
-                            image_urls.append(f'{settings.MEDIA_URL}{rendition.file.name}')
-
-                if isinstance(page, (Article, Poll, Survey, Quiz)):
-
-                    if isinstance(page, Article):
-                        for block in page.body.stream_data:
-                            if block['type'] == 'image':
-                                print(page.__class__.__name__, block)
-                                for rendition in Rendition.objects.filter(image_id=block['value']):
-                                    image_urls.append(f'{settings.MEDIA_URL}{rendition.file.name}')
-
-                    if isinstance(page, (Poll, Survey, Quiz)):
-                        for block in page.description.stream_data:
-                            if block['type'] == 'image':
-                                print(page.__class__.__name__, block)
-                                for rendition in Rendition.objects.filter(image_id=block['value']):
-                                    image_urls.append(f'{settings.MEDIA_URL}{rendition.file.name}')
-
-                        for block in page.thank_you_text.stream_data:
-                            if block['type'] == 'image':
-                                print(page.__class__.__name__, block)
-                                for rendition in Rendition.objects.filter(image_id=block['value']):
-                                    image_urls.append(f'{settings.MEDIA_URL}{rendition.file.name}')
+                image_urls += self._get_page_image_urls(page)
 
         for svg_to_png_map in SVGToPNGMap.objects.all():
             image_urls.append(f'{settings.MEDIA_URL}{svg_to_png_map.png_image_file.name}')
