@@ -76,7 +76,6 @@ class SitemapAPIView(APIView):
 
         media_urls = []
         for media in Media.objects.all():
-            media_urls.append(f'{settings.MEDIA_URL}{media.file.name}')
             if media.thumbnail:
                 image_urls.append(f'{settings.MEDIA_URL}{media.thumbnail.name}')
 
