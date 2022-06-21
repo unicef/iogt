@@ -1,5 +1,10 @@
+{% load wagtailcore_tags %}
 {% load i18n %}
 
-<button class='article__content__link-btn' onclick="download({{ page.id }})">
-    Download
+{% include_block value.description %}
+<button class='article__content__link-btn download-app-btn' onclick="download({{ value.page.id }})">
+    {{ value.smartphone_text }}
+</button>
+<button class='article__content__link-btn offline-app-btn'>
+    {{ value.offline_text }}
 </button>
