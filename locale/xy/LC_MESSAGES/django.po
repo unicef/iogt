@@ -1658,3 +1658,6 @@ msgstr ""
 "([not-needed]-Safe name of the form field, the label converted to "
 "ascii_snake_case. This will appear in the HTML but will not be visible to "
 "the user)"
+
+msgid "Need internet access to visit external site."
+msgstr "([needs-translation]-Need internet access to visit external site.)"
