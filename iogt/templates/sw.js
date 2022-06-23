@@ -49,3 +49,31 @@ self.addEventListener('fetch', event => {
             })
     );
 });
+
+self.addEventListener('push', event => {
+    console.log('Responding to push notification', event.data?.json());
+    let {head, body, icon, url} = event.data?.json() || {
+        "head": "No Content",
+        "body": "No Content",
+        "icon": "",
+        "url": ""
+    };
+    url = url || self.location.origin;
+
+    event.waitUntil(
+        self.registration.showNotification(head, {
+            body: body,
+            icon: icon,
+            data: {url}
+        })
+    );
+});
+
+self.addEventListener('notificationclick', event => {
+    console.log('Responding to notificationclick', event.notification.data.url)
+    event.waitUntil(
+        event.preventDefault(),
+        event.notification.close(),
+        self.clients.openWindow(event.notification.data.url)
+    );
+});

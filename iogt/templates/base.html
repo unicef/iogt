@@ -7,6 +7,7 @@
 <head>
     {% include 'google_analytics_tag_manager.html' %}
     <meta charset="utf-8"/>
+    <meta name="vapid-key" content="{{ vapid_public_key }}">
     <title>
         {% block title %}
             {% if page.seo_title %}

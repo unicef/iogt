@@ -124,3 +124,93 @@ const download = pageId => {
             console.log('Error while fetching page tree.', pageId);
         });
 };
+
+const getItem = (key, defaultValue) => {
+    return JSON.parse(localStorage.getItem(key, defaultValue));
+};
+
+const setItem = (key, value) => {
+    localStorage.setItem(key, JSON.stringify(value));
+};
+
+const registerPushNotification = registration => {
+    if (!registration.showNotification) {
+        console.log("Showing notifications isn't supported.");
+        return;
+    }
+    if (Notification.permission === 'denied') {
+        console.log("You prevented us from showing notifications.");
+        return;
+    }
+    if (!'PushManager' in window) {
+        console.log("Push isn't allowed in your browser.");
+        return;
+    }
+    subscribe(registration);
+};
+
+const urlB64ToUint8Array = base64String => {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+        .replace(/\-/g, '+')
+        .replace(/_/g, '/');
+
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+    const outputData = outputArray.map((output, index) => rawData.charCodeAt(index));
+
+    return outputData;
+}
+
+const subscribe = registration => {
+    registration.pushManager.getSubscription()
+        .then(subscription => {
+            if (subscription) {
+                sendSubscriptionToServer(subscription);
+                return;
+            }
+            const vapidKeyMeta = document.querySelector('meta[name="vapid-key"]');
+            const vapidKey = vapidKeyMeta.content;
+            const options = {
+                userVisibleOnly: true,
+                // if key exists, create applicationServerKey property
+                ...(vapidKey && {applicationServerKey: urlB64ToUint8Array(vapidKey)})
+            };
+
+            registration.pushManager.subscribe(options)
+                .then(subscription => {
+                    sendSubscriptionToServer(subscription);
+                })
+                .catch(error => {
+                    console.log("Error during subscribe()", error);
+                });
+        })
+        .catch(error => {
+            console.log("Error during getSubscription()", error);
+        });
+};
+
+const sendSubscriptionToServer = subscription => {
+    const browser = navigator.userAgent.match(/(firefox|msie|chrome|safari|trident)/ig)[0].toLowerCase();
+    const data = {
+        status_type: 'subscribe',
+        subscription: subscription.toJSON(),
+        browser: browser,
+    };
+
+    console.log('Sending user subscription', data);
+
+    fetch('/webpush/save_information', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            'content-type': 'application/json'
+        },
+        credentials: "include"
+    }).then(resp => {
+        console.log('Successfully saved user subscription', resp.ok);
+        setItem('isPushNotificationRegistered', true);
+    }).catch(error => {
+        console.log('Unable to save user subscription', error);
+    });
+};

@@ -8,6 +8,13 @@ if ('serviceWorker' in navigator) {
             } else if (registration.active) {
                 console.log('Service worker active.');
             }
+            const isPushNotificationRegistered = getItem('isPushNotificationRegistered', false);
+            if (!isPushNotificationRegistered) {
+                console.log('Push notification not registered.')
+                registerPushNotification(registration);
+            } else {
+                console.log('Push notification already registered.')
+            }
         })
         .catch(error => {
             console.log('Error while registering service worker.', error);

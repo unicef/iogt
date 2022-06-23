@@ -77,6 +77,7 @@ INSTALLED_APPS = [
     'health_check.contrib.migrations',
     'rest_framework_simplejwt',
     'google_analytics',
+    'webpush',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -130,6 +131,7 @@ TEMPLATES = [
                 'django.template.context_processors.i18n',
                 'home.processors.commit_hash',
                 'home.processors.show_footers',
+                'home.processors.add_vapid_public_key',
             ],
         },
     },
@@ -491,3 +493,10 @@ if CACHE_BACKEND:
     }
 
 SITE_VERSION = os.getenv('SITE_VERSION', 'unknown')
+
+WEBPUSH_SETTINGS = {
+    "VAPID_PUBLIC_KEY": "BDbE56S5JCkRrO1TShJOH15lsfPtQuVRlxYuczoYNBf7O-IJjGVmiWNlGU2ojeT6lZr80ralVVoCK19dfkrfaq8",
+    "VAPID_PRIVATE_KEY": "CZFzXDBb0TguIwTfmke8HfqmhPFbClwQGSMYeymWqeU",
+    "VAPID_ADMIN_EMAIL": "sher@cogentlabs.co",
+}
+APPEND_SLASH = False
