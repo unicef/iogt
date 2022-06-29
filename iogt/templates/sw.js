@@ -9,18 +9,18 @@ workbox.googleAnalytics.initialize({
 });
 
 self.addEventListener('install', event => {
-    console.log('Service worker installing.');
+    console.log('Responding to service worker install event.');
 });
 
 self.addEventListener('activate', event => {
-    console.log('Service worker activating.');
+    console.log('Responding to service worker activate event.');
 });
 
 self.addEventListener('fetch', event => {
+    console.log('Responding to service worker fetch event.', event.request.url);
     if (event.request.method !== 'GET')
         return;
 
-    console.log('Responding to', event.request.url);
     event.respondWith(
         fetch(event.request)
             .then(resp => {
