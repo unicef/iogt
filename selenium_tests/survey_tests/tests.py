@@ -8,6 +8,9 @@ from iogt_users.factories import AdminUserFactory
 from comments.models import CommentStatus
 from django.conf import settings
 from home.models import HomePage
+from iogt_content_migration.management.commands.load_v1_db import Command
+
+command = Command()
 
 class MySeleniumTests(LiveServerTestCase):
 
@@ -46,6 +49,7 @@ class MySeleniumTests(LiveServerTestCase):
         )
         self.home_page.add_child(instance=self.section01)
         self.section01.add_child(instance=self.survey01)
+        command.create_survey_question()
 
     def test_survey(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
