@@ -2,15 +2,16 @@ import time
 from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.support.ui import Select
+from selenium.webdriver.chrome.options import Options as ChromeOptions
 from home.factories import SurveyFactory, SectionFactory
 from home.models import HomePage
 from iogt_users.factories import AdminUserFactory
 from comments.models import CommentStatus
 from django.conf import settings
 from home.models import HomePage
-from iogt_content_migration.management.commands.load_v1_db import Command
+from questionnaires.models import Poll, PollFormField, Survey, SurveyFormField, Quiz, QuizFormField
 
-command = Command()
 
 class MySeleniumTests(LiveServerTestCase):
 
@@ -19,7 +20,7 @@ class MySeleniumTests(LiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
-        options = webdriver.ChromeOptions()
+        options = ChromeOptions()
         options.add_argument('--ignore-ssl-errors=yes')
         options.add_argument('--ignore-certificate-errors')
         # options.add_argument("--window-size=1920,1080")
@@ -49,7 +50,29 @@ class MySeleniumTests(LiveServerTestCase):
         )
         self.home_page.add_child(instance=self.section01)
         self.section01.add_child(instance=self.survey01)
-        command.create_survey_question()
+
+        SurveyFormField.objects.create(
+            page=self.survey01, 
+            sort_order=0,
+            required = True,
+            choices = "A|B|C", 
+            label='Question 1', 
+            default_value='',  
+            field_type='checkboxes',
+            admin_label='Q1',            
+        )
+
+        SurveyFormField.objects.create(
+            page=self.survey01, 
+            sort_order=1,
+            required = True,
+            choices = "blah1|blah2|blah3", 
+            label='Question 2', 
+            default_value='',  
+            field_type='dropdown',
+            admin_label='Q2',            
+        )
+        
 
     def test_survey(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
@@ -66,8 +89,16 @@ class MySeleniumTests(LiveServerTestCase):
 
         self.selenium.get('%s%s' % (self.live_server_url, '/section0/survey0/'))
         time.sleep(2)
+        self.selenium.find_element_by_xpath('//input[@value="A"]').click()
+        time.sleep(2)
+        select = Select(self.selenium.find_element_by_name("question_2"))
+        select.select_by_visible_text("blah3")
+        print(select.first_selected_option)
+        assert 'blah3' in select.first_selected_option.text
+        time.sleep(2)
         self.selenium.find_element_by_xpath('//button[@type="submit"]').click()
-        time.sleep(100)
+        time.sleep(2)
+        
      
         
         
