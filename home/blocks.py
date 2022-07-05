@@ -215,12 +215,13 @@ class DownloadButtonBlock(blocks.StructBlock):
         required=False,
         help_text=_(
             'This text appears when the user is using a feature phone and thus cannot install the app '
-            '(the button will be disabled in this case). [Currently not implemented]'))
+            '(the button will be disabled in this case). [Currently not implemented]'),
+        form_classname='red-help-text')
     offline_text = blocks.CharBlock(
         required=False, help_text=_(
             'This text appears when the user is navigating the site via the offline app and '
             'thus it doesn\'t make sense to install the offline app again '
-            '(the button will be disabled in this case). [Currently not implemented]'))
+            '(the button will be disabled in this case).'))
     page = PageChooserBlock(target_model='wagtailcore.Page')
     description = blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)
 

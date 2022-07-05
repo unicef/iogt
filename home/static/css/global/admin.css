@@ -6,6 +6,7 @@
 
 .red-help-text p.help {
     color: red;
+    font-weight: bold;
 }
 
 .disabled-clean-name textarea {
