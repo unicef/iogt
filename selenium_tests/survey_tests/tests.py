@@ -9,9 +9,9 @@ from home.models import HomePage
 from iogt_users.factories import AdminUserFactory
 from comments.models import CommentStatus
 from django.conf import settings
-from home.models import HomePage
-from questionnaires.models import Poll, PollFormField, Survey, SurveyFormField, Quiz, QuizFormField
-
+from wagtail.core.models import Site, Page
+from questionnaires.models import SurveyFormField
+from django.contrib.contenttypes.models import ContentType
 
 class MySeleniumTests(LiveServerTestCase):
 
@@ -40,8 +40,30 @@ class MySeleniumTests(LiveServerTestCase):
         super(MySeleniumTests, cls).tearDownClass()
 
     def setUp(self):
+
+        print("Set up")
+
+        homepage_content_type, __ = ContentType.objects.get_or_create(
+            model='homepage', app_label='home')
+
+        homepage, __ = HomePage.objects.update_or_create(slug='home', defaults={
+            'title': "Home",
+            'draft_title': "Home",
+            'content_type': homepage_content_type,
+            'path': '00010002',
+            'depth': 2,
+            'numchild': 0,
+            'url_path': '/home_new/',
+            'show_in_menus': True,
+        })
+
+        Site.objects.get_or_create(hostname='localhost', defaults={
+            'root_page': homepage,
+            'is_default_site': True,
+        })
+
         self.user = AdminUserFactory()
-        self.home_page = HomePage.objects.first()
+        self.home_page = homepage
         self.section01 = SectionFactory.build(
             owner=self.user,            
         )
@@ -74,7 +96,7 @@ class MySeleniumTests(LiveServerTestCase):
         )
         
 
-    def test_survey(self):
+    def test_login(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
         time.sleep(2)
         username_input = self.selenium.find_element_by_name("login")
@@ -85,8 +107,9 @@ class MySeleniumTests(LiveServerTestCase):
         time.sleep(2)
         self.selenium.find_element_by_xpath('//button[@type="submit"]').click()
         body_text = self.selenium.find_element_by_tag_name('body').text
-        assert self.user.username in body_text        
+        assert self.user.username in body_text   
 
+    def test_survey(self):   
         self.selenium.get('%s%s' % (self.live_server_url, '/section0/survey0/'))
         time.sleep(2)
         self.selenium.find_element_by_xpath('//input[@value="A"]').click()
