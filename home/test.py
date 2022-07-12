@@ -53,12 +53,31 @@ class SVGToPNGMapTests(TestCase):
         png = SVGToPNGMap.get_png_image(self.svg_path)
         expected_path_regex = ''.join([
             settings.MEDIA_ROOT,
-            r"/svg-to-png-maps/svg-to-png_.*\.png"
+            r"/svg-to-png-maps/svg-to-png.*\.png"
         ])
         self.assertRegex(png.path, expected_path_regex)
         self.assertGreater(png.size, 0)
 
         png_2 = SVGToPNGMap.get_png_image(self.svg_path)
+        self.assertEquals(png, png_2)
+
+    def test_ignore_duplicates(self):
+        png = SVGToPNGMap.get_png_image(self.svg_path)
+        duplicate = {
+            'svg_path': self.svg_path,
+            'fill_color': None,
+            'stroke_color': None,
+            'png_image_file': png
+        }
+        SVGToPNGMap.objects.create(**duplicate)
+        SVGToPNGMap.objects.create(**duplicate)
+        count = SVGToPNGMap.objects.filter(
+            svg_path=self.svg_path,
+            fill_color=None,
+            stroke_color=None
+        ).count()
+        self.assertEquals(count, 2)
+        png_2 = SVGToPNGMap.get_png_image(self.svg_path, None, None)
         self.assertEquals(png, png_2)
 
     @patch.object(SVGToPNGMap, 'create')
@@ -67,20 +86,37 @@ class SVGToPNGMapTests(TestCase):
             png = SVGToPNGMap.get_png_image(self.svg_path)
             self.assertIsNone(png)
 
-    def test_uniqueness_no_stroke_no_fill(self):
+    def test_uniqueness_unspecified_stroke_and_fill(self):
         SVGToPNGMap.create(self.svg_path)
         with self.assertRaises(IntegrityError):
             SVGToPNGMap.create(self.svg_path)
 
-    def test_uniqueness_fill_no_stroke(self):
-        SVGToPNGMap.create(self.svg_path, fill_color='#a1b2c3')
+    def test_uniqueness_no_stroke_and_fill(self):
+        SVGToPNGMap.create(self.svg_path, None, None)
         with self.assertRaises(IntegrityError):
-            SVGToPNGMap.create(self.svg_path, fill_color='#a1b2c3')
+            SVGToPNGMap.create(self.svg_path, None, None)
+
+    def test_uniqueness_fill_no_stroke(self):
+        SVGToPNGMap.create(
+            self.svg_path,
+            fill_color='#a1b2c3',
+            stroke_color=None
+        )
+        with self.assertRaises(IntegrityError):
+            SVGToPNGMap.create(
+                self.svg_path,
+                fill_color='#a1b2c3',
+                stroke_color=None
+            )
 
     def test_uniqueness_stroke_no_fill(self):
-        SVGToPNGMap.create(self.svg_path, stroke_color='#fff')
+        SVGToPNGMap.create(self.svg_path, fill_color=None, stroke_color='#fff')
         with self.assertRaises(IntegrityError):
-            SVGToPNGMap.create(self.svg_path, stroke_color='#fff')
+            SVGToPNGMap.create(
+                self.svg_path,
+                fill_color=None,
+                stroke_color='#fff'
+            )
 
     def test_uniqueness_stroke_and_fill(self):
         SVGToPNGMap.create(
