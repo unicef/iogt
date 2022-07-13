@@ -50,17 +50,17 @@ class MySeleniumTests(LiveServerTestCase):
 
     def setUp(self):
 
-        execute_from_command_line(['manage.py', 'migrate'])
+        # execute_from_command_line(['manage.py', 'migrate'])
 
-        print("Set up")
+        # print("Set up")
 
-        models.MiscellaneousIndexPage.objects.all().delete()
-        models.BannerIndexPage.objects.all().delete()
-        models.Article.objects.all().delete()
-        models.Section.objects.all().delete()
-        models.SectionIndexPage.objects.all().delete()
-        Image.objects.all().delete()
-        Page.objects.filter(id=2).delete()
+        # models.MiscellaneousIndexPage.objects.all().delete()
+        # models.BannerIndexPage.objects.all().delete()
+        # models.Article.objects.all().delete()
+        # models.Section.objects.all().delete()
+        # models.SectionIndexPage.objects.all().delete()
+        # Image.objects.all().delete()
+        # Page.objects.filter(id=2).delete()
 
         homepage_content_type, __ = ContentType.objects.get_or_create(
             model='homepage', app_label='home')
@@ -81,24 +81,24 @@ class MySeleniumTests(LiveServerTestCase):
             'is_default_site': True,
         })
 
-        site = Site.objects.get(is_default_site=True)
-        if not site:
-            self.stdout.write(self.style.SUCCESS('Default site not found.'))
+        # site = Site.objects.get(is_default_site=True)
+        # if not site:
+        #     self.stdout.write(self.style.SUCCESS('Default site not found.'))
 
-        locales = Locale.objects.all()
-        file = File(open(Path(settings.BASE_DIR) / 'iogt/static/icons/burger.svg'), name='burger.svg')
-        icon = Svg.objects.create(title='burger', file=file)
-        for locale in locales:
-            menu, __ = FlatMenu.objects.get_or_create(handle=f'{locale.language_code}_menu_live', defaults={
-                'title': f'{locale.language_code} main menu',
-                'site': site,
-                'heading': 'Main Menu',
-            })
-            IogtFlatMenuItem.objects.get_or_create(link_url='#menu', menu=menu, defaults={
-                'link_text': 'Menu',
-                'icon': icon,
-                'display_only_in_single_column_view': True,
-            })
+        # locales = Locale.objects.all()
+        # file = File(open(Path(settings.BASE_DIR) / 'iogt/static/icons/burger.svg'), name='burger.svg')
+        # icon = Svg.objects.create(title='burger', file=file)
+        # for locale in locales:
+        #     menu, __ = FlatMenu.objects.get_or_create(handle=f'{locale.language_code}_menu_live', defaults={
+        #         'title': f'{locale.language_code} main menu',
+        #         'site': site,
+        #         'heading': 'Main Menu',
+        #     })
+        #     IogtFlatMenuItem.objects.get_or_create(link_url='#menu', menu=menu, defaults={
+        #         'link_text': 'Menu',
+        #         'icon': icon,
+        #         'display_only_in_single_column_view': True,
+        #     })
 
         self.user = AdminUserFactory()
         self.home_page = homepage
@@ -147,7 +147,7 @@ class MySeleniumTests(LiveServerTestCase):
         assert self.user.username in body_text   
 
     def test_survey(self):   
-        self.selenium.get('%s%s' % (self.live_server_url, '/section0/survey0/'))
+        self.selenium.get('%s%s' % (self.live_server_url, '/en/section0/survey0/'))
         time.sleep(2)
         self.selenium.find_element_by_xpath('//input[@value="A"]').click()
         time.sleep(2)
