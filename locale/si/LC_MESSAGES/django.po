@@ -353,3 +353,6 @@ msgstr "ඔබට ඉහත ශ්‍රව්‍යයට සවන් දී�
 
 msgid "Please complete the questions marked as required to continue"
 msgstr ""
+
+msgid "Need internet access to visit external site."
+msgstr ""
