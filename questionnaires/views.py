@@ -17,3 +17,6 @@ class FormPagesListView(WagtailFormPagesListView):
 class CustomSubmissionsListView(SubmissionsListView):
     def get_filename(self):
         return self.form_page.get_export_filename()
+
+    def get_queryset(self):
+        return super().get_queryset().select_related('page', 'user')
