@@ -26,6 +26,12 @@ function validateFreeBasicsFileUpload(fileInput, file_size_threshold) {
 }
 
 $(document).ready(() => {
+    const externalLinkOverlay = $('#external-link-overlay')
+
+    externalLinkOverlay.click(() => {
+        externalLinkOverlay.css('display', 'none');
+    });
+
     const submitWhenOffline = gettext('You cannot submit when offline');
 
     const searchFormHolder = $('.search-form-holder');
@@ -42,6 +48,7 @@ $(document).ready(() => {
     const changeDigitalPinBtn = $('.change-digital-pin');
     const loginCreateAccountBtns = $('.login-create-account-btn');
     const logoutBtn = $('.logout-btn');
+    const externalLinks = $('a[href*="/external-link/?next="]')
 
     const disableForOfflineAccess = () => {
         searchFormHolder.hide();
@@ -67,6 +74,13 @@ $(document).ready(() => {
         changeDigitalPinBtn.hide();
         loginCreateAccountBtns.hide();
         logoutBtn.hide();
+        externalLinks.each((index, link) => {
+            link = $(link);
+            link.click(e => {
+                e.preventDefault();
+                externalLinkOverlay.css('display', 'block');
+            });
+        });
     };
 
     const enableForOnlineAccess = () => {
@@ -93,6 +107,11 @@ $(document).ready(() => {
         changeDigitalPinBtn.show();
         loginCreateAccountBtns.show();
         logoutBtn.show();
+        externalLinks.show();
+        externalLinks.each((index, link) => {
+            link = $(link);
+            link.off('click');
+        });
     };
 
     const isPWA = () => {

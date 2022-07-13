@@ -33,7 +33,7 @@ class MediaBlock(AbstractMediaChooserBlock):
         if value.type == 'video':
             player_code = '''
             <div>
-                <video width="320" height="240" {1} controls>
+                <video preload="none" width="320" height="240" {1} controls>
                     {0}
                     ''' + video_not_supported_text + '''
                 </video>
@@ -43,7 +43,7 @@ class MediaBlock(AbstractMediaChooserBlock):
         else:
             player_code = '''
             <div>
-                <audio controls>
+                <audio preload="none" controls>
                     {0}
                     ''' + audio_not_supported_text + '''
                 </audio>

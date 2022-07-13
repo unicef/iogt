@@ -552,7 +552,7 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
     ]
 
     def get_page(self):
-        return self.page.specific if self.page and self.page.live else None
+        return self.page.specific if self.page and self.page.live else self
 
     def get_icon(self):
         icon = super().get_icon()
@@ -1102,17 +1102,22 @@ class SVGToPNGMap(models.Model):
     png_image_file = models.ImageField(upload_to='svg-to-png-maps/')
 
     @classmethod
-    def get_png_image(cls, svg_path, fill_color='', stroke_color=''):
+    def get_png_image(cls, svg_path, fill_color=None, stroke_color=None):
         try:
-            cache_key = (svg_path, fill_color, stroke_color);
+            cache_key = (
+                svg_path,
+                cls._db_color(fill_color),
+                cls._db_color(stroke_color)
+            )
             return cache.get('svg_to_png_map')[cache_key].png_image_file
         except (KeyError, TypeError):
             try:
-                return cls.objects.get(
+                tmp = cls.objects.get(
                     svg_path=svg_path,
-                    fill_color=fill_color,
-                    stroke_color=stroke_color
-                ).png_image_file
+                    fill_color=cls._db_color(fill_color),
+                    stroke_color=cls._db_color(stroke_color)
+                )
+                return tmp.png_image_file
             except Exception as e:
                 logger.info(f"PNG not found, file={svg_path}, exception: {e}")
                 try:
@@ -1126,7 +1131,7 @@ class SVGToPNGMap(models.Model):
                     return None
 
     @classmethod
-    def create(cls, svg_path, fill_color='', stroke_color=''):
+    def create(cls, svg_path, fill_color=None, stroke_color=None):
         png_image = convert_svg_to_png_bytes(
             svg_path,
             fill_color=fill_color,
@@ -1135,13 +1140,17 @@ class SVGToPNGMap(models.Model):
         )
         return cls.objects.create(
             svg_path=svg_path,
-            fill_color=fill_color,
-            stroke_color=stroke_color,
+            fill_color=cls._db_color(fill_color),
+            stroke_color=cls._db_color(stroke_color),
             png_image_file=png_image
         )
 
+    @classmethod
+    def _db_color(cls, color):
+        return color if color else ''
+
     def __str__(self):
-        return f'{self.svg_path} (F={self.fill_color}) (S={self.stroke_color}) -> {self.png_image_file}'
+        return f'(svg={self.svg_path}, fill={self.fill_color}, stroke={self.stroke_color}, png={self.png_image_file})'
 
     class Meta:
         unique_together = ('svg_path', 'fill_color', 'stroke_color')
