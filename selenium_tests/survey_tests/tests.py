@@ -62,6 +62,8 @@ class MySeleniumTests(LiveServerTestCase):
         # Image.objects.all().delete()
         # Page.objects.filter(id=2).delete()
 
+        locale = Locale.objects.create(language_code="en")
+
         homepage_content_type, __ = ContentType.objects.get_or_create(
             model='homepage', app_label='home')
 
@@ -74,12 +76,13 @@ class MySeleniumTests(LiveServerTestCase):
             'numchild': 0,
             'url_path': '/home_new/',
             'show_in_menus': True,
+            'locale': locale,
         })
 
         Site.objects.get_or_create(hostname='localhost', defaults={
             'root_page': homepage,
             'is_default_site': True,
-        })
+        })        
 
         # site = Site.objects.get(is_default_site=True)
         # if not site:
