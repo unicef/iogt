@@ -1101,6 +1101,10 @@ class SVGToPNGMap(models.Model):
     stroke_color = models.TextField(null=True)
     png_image_file = models.ImageField(upload_to='svg-to-png-maps/')
 
+    @property
+    def url(self):
+        return self.png_image_file.url
+
     @classmethod
     def get_png_image(cls, svg_path, fill_color=None, stroke_color=None):
         try:

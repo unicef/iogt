@@ -116,7 +116,7 @@ class PageTreeAPIView(APIView):
     def _get_renditions(self, image_id):
         image_urls = []
         for rendition in Rendition.objects.filter(image_id=image_id):
-            image_urls.append(f'{settings.MEDIA_URL}{rendition.file.name}')
+            image_urls.append(rendition.url)
         return image_urls
 
     def _get_banner_image_urls(self, page):
@@ -178,7 +178,7 @@ class PageTreeAPIView(APIView):
                 image_urls += self._get_page_image_urls(page)
 
         for svg_to_png_map in SVGToPNGMap.objects.all():
-            image_urls.append(f'{settings.MEDIA_URL}{svg_to_png_map.png_image_file.name}')
+            image_urls.append(svg_to_png_map.url)
 
         language = translation.get_language()
         jsi18n_urls = [
