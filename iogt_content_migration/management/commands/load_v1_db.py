@@ -5,7 +5,6 @@ import csv
 from bs4 import BeautifulSoup
 from django.conf import settings
 from django.core.files import File
-from django.core.management import call_command
 from django.core.management.base import BaseCommand
 from django.urls import reverse
 from wagtail.core.models import Page, Site, Locale, Collection, PageRevision
@@ -107,7 +106,6 @@ class Command(BaseCommand):
         root = Page.get_first_root_node()
         self.migrate(root)
         self.print_post_migration_report()
-        call_command('create_initial_menu')
 
     def clear(self):
         PageRevision.objects.all().delete()
