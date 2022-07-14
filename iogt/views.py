@@ -122,8 +122,7 @@ class PageTreeAPIView(APIView):
         for page in pages:
             if isinstance(page, (HomePage, Section, Article, OfflineAppPage, Poll, Survey, Quiz)):
                 page_urls.append(page.url)
-                if hasattr(page, 'get_image_urls'):
-                    image_urls += page.get_image_urls
+                image_urls += page.get_image_urls
 
         for svg_to_png_map in SVGToPNGMap.objects.all():
             image_urls.append(svg_to_png_map.url)
