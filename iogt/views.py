@@ -132,6 +132,7 @@ class PageTreeAPIView(APIView):
             f'/{language}/jsi18n/'
         ]
 
+        static_root_path = Path(settings.STATIC_ROOT)
         static_urls = []
         static_dirs = [
             {'name': 'css', 'extensions': ('.css',)},
@@ -140,10 +141,10 @@ class PageTreeAPIView(APIView):
             {'name': 'icons', 'extensions': ('.svg',)},
         ]
         for static_dir in static_dirs:
-            for root, dirs, files in os.walk(Path(settings.STATIC_ROOT) / static_dir['name']):
+            for root, dirs, files in os.walk(static_root_path / static_dir['name']):
                 for file in files:
                     if file.endswith(static_dir['extensions']):
-                        static_urls.append(f'{settings.STATIC_URL}{root.split("/static/")[-1]}/{file}')
+                        static_urls.append(f'{settings.STATIC_URL}{root.split(f"{static_root_path.name}/")[-1]}/{file}')
 
 
         urls = set(flatten(
