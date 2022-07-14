@@ -61,7 +61,7 @@ User = get_user_model()
 logger = logging.getLogger(__name__)
 
 
-class HomePage(Page):
+class HomePage(Page, PageUtilsMixin):
     parent_page_types = ['wagtailcore.page']
     template = 'home/home_page.html'
     show_in_menus_default = True
@@ -93,6 +93,10 @@ class HomePage(Page):
                 banners.append(banner_page.specific)
         context['banners'] = banners
         return context
+
+    @property
+    def get_image_urls(self):
+        return self._get_stream_data_image_urls(self.home_featured_content.stream_data)
 
 
 class FeaturedContent(Orderable):
@@ -262,6 +266,20 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
 
         return Section.objects.exclude(pk__in=all_descendants)
 
+    @property
+    def get_image_urls(self):
+        image_urls = []
+
+        if self.lead_image:
+            image_urls += self._get_renditions(self.lead_image)
+
+        if self.image_icon:
+            image_urls += self._get_renditions(self.image_icon)
+
+        image_urls += self._get_stream_data_image_urls(self.body.stream_data)
+
+        return image_urls
+
     class Meta:
         verbose_name = _("section")
         verbose_name_plural = _("sections")
@@ -376,6 +394,20 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     def top_level_section(self):
         return self.get_ancestors().filter(depth=4).first().specific
 
+    @property
+    def get_image_urls(self):
+        image_urls = []
+
+        if self.lead_image:
+            image_urls += self._get_renditions(self.lead_image)
+
+        if self.image_icon:
+            image_urls += self._get_renditions(self.image_icon)
+
+        image_urls += self._get_stream_data_image_urls(self.body.stream_data)
+
+        return image_urls
+
     class Meta:
         abstract = True
         verbose_name = _("article")
@@ -471,7 +503,7 @@ class BannerIndexPage(Page):
     subpage_types = ['home.BannerPage']
 
 
-class BannerPage(Page):
+class BannerPage(Page, PageUtilsMixin):
     parent_page_types = ['home.BannerIndexPage']
     subpage_types = []
 
@@ -491,6 +523,15 @@ class BannerPage(Page):
         ImageChooserPanel('banner_image'),
         PageChooserPanel('banner_link_page'),
     ]
+
+    @property
+    def get_image_urls(self):
+        image_urls = []
+
+        if self.banner_image:
+            image_urls += self._get_renditions(self.banner_image)
+
+        return image_urls
 
 
 class FooterIndexPage(Page):

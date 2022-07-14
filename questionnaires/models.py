@@ -269,6 +269,18 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
         ]
         return data_fields
 
+    @property
+    def get_image_urls(self):
+        image_urls = []
+
+        if self.image_icon:
+            image_urls += self._get_renditions(self.image_icon)
+
+        image_urls += self._get_stream_data_image_urls(self.description.stream_data)
+        image_urls += self._get_stream_data_image_urls(self.thank_you_text.stream_data)
+
+        return image_urls
+
     class Meta:
         abstract = True
 
