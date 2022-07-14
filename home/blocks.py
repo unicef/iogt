@@ -209,9 +209,9 @@ class OfflineAppButtonBlock(blocks.StructBlock):
 
 
 class DownloadButtonBlock(blocks.StructBlock):
-    smartphone_text = blocks.CharBlock(
+    available_text = blocks.CharBlock(
         help_text=_('This text appears when it is possible for the user to install the app on their phone.'))
-    feature_phone_text = blocks.CharBlock(
+    unavailable_text = blocks.CharBlock(
         required=False,
         help_text=_(
             'This text appears when the user is using a feature phone and thus cannot install the app '

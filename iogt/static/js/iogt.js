@@ -114,20 +114,10 @@ $(document).ready(() => {
         });
     };
 
-    const isPWA = () => {
-        return ["fullscreen", "standalone", "minimal-ui"].some(
-            displayMode => window.matchMedia(`(display-mode: ${displayMode})`).matches
-        );
-    };
+    $(window).on('offline', () => disableForOfflineAccess());
+    $(window).on('online', () => enableForOnlineAccess());
 
-    if (isPWA()) {
-        $(window).on('offline', () => disableForOfflineAccess());
-        $(window).on('online', () => enableForOnlineAccess());
-
-        window.navigator.onLine ? enableForOnlineAccess() : disableForOfflineAccess();
-    } else {
-        offlineAppBtns.hide();
-    }
+    window.navigator.onLine ? enableForOnlineAccess() : disableForOfflineAccess();
 });
 
 const download = pageId => {
