@@ -13,7 +13,10 @@ class Command(BaseCommand):
         survey_index_page = SurveyIndexPage(title='Surveys')
         quiz_index_page = QuizIndexPage(title='Quizzes')
 
-        homepage.add_child(instance=poll_index_page)
-        homepage.add_child(instance=survey_index_page)
-        homepage.add_child(instance=quiz_index_page)
-        self.stdout.write(self.style.SUCCESS('Index pages added.'))
+        try:
+            homepage.add_child(instance=poll_index_page)
+            homepage.add_child(instance=survey_index_page)
+            homepage.add_child(instance=quiz_index_page)
+            self.stdout.write(self.style.SUCCESS('Index pages added.'))
+        except:
+            pass
