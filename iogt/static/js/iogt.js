@@ -128,8 +128,5 @@ const download = pageId => {
                 .then(cache => {
                     cache.addAll(urls);
                 });
-        })
-        .catch(error => {
-            console.log('Error while fetching page tree.', pageId);
         });
 };
