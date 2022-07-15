@@ -61,7 +61,7 @@ User = get_user_model()
 logger = logging.getLogger(__name__)
 
 
-class HomePage(Page, PageUtilsMixin):
+class HomePage(Page, PageUtilsMixin, TitleIconMixin):
     parent_page_types = ['wagtailcore.page']
     template = 'home/home_page.html'
     show_in_menus_default = True
