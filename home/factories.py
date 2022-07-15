@@ -18,11 +18,13 @@ class ArticleFactory(DjangoModelFactory):
     class Meta:
         model = Article
 
+
 class SurveyFactory(DjangoModelFactory):
     title = factory.Sequence(lambda n: f'survey{n}')
 
     class Meta:
         model = Survey
+
 
 class SiteSettingsFactory(DjangoModelFactory):
     class Meta:
