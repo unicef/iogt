@@ -5,7 +5,6 @@ from django.conf import settings
 from django.contrib.admin.utils import flatten
 from django.shortcuts import get_object_or_404
 from django.templatetags.static import static
-from django.urls import reverse
 from django.utils import translation
 from django.views.generic import TemplateView
 from rest_framework.response import Response
@@ -14,17 +13,8 @@ from wagtail.core.models import Page, Locale
 from wagtail.images.models import Rendition
 from wagtailmedia.models import Media
 
+from home.models import HomePage, Section, Article, OfflineAppPage, SVGToPNGMap, FooterPage
 from questionnaires.models import Poll, Survey, Quiz
-
-
-def check_user_session(request):
-    if request.method == "POST":
-        request.session["first_time_user"] = False
-
-
-def create_final_external_link(next_page):
-    transition_page = reverse("external-link")
-    return f"{transition_page}?next={next_page}"
 
 
 class TransitionPageView(TemplateView):
@@ -54,8 +44,6 @@ class TranslationNotFoundPage(TemplateView):
 
 class SitemapAPIView(APIView):
     def get(self, request):
-        from home.models import HomePage, Section, Article, FooterPage, OfflineAppPage, SVGToPNGMap
-
         home_page_urls = [p.url for p in HomePage.objects.live()],
         section_urls = [p.url for p in Section.objects.live()],
         article_urls = [p.url for p in Article.objects.live()],
@@ -114,8 +102,6 @@ class SitemapAPIView(APIView):
 
 class PageTreeAPIView(APIView):
     def get(self, request, page_id):
-        from home.models import HomePage, Section, Article, OfflineAppPage, SVGToPNGMap
-
         page = get_object_or_404(Page, id=page_id)
         pages = page.get_descendants(inclusive=True).live().specific()
         page_urls = []

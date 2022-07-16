@@ -44,7 +44,6 @@ from wagtailsvg.edit_handlers import SvgChooserPanel
 
 from messaging.blocks import ChatBotButtonBlock
 from comments.models import CommentableMixin, CannedResponse
-from iogt.views import check_user_session
 from questionnaires.models import Survey, Poll, Quiz
 from .blocks import (
     MediaBlock, SocialMediaLinkBlock, SocialMediaShareButtonBlock, EmbeddedPollBlock, EmbeddedSurveyBlock,
@@ -83,7 +82,6 @@ class HomePage(Page, PageUtilsMixin, TitleIconMixin):
     ]
 
     def get_context(self, request):
-        check_user_session(request)
         context = super().get_context(request)
         banners = []
         for home_page_banner in self.home_page_banners.select_related('banner_page', 'banner_page__banner_link_page').all():
@@ -239,7 +237,6 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         return progress_manager.is_section_complete(self)
 
     def get_context(self, request):
-        check_user_session(request)
         context = super().get_context(request)
         featured_content = self.featured_content.all().first()
         context['featured_content'] = featured_content.content.specific if featured_content and featured_content.content.live else None
@@ -368,7 +365,6 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
             show_progress_bar=True).first()
 
     def get_context(self, request):
-        check_user_session(request)
         context = super().get_context(request)
 
         progress_enabled_section = self.get_progress_enabled_section()
