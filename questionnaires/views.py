@@ -1,4 +1,11 @@
+from rest_framework.generics import ListAPIView
 from wagtail.contrib.forms.views import SubmissionsListView, FormPagesListView as WagtailFormPagesListView
+from wagtail.core.models import Page
+
+from questionnaires.filters import QuestionnaireFilter
+from questionnaires.models import QuestionnairePage
+from questionnaires.paginators import IoGTPagination
+from questionnaires.serializers import QuestionnairePageSerializer
 
 
 class FormPagesListView(WagtailFormPagesListView):
@@ -20,3 +27,10 @@ class CustomSubmissionsListView(SubmissionsListView):
 
     def get_queryset(self):
         return super().get_queryset().select_related('page', 'user')
+
+
+class QuestionnairesListAPIView(ListAPIView):
+    queryset = Page.objects.select_related('content_type').type(QuestionnairePage).live().order_by('title')
+    serializer_class = QuestionnairePageSerializer
+    filterset_class = QuestionnaireFilter
+    pagination_class = IoGTPagination

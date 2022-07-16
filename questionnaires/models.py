@@ -35,7 +35,6 @@ from questionnaires.blocks import SkipState, SkipLogicField
 from questionnaires.edit_handlers import FormSubmissionsPanel
 from questionnaires.forms import CustomFormBuilder, SurveyForm, QuizForm
 from questionnaires.utils import SkipLogicPaginator, FormHelper
-from questionnaires.views import CustomSubmissionsListView
 
 
 FORM_FIELD_CHOICES = (
@@ -248,6 +247,8 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
         )
 
     def get_submissions_list_view_class(self):
+        from questionnaires.views import CustomSubmissionsListView
+
         return CustomSubmissionsListView
 
     def get_export_filename(self):
