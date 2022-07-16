@@ -1,11 +1,16 @@
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 from wagtail.contrib.forms.views import SubmissionsListView, FormPagesListView as WagtailFormPagesListView
 from wagtail.core.models import Page
 
 from questionnaires.filters import QuestionnaireFilter
-from questionnaires.models import QuestionnairePage
+from questionnaires.models import QuestionnairePage, Survey, Poll, Quiz
 from questionnaires.paginators import IoGTPagination
-from questionnaires.serializers import QuestionnairePageSerializer
+from questionnaires.serializers import (
+    QuestionnairePageSerializer,
+    SurveyPageDetailSerializer,
+    PollPageDetailSerializer,
+    QuizPageDetailSerializer
+)
 
 
 class FormPagesListView(WagtailFormPagesListView):
@@ -30,7 +35,20 @@ class CustomSubmissionsListView(SubmissionsListView):
 
 
 class QuestionnairesListAPIView(ListAPIView):
-    queryset = Page.objects.select_related('content_type').type(QuestionnairePage).live().order_by('title')
+    queryset = Page.objects.type(QuestionnairePage).live().specific().order_by('title')
     serializer_class = QuestionnairePageSerializer
     filterset_class = QuestionnaireFilter
     pagination_class = IoGTPagination
+
+
+class QuestionnaireDetailAPIView(RetrieveAPIView):
+    queryset = Page.objects.type(QuestionnairePage).live().specific().order_by('title')
+
+    def get_serializer_class(self):
+        page = self.get_object()
+        if isinstance(page, Poll):
+            return PollPageDetailSerializer
+        elif isinstance(page, Survey):
+            return SurveyPageDetailSerializer
+        elif isinstance(page, Quiz):
+            return QuizPageDetailSerializer
