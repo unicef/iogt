@@ -2,14 +2,15 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView
 from wagtail.contrib.forms.views import SubmissionsListView, FormPagesListView as WagtailFormPagesListView
 from wagtail.core.models import Page
 
-from questionnaires.filters import QuestionnaireFilter
-from questionnaires.models import QuestionnairePage, Survey, Poll, Quiz
-from questionnaires.paginators import IoGTPagination
+from questionnaires.filters import QuestionnaireFilter, SubmissionFilter
+from questionnaires.models import QuestionnairePage, Survey, Poll, Quiz, UserSubmission
+from iogt.paginators import IoGTPagination
 from questionnaires.serializers import (
     QuestionnairePageSerializer,
     SurveyPageDetailSerializer,
     PollPageDetailSerializer,
-    QuizPageDetailSerializer
+    QuizPageDetailSerializer,
+    UserSubmissionSerializer
 )
 
 
@@ -35,14 +36,14 @@ class CustomSubmissionsListView(SubmissionsListView):
 
 
 class QuestionnairesListAPIView(ListAPIView):
-    queryset = Page.objects.type(QuestionnairePage).live().specific().order_by('title')
+    queryset = Page.objects.type(QuestionnairePage).specific().order_by('title')
     serializer_class = QuestionnairePageSerializer
     filterset_class = QuestionnaireFilter
     pagination_class = IoGTPagination
 
 
 class QuestionnaireDetailAPIView(RetrieveAPIView):
-    queryset = Page.objects.type(QuestionnairePage).live().specific().order_by('title')
+    queryset = Page.objects.type(QuestionnairePage).specific()
 
     def get_serializer_class(self):
         page = self.get_object()
@@ -52,3 +53,16 @@ class QuestionnaireDetailAPIView(RetrieveAPIView):
             return SurveyPageDetailSerializer
         elif isinstance(page, Quiz):
             return QuizPageDetailSerializer
+
+
+class QuestionnaireSubmissionsAPIView(ListAPIView):
+    serializer_class = UserSubmissionSerializer
+    filterset_class = SubmissionFilter
+    pagination_class = IoGTPagination
+
+    def get_queryset(self):
+        return UserSubmission.objects.filter(
+            page=self.kwargs.get(self.lookup_field)
+        ).select_related(
+            'user', 'page'
+        ).order_by('-submit_time')
