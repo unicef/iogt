@@ -5,7 +5,6 @@ from wagtail.core.models import Site
 from home.factories import SiteSettingsFactory, HomePageFactory
 from iogt_users.factories import UserFactory
 from wagtail_factories import SiteFactory
-
 from questionnaires.factories import SurveyFactory
 
 
