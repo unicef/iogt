@@ -78,6 +78,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'google_analytics',
     'django_filters',
+    'drf_yasg',
 
     'django.contrib.admin',
     'django.contrib.auth',

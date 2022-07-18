@@ -114,6 +114,12 @@ class QuizPageDetailSerializer(serializers.ModelSerializer):
         ]
 
 
+class QuestionnairePageDetailSerializer(serializers.Serializer):
+    poll = PollPageDetailSerializer()
+    survey = SurveyPageDetailSerializer()
+    quiz = QuizPageDetailSerializer()
+
+
 class UserSubmissionSerializer(serializers.ModelSerializer):
     submission = serializers.SerializerMethodField()
     user = serializers.CharField()

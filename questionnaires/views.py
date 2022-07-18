@@ -1,3 +1,7 @@
+from django.utils.decorators import method_decorator
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from wagtail.contrib.forms.views import SubmissionsListView, FormPagesListView as WagtailFormPagesListView
 from wagtail.core.models import Page
@@ -10,7 +14,8 @@ from questionnaires.serializers import (
     SurveyPageDetailSerializer,
     PollPageDetailSerializer,
     QuizPageDetailSerializer,
-    UserSubmissionSerializer
+    UserSubmissionSerializer,
+    QuestionnairePageDetailSerializer,
 )
 
 
@@ -45,6 +50,14 @@ class QuestionnairesListAPIView(ListAPIView):
         return Page.objects.filter(id__in=accessible_page_ids).type(QuestionnairePage).order_by('-last_published_at')
 
 
+@method_decorator(name='get', decorator=swagger_auto_schema(
+    responses={
+        status.HTTP_200_OK: openapi.Response(
+            description="Questionnaire Page Detail Serializer",
+            schema=QuestionnairePageDetailSerializer,
+        )
+    }
+))
 class QuestionnaireDetailAPIView(RetrieveAPIView):
     queryset = Page.objects.type(QuestionnairePage).specific()
 
