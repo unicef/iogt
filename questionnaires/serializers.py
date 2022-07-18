@@ -3,7 +3,15 @@ import json
 from rest_framework import serializers
 from wagtail.core.models import Page
 
-from questionnaires.models import Survey, SurveyFormField, Poll, PollFormField, QuizFormField, Quiz, UserSubmission
+from questionnaires.models import (
+    Survey,
+    SurveyFormField,
+    Poll,
+    PollFormField,
+    QuizFormField,
+    Quiz,
+    UserSubmission,
+)
 
 
 class QuestionnairePageSerializer(serializers.ModelSerializer):

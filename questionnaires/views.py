@@ -2,7 +2,7 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView
 from wagtail.contrib.forms.views import SubmissionsListView, FormPagesListView as WagtailFormPagesListView
 from wagtail.core.models import Page
 
-from questionnaires.filters import QuestionnaireFilter, SubmissionFilter
+from questionnaires.filters import QuestionnaireFilter, UserSubmissionFilter
 from questionnaires.models import QuestionnairePage, Survey, Poll, Quiz, UserSubmission
 from iogt.paginators import IoGTPagination
 from questionnaires.serializers import (
@@ -36,7 +36,7 @@ class CustomSubmissionsListView(SubmissionsListView):
 
 
 class QuestionnairesListAPIView(ListAPIView):
-    queryset = Page.objects.type(QuestionnairePage).specific().order_by('title')
+    queryset = Page.objects.type(QuestionnairePage).order_by('-last_published_at')
     serializer_class = QuestionnairePageSerializer
     filterset_class = QuestionnaireFilter
     pagination_class = IoGTPagination
@@ -57,7 +57,7 @@ class QuestionnaireDetailAPIView(RetrieveAPIView):
 
 class QuestionnaireSubmissionsAPIView(ListAPIView):
     serializer_class = UserSubmissionSerializer
-    filterset_class = SubmissionFilter
+    filterset_class = UserSubmissionFilter
     pagination_class = IoGTPagination
 
     def get_queryset(self):

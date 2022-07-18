@@ -1,6 +1,11 @@
 from django.urls import path
 
-from questionnaires.views import QuestionnairesListAPIView, QuestionnaireDetailAPIView, QuestionnaireSubmissionsAPIView
+from questionnaires.views import (
+    QuestionnairesListAPIView,
+    QuestionnaireDetailAPIView,
+    QuestionnaireSubmissionsAPIView,
+)
+
 
 urlpatterns = [
     path('list/', QuestionnairesListAPIView.as_view(), name='questionnaires_list'),
