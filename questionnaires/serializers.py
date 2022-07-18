@@ -24,7 +24,7 @@ class PollFormFieldSerializer(serializers.ModelSerializer):
     choices = serializers.SerializerMethodField()
 
     def get_choices(self, instance):
-        return instance.choices.split('|')
+        return instance.choices and instance.choices.split('|')
 
     class Meta:
         model = PollFormField
@@ -35,6 +35,9 @@ class PollFormFieldSerializer(serializers.ModelSerializer):
 
 
 class PollPageDetailSerializer(serializers.ModelSerializer):
+    description = serializers.JSONField(source='description.stream_data')
+    thank_you_text = serializers.JSONField(source='thank_you_text.stream_data')
+    terms_and_conditions = serializers.JSONField(source='terms_and_conditions.stream_data')
     url = serializers.CharField(source='full_url')
     published_at = serializers.DateTimeField(source='last_published_at')
     questions = PollFormFieldSerializer(source='poll_form_fields', many=True)
