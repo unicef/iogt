@@ -1,0 +1,14 @@
+{% extends "wagtailadmin/base.html" %}
+{% block titletag %}calendar{% endblock %}
+
+{% block extra_css %}
+    {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    {% include "wagtailadmin/shared/header.html" with title="Calendar" icon="date" %}
+
+    <div class="nice-padding">
+        ABC
+    </div>
+{% endblock %}

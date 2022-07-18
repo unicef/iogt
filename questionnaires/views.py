@@ -1,3 +1,4 @@
+from django.views.generic import TemplateView
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from wagtail.contrib.forms.views import SubmissionsListView, FormPagesListView as WagtailFormPagesListView
 from wagtail.core.models import Page
@@ -33,6 +34,10 @@ class CustomSubmissionsListView(SubmissionsListView):
 
     def get_queryset(self):
         return super().get_queryset().select_related('page', 'user')
+
+
+class UserSubmissionView(TemplateView):
+    template_name = "questionnaires/user_submissions.html"
 
 
 class QuestionnairesListAPIView(ListAPIView):
