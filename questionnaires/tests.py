@@ -5,11 +5,16 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
+from rest_framework.test import APIClient
 from wagtail.core.models import Site
 from wagtail_factories import SiteFactory
 
 from home.factories import HomePageFactory
-from iogt_users.factories import UserFactory
+from iogt_users.factories import (
+    UserFactory,
+    GroupFactory,
+    GroupPagePermissionFactory,
+)
 from questionnaires.factories import (
     PollFactory,
     SurveyFactory,
@@ -23,8 +28,12 @@ from questionnaires.factories import (
 
 class QuestionnairesListAPIViewTests(TestCase):
     def setUp(self):
-        self.url = reverse('questionnaires_list')
         self.user = UserFactory()
+        self.group = GroupFactory(name='questionnaires')
+        self.user.groups.add(self.group)
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+        self.url = reverse('questionnaires_list')
 
         Site.objects.all().delete()
         self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
@@ -49,6 +58,15 @@ class QuestionnairesListAPIViewTests(TestCase):
             parent=self.home_page, title='Quiz 02', last_published_at=current_datetime - timedelta(days=7))
         quiz_03 = QuizFactory(
             parent=self.home_page, title='Quiz 03', last_published_at=current_datetime - timedelta(days=8))
+        GroupPagePermissionFactory(group=self.group, page=poll_01)
+        GroupPagePermissionFactory(group=self.group, page=poll_02)
+        GroupPagePermissionFactory(group=self.group, page=poll_03)
+        GroupPagePermissionFactory(group=self.group, page=survey_01)
+        GroupPagePermissionFactory(group=self.group, page=survey_02)
+        GroupPagePermissionFactory(group=self.group, page=survey_03)
+        GroupPagePermissionFactory(group=self.group, page=quiz_01)
+        GroupPagePermissionFactory(group=self.group, page=quiz_02)
+        GroupPagePermissionFactory(group=self.group, page=quiz_03)
 
         response = self.client.get(self.url)
 
@@ -76,6 +94,15 @@ class QuestionnairesListAPIViewTests(TestCase):
         quiz_01 = QuizFactory(parent=self.home_page, title='Quiz 01')
         quiz_02 = QuizFactory(parent=self.home_page, title='Quiz 02')
         quiz_03 = QuizFactory(parent=self.home_page, title='Quiz 03')
+        GroupPagePermissionFactory(group=self.group, page=poll_01)
+        GroupPagePermissionFactory(group=self.group, page=poll_02)
+        GroupPagePermissionFactory(group=self.group, page=poll_03)
+        GroupPagePermissionFactory(group=self.group, page=survey_01)
+        GroupPagePermissionFactory(group=self.group, page=survey_02)
+        GroupPagePermissionFactory(group=self.group, page=survey_03)
+        GroupPagePermissionFactory(group=self.group, page=quiz_01)
+        GroupPagePermissionFactory(group=self.group, page=quiz_02)
+        GroupPagePermissionFactory(group=self.group, page=quiz_03)
 
         response = self.client.get(f'{self.url}?type=poll')
 
@@ -112,6 +139,9 @@ class QuestionnairesListAPIViewTests(TestCase):
         poll_01 = PollFactory(parent=self.home_page, title='Poll 01', last_published_at=current_datetime)
         poll_02 = PollFactory(parent=self.home_page, title='Poll 02', last_published_at=current_datetime - timedelta(days=1))
         poll_03 = PollFactory(parent=self.home_page, title='Poll 03', last_published_at=current_datetime - timedelta(days=2))
+        GroupPagePermissionFactory(group=self.group, page=poll_01)
+        GroupPagePermissionFactory(group=self.group, page=poll_02)
+        GroupPagePermissionFactory(group=self.group, page=poll_03)
 
         response = self.client.get(f'{self.url}?published_at_start={(current_datetime - timedelta(days=1)).date()}')
 
@@ -150,6 +180,15 @@ class QuestionnairesListAPIViewTests(TestCase):
             parent=self.home_page, title='Quiz 02', last_published_at=current_datetime - timedelta(days=7))
         quiz_03 = QuizFactory(
             parent=self.home_page, title='Quiz 03', last_published_at=current_datetime - timedelta(days=8))
+        GroupPagePermissionFactory(group=self.group, page=poll_01)
+        GroupPagePermissionFactory(group=self.group, page=poll_02)
+        GroupPagePermissionFactory(group=self.group, page=poll_03)
+        GroupPagePermissionFactory(group=self.group, page=survey_01)
+        GroupPagePermissionFactory(group=self.group, page=survey_02)
+        GroupPagePermissionFactory(group=self.group, page=survey_03)
+        GroupPagePermissionFactory(group=self.group, page=quiz_01)
+        GroupPagePermissionFactory(group=self.group, page=quiz_02)
+        GroupPagePermissionFactory(group=self.group, page=quiz_03)
 
         response = self.client.get(f'{self.url}?page_size=3')
 
@@ -181,11 +220,34 @@ class QuestionnairesListAPIViewTests(TestCase):
         self.assertEqual(response.data['results'][1]['title'], quiz_02.title)
         self.assertEqual(response.data['results'][2]['title'], quiz_03.title)
 
+    def test_questionnaires_list_page_permission(self):
+        current_datetime = timezone.now()
+        poll_01 = PollFactory(parent=self.home_page, title='Poll 01', last_published_at=current_datetime)
+        poll_02 = PollFactory(
+            parent=self.home_page, title='Poll 02', last_published_at=current_datetime - timedelta(days=1))
+        poll_03 = PollFactory(
+            parent=self.home_page, title='Poll 03', last_published_at=current_datetime - timedelta(days=2))
+        GroupPagePermissionFactory(group=self.group, page=poll_01)
+        GroupPagePermissionFactory(group=self.group, page=poll_02)
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 2)
+        self.assertIsNone(response.data['next'])
+        self.assertIsNone(response.data['previous'])
+        self.assertEqual(response.data['results'][0]['title'], poll_01.title)
+        self.assertEqual(response.data['results'][1]['title'], poll_02.title)
+
 
 class QuestionnaireDetailAPIViewTests(TestCase):
     def setUp(self):
-        self.url = 'questionnaire_detail'
         self.user = UserFactory()
+        self.group = GroupFactory(name='questionnaires')
+        self.user.groups.add(self.group)
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+        self.url = 'questionnaire_detail'
 
         Site.objects.all().delete()
         self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
@@ -193,6 +255,7 @@ class QuestionnaireDetailAPIViewTests(TestCase):
 
     def test_poll_detail(self):
         poll = PollFactory(parent=self.home_page)
+        GroupPagePermissionFactory(group=self.group, page=poll)
         poll_question = PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3', default_value='c2')
 
         response = self.client.get(reverse(self.url, kwargs={'pk': poll.id}))
@@ -227,6 +290,7 @@ class QuestionnaireDetailAPIViewTests(TestCase):
 
     def test_survey_detail(self):
         survey = SurveyFactory(parent=self.home_page)
+        GroupPagePermissionFactory(group=self.group, page=survey)
         skip_logic = json.dumps(
             [
                 {
@@ -296,6 +360,7 @@ class QuestionnaireDetailAPIViewTests(TestCase):
 
     def test_quiz_detail(self):
         quiz = QuizFactory(parent=self.home_page)
+        GroupPagePermissionFactory(group=self.group, page=quiz)
         quiz_question = QuizFormFieldFactory(
             page=quiz, field_type='checkboxes', choices='c1|c2|c3', default_value='c2', correct_answer='c3')
 
@@ -328,11 +393,22 @@ class QuestionnaireDetailAPIViewTests(TestCase):
         self.assertEqual(response.data['questions'][0]['feedback'], quiz_question.feedback)
         self.assertEqual(response.data['questions'][0]['admin_label'], quiz_question.admin_label)
 
+    def test_questionnaires_detail_page_permission(self):
+        poll = PollFactory(parent=self.home_page)
+        poll_question = PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3', default_value='c2')
+
+        response = self.client.get(reverse(self.url, kwargs={'pk': poll.id}))
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
+
 
 class QuestionnaireSubmissionsAPIViewTests(TestCase):
     def setUp(self):
-        self.url = 'questionnaire_submissions'
         self.user = UserFactory()
+        self.group = GroupFactory(name='questionnaires')
+        self.user.groups.add(self.group)
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+        self.url = 'questionnaire_submissions'
 
         Site.objects.all().delete()
         self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
@@ -341,6 +417,7 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
     def test_questionnaire_submission_list(self):
         current_datetime = timezone.now()
         poll = PollFactory(parent=self.home_page, last_published_at=current_datetime - timedelta(days=3))
+        GroupPagePermissionFactory(group=self.group, page=poll)
         poll_question = PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3', default_value='c2')
 
         user_01 = UserFactory()
@@ -400,6 +477,7 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
     def test_questionnaire_submission_list_submit_at_filter(self):
         current_datetime = timezone.now()
         poll = PollFactory(parent=self.home_page, last_published_at=current_datetime - timedelta(days=3))
+        GroupPagePermissionFactory(group=self.group, page=poll)
         poll_question = PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3', default_value='c2')
 
         user_01 = UserFactory()
@@ -472,6 +550,7 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
     def test_questionnaire_submission_list_user_ids_filter(self):
         current_datetime = timezone.now()
         poll = PollFactory(parent=self.home_page, last_published_at=current_datetime - timedelta(days=3))
+        GroupPagePermissionFactory(group=self.group, page=poll)
         poll_question = PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3', default_value='c2')
 
         user_01 = UserFactory()
@@ -537,6 +616,7 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
     def test_questionnaire_submission_list_page_size(self):
         current_datetime = timezone.now()
         poll = PollFactory(parent=self.home_page, last_published_at=current_datetime - timedelta(days=3))
+        GroupPagePermissionFactory(group=self.group, page=poll)
         poll_question = PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3', default_value='c2')
 
         user_01 = UserFactory()
@@ -609,3 +689,23 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         self.assertIsNotNone(response.data['results'][0]['submit_time'])
         self.assertEqual(response.data['results'][0]['page_url'], poll.full_url)
         self.assertEqual(response.data['results'][0]['submission'][poll_question.clean_name], ['c3'])
+
+    def test_questionnaires_detail_page_permission(self):
+        current_datetime = timezone.now()
+        poll = PollFactory(parent=self.home_page, last_published_at=current_datetime - timedelta(days=3))
+        poll_question = PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3', default_value='c2')
+
+        user_01 = UserFactory()
+        form_data_01 = json.dumps({
+            poll_question.clean_name: [
+                'c1',
+            ],
+        })
+        user_submission_01 = UserSubmissionFactory(page=poll, user=user_01, form_data=form_data_01)
+        user_submission_01.submit_time = current_datetime
+        user_submission_01.save()
+
+        response = self.client.get(reverse(self.url, kwargs={'pk': poll.id}))
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, [])
