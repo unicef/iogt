@@ -1,0 +1,10 @@
+{% load wagtailcore_tags %}
+{% load i18n %}
+
+{% include_block value.description %}
+<button class='article__content__link-btn download-app-btn' onclick="download({{ value.page.id }})">
+    {{ value.available_text }}
+</button>
+<button class='article__content__link-btn offline-app-btn'>
+    {{ value.offline_text }}
+</button>

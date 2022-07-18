@@ -2385,7 +2385,7 @@ input[type=checkbox], input[type=radio] {
   border-radius: 8px;
 }
 
-.block-offline_app_button .offline-app-btn {
+.offline-app-btn {
   background-color: #808080;
   pointer-events: none;
 }

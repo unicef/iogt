@@ -40,8 +40,8 @@ $(document).ready(() => {
     const commentLikeHolders = $('.like-holder');
     const reportComment = $('.report-comment');
     const commentReplyLinks = $('.reply-link');
-    const downloadAppBtns = $('.block-offline_app_button .download-app-btn');
-    const offlineAppBtns = $('.block-offline_app_button .offline-app-btn');
+    const downloadAppBtns = $('.download-app-btn');
+    const offlineAppBtns = $('.offline-app-btn');
     const chatbotBtns = $('.chatbot-btn');
     const questionnaireSubmitBtns = $('.questionnaire-submit-btn');
     const progressHolder = $('.progress-holder');
@@ -114,18 +114,19 @@ $(document).ready(() => {
         });
     };
 
-    const isPWA = () => {
-        return ["fullscreen", "standalone", "minimal-ui"].some(
-            displayMode => window.matchMedia(`(display-mode: ${displayMode})`).matches
-        );
-    };
+    $(window).on('offline', () => disableForOfflineAccess());
+    $(window).on('online', () => enableForOnlineAccess());
 
-    if (isPWA()) {
-        $(window).on('offline', () => disableForOfflineAccess());
-        $(window).on('online', () => enableForOnlineAccess());
-
-        window.navigator.onLine ? enableForOnlineAccess() : disableForOfflineAccess();
-    } else {
-        offlineAppBtns.hide();
-    }
+    window.navigator.onLine ? enableForOnlineAccess() : disableForOfflineAccess();
 });
+
+const download = pageId => {
+    fetch(`/page-tree/${pageId}/`)
+        .then(resp => resp.json())
+        .then(urls => {
+            caches.open('iogt')
+                .then(cache => {
+                    cache.addAll(urls);
+                });
+        });
+};

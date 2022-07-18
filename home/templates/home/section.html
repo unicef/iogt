@@ -14,6 +14,7 @@
     {% if user_progress %}
         {% render_user_progress user_progress %}
     {% endif %}
+    {% include_block page.body %}
     {% if featured_content %}
         {% include 'home/tags/section_featured_content_card.html' with featured_content=featured_content font_color=page.font_color background_color=page.background_color %}
     {% endif %}

@@ -1,28 +1,22 @@
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.http import HttpRequest
-from django.urls import reverse
-from rest_framework import status
-from wagtail.core.models import PageViewRestriction
+from wagtail.core.models import Site
 
-from comments.models import CommentStatus
-from home.factories import ArticleFactory, SectionFactory
-from home.models import HomePage
-from iogt_users.factories import UserFactory
 from home.wagtail_hooks import limit_page_chooser
+from home.factories import SectionFactory, ArticleFactory, HomePageFactory
+from wagtail_factories import SiteFactory
 
 
 class LimitPageChooserHookTests(TestCase):
     def setUp(self):
-        self.user = UserFactory()
-        self.home_page = HomePage.objects.first()
-        self.article01 = ArticleFactory.build(owner=self.user, commenting_status=CommentStatus.OPEN)
-        self.section01 = SectionFactory.build(owner=self.user)
-        self.home_page.add_child(instance=self.article01)
-        self.home_page.add_child(instance=self.section01)
-        self.section02 = SectionFactory.build(owner=self.user)
-        self.article02 = ArticleFactory.build(owner=self.user, commenting_status=CommentStatus.OPEN)
-        self.section01.add_child(instance=self.section02)
-        self.section01.add_child(instance=self.article02)
+        Site.objects.all().delete()
+        self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
+        self.home_page = HomePageFactory(parent=self.site.root_page)
+
+        self.article01 = ArticleFactory(parent=self.home_page)
+        self.section01 = SectionFactory(parent=self.home_page)
+        self.section02 = SectionFactory(parent=self.section01)
+        self.article02 = ArticleFactory(parent=self.section01)
 
     def test_start_from_section_when_current_page_is_section(self):
         request = HttpRequest()

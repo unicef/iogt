@@ -8,31 +8,37 @@ workbox.googleAnalytics.initialize({
     },
 });
 
-const precacheController = new workbox.precaching.PrecacheController();
-
-self.addEventListener('install', (event) => {
-    const resp = fetch('/sitemap/')
-        .then(response => response.json())
-        .then(urls => {
-            precacheController.addToCacheList(urls.map(url => ({
-                url,
-                revision: null,
-            })));
-        }).then(() => {
-            // Passing in event is required in Workbox v6+
-            event.waitUntil(precacheController.install(event));
-        })
-    event.waitUntil(resp);
+self.addEventListener('install', event => {
+    event.waitUntil(self.skipWaiting());
 });
 
-self.addEventListener('activate', (event) => {
-    // Passing in event is required in Workbox v6+
-    event.waitUntil(precacheController.activate(event));
+self.addEventListener('activate', event => {
+    event.waitUntil(self.clients.claim());
 });
 
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
+    if (event.request.method !== 'GET')
+        return;
+
     event.respondWith(
         fetch(event.request)
-            .catch(() => caches.match(event.request))
+            .then(resp => {
+                return caches.open('iogt')
+                    .then(cache => {
+                        return cache.match(event.request).then(match => {
+                            if (match) {
+                                cache.delete(event.request);
+                                cache.put(event.request, resp.clone());
+                            }
+                            return resp;
+                        })
+                    });
+            })
+            .catch(error => {
+                return caches.open('iogt')
+                    .then(cache => {
+                        return cache.match(event.request.url)
+                    });
+            })
     );
 });

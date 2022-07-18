@@ -1,10 +1,11 @@
 import os
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 from django.conf import settings
 from django.contrib.admin.utils import flatten
 from django.shortcuts import get_object_or_404
-from django.urls import reverse
+from django.templatetags.static import static
+from django.utils import translation
 from django.views.generic import TemplateView
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -12,17 +13,8 @@ from wagtail.core.models import Page, Locale
 from wagtail.images.models import Rendition
 from wagtailmedia.models import Media
 
+from home.models import HomePage, Section, Article, OfflineAppPage, SVGToPNGMap, FooterPage
 from questionnaires.models import Poll, Survey, Quiz
-
-
-def check_user_session(request):
-    if request.method == "POST":
-        request.session["first_time_user"] = False
-
-
-def create_final_external_link(next_page):
-    transition_page = reverse("external-link")
-    return f"{transition_page}?next={next_page}"
 
 
 class TransitionPageView(TemplateView):
@@ -52,8 +44,6 @@ class TranslationNotFoundPage(TemplateView):
 
 class SitemapAPIView(APIView):
     def get(self, request):
-        from home.models import HomePage, Section, Article, FooterPage, OfflineAppPage, SVGToPNGMap
-
         home_page_urls = [p.url for p in HomePage.objects.live()],
         section_urls = [p.url for p in Section.objects.live()],
         article_urls = [p.url for p in Article.objects.live()],
@@ -108,3 +98,46 @@ class SitemapAPIView(APIView):
             tuple(jsi18n_urls)
         )
         return Response(sitemap)
+
+
+class PageTreeAPIView(APIView):
+    def get(self, request, page_id):
+        page = get_object_or_404(Page, id=page_id)
+        pages = page.get_descendants(inclusive=True).live().specific()
+        page_urls = []
+        image_urls = []
+        for page in pages:
+            if isinstance(page, (HomePage, Section, Article, OfflineAppPage, Poll, Survey, Quiz)):
+                page_urls.append(page.url)
+                image_urls += page.get_image_urls
+
+        for svg_to_png_map in SVGToPNGMap.objects.all():
+            image_urls.append(svg_to_png_map.url)
+
+        language = translation.get_language()
+        jsi18n_urls = [
+            f'/{language}/jsi18n/'
+        ]
+
+        static_urls = []
+        static_dirs = [
+            {'name': 'css', 'extensions': ('.css',)},
+            {'name': 'js', 'extensions': ('.js',)},
+            {'name': 'fonts', 'extensions': ('.woff', '.woff2',)},
+            {'name': 'icons', 'extensions': ('.svg',)},
+        ]
+        for static_dir in static_dirs:
+            for root, dirs, files in os.walk(Path(settings.STATIC_ROOT).joinpath(static_dir['name'])):
+                for file in files:
+                    if file.endswith(static_dir['extensions']):
+                        static_urls.append(
+                            static(f'{PurePosixPath(root).relative_to(settings.STATIC_ROOT).joinpath(file)}'))
+
+
+        urls = set(flatten(
+            page_urls +
+            image_urls +
+            jsi18n_urls +
+            static_urls
+        ))
+        return Response(urls)

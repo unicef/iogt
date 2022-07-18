@@ -44,11 +44,11 @@ from wagtailsvg.edit_handlers import SvgChooserPanel
 
 from messaging.blocks import ChatBotButtonBlock
 from comments.models import CommentableMixin, CannedResponse
-from iogt.views import check_user_session
 from questionnaires.models import Survey, Poll, Quiz
 from .blocks import (
     MediaBlock, SocialMediaLinkBlock, SocialMediaShareButtonBlock, EmbeddedPollBlock, EmbeddedSurveyBlock,
     EmbeddedQuizBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock, ArticleBlock, OfflineAppButtonBlock,
+    DownloadButtonBlock,
 )
 from .forms import SectionPageForm
 from .mixins import PageUtilsMixin, TitleIconMixin
@@ -60,7 +60,7 @@ User = get_user_model()
 logger = logging.getLogger(__name__)
 
 
-class HomePage(Page):
+class HomePage(Page, PageUtilsMixin, TitleIconMixin):
     parent_page_types = ['wagtailcore.page']
     template = 'home/home_page.html'
     show_in_menus_default = True
@@ -71,6 +71,7 @@ class HomePage(Page):
         ('embedded_survey', EmbeddedSurveyBlock()),
         ('embedded_quiz', EmbeddedQuizBlock()),
         ('article', ArticleBlock()),
+        ('download', DownloadButtonBlock()),
     ], null=True, blank=True)
 
     content_panels = Page.content_panels + [
@@ -81,7 +82,6 @@ class HomePage(Page):
     ]
 
     def get_context(self, request):
-        check_user_session(request)
         context = super().get_context(request)
         banners = []
         for home_page_banner in self.home_page_banners.select_related('banner_page', 'banner_page__banner_link_page').all():
@@ -91,6 +91,10 @@ class HomePage(Page):
                 banners.append(banner_page.specific)
         context['banners'] = banners
         return context
+
+    @property
+    def get_image_urls(self):
+        return self._get_stream_data_image_urls(self.home_featured_content.stream_data)
 
 
 class FeaturedContent(Orderable):
@@ -169,6 +173,9 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         blank=True,
         null=True,
     )
+    body = StreamField([
+        ('download', DownloadButtonBlock()),
+    ], null=True, blank=True)
 
     tags = ClusterTaggableManager(through='SectionTaggedItem', blank=True)
     show_progress_bar = models.BooleanField(default=False)
@@ -191,6 +198,7 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
             InlinePanel('featured_content', max_num=1,
                         label=_("Featured Content")),
         ], heading=_('Featured Content')),
+        StreamFieldPanel('body'),
     ]
 
     settings_panels = Page.settings_panels + [
@@ -229,7 +237,6 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         return progress_manager.is_section_complete(self)
 
     def get_context(self, request):
-        check_user_session(request)
         context = super().get_context(request)
         featured_content = self.featured_content.all().first()
         context['featured_content'] = featured_content.content.specific if featured_content and featured_content.content.live else None
@@ -255,6 +262,20 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         all_descendants = set(flatten(all_descendants))
 
         return Section.objects.exclude(pk__in=all_descendants)
+
+    @property
+    def get_image_urls(self):
+        image_urls = []
+
+        if self.lead_image:
+            image_urls += self._get_renditions(self.lead_image)
+
+        if self.image_icon:
+            image_urls += self._get_renditions(self.image_icon)
+
+        image_urls += self._get_stream_data_image_urls(self.body.stream_data)
+
+        return image_urls
 
     class Meta:
         verbose_name = _("section")
@@ -309,6 +330,7 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         ('embedded_quiz', EmbeddedQuizBlock()),
         ('media', MediaBlock(icon='media')),
         ('chat_bot', ChatBotButtonBlock()),
+        ('download', DownloadButtonBlock()),
     ])
     show_in_menus_default = True
 
@@ -343,7 +365,6 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
             show_progress_bar=True).first()
 
     def get_context(self, request):
-        check_user_session(request)
         context = super().get_context(request)
 
         progress_enabled_section = self.get_progress_enabled_section()
@@ -368,6 +389,20 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     @property
     def top_level_section(self):
         return self.get_ancestors().filter(depth=4).first().specific
+
+    @property
+    def get_image_urls(self):
+        image_urls = []
+
+        if self.lead_image:
+            image_urls += self._get_renditions(self.lead_image)
+
+        if self.image_icon:
+            image_urls += self._get_renditions(self.image_icon)
+
+        image_urls += self._get_stream_data_image_urls(self.body.stream_data)
+
+        return image_urls
 
     class Meta:
         abstract = True
@@ -464,7 +499,7 @@ class BannerIndexPage(Page):
     subpage_types = ['home.BannerPage']
 
 
-class BannerPage(Page):
+class BannerPage(Page, PageUtilsMixin):
     parent_page_types = ['home.BannerIndexPage']
     subpage_types = []
 
@@ -484,6 +519,15 @@ class BannerPage(Page):
         ImageChooserPanel('banner_image'),
         PageChooserPanel('banner_link_page'),
     ]
+
+    @property
+    def get_image_urls(self):
+        image_urls = []
+
+        if self.banner_image:
+            image_urls += self._get_renditions(self.banner_image)
+
+        return image_urls
 
 
 class FooterIndexPage(Page):
@@ -1093,6 +1137,10 @@ class SVGToPNGMap(models.Model):
     fill_color = models.TextField(null=True)
     stroke_color = models.TextField(null=True)
     png_image_file = models.ImageField(upload_to='svg-to-png-maps/')
+
+    @property
+    def url(self):
+        return self.png_image_file.url
 
     @classmethod
     def get_png_image(cls, svg_path, fill_color=None, stroke_color=None):
