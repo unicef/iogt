@@ -1,6 +1,5 @@
 import logging
 import os
-import re
 from pathlib import Path, PurePosixPath
 
 from django.conf import settings
@@ -16,6 +15,7 @@ from wagtail.images.models import Rendition
 from wagtailmedia.models import Media
 
 from home.models import HomePage, Section, Article, OfflineAppPage, SVGToPNGMap, FooterPage
+from iogt.utils import has_md5_hash
 from questionnaires.models import Poll, Survey, Quiz
 
 logger = logging.getLogger(__name__)
@@ -135,7 +135,7 @@ class PageTreeAPIView(APIView):
                 for file in files:
                     if file.endswith(static_dir['extensions']):
                         try:
-                            if not re.search('\.[a-f0-9]{12}\..*$', file):
+                            if not has_md5_hash(file):
                                 static_urls.append(
                                     static(f'{PurePosixPath(root).relative_to(settings.STATIC_ROOT).joinpath(file)}'))
                         except Exception as e:
