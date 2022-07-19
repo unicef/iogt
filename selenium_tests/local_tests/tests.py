@@ -1,6 +1,7 @@
 from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 from iogt_users.factories import AdminUserFactory
 from home.factories import ArticleFactory, HomePageFactory
@@ -19,9 +20,13 @@ class MySeleniumTests(LiveServerTestCase):
         options.add_argument('--ignore-certificate-errors')
         options.add_argument("--window-size=1920,1080")
         options.add_argument("--start-maximized")
-        options.add_argument("--headless")
+        #options.add_argument("--headless")
         #use webdriver
-        cls.selenium = webdriver.Chrome()
+        cls.selenium = webdriver.Remote(
+            command_executor='http://selenium-hub:4444/wd/hub',
+            desired_capabilities=DesiredCapabilities.CHROME,
+            options=options
+        )
         cls.selenium.implicitly_wait(5)
         super(MySeleniumTests, cls).setUpClass()
 
