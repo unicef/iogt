@@ -11,6 +11,8 @@ from wagtail_factories import SiteFactory
 
 class MySeleniumTests(LiveServerTestCase):
 
+    #check
+
     host = 'django'
     port = 9000
 
