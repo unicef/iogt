@@ -1,4 +1,5 @@
 import os
+import re
 from pathlib import Path, PurePosixPath
 
 from django.conf import settings
@@ -130,8 +131,9 @@ class PageTreeAPIView(APIView):
             for root, dirs, files in os.walk(Path(settings.STATIC_ROOT).joinpath(static_dir['name'])):
                 for file in files:
                     if file.endswith(static_dir['extensions']):
-                        static_urls.append(
-                            static(f'{PurePosixPath(root).relative_to(settings.STATIC_ROOT).joinpath(file)}'))
+                        if not re.search('\.\w.*\.(css|js|svg|woff|woff2)', file):
+                            static_urls.append(
+                                static(f'{PurePosixPath(root).relative_to(settings.STATIC_ROOT).joinpath(file)}'))
 
 
         urls = set(flatten(
