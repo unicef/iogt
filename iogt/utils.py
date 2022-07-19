@@ -1,5 +1,5 @@
-import re
+from django.conf import settings
 
 
 def has_md5_hash(name):
-    return bool(re.search(r"\.[a-f0-9]{12}\..*$", name))
+    return bool(settings.HAS_MD5_HASH_REGEX.search(name))
