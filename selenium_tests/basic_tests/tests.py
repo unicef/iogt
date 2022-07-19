@@ -56,7 +56,7 @@ class MySeleniumTests(LiveServerTestCase):
         body_text = self.selenium.find_element_by_tag_name('body').text
         assert self.user.username in body_text
 
-    def test_article_comment(self):
+    #def test_article_comment(self):
         self.selenium.get('%s%s' % (self.live_server_url, self.article01.url))
         time.sleep(5)
         comment_input = self.selenium.find_element_by_name("comment")
