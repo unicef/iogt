@@ -11,8 +11,7 @@ from wagtail_factories import SiteFactory
 
 
 class MySeleniumTests(LiveServerTestCase):
-
-    #check
+    
 
     host = 'django'
     port = 9000
@@ -47,7 +46,7 @@ class MySeleniumTests(LiveServerTestCase):
 
     def test_login(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
-        time.sleep(5)
+        time.sleep(2)
         username_input = self.selenium.find_element_by_name("login")
         username_input.send_keys(self.user.username)
         password_input = self.selenium.find_element_by_name("password")
@@ -56,9 +55,9 @@ class MySeleniumTests(LiveServerTestCase):
         body_text = self.selenium.find_element_by_tag_name('body').text
         assert self.user.username in body_text
 
-    #def test_article_comment(self):
+    def test_article_comment(self):
         self.selenium.get('%s%s' % (self.live_server_url, self.article01.url))
-        time.sleep(5)
+        time.sleep(2)
         comment_input = self.selenium.find_element_by_name("comment")
         comment_input.send_keys('Test comment')
         self.selenium.find_element_by_xpath('//input[@value="Leave comment"]').send_keys(Keys.RETURN)
