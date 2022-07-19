@@ -1,3 +1,4 @@
+import logging
 import os
 import re
 from pathlib import Path, PurePosixPath
@@ -16,6 +17,8 @@ from wagtailmedia.models import Media
 
 from home.models import HomePage, Section, Article, OfflineAppPage, SVGToPNGMap, FooterPage
 from questionnaires.models import Poll, Survey, Quiz
+
+logger = logging.getLogger(__name__)
 
 
 class TransitionPageView(TemplateView):
@@ -131,10 +134,12 @@ class PageTreeAPIView(APIView):
             for root, dirs, files in os.walk(Path(settings.STATIC_ROOT).joinpath(static_dir['name'])):
                 for file in files:
                     if file.endswith(static_dir['extensions']):
-                        if not re.search('\.\w.*\.(css|js|svg|woff|woff2)', file):
-                            static_urls.append(
-                                static(f'{PurePosixPath(root).relative_to(settings.STATIC_ROOT).joinpath(file)}'))
-
+                        try:
+                            if not re.search('\.[a-f0-9]{12}\..*$', file):
+                                static_urls.append(
+                                    static(f'{PurePosixPath(root).relative_to(settings.STATIC_ROOT).joinpath(file)}'))
+                        except Exception as e:
+                            logger.exception(e)
 
         urls = set(flatten(
             page_urls +
