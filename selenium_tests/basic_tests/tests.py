@@ -72,7 +72,6 @@ class MySeleniumTests(LiveServerTestCase):
 
     def test_login(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
-        time.sleep(2)
         username_input = self.selenium.find_element_by_name("login")
         username_input.send_keys(self.user.username)
         password_input = self.selenium.find_element_by_name("password")
@@ -83,20 +82,15 @@ class MySeleniumTests(LiveServerTestCase):
 
     #def test_article_comment(self):
         self.selenium.get('%s%s' % (self.live_server_url, self.article01.url))
-        time.sleep(2)
         comment_input = self.selenium.find_element_by_name("comment")
         comment_input.send_keys('Test comment')
         self.selenium.find_element_by_xpath('//input[@value="Leave comment"]').send_keys(Keys.RETURN)
 
     #def test_survey_buttons(self):
         self.selenium.get('%s%s' % (self.live_server_url, self.survey01.url))
-        time.sleep(2)
         self.selenium.find_element_by_xpath('//input[@value="A"]').click()
-        time.sleep(2)
         select = Select(self.selenium.find_element_by_name("question_2"))
         select.select_by_visible_text("blah3")
         print(select.first_selected_option)
         assert 'blah3' in select.first_selected_option.text
-        time.sleep(2)
         self.selenium.find_element_by_xpath('//button[@type="submit"]').click()
-        time.sleep(2)
