@@ -3,10 +3,12 @@ from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import Select
 from wagtail.core.models import Site
+from questionnaires.models import SurveyFormField
 
 from iogt_users.factories import AdminUserFactory
-from home.factories import ArticleFactory, HomePageFactory
+from home.factories import ArticleFactory, HomePageFactory, SurveyFactory
 from wagtail_factories import SiteFactory
 
 
@@ -43,6 +45,30 @@ class MySeleniumTests(LiveServerTestCase):
         self.user = AdminUserFactory()
         self.home_page = HomePageFactory(parent=self.site.root_page, owner=self.user)
         self.article01 = ArticleFactory(parent=self.home_page, owner=self.user)
+        self.survey01 = SurveyFactory(parent=self.home_page, owner=self.user)
+
+        SurveyFormField.objects.create(
+            page=self.survey01, 
+            sort_order=0,
+            required = True,
+            choices = "A|B|C", 
+            label='Question 1', 
+            default_value='',  
+            field_type='checkboxes',
+            admin_label='Q1',            
+        )
+
+        SurveyFormField.objects.create(
+            page=self.survey01, 
+            sort_order=1,
+            required = True,
+            choices = "blah1|blah2|blah3", 
+            label='Question 2', 
+            default_value='',  
+            field_type='dropdown',
+            admin_label='Q2',            
+        )
+        
 
     def test_login(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
@@ -55,9 +81,22 @@ class MySeleniumTests(LiveServerTestCase):
         body_text = self.selenium.find_element_by_tag_name('body').text
         assert self.user.username in body_text
 
-    def test_article_comment(self):
+    #def test_article_comment(self):
         self.selenium.get('%s%s' % (self.live_server_url, self.article01.url))
         time.sleep(2)
         comment_input = self.selenium.find_element_by_name("comment")
         comment_input.send_keys('Test comment')
         self.selenium.find_element_by_xpath('//input[@value="Leave comment"]').send_keys(Keys.RETURN)
+
+    #def test_survey_buttons(self):
+        self.selenium.get('%s%s' % (self.live_server_url, self.survey01.url))
+        time.sleep(2)
+        self.selenium.find_element_by_xpath('//input[@value="A"]').click()
+        time.sleep(2)
+        select = Select(self.selenium.find_element_by_name("question_2"))
+        select.select_by_visible_text("blah3")
+        print(select.first_selected_option)
+        assert 'blah3' in select.first_selected_option.text
+        time.sleep(2)
+        self.selenium.find_element_by_xpath('//button[@type="submit"]').click()
+        time.sleep(2)
