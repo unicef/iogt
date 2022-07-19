@@ -8,12 +8,13 @@ from wagtail.core.models import Site
 from questionnaires.models import SurveyFormField
 
 from iogt_users.factories import AdminUserFactory
-from home.factories import ArticleFactory, HomePageFactory, SurveyFactory
+from home.factories import ArticleFactory, HomePageFactory, SurveyFactory, SectionFactory
 from wagtail_factories import SiteFactory
 
 
 class MySeleniumTests(LiveServerTestCase):
-    
+
+    fixtures = ['selenium_tests/locales.json']    
 
     host = 'django'
     port = 9000
@@ -23,9 +24,9 @@ class MySeleniumTests(LiveServerTestCase):
         options = webdriver.ChromeOptions()
         options.add_argument('--ignore-ssl-errors=yes')
         options.add_argument('--ignore-certificate-errors')
-        #options.add_argument("--window-size=1920,1080")
+        options.add_argument("--window-size=1920,1080")
         options.add_argument("--start-maximized")
-        #options.add_argument("--headless")
+        options.add_argument("--headless")
         cls.selenium = webdriver.Remote(
             command_executor='http://selenium-hub:4444/wd/hub',
             desired_capabilities=DesiredCapabilities.CHROME,
@@ -44,8 +45,9 @@ class MySeleniumTests(LiveServerTestCase):
         self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
         self.user = AdminUserFactory()
         self.home_page = HomePageFactory(parent=self.site.root_page, owner=self.user)
-        self.article01 = ArticleFactory(parent=self.home_page, owner=self.user)
-        self.survey01 = SurveyFactory(parent=self.home_page, owner=self.user)
+        self.section01 = SectionFactory(parent=self.home_page, owner=self.user)
+        self.article01 = ArticleFactory(parent=self.section01, owner=self.user)
+        self.survey01 = SurveyFactory(parent=self.section01, owner=self.user)
 
         SurveyFormField.objects.create(
             page=self.survey01, 
@@ -69,8 +71,7 @@ class MySeleniumTests(LiveServerTestCase):
             admin_label='Q2',            
         )
         
-
-    def test_login(self):
+    def test_article_comment(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
         username_input = self.selenium.find_element_by_name("login")
         username_input.send_keys(self.user.username)
@@ -79,14 +80,12 @@ class MySeleniumTests(LiveServerTestCase):
         self.selenium.find_element_by_xpath('//button[@type="submit"]').click()
         body_text = self.selenium.find_element_by_tag_name('body').text
         assert self.user.username in body_text
-
-    #def test_article_comment(self):
         self.selenium.get('%s%s' % (self.live_server_url, self.article01.url))
         comment_input = self.selenium.find_element_by_name("comment")
         comment_input.send_keys('Test comment')
         self.selenium.find_element_by_xpath('//input[@value="Leave comment"]').send_keys(Keys.RETURN)
 
-    #def test_survey_buttons(self):
+    def test_survey_buttons(self):
         self.selenium.get('%s%s' % (self.live_server_url, self.survey01.url))
         self.selenium.find_element_by_xpath('//input[@value="A"]').click()
         select = Select(self.selenium.find_element_by_name("question_2"))
