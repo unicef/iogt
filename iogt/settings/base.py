@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import re
 from datetime import timedelta
 
 import allauth
@@ -127,7 +128,6 @@ TEMPLATES = [
                 "wagtail.contrib.settings.context_processors.settings",
                 'wagtailmenus.context_processors.wagtailmenus',
                 'wagtail.contrib.settings.context_processors.settings',
-                "home.processors.show_welcome_banner",
                 'django.template.context_processors.i18n',
                 'home.processors.commit_hash',
                 'home.processors.show_footers',
@@ -493,6 +493,8 @@ if CACHE_BACKEND:
     }
 
 SITE_VERSION = os.getenv('SITE_VERSION', 'unknown')
+
+HAS_MD5_HASH_REGEX = re.compile(r"\.[a-f0-9]{12}\..*$")
 
 WEBPUSH_SETTINGS = {
     "VAPID_PUBLIC_KEY": "BDbE56S5JCkRrO1TShJOH15lsfPtQuVRlxYuczoYNBf7O-IJjGVmiWNlGU2ojeT6lZr80ralVVoCK19dfkrfaq8",

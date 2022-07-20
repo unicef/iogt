@@ -33,7 +33,7 @@ class MediaBlock(AbstractMediaChooserBlock):
         if value.type == 'video':
             player_code = '''
             <div>
-                <video width="320" height="240" {1} controls>
+                <video preload="none" width="320" height="240" {1} controls>
                     {0}
                     ''' + video_not_supported_text + '''
                 </video>
@@ -43,7 +43,7 @@ class MediaBlock(AbstractMediaChooserBlock):
         else:
             player_code = '''
             <div>
-                <audio controls>
+                <audio preload="none" controls>
                     {0}
                     ''' + audio_not_supported_text + '''
                 </audio>
@@ -209,18 +209,19 @@ class OfflineAppButtonBlock(blocks.StructBlock):
 
 
 class DownloadButtonBlock(blocks.StructBlock):
-    smartphone_text = blocks.CharBlock(
+    available_text = blocks.CharBlock(
         help_text=_('This text appears when it is possible for the user to install the app on their phone.'))
-    feature_phone_text = blocks.CharBlock(
+    unavailable_text = blocks.CharBlock(
         required=False,
         help_text=_(
             'This text appears when the user is using a feature phone and thus cannot install the app '
-            '(the button will be disabled in this case). [Currently not implemented]'))
+            '(the button will be disabled in this case). [Currently not implemented]'),
+        form_classname='red-help-text')
     offline_text = blocks.CharBlock(
         required=False, help_text=_(
             'This text appears when the user is navigating the site via the offline app and '
             'thus it doesn\'t make sense to install the offline app again '
-            '(the button will be disabled in this case). [Currently not implemented]'))
+            '(the button will be disabled in this case).'))
     page = PageChooserBlock(target_model='wagtailcore.Page')
     description = blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)
 

@@ -15,6 +15,7 @@ class UserFactory(DjangoModelFactory):
     class Meta:
         model = get_user_model()
 
+
 class AdminUserFactory(DjangoModelFactory):
     first_name = 'John'
     last_name = 'Doe'

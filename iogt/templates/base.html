@@ -50,6 +50,11 @@
 {% wagtailuserbar %}
 
 <main id="app">
+    <div id="external-link-overlay">
+        <div id="external-link-overlay-text">
+            {% translate "Need internet access to visit external site." %}
+        </div>
+    </div>
     <div id="content-wrap">
         {% include "header.html" %}
         <div class="main-wrapper" style="background: {{ settings.home.ThemeSettings.global_background_color }}">

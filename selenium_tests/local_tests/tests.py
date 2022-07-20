@@ -1,12 +1,11 @@
 from django.test import LiveServerTestCase
 from selenium import webdriver
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from home.factories import ArticleFactory
-from home.models import HomePage
+from selenium.webdriver.common.keys import Keys
+
 from iogt_users.factories import AdminUserFactory
-from comments.models import CommentStatus
-from django.conf import settings
-from home.models import HomePage
+from home.factories import ArticleFactory, HomePageFactory
+from wagtail_factories import SiteFactory
+
 
 class MySeleniumTests(LiveServerTestCase):
 
@@ -32,13 +31,10 @@ class MySeleniumTests(LiveServerTestCase):
         super(MySeleniumTests, cls).tearDownClass()
 
     def setUp(self):
+        self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
         self.user = AdminUserFactory()
-        self.home_page = HomePage.objects.first()
-        self.article01 = ArticleFactory.build(
-            owner=self.user,
-            commenting_status=CommentStatus.OPEN
-        )
-        self.home_page.add_child(instance=self.article01)
+        self.home_page = HomePageFactory(parent=self.site.root_page, owner=self.user)
+        self.article01 = ArticleFactory(parent=self.home_page, owner=self.user)
 
     def test_article_comment(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
@@ -52,4 +48,4 @@ class MySeleniumTests(LiveServerTestCase):
         self.selenium.get('%s%s' % (self.live_server_url, '/article0/'))
         comment_input = self.selenium.find_element_by_name("comment")
         comment_input.send_keys('Test comment')
-        self.selenium.find_element_by_xpath('//input[@value="Leave comment"]').click()
+        self.selenium.find_element_by_xpath('//input[@value="Leave comment"]').send_keys(Keys.RETURN)

@@ -2,27 +2,23 @@ from django.test import TestCase
 from rest_framework import status
 from wagtail.core.models import Site
 
-from comments.models import CommentStatus
-from home.factories import ArticleFactory, SurveyFactory, SiteSettingsFactory
-from home.models import HomePage
+from home.factories import SurveyFactory, SiteSettingsFactory, HomePageFactory
 from iogt_users.factories import UserFactory
+from wagtail_factories import SiteFactory
 
 
 class PostRegistrationRedirectTests(TestCase):
-    def setUp(self) -> None:
+    def setUp(self):
         self.user = UserFactory(has_filled_registration_survey=False)
         self.admin_user = UserFactory()
 
-        self.home_page = HomePage.objects.first()
-        self.public_article = ArticleFactory.build(owner=self.admin_user, commenting_status=CommentStatus.OPEN)
-        self.home_page.add_child(instance=self.public_article)
+        Site.objects.all().delete()
+        self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
+        self.home_page = HomePageFactory(parent=self.site.root_page)
 
-        self.registration_survey = SurveyFactory.build()
-        self.home_page.add_child(instance=self.registration_survey)
-
-        self.site = Site.objects.filter(is_default_site=True).first()
-        self.site_settings = SiteSettingsFactory.create(registration_survey=self.registration_survey,
-                                                        site_id=self.site.id)
+        self.registration_survey = SurveyFactory(parent=self.home_page)
+        self.site_settings = SiteSettingsFactory.create(
+            registration_survey=self.registration_survey, site=self.site)
 
     def test_user_locked_out_without_filling_registration_survey_form(self):
         self.client.force_login(self.user)

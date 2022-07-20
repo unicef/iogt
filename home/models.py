@@ -44,7 +44,6 @@ from wagtailsvg.edit_handlers import SvgChooserPanel
 
 from messaging.blocks import ChatBotButtonBlock
 from comments.models import CommentableMixin, CannedResponse
-from iogt.views import check_user_session
 from questionnaires.models import Survey, Poll, Quiz
 from .blocks import (
     MediaBlock, SocialMediaLinkBlock, SocialMediaShareButtonBlock, EmbeddedPollBlock, EmbeddedSurveyBlock,
@@ -61,7 +60,7 @@ User = get_user_model()
 logger = logging.getLogger(__name__)
 
 
-class HomePage(Page):
+class HomePage(Page, PageUtilsMixin, TitleIconMixin):
     parent_page_types = ['wagtailcore.page']
     template = 'home/home_page.html'
     show_in_menus_default = True
@@ -83,7 +82,6 @@ class HomePage(Page):
     ]
 
     def get_context(self, request):
-        check_user_session(request)
         context = super().get_context(request)
         banners = []
         for home_page_banner in self.home_page_banners.select_related('banner_page', 'banner_page__banner_link_page').all():
@@ -93,6 +91,10 @@ class HomePage(Page):
                 banners.append(banner_page.specific)
         context['banners'] = banners
         return context
+
+    @property
+    def get_image_urls(self):
+        return self._get_stream_data_image_urls(self.home_featured_content.stream_data)
 
 
 class FeaturedContent(Orderable):
@@ -235,7 +237,6 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         return progress_manager.is_section_complete(self)
 
     def get_context(self, request):
-        check_user_session(request)
         context = super().get_context(request)
         featured_content = self.featured_content.all().first()
         context['featured_content'] = featured_content.content.specific if featured_content and featured_content.content.live else None
@@ -261,6 +262,20 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         all_descendants = set(flatten(all_descendants))
 
         return Section.objects.exclude(pk__in=all_descendants)
+
+    @property
+    def get_image_urls(self):
+        image_urls = []
+
+        if self.lead_image:
+            image_urls += self._get_renditions(self.lead_image)
+
+        if self.image_icon:
+            image_urls += self._get_renditions(self.image_icon)
+
+        image_urls += self._get_stream_data_image_urls(self.body.stream_data)
+
+        return image_urls
 
     class Meta:
         verbose_name = _("section")
@@ -350,7 +365,6 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
             show_progress_bar=True).first()
 
     def get_context(self, request):
-        check_user_session(request)
         context = super().get_context(request)
 
         progress_enabled_section = self.get_progress_enabled_section()
@@ -375,6 +389,20 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     @property
     def top_level_section(self):
         return self.get_ancestors().filter(depth=4).first().specific
+
+    @property
+    def get_image_urls(self):
+        image_urls = []
+
+        if self.lead_image:
+            image_urls += self._get_renditions(self.lead_image)
+
+        if self.image_icon:
+            image_urls += self._get_renditions(self.image_icon)
+
+        image_urls += self._get_stream_data_image_urls(self.body.stream_data)
+
+        return image_urls
 
     class Meta:
         abstract = True
@@ -471,7 +499,7 @@ class BannerIndexPage(Page):
     subpage_types = ['home.BannerPage']
 
 
-class BannerPage(Page):
+class BannerPage(Page, PageUtilsMixin):
     parent_page_types = ['home.BannerIndexPage']
     subpage_types = []
 
@@ -491,6 +519,15 @@ class BannerPage(Page):
         ImageChooserPanel('banner_image'),
         PageChooserPanel('banner_link_page'),
     ]
+
+    @property
+    def get_image_urls(self):
+        image_urls = []
+
+        if self.banner_image:
+            image_urls += self._get_renditions(self.banner_image)
+
+        return image_urls
 
 
 class FooterIndexPage(Page):
@@ -552,7 +589,7 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
     ]
 
     def get_page(self):
-        return self.page.specific if self.page and self.page.live else None
+        return self.page.specific if self.page and self.page.live else self
 
     def get_icon(self):
         icon = super().get_icon()
@@ -1101,18 +1138,27 @@ class SVGToPNGMap(models.Model):
     stroke_color = models.TextField(null=True)
     png_image_file = models.ImageField(upload_to='svg-to-png-maps/')
 
+    @property
+    def url(self):
+        return self.png_image_file.url
+
     @classmethod
-    def get_png_image(cls, svg_path, fill_color='', stroke_color=''):
+    def get_png_image(cls, svg_path, fill_color=None, stroke_color=None):
         try:
-            cache_key = (svg_path, fill_color, stroke_color);
+            cache_key = (
+                svg_path,
+                cls._db_color(fill_color),
+                cls._db_color(stroke_color)
+            )
             return cache.get('svg_to_png_map')[cache_key].png_image_file
         except (KeyError, TypeError):
             try:
-                return cls.objects.get(
+                tmp = cls.objects.get(
                     svg_path=svg_path,
-                    fill_color=fill_color,
-                    stroke_color=stroke_color
-                ).png_image_file
+                    fill_color=cls._db_color(fill_color),
+                    stroke_color=cls._db_color(stroke_color)
+                )
+                return tmp.png_image_file
             except Exception as e:
                 logger.info(f"PNG not found, file={svg_path}, exception: {e}")
                 try:
@@ -1126,7 +1172,7 @@ class SVGToPNGMap(models.Model):
                     return None
 
     @classmethod
-    def create(cls, svg_path, fill_color='', stroke_color=''):
+    def create(cls, svg_path, fill_color=None, stroke_color=None):
         png_image = convert_svg_to_png_bytes(
             svg_path,
             fill_color=fill_color,
@@ -1135,13 +1181,17 @@ class SVGToPNGMap(models.Model):
         )
         return cls.objects.create(
             svg_path=svg_path,
-            fill_color=fill_color,
-            stroke_color=stroke_color,
+            fill_color=cls._db_color(fill_color),
+            stroke_color=cls._db_color(stroke_color),
             png_image_file=png_image
         )
 
+    @classmethod
+    def _db_color(cls, color):
+        return color if color else ''
+
     def __str__(self):
-        return f'{self.svg_path} (F={self.fill_color}) (S={self.stroke_color}) -> {self.png_image_file}'
+        return f'(svg={self.svg_path}, fill={self.fill_color}, stroke={self.stroke_color}, png={self.png_image_file})'
 
     class Meta:
         unique_together = ('svg_path', 'fill_color', 'stroke_color')

@@ -61,5 +61,6 @@ translatable_strings = [
     'Date must be in this (YYYY-MM-DD) format',
     'Datetime must be in this YYYY-MM-DDTHH:SS format',
     'Date must be in this (YYYY-MM-DD) format',
-    'Datetime must be in this YYYY-MM-DDTHH:SS format'
+    'Datetime must be in this YYYY-MM-DDTHH:SS format',
+    'Need internet access to visit external site.'
 ]

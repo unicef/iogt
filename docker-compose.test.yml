@@ -16,7 +16,7 @@ services:
       DB_USER: iogt
       DB_SSL_MODE: allow
       DEBUG: enable
-      DJANGO_SETTINGS_MODULE: iogt.settings.production
+      DJANGO_SETTINGS_MODULE: iogt.settings.test
       COMMIT_HASH: asdfghjkl
       SECRET_KEY: secret_key
       WAGTAILTRANSFER_SECRET_KEY: wagtailtransfer-secret-key
