@@ -497,8 +497,8 @@ SITE_VERSION = os.getenv('SITE_VERSION', 'unknown')
 HAS_MD5_HASH_REGEX = re.compile(r"\.[a-f0-9]{12}\..*$")
 
 WEBPUSH_SETTINGS = {
-    "VAPID_PUBLIC_KEY": "BDbE56S5JCkRrO1TShJOH15lsfPtQuVRlxYuczoYNBf7O-IJjGVmiWNlGU2ojeT6lZr80ralVVoCK19dfkrfaq8",
-    "VAPID_PRIVATE_KEY": "CZFzXDBb0TguIwTfmke8HfqmhPFbClwQGSMYeymWqeU",
-    "VAPID_ADMIN_EMAIL": "sher@cogentlabs.co",
+    'VAPID_PUBLIC_KEY': os.getenv('VAPID_PUBLIC_KEY'),
+    'VAPID_PRIVATE_KEY': os.getenv('VAPID_PRIVATE_KEY'),
+    'VAPID_ADMIN_EMAIL': os.getenv('VAPID_ADMIN_EMAIL'),
 }
 APPEND_SLASH = False
