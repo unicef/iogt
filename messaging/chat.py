@@ -3,6 +3,7 @@ from django.core import validators
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.utils import timezone
+from webpush import send_user_notification
 
 from .models import Message, Thread, UserThread
 from messaging.rapidpro_client import RapidProClient
@@ -35,6 +36,14 @@ class ChatManager:
                 # be confirmed with RapidPro
                 message.text = f'{message.text}{text}'
                 message.save(update_fields=['text'])
+            else:
+                payload = {
+                    'head': 'New Message!',
+                    'body': 'Click here to view it.',
+                    'url': self.thread.get_absolute_url(),
+                }
+                for user in self.thread.users.all():
+                    send_user_notification(user=user, payload=payload, ttl=1000)
 
         else:
             Message.objects.create(
