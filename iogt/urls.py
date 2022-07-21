@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.i18n import JavaScriptCatalog
 from wagtail.images.views.serve import ServeView
+from webpush.views import save_info
 
 from home.views import get_manifest, LogoutRedirectHackView
 from iogt_users import urls as users_urls
@@ -40,7 +41,7 @@ urlpatterns = [
     *i18n_patterns(path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog')),
     path('health-check/', include('health_check.urls')),
     path('page-tree/<int:page_id>/', PageTreeAPIView.as_view(), name='page_tree'),
-    path('webpush/', include('webpush.urls')),
+    path('webpush/subscribe/', save_info, name='save_webpush_info'),
 ]
 
 if settings.DEBUG:

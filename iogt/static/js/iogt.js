@@ -206,7 +206,7 @@ const sendSubscriptionToServer = subscription => {
 
     console.log('Sending user subscription', data);
 
-    fetch('/webpush/save_information', {
+    fetch('/webpush/subscribe/', {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
