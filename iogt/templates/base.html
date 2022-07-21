@@ -81,7 +81,12 @@
 
 {# Global javascript #}
 <script>
-    var serviceWorkerURL = '{% url "sw.js" %}'
+    var serviceWorkerURL = '{% url "sw.js" %}';
+    {% if request.user.is_authenticated %}
+        var isAuthenticated = true;
+    {% else %}
+        var isAuthenticated = false;
+    {% endif %}
 </script>
 <script src="{% url 'javascript-catalog' %}"></script>
 <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
