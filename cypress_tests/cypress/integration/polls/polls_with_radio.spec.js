@@ -1,5 +1,5 @@
 describe("Polls with radio tests", () => {
-    const url = "/en/sections/questionnaire-testing/poll-with-radio";
+    const url = "/en/sections/questionnaire-testing/poll-with-radio/";
 
     it("Visits poll with radio", () => {
         cy.visitUrl(url);
