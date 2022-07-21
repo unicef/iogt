@@ -1,13 +1,11 @@
-import locale
-from django.urls import path, reverse
+from django.urls import path
 from django.utils.html import format_html_join
 from django.templatetags.static import static
-from wagtail.admin.menu import MenuItem
 
 from wagtail.core import hooks
 from wagtail.core.models import Locale
 
-from questionnaires.views import FormPagesListView, UserSubmissionView
+from questionnaires.views import FormPagesListView, UserSubmissionFormsView
 
 
 @hooks.register('insert_editor_js', order=100)
@@ -28,10 +26,5 @@ def editor_js():
 def register_custom_form_pages_list_view():
   return [
       path('forms/', FormPagesListView.as_view(), name='index'),
-      path('user-submissions/', UserSubmissionView.as_view(), name='user_submissions'),
+      path('user-submission-forms/', UserSubmissionFormsView.as_view(), name='user_submissions'),
   ]
-
-
-@hooks.register('register_admin_menu_item')
-def register_calendar_menu_item():
-    return MenuItem('User Submissions', reverse('user_submissions'), icon_name='date')

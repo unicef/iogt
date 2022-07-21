@@ -3,12 +3,32 @@ from functools import cached_property
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db.models import Prefetch
+from django.urls import reverse
 from django.utils import timezone
+from wagtail.contrib.modeladmin.helpers import ButtonHelper
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 
 from home.models import SiteSettings
 from iogt_users.filters import GroupsFilter
 from questionnaires.models import UserSubmission
+
+
+class UserButtonHelper(ButtonHelper):
+    view_button_classnames = ["button-small", "icon", "icon-form"]
+
+    def submissions_button(self, obj):
+        text = "Submissions"
+        return {
+            "url": f'{reverse("user_submissions")}?user_id={obj.id}',  # decide where the button links to
+            "label": text,
+            "classname": self.finalise_classname(self.view_button_classnames),
+            "title": text,
+        }
+
+    def get_buttons_for_obj(self, obj, exclude=None, classnames_add=None, classnames_exclude=None):
+        btns = super().get_buttons_for_obj(obj, exclude, classnames_add, classnames_exclude)
+        btns.append(self.submissions_button(obj))
+        return btns
 
 
 class UsersExportAdmin(ModelAdmin):
@@ -24,6 +44,7 @@ class UsersExportAdmin(ModelAdmin):
     add_to_settings_menu = True
     list_per_page = 20
     menu_order = 601
+    button_helper_class = UserButtonHelper
 
     def registration_survey_response(self, obj):
         user_submissions = obj.user_submissions

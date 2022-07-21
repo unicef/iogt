@@ -1,7 +1,18 @@
-from django.views.generic import TemplateView
+import csv
+import datetime
+import json
+
 from rest_framework.generics import ListAPIView, RetrieveAPIView
-from wagtail.contrib.forms.views import SubmissionsListView, FormPagesListView as WagtailFormPagesListView
+from wagtail.admin.views.mixins import SpreadsheetExportMixin, Echo
+from wagtail.contrib.forms.forms import SelectDateForm
+from wagtail.contrib.forms.utils import get_forms_for_user
+from wagtail.contrib.forms.views import (
+    SubmissionsListView,
+    FormPagesListView as WagtailFormPagesListView,
+    SafePaginateListView,
+)
 from wagtail.core.models import Page
+from xlsxwriter.workbook import Workbook
 
 from questionnaires.filters import QuestionnaireFilter, SubmissionFilter
 from questionnaires.models import QuestionnairePage, Survey, Poll, Quiz, UserSubmission
@@ -36,8 +47,107 @@ class CustomSubmissionsListView(SubmissionsListView):
         return super().get_queryset().select_related('page', 'user')
 
 
-class UserSubmissionView(TemplateView):
-    template_name = "questionnaires/user_submissions.html"
+class UserSubmissionFormsView(SpreadsheetExportMixin, SafePaginateListView):
+    template_name = "questionnaires/form_pages.html"
+    context_object_name = 'form_pages'
+    list_export = ['Name', 'Submission Date', 'Field', 'Value']
+    select_date_form = SelectDateForm
+
+    def dispatch(self, request, *args, **kwargs):
+        self.is_export = (self.request.GET.get('export') in self.FORMATS)
+        if self.is_export:
+            self.paginate_by = None
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        """ Return the queryset of form pages for this view """
+        queryset = get_forms_for_user(self.request.user)
+        queryset = queryset.filter(
+            usersubmission__user_id=self.request.GET.get('user_id')
+        ).distinct().order_by('-last_published_at')
+
+        filtering = self.get_filtering()
+        if filtering and isinstance(filtering, dict):
+            queryset = queryset.filter(**filtering)
+
+        return queryset
+
+    def get_filtering(self, for_form_pages=True):
+        """ Return filering as a dict for submissions queryset """
+        filter_name = 'usersubmission__submit_time' if for_form_pages else 'submit_time'
+        self.select_date_form = SelectDateForm(self.request.GET)
+        result = dict()
+        if self.select_date_form.is_valid():
+            date_from = self.select_date_form.cleaned_data.get('date_from')
+            date_to = self.select_date_form.cleaned_data.get('date_to')
+            if date_to:
+                # careful: date_to must be increased by 1 day
+                # as submit_time is a time so will always be greater
+                date_to += datetime.timedelta(days=1)
+                if date_from:
+                    result[f'{filter_name}__range'] = [date_from, date_to]
+                else:
+                    result[f'{filter_name}__lte'] = date_to
+            elif date_from:
+                result[f'{filter_name}__gte'] = date_from
+        return result
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.is_export:
+            return self.as_spreadsheet(context['submissions'], self.request.GET.get('export'))
+        return super().render_to_response(context, **response_kwargs)
+
+    def get_context_data(self, **kwargs):
+        """ Return context for view """
+        context = super().get_context_data(**kwargs)
+        form_pages = context[self.context_object_name]
+        context['submissions'] = UserSubmission.objects.select_related('page', 'user').filter(
+            user_id=self.request.GET.get('user_id'), page__in=form_pages, **self.get_filtering(for_form_pages=False)
+        ).order_by('-submit_time')
+        context.update({
+            'select_date_form': self.select_date_form,
+            'user_id': self.request.GET.get('user_id'),
+        })
+        return context
+
+    def stream_csv(self, queryset):
+        """ Generate a csv file line by line from queryset, to be used in a StreamingHTTPResponse """
+        writer = csv.DictWriter(Echo(), fieldnames=self.list_export)
+        yield writer.writerow(
+            {field: self.get_heading(queryset, field) for field in self.list_export}
+        )
+
+        for item in queryset:
+            form_data = json.loads(item.form_data)
+            for k, v in form_data.items():
+                row_dict = dict(zip(self.list_export, [item.page.title, item.submit_time, k, v]))
+                yield self.write_csv_row(writer, row_dict)
+
+    def write_xlsx(self, queryset, output):
+        """ Write an xlsx workbook from a queryset"""
+        workbook = Workbook(
+            output,
+            {
+                "in_memory": True,
+                "constant_memory": True,
+                "remove_timezone": True,
+                "default_date_format": "dd/mm/yy hh:mm:ss",
+            },
+        )
+        worksheet = workbook.add_worksheet()
+
+        for col_number, field in enumerate(self.list_export):
+            worksheet.write(0, col_number, self.get_heading(queryset, field))
+
+        row_number = 1
+        for item in queryset:
+            form_data = json.loads(item.form_data)
+            for k, v in form_data.items():
+                row_dict = dict(zip(self.list_export, [item.page.title, item.submit_time, k, v]))
+                self.write_xlsx_row(worksheet, row_dict, row_number)
+                row_number += 1
+
+        workbook.close()
 
 
 class QuestionnairesListAPIView(ListAPIView):
