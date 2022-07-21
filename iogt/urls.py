@@ -3,6 +3,10 @@ from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.i18n import JavaScriptCatalog
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
 from wagtail.images.views.serve import ServeView
 
 from home.views import get_manifest, LogoutRedirectHackView
@@ -15,7 +19,24 @@ from home import views as pwa_views
 from wagtail_transfer import urls as wagtailtransfer_urls
 from iogt.views import TransitionPageView, SitemapAPIView, TranslationNotFoundPage, PageTreeAPIView
 
-urlpatterns = [
+
+api_url_patterns = [
+    path('questionnaires/', include('questionnaires.urls'), name='questionnaires'),
+]
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="IoGT API",
+        default_version='v1',
+        description="IoGT APIs",
+    ),
+    public=True,
+    authentication_classes=(SessionAuthentication,),
+    permission_classes=(IsAuthenticated,),
+    patterns=api_url_patterns
+)
+
+urlpatterns = api_url_patterns + [
     path('django-admin/', admin.site.urls),
     path('admin/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),
@@ -40,7 +61,7 @@ urlpatterns = [
     *i18n_patterns(path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog')),
     path('health-check/', include('health_check.urls')),
     path('page-tree/<int:page_id>/', PageTreeAPIView.as_view(), name='page_tree'),
-    path('questionnaires/', include('questionnaires.urls'), name='questionnaires'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger'),
 ]
 
 if settings.DEBUG:

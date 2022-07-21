@@ -16,7 +16,7 @@ class QuestionnaireFilter(filters.FilterSet):
         fields = ['published_at_start', 'published_at_end', 'type']
 
 
-class SubmissionFilter(filters.FilterSet):
+class UserSubmissionFilter(filters.FilterSet):
     submit_at_start = filters.DateFilter(field_name='submit_time__date', lookup_expr='gte')
     submit_at_end = filters.DateFilter(field_name="submit_time__date", lookup_expr='lte')
     user_ids = ListIdFilter(field_name='user_id')

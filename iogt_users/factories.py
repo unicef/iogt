@@ -3,6 +3,7 @@ import factory
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import Group
 from factory.django import DjangoModelFactory
+from wagtail.core.models import GroupPagePermission
 
 
 class UserFactory(DjangoModelFactory):
@@ -31,3 +32,10 @@ class AdminUserFactory(DjangoModelFactory):
 class GroupFactory(DjangoModelFactory):
     class Meta:
         model = Group
+
+
+class GroupPagePermissionFactory(DjangoModelFactory):
+    permission_type = 'edit'
+
+    class Meta:
+        model = GroupPagePermission

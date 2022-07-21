@@ -3,7 +3,15 @@ import json
 from rest_framework import serializers
 from wagtail.core.models import Page
 
-from questionnaires.models import Survey, SurveyFormField, Poll, PollFormField, QuizFormField, Quiz, UserSubmission
+from questionnaires.models import (
+    Survey,
+    SurveyFormField,
+    Poll,
+    PollFormField,
+    QuizFormField,
+    Quiz,
+    UserSubmission,
+)
 
 
 class QuestionnairePageSerializer(serializers.ModelSerializer):
@@ -16,7 +24,7 @@ class PollFormFieldSerializer(serializers.ModelSerializer):
     choices = serializers.SerializerMethodField()
 
     def get_choices(self, instance):
-        return instance.choices.split('|')
+        return instance.choices and instance.choices.split('|')
 
     class Meta:
         model = PollFormField
@@ -27,6 +35,9 @@ class PollFormFieldSerializer(serializers.ModelSerializer):
 
 
 class PollPageDetailSerializer(serializers.ModelSerializer):
+    description = serializers.JSONField(source='description.stream_data')
+    thank_you_text = serializers.JSONField(source='thank_you_text.stream_data')
+    terms_and_conditions = serializers.JSONField(source='terms_and_conditions.stream_data')
     url = serializers.CharField(source='full_url')
     published_at = serializers.DateTimeField(source='last_published_at')
     questions = PollFormFieldSerializer(source='poll_form_fields', many=True)
@@ -101,6 +112,12 @@ class QuizPageDetailSerializer(serializers.ModelSerializer):
             'index_page_description_line_2', 'multi_step', 'description', 'thank_you_text', 'terms_and_conditions',
             'questions',
         ]
+
+
+class QuestionnairePageDetailSerializer(serializers.Serializer):
+    poll = PollPageDetailSerializer()
+    survey = SurveyPageDetailSerializer()
+    quiz = QuizPageDetailSerializer()
 
 
 class UserSubmissionSerializer(serializers.ModelSerializer):
