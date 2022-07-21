@@ -3,11 +3,11 @@ from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.generics import ListAPIView, RetrieveAPIView
+from wagtail.contrib.forms.utils import get_forms_for_user
 from wagtail.contrib.forms.views import SubmissionsListView, FormPagesListView as WagtailFormPagesListView
-from wagtail.core.models import Page
 
 from questionnaires.filters import QuestionnaireFilter, UserSubmissionFilter
-from questionnaires.models import QuestionnairePage, Survey, Poll, Quiz, UserSubmission
+from questionnaires.models import Survey, Poll, Quiz, UserSubmission
 from iogt.paginators import IoGTPagination
 from questionnaires.serializers import (
     QuestionnairePageSerializer,
@@ -46,8 +46,7 @@ class QuestionnairesListAPIView(ListAPIView):
     pagination_class = IoGTPagination
 
     def get_queryset(self):
-        accessible_page_ids = self.request.user.get_accessible_page_ids
-        return Page.objects.filter(id__in=accessible_page_ids).type(QuestionnairePage).order_by('-last_published_at')
+        return get_forms_for_user(self.request.user).order_by('-last_published_at')
 
 
 @method_decorator(name='get', decorator=swagger_auto_schema(
@@ -59,12 +58,8 @@ class QuestionnairesListAPIView(ListAPIView):
     }
 ))
 class QuestionnaireDetailAPIView(RetrieveAPIView):
-    queryset = Page.objects.type(QuestionnairePage).specific()
-
     def get_queryset(self):
-        accessible_page_ids = self.request.user.get_accessible_page_ids
-        return Page.objects.filter(id__in=accessible_page_ids).type(QuestionnairePage).specific().order_by(
-            '-last_published_at')
+        return get_forms_for_user(self.request.user).specific().order_by('-last_published_at')
 
     def get_serializer_class(self):
         page = self.get_object()
@@ -82,10 +77,9 @@ class QuestionnaireSubmissionsAPIView(ListAPIView):
     pagination_class = IoGTPagination
 
     def get_queryset(self):
-        accessible_page_ids = self.request.user.get_accessible_page_ids
         return UserSubmission.objects.filter(
             page_id=self.kwargs.get(self.lookup_field),
-            page_id__in=accessible_page_ids
+            page__in=get_forms_for_user(self.request.user)
         ).select_related(
             'user', 'page'
         ).order_by('-submit_time')
