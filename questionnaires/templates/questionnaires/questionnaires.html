@@ -62,10 +62,10 @@
                 </div>
                 <div class="right">
                     <div class="dropdown dropdown-button match-width">
-                        <a id="download-xlsx" href="{{ request.get_full_path }}&export=xlsx" class="button bicolor button--icon">{% icon name="download" wrapped=1 %}{% trans 'Download XLSX' %}</a>
+                        <a id="download-xlsx" href="{{ request.get_full_path }}&export=xlsx" class="button bicolor button--icon">{% icon name="download" wrapped=1 %}{% trans 'Download Submissions (XLSX)' %}</a>
                         <div class="dropdown-toggle">{% icon name="arrow-down" %}</div>
                         <ul>
-                            <li><a id="download-csv" class="button bicolor button--icon" href="{{ request.get_full_path }}&export=csv">{% icon name="download" wrapped=1 %}{% trans 'Download CSV' %}</a></li>
+                            <li><a id="download-csv" class="button bicolor button--icon" href="{{ request.get_full_path }}&export=csv">{% icon name="download" wrapped=1 %}{% trans 'Download Submissions (CSV)' %}</a></li>
                         </ul>
                     </div>
                 </div>
