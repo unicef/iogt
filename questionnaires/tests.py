@@ -904,6 +904,95 @@ class QuestionnairesTests(TestCase):
         self.assertEqual(response.context['form_pages'].count(), 1)
         self.assertEqual(response.context['form_pages'][0].title, survey.title)
 
+    def test_user_submissions_export_page_ids_filter(self):
+        current_datetime = timezone.now().replace(microsecond=0)
+
+        poll = PollFactory(parent=self.home_page, last_published_at=current_datetime)
+        GroupPagePermissionFactory(group=self.group, page=poll)
+        poll_question = PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3', default_value='c2')
+
+        survey = SurveyFactory(parent=self.home_page, last_published_at=current_datetime - timedelta(days=1))
+        GroupPagePermissionFactory(group=self.group, page=survey)
+        skip_logic = json.dumps(
+            [
+                {
+                    "type": "skip_logic",
+                    "value": {
+                        "choice": "c1",
+                        "skip_logic": "next",
+                        "question": None
+                    }
+                },
+                {
+                    "type": "skip_logic",
+                    "value": {
+                        "choice": "c2",
+                        "skip_logic": "next",
+                        "question": None
+                    }
+                },
+                {
+                    "type": "skip_logic",
+                    "value": {
+                        "choice": "c3",
+                        "skip_logic": "next",
+                        "question": None
+                    }
+                }
+            ]
+        )
+        survey_question = SurveyFormFieldFactory(
+            page=survey, field_type='checkboxes', skip_logic=skip_logic, default_value='c2')
+
+        quiz = QuizFactory(parent=self.home_page, last_published_at=current_datetime - timedelta(days=2))
+        GroupPagePermissionFactory(group=self.group, page=quiz)
+        quiz_question = QuizFormFieldFactory(
+            page=quiz, field_type='checkboxes', choices='c1|c2|c3', default_value='c2', correct_answer='c3')
+
+        user_01 = UserFactory()
+        form_data_01 = json.dumps({
+            poll_question.clean_name: [
+                'c1',
+            ],
+        })
+        user_submission_01 = UserSubmissionFactory(page=poll, user=user_01, form_data=form_data_01)
+        user_submission_01.submit_time = current_datetime
+        user_submission_01.save()
+
+        form_data_02 = json.dumps({
+            survey_question.clean_name: [
+                'c2',
+            ],
+        })
+        user_submission_02 = UserSubmissionFactory(page=survey, user=user_01, form_data=form_data_02)
+        user_submission_02.submit_time = current_datetime - timedelta(days=1)
+        user_submission_02.save()
+
+        form_data_03 = json.dumps({
+            quiz_question.clean_name: [
+                'c3',
+            ],
+        })
+        user_submission_03 = UserSubmissionFactory(page=quiz, user=user_01, form_data=form_data_03)
+        user_submission_03.submit_time = current_datetime - timedelta(days=2)
+        user_submission_03.save()
+
+        response = self.client.get(f'{self.url}?user_id={user_01.id}&export=csv&page_ids={poll.id},{quiz.id}')
+
+        byte_response = b''
+        for stream in response.streaming_content:
+            byte_response += stream
+        expected_response = \
+            f'ID,Name,Submission Date,Field,Value\r\n' \
+            f'{user_submission_01.id},{poll.title},{user_submission_01.submit_time},User,{user_01.username}\r\n' \
+            f'{user_submission_01.id},{poll.title},{user_submission_01.submit_time},URL,{poll.full_url}\r\n' \
+            f'{user_submission_01.id},{poll.title},{user_submission_01.submit_time},{poll_question.clean_name},c1\r\n' \
+            f'{user_submission_03.id},{quiz.title},{user_submission_03.submit_time},User,{user_01.username}\r\n' \
+            f'{user_submission_03.id},{quiz.title},{user_submission_03.submit_time},URL,{quiz.full_url}\r\n' \
+            f'{user_submission_03.id},{quiz.title},{user_submission_03.submit_time},{quiz_question.clean_name},c3\r\n'
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(byte_response.decode(), expected_response)
+
     def test_user_submissions_csv_export(self):
         current_datetime = timezone.now()
 
