@@ -124,12 +124,13 @@ class UserSubmissionFormsView(SpreadsheetExportMixin, SafePaginateListView):
         )
 
         for item in queryset:
-            row_dict = dict(zip(self.list_export, [item.id, item.page.title, item.submit_time, 'User', item.user.username]))
-            yield self.write_csv_row(writer, row_dict)
-            row_dict = dict(zip(self.list_export, [item.id, item.page.title, item.submit_time, 'URL', item.page.full_url]))
-            yield self.write_csv_row(writer, row_dict)
+            additional_data = {
+                'User': item.user.username,
+                'URL': item.page.full_url,
+            }
             form_data = json.loads(item.form_data)
-            for k, v in form_data.items():
+            data = {**additional_data, **form_data}
+            for k, v in data.items():
                 row_dict = dict(zip(self.list_export, [item.id, item.page.title, item.submit_time, k, v]))
                 yield self.write_csv_row(writer, row_dict)
 
@@ -151,14 +152,13 @@ class UserSubmissionFormsView(SpreadsheetExportMixin, SafePaginateListView):
 
         row_number += 1
         for item in queryset:
-            row_dict = dict(zip(self.list_export, [item.id, item.page.title, item.submit_time, 'User', item.user.username]))
-            self.write_xlsx_row(worksheet, row_dict, row_number)
-            row_number += 1
-            row_dict = dict(zip(self.list_export, [item.id, item.page.title, item.submit_time, 'URL', item.page.full_url]))
-            self.write_xlsx_row(worksheet, row_dict, row_number)
-            row_number += 1
+            additional_data = {
+                'User': item.user.username,
+                'URL': item.page.full_url,
+            }
             form_data = json.loads(item.form_data)
-            for k, v in form_data.items():
+            data = {**additional_data, **form_data}
+            for k, v in data.items():
                 row_dict = dict(zip(self.list_export, [item.id, item.page.title, item.submit_time, k, v]))
                 self.write_xlsx_row(worksheet, row_dict, row_number)
                 row_number += 1
