@@ -2,6 +2,10 @@ import csv
 import datetime
 import json
 
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -31,6 +35,9 @@ from questionnaires.serializers import (
 )
 
 
+User = get_user_model()
+
+
 class FormPagesListView(WagtailFormPagesListView):
     def get_queryset(self):
         from home.models import SiteSettings
@@ -58,9 +65,12 @@ class QuestionnairesView(SpreadsheetExportMixin, SafePaginateListView):
     list_export = ['ID', 'Name', 'Submission Date', 'Field', 'Value']
     select_date_form = SelectDateForm
     page_ids = []
+    user = None
 
     def dispatch(self, request, *args, **kwargs):
         self.is_export = (self.request.GET.get('export') in self.FORMATS)
+        user_id = self.request.GET.get('user_id')
+        self.user = get_object_or_404(User, pk=user_id)
         if self.is_export:
             page_ids = self.request.GET.get('page_ids')
             self.page_ids = page_ids.split(',') if page_ids else []
@@ -71,7 +81,7 @@ class QuestionnairesView(SpreadsheetExportMixin, SafePaginateListView):
         """ Return the queryset of form pages for this view """
         queryset = get_forms_for_user(self.request.user)
         queryset = queryset.filter(
-            usersubmission__user_id=self.request.GET.get('user_id')
+            usersubmission__user_id=self.user.id
         ).distinct().order_by('-last_published_at')
 
         filtering = self.get_filtering()
@@ -113,11 +123,11 @@ class QuestionnairesView(SpreadsheetExportMixin, SafePaginateListView):
             if self.page_ids:
                 form_pages = form_pages.filter(id__in=self.page_ids)
             context['submissions'] = UserSubmission.objects.select_related('page', 'user').filter(
-                user_id=self.request.GET.get('user_id'), page__in=form_pages, **self.get_filtering(for_form_pages=False)
+                user_id=self.user.id, page__in=form_pages, **self.get_filtering(for_form_pages=False)
             ).order_by('-submit_time')
         context.update({
             'select_date_form': self.select_date_form,
-            'user_id': self.request.GET.get('user_id'),
+            'user_id': self.user.id,
         })
         return context
 
@@ -169,6 +179,11 @@ class QuestionnairesView(SpreadsheetExportMixin, SafePaginateListView):
                 row_number += 1
 
         workbook.close()
+
+    def get_filename(self):
+        """ Gets the base filename for the exported spreadsheet, without extensions """
+        timestamp = timezone.now().strftime(settings.EXPORT_FILENAME_TIMESTAMP_FORMAT)
+        return f'{self.user.username}-submission_{timestamp}'
 
 
 class QuestionnairesListAPIView(ListAPIView):
