@@ -22,14 +22,14 @@
                 format: 'Y-m-d',
             });
             $('#download-xlsx,#download-csv').click(e => {
-                const downloadBtn = $(e.target);
                 let pageIds = []
                 $(':checked').each((index, box) => {
                     pageIds.push(box.id);
                 });
-                const href_ = downloadBtn.attr('href');
                 if (pageIds.length > 0) {
-                    downloadBtn.attr('href', href_ + `&page_ids=${pageIds.join(',')}`);
+                    const downloadBtn = $(e.target);
+                    const href = downloadBtn.attr('href');
+                    downloadBtn.attr('href', href + `&page_ids=${pageIds.join(',')}`);
                 }
             });
         });
