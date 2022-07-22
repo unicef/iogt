@@ -106,9 +106,10 @@ class UserSubmissionFormsView(SpreadsheetExportMixin, SafePaginateListView):
         """ Return context for view """
         context = super().get_context_data(**kwargs)
         form_pages = context[self.context_object_name]
-        context['submissions'] = UserSubmission.objects.select_related('page', 'user').filter(
-            user_id=self.request.GET.get('user_id'), page__in=form_pages, **self.get_filtering(for_form_pages=False)
-        ).order_by('-submit_time')
+        if self.is_export:
+            context['submissions'] = UserSubmission.objects.select_related('page', 'user').filter(
+                user_id=self.request.GET.get('user_id'), page__in=form_pages, **self.get_filtering(for_form_pages=False)
+            ).order_by('-submit_time')
         context.update({
             'select_date_form': self.select_date_form,
             'user_id': self.request.GET.get('user_id'),
