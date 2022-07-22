@@ -19,7 +19,7 @@ class UserButtonHelper(ButtonHelper):
     def submissions_button(self, obj):
         text = "Submissions"
         return {
-            "url": f'{reverse("user_submissions")}?user_id={obj.id}',  # decide where the button links to
+            "url": f'{reverse("questionnaires")}?user_id={obj.id}',  # decide where the button links to
             "label": text,
             "classname": self.finalise_classname(self.view_button_classnames),
             "title": text,

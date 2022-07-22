@@ -5,7 +5,7 @@ from django.templatetags.static import static
 from wagtail.core import hooks
 from wagtail.core.models import Locale
 
-from questionnaires.views import FormPagesListView, UserSubmissionFormsView
+from questionnaires.views import FormPagesListView, QuestionnairesView
 
 
 @hooks.register('insert_editor_js', order=100)
@@ -26,5 +26,5 @@ def editor_js():
 def register_custom_form_pages_list_view():
   return [
       path('forms/', FormPagesListView.as_view(), name='index'),
-      path('user-submission-forms/', UserSubmissionFormsView.as_view(), name='user_submissions'),
+      path('questionnaires/', QuestionnairesView.as_view(), name='questionnaires'),
   ]

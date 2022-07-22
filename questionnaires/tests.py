@@ -1,9 +1,14 @@
+import datetime
+import io
 import json
 from datetime import timedelta
 
+import pytz
+from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
+from openpyxl import load_workbook
 from rest_framework import status
 from rest_framework.test import APIClient
 from wagtail.core.models import Site
@@ -709,3 +714,488 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, [])
+
+
+class QuestionnairesTests(TestCase):
+    def setUp(self):
+        self.group = GroupFactory(name='questionnaires')
+        self.admin_access_permission = Permission.objects.get(codename='access_admin')
+        self.group.permissions.add(self.admin_access_permission)
+        self.staff_user = UserFactory()
+        self.staff_user.groups.add(self.group)
+        self.client.force_login(self.staff_user)
+        self.url = reverse('questionnaires')
+
+        Site.objects.all().delete()
+        self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
+        self.home_page = HomePageFactory(parent=self.site.root_page)
+
+    def test_questionnaires_list_pages(self):
+        current_datetime = timezone.now()
+
+        poll = PollFactory(parent=self.home_page, last_published_at=current_datetime)
+        GroupPagePermissionFactory(group=self.group, page=poll)
+        poll_question = PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3', default_value='c2')
+
+        survey = SurveyFactory(parent=self.home_page, last_published_at=current_datetime - timedelta(days=1))
+        GroupPagePermissionFactory(group=self.group, page=survey)
+        skip_logic = json.dumps(
+            [
+                {
+                    "type": "skip_logic",
+                    "value": {
+                        "choice": "c1",
+                        "skip_logic": "next",
+                        "question": None
+                    }
+                },
+                {
+                    "type": "skip_logic",
+                    "value": {
+                        "choice": "c2",
+                        "skip_logic": "next",
+                        "question": None
+                    }
+                },
+                {
+                    "type": "skip_logic",
+                    "value": {
+                        "choice": "c3",
+                        "skip_logic": "next",
+                        "question": None
+                    }
+                }
+            ]
+        )
+        survey_question = SurveyFormFieldFactory(
+            page=survey, field_type='checkboxes', skip_logic=skip_logic, default_value='c2')
+
+        quiz = QuizFactory(parent=self.home_page, last_published_at=current_datetime - timedelta(days=2))
+        GroupPagePermissionFactory(group=self.group, page=quiz)
+        quiz_question = QuizFormFieldFactory(
+            page=quiz, field_type='checkboxes', choices='c1|c2|c3', default_value='c2', correct_answer='c3')
+
+        user_01 = UserFactory()
+        form_data_01 = json.dumps({
+            poll_question.clean_name: [
+                'c1',
+            ],
+        })
+        UserSubmissionFactory(page=poll, user=user_01, form_data=form_data_01)
+
+        form_data_02 = json.dumps({
+            survey_question.clean_name: [
+                'c2',
+            ],
+        })
+        UserSubmissionFactory(page=survey, user=user_01, form_data=form_data_02)
+
+        user_02 = UserFactory()
+        form_data_03 = json.dumps({
+            quiz_question.clean_name: [
+                'c3',
+            ],
+        })
+        UserSubmissionFactory(page=quiz, user=user_02, form_data=form_data_03)
+
+        response = self.client.get(f'{self.url}?user_id={user_01.id}')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.context['form_pages'].count(), 2)
+        self.assertEqual(response.context['form_pages'][0].title, poll.title)
+        self.assertEqual(response.context['form_pages'][1].title, survey.title)
+
+        response = self.client.get(f'{self.url}?user_id={user_02.id}')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.context['form_pages'].count(), 1)
+        self.assertEqual(response.context['form_pages'][0].title, quiz.title)
+
+    def test_questionnaires_list_pages_date_range_filter(self):
+        current_datetime = timezone.now()
+
+        poll = PollFactory(parent=self.home_page, last_published_at=current_datetime)
+        GroupPagePermissionFactory(group=self.group, page=poll)
+        poll_question = PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3', default_value='c2')
+
+        survey = SurveyFactory(parent=self.home_page, last_published_at=current_datetime - timedelta(days=1))
+        GroupPagePermissionFactory(group=self.group, page=survey)
+        skip_logic = json.dumps(
+            [
+                {
+                    "type": "skip_logic",
+                    "value": {
+                        "choice": "c1",
+                        "skip_logic": "next",
+                        "question": None
+                    }
+                },
+                {
+                    "type": "skip_logic",
+                    "value": {
+                        "choice": "c2",
+                        "skip_logic": "next",
+                        "question": None
+                    }
+                },
+                {
+                    "type": "skip_logic",
+                    "value": {
+                        "choice": "c3",
+                        "skip_logic": "next",
+                        "question": None
+                    }
+                }
+            ]
+        )
+        survey_question = SurveyFormFieldFactory(
+            page=survey, field_type='checkboxes', skip_logic=skip_logic, default_value='c2')
+
+        quiz = QuizFactory(parent=self.home_page, last_published_at=current_datetime - timedelta(days=2))
+        GroupPagePermissionFactory(group=self.group, page=quiz)
+        quiz_question = QuizFormFieldFactory(
+            page=quiz, field_type='checkboxes', choices='c1|c2|c3', default_value='c2', correct_answer='c3')
+
+        user_01 = UserFactory()
+        form_data_01 = json.dumps({
+            poll_question.clean_name: [
+                'c1',
+            ],
+        })
+        user_submission_01 = UserSubmissionFactory(page=poll, user=user_01, form_data=form_data_01)
+        user_submission_01.submit_time = current_datetime
+        user_submission_01.save()
+
+        form_data_02 = json.dumps({
+            survey_question.clean_name: [
+                'c2',
+            ],
+        })
+        user_submission_02 = UserSubmissionFactory(page=survey, user=user_01, form_data=form_data_02)
+        user_submission_02.submit_time = current_datetime - timedelta(days=1)
+        user_submission_02.save()
+
+        form_data_03 = json.dumps({
+            quiz_question.clean_name: [
+                'c3',
+            ],
+        })
+        user_submission_03 = UserSubmissionFactory(page=quiz, user=user_01, form_data=form_data_03)
+        user_submission_03.submit_time = current_datetime - timedelta(days=2)
+        user_submission_03.save()
+
+        response = self.client.get(f'{self.url}?user_id={user_01.id}&date_from={(current_datetime - timedelta(days=1)).date()}')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.context['form_pages'].count(), 2)
+        self.assertEqual(response.context['form_pages'][0].title, poll.title)
+        self.assertEqual(response.context['form_pages'][1].title, survey.title)
+
+        response = self.client.get(f'{self.url}?user_id={user_01.id}&date_to={(current_datetime - timedelta(days=1)).date()}')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.context['form_pages'].count(), 2)
+        self.assertEqual(response.context['form_pages'][0].title, survey.title)
+        self.assertEqual(response.context['form_pages'][1].title, quiz.title)
+
+        response = self.client.get(f'{self.url}?user_id={user_01.id}&date_from={(current_datetime - timedelta(days=1)).date()}&date_to={(current_datetime - timedelta(days=1)).date()}')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.context['form_pages'].count(), 1)
+        self.assertEqual(response.context['form_pages'][0].title, survey.title)
+
+    def test_user_submissions_csv_export(self):
+        current_datetime = timezone.now()
+
+        poll = PollFactory(parent=self.home_page, last_published_at=current_datetime)
+        GroupPagePermissionFactory(group=self.group, page=poll)
+        poll_question = PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3', default_value='c2')
+
+        survey = SurveyFactory(parent=self.home_page, last_published_at=current_datetime - timedelta(days=1))
+        GroupPagePermissionFactory(group=self.group, page=survey)
+        skip_logic = json.dumps(
+            [
+                {
+                    "type": "skip_logic",
+                    "value": {
+                        "choice": "c1",
+                        "skip_logic": "next",
+                        "question": None
+                    }
+                },
+                {
+                    "type": "skip_logic",
+                    "value": {
+                        "choice": "c2",
+                        "skip_logic": "next",
+                        "question": None
+                    }
+                },
+                {
+                    "type": "skip_logic",
+                    "value": {
+                        "choice": "c3",
+                        "skip_logic": "next",
+                        "question": None
+                    }
+                }
+            ]
+        )
+        survey_question = SurveyFormFieldFactory(
+            page=survey, field_type='checkboxes', skip_logic=skip_logic, default_value='c2')
+
+        quiz = QuizFactory(parent=self.home_page, last_published_at=current_datetime - timedelta(days=2))
+        GroupPagePermissionFactory(group=self.group, page=quiz)
+        quiz_question = QuizFormFieldFactory(
+            page=quiz, field_type='checkboxes', choices='c1|c2|c3', default_value='c2', correct_answer='c3')
+
+        user_01 = UserFactory()
+        form_data_01 = json.dumps({
+            poll_question.clean_name: [
+                'c1',
+            ],
+        })
+        user_submission_01 = UserSubmissionFactory(page=poll, user=user_01, form_data=form_data_01)
+        user_submission_01.submit_time = current_datetime
+        user_submission_01.save()
+
+        form_data_02 = json.dumps({
+            survey_question.clean_name: [
+                'c2',
+            ],
+        })
+        user_submission_02 = UserSubmissionFactory(page=survey, user=user_01, form_data=form_data_02)
+        user_submission_02.submit_time = current_datetime - timedelta(days=1)
+        user_submission_02.save()
+
+        user_02 = UserFactory()
+        form_data_03 = json.dumps({
+            quiz_question.clean_name: [
+                'c3',
+            ],
+        })
+        user_submission_03 = UserSubmissionFactory(page=quiz, user=user_02, form_data=form_data_03)
+        user_submission_03.submit_time = current_datetime - timedelta(days=2)
+        user_submission_03.save()
+
+        response = self.client.get(f'{self.url}?user_id={user_01.id}&export=csv')
+
+        byte_response = b''
+        for stream in response.streaming_content:
+            byte_response += stream
+        expected_response = \
+            f'ID,Name,Submission Date,Field,Value\r\n' \
+            f'{user_submission_01.id},{poll.title},{user_submission_01.submit_time},User,{user_01.username}\r\n' \
+            f'{user_submission_01.id},{poll.title},{user_submission_01.submit_time},URL,{poll.full_url}\r\n' \
+            f'{user_submission_01.id},{poll.title},{user_submission_01.submit_time},{poll_question.clean_name},c1\r\n' \
+            f'{user_submission_02.id},{survey.title},{user_submission_02.submit_time},User,{user_01.username}\r\n' \
+            f'{user_submission_02.id},{survey.title},{user_submission_02.submit_time},URL,{survey.full_url}\r\n' \
+            f'{user_submission_02.id},{survey.title},{user_submission_02.submit_time},{survey_question.clean_name},c2\r\n'
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(byte_response.decode(), expected_response)
+
+    def test_user_submissions_xlsx_export(self):
+        current_datetime = timezone.now().replace(microsecond=0)
+
+        poll = PollFactory(parent=self.home_page, last_published_at=current_datetime)
+        GroupPagePermissionFactory(group=self.group, page=poll)
+        poll_question = PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3', default_value='c2')
+
+        survey = SurveyFactory(parent=self.home_page, last_published_at=current_datetime - timedelta(days=1))
+        GroupPagePermissionFactory(group=self.group, page=survey)
+        skip_logic = json.dumps(
+            [
+                {
+                    "type": "skip_logic",
+                    "value": {
+                        "choice": "c1",
+                        "skip_logic": "next",
+                        "question": None
+                    }
+                },
+                {
+                    "type": "skip_logic",
+                    "value": {
+                        "choice": "c2",
+                        "skip_logic": "next",
+                        "question": None
+                    }
+                },
+                {
+                    "type": "skip_logic",
+                    "value": {
+                        "choice": "c3",
+                        "skip_logic": "next",
+                        "question": None
+                    }
+                }
+            ]
+        )
+        survey_question = SurveyFormFieldFactory(
+            page=survey, field_type='checkboxes', skip_logic=skip_logic, default_value='c2')
+
+        quiz = QuizFactory(parent=self.home_page, last_published_at=current_datetime - timedelta(days=2))
+        GroupPagePermissionFactory(group=self.group, page=quiz)
+        quiz_question = QuizFormFieldFactory(
+            page=quiz, field_type='checkboxes', choices='c1|c2|c3', default_value='c2', correct_answer='c3')
+
+        user_01 = UserFactory()
+        form_data_01 = json.dumps({
+            poll_question.clean_name: [
+                'c1',
+            ],
+        })
+        user_submission_01 = UserSubmissionFactory(page=poll, user=user_01, form_data=form_data_01)
+        user_submission_01.submit_time = current_datetime
+        user_submission_01.save()
+
+        form_data_02 = json.dumps({
+            survey_question.clean_name: [
+                'c2',
+            ],
+        })
+        user_submission_02 = UserSubmissionFactory(page=survey, user=user_01, form_data=form_data_02)
+        user_submission_02.submit_time = current_datetime - timedelta(days=1)
+        user_submission_02.save()
+
+        user_02 = UserFactory()
+        form_data_03 = json.dumps({
+            quiz_question.clean_name: [
+                'c3',
+            ],
+        })
+        user_submission_03 = UserSubmissionFactory(page=quiz, user=user_02, form_data=form_data_03)
+        user_submission_03.submit_time = current_datetime - timedelta(days=2)
+        user_submission_03.save()
+
+        response = self.client.get(f'{self.url}?user_id={user_01.id}&export=xlsx')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        sheet = load_workbook(io.BytesIO(response.content)).active
+        expected_response = {
+            'A': {
+                1: 'ID',
+                2: f'{user_submission_01.id}',
+                3: f'{user_submission_01.id}',
+                4: f'{user_submission_01.id}',
+                5: f'{user_submission_02.id}',
+                6: f'{user_submission_02.id}',
+                7: f'{user_submission_02.id}',
+            },
+            'B': {
+                1: 'Name',
+                2: poll.title,
+                3: poll.title,
+                4: poll.title,
+                5: survey.title,
+                6: survey.title,
+                7: survey.title,
+            },
+            'C': {
+                1: 'Submission Date',
+                2: user_submission_01.submit_time,
+                3: user_submission_01.submit_time,
+                4: user_submission_01.submit_time,
+                5: user_submission_02.submit_time,
+                6: user_submission_02.submit_time,
+                7: user_submission_02.submit_time,
+            },
+            'D': {
+                1: 'Field',
+                2: 'User',
+                3: 'URL',
+                4: poll_question.clean_name,
+                5: 'User',
+                6: 'URL',
+                7: survey_question.clean_name,
+            },
+            'E': {
+                1: 'Value',
+                2: user_01.username,
+                3: poll.full_url,
+                4: 'c1',
+                5: user_01.username,
+                6: survey.full_url,
+                7: 'c2',
+            },
+        }
+
+        for row in [1, 2, 3, 4, 5, 6, 7]:
+            for column in ['A', 'B', 'C', 'D', 'E']:
+                value = sheet[f'{column}{row}'].value
+                if isinstance(value, datetime.datetime):
+                    value = value.replace(tzinfo=pytz.UTC)
+                self.assertEqual(value, expected_response[column][row])
+
+    def test_questionnaires_list_pages_permission(self):
+        current_datetime = timezone.now()
+
+        poll = PollFactory(parent=self.home_page, last_published_at=current_datetime)
+        GroupPagePermissionFactory(group=self.group, page=poll)
+        poll_question = PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3', default_value='c2')
+
+        survey = SurveyFactory(parent=self.home_page, last_published_at=current_datetime - timedelta(days=1))
+        GroupPagePermissionFactory(group=self.group, page=survey)
+        skip_logic = json.dumps(
+            [
+                {
+                    "type": "skip_logic",
+                    "value": {
+                        "choice": "c1",
+                        "skip_logic": "next",
+                        "question": None
+                    }
+                },
+                {
+                    "type": "skip_logic",
+                    "value": {
+                        "choice": "c2",
+                        "skip_logic": "next",
+                        "question": None
+                    }
+                },
+                {
+                    "type": "skip_logic",
+                    "value": {
+                        "choice": "c3",
+                        "skip_logic": "next",
+                        "question": None
+                    }
+                }
+            ]
+        )
+        survey_question = SurveyFormFieldFactory(
+            page=survey, field_type='checkboxes', skip_logic=skip_logic, default_value='c2')
+
+        quiz = QuizFactory(parent=self.home_page, last_published_at=current_datetime - timedelta(days=2))
+        quiz_question = QuizFormFieldFactory(
+            page=quiz, field_type='checkboxes', choices='c1|c2|c3', default_value='c2', correct_answer='c3')
+
+        user_01 = UserFactory()
+        form_data_01 = json.dumps({
+            poll_question.clean_name: [
+                'c1',
+            ],
+        })
+        UserSubmissionFactory(page=poll, user=user_01, form_data=form_data_01)
+
+        form_data_02 = json.dumps({
+            survey_question.clean_name: [
+                'c2',
+            ],
+        })
+        UserSubmissionFactory(page=survey, user=user_01, form_data=form_data_02)
+
+        form_data_03 = json.dumps({
+            quiz_question.clean_name: [
+                'c3',
+            ],
+        })
+        UserSubmissionFactory(page=quiz, user=user_01, form_data=form_data_03)
+
+        response = self.client.get(f'{self.url}?user_id={user_01.id}')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.context['form_pages'].count(), 2)
+        self.assertEqual(response.context['form_pages'][0].title, poll.title)
+        self.assertEqual(response.context['form_pages'][1].title, survey.title)

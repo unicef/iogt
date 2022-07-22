@@ -52,8 +52,8 @@ class CustomSubmissionsListView(SubmissionsListView):
         return super().get_queryset().select_related('page', 'user')
 
 
-class UserSubmissionFormsView(SpreadsheetExportMixin, SafePaginateListView):
-    template_name = "questionnaires/form_pages.html"
+class QuestionnairesView(SpreadsheetExportMixin, SafePaginateListView):
+    template_name = "questionnaires/questionnaires.html"
     context_object_name = 'form_pages'
     list_export = ['ID', 'Name', 'Submission Date', 'Field', 'Value']
     select_date_form = SelectDateForm
