@@ -55,7 +55,7 @@ class CustomSubmissionsListView(SubmissionsListView):
 class UserSubmissionFormsView(SpreadsheetExportMixin, SafePaginateListView):
     template_name = "questionnaires/form_pages.html"
     context_object_name = 'form_pages'
-    list_export = ['Name', 'Submission Date', 'Field', 'Value']
+    list_export = ['ID', 'Name', 'Submission Date', 'Field', 'Value']
     select_date_form = SelectDateForm
 
     def dispatch(self, request, *args, **kwargs):
@@ -123,9 +123,11 @@ class UserSubmissionFormsView(SpreadsheetExportMixin, SafePaginateListView):
         )
 
         for item in queryset:
+            row_dict = dict(zip(self.list_export, [item.id, item.page.title, item.submit_time, 'User', item.user.username]))
+            yield self.write_csv_row(writer, row_dict)
             form_data = json.loads(item.form_data)
             for k, v in form_data.items():
-                row_dict = dict(zip(self.list_export, [item.page.title, item.submit_time, k, v]))
+                row_dict = dict(zip(self.list_export, [item.id, item.page.title, item.submit_time, k, v]))
                 yield self.write_csv_row(writer, row_dict)
 
     def write_xlsx(self, queryset, output):
@@ -140,15 +142,18 @@ class UserSubmissionFormsView(SpreadsheetExportMixin, SafePaginateListView):
             },
         )
         worksheet = workbook.add_worksheet()
-
+        row_number = 0
         for col_number, field in enumerate(self.list_export):
-            worksheet.write(0, col_number, self.get_heading(queryset, field))
+            worksheet.write(row_number, col_number, self.get_heading(queryset, field))
 
-        row_number = 1
+        row_number += 1
         for item in queryset:
+            row_dict = dict(zip(self.list_export, [item.id, item.page.title, item.submit_time, 'User', item.user.username]))
+            self.write_xlsx_row(worksheet, row_dict, row_number)
+            row_number += 1
             form_data = json.loads(item.form_data)
             for k, v in form_data.items():
-                row_dict = dict(zip(self.list_export, [item.page.title, item.submit_time, k, v]))
+                row_dict = dict(zip(self.list_export, [item.id, item.page.title, item.submit_time, k, v]))
                 self.write_xlsx_row(worksheet, row_dict, row_number)
                 row_number += 1
 
