@@ -57,10 +57,13 @@ class UserSubmissionFormsView(SpreadsheetExportMixin, SafePaginateListView):
     context_object_name = 'form_pages'
     list_export = ['ID', 'Name', 'Submission Date', 'Field', 'Value']
     select_date_form = SelectDateForm
+    page_ids = []
 
     def dispatch(self, request, *args, **kwargs):
         self.is_export = (self.request.GET.get('export') in self.FORMATS)
         if self.is_export:
+            page_ids = self.request.GET.get('page_ids')
+            self.page_ids = page_ids.split(',') if page_ids else []
             self.paginate_by = None
         return super().dispatch(request, *args, **kwargs)
 
@@ -107,6 +110,8 @@ class UserSubmissionFormsView(SpreadsheetExportMixin, SafePaginateListView):
         context = super().get_context_data(**kwargs)
         form_pages = context[self.context_object_name]
         if self.is_export:
+            if self.page_ids:
+                form_pages = form_pages.filter(id__in=self.page_ids)
             context['submissions'] = UserSubmission.objects.select_related('page', 'user').filter(
                 user_id=self.request.GET.get('user_id'), page__in=form_pages, **self.get_filtering(for_form_pages=False)
             ).order_by('-submit_time')

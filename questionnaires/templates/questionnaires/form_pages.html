@@ -21,6 +21,17 @@
                 timepicker: false,
                 format: 'Y-m-d',
             });
+            $('#download-xlsx,#download-csv').click(e => {
+                const downloadBtn = $(e.target);
+                let pageIds = []
+                $(':checked').each((index, box) => {
+                    pageIds.push(box.id);
+                });
+                const href_ = downloadBtn.attr('href');
+                if (pageIds.length > 0) {
+                    downloadBtn.attr('href', href_ + `&page_ids=${pageIds.join(',')}`);
+                }
+            });
         });
     </script>
 {% endblock %}
@@ -51,10 +62,10 @@
                 </div>
                 <div class="right">
                     <div class="dropdown dropdown-button match-width">
-                        <a href="{{ request.get_full_path }}&export=xlsx" class="button bicolor button--icon">{% icon name="download" wrapped=1 %}{% trans 'Download XLSX' %}</a>
+                        <a id="download-xlsx" href="{{ request.get_full_path }}&export=xlsx" class="button bicolor button--icon">{% icon name="download" wrapped=1 %}{% trans 'Download XLSX' %}</a>
                         <div class="dropdown-toggle">{% icon name="arrow-down" %}</div>
                         <ul>
-                            <li><a  class="button bicolor button--icon" href="{{ request.get_full_path }}&export=csv">{% icon name="download" wrapped=1 %}{% trans 'Download CSV' %}</a></li>
+                            <li><a id="download-csv" class="button bicolor button--icon" href="{{ request.get_full_path }}&export=csv">{% icon name="download" wrapped=1 %}{% trans 'Download CSV' %}</a></li>
                         </ul>
                     </div>
                 </div>
@@ -63,7 +74,7 @@
     </header>
     <div class="nice-padding">
         <div id="form-results" class="forms">
-            {% include "wagtailforms/results_forms.html" %}
+            {% include "questionnaires/results_forms.html" %}
         </div>
     </div>
 {% endblock %}
