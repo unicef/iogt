@@ -78,7 +78,7 @@ class UserSubmissionFormsView(SpreadsheetExportMixin, SafePaginateListView):
         return queryset
 
     def get_filtering(self, for_form_pages=True):
-        """ Return filering as a dict for submissions queryset """
+        """ Return filering as a dict for form pages or submissions queryset """
         filter_name = 'usersubmission__submit_time' if for_form_pages else 'submit_time'
         self.select_date_form = SelectDateForm(self.request.GET)
         result = dict()
