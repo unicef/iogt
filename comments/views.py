@@ -1,8 +1,11 @@
 from urllib.parse import urlparse, urlunparse, urlencode, parse_qsl
 
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.db.models import Q, Count
 from django.contrib import messages
 from django.shortcuts import redirect, get_object_or_404, render
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_POST
@@ -97,6 +100,14 @@ class ProcessCannedResponseView(View):
 
 
 class CommentListingView(View):
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('perms.django_comments_xtd.can_moderate'):
+            raise PermissionDenied(
+                "You do not have permission."
+            )
+        return super().dispatch(request, *args, **kwargs)
+
     def get(self, request):
         context = {
             'comments': XtdComment.objects.all(),
