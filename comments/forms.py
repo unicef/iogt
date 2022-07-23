@@ -45,3 +45,38 @@ class AdminCommentForm(CommentForm):
     def __init__(self, *args, **kwargs):
         super(AdminCommentForm, self).__init__(*args, **kwargs)
         self.is_admin = True
+
+
+class CommentFilterForm(forms.Form):
+    is_flagged = forms.ChoiceField(label='By is flagged?', choices=[(None, 'All'), (True, 'Yes'), (False, 'No')], required=False)
+    is_removed = forms.ChoiceField(label='By is removed?', choices=[(None, 'All'), (True, 'Yes'), (False, 'No')], required=False)
+    is_public = forms.ChoiceField(label='By is public?', choices=[(None, 'All'), (True, 'Yes'), (False, 'No')], required=False)
+    from_date = forms.DateField(label='From date', required=False)
+    to_date = forms.DateField(label='To date', required=False)
+
+    def clean_is_flagged(self):
+        value = self.cleaned_data['is_flagged']
+        rv = None
+        if value == 'True':
+            rv = True
+        elif value == 'False':
+            rv = False
+        return rv
+
+    def clean_is_removed(self):
+        value = self.cleaned_data['is_removed']
+        rv = None
+        if value == 'True':
+            rv = True
+        elif value == 'False':
+            rv = False
+        return rv
+
+    def clean_is_public(self):
+        value = self.cleaned_data['is_public']
+        rv = None
+        if value == 'True':
+            rv = True
+        elif value == 'False':
+            rv = False
+        return rv

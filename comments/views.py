@@ -1,8 +1,8 @@
 from urllib.parse import urlparse, urlunparse, urlencode, parse_qsl
 
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.contrib import messages
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404, render
 from django.views import View
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_POST
@@ -11,7 +11,7 @@ from django_comments.views.comments import post_comment
 from django_comments_xtd.models import XtdComment
 from django.utils.translation import ugettext as _
 
-from comments.forms import AdminCommentForm
+from comments.forms import AdminCommentForm, CommentFilterForm
 from comments.models import CannedResponse
 
 
@@ -94,3 +94,46 @@ class ProcessCannedResponseView(View):
 
         referer_url = urlunparse(parsed_url)
         return redirect(to=referer_url)
+
+
+class CommentListingView(View):
+    def get(self, request):
+        context = {
+            'comments': XtdComment.objects.all(),
+            'form': CommentFilterForm(),
+        }
+        return render(request, 'comments/listing.html', context)
+
+    def post(self, request):
+        form = CommentFilterForm(request.POST)
+        comments = XtdComment.objects.all()
+        if form.is_valid():
+            data = form.cleaned_data
+            is_flagged = data['is_flagged']
+            is_removed = data['is_removed']
+            is_public = data['is_public']
+            from_date = data['from_date']
+            to_date = data['to_date']
+
+            if is_flagged is not None:
+                if is_flagged:
+                    comments = comments.annotate(num_flags=Count('flags')).filter(num_flags__gt=0)
+                else:
+                    comments = comments.annotate(num_flags=Count('flags')).filter(num_flags=0)
+            if is_removed is not None:
+                comments = comments.filter(is_removed=is_removed)
+            if is_public is not None:
+                comments = comments.filter(is_public=is_public)
+            if to_date:
+                if from_date:
+                    comments = comments.filter(submit_date__date__range=[from_date, to_date])
+                else:
+                    comments = comments.filter(submit_date__date__lte=to_date)
+            elif from_date:
+                comments = comments.filter(submit_date__date__gte=from_date)
+
+        context = {
+            'comments': comments,
+            'form': form,
+        }
+        return render(request, 'comments/listing.html', context)

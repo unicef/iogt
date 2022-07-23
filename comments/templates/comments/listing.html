@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags comments comments_xtd  wagtailuserbar menu_tags  home_tags questionnaires_tags sass_tags i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_language_info for LANGUAGE_CODE as lang %}
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as languages %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_table }}
+        <input type="submit">
+    </form>
+    {% if comments %}
+        <table>
+            <tr>
+                <th>Comments</th>
+                <th>Action</th>
+            </tr>
+            {% for comment in comments %}
+                <tr>
+                    <td>{{ comment.comment }}</td>
+                    <td>
+                        {% if comment.is_public %}
+                            <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='unpublish' %}>Unpublish</a>
+                        {% else %}
+                            <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='publish' %}>Publish</a>
+                        {% endif %}
+                        {% if comment.is_removed %}
+                            <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='show' %}>Show</a>
+                        {% else %}
+                            <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='hide' %}>Hide</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <div>No comments found.</div>
+    {% endif %}
+{% endblock content %}
