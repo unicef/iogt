@@ -4,12 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q, Count
 from django.contrib import messages
-from django.shortcuts import redirect, get_object_or_404, render
+from django.shortcuts import redirect, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_POST
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 from django_comments.views.comments import post_comment
 from django_comments_xtd.models import XtdComment
 from django.utils.translation import ugettext as _
@@ -99,7 +99,12 @@ class ProcessCannedResponseView(View):
         return redirect(to=referer_url)
 
 
-class CommentListingView(View):
+class CommentListingView(ListView):
+    model = XtdComment
+    template_name = 'comments/listing.html'
+    context_object_name = 'comments'
+    paginate_by = 2
+
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         if not request.user.has_perm('perms.django_comments_xtd.can_moderate'):
@@ -108,16 +113,9 @@ class CommentListingView(View):
             )
         return super().dispatch(request, *args, **kwargs)
 
-    def get(self, request):
-        context = {
-            'comments': XtdComment.objects.all(),
-            'form': CommentFilterForm(),
-        }
-        return render(request, 'comments/listing.html', context)
-
-    def post(self, request):
-        form = CommentFilterForm(request.POST)
-        comments = XtdComment.objects.all()
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        form = CommentFilterForm(self.request.GET)
         if form.is_valid():
             data = form.cleaned_data
             is_flagged = data['is_flagged']
@@ -128,23 +126,29 @@ class CommentListingView(View):
 
             if is_flagged is not None:
                 if is_flagged:
-                    comments = comments.annotate(num_flags=Count('flags')).filter(num_flags__gt=0)
+                    queryset = queryset.annotate(num_flags=Count('flags')).filter(num_flags__gt=0)
                 else:
-                    comments = comments.annotate(num_flags=Count('flags')).filter(num_flags=0)
+                    queryset = queryset.annotate(num_flags=Count('flags')).filter(num_flags=0)
             if is_removed is not None:
-                comments = comments.filter(is_removed=is_removed)
+                queryset = queryset.filter(is_removed=is_removed)
             if is_public is not None:
-                comments = comments.filter(is_public=is_public)
+                queryset = queryset.filter(is_public=is_public)
             if to_date:
                 if from_date:
-                    comments = comments.filter(submit_date__date__range=[from_date, to_date])
+                    queryset = queryset.filter(submit_date__date__range=[from_date, to_date])
                 else:
-                    comments = comments.filter(submit_date__date__lte=to_date)
+                    queryset = queryset.filter(submit_date__date__lte=to_date)
             elif from_date:
-                comments = comments.filter(submit_date__date__gte=from_date)
+                queryset = queryset.filter(submit_date__date__gte=from_date)
+        return queryset
 
-        context = {
-            'comments': comments,
-            'form': form,
-        }
-        return render(request, 'comments/listing.html', context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        form = CommentFilterForm(self.request.GET)
+        if form.is_valid():
+            data = form.cleaned_data
+            context.update({
+                'form': form,
+                'params': urlencode(data)
+            })
+        return context
