@@ -56,7 +56,7 @@ class CommentFilterForm(forms.Form):
 
     def clean_is_flagged(self):
         value = self.cleaned_data['is_flagged']
-        rv = None
+        rv = ''
         if value == 'True':
             rv = True
         elif value == 'False':
@@ -65,7 +65,7 @@ class CommentFilterForm(forms.Form):
 
     def clean_is_removed(self):
         value = self.cleaned_data['is_removed']
-        rv = None
+        rv = ''
         if value == 'True':
             rv = True
         elif value == 'False':
@@ -74,9 +74,15 @@ class CommentFilterForm(forms.Form):
 
     def clean_is_public(self):
         value = self.cleaned_data['is_public']
-        rv = None
+        rv = ''
         if value == 'True':
             rv = True
         elif value == 'False':
             rv = False
         return rv
+
+    def clean_to_date(self):
+        return self.cleaned_data['to_date'] or ''
+
+    def clean_from_date(self):
+        return self.cleaned_data['from_date'] or ''

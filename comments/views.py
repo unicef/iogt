@@ -124,14 +124,14 @@ class CommentListingView(ListView):
             from_date = data['from_date']
             to_date = data['to_date']
 
-            if is_flagged is not None:
+            if is_flagged != '':
                 if is_flagged:
                     queryset = queryset.annotate(num_flags=Count('flags')).filter(num_flags__gt=0)
                 else:
                     queryset = queryset.annotate(num_flags=Count('flags')).filter(num_flags=0)
-            if is_removed is not None:
+            if is_removed != '':
                 queryset = queryset.filter(is_removed=is_removed)
-            if is_public is not None:
+            if is_public != '':
                 queryset = queryset.filter(is_public=is_public)
             if to_date:
                 if from_date:
