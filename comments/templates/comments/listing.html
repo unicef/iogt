@@ -31,6 +31,9 @@
                         {% else %}
                             <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='hide' %}>Hide</a>
                         {% endif %}
+                        {% if comment.num_flags %}
+                            <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='clear_flags' %}>Clear Flags</a>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}

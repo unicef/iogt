@@ -1,8 +1,12 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils import timezone
 from django_comments_xtd.models import XtdComment
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.core.models import Page
+
+from comments.clients import StubModerator
 
 
 class CommentStatus:
@@ -101,3 +105,22 @@ class CannedResponse(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class CommentModeration(models.Model):
+    is_accepted = models.BooleanField(null=True, blank=True)
+    comment = models.OneToOneField(
+        to='django_comments_xtd.XtdComment', related_name='comment_moderation', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.comment.id} | is_accepted={self.is_accepted}'
+
+
+@receiver(post_save, sender=XtdComment)
+def my_callback(sender, instance, created, **kwargs):
+    if created:
+        moderator = StubModerator(instance)
+        is_accepted = moderator.is_accepted()
+        instance.is_public = is_accepted
+        instance.save(update_fields=['is_public'])
+        CommentModeration.objects.create(is_accepted=is_accepted, comment_id=instance.id)

@@ -493,3 +493,5 @@ if CACHE_BACKEND:
 SITE_VERSION = os.getenv('SITE_VERSION', 'unknown')
 
 HAS_MD5_HASH_REGEX = re.compile(r"\.[a-f0-9]{12}\..*$")
+
+HIVE_MODERATION_API_KEY = os.getenv('HIVE_MODERATION_API_KEY')

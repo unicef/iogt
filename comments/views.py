@@ -103,7 +103,7 @@ class CommentListingView(ListView):
     model = XtdComment
     template_name = 'comments/listing.html'
     context_object_name = 'comments'
-    paginate_by = 2
+    paginate_by = 10
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -118,12 +118,15 @@ class CommentListingView(ListView):
         form = CommentFilterForm(self.request.GET)
         if form.is_valid():
             data = form.cleaned_data
+            is_accepted = data['is_accepted']
             is_flagged = data['is_flagged']
             is_removed = data['is_removed']
             is_public = data['is_public']
             from_date = data['from_date']
             to_date = data['to_date']
 
+            if is_accepted != '':
+                queryset = queryset.filter(comment_moderation__is_accepted=is_accepted)
             if is_flagged != '':
                 if is_flagged:
                     queryset = queryset.annotate(num_flags=Count('flags')).filter(num_flags__gt=0)
