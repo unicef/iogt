@@ -1,39 +1,34 @@
 {% extends "base.html" %}
 {% load static wagtailcore_tags wagtailimages_tags comments comments_xtd  wagtailuserbar menu_tags  home_tags questionnaires_tags sass_tags i18n %}
-{% get_current_language as LANGUAGE_CODE %}
-{% get_language_info for LANGUAGE_CODE as lang %}
-{% get_available_languages as LANGUAGES %}
-{% get_language_info_list for LANGUAGES as languages %}
-{% get_current_language as LANGUAGE_CODE %}
 
 {% block content %}
-    <h1>Comment Moderation</h1>
+    <h1>{% translate 'Comment Moderation' %}</h1>
     <form action="" method="get">
         {{ form.as_table }}
-        <input type="submit">
+        <button type="submit">{% translate 'Apply' %}</button>
     </form>
     {% if comments %}
         <table>
             <tr>
-                <th>Comments</th>
-                <th>Action</th>
+                <th>{% translate 'Comments' %}</th>
+                <th>{% translate 'Actions' %}</th>
             </tr>
             {% for comment in comments %}
                 <tr>
                     <td>{{ comment.comment }}</td>
                     <td>
                         {% if comment.is_public %}
-                            <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='unpublish' %}>Unpublish</a>
+                            <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='unpublish' %}>{% translate 'Unpublish' %}</a>
                         {% else %}
-                            <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='publish' %}>Publish</a>
+                            <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='publish' %}>{% translate 'Publish' %}</a>
                         {% endif %}
                         {% if comment.is_removed %}
-                            <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='show' %}>Show</a>
+                            <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='show' %}>{% translate 'Show' %}</a>
                         {% else %}
-                            <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='hide' %}>Hide</a>
+                            <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='hide' %}>{% translate 'Hide' %}</a>
                         {% endif %}
                         {% if comment.num_flags %}
-                            <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='clear_flags' %}>Clear Flags</a>
+                            <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='clear_flags' %}>{% translate 'Clear Flags' %}</a>
                         {% endif %}
                     </td>
                 </tr>
@@ -43,18 +38,18 @@
             <div class="pagination">
                 <span class="page-links">
                     {% if page_obj.has_previous %}
-                        <a href="?{{ params }}&page={{ page_obj.previous_page_number }}">previous</a>
+                        <a href="?{{ params }}&page={{ page_obj.previous_page_number }}">{% translate 'Previous' %}</a>
                     {% endif %}
                     <span class="page-current">
                         Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
                     </span>
                     {% if page_obj.has_next %}
-                        <a href="?{{ params }}&page={{ page_obj.next_page_number }}">next</a>
+                        <a href="?{{ params }}&page={{ page_obj.next_page_number }}">{% translate 'Next' %}</a>
                     {% endif %}
                 </span>
             </div>
         {% endif %}
     {% else %}
-        <div>No comments found.</div>
+        <div>{% translate 'No comments found.' %}</div>
     {% endif %}
 {% endblock content %}
