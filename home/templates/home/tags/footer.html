@@ -9,6 +9,11 @@
             {% url 'account_login' as login_url %}
             {% primary_button title='Log in / Create account' href=login_url icon_path='icons/login.svg' extra_classnames='login-create-account-btn' %}
         {% else %}
+            {% if perms.django_comments_xtd.can_moderate %}
+                {% url 'comments_moderation' as comments_moderation %}
+                {% primary_button title='Comments Moderation' href=comments_moderation %}
+            {% endif %}
+
             {% url 'user_profile' as profile_url %}
             {% primary_button title='Profile' href=profile_url icon_path='icons/profile.svg' %}
 

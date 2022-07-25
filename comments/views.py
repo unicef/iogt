@@ -101,9 +101,9 @@ class ProcessCannedResponseView(View):
         return redirect(to=referer_url)
 
 
-class CommentListingView(ListView):
+class CommentsModerationView(ListView):
     model = XtdComment
-    template_name = 'comments/listing.html'
+    template_name = 'comments/moderation.html'
     context_object_name = 'comments'
     paginate_by = 10
 
