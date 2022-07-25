@@ -29,6 +29,8 @@ def update(request, comment_pk, action):
     elif action == 'publish':
         for comment in comments:
             comment.is_public = True
+            comment.comment_moderation.is_accepted = True
+            comment.comment_moderation.save(update_fields=['is_accepted'])
         verb = 'published'
     elif action == 'hide':
         for comment in comments:
