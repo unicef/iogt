@@ -1,3 +1,4 @@
+{% load comments_xtd %}
 {% load static wagtailcore_tags wagtailimages_tags i18n generic_components image_tags %}
 
 <footer class="bottom-level">
@@ -9,7 +10,7 @@
             {% url 'account_login' as login_url %}
             {% primary_button title='Log in / Create account' href=login_url icon_path='icons/login.svg' extra_classnames='login-create-account-btn' %}
         {% else %}
-            {% if perms.django_comments_xtd.can_moderate %}
+            {% if request.user|has_permission:'django_comments_xtd.can_moderate' %}
                 {% url 'comments_moderation' as comments_moderation %}
                 {% primary_button title='Comments Moderation' href=comments_moderation %}
             {% endif %}

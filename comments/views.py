@@ -109,7 +109,7 @@ class CommentsModerationView(ListView):
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.has_perm('perms.django_comments_xtd.can_moderate'):
+        if not request.user.has_perm('django_comments_xtd.can_moderate'):
             raise PermissionDenied(
                 "You do not have permission."
             )
