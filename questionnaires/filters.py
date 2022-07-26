@@ -17,10 +17,10 @@ class QuestionnaireFilter(filters.FilterSet):
 
 
 class UserSubmissionFilter(filters.FilterSet):
-    submit_at_start = filters.DateFilter(field_name='submit_time__date', lookup_expr='gte')
-    submit_at_end = filters.DateFilter(field_name="submit_time__date", lookup_expr='lte')
+    submit_time_start = filters.DateFilter(field_name='submit_time__date', lookup_expr='gte')
+    submit_time_end = filters.DateFilter(field_name="submit_time__date", lookup_expr='lte')
     user_ids = ListIdFilter(field_name='user_id')
 
     class Meta:
         model = UserSubmission
-        fields = ['submit_at_start', 'submit_at_end', 'user_ids']
+        fields = ['submit_time_start', 'submit_time_end', 'user_ids']

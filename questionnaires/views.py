@@ -40,6 +40,19 @@ class CustomSubmissionsListView(SubmissionsListView):
         return super().get_queryset().select_related('page', 'user')
 
 
+@method_decorator(name='get', decorator=swagger_auto_schema(
+    manual_parameters=[
+        openapi.Parameter('last_published_at_start', openapi.IN_QUERY, format="YYYY-MM-DD", type=openapi.TYPE_STRING),
+        openapi.Parameter('last_published_at_end', openapi.IN_QUERY, format="YYYY-MM-DD", type=openapi.TYPE_STRING),
+        openapi.Parameter('type', openapi.IN_QUERY, enum=['poll', 'survey', 'quiz'], type=openapi.TYPE_STRING),
+    ],
+    responses={
+        status.HTTP_200_OK: openapi.Response(
+            description="Questionnaires List API",
+            schema=QuestionnairePageSerializer,
+        )
+    }
+))
 class QuestionnairesListAPIView(ListAPIView):
     serializer_class = QuestionnairePageSerializer
     filterset_class = QuestionnaireFilter
@@ -52,7 +65,7 @@ class QuestionnairesListAPIView(ListAPIView):
 @method_decorator(name='get', decorator=swagger_auto_schema(
     responses={
         status.HTTP_200_OK: openapi.Response(
-            description="Questionnaire Page Detail Serializer",
+            description="Questionnaire Page Detail API",
             schema=QuestionnairePageDetailSerializer,
         )
     }
@@ -71,6 +84,19 @@ class QuestionnaireDetailAPIView(RetrieveAPIView):
             return QuizPageDetailSerializer
 
 
+@method_decorator(name='get', decorator=swagger_auto_schema(
+    manual_parameters=[
+        openapi.Parameter('submit_time_start', openapi.IN_QUERY, format="YYYY-MM-DD", type=openapi.TYPE_STRING),
+        openapi.Parameter('submit_time_end', openapi.IN_QUERY, format="YYYY-MM-DD", type=openapi.TYPE_STRING),
+        openapi.Parameter('user_ids', openapi.IN_QUERY, format='Comma (,) separated with no spaces', type=openapi.TYPE_STRING),
+    ],
+    responses={
+        status.HTTP_200_OK: openapi.Response(
+            description="Questionnaire Submissions List API",
+            schema=UserSubmissionSerializer,
+        )
+    }
+))
 class QuestionnaireSubmissionsAPIView(ListAPIView):
     serializer_class = UserSubmissionSerializer
     filterset_class = UserSubmissionFilter
