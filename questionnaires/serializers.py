@@ -15,9 +15,11 @@ from questionnaires.models import (
 
 
 class QuestionnairePageSerializer(serializers.ModelSerializer):
+    type = serializers.CharField(source='content_type.model')
+
     class Meta:
         model = Page
-        fields = ['id', 'title']
+        fields = ['id', 'title', 'type', 'last_published_at']
 
 
 class PollFormFieldSerializer(serializers.ModelSerializer):
@@ -54,12 +56,17 @@ class PollPageDetailSerializer(serializers.ModelSerializer):
 
 
 class SurveyFormFieldSerializer(serializers.ModelSerializer):
+    choices = serializers.SerializerMethodField()
+
+    def get_choices(self, instance):
+        return instance.choices and instance.choices.split('|')
+
     skip_logic = serializers.JSONField(source='skip_logic.stream_data')
 
     class Meta:
         model = SurveyFormField
         fields = [
-            'id', 'sort_order', 'label', 'clean_name', 'help_text', 'required', 'field_type', 'skip_logic',
+            'id', 'sort_order', 'label', 'clean_name', 'help_text', 'required', 'field_type', 'choices', 'skip_logic',
             'default_value', 'admin_label', 'page_break',
         ]
 
