@@ -24,9 +24,13 @@ class QuestionnairePageSerializer(serializers.ModelSerializer):
 
 class PollFormFieldSerializer(serializers.ModelSerializer):
     choices = serializers.SerializerMethodField()
+    default_value = serializers.SerializerMethodField()
 
     def get_choices(self, instance):
         return instance.choices and instance.choices.split('|')
+
+    def get_default_value(self, instance):
+        return instance.default_value and instance.default_value.split('|')
 
     class Meta:
         model = PollFormField
@@ -57,9 +61,13 @@ class PollPageDetailSerializer(serializers.ModelSerializer):
 
 class SurveyFormFieldSerializer(serializers.ModelSerializer):
     choices = serializers.SerializerMethodField()
+    default_value = serializers.SerializerMethodField()
 
     def get_choices(self, instance):
         return instance.choices and instance.choices.split('|')
+
+    def get_default_value(self, instance):
+        return instance.default_value and instance.default_value.split('|')
 
     skip_logic = serializers.JSONField(source='skip_logic.stream_data')
 
@@ -91,9 +99,17 @@ class SurveyPageDetailSerializer(serializers.ModelSerializer):
 
 class QuizFormFieldSerializer(serializers.ModelSerializer):
     choices = serializers.SerializerMethodField()
+    default_value = serializers.SerializerMethodField()
+    correct_answer = serializers.SerializerMethodField()
 
     def get_choices(self, instance):
-        return instance.choices.split('|')
+        return instance.choices and instance.choices.split('|')
+
+    def get_default_value(self, instance):
+        return instance.default_value and instance.default_value.split('|')
+
+    def get_correct_answer(self, instance):
+        return instance.correct_answer and instance.correct_answer.split('|')
 
     class Meta:
         model = QuizFormField
@@ -133,7 +149,17 @@ class UserSubmissionSerializer(serializers.ModelSerializer):
     page_url = serializers.CharField(source='page.full_url')
 
     def get_submission(self, instance):
-        return json.loads(instance.form_data)
+        form_data = json.loads(instance.form_data)
+        form_data_ = []
+        for clean_name, answer in form_data.items():
+            question = instance.page.specific.get_form_fields().get(clean_name=clean_name)
+            form_data_.append({
+                question.admin_label: {
+                    "clean_name": clean_name,
+                    "user_answer": answer,
+                }
+            })
+        return form_data_
 
     class Meta:
         model = UserSubmission
