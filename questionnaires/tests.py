@@ -194,7 +194,7 @@ class QuestionnairesListAPIViewTests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 9)
-        self.assertEqual(response.data['next'], 'http://testserver/questionnaires/list/?page=2&page_size=3')
+        self.assertEqual(response.data['next'], 'http://testserver/v1/questionnaires/?page=2&page_size=3')
         self.assertIsNone(response.data['previous'])
         self.assertEqual(response.data['results'][0]['title'], poll_01.title)
         self.assertEqual(response.data['results'][1]['title'], poll_02.title)
@@ -204,8 +204,8 @@ class QuestionnairesListAPIViewTests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 9)
-        self.assertEqual(response.data['next'], 'http://testserver/questionnaires/list/?page=3&page_size=3')
-        self.assertEqual(response.data['previous'], 'http://testserver/questionnaires/list/?page_size=3')
+        self.assertEqual(response.data['next'], 'http://testserver/v1/questionnaires/?page=3&page_size=3')
+        self.assertEqual(response.data['previous'], 'http://testserver/v1/questionnaires/?page_size=3')
         self.assertEqual(response.data['results'][0]['title'], survey_01.title)
         self.assertEqual(response.data['results'][1]['title'], survey_02.title)
         self.assertEqual(response.data['results'][2]['title'], survey_03.title)
@@ -215,7 +215,7 @@ class QuestionnairesListAPIViewTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 9)
         self.assertIsNone(response.data['next'])
-        self.assertEqual(response.data['previous'], 'http://testserver/questionnaires/list/?page=2&page_size=3')
+        self.assertEqual(response.data['previous'], 'http://testserver/v1/questionnaires/?page=2&page_size=3')
         self.assertEqual(response.data['results'][0]['title'], quiz_01.title)
         self.assertEqual(response.data['results'][1]['title'], quiz_02.title)
         self.assertEqual(response.data['results'][2]['title'], quiz_03.title)
@@ -666,7 +666,7 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 3)
         self.assertEqual(
-            response.data['next'], f'http://testserver/questionnaires/{poll.id}/submissions/?page=2&page_size=1')
+            response.data['next'], f'http://testserver/v1/questionnaires/{poll.id}/submissions/?page=2&page_size=1')
         self.assertIsNone(response.data['previous'])
         self.assertEqual(response.data['results'][0]['id'], user_submission_01.id)
         self.assertEqual(response.data['results'][0]['user'], user_01.username)
@@ -680,9 +680,9 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 3)
         self.assertEqual(
-            response.data['next'], f'http://testserver/questionnaires/{poll.id}/submissions/?page=3&page_size=1')
+            response.data['next'], f'http://testserver/v1/questionnaires/{poll.id}/submissions/?page=3&page_size=1')
         self.assertEqual(
-            response.data['previous'], f'http://testserver/questionnaires/{poll.id}/submissions/?page_size=1')
+            response.data['previous'], f'http://testserver/v1/questionnaires/{poll.id}/submissions/?page_size=1')
         self.assertEqual(response.data['results'][0]['id'], user_submission_02.id)
         self.assertEqual(response.data['results'][0]['user'], user_02.username)
         self.assertIsNotNone(response.data['results'][0]['submit_time'])
@@ -696,7 +696,7 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         self.assertEqual(response.data['count'], 3)
         self.assertIsNone(response.data['next'])
         self.assertEqual(
-            response.data['previous'], f'http://testserver/questionnaires/{poll.id}/submissions/?page=2&page_size=1')
+            response.data['previous'], f'http://testserver/v1/questionnaires/{poll.id}/submissions/?page=2&page_size=1')
         self.assertEqual(response.data['results'][0]['id'], user_submission_03.id)
         self.assertEqual(response.data['results'][0]['user'], user_03.username)
         self.assertIsNotNone(response.data['results'][0]['submit_time'])
