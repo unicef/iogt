@@ -152,13 +152,14 @@ class UserSubmissionSerializer(serializers.ModelSerializer):
         form_data = json.loads(instance.form_data)
         form_data_ = []
         for clean_name, answer in form_data.items():
-            question = instance.page.specific.get_form_fields().get(clean_name=clean_name)
-            form_data_.append({
-                question.admin_label: {
-                    "clean_name": clean_name,
-                    "user_answer": answer,
-                }
-            })
+            question = instance.page.specific.get_form_fields().filter(clean_name=clean_name).first()
+            if question:
+                form_data_.append({
+                    question.admin_label: {
+                        "clean_name": clean_name,
+                        "user_answer": answer,
+                    }
+                })
         return form_data_
 
     class Meta:
