@@ -21,7 +21,7 @@ from iogt.views import TransitionPageView, SitemapAPIView, TranslationNotFoundPa
 
 
 api_url_patterns = [
-    path('questionnaires/', include('questionnaires.urls'), name='questionnaires'),
+    path('v1/questionnaires/', include('questionnaires.urls'), name='questionnaires'),
 ]
 
 schema_view = get_schema_view(
