@@ -1,5 +1,4 @@
-from cgi import parse_qs
-from urllib.parse import urlparse, urlencode
+from urllib.parse import urlparse, urlencode, parse_qs
 
 from django import template
 from django.conf import settings
