@@ -1,11 +1,10 @@
 from django.urls import path
 
-from questionnaires.views import (
+from questionnaires.api.v1.views import (
     QuestionnairesListAPIView,
     QuestionnaireDetailAPIView,
     QuestionnaireSubmissionsAPIView,
 )
-
 
 urlpatterns = [
     path('', QuestionnairesListAPIView.as_view(), name='questionnaires_list'),
