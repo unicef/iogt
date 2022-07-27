@@ -134,7 +134,7 @@ class QuestionnairesListAPIViewTests(TestCase):
         self.assertEqual(response.data['results'][1]['title'], quiz_02.title)
         self.assertEqual(response.data['results'][2]['title'], quiz_03.title)
 
-    def test_questionnaires_list_published_at_filter(self):
+    def test_questionnaires_list_last_published_at_filter(self):
         current_datetime = timezone.now()
         poll_01 = PollFactory(parent=self.home_page, title='Poll 01', last_published_at=current_datetime)
         poll_02 = PollFactory(parent=self.home_page, title='Poll 02', last_published_at=current_datetime - timedelta(days=1))
@@ -194,7 +194,7 @@ class QuestionnairesListAPIViewTests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 9)
-        self.assertEqual(response.data['next'], 'http://testserver/v1/questionnaires/?page=2&page_size=3')
+        self.assertEqual(response.data['next'], 'http://testserver/api/v1/questionnaires/?page=2&page_size=3')
         self.assertIsNone(response.data['previous'])
         self.assertEqual(response.data['results'][0]['title'], poll_01.title)
         self.assertEqual(response.data['results'][1]['title'], poll_02.title)
@@ -204,8 +204,8 @@ class QuestionnairesListAPIViewTests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 9)
-        self.assertEqual(response.data['next'], 'http://testserver/v1/questionnaires/?page=3&page_size=3')
-        self.assertEqual(response.data['previous'], 'http://testserver/v1/questionnaires/?page_size=3')
+        self.assertEqual(response.data['next'], 'http://testserver/api/v1/questionnaires/?page=3&page_size=3')
+        self.assertEqual(response.data['previous'], 'http://testserver/api/v1/questionnaires/?page_size=3')
         self.assertEqual(response.data['results'][0]['title'], survey_01.title)
         self.assertEqual(response.data['results'][1]['title'], survey_02.title)
         self.assertEqual(response.data['results'][2]['title'], survey_03.title)
@@ -215,7 +215,7 @@ class QuestionnairesListAPIViewTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 9)
         self.assertIsNone(response.data['next'])
-        self.assertEqual(response.data['previous'], 'http://testserver/v1/questionnaires/?page=2&page_size=3')
+        self.assertEqual(response.data['previous'], 'http://testserver/api/v1/questionnaires/?page=2&page_size=3')
         self.assertEqual(response.data['results'][0]['title'], quiz_01.title)
         self.assertEqual(response.data['results'][1]['title'], quiz_02.title)
         self.assertEqual(response.data['results'][2]['title'], quiz_03.title)
@@ -477,7 +477,7 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         self.assertEqual(response.data['results'][2]['submission'][0][poll_question.admin_label]['clean_name'], poll_question.clean_name)
         self.assertEqual(response.data['results'][2]['submission'][0][poll_question.admin_label]['user_answer'], ['c3'])
 
-    def test_questionnaire_submission_list_submit_at_filter(self):
+    def test_questionnaire_submission_list_submit_time_filter(self):
         current_datetime = timezone.now()
         poll = PollFactory(parent=self.home_page, last_published_at=current_datetime - timedelta(days=3))
         GroupPagePermissionFactory(group=self.group, page=poll)
@@ -515,7 +515,7 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         user_submission_03.save()
 
         response = self.client.get(
-            f"{reverse(self.url, kwargs={'pk': poll.id})}?submit_at_start={(current_datetime - timedelta(days=1)).date()}")
+            f"{reverse(self.url, kwargs={'pk': poll.id})}?submit_time_start={(current_datetime - timedelta(days=1)).date()}")
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 2)
@@ -535,7 +535,7 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         self.assertEqual(response.data['results'][1]['submission'][0][poll_question.admin_label]['user_answer'], ['c2', 'c3'])
 
         response = self.client.get(
-            f"{reverse(self.url, kwargs={'pk': poll.id})}?submit_at_end={(current_datetime - timedelta(days=1)).date()}")
+            f"{reverse(self.url, kwargs={'pk': poll.id})}?submit_time_end={(current_datetime - timedelta(days=1)).date()}")
 
         self.assertEqual(response.data['count'], 2)
         self.assertIsNone(response.data['next'])
@@ -666,7 +666,7 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 3)
         self.assertEqual(
-            response.data['next'], f'http://testserver/v1/questionnaires/{poll.id}/submissions/?page=2&page_size=1')
+            response.data['next'], f'http://testserver/api/v1/questionnaires/{poll.id}/submissions/?page=2&page_size=1')
         self.assertIsNone(response.data['previous'])
         self.assertEqual(response.data['results'][0]['id'], user_submission_01.id)
         self.assertEqual(response.data['results'][0]['user'], user_01.username)
@@ -680,9 +680,9 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 3)
         self.assertEqual(
-            response.data['next'], f'http://testserver/v1/questionnaires/{poll.id}/submissions/?page=3&page_size=1')
+            response.data['next'], f'http://testserver/api/v1/questionnaires/{poll.id}/submissions/?page=3&page_size=1')
         self.assertEqual(
-            response.data['previous'], f'http://testserver/v1/questionnaires/{poll.id}/submissions/?page_size=1')
+            response.data['previous'], f'http://testserver/api/v1/questionnaires/{poll.id}/submissions/?page_size=1')
         self.assertEqual(response.data['results'][0]['id'], user_submission_02.id)
         self.assertEqual(response.data['results'][0]['user'], user_02.username)
         self.assertIsNotNone(response.data['results'][0]['submit_time'])
@@ -696,7 +696,7 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         self.assertEqual(response.data['count'], 3)
         self.assertIsNone(response.data['next'])
         self.assertEqual(
-            response.data['previous'], f'http://testserver/v1/questionnaires/{poll.id}/submissions/?page=2&page_size=1')
+            response.data['previous'], f'http://testserver/api/v1/questionnaires/{poll.id}/submissions/?page=2&page_size=1')
         self.assertEqual(response.data['results'][0]['id'], user_submission_03.id)
         self.assertEqual(response.data['results'][0]['user'], user_03.username)
         self.assertIsNotNone(response.data['results'][0]['submit_time'])
