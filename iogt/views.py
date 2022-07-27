@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib.admin.utils import flatten
 from django.shortcuts import get_object_or_404
 from django.templatetags.static import static
+from django.urls import reverse
 from django.utils import translation
 from django.views.generic import TemplateView
 from rest_framework.response import Response
@@ -109,6 +110,11 @@ class PageTreeAPIView(APIView):
         page = get_object_or_404(Page, id=page_id)
         pages = page.get_descendants(inclusive=True).live().specific()
         page_urls = []
+        active_locale = Locale.get_active()
+        for locale in Locale.objects.all():
+            translation.activate(locale.language_code)
+            page_urls.append(reverse('offline_content_not_found'))
+        translation.activate(active_locale.language_code)
         image_urls = []
         for page in pages:
             if isinstance(page, (HomePage, Section, Article, OfflineAppPage, Poll, Survey, Quiz)):
@@ -148,3 +154,7 @@ class PageTreeAPIView(APIView):
             static_urls
         ))
         return Response(urls)
+
+
+class OfflineContentNotFoundPageView(TemplateView):
+    template_name = "offline-content-not-found.html"
