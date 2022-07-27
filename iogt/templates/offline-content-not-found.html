@@ -2,5 +2,9 @@
 {% load i18n %}
 
 {% block content %}
-    <h3>{% translate 'The content you are trying to reach is not available.' %}</h3>
+    <h3>
+        {% blocktranslate %}
+            The content you are trying to reach is not available. To see offline content click <a href="{{ offline_content_index_page_url }}">here</a>
+        {% endblocktranslate %}
+    </h3>
 {% endblock content %}

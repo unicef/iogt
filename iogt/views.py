@@ -15,7 +15,7 @@ from wagtail.core.models import Page, Locale
 from wagtail.images.models import Rendition
 from wagtailmedia.models import Media
 
-from home.models import HomePage, Section, Article, OfflineAppPage, SVGToPNGMap, FooterPage
+from home.models import HomePage, Section, Article, OfflineAppPage, SVGToPNGMap, FooterPage, OfflineContentIndexPage
 from iogt.utils import has_md5_hash
 from questionnaires.models import Poll, Survey, Quiz
 
@@ -114,6 +114,9 @@ class PageTreeAPIView(APIView):
         for locale in Locale.objects.all():
             translation.activate(locale.language_code)
             page_urls.append(reverse('offline_content_not_found'))
+            page = OfflineContentIndexPage.objects.filter(locale=locale).first()
+            if page:
+                page_urls.append(page.url)
         translation.activate(active_locale.language_code)
         image_urls = []
         for page in pages:
@@ -158,3 +161,9 @@ class PageTreeAPIView(APIView):
 
 class OfflineContentNotFoundPageView(TemplateView):
     template_name = "offline-content-not-found.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        page = OfflineContentIndexPage.objects.filter(locale=Locale.get_active()).first()
+        context["offline_content_index_page_url"] = (page and page.url) or ''
+        return context

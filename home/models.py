@@ -455,7 +455,7 @@ class Article(AbstractArticle):
 
 class MiscellaneousIndexPage(Page):
     parent_page_types = ['home.HomePage']
-    subpage_types = ['home.OfflineAppPage']
+    subpage_types = ['home.OfflineAppPage', 'home.OfflineContentIndexPage']
 
 
 class OfflineAppPage(AbstractArticle):
@@ -492,6 +492,44 @@ class OfflineAppPage(AbstractArticle):
         ObjectList(AbstractArticle.settings_panels, heading='Settings'),
         ObjectList(CommentableMixin.comments_panels, heading='Comments')
     ])
+
+
+class OfflineContentIndexPage(AbstractArticle):
+    template = 'home/article.html'
+    parent_page_types = ['home.MiscellaneousIndexPage']
+    subpage_types = []
+
+    body = StreamField([
+        ('heading', blocks.CharBlock(form_classname="full title", template='blocks/heading.html')),
+        ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
+        ('markdown', MarkdownBlock(icon='code')),
+        ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
+        ('image', ImageChooserBlock(template='blocks/image.html')),
+        ('list', blocks.ListBlock(MarkdownBlock(icon='code'))),
+        ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
+        ('page_button', PageButtonBlock()),
+        ('embedded_poll', EmbeddedPollBlock()),
+        ('embedded_survey', EmbeddedSurveyBlock()),
+        ('embedded_quiz', EmbeddedQuizBlock()),
+        ('media', MediaBlock(icon='media')),
+        ('chat_bot', ChatBotButtonBlock()),
+    ])
+
+    content_panels = AbstractArticle.content_panels + [
+        ImageChooserPanel('lead_image'),
+        SvgChooserPanel('icon'),
+        StreamFieldPanel('body'),
+        FieldPanel('index_page_description'),
+    ]
+
+    edit_handler = TabbedInterface([
+        ObjectList(content_panels, heading='Content'),
+        ObjectList(AbstractArticle.settings_panels, heading='Settings'),
+        ObjectList(CommentableMixin.comments_panels, heading='Comments')
+    ])
+
+    class Meta:
+        verbose_name = 'Offline Content Index Page'
 
 
 class BannerIndexPage(Page):
