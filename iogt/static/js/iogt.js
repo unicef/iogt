@@ -220,3 +220,54 @@ const sendSubscriptionToServer = subscription => {
         console.log('Unable to save user subscription', error);
     });
 };
+
+
+const unsubscribePushNotifications = registration => {
+    registration.pushManager.getSubscription()
+        .then(subscription => {
+            if (subscription) {
+                const browser = navigator.userAgent.match(/(firefox|msie|chrome|safari|trident)/ig)[0].toLowerCase();
+                const data = {
+                    status_type: 'unsubscribe',
+                    subscription: subscription.toJSON(),
+                    browser: browser,
+                };
+
+                console.log('Sending user unsubscription', data);
+
+                fetch('/webpush/subscribe/', {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    credentials: "include"
+                }).then(resp => {
+                    console.log('Successfully saved user unsubscription', resp.ok);
+                    setItem('isPushNotificationRegistered', false);
+                }).catch(error => {
+                    console.log('Unable to save user unsubscription', error);
+                });
+            }
+        })
+        .catch(error => {
+            console.log("Error during getSubscription()", error);
+        });
+};
+
+const unregisterPushNotifications = async () => {
+    const isPushNotificationRegistered = getItem('isPushNotificationRegistered', false);
+    if (isPushNotificationRegistered) {
+        console.log('Push notification already registered.')
+        if (isAuthenticated) {
+            if ('serviceWorker' in navigator) {
+                const registration = await navigator.serviceWorker.ready;
+                unsubscribePushNotifications(registration);
+            }
+        } else {
+            console.log('User isn\'t authenticated.')
+        }
+    } else {
+        console.log('Push notification isn\'t registered.')
+    }
+};

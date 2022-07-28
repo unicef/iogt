@@ -14,7 +14,7 @@
   {% if redirect_field_value %}
   <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
   {% endif %}
-  <button class="cust-btn cust-btn--dark profile-form__btn" type="submit">
+  <button class="cust-btn cust-btn--dark profile-form__btn" type="submit" onclick="unregisterPushNotifications();">
     <span>{% translate 'Log out' %}</span>
   </button>
 </form>
