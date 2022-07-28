@@ -738,7 +738,7 @@ class QuestionnairesTests(TestCase):
         self.staff_user = UserFactory()
         self.staff_user.groups.add(self.group)
         self.client.force_login(self.staff_user)
-        self.url = reverse('questionnaires')
+        self.url = reverse('form_data')
 
         Site.objects.all().delete()
         self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)

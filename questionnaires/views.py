@@ -44,7 +44,7 @@ class CustomSubmissionsListView(SubmissionsListView):
 
 
 class QuestionnairesView(SpreadsheetExportMixin, SafePaginateListView):
-    template_name = "questionnaires/questionnaires.html"
+    template_name = "questionnaires/form_data.html"
     context_object_name = 'form_pages'
     list_export = ['ID', 'Name', 'Submission Date', 'Field', 'Value']
     select_date_form = SelectDateForm

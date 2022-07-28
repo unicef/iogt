@@ -16,10 +16,10 @@ from questionnaires.models import UserSubmission
 class UserButtonHelper(ButtonHelper):
     view_button_classnames = ["button-small", "icon", "icon-form"]
 
-    def submissions_button(self, obj):
-        text = "Submissions"
+    def form_data_button(self, obj):
+        text = "Form Data"
         return {
-            "url": f'{reverse("questionnaires")}?user_id={obj.id}',  # decide where the button links to
+            "url": f'{reverse("form_data")}?user_id={obj.id}',  # decide where the button links to
             "label": text,
             "classname": self.finalise_classname(self.view_button_classnames),
             "title": text,
@@ -27,7 +27,7 @@ class UserButtonHelper(ButtonHelper):
 
     def get_buttons_for_obj(self, obj, exclude=None, classnames_add=None, classnames_exclude=None):
         btns = super().get_buttons_for_obj(obj, exclude, classnames_add, classnames_exclude)
-        btns.append(self.submissions_button(obj))
+        btns.append(self.form_data_button(obj))
         return btns
 
 

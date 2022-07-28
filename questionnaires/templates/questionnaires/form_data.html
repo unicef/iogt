@@ -1,6 +1,6 @@
 {% extends "wagtailadmin/base.html" %}
 {% load i18n wagtailadmin_tags %}
-{% block titletag %}{% trans "Questionnaires" %}{% endblock %}
+{% block titletag %}{% trans "Form Data" %}{% endblock %}
 {% block extra_js %}
     {{ block.super }}
 
@@ -46,7 +46,7 @@
                     <div class="col header-title">
                         <h1>
                           {% icon name="form" class_name="header-title-icon" %}
-                          {% trans "Questionnaires" %}
+                          {% trans "Form Data" %}
                         </h1>
                     </div>
                     <div class="col search-bar">
@@ -62,10 +62,10 @@
                 </div>
                 <div class="right">
                     <div class="dropdown dropdown-button match-width">
-                        <a id="download-xlsx" href="{{ request.get_full_path }}&export=xlsx" class="button bicolor button--icon">{% icon name="download" wrapped=1 %}{% trans 'Download Submissions (XLSX)' %}</a>
+                        <a id="download-xlsx" href="{{ request.get_full_path }}&export=xlsx" class="button bicolor button--icon">{% icon name="download" wrapped=1 %}{% trans 'Download Form Data (XLSX)' %}</a>
                         <div class="dropdown-toggle">{% icon name="arrow-down" %}</div>
                         <ul>
-                            <li><a id="download-csv" class="button bicolor button--icon" href="{{ request.get_full_path }}&export=csv">{% icon name="download" wrapped=1 %}{% trans 'Download Submissions (CSV)' %}</a></li>
+                            <li><a id="download-csv" class="button bicolor button--icon" href="{{ request.get_full_path }}&export=csv">{% icon name="download" wrapped=1 %}{% trans 'Download Form Data (CSV)' %}</a></li>
                         </ul>
                     </div>
                 </div>

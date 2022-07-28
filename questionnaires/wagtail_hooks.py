@@ -26,5 +26,5 @@ def editor_js():
 def register_custom_form_pages_list_view():
   return [
       path('forms/', FormPagesListView.as_view(), name='index'),
-      path('questionnaires/', QuestionnairesView.as_view(), name='questionnaires'),
+      path('form-data/', QuestionnairesView.as_view(), name='form_data'),
   ]
