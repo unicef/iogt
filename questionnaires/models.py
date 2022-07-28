@@ -2,7 +2,6 @@ import json
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.contrib.sites.models import Site
 from django.db.models import Q
 from django.utils import timezone
 from django.utils.functional import cached_property
@@ -20,7 +19,6 @@ from wagtailsvg.models import Svg
 
 from home.blocks import MediaBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock
 from home.mixins import PageUtilsMixin, TitleIconMixin
-from iogt_users.models import User
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (FieldPanel, InlinePanel,
                                          MultiFieldPanel, StreamFieldPanel)
@@ -35,7 +33,6 @@ from questionnaires.blocks import SkipState, SkipLogicField
 from questionnaires.edit_handlers import FormSubmissionsPanel
 from questionnaires.forms import CustomFormBuilder, SurveyForm, QuizForm
 from questionnaires.utils import SkipLogicPaginator, FormHelper
-from questionnaires.views import CustomSubmissionsListView
 
 FORM_FIELD_CHOICES = (
     ('checkbox', _('Checkbox')),
@@ -245,8 +242,10 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
             user=None if user.is_anonymous else user,
             session_key=self.session.session_key,
         )
-
+    
+    # Required by Wagtail Forms
     def get_submissions_list_view_class(self):
+        from questionnaires.views import CustomSubmissionsListView
         return CustomSubmissionsListView
 
     def get_export_filename(self):
