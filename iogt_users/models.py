@@ -57,10 +57,6 @@ class User(AbstractUser):
     def get_display_name(self):
         return self.display_name or self.username
 
-    @property
-    def get_accessible_page_ids(self):
-        return self.groups.values_list('page_permissions__page_id', flat=True)
-
     class Meta:
         ordering = ('id',)
 

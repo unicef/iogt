@@ -1,6 +1,7 @@
 import json
 
 from rest_framework import serializers
+from wagtail.contrib.forms.models import AbstractFormField
 from wagtail.core.models import Page
 
 from questionnaires.models import (
@@ -11,107 +12,102 @@ from questionnaires.models import (
     QuizFormField,
     Quiz,
     UserSubmission,
+    QuestionnairePage,
 )
 
 
 class QuestionnairePageSerializer(serializers.ModelSerializer):
+    type = serializers.CharField(source='content_type.model')
+
     class Meta:
         model = Page
-        fields = ['id', 'title']
+        fields = ['id', 'title', 'type', 'last_published_at']
 
 
-class PollFormFieldSerializer(serializers.ModelSerializer):
+class BaseFormFieldSerializer(serializers.ModelSerializer):
     choices = serializers.SerializerMethodField()
+    default_value = serializers.SerializerMethodField()
 
     def get_choices(self, instance):
         return instance.choices and instance.choices.split('|')
 
+    def get_default_value(self, instance):
+        return instance.default_value and instance.default_value.split('|')
+
     class Meta:
-        model = PollFormField
+        model = AbstractFormField
         fields = [
             'id', 'sort_order', 'label', 'clean_name', 'help_text', 'required', 'field_type', 'choices',
-            'default_value', 'admin_label',
+            'default_value',
         ]
+        abstract = True
 
 
-class PollPageDetailSerializer(serializers.ModelSerializer):
+class BaseQuestionnairePageDetailSerializer(serializers.ModelSerializer):
     description = serializers.JSONField(source='description.stream_data')
     thank_you_text = serializers.JSONField(source='thank_you_text.stream_data')
     terms_and_conditions = serializers.JSONField(source='terms_and_conditions.stream_data')
     url = serializers.CharField(source='full_url')
-    published_at = serializers.DateTimeField(source='last_published_at')
+
+    class Meta:
+        model = QuestionnairePage
+        fields = [
+            'id', 'title', 'last_published_at', 'live', 'url', 'last_published_at', 'allow_anonymous_submissions',
+            'allow_multiple_submissions', 'submit_button_text', 'direct_display', 'index_page_description',
+            'index_page_description_line_2', 'description', 'thank_you_text', 'terms_and_conditions',
+        ]
+        abstract = True
+
+
+class PollFormFieldSerializer(BaseFormFieldSerializer):
+    class Meta:
+        model = PollFormField
+        fields = BaseFormFieldSerializer.Meta.fields + ['admin_label']
+
+
+class PollPageDetailSerializer(BaseQuestionnairePageDetailSerializer):
     questions = PollFormFieldSerializer(source='poll_form_fields', many=True)
 
     class Meta:
         model = Poll
-        fields = [
-            'id', 'title', 'live', 'url', 'published_at', 'allow_anonymous_submissions',
-            'allow_multiple_submissions', 'show_results', 'result_as_percentage', 'randomise_options',
-            'show_results_with_no_votes', 'submit_button_text', 'direct_display', 'index_page_description',
-            'index_page_description_line_2', 'description', 'thank_you_text', 'terms_and_conditions',
-            'questions',
+        fields = BaseQuestionnairePageDetailSerializer.Meta.fields + [
+            'show_results', 'result_as_percentage', 'randomise_options', 'show_results_with_no_votes', 'questions',
         ]
 
 
-class SurveyFormFieldSerializer(serializers.ModelSerializer):
+class SurveyFormFieldSerializer(BaseFormFieldSerializer):
     skip_logic = serializers.JSONField(source='skip_logic.stream_data')
 
     class Meta:
         model = SurveyFormField
-        fields = [
-            'id', 'sort_order', 'label', 'clean_name', 'help_text', 'required', 'field_type', 'skip_logic',
-            'default_value', 'admin_label', 'page_break',
-        ]
+        fields = BaseFormFieldSerializer.Meta.fields + ['skip_logic', 'admin_label', 'page_break']
 
 
-class SurveyPageDetailSerializer(serializers.ModelSerializer):
-    description = serializers.JSONField(source='description.stream_data')
-    thank_you_text = serializers.JSONField(source='thank_you_text.stream_data')
-    terms_and_conditions = serializers.JSONField(source='terms_and_conditions.stream_data')
-    url = serializers.CharField(source='full_url')
-    published_at = serializers.DateTimeField(source='last_published_at')
+class SurveyPageDetailSerializer(BaseQuestionnairePageDetailSerializer):
     questions = SurveyFormFieldSerializer(source='survey_form_fields', many=True)
 
     class Meta:
         model = Survey
-        fields = [
-            'id', 'title', 'live', 'url', 'published_at', 'allow_anonymous_submissions',
-            'allow_multiple_submissions', 'submit_button_text', 'direct_display', 'index_page_description',
-            'index_page_description_line_2', 'multi_step', 'description', 'thank_you_text', 'terms_and_conditions',
-            'questions',
-        ]
+        fields = BaseQuestionnairePageDetailSerializer.Meta.fields + ['multi_step', 'questions']
 
 
-class QuizFormFieldSerializer(serializers.ModelSerializer):
-    choices = serializers.SerializerMethodField()
+class QuizFormFieldSerializer(BaseFormFieldSerializer):
+    correct_answer = serializers.SerializerMethodField()
 
-    def get_choices(self, instance):
-        return instance.choices.split('|')
+    def get_correct_answer(self, instance):
+        return instance.correct_answer and instance.correct_answer.split('|')
 
     class Meta:
         model = QuizFormField
-        fields = [
-            'id', 'sort_order', 'label', 'clean_name', 'help_text', 'required', 'field_type', 'choices',
-            'default_value', 'correct_answer', 'feedback', 'admin_label', 'page_break',
-        ]
+        fields = BaseFormFieldSerializer.Meta.fields + ['correct_answer', 'feedback', 'admin_label', 'page_break']
 
 
-class QuizPageDetailSerializer(serializers.ModelSerializer):
-    description = serializers.JSONField(source='description.stream_data')
-    thank_you_text = serializers.JSONField(source='thank_you_text.stream_data')
-    terms_and_conditions = serializers.JSONField(source='terms_and_conditions.stream_data')
-    url = serializers.CharField(source='full_url')
-    published_at = serializers.DateTimeField(source='last_published_at')
+class QuizPageDetailSerializer(BaseQuestionnairePageDetailSerializer):
     questions = QuizFormFieldSerializer(source='quiz_form_fields', many=True)
 
     class Meta:
         model = Quiz
-        fields = [
-            'id', 'title', 'live', 'url', 'published_at', 'allow_anonymous_submissions',
-            'allow_multiple_submissions', 'submit_button_text', 'direct_display', 'index_page_description',
-            'index_page_description_line_2', 'multi_step', 'description', 'thank_you_text', 'terms_and_conditions',
-            'questions',
-        ]
+        fields = BaseQuestionnairePageDetailSerializer.Meta.fields + ['multi_step', 'questions']
 
 
 class QuestionnairePageDetailSerializer(serializers.Serializer):
@@ -126,7 +122,18 @@ class UserSubmissionSerializer(serializers.ModelSerializer):
     page_url = serializers.CharField(source='page.full_url')
 
     def get_submission(self, instance):
-        return json.loads(instance.form_data)
+        form_data = json.loads(instance.form_data)
+        form_data_ = []
+        for clean_name, answer in form_data.items():
+            question = instance.page.specific.get_form_fields().filter(clean_name=clean_name).first()
+            if question:
+                form_data_.append({
+                    question.admin_label: {
+                        "clean_name": clean_name,
+                        "user_answer": answer,
+                    }
+                })
+        return form_data_
 
     class Meta:
         model = UserSubmission

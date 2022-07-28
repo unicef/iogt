@@ -21,7 +21,7 @@ from iogt.views import TransitionPageView, SitemapAPIView, TranslationNotFoundPa
 
 
 api_url_patterns = [
-    path('questionnaires/', include('questionnaires.urls'), name='questionnaires'),
+    path('api/v1/questionnaires/', include('questionnaires.api.v1.urls')),
 ]
 
 schema_view = get_schema_view(
@@ -61,7 +61,7 @@ urlpatterns = api_url_patterns + [
     *i18n_patterns(path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog')),
     path('health-check/', include('health_check.urls')),
     path('page-tree/<int:page_id>/', PageTreeAPIView.as_view(), name='page_tree'),
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger'),
+    path('api/docs/', schema_view.with_ui('swagger'), name='swagger'),
 ]
 
 if settings.DEBUG:

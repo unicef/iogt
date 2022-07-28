@@ -6,11 +6,6 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
-from django.utils.decorators import method_decorator
-from drf_yasg import openapi
-from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status
-from rest_framework.generics import ListAPIView, RetrieveAPIView
 from wagtail.admin.views.mixins import SpreadsheetExportMixin, Echo
 from wagtail.contrib.forms.forms import SelectDateForm
 from wagtail.contrib.forms.utils import get_forms_for_user
@@ -19,20 +14,9 @@ from wagtail.contrib.forms.views import (
     FormPagesListView as WagtailFormPagesListView,
     SafePaginateListView,
 )
-from wagtail.core.models import Page
 from xlsxwriter.workbook import Workbook
 
-from questionnaires.filters import QuestionnaireFilter, UserSubmissionFilter
-from questionnaires.models import QuestionnairePage, Survey, Poll, Quiz, UserSubmission
-from iogt.paginators import IoGTPagination
-from questionnaires.serializers import (
-    QuestionnairePageSerializer,
-    SurveyPageDetailSerializer,
-    PollPageDetailSerializer,
-    QuizPageDetailSerializer,
-    UserSubmissionSerializer,
-    QuestionnairePageDetailSerializer,
-)
+from questionnaires.models import UserSubmission
 
 
 User = get_user_model()
@@ -184,54 +168,3 @@ class QuestionnairesView(SpreadsheetExportMixin, SafePaginateListView):
         """ Gets the base filename for the exported spreadsheet, without extensions """
         timestamp = timezone.now().strftime(settings.EXPORT_FILENAME_TIMESTAMP_FORMAT)
         return f'{self.user.username}-submission_{timestamp}'
-
-
-class QuestionnairesListAPIView(ListAPIView):
-    serializer_class = QuestionnairePageSerializer
-    filterset_class = QuestionnaireFilter
-    pagination_class = IoGTPagination
-
-    def get_queryset(self):
-        accessible_page_ids = self.request.user.get_accessible_page_ids
-        return Page.objects.filter(id__in=accessible_page_ids).type(QuestionnairePage).order_by('-last_published_at')
-
-
-@method_decorator(name='get', decorator=swagger_auto_schema(
-    responses={
-        status.HTTP_200_OK: openapi.Response(
-            description="Questionnaire Page Detail Serializer",
-            schema=QuestionnairePageDetailSerializer,
-        )
-    }
-))
-class QuestionnaireDetailAPIView(RetrieveAPIView):
-    queryset = Page.objects.type(QuestionnairePage).specific()
-
-    def get_queryset(self):
-        accessible_page_ids = self.request.user.get_accessible_page_ids
-        return Page.objects.filter(id__in=accessible_page_ids).type(QuestionnairePage).specific().order_by(
-            '-last_published_at')
-
-    def get_serializer_class(self):
-        page = self.get_object()
-        if isinstance(page, Poll):
-            return PollPageDetailSerializer
-        elif isinstance(page, Survey):
-            return SurveyPageDetailSerializer
-        elif isinstance(page, Quiz):
-            return QuizPageDetailSerializer
-
-
-class QuestionnaireSubmissionsAPIView(ListAPIView):
-    serializer_class = UserSubmissionSerializer
-    filterset_class = UserSubmissionFilter
-    pagination_class = IoGTPagination
-
-    def get_queryset(self):
-        accessible_page_ids = self.request.user.get_accessible_page_ids
-        return UserSubmission.objects.filter(
-            page_id=self.kwargs.get(self.lookup_field),
-            page_id__in=accessible_page_ids
-        ).select_related(
-            'user', 'page'
-        ).order_by('-submit_time')

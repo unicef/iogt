@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import re
 from datetime import timedelta
 
 import allauth
@@ -499,3 +500,5 @@ if CACHE_BACKEND:
     }
 
 SITE_VERSION = os.getenv('SITE_VERSION', 'unknown')
+
+HAS_MD5_HASH_REGEX = re.compile(r"\.[a-f0-9]{12}\..*$")

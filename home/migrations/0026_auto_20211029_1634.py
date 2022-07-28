@@ -2,58 +2,6 @@
 
 from django.db import migrations
 
-from questionnaires.models import Poll, Survey, Quiz
-
-
-def _fix_embedded_questionnaires(block):
-    if block['type'] == 'embedded_poll':
-        poll = Poll.objects.filter(id=block['value']).first()
-        if poll:
-            block['value'] = {
-                'direct_display': True,
-                'poll': poll.id,
-            }
-    elif block['type'] == 'embedded_survey':
-        survey = Survey.objects.filter(id=block['value']).first()
-        if survey:
-            block['value'] = {
-                'direct_display': survey.specific.direct_display,
-                'survey': survey.id,
-            }
-    elif block['type'] == 'embedded_quiz':
-        quiz = Quiz.objects.filter(id=block['value']).first()
-        if quiz:
-            block['value'] = {
-                'direct_display': quiz.specific.direct_display,
-                'quiz': quiz.id,
-            }
-
-
-def _update_home_page_featured_content(apps, schema_editor):
-    HomePage = apps.get_model('home.HomePage')
-    home_pages = HomePage.objects.all()
-    for home_page in home_pages:
-        home_featured_content = home_page.home_featured_content.stream_data
-        for block in home_featured_content:
-            if block['type'] == 'article':
-                block['value'] = {
-                    'article': block['value'],
-                    'display_section_title': True,
-                }
-            else:
-                _fix_embedded_questionnaires(block)
-        home_page.save()
-
-
-def _update_article_body(apps, schema_editor):
-    Article = apps.get_model('home.Article')
-    articles = Article.objects.all()
-    for article in articles:
-        body = article.body.stream_data
-        for block in body:
-            _fix_embedded_questionnaires(block)
-        article.save()
-
 
 class Migration(migrations.Migration):
 
@@ -62,6 +10,4 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(_update_home_page_featured_content, migrations.RunPython.noop),
-        migrations.RunPython(_update_article_body, migrations.RunPython.noop),
     ]

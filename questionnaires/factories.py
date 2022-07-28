@@ -3,7 +3,6 @@ from django.utils import timezone
 from factory.django import DjangoModelFactory
 from wagtail_factories import PageFactory
 
-from iogt_users.factories import UserFactory
 from questionnaires.models import Survey, Poll, Quiz, PollFormField, SurveyFormField, QuizFormField, UserSubmission
 
 
@@ -66,7 +65,5 @@ class QuizFactory(PageFactory):
 
 
 class UserSubmissionFactory(DjangoModelFactory):
-    user = factory.SubFactory(UserFactory)
-
     class Meta:
         model = UserSubmission

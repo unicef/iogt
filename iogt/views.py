@@ -1,3 +1,4 @@
+import logging
 import os
 from pathlib import Path, PurePosixPath
 
@@ -14,7 +15,10 @@ from wagtail.images.models import Rendition
 from wagtailmedia.models import Media
 
 from home.models import HomePage, Section, Article, OfflineAppPage, SVGToPNGMap, FooterPage
+from iogt.utils import has_md5_hash
 from questionnaires.models import Poll, Survey, Quiz
+
+logger = logging.getLogger(__name__)
 
 
 class TransitionPageView(TemplateView):
@@ -133,9 +137,12 @@ class PageTreeAPIView(APIView):
             for root, dirs, files in os.walk(Path(settings.STATIC_ROOT).joinpath(static_dir['name'])):
                 for file in files:
                     if file.endswith(static_dir['extensions']):
-                        static_urls.append(
-                            static(f'{PurePosixPath(root).relative_to(settings.STATIC_ROOT).joinpath(file)}'))
-
+                        try:
+                            if not has_md5_hash(file):
+                                static_urls.append(
+                                    static(f'{PurePosixPath(root).relative_to(settings.STATIC_ROOT).joinpath(file)}'))
+                        except Exception as e:
+                            logger.exception(e)
 
         urls = set(flatten(
             page_urls +
