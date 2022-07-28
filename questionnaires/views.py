@@ -1,6 +1,7 @@
 import csv
 import datetime
 import json
+from collections import defaultdict
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -16,8 +17,7 @@ from wagtail.contrib.forms.views import (
 )
 from xlsxwriter.workbook import Workbook
 
-from questionnaires.models import UserSubmission
-
+from questionnaires.models import UserSubmission, SurveyFormField, PollFormField, QuizFormField
 
 User = get_user_model()
 
@@ -115,23 +115,40 @@ class QuestionnairesView(SpreadsheetExportMixin, SafePaginateListView):
         })
         return context
 
+    def get_form_fields_dict(self):
+        context = self.get_context_data()
+        form_fields_dict = defaultdict(dict)
+        for form_field in [PollFormField, SurveyFormField, QuizFormField]:
+            for (page_id, clean_name, admin_label) in form_field.objects.filter(
+                    page__in=context[self.context_object_name]).values_list('page_id', 'clean_name', 'admin_label'):
+                form_fields_dict[page_id].update({
+                    clean_name: admin_label or clean_name
+                })
+        return form_fields_dict
+
+    def get_rows(self, item, form_fields_dict):
+        data = {
+            'User': item.user.username,
+            'URL': item.page.full_url,
+        }
+        for clean_name, answer in json.loads(item.form_data).items():
+            data.update({
+                form_fields_dict[item.page_id][clean_name]: answer,
+            })
+        return [dict(zip(self.list_export, [item.id, item.page.title, item.submit_time, field, value]))
+                for field, value in data.items()]
+
     def stream_csv(self, queryset):
         """ Generate a csv file line by line from queryset, to be used in a StreamingHTTPResponse """
         writer = csv.DictWriter(Echo(), fieldnames=self.list_export)
-        yield writer.writerow(
-            {field: self.get_heading(queryset, field) for field in self.list_export}
-        )
+        yield writer.writerow(dict(zip(self.list_export, self.list_export)))
+
+        form_fields_dict = self.get_form_fields_dict()
 
         for item in queryset:
-            additional_data = {
-                'User': item.user.username,
-                'URL': item.page.full_url,
-            }
-            form_data = json.loads(item.form_data)
-            data = {**additional_data, **form_data}
-            for k, v in data.items():
-                row_dict = dict(zip(self.list_export, [item.id, item.page.title, item.submit_time, k, v]))
-                yield self.write_csv_row(writer, row_dict)
+            rows = self.get_rows(item, form_fields_dict)
+            for row in rows:
+                yield self.write_csv_row(writer, row)
 
     def write_xlsx(self, queryset, output):
         """ Write an xlsx workbook from a queryset"""
@@ -149,17 +166,13 @@ class QuestionnairesView(SpreadsheetExportMixin, SafePaginateListView):
         for col_number, field in enumerate(self.list_export):
             worksheet.write(row_number, col_number, self.get_heading(queryset, field))
 
+        form_fields_dict = self.get_form_fields_dict()
+
         row_number += 1
         for item in queryset:
-            additional_data = {
-                'User': item.user.username,
-                'URL': item.page.full_url,
-            }
-            form_data = json.loads(item.form_data)
-            data = {**additional_data, **form_data}
-            for k, v in data.items():
-                row_dict = dict(zip(self.list_export, [item.id, item.page.title, item.submit_time, k, v]))
-                self.write_xlsx_row(worksheet, row_dict, row_number)
+            rows = self.get_rows(item, form_fields_dict)
+            for row in rows:
+                self.write_xlsx_row(worksheet, row, row_number)
                 row_number += 1
 
         workbook.close()
