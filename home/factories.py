@@ -5,7 +5,6 @@ from wagtail_factories import PageFactory, ImageFactory, StreamFieldFactory, Ima
 
 from comments.models import CommentStatus
 from home.models import Article, Section, SiteSettings, HomePage, SVGToPNGMap
-from questionnaires.models import Survey
 
 
 class HomePageFactory(PageFactory):
@@ -48,13 +47,6 @@ class SVGToPNGMapFactory(DjangoModelFactory):
 
     class Meta:
         model = SVGToPNGMap
-
-
-class SurveyFactory(PageFactory):
-    title = factory.Sequence(lambda n: f'survey{n}')
-
-    class Meta:
-        model = Survey
 
 
 class SiteSettingsFactory(DjangoModelFactory):
