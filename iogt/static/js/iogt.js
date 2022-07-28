@@ -141,15 +141,12 @@ const setItem = (key, value) => {
 
 const registerPushNotification = registration => {
     if (!registration.showNotification) {
-        console.log("Showing notifications isn't supported.");
         return;
     }
     if (Notification.permission === 'denied') {
-        console.log("You prevented us from showing notifications.");
         return;
     }
     if (!'PushManager' in window) {
-        console.log("Push isn't allowed in your browser.");
         return;
     }
     subscribe(registration);
@@ -172,7 +169,7 @@ const subscribe = registration => {
     registration.pushManager.getSubscription()
         .then(subscription => {
             if (subscription) {
-                sendSubscriptionToServer(subscription);
+                sendSubscriptionToServer(subscription, 'subscribe');
                 return;
             }
             const vapidKeyMeta = document.querySelector('meta[name="vapid-key"]');
@@ -185,26 +182,18 @@ const subscribe = registration => {
 
             registration.pushManager.subscribe(options)
                 .then(subscription => {
-                    sendSubscriptionToServer(subscription);
-                })
-                .catch(error => {
-                    console.log("Error during subscribe()", error);
+                    sendSubscriptionToServer(subscription, 'subscribe');
                 });
-        })
-        .catch(error => {
-            console.log("Error during getSubscription()", error);
         });
 };
 
-const sendSubscriptionToServer = subscription => {
+const sendSubscriptionToServer = (subscription, statusType) => {
     const browser = navigator.userAgent.match(/(firefox|msie|chrome|safari|trident)/ig)[0].toLowerCase();
     const data = {
-        status_type: 'subscribe',
+        status_type: statusType,
         subscription: subscription.toJSON(),
         browser: browser,
     };
-
-    console.log('Sending user subscription', data);
 
     fetch('/webpush/subscribe/', {
         method: 'POST',
@@ -214,60 +203,18 @@ const sendSubscriptionToServer = subscription => {
         },
         credentials: "include"
     }).then(resp => {
-        console.log('Successfully saved user subscription', resp.ok);
-        setItem('isPushNotificationRegistered', true);
-    }).catch(error => {
-        console.log('Unable to save user subscription', error);
+        setItem('isPushNotificationRegistered', statusType === 'subscribe');
     });
 };
 
 
-const unsubscribePushNotifications = registration => {
-    registration.pushManager.getSubscription()
-        .then(subscription => {
-            if (subscription) {
-                const browser = navigator.userAgent.match(/(firefox|msie|chrome|safari|trident)/ig)[0].toLowerCase();
-                const data = {
-                    status_type: 'unsubscribe',
-                    subscription: subscription.toJSON(),
-                    browser: browser,
-                };
-
-                console.log('Sending user unsubscription', data);
-
-                fetch('/webpush/subscribe/', {
-                    method: 'POST',
-                    body: JSON.stringify(data),
-                    headers: {
-                        'content-type': 'application/json'
-                    },
-                    credentials: "include"
-                }).then(resp => {
-                    console.log('Successfully saved user unsubscription', resp.ok);
-                    setItem('isPushNotificationRegistered', false);
-                }).catch(error => {
-                    console.log('Unable to save user unsubscription', error);
-                });
-            }
-        })
-        .catch(error => {
-            console.log("Error during getSubscription()", error);
-        });
-};
-
-const unregisterPushNotifications = async () => {
+const unSubscribePushNotifications = () => {
     const isPushNotificationRegistered = getItem('isPushNotificationRegistered', false);
-    if (isPushNotificationRegistered) {
-        console.log('Push notification already registered.')
-        if (isAuthenticated) {
-            if ('serviceWorker' in navigator) {
-                const registration = await navigator.serviceWorker.ready;
-                unsubscribePushNotifications(registration);
-            }
-        } else {
-            console.log('User isn\'t authenticated.')
-        }
-    } else {
-        console.log('Push notification isn\'t registered.')
+    if (isPushNotificationRegistered && isAuthenticated && 'serviceWorker' in navigator) {
+        navigator.serviceWorker.ready.then(registration => {
+            registration.pushManager.getSubscription().then(subscription => {
+                subscription && sendSubscriptionToServer(subscription, 'unsubscribe');
+            });
+        });
     }
 };

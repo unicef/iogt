@@ -44,7 +44,6 @@ self.addEventListener('fetch', event => {
 });
 
 self.addEventListener('push', event => {
-    console.log('Responding to push notification', event.data?.json());
     let {head, body, icon, url} = event.data?.json() || {
         "head": "No Content",
         "body": "No Content",
@@ -63,7 +62,6 @@ self.addEventListener('push', event => {
 });
 
 self.addEventListener('notificationclick', event => {
-    console.log('Responding to notificationclick', event.notification.data.url)
     event.waitUntil(
         event.preventDefault(),
         event.notification.close(),
