@@ -105,6 +105,9 @@ class SitemapAPIView(APIView):
 
 
 class PageTreeAPIView(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+
     def get(self, request, page_id):
         page = get_object_or_404(Page, id=page_id)
         pages = page.get_descendants(inclusive=True).live().specific()

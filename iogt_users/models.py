@@ -35,7 +35,6 @@ class User(AbstractUser):
 
         return tokens
 
-
     read_articles = models.ManyToManyField(to='home.Article')
 
     @classmethod
