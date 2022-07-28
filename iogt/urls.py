@@ -61,7 +61,7 @@ urlpatterns = api_url_patterns + [
     *i18n_patterns(path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog')),
     path('health-check/', include('health_check.urls')),
     path('page-tree/<int:page_id>/', PageTreeAPIView.as_view(), name='page_tree'),
-    path('api/docs/swagger/', schema_view.with_ui('swagger'), name='swagger'),
+    path('api/docs/', schema_view.with_ui('swagger'), name='swagger'),
 ]
 
 if settings.DEBUG:
