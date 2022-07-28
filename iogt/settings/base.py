@@ -131,7 +131,7 @@ TEMPLATES = [
                 'django.template.context_processors.i18n',
                 'home.processors.commit_hash',
                 'home.processors.show_footers',
-                'home.processors.add_vapid_public_key',
+                'messaging.processors.add_vapid_public_key',
             ],
         },
     },
