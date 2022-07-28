@@ -1,5 +1,6 @@
+import logging
+
 from django.contrib.auth import get_user_model
-from django.core import validators
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.utils import timezone
@@ -9,6 +10,7 @@ from .models import Message, Thread, UserThread
 from messaging.rapidpro_client import RapidProClient
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 
 class ChatManager:
@@ -43,7 +45,10 @@ class ChatManager:
                     'url': self.thread.get_absolute_url(),
                 }
                 for user in self.thread.users.all():
-                    send_user_notification(user=user, payload=payload, ttl=1000)
+                    try:
+                        send_user_notification(user=user, payload=payload, ttl=1000)
+                    except Exception as e:
+                        logger.exception(e)
 
         else:
             Message.objects.create(
