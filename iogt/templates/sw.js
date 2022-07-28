@@ -19,12 +19,9 @@ self.addEventListener('activate', event => {
 
 const languageCodeRegEx = RegExp('^\\/(\\w+([@-]\\w+)?)(\\/|$)');
 
-self.addEventListener('fetch', event => {
+self.addEventListener('fetch', async event => {
     if (event.request.method !== 'GET')
         return;
-
-    const languageCode = languageCodeRegEx.exec(new URL(event.request.url).pathname)?.[1] || 'en';
-    console.log(languageCode);
 
     event.respondWith(
         fetch(event.request)
@@ -43,13 +40,14 @@ self.addEventListener('fetch', event => {
             .catch(error => {
                 return caches.open('iogt')
                     .then(cache => {
-                        console.log(languageCode);
                         return cache.match(event.request)
                             .then(match => {
-                                if (match)
+                                if (match) {
                                     return match;
-                                else if (event.request.headers.get('Accept').indexOf('text/html') !== -1)
+                                } else if (event.request.headers.get('Accept').indexOf('text/html') !== -1) {
+                                    const languageCode = languageCodeRegEx.exec(new URL(event.request.url).pathname)?.[1] || 'en';
                                     return cache.match(`/${languageCode}/offline-content-not-found/`);
+                                }
                             });
                     });
             })

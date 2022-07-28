@@ -114,6 +114,7 @@ class PageTreeAPIView(APIView):
         for locale in Locale.objects.all():
             translation.activate(locale.language_code)
             page_urls.append(reverse('offline_content_not_found'))
+            page_urls.append(reverse('javascript-catalog'))
             page = OfflineContentIndexPage.objects.filter(locale=locale).first()
             if page:
                 page_urls.append(page.url)
@@ -126,11 +127,6 @@ class PageTreeAPIView(APIView):
 
         for svg_to_png_map in SVGToPNGMap.objects.all():
             image_urls.append(svg_to_png_map.url)
-
-        language = translation.get_language()
-        jsi18n_urls = [
-            f'/{language}/jsi18n/'
-        ]
 
         static_urls = []
         static_dirs = [
@@ -153,7 +149,6 @@ class PageTreeAPIView(APIView):
         urls = set(flatten(
             page_urls +
             image_urls +
-            jsi18n_urls +
             static_urls
         ))
         return Response(urls)
