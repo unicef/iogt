@@ -183,7 +183,13 @@ const subscribe = registration => {
             registration.pushManager.subscribe(options)
                 .then(subscription => {
                     sendSubscriptionToServer(subscription, 'subscribe');
+                })
+                .catch(error => {
+                    console.log("Error during subscribe()", error);
                 });
+        })
+        .catch(error => {
+            console.log("Error during getSubscription()", error);
         });
 };
 
