@@ -45,33 +45,8 @@ class MySeleniumTests(LiveServerTestCase):
         self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
         self.user = AdminUserFactory()
         self.home_page = HomePageFactory(parent=self.site.root_page, owner=self.user)
-        self.section01 = SectionFactory(parent=self.home_page, owner=self.user)
-        self.article01 = ArticleFactory(parent=self.section01, owner=self.user)
-        self.survey01 = SurveyFactory(parent=self.section01, owner=self.user)
-
-        SurveyFormField.objects.create(
-            page=self.survey01, 
-            sort_order=0,
-            required = True,
-            choices = "A|B|C", 
-            label='Question 1', 
-            default_value='',  
-            field_type='checkboxes',
-            admin_label='Q1',            
-        )
-
-        SurveyFormField.objects.create(
-            page=self.survey01, 
-            sort_order=1,
-            required = True,
-            choices = "blah1|blah2|blah3", 
-            label='Question 2', 
-            default_value='',  
-            field_type='dropdown',
-            admin_label='Q2',            
-        )
         
-    def test_article_comment(self):
+    def test_login(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
         username_input = self.selenium.find_element_by_name("login")
         username_input.send_keys(self.user.username)
@@ -80,16 +55,4 @@ class MySeleniumTests(LiveServerTestCase):
         self.selenium.find_element_by_xpath('//button[@type="submit"]').click()
         body_text = self.selenium.find_element_by_tag_name('body').text
         assert self.user.username in body_text
-        self.selenium.get('%s%s' % (self.live_server_url, self.article01.url))
-        comment_input = self.selenium.find_element_by_name("comment")
-        comment_input.send_keys('Test comment')
-        self.selenium.find_element_by_xpath('//input[@value="Leave comment"]').send_keys(Keys.RETURN)
-
-    def test_survey_buttons(self):
-        self.selenium.get('%s%s' % (self.live_server_url, self.survey01.url))
-        self.selenium.find_element_by_xpath('//input[@value="A"]').click()
-        select = Select(self.selenium.find_element_by_name("question_2"))
-        select.select_by_visible_text("blah3")
-        print(select.first_selected_option)
-        assert 'blah3' in select.first_selected_option.text
-        self.selenium.find_element_by_xpath('//button[@type="submit"]').click()
+        
