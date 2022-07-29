@@ -6,7 +6,7 @@ from iogt_users.factories import AdminUserFactory
 from home.factories import HomePageFactory
 from wagtail_factories import SiteFactory
 
-class ExampleSeleniumTests(BaseSeleniumTests):
+class LoginSeleniumTests(BaseSeleniumTests):
 
     def setUp(self):
         Site.objects.all().delete()
@@ -14,7 +14,7 @@ class ExampleSeleniumTests(BaseSeleniumTests):
         self.user = AdminUserFactory()
         self.home_page = HomePageFactory(parent=self.site.root_page, owner=self.user)
         
-    def test_example(self):
+    def test_login(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
         username_input = self.selenium.find_element_by_name("login")
         username_input.send_keys(self.user.username)
