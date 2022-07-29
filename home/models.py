@@ -44,7 +44,6 @@ from wagtailsvg.edit_handlers import SvgChooserPanel
 
 from messaging.blocks import ChatBotButtonBlock
 from comments.models import CommentableMixin, CannedResponse
-from questionnaires.models import Survey, Poll, Quiz
 from .blocks import (
     MediaBlock, SocialMediaLinkBlock, SocialMediaShareButtonBlock, EmbeddedPollBlock, EmbeddedSurveyBlock,
     EmbeddedQuizBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock, ArticleBlock, OfflineAppButtonBlock,
@@ -853,7 +852,7 @@ class IogtFlatMenuItem(AbstractFlatMenuItem, TitleIconMixin):
 
     def get_icon(self):
         icon = super().get_icon()
-        if not icon.url and self.link_page:
+        if not icon.url and self.link_page and hasattr(self.link_page, 'get_icon'):
             icon = self.link_page.get_icon()
 
         return icon

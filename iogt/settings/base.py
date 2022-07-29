@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import re
 from datetime import timedelta
 
 import allauth
@@ -77,6 +78,8 @@ INSTALLED_APPS = [
     'health_check.contrib.migrations',
     'rest_framework_simplejwt',
     'google_analytics',
+    'django_filters',
+    'drf_yasg',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -462,8 +465,15 @@ WAGTAILTRANSFER_LOOKUP_FIELDS = {
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
 }
 
 SIMPLE_JWT = {
@@ -490,3 +500,5 @@ if CACHE_BACKEND:
     }
 
 SITE_VERSION = os.getenv('SITE_VERSION', 'unknown')
+
+HAS_MD5_HASH_REGEX = re.compile(r"\.[a-f0-9]{12}\..*$")
