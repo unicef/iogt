@@ -47,7 +47,7 @@ from comments.models import CommentableMixin, CannedResponse
 from questionnaires.models import Survey, Poll, Quiz
 from .blocks import (
     MediaBlock, SocialMediaLinkBlock, SocialMediaShareButtonBlock, EmbeddedPollBlock, EmbeddedSurveyBlock,
-    EmbeddedQuizBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock, ArticleBlock, OfflineAppButtonBlock,
+    EmbeddedQuizBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock, ArticleBlock,
     DownloadButtonBlock,
 )
 from .forms import SectionPageForm
@@ -334,6 +334,22 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     ])
     show_in_menus_default = True
 
+    content_panels = Page.content_panels + [
+        ImageChooserPanel('lead_image'),
+        SvgChooserPanel('icon'),
+        ImageChooserPanel('image_icon'),
+        StreamFieldPanel('body'),
+        FieldPanel('index_page_description'),
+    ]
+
+    edit_handler_list = [
+        ObjectList(content_panels, heading='Content'),
+        ObjectList(Page.settings_panels, heading='Settings'),
+        ObjectList(CommentableMixin.comments_panels, heading='Comments')
+    ]
+
+    edit_handler = TabbedInterface(edit_handler_list)
+
     search_fields = Page.search_fields + [
         index.SearchField('get_heading_values', partial_match=True, boost=1),
         index.SearchField('get_paragraph_values', partial_match=True),
@@ -414,11 +430,6 @@ class Article(AbstractArticle):
     tags = ClusterTaggableManager(through='ArticleTaggedItem', blank=True)
 
     content_panels = AbstractArticle.content_panels + [
-        ImageChooserPanel('lead_image'),
-        SvgChooserPanel('icon'),
-        ImageChooserPanel('image_icon'),
-        StreamFieldPanel('body'),
-        FieldPanel('index_page_description'),
         MultiFieldPanel([
             InlinePanel('recommended_articles',
                         label=_("Recommended Articles")),
@@ -430,12 +441,11 @@ class Article(AbstractArticle):
         MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
     ]
 
-    edit_handler = TabbedInterface([
-        ObjectList(content_panels, heading='Content'),
+    edit_handler_list = AbstractArticle.edit_handler_list + [
         ObjectList(promote_panels, heading='Promote'),
-        ObjectList(AbstractArticle.settings_panels, heading='Settings'),
-        ObjectList(CommentableMixin.comments_panels, heading='Comments')
-    ])
+    ]
+
+    edit_handler = TabbedInterface(edit_handler_list)
 
     def get_context(self, request):
         context = super().get_context(request)
@@ -455,78 +465,13 @@ class Article(AbstractArticle):
 
 class MiscellaneousIndexPage(Page):
     parent_page_types = ['home.HomePage']
-    subpage_types = ['home.OfflineAppPage', 'home.OfflineContentIndexPage']
-
-
-class OfflineAppPage(AbstractArticle):
-    template = 'home/article.html'
-    parent_page_types = ['home.MiscellaneousIndexPage']
-    subpage_types = []
-
-    body = StreamField([
-        ('heading', blocks.CharBlock(form_classname="full title", template='blocks/heading.html')),
-        ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
-        ('markdown', MarkdownBlock(icon='code')),
-        ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
-        ('image', ImageChooserBlock(template='blocks/image.html')),
-        ('list', blocks.ListBlock(MarkdownBlock(icon='code'))),
-        ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
-        ('page_button', PageButtonBlock()),
-        ('embedded_poll', EmbeddedPollBlock()),
-        ('embedded_survey', EmbeddedSurveyBlock()),
-        ('embedded_quiz', EmbeddedQuizBlock()),
-        ('media', MediaBlock(icon='media')),
-        ('chat_bot', ChatBotButtonBlock()),
-        ('offline_app_button', OfflineAppButtonBlock()),
-    ])
-
-    content_panels = AbstractArticle.content_panels + [
-        ImageChooserPanel('lead_image'),
-        SvgChooserPanel('icon'),
-        StreamFieldPanel('body'),
-        FieldPanel('index_page_description'),
-    ]
-
-    edit_handler = TabbedInterface([
-        ObjectList(content_panels, heading='Content'),
-        ObjectList(AbstractArticle.settings_panels, heading='Settings'),
-        ObjectList(CommentableMixin.comments_panels, heading='Comments')
-    ])
+    subpage_types = ['home.OfflineContentIndexPage']
 
 
 class OfflineContentIndexPage(AbstractArticle):
     template = 'home/article.html'
     parent_page_types = ['home.MiscellaneousIndexPage']
     subpage_types = []
-
-    body = StreamField([
-        ('heading', blocks.CharBlock(form_classname="full title", template='blocks/heading.html')),
-        ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
-        ('markdown', MarkdownBlock(icon='code')),
-        ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
-        ('image', ImageChooserBlock(template='blocks/image.html')),
-        ('list', blocks.ListBlock(MarkdownBlock(icon='code'))),
-        ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
-        ('page_button', PageButtonBlock()),
-        ('embedded_poll', EmbeddedPollBlock()),
-        ('embedded_survey', EmbeddedSurveyBlock()),
-        ('embedded_quiz', EmbeddedQuizBlock()),
-        ('media', MediaBlock(icon='media')),
-        ('chat_bot', ChatBotButtonBlock()),
-    ])
-
-    content_panels = AbstractArticle.content_panels + [
-        ImageChooserPanel('lead_image'),
-        SvgChooserPanel('icon'),
-        StreamFieldPanel('body'),
-        FieldPanel('index_page_description'),
-    ]
-
-    edit_handler = TabbedInterface([
-        ObjectList(content_panels, heading='Content'),
-        ObjectList(AbstractArticle.settings_panels, heading='Settings'),
-        ObjectList(CommentableMixin.comments_panels, heading='Comments')
-    ])
 
     class Meta:
         verbose_name = 'Offline Content Index Page'

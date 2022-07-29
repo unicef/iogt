@@ -15,7 +15,7 @@ from wagtail.core.models import Page, Locale
 from wagtail.images.models import Rendition
 from wagtailmedia.models import Media
 
-from home.models import HomePage, Section, Article, OfflineAppPage, SVGToPNGMap, FooterPage, OfflineContentIndexPage
+from home.models import HomePage, Section, Article, SVGToPNGMap, FooterPage, OfflineContentIndexPage
 from iogt.utils import has_md5_hash
 from questionnaires.models import Poll, Survey, Quiz
 
@@ -56,7 +56,6 @@ class SitemapAPIView(APIView):
         poll_urls = [p.url for p in Poll.objects.live()],
         survey_urls = [p.url for p in Survey.objects.live()],
         quiz_urls = [p.url for p in Quiz.objects.live()],
-        offline_app_page_urls = [p.url for p in OfflineAppPage.objects.live()],
 
         jsi18n_urls = []
         for locale in Locale.objects.all():
@@ -96,7 +95,6 @@ class SitemapAPIView(APIView):
             poll_urls +
             survey_urls +
             quiz_urls +
-            offline_app_page_urls +
             tuple(static_urls) +
             tuple(image_urls) +
             tuple(media_urls) +
@@ -121,7 +119,7 @@ class PageTreeAPIView(APIView):
         translation.activate(active_locale.language_code)
         image_urls = []
         for page in pages:
-            if isinstance(page, (HomePage, Section, Article, OfflineAppPage, Poll, Survey, Quiz)):
+            if isinstance(page, (HomePage, Section, Article, Poll, Survey, Quiz)):
                 page_urls.append(page.url)
                 image_urls += page.get_image_urls
 
