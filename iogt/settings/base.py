@@ -80,6 +80,7 @@ INSTALLED_APPS = [
     'google_analytics',
     'django_filters',
     'drf_yasg',
+    'webpush',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -132,6 +133,7 @@ TEMPLATES = [
                 'django.template.context_processors.i18n',
                 'home.processors.commit_hash',
                 'home.processors.show_footers',
+                'messaging.processors.add_vapid_public_key',
             ],
         },
     },
@@ -502,3 +504,9 @@ if CACHE_BACKEND:
 SITE_VERSION = os.getenv('SITE_VERSION', 'unknown')
 
 HAS_MD5_HASH_REGEX = re.compile(r"\.[a-f0-9]{12}\..*$")
+
+WEBPUSH_SETTINGS = {
+    'VAPID_PUBLIC_KEY': os.getenv('VAPID_PUBLIC_KEY'),
+    'VAPID_PRIVATE_KEY': os.getenv('VAPID_PRIVATE_KEY'),
+    'VAPID_ADMIN_EMAIL': os.getenv('VAPID_ADMIN_EMAIL'),
+}
