@@ -52,8 +52,8 @@ class CommentFilterForm(forms.Form):
     is_flagged = forms.ChoiceField(label='By is flagged?', choices=[(None, 'All'), (True, 'Yes'), (False, 'No')], required=False)
     is_removed = forms.ChoiceField(label='By is removed?', choices=[(None, 'All'), (True, 'Yes'), (False, 'No')], required=False)
     is_public = forms.ChoiceField(label='By is public?', choices=[(None, 'All'), (True, 'Yes'), (False, 'No')], required=False)
-    from_date = forms.DateField(label='From date', required=False)
-    to_date = forms.DateField(label='To date', required=False)
+    from_date = forms.DateField(label='From date', required=False, widget=forms.DateInput(attrs={'type': 'date'}))
+    to_date = forms.DateField(label='To date', required=False, widget=forms.DateInput(attrs={'type': 'date'}))
 
     def clean(self):
         cleaned_data = super().clean()
