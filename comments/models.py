@@ -119,8 +119,8 @@ class CommentModeration(models.Model):
 @receiver(post_save, sender=XtdComment)
 def comment_moderation_handler(sender, instance, created, **kwargs):
     if created:
-        moderator = StubModerator(instance)
-        is_valid = moderator.is_valid()
+        moderator = StubModerator()
+        is_valid = moderator.is_valid(instance)
         instance.is_public = is_valid
         instance.save(update_fields=['is_public'])
         CommentModeration.objects.create(is_valid=is_valid, comment_id=instance.id)
