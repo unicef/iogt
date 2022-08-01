@@ -78,6 +78,9 @@ INSTALLED_APPS = [
     'health_check.contrib.migrations',
     'rest_framework_simplejwt',
     'google_analytics',
+    'django_filters',
+    'drf_yasg',
+    'webpush',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -130,6 +133,7 @@ TEMPLATES = [
                 'django.template.context_processors.i18n',
                 'home.processors.commit_hash',
                 'home.processors.show_footers',
+                'messaging.processors.add_vapid_public_key',
             ],
         },
     },
@@ -463,8 +467,15 @@ WAGTAILTRANSFER_LOOKUP_FIELDS = {
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
 }
 
 SIMPLE_JWT = {
@@ -493,3 +504,9 @@ if CACHE_BACKEND:
 SITE_VERSION = os.getenv('SITE_VERSION', 'unknown')
 
 HAS_MD5_HASH_REGEX = re.compile(r"\.[a-f0-9]{12}\..*$")
+
+WEBPUSH_SETTINGS = {
+    'VAPID_PUBLIC_KEY': os.getenv('VAPID_PUBLIC_KEY'),
+    'VAPID_PRIVATE_KEY': os.getenv('VAPID_PRIVATE_KEY'),
+    'VAPID_ADMIN_EMAIL': os.getenv('VAPID_ADMIN_EMAIL'),
+}
