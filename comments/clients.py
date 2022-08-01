@@ -28,7 +28,7 @@ class HiveModerator(BaseModerator):
         if response.ok:
             return response.json()
 
-        logger.error(f'Error response from hive moderation.')
+        raise Exception('Invalid response from Hive')
 
     @classmethod
     def _get_hive_response(cls, text):
@@ -48,9 +48,13 @@ class HiveModerator(BaseModerator):
 
     @classmethod
     def is_valid(cls, comment):
-        response = cls._get_hive_response(comment.comment)
-        response = cls._validate_response(response)
-        return cls._handle_hive_classifications(response)
+        try:
+            response = cls._get_hive_response(comment.comment)
+            response = cls._validate_response(response)
+            return cls._handle_hive_classifications(response)
+        except Exception as e:
+            logger.error(f'Error response from hive moderation.')
+            return True
 
 
 class StubModerator(BaseModerator):
