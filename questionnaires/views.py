@@ -62,7 +62,6 @@ class QuestionnairesView(SpreadsheetExportMixin, SafePaginateListView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        """ Return the queryset of form pages for this view """
         queryset = get_forms_for_user(self.request.user)
         queryset = queryset.filter(
             usersubmission__user_id=self.user.id
@@ -75,7 +74,6 @@ class QuestionnairesView(SpreadsheetExportMixin, SafePaginateListView):
         return queryset
 
     def get_filtering(self, for_form_pages=True):
-        """ Return filering as a dict for form pages or submissions queryset """
         filter_name = 'usersubmission__submit_time' if for_form_pages else 'submit_time'
         self.select_date_form = SelectDateForm(self.request.GET)
         result = dict()
@@ -100,7 +98,6 @@ class QuestionnairesView(SpreadsheetExportMixin, SafePaginateListView):
         return super().render_to_response(context, **response_kwargs)
 
     def get_context_data(self, **kwargs):
-        """ Return context for view """
         context = super().get_context_data(**kwargs)
         form_pages = context[self.context_object_name]
         if self.is_export:
@@ -139,7 +136,6 @@ class QuestionnairesView(SpreadsheetExportMixin, SafePaginateListView):
                 for field, value in data.items()]
 
     def stream_csv(self, queryset):
-        """ Generate a csv file line by line from queryset, to be used in a StreamingHTTPResponse """
         writer = csv.DictWriter(Echo(), fieldnames=self.list_export)
         yield writer.writerow(dict(zip(self.list_export, self.list_export)))
 
@@ -151,7 +147,6 @@ class QuestionnairesView(SpreadsheetExportMixin, SafePaginateListView):
                 yield self.write_csv_row(writer, row)
 
     def write_xlsx(self, queryset, output):
-        """ Write an xlsx workbook from a queryset"""
         workbook = Workbook(
             output,
             {
@@ -178,6 +173,5 @@ class QuestionnairesView(SpreadsheetExportMixin, SafePaginateListView):
         workbook.close()
 
     def get_filename(self):
-        """ Gets the base filename for the exported spreadsheet, without extensions """
         timestamp = timezone.now().strftime(settings.EXPORT_FILENAME_TIMESTAMP_FORMAT)
         return f'{self.user.username}-submission_{timestamp}'
