@@ -4,7 +4,7 @@
 {% block content %}
     <h1>{% translate 'Comment Moderation' %}</h1>
     <form action="" method="get">
-        <div>
+        <div class="comment-moderation-field-wrapper">
             {% for field in form %}
                 <div>
                     <label>
@@ -13,19 +13,23 @@
                     {{ field }}
                 </div>
             {% endfor %}
+            <div>
+                <button type="submit">{% translate 'Apply' %}</button>
+            </div>
         </div>
-        <button type="submit">{% translate 'Apply' %}</button>
     </form>
     {% if comments %}
-        <table>
-            <tr>
-                <th>{% translate 'Comments' %}</th>
-                <th>{% translate 'Actions' %}</th>
-            </tr>
+        <table class="comment-moderation-table">
+            <thead>
+                <tr>
+                    <th>{% translate 'Comments' %}</th>
+                    <th class="width-32">{% translate 'Actions' %}</th>
+                </tr>
+            </thead>
             {% for comment in comments %}
                 <tr>
                     <td>{{ comment.comment }}</td>
-                    <td>
+                    <td class="width-32">
                         {% if comment.is_public %}
                             <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='unpublish' %}>{% translate 'Unpublish' %}</a>
                         {% else %}

@@ -2431,3 +2431,73 @@ input[type=checkbox], input[type=radio] {
     font-size: 12px;
   }
 }
+
+
+.comment-moderation-field-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+.comment-moderation-field-wrapper div {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+    margin-right: 16px
+}
+.comment-moderation-field-wrapper div label{
+   font-size: 14px;
+   color: #000000;
+   margin-bottom: 6px;
+}
+.comment-moderation-field-wrapper div select, input{
+    width: 120px;
+    height: 25px;
+}
+.comment-moderation-field-wrapper button {
+    padding: 4px 18px;
+    border-radius: 8px;
+}
+
+.comment-moderation-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 26px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+.comment-moderation-table td, th {
+    text-align: left;
+    padding: 8px 16px;
+}
+.comment-moderation-table .width-32 {
+    width: 32%;
+}
+.comment-moderation-table thead tr {
+    background: #F0F0F0;
+}
+.comment-moderation-table thead tr th {
+    font-size: 16px;
+    color: #000000;
+    font-weight: 500;
+}
+.comment-moderation-table thead td:last-child, th:last-child {
+    text-align: right;
+    padding-right: 55px;
+}
+.comment-moderation-table tbody tr {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+.comment-moderation-table tbody td {
+    padding:16px;
+}
+
+.comment-moderation-table tbody a {
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: #000000;
+}
+
+.comment-moderation-table tbody a:last-child {
+    color: #7B7B7B;
+    margin-left: 14px; 
+}
