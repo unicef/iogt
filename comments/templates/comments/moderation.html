@@ -4,7 +4,16 @@
 {% block content %}
     <h1>{% translate 'Comment Moderation' %}</h1>
     <form action="" method="get">
-        {{ form.as_table }}
+        <div>
+            {% for field in form %}
+                <div>
+                    <label>
+                        {{ field.label }}
+                    </label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+        </div>
         <button type="submit">{% translate 'Apply' %}</button>
     </form>
     {% if comments %}
