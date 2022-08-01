@@ -43,7 +43,11 @@ class CustomSubmissionsListView(SubmissionsListView):
         return super().get_queryset().select_related('page', 'user')
 
 
-class QuestionnairesView(SpreadsheetExportMixin, SafePaginateListView):
+class FormDataView(SpreadsheetExportMixin, SafePaginateListView):
+    """
+    This view is taking inspiration from `wagtail.contrib.forms.views.FormPagesListView` and
+    `wagtail.contrib.forms.views.SubmissionsListView`
+    """
     template_name = "questionnaires/form_data.html"
     context_object_name = 'form_pages'
     list_export = ['ID', 'Name', 'Submission Date', 'Field', 'Value']
