@@ -1,4 +1,5 @@
 from django import template
+from django.conf import settings
 from django_comments_xtd.models import LIKEDIT_FLAG, DISLIKEDIT_FLAG
 
 register = template.Library()
@@ -40,3 +41,12 @@ def get_next_num_records(request):
 @register.simple_tag
 def get_comment_report_count(comment):
     return comment.flags.exclude(flag__in=[LIKEDIT_FLAG, DISLIKEDIT_FLAG]).count()
+
+
+@register.inclusion_tag('comments/comments_moderation_button.html', takes_context=True)
+def comments_moderation_button(context):
+    request = context['request']
+    context.update({
+        'show_comments_moderation_button': settings.ENABLE_FE_COMMENTS_MODERATION and request.user.has_perm('django_comments_xtd.can_moderate')
+    })
+    return context

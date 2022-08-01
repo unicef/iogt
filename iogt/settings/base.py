@@ -494,4 +494,6 @@ SITE_VERSION = os.getenv('SITE_VERSION', 'unknown')
 
 HAS_MD5_HASH_REGEX = re.compile(r"\.[a-f0-9]{12}\..*$")
 
+ENABLE_FE_COMMENTS_MODERATION = True if os.getenv('ENABLE_FE_COMMENTS_MODERATION') in ['True', 'true', '1'] else False
+
 HIVE_MODERATION_API_KEY = os.getenv('HIVE_MODERATION_API_KEY')

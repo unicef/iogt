@@ -20,6 +20,7 @@ services:
       WAGTAILTRANSFER_SOURCE_SECRET_KEY: wagtailtransfer-source-secret-key
       BASE_URL: 'http://localhost:8000'
       HIVE_MODERATION_API_KEY: ''
+      ENABLE_FE_COMMENTS_MODERATION: true
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./:/app/

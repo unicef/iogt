@@ -1,5 +1,6 @@
 from urllib.parse import urlparse, urlunparse, urlencode, parse_qsl
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q, Count
@@ -109,7 +110,7 @@ class CommentsModerationView(ListView):
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.has_perm('django_comments_xtd.can_moderate'):
+        if not (request.user.has_perm('django_comments_xtd.can_moderate') or settings.ENABLE_FE_COMMENTS_MODERATION):
             raise PermissionDenied(
                 "You do not have permission."
             )
