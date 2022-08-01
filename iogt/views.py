@@ -15,7 +15,7 @@ from wagtail.core.models import Page, Locale
 from wagtail.images.models import Rendition
 from wagtailmedia.models import Media
 
-from home.models import HomePage, Section, Article, SVGToPNGMap, FooterPage, OfflineContentIndexPage, OfflineAppPage
+from home.models import HomePage, Section, Article, SVGToPNGMap, FooterPage, OfflineContentIndexPage
 from iogt.utils import has_md5_hash
 from questionnaires.models import Poll, Survey, Quiz
 
@@ -49,14 +49,13 @@ class TranslationNotFoundPage(TemplateView):
 
 class SitemapAPIView(APIView):
     def get(self, request):
-        home_page_urls = [p.url for p in HomePage.objects.live()],
-        section_urls = [p.url for p in Section.objects.live()],
-        article_urls = [p.url for p in Article.objects.live()],
-        footer_urls = [p.url for p in FooterPage.objects.live()],
-        poll_urls = [p.url for p in Poll.objects.live()],
-        survey_urls = [p.url for p in Survey.objects.live()],
-        quiz_urls = [p.url for p in Quiz.objects.live()],
-        offline_app_page_urls = [p.url for p in OfflineAppPage.objects.live()],
+        home_page_urls = [p.url for p in HomePage.objects.live()]
+        section_urls = [p.url for p in Section.objects.live()]
+        article_urls = [p.url for p in Article.objects.live()]
+        footer_urls = [p.url for p in FooterPage.objects.live()]
+        poll_urls = [p.url for p in Poll.objects.live()]
+        survey_urls = [p.url for p in Survey.objects.live()]
+        quiz_urls = [p.url for p in Quiz.objects.live()]
 
         jsi18n_urls = []
         for locale in Locale.objects.all():
@@ -88,7 +87,7 @@ class SitemapAPIView(APIView):
                     if file.endswith(static_dir['extensions']):
                         static_urls.append(f'{settings.STATIC_URL}{root.split("/static/")[-1]}/{file}')
 
-        sitemap = flatten(
+        sitemap = set(flatten(
             home_page_urls +
             section_urls +
             article_urls +
@@ -96,12 +95,11 @@ class SitemapAPIView(APIView):
             poll_urls +
             survey_urls +
             quiz_urls +
-            offline_app_page_urls +
-            tuple(static_urls) +
-            tuple(image_urls) +
-            tuple(media_urls) +
-            tuple(jsi18n_urls)
-        )
+            static_urls +
+            image_urls +
+            media_urls +
+            jsi18n_urls
+        ))
         return Response(sitemap)
 
 
@@ -121,7 +119,7 @@ class PageTreeAPIView(APIView):
         translation.activate(active_locale.language_code)
         image_urls = []
         for page in pages:
-            if isinstance(page, (HomePage, Section, Article, OfflineAppPage, Poll, Survey, Quiz)):
+            if isinstance(page, (HomePage, Section, Article, Poll, Survey, Quiz)):
                 page_urls.append(page.url)
                 image_urls += page.get_image_urls
 
