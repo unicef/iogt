@@ -29,8 +29,8 @@ def update(request, comment_pk, action):
     elif action == 'publish':
         for comment in comments:
             comment.is_public = True
-            comment.comment_moderation.is_accepted = True
-            comment.comment_moderation.save(update_fields=['is_accepted'])
+            comment.comment_moderation.is_valid = True
+            comment.comment_moderation.save(update_fields=['is_valid'])
         verb = 'published'
     elif action == 'hide':
         for comment in comments:
@@ -120,15 +120,15 @@ class CommentsModerationView(ListView):
         form = CommentFilterForm(self.request.GET)
         if form.is_valid():
             data = form.cleaned_data
-            is_accepted = data['is_accepted']
+            is_valid = data['is_valid']
             is_flagged = data['is_flagged']
             is_removed = data['is_removed']
             is_public = data['is_public']
             from_date = data['from_date']
             to_date = data['to_date']
 
-            if is_accepted != '':
-                queryset = queryset.filter(comment_moderation__is_accepted=is_accepted)
+            if is_valid != '':
+                queryset = queryset.filter(comment_moderation__is_valid=is_valid)
             if is_flagged != '':
                 if is_flagged:
                     queryset = queryset.annotate(num_flags=Count('flags')).filter(num_flags__gt=0)

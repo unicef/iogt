@@ -108,19 +108,19 @@ class CannedResponse(models.Model):
 
 
 class CommentModeration(models.Model):
-    is_accepted = models.BooleanField(null=True, blank=True)
+    is_valid = models.BooleanField(null=True, blank=True)
     comment = models.OneToOneField(
         to='django_comments_xtd.XtdComment', related_name='comment_moderation', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.comment.id} | is_accepted={self.is_accepted}'
+        return f'{self.comment.id} | is_valid={self.is_valid}'
 
 
 @receiver(post_save, sender=XtdComment)
-def my_callback(sender, instance, created, **kwargs):
+def comment_moderation_handler(sender, instance, created, **kwargs):
     if created:
         moderator = StubModerator(instance)
-        is_accepted = moderator.is_accepted()
-        instance.is_public = is_accepted
+        is_valid = moderator.is_valid()
+        instance.is_public = is_valid
         instance.save(update_fields=['is_public'])
-        CommentModeration.objects.create(is_accepted=is_accepted, comment_id=instance.id)
+        CommentModeration.objects.create(is_valid=is_valid, comment_id=instance.id)

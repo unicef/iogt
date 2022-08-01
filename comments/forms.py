@@ -48,51 +48,22 @@ class AdminCommentForm(CommentForm):
 
 
 class CommentFilterForm(forms.Form):
-    is_accepted = forms.ChoiceField(label='By is accepted?', choices=[(None, 'All'), (True, 'Yes'), (False, 'No')], required=False)
+    is_valid = forms.ChoiceField(label='By is valid?', choices=[(None, 'All'), (True, 'Yes'), (False, 'No')], required=False)
     is_flagged = forms.ChoiceField(label='By is flagged?', choices=[(None, 'All'), (True, 'Yes'), (False, 'No')], required=False)
     is_removed = forms.ChoiceField(label='By is removed?', choices=[(None, 'All'), (True, 'Yes'), (False, 'No')], required=False)
     is_public = forms.ChoiceField(label='By is public?', choices=[(None, 'All'), (True, 'Yes'), (False, 'No')], required=False)
     from_date = forms.DateField(label='From date', required=False)
     to_date = forms.DateField(label='To date', required=False)
 
-    def clean_is_accepted(self):
-        value = self.cleaned_data['is_accepted']
-        rv = ''
-        if value == 'True':
-            rv = True
-        elif value == 'False':
-            rv = False
-        return rv
+    def clean(self):
+        cleaned_data = super().clean()
+        for field_name in ['is_valid', 'is_flagged', 'is_removed', 'is_public', 'from_date', 'to_date']:
+            field_value = cleaned_data[field_name]
+            if field_value == 'True':
+                cleaned_data[field_name] = True
+            elif field_value == 'False':
+                cleaned_data[field_name] = False
+            else:
+                cleaned_data[field_name] = field_value or ''
 
-    def clean_is_flagged(self):
-        value = self.cleaned_data['is_flagged']
-        rv = ''
-        if value == 'True':
-            rv = True
-        elif value == 'False':
-            rv = False
-        return rv
-
-    def clean_is_removed(self):
-        value = self.cleaned_data['is_removed']
-        rv = ''
-        if value == 'True':
-            rv = True
-        elif value == 'False':
-            rv = False
-        return rv
-
-    def clean_is_public(self):
-        value = self.cleaned_data['is_public']
-        rv = ''
-        if value == 'True':
-            rv = True
-        elif value == 'False':
-            rv = False
-        return rv
-
-    def clean_to_date(self):
-        return self.cleaned_data['to_date'] or ''
-
-    def clean_from_date(self):
-        return self.cleaned_data['from_date'] or ''
+        return cleaned_data
