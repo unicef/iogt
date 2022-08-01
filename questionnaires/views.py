@@ -74,16 +74,13 @@ class QuestionnairesView(SpreadsheetExportMixin, SafePaginateListView):
         return queryset
 
     def get_filtering(self, for_form_pages=True):
-        filter_name = 'usersubmission__submit_time' if for_form_pages else 'submit_time'
+        filter_name = 'usersubmission__submit_time__date' if for_form_pages else 'submit_time__date'
         self.select_date_form = SelectDateForm(self.request.GET)
         result = dict()
         if self.select_date_form.is_valid():
             date_from = self.select_date_form.cleaned_data.get('date_from')
             date_to = self.select_date_form.cleaned_data.get('date_to')
             if date_to:
-                # careful: date_to must be increased by 1 day
-                # as submit_time is a time so will always be greater
-                date_to += datetime.timedelta(days=1)
                 if date_from:
                     result[f'{filter_name}__range'] = [date_from, date_to]
                 else:
