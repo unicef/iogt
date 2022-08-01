@@ -730,7 +730,7 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         self.assertEqual(response.data, [])
 
 
-class FormDataPerUserTests(TestCase):
+class FormDataPerUserAdminTests(TestCase):
     def setUp(self):
         self.group = GroupFactory(name='questionnaires')
         self.admin_access_permission = Permission.objects.get(codename='access_admin')
