@@ -48,7 +48,7 @@ from questionnaires.models import Survey, Poll, Quiz
 from .blocks import (
     MediaBlock, SocialMediaLinkBlock, SocialMediaShareButtonBlock, EmbeddedPollBlock, EmbeddedSurveyBlock,
     EmbeddedQuizBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock, ArticleBlock,
-    DownloadButtonBlock,
+    OfflineAppButtonBlock, DownloadButtonBlock,
 )
 from .forms import SectionPageForm
 from .mixins import PageUtilsMixin, TitleIconMixin
@@ -466,6 +466,29 @@ class Article(AbstractArticle):
 class MiscellaneousIndexPage(Page):
     parent_page_types = ['home.HomePage']
     subpage_types = ['home.OfflineContentIndexPage']
+
+
+class OfflineAppPage(AbstractArticle):
+    template = 'home/article.html'
+    parent_page_types = ['home.OfflineAppPage', 'home.MiscellaneousIndexPage']
+    subpage_types = []
+
+    body = StreamField([
+        ('heading', blocks.CharBlock(form_classname="full title", template='blocks/heading.html')),
+        ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
+        ('markdown', MarkdownBlock(icon='code')),
+        ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
+        ('image', ImageChooserBlock(template='blocks/image.html')),
+        ('list', blocks.ListBlock(MarkdownBlock(icon='code'))),
+        ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
+        ('page_button', PageButtonBlock()),
+        ('embedded_poll', EmbeddedPollBlock()),
+        ('embedded_survey', EmbeddedSurveyBlock()),
+        ('embedded_quiz', EmbeddedQuizBlock()),
+        ('media', MediaBlock(icon='media')),
+        ('chat_bot', ChatBotButtonBlock()),
+        ('offline_app_button', OfflineAppButtonBlock()),
+    ])
 
 
 class OfflineContentIndexPage(AbstractArticle):
