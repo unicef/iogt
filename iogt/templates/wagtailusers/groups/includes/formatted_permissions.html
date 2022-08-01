@@ -19,7 +19,7 @@
         </thead>
         <tbody>
             {% for content_perms_dict in object_perms %}
-                {# filter out "user" and "group" permission #}
+                {# filter out "user" and "group" permission. for reference see issue https://github.com/unicef/iogt/issues/1347 #}
                 {% if content_perms_dict.object != 'user' and content_perms_dict.object != 'group' %}
                     <tr>
                         <td class="title"><h3>{{ content_perms_dict.object|capfirst }}</h3></td>
