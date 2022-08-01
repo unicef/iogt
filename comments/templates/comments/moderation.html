@@ -13,9 +13,9 @@
                     {{ field }}
                 </div>
             {% endfor %}
-            <div>
-                <button type="submit">{% translate 'Apply' %}</button>
-            </div>
+        </div>
+        <div class="comment-moderation-button">
+            <button type="submit">{% translate 'Apply' %}</button>
         </div>
     </form>
     {% if comments %}
@@ -28,7 +28,9 @@
             </thead>
             {% for comment in comments %}
                 <tr>
-                    <td>{{ comment.comment }}</td>
+                    <td class="comment-moderation-comment">
+                        {{ comment.comment }}
+                    </td>
                     <td class="width-32">
                         {% if comment.is_public %}
                             <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='unpublish' %}>{% translate 'Unpublish' %}</a>
@@ -51,13 +53,10 @@
             <div class="pagination">
                 <span class="page-links">
                     {% if page_obj.has_previous %}
-                        <a href="?{{ params }}&page={{ page_obj.previous_page_number }}">{% translate 'Previous' %}</a>
+                        <a class="comment-moderation previous-btn" href="?{{ params }}&page={{ page_obj.previous_page_number }}">{% translate 'Previous' %}</a>
                     {% endif %}
-                    <span class="page-current">
-                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                    </span>
                     {% if page_obj.has_next %}
-                        <a href="?{{ params }}&page={{ page_obj.next_page_number }}">{% translate 'Next' %}</a>
+                        <a class="comment-moderation next-btn" href="?{{ params }}&page={{ page_obj.next_page_number }}">{% translate 'Next' %}</a>
                     {% endif %}
                 </span>
             </div>
