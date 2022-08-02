@@ -169,7 +169,7 @@ class GoogleAnalyticsTagsTestCase(TestCase):
 
         parsed_qs = parse_qs(rendered_template)
         self.assertEqual(parsed_qs['tracking_code'][0], "my-code")
-        self.assertEqual(parsed_qs['p'][0], "/en/?test=xyz")
+        self.assertEqual(parsed_qs['p'][0], "/en/?test=abc&test=xyz")
 
     def test_query_param_with_utm(self):
         request = self.request_factory.get(
