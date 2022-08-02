@@ -1,4 +1,4 @@
-from urllib.parse import unquote, parse_qs
+from urllib.parse import parse_qs
 
 from django.conf import settings
 from django.db.utils import IntegrityError
@@ -147,7 +147,9 @@ class GoogleAnalyticsTagsTestCase(TestCase):
 
         rendered_template = google_analytics(context, tracking_code='my-code')
 
-        self.assertIn("/en/?test=['']", unquote(parse_qs(rendered_template)['p'][0]))
+        parsed_qs = parse_qs(rendered_template)
+        self.assertEqual(parsed_qs['tracking_code'][0], "my-code")
+        self.assertEqual(parsed_qs['p'][0], "/en/?test=")
 
     def test_query_param_with_value(self):
         request = self.request_factory.get('/en/?test=abc')
@@ -155,4 +157,32 @@ class GoogleAnalyticsTagsTestCase(TestCase):
 
         rendered_template = google_analytics(context, tracking_code='my-code')
 
-        self.assertIn("/en/?test=['abc']", unquote(parse_qs(rendered_template)['p'][0]))
+        parsed_qs = parse_qs(rendered_template)
+        self.assertEqual(parsed_qs['tracking_code'][0], "my-code")
+        self.assertEqual(parsed_qs['p'][0], "/en/?test=abc")
+
+    def test_query_param_with_multiple_values_with_same_key(self):
+        request = self.request_factory.get('/en/?test=abc&test=xyz')
+        context = Context({'request': request})
+
+        rendered_template = google_analytics(context, tracking_code='my-code')
+
+        parsed_qs = parse_qs(rendered_template)
+        self.assertEqual(parsed_qs['tracking_code'][0], "my-code")
+        self.assertEqual(parsed_qs['p'][0], "/en/?test=xyz")
+
+    def test_query_param_with_utm(self):
+        request = self.request_factory.get(
+            '/en/?utm_content=content&utm_term=term&utm_source=source&utm_medium=medium&utm_campaign=campaign')
+        context = Context({'request': request})
+
+        rendered_template = google_analytics(context, tracking_code='my-code')
+
+        parsed_qs = parse_qs(rendered_template)
+        self.assertEqual(parsed_qs['tracking_code'][0], "my-code")
+        self.assertEqual(parsed_qs['p'][0], "/en/")
+        self.assertEqual(parsed_qs['utm_content'][0], "content")
+        self.assertEqual(parsed_qs['utm_term'][0], "term")
+        self.assertEqual(parsed_qs['utm_source'][0], "source")
+        self.assertEqual(parsed_qs['utm_medium'][0], "medium")
+        self.assertEqual(parsed_qs['utm_campaign'][0], "campaign")
