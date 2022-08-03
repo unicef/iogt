@@ -55,7 +55,7 @@ class QuizFormFieldFactory(DjangoModelFactory):
 
 
 class QuizFactory(PageFactory):
-    title = factory.Sequence(lambda n: f'survey{n}')
+    title = factory.Sequence(lambda n: f'quiz{n}')
     last_published_at = timezone.now()
     index_page_description = factory.Sequence(lambda n: f'index page description{n}')
     index_page_description_line_2 = factory.Sequence(lambda n: f'index page description line 2{n}')
