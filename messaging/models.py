@@ -71,7 +71,7 @@ class Thread(models.Model):
         return f"{self.subject}: {self.chatbot.display_name} {', '.join([str(user) for user in self.users.all()])}"
 
     def get_absolute_url(self):
-        return reverse("messaging:thread_view", args=[self.pk])
+        return reverse("messaging:thread", args=[self.pk])
 
 
 class UserThread(models.Model):
