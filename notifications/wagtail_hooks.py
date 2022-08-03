@@ -7,7 +7,7 @@ from notifications.views import CreateNotificationView
 
 class NotificationModelAdmin(ModelAdmin):
     model = Notification
-    menu_label = 'Notification'
+    menu_label = 'Notifications'
     menu_icon = 'mail'
     list_display = ('head', 'body', 'url',)
     list_filter = ('groups',)
