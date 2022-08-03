@@ -25,6 +25,7 @@ test:
 	docker-compose -f docker-compose.test.yml down --remove-orphans
 cypress:
 	docker-compose -f docker-compose.cypress.yml up --build -d django
+	docker-compose -f docker-compose.cypress.yml exec -T django python manage.py clear_svg_to_png_map
 selenium-test: selenium-up selenium-local selenium-down
 selenium-up:
 	docker-compose -f docker-compose.selenium.yml up --build -d
