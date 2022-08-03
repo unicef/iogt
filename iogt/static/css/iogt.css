@@ -2530,3 +2530,13 @@ input[type=checkbox], input[type=radio] {
     background-color: #303030;
     color: #fff;
 }
+
+.comment-moderator-pagination {
+    width: 100%;
+}
+
+.comment-moderator-pagination .page-links {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}

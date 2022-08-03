@@ -50,12 +50,14 @@
             {% endfor %}
         </table>
         {% if is_paginated %}
-            <div class="pagination">
+            <div class="pagination comment-moderator-pagination">
                 <span class="page-links">
                     {% if page_obj.has_previous %}
                         <a class="comment-moderation previous-btn" href="?{{ params }}&page={{ page_obj.previous_page_number }}">{% translate 'Previous' %}</a>
+                        <span></span>
                     {% endif %}
                     {% if page_obj.has_next %}
+                        <span></span>
                         <a class="comment-moderation next-btn" href="?{{ params }}&page={{ page_obj.next_page_number }}">{% translate 'Next' %}</a>
                     {% endif %}
                 </span>
