@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib.admin.utils import flatten
 from django.shortcuts import get_object_or_404
 from django.templatetags.static import static
+from django.urls import reverse
 from django.utils import translation
 from django.views.generic import TemplateView
 from rest_framework.response import Response
@@ -14,7 +15,7 @@ from wagtail.core.models import Page, Locale
 from wagtail.images.models import Rendition
 from wagtailmedia.models import Media
 
-from home.models import HomePage, Section, Article, OfflineAppPage, SVGToPNGMap, FooterPage
+from home.models import HomePage, Section, Article, SVGToPNGMap, FooterPage, OfflineContentIndexPage
 from iogt.utils import has_md5_hash
 from questionnaires.models import Poll, Survey, Quiz
 
@@ -48,14 +49,13 @@ class TranslationNotFoundPage(TemplateView):
 
 class SitemapAPIView(APIView):
     def get(self, request):
-        home_page_urls = [p.url for p in HomePage.objects.live()],
-        section_urls = [p.url for p in Section.objects.live()],
-        article_urls = [p.url for p in Article.objects.live()],
-        footer_urls = [p.url for p in FooterPage.objects.live()],
-        poll_urls = [p.url for p in Poll.objects.live()],
-        survey_urls = [p.url for p in Survey.objects.live()],
-        quiz_urls = [p.url for p in Quiz.objects.live()],
-        offline_app_page_urls = [p.url for p in OfflineAppPage.objects.live()],
+        home_page_urls = [p.url for p in HomePage.objects.live()]
+        section_urls = [p.url for p in Section.objects.live()]
+        article_urls = [p.url for p in Article.objects.live()]
+        footer_urls = [p.url for p in FooterPage.objects.live()]
+        poll_urls = [p.url for p in Poll.objects.live()]
+        survey_urls = [p.url for p in Survey.objects.live()]
+        quiz_urls = [p.url for p in Quiz.objects.live()]
 
         jsi18n_urls = []
         for locale in Locale.objects.all():
@@ -87,7 +87,7 @@ class SitemapAPIView(APIView):
                     if file.endswith(static_dir['extensions']):
                         static_urls.append(f'{settings.STATIC_URL}{root.split("/static/")[-1]}/{file}')
 
-        sitemap = flatten(
+        sitemap = set(flatten(
             home_page_urls +
             section_urls +
             article_urls +
@@ -95,12 +95,11 @@ class SitemapAPIView(APIView):
             poll_urls +
             survey_urls +
             quiz_urls +
-            offline_app_page_urls +
-            tuple(static_urls) +
-            tuple(image_urls) +
-            tuple(media_urls) +
-            tuple(jsi18n_urls)
-        )
+            static_urls +
+            image_urls +
+            media_urls +
+            jsi18n_urls
+        ))
         return Response(sitemap)
 
 
@@ -112,19 +111,23 @@ class PageTreeAPIView(APIView):
         page = get_object_or_404(Page, id=page_id)
         pages = page.get_descendants(inclusive=True).live().specific()
         page_urls = []
+        active_locale = Locale.get_active()
+        for locale in Locale.objects.all():
+            translation.activate(locale.language_code)
+            page_urls.append(reverse('offline_content_not_found'))
+            page_urls.append(reverse('javascript-catalog'))
+            page = OfflineContentIndexPage.objects.filter(locale=locale).first()
+            if page:
+                page_urls.append(page.url)
+        translation.activate(active_locale.language_code)
         image_urls = []
         for page in pages:
-            if isinstance(page, (HomePage, Section, Article, OfflineAppPage, Poll, Survey, Quiz)):
+            if isinstance(page, (HomePage, Section, Article, Poll, Survey, Quiz)):
                 page_urls.append(page.url)
                 image_urls += page.get_image_urls
 
         for svg_to_png_map in SVGToPNGMap.objects.all():
             image_urls.append(svg_to_png_map.url)
-
-        language = translation.get_language()
-        jsi18n_urls = [
-            f'/{language}/jsi18n/'
-        ]
 
         static_urls = []
         static_dirs = [
@@ -147,7 +150,16 @@ class PageTreeAPIView(APIView):
         urls = set(flatten(
             page_urls +
             image_urls +
-            jsi18n_urls +
             static_urls
         ))
         return Response(urls)
+
+
+class OfflineContentNotFoundPageView(TemplateView):
+    template_name = "offline_content_not_found.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        page = OfflineContentIndexPage.objects.filter(locale=Locale.get_active()).first()
+        context["offline_content_index_page_url"] = (page and page.url) or ''
+        return context
