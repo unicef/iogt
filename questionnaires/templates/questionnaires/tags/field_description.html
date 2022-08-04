@@ -1,7 +1,8 @@
 {% load i18n %}
 
 {% with type=field.widget_type %}
-    <p class="quest-item__step-desc">
+    {% if not field.field.required or field.help_text or type == "radioselect" or type == "select" or type == "checkboxselectmultiple" or type == "selectmultiple" or type == "checkbox" %}
+        <p class="quest-item__step-desc">
         <span>
             {% if not field.field.required %}
                 {% translate "Optional" %}<br>
@@ -16,5 +17,6 @@
                 {% translate "Check if applies" %}
             {% endif %}
         </span>
-    </p>
+        </p>
+    {% endif %}
 {% endwith %}
