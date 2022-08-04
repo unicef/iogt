@@ -1,10 +1,19 @@
 import factory
 from django.core.files.base import ContentFile
 from factory.django import DjangoModelFactory, ImageField
+from wagtail.core.models import Locale
 from wagtail_factories import PageFactory, ImageFactory, StreamFieldFactory, ImageChooserBlockFactory
 
 from comments.models import CommentStatus
-from home.models import Article, Section, SiteSettings, HomePage, SVGToPNGMap
+from home.models import (
+    Article,
+    Section,
+    SiteSettings,
+    HomePage,
+    SVGToPNGMap,
+    OfflineContentIndexPage,
+    MiscellaneousIndexPage,
+)
 
 
 class HomePageFactory(PageFactory):
@@ -36,6 +45,20 @@ class ArticleFactory(PageFactory):
         model = Article
 
 
+class MiscellaneousIndexPageFactory(PageFactory):
+    title = factory.Sequence(lambda n: f'miscellaneous{n}')
+
+    class Meta:
+        model = MiscellaneousIndexPage
+
+
+class OfflineContentIndexPageFactory(ArticleFactory):
+    title = factory.Sequence(lambda n: f'offline-content-index{n}')
+
+    class Meta:
+        model = OfflineContentIndexPage
+
+
 class SVGToPNGMapFactory(DjangoModelFactory):
     png_image_file = factory.LazyAttribute(
             lambda _: ContentFile(
@@ -52,3 +75,9 @@ class SVGToPNGMapFactory(DjangoModelFactory):
 class SiteSettingsFactory(DjangoModelFactory):
     class Meta:
         model = SiteSettings
+
+
+class LocaleFactory(DjangoModelFactory):
+    class Meta:
+        model = Locale
+        django_get_or_create = ('language_code',)
