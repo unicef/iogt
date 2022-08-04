@@ -24,13 +24,13 @@
                                 {% csrf_token %}
                                 {% for field in form %}
                                     <div class="quest-item" tabindex="0">
-                                        <div class="quest-item__header">
-                                            {% field_description field %}
-                                        </div>
                                         <div class="quest-item__desc">
                                             {% if field.widget_type != "checkbox" %}
                                                 <p>{{ field.label }}</p>
                                             {% endif %}
+                                        </div>
+                                        <div class="quest-item__header">
+                                            {% field_description field %}
                                         </div>
                                         {% render_field field %}
                                     </div>
@@ -51,7 +51,7 @@
                                                 </div>
                                                 <div class="cust-check__title-right">
                                                     <span class="cust-check__percent">{{ count|floatformat:"0" }}
-                                                            {% if result_as_percentage %}%{% endif %}</span>
+                                                        {% if result_as_percentage %}%{% endif %}</span>
                                                 </div>
                                                 <div class="cust-check__percent-item"
                                                      style="width: {{ count |floatformat:"0" }}%"></div>
