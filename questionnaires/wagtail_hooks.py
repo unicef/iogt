@@ -1,4 +1,3 @@
-import locale
 from django.urls import path
 from django.utils.html import format_html_join
 from django.templatetags.static import static
@@ -6,7 +5,7 @@ from django.templatetags.static import static
 from wagtail.core import hooks
 from wagtail.core.models import Locale
 
-from questionnaires.views import FormPagesListView
+from questionnaires.views import FormPagesListView, FormDataPerUserView
 
 
 @hooks.register('insert_editor_js', order=100)
@@ -27,4 +26,5 @@ def editor_js():
 def register_custom_form_pages_list_view():
   return [
       path('forms/', FormPagesListView.as_view(), name='index'),
+      path('form-data/', FormDataPerUserView.as_view(), name='form_data_per_user'),
   ]
