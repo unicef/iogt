@@ -156,7 +156,7 @@ class PageTreeAPIView(APIView):
 
 
 class OfflineContentNotFoundPageView(TemplateView):
-    template_name = "offline-content-not-found.html"
+    template_name = "offline_content_not_found.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
