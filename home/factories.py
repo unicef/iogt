@@ -14,6 +14,7 @@ from home.models import (
     MiscellaneousIndexPage,
 )
 
+
 class HomePageFactory(PageFactory):
     title = factory.Sequence(lambda n: f'homepage{n}')
 
@@ -43,6 +44,20 @@ class ArticleFactory(PageFactory):
         model = Article
 
 
+class MiscellaneousIndexPageFactory(PageFactory):
+    title = factory.Sequence(lambda n: f'miscellaneous{n}')
+
+    class Meta:
+        model = MiscellaneousIndexPage
+
+
+class OfflineContentIndexPageFactory(ArticleFactory):
+    title = factory.Sequence(lambda n: f'offline-content-index{n}')
+
+    class Meta:
+        model = OfflineContentIndexPage
+
+
 class SVGToPNGMapFactory(DjangoModelFactory):
     png_image_file = factory.LazyAttribute(
             lambda _: ContentFile(
@@ -63,5 +78,4 @@ class LocaleFactory(DjangoModelFactory):
     class Meta:
         model = Locale
         django_get_or_create = ('language_code',)
-
 

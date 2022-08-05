@@ -8,6 +8,7 @@ from drf_yasg.views import get_schema_view
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from wagtail.images.views.serve import ServeView
+from webpush.views import save_info
 
 from home.views import get_manifest, LogoutRedirectHackView
 from iogt_users import urls as users_urls
@@ -17,7 +18,13 @@ from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 from home import views as pwa_views
 from wagtail_transfer import urls as wagtailtransfer_urls
-from iogt.views import TransitionPageView, SitemapAPIView, TranslationNotFoundPage, PageTreeAPIView
+from iogt.views import (
+    TransitionPageView,
+    SitemapAPIView,
+    TranslationNotFoundPage,
+    PageTreeAPIView,
+    OfflineContentNotFoundPageView,
+)
 
 
 api_url_patterns = [
@@ -52,6 +59,7 @@ urlpatterns = api_url_patterns + [
     ),
     *i18n_patterns(path("external-link/", TransitionPageView.as_view(), name="external-link")),
     *i18n_patterns(path("translation-not-found/", TranslationNotFoundPage.as_view(), name="translation-not-found")),
+    *i18n_patterns(path("offline-content-not-found/", OfflineContentNotFoundPageView.as_view(), name="offline_content_not_found")),
 
     path('messaging/', include('messaging.urls'), name='messaging-urls'),
     path('wagtail-transfer/', include(wagtailtransfer_urls)),
@@ -62,6 +70,7 @@ urlpatterns = api_url_patterns + [
     path('health-check/', include('health_check.urls')),
     path('page-tree/<int:page_id>/', PageTreeAPIView.as_view(), name='page_tree'),
     path('api/docs/', schema_view.with_ui('swagger'), name='swagger'),
+    path('webpush/subscribe/', save_info, name='save_webpush_info'),
 ]
 
 if settings.DEBUG:

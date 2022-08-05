@@ -109,7 +109,6 @@ class Command(BaseCommand):
 
     def clear(self):
         PageRevision.objects.all().delete()
-        models.OfflineAppPage.objects.all().delete()
         models.MiscellaneousIndexPage.objects.all().delete()
         models.PageLinkPage.objects.all().delete()
         PollFormField.objects.all().delete()

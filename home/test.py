@@ -1,12 +1,16 @@
+from urllib.parse import unquote, parse_qs
+
 from django.conf import settings
 from django.db.utils import IntegrityError
-from django.test import TestCase
+from django.template import Context
+from django.test import TestCase, RequestFactory
 from django.urls import reverse
 from rest_framework import status
 from wagtail.core.models import PageViewRestriction, Site
 from unittest.mock import patch
 
 from home.models import SVGToPNGMap
+from home.templatetags.generic_components import google_analytics
 from iogt_users.factories import UserFactory, GroupFactory
 from home.factories import ArticleFactory, HomePageFactory
 from wagtail_factories import SiteFactory
@@ -131,3 +135,24 @@ class SVGToPNGMapTests(TestCase):
                 fill_color='#555',
                 stroke_color='#666'
             )
+
+
+class GoogleAnalyticsTagsTestCase(TestCase):
+    def setUp(self):
+        self.request_factory = RequestFactory()
+
+    def test_query_param_without_value(self):
+        request = self.request_factory.get('/en/?test')
+        context = Context({'request': request})
+
+        rendered_template = google_analytics(context, tracking_code='my-code')
+
+        self.assertIn("/en/?test=['']", unquote(parse_qs(rendered_template)['p'][0]))
+
+    def test_query_param_with_value(self):
+        request = self.request_factory.get('/en/?test=abc')
+        context = Context({'request': request})
+
+        rendered_template = google_analytics(context, tracking_code='my-code')
+
+        self.assertIn("/en/?test=['abc']", unquote(parse_qs(rendered_template)['p'][0]))

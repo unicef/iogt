@@ -16,7 +16,10 @@ self.addEventListener('activate', event => {
     event.waitUntil(self.clients.claim());
 });
 
-self.addEventListener('fetch', event => {
+
+const languageCodeRegEx = RegExp('^\\/(\\w+([@-]\\w+)?)(\\/|$)');
+
+self.addEventListener('fetch', async event => {
     if (event.request.method !== 'GET')
         return;
 
@@ -37,8 +40,42 @@ self.addEventListener('fetch', event => {
             .catch(error => {
                 return caches.open('iogt')
                     .then(cache => {
-                        return cache.match(event.request.url)
+                        return cache.match(event.request)
+                            .then(match => {
+                                if (match) {
+                                    return match;
+                                } else if (event.request.headers.get('Accept').indexOf('text/html') !== -1) {
+                                    const languageCode = languageCodeRegEx.exec(new URL(event.request.url).pathname)?.[1] || 'en';
+                                    return cache.match(`/${languageCode}/offline-content-not-found/`);
+                                }
+                            });
                     });
             })
+    );
+});
+
+self.addEventListener('push', event => {
+    let {head, body, icon, url} = event.data?.json() || {
+        "head": "No Content",
+        "body": "No Content",
+        "icon": "",
+        "url": ""
+    };
+    url = url || self.location.origin;
+
+    event.waitUntil(
+        self.registration.showNotification(head, {
+            body: body,
+            icon: icon,
+            data: {url}
+        })
+    );
+});
+
+self.addEventListener('notificationclick', event => {
+    event.waitUntil(
+        event.preventDefault(),
+        event.notification.close(),
+        self.clients.openWindow(event.notification.data.url)
     );
 });
