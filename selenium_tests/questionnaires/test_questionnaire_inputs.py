@@ -9,7 +9,7 @@ from home.factories import ArticleFactory, HomePageFactory, SectionFactory
 from questionnaires.factories import SurveyFactory
 from wagtail_factories import SiteFactory
 
-class QInputsSeleniumTests(BaseSeleniumTests):
+class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
 
     def setUp(self):
         Site.objects.all().delete()
