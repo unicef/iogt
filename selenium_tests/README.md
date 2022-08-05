@@ -7,7 +7,7 @@ The functional tests have been broken down into Categories > Groups > Tests
 - Each category has it's own folder within the selenium_tests directory, it contains multiple groups of tests
 - Each group of tests gas it's own python file within the category folder, each group contains multiple tests
 
-For general guidance on how to write the selenium tests, review the 'example_test' folder.
+For general guidance on how to write the selenium tests, review the existing tests within this folder.
 
 
 ## Running tests locally
