@@ -22,5 +22,5 @@ class LoginSeleniumTests(BaseSeleniumTests):
         password_input.send_keys('test@123')
         self.selenium.find_element_by_xpath('//button[@type="submit"]').click()
         body_text = self.selenium.find_element_by_tag_name('body').text
-        assert self.user.username in body_text
+        self.assertIn(self.user.username, body_text)
         
