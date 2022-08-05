@@ -1,5 +1,5 @@
 import time
-from selenium_tests.TestBase.base import BaseSeleniumTests
+from selenium_tests.base import BaseSeleniumTests
 from selenium.webdriver.support.ui import Select
 from wagtail.core.models import Site
 from questionnaires.models import SurveyFormField

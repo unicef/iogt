@@ -1,5 +1,5 @@
 import time
-from selenium_tests.TestBase.base import BaseSeleniumTests
+from selenium_tests.base import BaseSeleniumTests
 from wagtail.core.models import Site
 
 from iogt_users.factories import AdminUserFactory

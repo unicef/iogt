@@ -1,9 +1,6 @@
-import time
 from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-
-
 
 class BaseSeleniumTests(LiveServerTestCase):
 
@@ -32,7 +29,3 @@ class BaseSeleniumTests(LiveServerTestCase):
     def tearDownClass(cls):
         cls.selenium.quit()
         super(BaseSeleniumTests, cls).tearDownClass()
-
-    
-        
-        
