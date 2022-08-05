@@ -5,7 +5,8 @@ from wagtail.core.models import Site
 from questionnaires.models import SurveyFormField
 
 from iogt_users.factories import AdminUserFactory
-from home.factories import ArticleFactory, HomePageFactory, SurveyFactory, SectionFactory
+from home.factories import ArticleFactory, HomePageFactory, SectionFactory
+from questionnaires.factories import SurveyFactory
 from wagtail_factories import SiteFactory
 
 class QInputsSeleniumTests(BaseSeleniumTests):

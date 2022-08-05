@@ -3,7 +3,8 @@ from selenium_tests.TestBase.base import BaseSeleniumTests
 from wagtail.core.models import Site
 
 from iogt_users.factories import AdminUserFactory
-from home.factories import HomePageFactory, SurveyFactory
+from home.factories import HomePageFactory
+from questionnaires.factories import SurveyFactory
 from wagtail_factories import SiteFactory
 
 

@@ -49,12 +49,6 @@ class SVGToPNGMapFactory(DjangoModelFactory):
     class Meta:
         model = SVGToPNGMap
 
-class SurveyFactory(PageFactory):
-    title = factory.Sequence(lambda n: f'survey{n}')
-
-    class Meta:
-        model = Survey
-
 class SiteSettingsFactory(DjangoModelFactory):
     class Meta:
         model = SiteSettings
