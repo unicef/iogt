@@ -1,10 +1,19 @@
 import factory
 from django.core.files.base import ContentFile
 from factory.django import DjangoModelFactory, ImageField
+from wagtail.core.models import Locale
 from wagtail_factories import PageFactory, ImageFactory, StreamFieldFactory, ImageChooserBlockFactory
 
 from comments.models import CommentStatus
-from home.models import Article, Section, SiteSettings, HomePage, SVGToPNGMap
+from home.models import (
+    Article,
+    Section,
+    SiteSettings,
+    HomePage,
+    SVGToPNGMap,
+    OfflineContentIndexPage,
+    MiscellaneousIndexPage,
+)
 from questionnaires.models import Survey
 
 
@@ -52,5 +61,10 @@ class SVGToPNGMapFactory(DjangoModelFactory):
 class SiteSettingsFactory(DjangoModelFactory):
     class Meta:
         model = SiteSettings
+
+class LocaleFactory(DjangoModelFactory):
+    class Meta:
+        model = Locale
+        django_get_or_create = ('language_code',)
 
 
