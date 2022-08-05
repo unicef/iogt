@@ -3,7 +3,6 @@ from django.core.files.base import ContentFile
 from factory.django import DjangoModelFactory, ImageField
 from wagtail.core.models import Locale
 from wagtail_factories import PageFactory, ImageFactory, StreamFieldFactory, ImageChooserBlockFactory
-
 from comments.models import CommentStatus
 from home.models import (
     Article,
@@ -14,8 +13,6 @@ from home.models import (
     OfflineContentIndexPage,
     MiscellaneousIndexPage,
 )
-from questionnaires.models import Survey
-
 
 class HomePageFactory(PageFactory):
     title = factory.Sequence(lambda n: f'homepage{n}')
