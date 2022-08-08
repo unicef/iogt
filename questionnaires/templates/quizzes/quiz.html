@@ -21,14 +21,14 @@
                         {% csrf_token %}
                         {% for field in form %}
                             <div class="quest-item">
-                                <div class="quest-item__header">
-                                    {% field_description field %}
-                                </div>
                                 {% if field.widget_type != "checkbox" %}
                                     <div class="quest-item__desc">
                                         <p>{{ field.label }}</p>
                                     </div>
                                 {% endif %}
+                                <div class="quest-item__header">
+                                    {% field_description field %}
+                                </div>
                                 <div class="quest-item__content" tabindex="0">
                                     {% render_field field %}
                                 </div>
