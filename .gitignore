@@ -112,6 +112,7 @@ GitHub.sublime-settings
 .DS_Store
 
 # Data dir for postgres with docker-compose
+initdb.d/
 legacy-initdb.d/
 
 # Local overrides for Docker Compose
