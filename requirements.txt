@@ -16,7 +16,7 @@ tqdm==4.62.*
 wagtail-localize==1.1.1
 wagtail-markdown==0.7.0
 Markdown==3.3.7
-wagtail==2.11.*
+wagtail==2.15.*
 wagtailmedia==0.7.0
 wagtailmenus~=3.0
 wagtailsvg==0.0.14
