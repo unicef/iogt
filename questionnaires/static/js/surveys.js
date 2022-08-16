@@ -10,7 +10,7 @@ const addHelperMethods = questionSelector => {
     question.fieldSelect = () => question.find('[id$="-field_type"]');
     question.sortOrder = () => parseInt(question.children('[id$="-ORDER"]').val());
     question.label = () => question.find('textarea[id$="-label"]');
-    question.skipLogicChoiceHelpText = () => question.find('.skip-logic-stream-block').closest('.skip-logic').find('.help');
+    question.skipLogicChoiceHelpText = () => question.find('.skip-logic-stream-block').closest('.skip-logic').find('p.help>strong');
     question.skipLogicQuestionSelectors = () => question.find('[id$="-question_1"]');
     question.filterSelectors = sortOrder => question.skipLogicQuestionSelectors().find(`option[value=${sortOrder}]`);
     question.hasSelected = sortOrder => {
