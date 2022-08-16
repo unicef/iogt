@@ -5,32 +5,35 @@ const questionSelector = fieldId => {
 const addHelperMethods = questionSelector => {
     const question = $(questionSelector);
 
-    question.skipLogicChoiceLabels = () => question.find('label[for$="-value-choice"]');
-    question.skipLogicLabel = () => question.find('label[for$="-skip_logic"]').first();
-    question.fieldSelect = () => question.find('[id$="-field_type"]');
-    question.sortOrder = () => parseInt(question.children('[id$="-ORDER"]').val());
     question.label = () => question.find('textarea[id$="-label"]');
+    question.fieldTypeInput = () => question.find('[id$="-field_type"]');
+    question.skipLogicLabel = () => question.find('label[for$="-skip_logic"]').first();
+    question.skipLogicChoiceLabels = () => question.find('label[for$="-value-choice"]');
+    question.skipLogicChoiceInputs = () => question.find('input[for$="-value-choice"]');
+    question.skipLogicTypeLabels = () => question.find('label[for$="-value-skip_logic"]');
+    question.skipLogicTypeInputs = () => question.find('select[for$="-value-skip_logic"]');
+    question.skipLogicQuestions = () => question.find('[id*="-question_"]');
+    question.skipLogicQuestionInputs = () => question.find('[id$="-question_1"]');
     question.skipLogicChoiceHelpText = () => question.find('.skip-logic-stream-block').closest('.skip-logic').find('p.help>strong');
-    question.skipLogicQuestionSelectors = () => question.find('[id$="-question_1"]');
-    question.filterSelectors = sortOrder => question.skipLogicQuestionSelectors().find(`option[value=${sortOrder}]`);
+    question.sortOrder = () => parseInt(question.children('[id$="-ORDER"]').val());
+    question.filterSelectors = sortOrder => question.skipLogicQuestionInputs().find(`option[value=${sortOrder}]`);
     question.hasSelected = sortOrder => {
-        return question.skipLogicQuestionSelectors().filter(':visible').is((index, element) => {
+        return question.skipLogicQuestionInputs().filter(':visible').is((index, element) => {
             return $(element).val() === sortOrder;
         });
     };
     question.updateSkipLogicLabel = () => {
-        const questionType = question.fieldSelect().val();
+        const questionType = question.fieldTypeInput().val();
         const newLabel = ['checkboxes', 'dropdown', 'radio'].includes(questionType) ? 'Answer options:' : 'Skip logic options:';
         question.skipLogicLabel().html(newLabel);
     };
     question.updateSkipLogicChoiceLabels = () => {
-        const questionType = question.fieldSelect().val();
+        const questionType = question.fieldTypeInput().val();
         const newLabel = ['checkboxes', 'dropdown', 'radio'].includes(questionType) ? 'Choice' : 'Skip value';
         question.skipLogicChoiceLabels().html(newLabel);
     };
-
-    question.updateSkipLogicChoiceHelpText = () => {
-        const questionType = question.fieldSelect().val();
+    question.toggleSkipLogicChoiceHelpText = () => {
+        const questionType = question.fieldTypeInput().val();
         questionType === 'checkbox' ? question.skipLogicChoiceHelpText().show() : question.skipLogicChoiceHelpText().hide();
     };
 
@@ -46,3 +49,29 @@ const allQuestions = fieldId => {
 };
 
 const allQuestionSelectors = () => $('[id$="-question_1"]');
+
+const populateAllQuestions = () => {
+    const questions = allQuestions('survey_form_fields')
+    for (const thisQuestion of questions) {
+        thisQuestion.toggleSkipLogicChoiceHelpText();
+        const skipLogicQuestions = thisQuestion.skipLogicQuestions();
+        for (let i = 0; i < skipLogicQuestions.length; i += 2) { // each question has input and select elements
+            const input = $(skipLogicQuestions[i]);
+            const select = $(skipLogicQuestions[i + 1]);
+            for (let question of questions) {
+                const sortOrder = question.sortOrder();
+                const label = question.label().val();
+                const selected = sortOrder == input.val() ? 'selected' : '';
+                if (sortOrder > thisQuestion.sortOrder()) {
+                    select.append(
+                        `<option value="${sortOrder}" ${selected}>${label}</option>`
+                    );
+                }
+            }
+        }
+    }
+};
+
+$(document).ready(() => {
+    populateAllQuestions();
+});

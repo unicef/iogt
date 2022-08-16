@@ -6,11 +6,11 @@ class SkipLogicStreamBlockDefinition extends window.wagtailStreamField.blocks.St
         const fieldId = `${splitPrefix[0]}-${splitPrefix[1]}`;
         const thisQuestion = question(fieldId);
 
-        thisQuestion.fieldSelect().change(() => {
-            if (thisQuestion.fieldSelect().val() === 'checkbox') {
+        thisQuestion.fieldTypeInput().change(() => {
+            if (thisQuestion.fieldTypeInput().val() == 'checkbox') {
                 const addChoiceButton = thisQuestion.find('.action-add-block-skip_logic').last();
                 let choices = thisQuestion.find('[id$=value-choice]');
-                if (choices.length === 0) {
+                if (choices.length == 0) {
                     addChoiceButton.trigger('click');
                     addChoiceButton.trigger('click');
                     choices = thisQuestion.find('[id$=value-choice]');
@@ -20,12 +20,12 @@ class SkipLogicStreamBlockDefinition extends window.wagtailStreamField.blocks.St
             }
             thisQuestion.updateSkipLogicLabel();
             thisQuestion.updateSkipLogicChoiceLabels();
-            thisQuestion.updateSkipLogicChoiceHelpText();
+            thisQuestion.toggleSkipLogicChoiceHelpText();
         });
 
         thisQuestion.updateSkipLogicLabel();
         thisQuestion.updateSkipLogicChoiceLabels();
-        thisQuestion.updateSkipLogicChoiceHelpText();
+        thisQuestion.toggleSkipLogicChoiceHelpText();
 
         thisQuestion.label().change(e => {
             const sortOrder = thisQuestion.sortOrder();
@@ -47,13 +47,13 @@ class SkipLogicStreamBlockDefinition extends window.wagtailStreamField.blocks.St
                 const latestQuestion = allQuestions(splitPrefix[0]).pop();
                 const sortOrder = latestQuestion.sortOrder();
                 const label = `[Please update question ${sortOrder}]`;
-                thisQuestion.skipLogicQuestionSelectors().append(
+                thisQuestion.skipLogicQuestionInputs().append(
                     `<option value="${sortOrder}">${label}</option>`
                 );
             });
         };
 
-        if (questionAdd.length === 1) {
+        if (questionAdd.length == 1) {
             wrapAddQuestion();
         }
 
@@ -88,7 +88,7 @@ class SkipLogicStreamBlockDefinition extends window.wagtailStreamField.blocks.St
             const sortOrder = thisQuestion.sortOrder();
             const targetSortOrder = question.sortOrder();
             const questionIndex = opts.questionOrder.indexOf(sortOrder);
-            if (opts.questionOrder[questionIndex - 1] === targetSortOrder) {
+            if (opts.questionOrder[questionIndex - 1] == targetSortOrder) {
                 if (question.hasSelected(sortOrder)) {
                     const questionLabel = question.label().val();
                     alert(`Cannot move above "${questionLabel}", please change the logic.`);
@@ -108,7 +108,7 @@ class SkipLogicStreamBlockDefinition extends window.wagtailStreamField.blocks.St
             const sortOrder = thisQuestion.sortOrder();
             const targetSortOrder = question.sortOrder();
             const questionIndex = opts.questionOrder.indexOf(sortOrder);
-            if (opts.questionOrder[questionIndex + 1] === targetSortOrder) {
+            if (opts.questionOrder[questionIndex + 1] == targetSortOrder) {
                 if (thisQuestion.hasSelected(targetSortOrder)) {
                     const questionLabel = question.label().val();
                     alert(`Cannot move below "${questionLabel}", please change the logic.`);
@@ -119,7 +119,7 @@ class SkipLogicStreamBlockDefinition extends window.wagtailStreamField.blocks.St
                     swapSortOrder(sortOrder, targetSortOrder);
 
                     const label = thisQuestion.label().val();
-                    question.skipLogicQuestionSelectors().prepend(
+                    question.skipLogicQuestionInputs().prepend(
                         `<option value="${sortOrder}">${label}</option>`
                     );
                     return true;
