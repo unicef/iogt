@@ -1,4 +1,0 @@
-django-storages
-google-cloud-storage
-google-cloud-secret-manager
-gunicorn
