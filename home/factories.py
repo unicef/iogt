@@ -3,7 +3,6 @@ from django.core.files.base import ContentFile
 from factory.django import DjangoModelFactory, ImageField
 from wagtail.core.models import Locale
 from wagtail_factories import PageFactory, ImageFactory, StreamFieldFactory, ImageChooserBlockFactory
-
 from comments.models import CommentStatus
 from home.models import (
     Article,
@@ -71,13 +70,12 @@ class SVGToPNGMapFactory(DjangoModelFactory):
     class Meta:
         model = SVGToPNGMap
 
-
 class SiteSettingsFactory(DjangoModelFactory):
     class Meta:
         model = SiteSettings
-
 
 class LocaleFactory(DjangoModelFactory):
     class Meta:
         model = Locale
         django_get_or_create = ('language_code',)
+
