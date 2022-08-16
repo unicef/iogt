@@ -22,18 +22,15 @@ const addHelperMethods = questionSelector => {
             return $(element).val() === sortOrder;
         });
     };
-    question.updateSkipLogicLabel = () => {
+    question.updateSkipLogicLabels = () => {
         const questionType = question.fieldTypeInput().val();
-        const newLabel = ['checkboxes', 'dropdown', 'radio'].includes(questionType) ? 'Answer options:' : 'Skip logic options:';
-        question.skipLogicLabel().html(newLabel);
-    };
-    question.updateSkipLogicChoiceLabels = () => {
-        const questionType = question.fieldTypeInput().val();
-        const newLabel = ['checkboxes', 'dropdown', 'radio'].includes(questionType) ? 'Choice' : 'Skip value';
-        question.skipLogicChoiceLabels().html(newLabel);
-    };
-    question.toggleSkipLogicChoiceHelpText = () => {
-        const questionType = question.fieldTypeInput().val();
+        if (['checkboxes', 'dropdown', 'radio'].includes(questionType)) {
+            question.skipLogicLabel().html('Answer options:');
+            question.skipLogicChoiceLabels().html('Choice');
+        } else {
+            question.skipLogicLabel().html('Skip logic options:');
+            question.skipLogicChoiceLabels().html('Skip value');
+        }
         questionType === 'checkbox' ? question.skipLogicChoiceHelpText().show() : question.skipLogicChoiceHelpText().hide();
     };
 
@@ -53,7 +50,7 @@ const allQuestionSelectors = () => $('[id$="-question_1"]');
 const populateAllQuestions = () => {
     const questions = allQuestions('survey_form_fields')
     for (const thisQuestion of questions) {
-        thisQuestion.toggleSkipLogicChoiceHelpText();
+        thisQuestion.updateSkipLogicLabels();
         const skipLogicQuestions = thisQuestion.skipLogicQuestions();
         for (let i = 0; i < skipLogicQuestions.length; i += 2) { // each question has input and select elements
             const input = $(skipLogicQuestions[i]);

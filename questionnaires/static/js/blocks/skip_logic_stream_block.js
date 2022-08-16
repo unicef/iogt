@@ -7,10 +7,11 @@ class SkipLogicStreamBlockDefinition extends window.wagtailStreamField.blocks.St
         const thisQuestion = question(fieldId);
 
         thisQuestion.fieldTypeInput().change(() => {
-            if (thisQuestion.fieldTypeInput().val() == 'checkbox') {
+            const questionType = thisQuestion.fieldTypeInput().val();
+            if (questionType === 'checkbox') {
                 const addChoiceButton = thisQuestion.find('.action-add-block-skip_logic').last();
                 let skipLogicChoices = thisQuestion.skipLogicChoiceInputs();
-                if (skipLogicChoices.length == 0) {
+                if (skipLogicChoices.length === 0) {
                     addChoiceButton.trigger('click');
                     addChoiceButton.trigger('click');
                     skipLogicChoices = thisQuestion.skipLogicChoiceInputs();
@@ -18,14 +19,10 @@ class SkipLogicStreamBlockDefinition extends window.wagtailStreamField.blocks.St
                     skipLogicChoices.last().val('false');
                 }
             }
-            thisQuestion.updateSkipLogicLabel();
-            thisQuestion.updateSkipLogicChoiceLabels();
-            thisQuestion.toggleSkipLogicChoiceHelpText();
+            thisQuestion.updateSkipLogicLabels();
         });
 
-        thisQuestion.updateSkipLogicLabel();
-        thisQuestion.updateSkipLogicChoiceLabels();
-        thisQuestion.toggleSkipLogicChoiceHelpText();
+        thisQuestion.updateSkipLogicLabels();
 
         thisQuestion.label().change(e => {
             const sortOrder = thisQuestion.sortOrder();
