@@ -42,7 +42,6 @@ class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
             admin_label='Q2',            
         )
         
-    
     def test_checkboxes(self):
         self.selenium.get('%s%s' % (self.live_server_url, self.survey01.url))
         self.selenium.find_element_by_xpath('//input[@value="A"]').click()
@@ -52,5 +51,5 @@ class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
         select = Select(self.selenium.find_element_by_name("question_2"))
         select.select_by_visible_text("blah3")
         print(select.first_selected_option)
-        assert 'blah3' in select.first_selected_option.text
+        self.assertIn('blah3', select.first_selected_option.text)
         
