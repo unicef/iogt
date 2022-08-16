@@ -1,7 +1,8 @@
+// copied from wagtail
 class BoundWidget {
     constructor(element, name, idForLabel, initialState) {
-        var hiddenInputSelector = ':input[name="' + name + '_0"]';
-        this.input = element.find(hiddenInputSelector).addBack(hiddenInputSelector);  // find, including element itself
+        var selector = ':input[name="' + name + '_0"]'; // hidden input selector
+        this.input = element.find(selector).addBack(selector);  // find, including element itself
         this.idForLabel = idForLabel;
         this.setState(initialState);
     }
