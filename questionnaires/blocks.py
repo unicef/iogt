@@ -85,7 +85,7 @@ class SkipLogicBlock(blocks.StructBlock):
         return cleaned_data
 
     class Meta:
-        form_classname = 'skip-logic-block'
+        form_classname = 'skip-logic-block struct-block'
 
 
 register(SkipLogicStreamBlockAdapter(), SkipLogicStreamBlock)
