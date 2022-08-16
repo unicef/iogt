@@ -9,13 +9,13 @@ class SkipLogicStreamBlockDefinition extends window.wagtailStreamField.blocks.St
         thisQuestion.fieldTypeInput().change(() => {
             if (thisQuestion.fieldTypeInput().val() == 'checkbox') {
                 const addChoiceButton = thisQuestion.find('.action-add-block-skip_logic').last();
-                let choices = thisQuestion.find('[id$=value-choice]');
-                if (choices.length == 0) {
+                let skipLogicChoices = thisQuestion.skipLogicChoiceInputs();
+                if (skipLogicChoices.length == 0) {
                     addChoiceButton.trigger('click');
                     addChoiceButton.trigger('click');
-                    choices = thisQuestion.find('[id$=value-choice]');
-                    choices.first().val('true');
-                    choices.last().val('false');
+                    skipLogicChoices = thisQuestion.skipLogicChoiceInputs();
+                    skipLogicChoices.first().val('true');
+                    skipLogicChoices.last().val('false');
                 }
             }
             thisQuestion.updateSkipLogicLabel();

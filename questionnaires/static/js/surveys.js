@@ -9,7 +9,7 @@ const addHelperMethods = questionSelector => {
     question.fieldTypeInput = () => question.find('[id$="-field_type"]');
     question.skipLogicLabel = () => question.find('label[for$="-skip_logic"]').first();
     question.skipLogicChoiceLabels = () => question.find('label[for$="-value-choice"]');
-    question.skipLogicChoiceInputs = () => question.find('input[for$="-value-choice"]');
+    question.skipLogicChoiceInputs = () => question.find('input[id$="-value-choice"]');
     question.skipLogicTypeLabels = () => question.find('label[for$="-value-skip_logic"]');
     question.skipLogicTypeInputs = () => question.find('select[for$="-value-skip_logic"]');
     question.skipLogicQuestions = () => question.find('[id*="-question_"]');
