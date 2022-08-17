@@ -29,3 +29,7 @@ class BaseSeleniumTests(LiveServerTestCase):
     def tearDownClass(cls):
         cls.selenium.quit()
         super(BaseSeleniumTests, cls).tearDownClass()
+
+    def visit(self, uri):
+        url = '%s%s' % (self.live_server_url, uri)
+        self.selenium.get(url)

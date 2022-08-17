@@ -12,6 +12,7 @@ from home.models import (
     SVGToPNGMap,
     OfflineContentIndexPage,
     MiscellaneousIndexPage,
+    FooterIndexPage,
 )
 
 
@@ -25,6 +26,7 @@ class HomePageFactory(PageFactory):
 class SectionFactory(PageFactory):
     title = factory.Sequence(lambda n: f'section{n}')
     lead_image = factory.SubFactory(ImageFactory)
+    image_icon = factory.SubFactory(ImageFactory)
 
     class Meta:
         model = Section
@@ -79,3 +81,8 @@ class LocaleFactory(DjangoModelFactory):
         model = Locale
         django_get_or_create = ('language_code',)
 
+class FooterIndexPageFactory(PageFactory):
+    title = 'Footers'
+
+    class Meta:
+        model = FooterIndexPage
