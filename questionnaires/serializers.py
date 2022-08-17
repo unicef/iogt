@@ -44,25 +44,10 @@ class BaseFormFieldSerializer(serializers.ModelSerializer):
 
 
 class BaseQuestionnairePageDetailSerializer(serializers.ModelSerializer):
-    description = serializers.SerializerMethodField()
-    thank_you_text = serializers.SerializerMethodField()
-    terms_and_conditions = serializers.SerializerMethodField()
+    description = serializers.JSONField(source='description.get_prep_value')
+    thank_you_text = serializers.JSONField(source='thank_you_text.get_prep_value')
+    terms_and_conditions = serializers.JSONField(source='terms_and_conditions.get_prep_value')
     url = serializers.CharField(source='full_url')
-
-    def get_description(self, obj):
-        if obj.description:
-            return [d for d in obj.description.raw_data]
-        return []
-
-    def get_thank_you_text(self, obj):
-        if obj.thank_you_text:
-            return [d for d in obj.thank_you_text.raw_data]
-        return []
-
-    def get_terms_and_conditions(self, obj):
-        if obj.terms_and_conditions:
-            return [d for d in obj.terms_and_conditions.raw_data]
-        return []
 
     class Meta:
         model = QuestionnairePage
@@ -91,12 +76,7 @@ class PollPageDetailSerializer(BaseQuestionnairePageDetailSerializer):
 
 
 class SurveyFormFieldSerializer(BaseFormFieldSerializer):
-    skip_logic = serializers.SerializerMethodField()
-
-    def get_skip_logic(self, obj):
-        if obj.skip_logic:
-            return [d for d in obj.skip_logic.raw_data]
-        return []
+    skip_logic = serializers.JSONField(source='skip_logic.get_prep_value')
 
     class Meta:
         model = SurveyFormField
