@@ -15,11 +15,12 @@ const addHelperMethods = questionSelector => {
     question.skipLogicQuestions = () => question.find('[id*="-question_"]');
     question.skipLogicQuestionInputs = () => question.find('[id$="-question_1"]');
     question.skipLogicChoiceHelpText = () => question.find('.skip-logic-stream-block').closest('.skip-logic').find('p.help>strong');
+    question.addSkipLogicBtn = () => question.find('.action-add-block-skip_logic').last();
     question.sortOrder = () => parseInt(question.children('[id$="-ORDER"]').val());
     question.filterSelectors = sortOrder => question.skipLogicQuestionInputs().find(`option[value=${sortOrder}]`);
     question.hasSelected = sortOrder => {
         return question.skipLogicQuestionInputs().filter(':visible').is((index, element) => {
-            return $(element).val() === sortOrder;
+            return $(element).val() == sortOrder;
         });
     };
     question.updateSkipLogicLabels = () => {
@@ -44,8 +45,6 @@ const question = fieldId => {
 const allQuestions = fieldId => {
     return $.map($(questionSelector(fieldId)).not('.deleted'), addHelperMethods);
 };
-
-const allQuestionSelectors = () => $('[id$="-question_1"]');
 
 const populateAllQuestions = () => {
     const questions = allQuestions('survey_form_fields')

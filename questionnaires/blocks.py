@@ -43,7 +43,6 @@ class SkipLogicField(StreamField):
 
 class SkipLogicStreamBlock(blocks.StreamBlock):
     class Meta:
-        required = False
         form_classname = 'skip-logic-stream-block'
 
 

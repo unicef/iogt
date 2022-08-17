@@ -7,7 +7,7 @@ class SkipLogicBlockDefinition extends window.wagtailStreamField.blocks.StructBl
 
         const toggleQuestionInput = () => {
             const questionElement = questionSelect.closest('.skip-logic-block>div:last-child');
-            type.val() == 'question' ? questionElement.show() : questionElement.hide();
+            type.val() === 'question' ? questionElement.show() : questionElement.hide();
         };
 
         type.change(() => {
