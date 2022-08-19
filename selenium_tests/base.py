@@ -19,7 +19,7 @@ class BaseSeleniumTests(LiveServerTestCase):
         options.add_argument('--ignore-ssl-errors=yes')
         options.add_argument('--ignore-certificate-errors')
         #options.add_argument("--window-size=1920,1080")
-        #options.add_argument("--start-maximized")
+        options.add_argument("--start-maximized")
         #options.add_argument("--headless")
         cls.selenium = webdriver.Remote(
             command_executor='http://selenium-hub:4444/wd/hub',
