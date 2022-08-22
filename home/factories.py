@@ -2,17 +2,23 @@ import factory
 from django.core.files.base import ContentFile
 from factory.django import DjangoModelFactory, ImageField
 from wagtail.core.models import Locale
-from wagtail_factories import PageFactory, ImageFactory, StreamFieldFactory, ImageChooserBlockFactory
+from wagtail_factories import (
+    ImageChooserBlockFactory,
+    ImageFactory,
+    PageFactory,
+    StreamFieldFactory,
+)
 from comments.models import CommentStatus
 from home.models import (
     Article,
-    Section,
-    SiteSettings,
-    HomePage,
-    SVGToPNGMap,
-    OfflineContentIndexPage,
-    MiscellaneousIndexPage,
     FooterIndexPage,
+    HomePage,
+    MiscellaneousIndexPage,
+    OfflineContentIndexPage,
+    SVGToPNGMap,
+    Section,
+    SectionIndexPage,
+    SiteSettings,
 )
 
 
@@ -22,6 +28,11 @@ class HomePageFactory(PageFactory):
     class Meta:
         model = HomePage
 
+class SectionIndexFactory(PageFactory):
+    title = 'Sections'
+
+    class Meta:
+        model = SectionIndexPage
 
 class SectionFactory(PageFactory):
     title = factory.Sequence(lambda n: f'section{n}')
