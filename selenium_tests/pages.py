@@ -1,4 +1,5 @@
 from typing import List
+from urllib.parse import urlparse
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 
@@ -9,7 +10,7 @@ class BasePage():
         self.driver = driver
 
     def url_matches(self, path: str) -> bool:
-        return self.driver.current_url.endswith(path)
+        return urlparse(self.driver.current_url).path == path
 
     @property
     def footer(self) -> 'FooterElement':
