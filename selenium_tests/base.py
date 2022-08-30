@@ -1,6 +1,10 @@
 from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from wagtail.core.models import Page
+
+from selenium_tests.pages import BasePage
+
 
 class BaseSeleniumTests(LiveServerTestCase):
 
@@ -29,3 +33,11 @@ class BaseSeleniumTests(LiveServerTestCase):
     def tearDownClass(cls):
         cls.selenium.quit()
         super(BaseSeleniumTests, cls).tearDownClass()
+
+    def visit_page(self, page: Page) -> BasePage:
+        self.visit_url(page.url)
+        return BasePage(self.selenium)
+
+    def visit_url(self, url: str) -> None:
+        url = '%s%s' % (self.live_server_url, url)
+        self.selenium.get(url)
