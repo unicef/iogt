@@ -15,15 +15,15 @@
                 <div class="{{ questionnaire.get_type }}-page__content">
                     {% for field in form %}
                         <div class="quest-item">
-                            <div class="quest-item__header">
-                                <div class="quest-item__header">
-                                    {% field_description field %}
-                                </div>
-                            </div>
                             <div class="quest-item__desc">
                                 {% if field.widget_type != "checkbox" %}
                                     <p>{{ field.label }}</p>
                                 {% endif %}
+                            </div>
+                            <div class="quest-item__header">
+                                <div class="quest-item__header">
+                                    {% field_description field %}
+                                </div>
                             </div>
                             {% render_field field %}
                         </div>

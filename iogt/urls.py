@@ -18,7 +18,13 @@ from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 from home import views as pwa_views
 from wagtail_transfer import urls as wagtailtransfer_urls
-from iogt.views import TransitionPageView, SitemapAPIView, TranslationNotFoundPage, PageTreeAPIView
+from iogt.views import (
+    TransitionPageView,
+    SitemapAPIView,
+    TranslationNotFoundPage,
+    PageTreeAPIView,
+    OfflineContentNotFoundPageView,
+)
 
 
 api_url_patterns = [
@@ -53,6 +59,7 @@ urlpatterns = api_url_patterns + [
     ),
     *i18n_patterns(path("external-link/", TransitionPageView.as_view(), name="external-link")),
     *i18n_patterns(path("translation-not-found/", TranslationNotFoundPage.as_view(), name="translation-not-found")),
+    *i18n_patterns(path("offline-content-not-found/", OfflineContentNotFoundPageView.as_view(), name="offline_content_not_found")),
 
     path('messaging/', include('messaging.urls'), name='messaging-urls'),
     path('wagtail-transfer/', include(wagtailtransfer_urls)),

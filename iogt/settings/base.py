@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'questionnaires',
     'messaging',
     'common',
+    'notifications',
     'django.contrib.humanize',
     'wagtail_localize',
     'wagtail_localize.locales',

@@ -34,6 +34,7 @@ from questionnaires.edit_handlers import FormSubmissionsPanel
 from questionnaires.forms import CustomFormBuilder, SurveyForm, QuizForm
 from questionnaires.utils import SkipLogicPaginator, FormHelper
 
+
 FORM_FIELD_CHOICES = (
     ('checkbox', _('Checkbox')),
     ('checkboxes', _('Checkboxes')),
