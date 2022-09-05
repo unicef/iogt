@@ -2225,7 +2225,7 @@ input[type=checkbox], input[type=radio] {
 
 .load-more a, button:hover,
 .load-more a, button:active,
-.load-more a. button:focus {
+.load-more a, button:focus {
     background: #303030;
     color: white;
     transition: all 0.2s linear;
@@ -2535,6 +2535,9 @@ input[type=checkbox], input[type=radio] {
     display: flex;
     justify-content: space-between;
 }
+.search__form input {
+    height: auto;
+}
 .action-btn {
   display: flex;
   flex-direction: column;
@@ -2542,4 +2545,7 @@ input[type=checkbox], input[type=radio] {
 }
 .action-btn a {
   margin: 0;
+}
+.comments__submit {
+    padding: 12px;
 }

@@ -469,7 +469,7 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  padding: 12px;
+  padding: 0;
   background-color: #303030;
   border-radius: 24px;
   -webkit-box-flex: 0;
@@ -524,7 +524,7 @@
     line-height: 24px;
   }
   .comments__submit {
-    padding: 12px;
+    padding: 0;
     margin: 16px 0px;
   }
   .comments__submit input,
