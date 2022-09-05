@@ -16,7 +16,10 @@ self.addEventListener('activate', event => {
     event.waitUntil(self.clients.claim());
 });
 
-self.addEventListener('fetch', event => {
+
+const languageCodeRegEx = RegExp('^\\/(\\w+([@-]\\w+)?)(\\/|$)');
+
+self.addEventListener('fetch', async event => {
     if (event.request.method !== 'GET')
         return;
 
@@ -37,7 +40,15 @@ self.addEventListener('fetch', event => {
             .catch(error => {
                 return caches.open('iogt')
                     .then(cache => {
-                        return cache.match(event.request.url)
+                        return cache.match(event.request)
+                            .then(match => {
+                                if (match) {
+                                    return match;
+                                } else if (event.request.headers.get('Accept').indexOf('text/html') !== -1) {
+                                    const languageCode = languageCodeRegEx.exec(new URL(event.request.url).pathname)?.[1] || 'en';
+                                    return cache.match(`/${languageCode}/offline-content-not-found/`);
+                                }
+                            });
                     });
             })
     );
