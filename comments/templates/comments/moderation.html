@@ -3,6 +3,7 @@
 
 {% block content %}
     <h1>{% translate 'Comment Moderation' %}</h1>
+    <h3>{% translate 'Filters' %}</h3>
     <form action="" method="get">
         <div class="comment-moderation-field-wrapper">
             {% for field in form %}
@@ -32,19 +33,22 @@
                         {{ comment.comment }}
                     </td>
                     <td class="width-32">
-                        {% if comment.is_public %}
-                            <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='unpublish' %}>{% translate 'Unpublish' %}</a>
-                        {% else %}
-                            <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='publish' %}>{% translate 'Publish' %}</a>
-                        {% endif %}
-                        {% if comment.is_removed %}
-                            <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='show' %}>{% translate 'Show' %}</a>
-                        {% else %}
-                            <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='hide' %}>{% translate 'Hide' %}</a>
-                        {% endif %}
-                        {% if comment.num_flags %}
-                            <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='clear_flags' %}>{% translate 'Clear Flags' %}</a>
-                        {% endif %}
+                        <div class="action-btn">
+                            {% if comment.is_public %}
+                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='unpublish' %}>{% translate 'Unpublish' %}</a>
+                            {% else %}
+                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='publish' %}>{% translate 'Publish' %}</a>
+                            {% endif %}
+                            {% if comment.is_removed %}
+                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='show' %}>{% translate 'Show' %}</a>
+                            {% else %}
+                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='hide' %}>{% translate 'Hide' %}</a>
+                            {% endif %}
+                            {% if comment.num_flags %}
+                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='clear_flags' %}>{% translate 'Clear Flags' %}</a>
+                            {% endif %}
+                            <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='manual_validated' %}>{% translate 'Validate' %}</a>
+                        </div>
                     </td>
                 </tr>
             {% endfor %}

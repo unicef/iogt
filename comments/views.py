@@ -45,6 +45,12 @@ def update(request, comment_pk, action):
         comment = XtdComment.objects.get(pk=comment_pk)
         comment.flags.all().delete()
         verb = 'cleared'
+    elif action == 'manual_validated':
+        for comment in comments:
+            comment.comment_moderation.is_manual_validated = True
+            comment.comment_moderation.manual_validated_by = request.user
+            comment.comment_moderation.save(update_fields=['is_manual_validated', 'manual_validated_by'])
+        verb = 'validated'
     XtdComment.objects.bulk_update(comments, ['is_public', 'is_removed'])
 
     messages.success(request, _(f'The comment has been {verb} successfully!'))
@@ -117,7 +123,8 @@ class CommentsModerationView(ListView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().filter(
+            comment_moderation__is_manual_validated=False).annotate(num_flags=Count('flags'))
         form = CommentFilterForm(self.request.GET)
         if form.is_valid():
             data = form.cleaned_data
@@ -132,9 +139,9 @@ class CommentsModerationView(ListView):
                 queryset = queryset.filter(comment_moderation__is_valid=is_valid)
             if is_flagged != '':
                 if is_flagged:
-                    queryset = queryset.annotate(num_flags=Count('flags')).filter(num_flags__gt=0)
+                    queryset = queryset.filter(num_flags__gt=0)
                 else:
-                    queryset = queryset.annotate(num_flags=Count('flags')).filter(num_flags=0)
+                    queryset = queryset.filter(num_flags=0)
             if is_removed != '':
                 queryset = queryset.filter(is_removed=is_removed)
             if is_public != '':

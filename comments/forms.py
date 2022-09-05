@@ -48,12 +48,16 @@ class AdminCommentForm(CommentForm):
 
 
 class CommentFilterForm(forms.Form):
-    is_valid = forms.ChoiceField(label='By is valid?', choices=[(None, 'All'), (True, 'Yes'), (False, 'No')], required=False)
-    is_flagged = forms.ChoiceField(label='By is flagged?', choices=[(None, 'All'), (True, 'Yes'), (False, 'No')], required=False)
-    is_removed = forms.ChoiceField(label='By is removed?', choices=[(None, 'All'), (True, 'Yes'), (False, 'No')], required=False)
-    is_public = forms.ChoiceField(label='By is public?', choices=[(None, 'All'), (True, 'Yes'), (False, 'No')], required=False)
-    from_date = forms.DateField(label='From date', required=False, widget=forms.DateInput(attrs={'type': 'date'}))
-    to_date = forms.DateField(label='To date', required=False, widget=forms.DateInput(attrs={'type': 'date'}))
+    is_valid = forms.ChoiceField(
+        label='Is AI validated?', choices=[(None, 'All'), (True, 'Yes'), (False, 'No')], required=False)
+    is_flagged = forms.ChoiceField(
+        label='Is flagged?', choices=[(None, 'All'), (True, 'Yes'), (False, 'No')], required=False)
+    is_removed = forms.ChoiceField(
+        label='Is hidden?', choices=[(None, 'All'), (True, 'Yes'), (False, 'No')], required=False)
+    is_public = forms.ChoiceField(
+        label='Is published?', choices=[(None, 'All'), (True, 'Yes'), (False, 'No')], required=False)
+    from_date = forms.DateField(label='From', required=False, widget=forms.DateInput(attrs={'type': 'date'}))
+    to_date = forms.DateField(label='To', required=False, widget=forms.DateInput(attrs={'type': 'date'}))
 
     def clean(self):
         cleaned_data = super().clean()

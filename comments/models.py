@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -7,6 +8,8 @@ from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.core.models import Page
 
 from comments.clients import StubModerator
+
+User = get_user_model()
 
 
 class CommentStatus:
@@ -109,6 +112,9 @@ class CannedResponse(models.Model):
 
 class CommentModeration(models.Model):
     is_valid = models.BooleanField(null=True, blank=True)
+    is_manual_validated = models.BooleanField(default=False)
+    manual_validated_by = models.ForeignKey(
+        User, related_name='comment_moderations', null=True, on_delete=models.SET_NULL)
     comment = models.OneToOneField(
         to='django_comments_xtd.XtdComment', related_name='comment_moderation', on_delete=models.CASCADE)
 

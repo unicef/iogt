@@ -2497,11 +2497,6 @@ input[type=checkbox], input[type=radio] {
     color: #000000;
 }
 
-.comment-moderation-table tbody a:last-child {
-    color: #7B7B7B;
-    margin-left: 14px; 
-}
-
 .comment-moderation-comment {
     position: relative;
     display: inline-block;
@@ -2539,4 +2534,12 @@ input[type=checkbox], input[type=radio] {
     width: 100%;
     display: flex;
     justify-content: space-between;
+}
+.action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.action-btn a {
+  margin: 0;
 }
