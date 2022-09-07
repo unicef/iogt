@@ -1006,24 +1006,18 @@ class FormDataPerUserAdminTests(TestCase):
         user_submission = UserSubmissionFactory(page=self.survey, user=self.user_01, form_data=form_data)
         user_submission.submit_time = self.current_datetime
         user_submission.save()
-        response = self.client.get(f'{self.url}?user_id={self.user_01.id}&export=csv')
+        response = self.client.get(f'{self.url}?user_id={self.user_01.id}&export=csv&page_ids={self.survey.id}')
 
         byte_response = b''
         for stream in response.streaming_content:
             byte_response += stream
         expected_response = \
             f'ID,Name,Submission Date,Field,Value\r\n' \
-            f'{self.user_submission_01.id},{self.poll.title},{self.user_submission_01.submit_time},User,{self.user_01.username}\r\n' \
-            f'{self.user_submission_01.id},{self.poll.title},{self.user_submission_01.submit_time},URL,{self.poll.full_url}\r\n' \
-            f'{self.user_submission_01.id},{self.poll.title},{self.user_submission_01.submit_time},{self.poll_question.admin_label},c1\r\n' \
             f'{user_submission.id},{self.survey.title},{user_submission.submit_time},User,{self.user_01.username}\r\n' \
             f'{user_submission.id},{self.survey.title},{user_submission.submit_time},URL,{self.survey.full_url}\r\n' \
-            f'{user_submission.id},{self.survey.title},{user_submission.submit_time},{survey_question.admin_label},c3\r\n' \
+            f'{user_submission.id},{self.survey.title},{user_submission.submit_time},Q 01,c3\r\n' \
             f'{self.user_submission_02.id},{self.survey.title},{self.user_submission_02.submit_time},User,{self.user_01.username}\r\n' \
             f'{self.user_submission_02.id},{self.survey.title},{self.user_submission_02.submit_time},URL,{self.survey.full_url}\r\n' \
-            f'{self.user_submission_02.id},{self.survey.title},{self.user_submission_02.submit_time},{self.survey_question.admin_label},c2\r\n' \
-            f'{self.user_submission_03.id},{self.quiz.title},{self.user_submission_03.submit_time},User,{self.user_01.username}\r\n' \
-            f'{self.user_submission_03.id},{self.quiz.title},{self.user_submission_03.submit_time},URL,{self.quiz.full_url}\r\n' \
-            f'{self.user_submission_03.id},{self.quiz.title},{self.user_submission_03.submit_time},{self.quiz_question.admin_label},c3\r\n'
+            f'{self.user_submission_02.id},{self.survey.title},{self.user_submission_02.submit_time},{self.survey_question.admin_label},c2\r\n'
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(byte_response.decode(), expected_response)
