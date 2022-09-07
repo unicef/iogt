@@ -131,7 +131,7 @@ class FormDataPerUserView(SpreadsheetExportMixin, SafePaginateListView):
         }
         for clean_name, answer in json.loads(item.form_data).items():
             data.update({
-                form_fields_dict.get(item.page_id, {}).get(clean_name): answer,
+                form_fields_dict.get(item.page_id, {}).get(clean_name, clean_name): answer,
             })
         return [dict(zip(self.list_export, [item.id, item.page.title, item.submit_time, field, value]))
                 for field, value in data.items()]
