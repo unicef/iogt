@@ -1,4 +1,5 @@
 from typing import List
+from urllib.parse import urlparse
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 
@@ -9,19 +10,27 @@ class BasePage():
         self.driver = driver
 
     def url_matches(self, path: str) -> bool:
-        return self.driver.current_url.endswith(path)
+        return urlparse(self.driver.current_url).path == path
 
     @property
     def footer(self) -> 'FooterElement':
         return FooterElement(self.driver)
 
+    @property
+    def navbar(self) -> 'NavbarElement':
+        return NavbarElement(self.driver)
 
-class FooterElement():
-    locator = (By.CSS_SELECTOR, '.footer-main .bottom-level')
+
+class BaseElement():
+    locator = (By.TAG_NAME, 'html')
 
     def __init__(self, driver: WebDriver) -> None:
         self.driver = driver
         self.html = self.driver.find_element(*self.locator)
+
+
+class FooterElement(BaseElement):
+    locator = (By.CSS_SELECTOR, '.footer-main .bottom-level')
 
     @property
     def is_displayed(self) -> bool:
@@ -53,6 +62,18 @@ class FooterItemElement():
             and icon.is_displayed()
         )
 
+    @property
+    def background_color(self):
+        return self.html.value_of_css_property('background-color')
+
+    @property
+    def font_color(self):
+        return self.html.value_of_css_property('color')
+
     def click(self) -> 'BasePage':
         self.html.click()
         return BasePage(self.driver)
+
+
+class NavbarElement(FooterElement):
+    locator = (By.CSS_SELECTOR, '.footer-main .top-level')

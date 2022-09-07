@@ -6,6 +6,7 @@ from home.factories import (
     FooterIndexPageFactory,
     HomePageFactory,
     SectionFactory,
+    SectionIndexFactory,
 )
 
 class FooterSeleniumTests(BaseSeleniumTests):
@@ -21,6 +22,7 @@ class FooterSeleniumTests(BaseSeleniumTests):
             root_page=self.home
         )
         self.footer_index = FooterIndexPageFactory(parent=self.site.root_page)
+        self.sections_index = SectionIndexFactory(parent=self.site.root_page)
 
     def test_footer_is_present(self):
         section = SectionFactory(
@@ -38,6 +40,38 @@ class FooterSeleniumTests(BaseSeleniumTests):
             'Section title is the link text'
         )
         section_page = section_item.click()
+        self.assertTrue(
+            section_page.url_matches(section.url),
+            'Clicking on footer link navigates to section page'
+        )
+
+    def test_navbar_is_present(self):
+        section = SectionFactory(
+            parent=self.sections_index,
+            background_color='#0A0',
+            font_color='#DDD',
+        )
+
+        home_page = self.visit_page(self.home)
+        self.assertTrue(home_page.navbar.is_displayed, 'Navbar must be visible')
+        item = home_page.navbar.items[0]
+        self.assertTrue(item.has_icon, 'Icon must be visible')
+        self.assertEqual(
+            item.title,
+            section.title,
+            'Section title is the link text'
+        )
+        self.assertEqual(
+            item.background_color,
+            'rgba(0, 170, 0, 1)',
+            'Navbar item background color must match section background color'
+        )
+        self.assertEqual(
+            item.font_color,
+            'rgba(221, 221, 221, 1)',
+            'Navbar item font color must match section font color'
+        )
+        section_page = item.click()
         self.assertTrue(
             section_page.url_matches(section.url),
             'Clicking on footer link navigates to section page'
