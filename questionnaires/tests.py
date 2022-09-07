@@ -739,7 +739,8 @@ class FormDataPerUserAdminTests(TestCase):
         self.staff_user.groups.add(self.group)
         self.client.force_login(self.staff_user)
         self.url = reverse('form_data_per_user')
-        self.current_datetime = timezone.now().replace(microsecond=0)
+        self.current_datetime = datetime.datetime(
+            year=2022, month=9, day=1, hour=23, minute=0, second=0, microsecond=0, tzinfo=timezone.utc)
 
         Site.objects.all().delete()
         self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
@@ -749,7 +750,7 @@ class FormDataPerUserAdminTests(TestCase):
         GroupPagePermissionFactory(group=self.group, page=self.poll)
         self.poll_question = PollFormFieldFactory(page=self.poll, field_type='checkboxes', choices='c1|c2|c3', default_value='c2')
 
-        self.survey = SurveyFactory(parent=self.home_page, last_published_at=self.current_datetime - timedelta(days=1))
+        self.survey = SurveyFactory(parent=self.home_page, title='Survey 01', last_published_at=self.current_datetime - timedelta(days=1))
         GroupPagePermissionFactory(group=self.group, page=self.survey)
         self.skip_logic = json.dumps(
             [
@@ -780,14 +781,15 @@ class FormDataPerUserAdminTests(TestCase):
             ]
         )
         self.survey_question = SurveyFormFieldFactory(
-            page=self.survey, field_type='checkboxes', skip_logic=self.skip_logic, default_value='c2')
+            page=self.survey, label='Question 01', admin_label='Q 01', field_type='checkboxes',
+            skip_logic=self.skip_logic, default_value='c2')
 
         self.quiz = QuizFactory(parent=self.home_page, last_published_at=self.current_datetime - timedelta(days=2))
         GroupPagePermissionFactory(group=self.group, page=self.quiz)
         self.quiz_question = QuizFormFieldFactory(
             page=self.quiz, field_type='checkboxes', choices='c1|c2|c3', default_value='c2', correct_answer='c3')
 
-        self.user_01 = UserFactory()
+        self.user_01 = UserFactory(username='test')
         form_data_01 = json.dumps({
             self.poll_question.clean_name: [
                 'c1',
@@ -996,7 +998,7 @@ class FormDataPerUserAdminTests(TestCase):
     def test_csv_export_with_modified_questions(self):
         self.survey_question.delete()
         survey_question = SurveyFormFieldFactory(
-            page=self.survey, label='Question 01', admin_label='Q 01', field_type='checkboxes',
+            page=self.survey, label='Question 02', admin_label='Q 02', field_type='checkboxes',
             skip_logic=self.skip_logic, default_value='c3')
         form_data = json.dumps({
             survey_question.clean_name: [
@@ -1013,11 +1015,11 @@ class FormDataPerUserAdminTests(TestCase):
             byte_response += stream
         expected_response = \
             f'ID,Name,Submission Date,Field,Value\r\n' \
-            f'{user_submission.id},{self.survey.title},{user_submission.submit_time},User,{self.user_01.username}\r\n' \
-            f'{user_submission.id},{self.survey.title},{user_submission.submit_time},URL,{self.survey.full_url}\r\n' \
-            f'{user_submission.id},{self.survey.title},{user_submission.submit_time},Q 01,c3\r\n' \
-            f'{self.user_submission_02.id},{self.survey.title},{self.user_submission_02.submit_time},User,{self.user_01.username}\r\n' \
-            f'{self.user_submission_02.id},{self.survey.title},{self.user_submission_02.submit_time},URL,{self.survey.full_url}\r\n' \
-            f'{self.user_submission_02.id},{self.survey.title},{self.user_submission_02.submit_time},{self.survey_question.admin_label},c2\r\n'
+            f'{user_submission.id},Survey 01,2022-09-01 23:00:00+00:00,User,test\r\n' \
+            f'{user_submission.id},Survey 01,2022-09-01 23:00:00+00:00,URL,{self.survey.full_url}\r\n' \
+            f'{user_submission.id},Survey 01,2022-09-01 23:00:00+00:00,Q 02,c3\r\n' \
+            f'{self.user_submission_02.id},Survey 01,2022-08-31 23:00:00+00:00,User,test\r\n' \
+            f'{self.user_submission_02.id},Survey 01,2022-08-31 23:00:00+00:00,URL,{self.survey.full_url}\r\n' \
+            f'{self.user_submission_02.id},Survey 01,2022-08-31 23:00:00+00:00,question_01,c2\r\n'
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(byte_response.decode(), expected_response)
