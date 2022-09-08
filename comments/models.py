@@ -7,9 +7,10 @@ from django_comments_xtd.models import XtdComment
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.core.models import Page
 
-from comments.clients import StubModerator
+from comments import get_community_moderation_class
 
 User = get_user_model()
+Moderator = get_community_moderation_class()
 
 
 class CommentStatus:
@@ -125,7 +126,7 @@ class CommentModeration(models.Model):
 @receiver(post_save, sender=XtdComment)
 def comment_moderation_handler(sender, instance, created, **kwargs):
     if created:
-        moderator = StubModerator()
+        moderator = Moderator()
         is_valid = moderator.is_valid(instance)
         instance.is_public = is_valid
         instance.save(update_fields=['is_public'])
