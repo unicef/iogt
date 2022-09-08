@@ -43,10 +43,10 @@ def get_comment_report_count(comment):
     return comment.flags.exclude(flag__in=[LIKEDIT_FLAG, DISLIKEDIT_FLAG]).count()
 
 
-@register.inclusion_tag('comments/comments_moderation_button.html', takes_context=True)
+@register.inclusion_tag('comments/community_moderation_button.html', takes_context=True)
 def comments_moderation_button(context):
     request = context['request']
     context.update({
-        'show_comments_moderation_button': settings.ENABLE_FE_COMMENTS_MODERATION and request.user.has_perm('django_comments_xtd.can_moderate')
+        'show_comments_community_moderation_button': settings.COMMENTS_COMMUNITY_MODERATION and request.user.has_perm('django_comments_xtd.can_moderate')
     })
     return context

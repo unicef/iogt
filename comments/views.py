@@ -108,15 +108,15 @@ class ProcessCannedResponseView(View):
         return redirect(to=referer_url)
 
 
-class CommentsModerationView(ListView):
+class CommentsCommunityModerationView(ListView):
     model = XtdComment
-    template_name = 'comments/moderation.html'
+    template_name = 'comments/community_moderation.html'
     context_object_name = 'comments'
     paginate_by = 10
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        if not (request.user.has_perm('django_comments_xtd.can_moderate') or settings.ENABLE_FE_COMMENTS_MODERATION):
+        if not settings.COMMENTS_COMMUNITY_MODERATION or not request.user.has_perm('django_comments_xtd.can_moderate'):
             raise PermissionDenied(
                 "You do not have permission."
             )

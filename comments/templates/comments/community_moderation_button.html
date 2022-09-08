@@ -1,6 +1,6 @@
 {% load generic_components comments_xtd %}
 
-{% if show_comments_moderation_button %}
-    {% url 'comments_moderation' as comments_moderation %}
+{% if show_comments_community_moderation_button %}
+    {% url 'comments_community_moderation' as comments_moderation %}
     {% primary_button title='Comments Moderation' href=comments_moderation %}
 {% endif %}

@@ -3,7 +3,7 @@ from django.conf.urls import url
 from django.urls import path
 
 from comments import views
-from comments.views import ProcessCannedResponseView, CommentsModerationView
+from comments.views import ProcessCannedResponseView, CommentsCommunityModerationView
 
 urlpatterns = [
     url(r'^comment/(?P<comment_pk>\d+)/update/(?P<action>publish|unpublish|hide|show|clear_flags|manual_validated)/$',
@@ -13,5 +13,5 @@ urlpatterns = [
     path('comment/new',
             views.post_admin_comment, name='comment_post_admin_comment'),
     path('comment/process-canned-response', ProcessCannedResponseView.as_view(), name='process_canned_response'),
-    path('moderation/', CommentsModerationView.as_view(), name='comments_moderation'),
+    path('community-moderation/', CommentsCommunityModerationView.as_view(), name='comments_community_moderation'),
 ]
