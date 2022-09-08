@@ -2178,7 +2178,7 @@ input[type=checkbox], input[type=radio] {
     color: #FFFFFF;
     display: block;
     border-radius: 24px;
-    padding: 12px 16px;
+    padding: 0;
     width: 100%;
     cursor: pointer;
 }
