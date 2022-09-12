@@ -118,6 +118,9 @@ $(document).ready(() => {
     $(window).on('online', () => enableForOnlineAccess());
 
     window.navigator.onLine ? enableForOnlineAccess() : disableForOfflineAccess();
+
+    // for JS enabled devices hide double menu
+    $('#menu').hide();
 });
 
 const download = pageId => {
