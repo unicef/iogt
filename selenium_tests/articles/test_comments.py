@@ -4,6 +4,7 @@ from wagtail_factories import SiteFactory
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium_tests.pages import LoginPage
 
 from selenium_tests.base import BaseSeleniumTests
 from home.factories import (
@@ -14,6 +15,8 @@ from home.factories import (
 from iogt_users.factories import (
     AdminUserFactory
 )
+
+from selenium_tests.pages import ArticlePage
 
 class ArticleCommentsSeleniumTests(BaseSeleniumTests):
 
@@ -32,23 +35,58 @@ class ArticleCommentsSeleniumTests(BaseSeleniumTests):
         self.article01 = ArticleFactory(parent=self.section, title = 'article01')
 
     def test_basic_article_comment(self):
-        #login so we can leave a comment
+        #login as an admin so we can leave a comment
         self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
-        username_input = self.selenium.find_element_by_name("login")
-        username_input.send_keys(self.user.username)
-        password_input = self.selenium.find_element_by_name("password")
-        password_input.send_keys('test@123')
-        self.selenium.find_element_by_xpath('//button[@type="submit"]').click()
+        login_page = LoginPage(self.selenium)
+        login_page.login_admin_user()
         
         #visit an article and leave a comment
-        self.visit_page(self.article01)        
-        comment_input = self.selenium.find_element_by_name("comment")
-        comment_input.send_keys('test comment here')
-        button = self.selenium.find_element_by_xpath("//input[@value='Leave comment']")
-        self.selenium.execute_script("arguments[0].click();", button)
+        test_comment = 'test comment here'
         self.visit_page(self.article01)
-        comment_section = self.selenium.find_element_by_class_name('comments-holder').text
-        self.assertIn('test comment here', comment_section)
+        article_page = ArticlePage(self.selenium)
+        article_page.submit_comment(test_comment)        
+        self.visit_page(self.article01)
+        self.assertIn(test_comment, article_page.retrieve_comments())
+
+    def test_remove_article_comment(self):
+        #login as an admin so we can leave a comment
+        self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
+        login_page = LoginPage(self.selenium)
+        login_page.login_admin_user()
+        
+        #visit an article and leave a comment
+        test_comment = 'test comment here'
+        self.visit_page(self.article01)
+        article_page = ArticlePage(self.selenium)
+        article_page.submit_comment(test_comment)
+        self.visit_page(self.article01)
+
+        #delete comment
+        article_page.delete_last_comment()
+        body_text = self.selenium.find_element(By.TAG_NAME, 'body').text
+        self.assertIn('The comment has been removed successfully!', body_text)
+
+    def test_reply_article_comment(self):
+        #login as an admin so we can leave a comment
+        self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
+        login_page = LoginPage(self.selenium)
+        login_page.login_admin_user()
+        
+        #visit an article and leave a comment
+        test_comment = 'test comment here'
+        self.visit_page(self.article01)
+        article_page = ArticlePage(self.selenium)
+        article_page.submit_comment(test_comment)        
+        
+        #leave a reply to the first comment
+        test_reply = 'test reply here'
+        self.visit_page(self.article01)
+        article_page.reply_last_comment(test_reply)
+        self.visit_page(self.article01)
+        self.assertIn(test_reply, article_page.retrieve_comments())
+
+        
+
         
         
         

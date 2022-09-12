@@ -6,21 +6,42 @@ from iogt_users.factories import AdminUserFactory
 from home.factories import HomePageFactory
 from wagtail_factories import SiteFactory
 
+from selenium_tests.pages import LoginPage
+from selenium_tests.pages import HomePage
+
+from selenium.webdriver.common.by import By
+
 class LoginSeleniumTests(BaseSeleniumTests):
 
     def setUp(self):
+        
         Site.objects.all().delete()
-        self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
+
+        self.home = HomePageFactory()
+        self.site = SiteFactory(
+            site_name='IoGT',
+            hostname=self.host,
+            port=self.port,
+            is_default_site=True,
+            root_page=self.home
+        )
         self.user = AdminUserFactory()
-        self.home_page = HomePageFactory(parent=self.site.root_page, owner=self.user)
         
     def test_login(self):
+
+        # Tried to test this by clicking the button from the homepage but couldn't get this to work..
+        # self.visit_page(self.home)
+        # home_page = HomePage(self.selenium)
+        # home_page.login_button.click() 
+
         self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
-        username_input = self.selenium.find_element_by_name("login")
-        username_input.send_keys(self.user.username)
-        password_input = self.selenium.find_element_by_name("password")
-        password_input.send_keys('test@123')
-        self.selenium.find_element_by_xpath('//button[@type="submit"]').click()
-        body_text = self.selenium.find_element_by_tag_name('body').text
+        
+        login_page = LoginPage(self.selenium) 
+
+        login_page.login_user_name.send_keys(self.user.username)
+        login_page.login_password.send_keys('test@123')
+        login_page.login_submit.click()
+
+        body_text = self.selenium.find_element(By.TAG_NAME, 'body').text
         self.assertIn(self.user.username, body_text)
         

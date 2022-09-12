@@ -25,25 +25,21 @@ class ArticleNavigationSeleniumTests(BaseSeleniumTests):
         )
         self.section = SectionFactory(parent=self.site.root_page)
         self.article01 = ArticleFactory(parent=self.section, title = 'article01')
-        self.article02 = ArticleFactory(parent=self.section, title = 'article02')
 
 
-    def test_navigation_next(self):
+    def test_title(self):
 
         self.visit_page(self.article01)
         article_page = ArticlePage(self.selenium)
-        article_page.navigate_next()
-        article_page = ArticlePage(self.selenium)
-        self.assertIn(self.article02.title, article_page.article_title.text)
+        self.assertIn(self.article01.title, article_page.article_title.text)
         
 
-    def test_navigation_previous(self):
+    def test_image(self):
 
-        self.visit_page(self.article02)
+        self.visit_page(self.article01)
         article_page = ArticlePage(self.selenium)
-        article_page.navigate_previous()
-        article_page = ArticlePage(self.selenium)
-        self.assertIn(self.article01.title, article_page.article_title.text)
+        self.assertTrue(article_page.confirm_image(), 'Image should be present and visible')
+        
     
         
         
