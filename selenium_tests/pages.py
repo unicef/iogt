@@ -56,7 +56,9 @@ class ArticlePage(BasePage):
     def __init__(self, driver: WebDriver) -> None:
         self.driver = driver
 
-        self.article_title = driver.find_element(By.TAG_NAME,Locator.article_heading)
+    @property
+    def title(self) -> str:
+        return self.driver.find_element(By.TAG_NAME, Locator.article_heading).text
 
     def confirm_image(self):
         lead_image = self.driver.find_element(By.CLASS_NAME, Locator.article_lead_image)

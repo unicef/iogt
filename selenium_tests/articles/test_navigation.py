@@ -19,7 +19,7 @@ class ArticleNavigationSeleniumTests(BaseSeleniumTests):
         article_page = ArticlePage(self.selenium)
         article_page.navigate_next()
         article_page = ArticlePage(self.selenium)
-        self.assertIn(self.article02.title, article_page.article_title.text)
+        self.assertIn(self.article02.title, article_page.title)
         
 
     def test_navigation_previous(self):
@@ -28,7 +28,7 @@ class ArticleNavigationSeleniumTests(BaseSeleniumTests):
         article_page = ArticlePage(self.selenium)
         article_page.navigate_previous()
         article_page = ArticlePage(self.selenium)
-        self.assertIn(self.article01.title, article_page.article_title.text)
+        self.assertIn(self.article01.title, article_page.title)
     
         
         

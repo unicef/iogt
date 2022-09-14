@@ -16,7 +16,7 @@ class ArticleNavigationSeleniumTests(BaseSeleniumTests):
 
         self.visit_page(self.article01)
         article_page = ArticlePage(self.selenium)
-        self.assertIn(self.article01.title, article_page.article_title.text)
+        self.assertIn(self.article01.title, article_page.title)
         
     def test_image(self):
 
