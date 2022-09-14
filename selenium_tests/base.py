@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from wagtail.core.models import Page
 from selenium_tests.pages import BasePage
+from selenium_tests.pages import LoginPage
 from wagtail.core.models import Site
 from wagtail_factories import SiteFactory
 from home.factories import HomePageFactory
@@ -38,6 +39,10 @@ class BaseSeleniumTests(LiveServerTestCase):
     def visit_page(self, page: Page) -> BasePage:
         self.visit_url(page.url)
         return BasePage(self.selenium)
+
+    def visit_login_page(self) -> LoginPage:
+        self.visit_url('/accounts/login/')
+        return LoginPage(self.selenium)
 
     def visit_url(self, url: str) -> None:
         url = '%s%s' % (self.live_server_url, url)

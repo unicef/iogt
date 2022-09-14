@@ -17,10 +17,8 @@ class LoginSeleniumTests(BaseSeleniumTests):
         # home_page = HomePage(self.selenium)
         # home_page.login_button.click() 
 
-        self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
+        login_page = self.visit_login_page()        
         
-        login_page = LoginPage(self.selenium) 
-
         login_page.login_user_name.send_keys(self.user.username)
         login_page.login_password.send_keys('test@123')
         login_page.login_submit.click()

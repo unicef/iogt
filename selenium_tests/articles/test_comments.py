@@ -1,5 +1,4 @@
 from selenium.webdriver.common.by import By
-from selenium_tests.pages import LoginPage
 from selenium_tests.base import BaseSeleniumTests
 from home.factories import (
     SectionFactory,
@@ -20,8 +19,7 @@ class ArticleCommentsSeleniumTests(BaseSeleniumTests):
 
     def test_basic_article_comment(self):
         #login as an admin so we can leave a comment
-        self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
-        login_page = LoginPage(self.selenium)
+        login_page = self.visit_login_page()
         login_page.login_admin_user()
         
         #visit an article and leave a comment
@@ -33,9 +31,8 @@ class ArticleCommentsSeleniumTests(BaseSeleniumTests):
         self.assertIn(test_comment, article_page.retrieve_comments())
 
     def test_remove_article_comment(self):
-        #login as an admin so we can leave a comment
-        self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
-        login_page = LoginPage(self.selenium)
+        #login as an admin
+        login_page = self.visit_login_page()
         login_page.login_admin_user()
         
         #visit an article and leave a comment
@@ -52,8 +49,7 @@ class ArticleCommentsSeleniumTests(BaseSeleniumTests):
 
     def test_reply_article_comment(self):
         #login as an admin so we can leave a comment
-        self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
-        login_page = LoginPage(self.selenium)
+        login_page = self.visit_login_page()
         login_page.login_admin_user()
         
         #visit an article and leave a comment
