@@ -18,11 +18,8 @@ class LoginSeleniumTests(BaseSeleniumTests):
         # home_page.login_button.click() 
 
         login_page = self.visit_login_page()        
+        login_page.login_user(self.user)
         
-        login_page.login_user_name.send_keys(self.user.username)
-        login_page.login_password.send_keys('test@123')
-        login_page.login_submit.click()
-
         body_text = self.selenium.find_element(By.TAG_NAME, 'body').text
         self.assertIn(self.user.username, body_text)
         

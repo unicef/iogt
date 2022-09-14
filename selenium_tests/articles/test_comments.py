@@ -20,7 +20,7 @@ class ArticleCommentsSeleniumTests(BaseSeleniumTests):
     def test_basic_article_comment(self):
         #login as an admin so we can leave a comment
         login_page = self.visit_login_page()
-        login_page.login_admin_user()
+        login_page.login_user(self.user)
         
         #visit an article and leave a comment
         test_comment = 'test comment here'
@@ -33,7 +33,7 @@ class ArticleCommentsSeleniumTests(BaseSeleniumTests):
     def test_remove_article_comment(self):
         #login as an admin
         login_page = self.visit_login_page()
-        login_page.login_admin_user()
+        login_page.login_user(self.user)
         
         #visit an article and leave a comment
         test_comment = 'test comment here'
@@ -50,7 +50,7 @@ class ArticleCommentsSeleniumTests(BaseSeleniumTests):
     def test_reply_article_comment(self):
         #login as an admin so we can leave a comment
         login_page = self.visit_login_page()
-        login_page.login_admin_user()
+        login_page.login_user(self.user)
         
         #visit an article and leave a comment
         test_comment = 'test comment here'

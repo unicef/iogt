@@ -42,15 +42,8 @@ class LoginPage(BasePage):
     def get_login_submit(self):
         return self.login_submit
 
-    def login_admin_user(self):
-        self.user = AdminUserFactory()
-        self.login_user_name.send_keys(self.user.username)
-        self.login_password.send_keys('test@123')
-        self.login_submit.click()
-
-    def login_user(self):
-        self.user = UserFactory()
-        self.login_user_name.send_keys(self.user.username)
+    def login_user(self, user):
+        self.login_user_name.send_keys(user.username)
         self.login_password.send_keys('test@123')
         self.login_submit.click()
 
