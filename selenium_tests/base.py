@@ -2,9 +2,10 @@ from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from wagtail.core.models import Page
-
 from selenium_tests.pages import BasePage
-
+from wagtail.core.models import Site
+from wagtail_factories import SiteFactory
+from home.factories import HomePageFactory
 
 class BaseSeleniumTests(LiveServerTestCase):
 
@@ -41,3 +42,14 @@ class BaseSeleniumTests(LiveServerTestCase):
     def visit_url(self, url: str) -> None:
         url = '%s%s' % (self.live_server_url, url)
         self.selenium.get(url)
+
+    def setup_blank_site(self):
+        Site.objects.all().delete()
+        self.home = HomePageFactory()
+        self.site = SiteFactory(
+            site_name='IoGT',
+            hostname=self.host,
+            port=self.port,
+            is_default_site=True,
+            root_page=self.home
+        )

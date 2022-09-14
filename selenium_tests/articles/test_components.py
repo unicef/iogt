@@ -1,8 +1,5 @@
-from wagtail.core.models import Site
-from wagtail_factories import SiteFactory
 from selenium_tests.base import BaseSeleniumTests
 from home.factories import (
-    HomePageFactory,
     SectionFactory,
     ArticleFactory
 )
@@ -11,15 +8,7 @@ from selenium_tests.pages import ArticlePage
 class ArticleNavigationSeleniumTests(BaseSeleniumTests):
 
     def setUp(self):
-        Site.objects.all().delete()
-        self.home = HomePageFactory()
-        self.site = SiteFactory(
-            site_name='IoGT',
-            hostname=self.host,
-            port=self.port,
-            is_default_site=True,
-            root_page=self.home
-        )
+        self.setup_blank_site()
         self.section = SectionFactory(parent=self.site.root_page)
         self.article01 = ArticleFactory(parent=self.section, title = 'article01')
 
