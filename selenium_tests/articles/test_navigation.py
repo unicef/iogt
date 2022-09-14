@@ -1,7 +1,5 @@
-import time
 from wagtail.core.models import Site
 from wagtail_factories import SiteFactory
-
 from selenium_tests.base import BaseSeleniumTests
 from home.factories import (
     HomePageFactory,
@@ -26,7 +24,6 @@ class ArticleNavigationSeleniumTests(BaseSeleniumTests):
         self.section = SectionFactory(parent=self.site.root_page)
         self.article01 = ArticleFactory(parent=self.section, title = 'article01')
         self.article02 = ArticleFactory(parent=self.section, title = 'article02')
-
 
     def test_navigation_next(self):
 

@@ -1,11 +1,7 @@
-import time
 from wagtail.core.models import Site
 from wagtail_factories import SiteFactory
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
 from selenium_tests.pages import LoginPage
-
 from selenium_tests.base import BaseSeleniumTests
 from home.factories import (
     HomePageFactory,
@@ -15,7 +11,6 @@ from home.factories import (
 from iogt_users.factories import (
     AdminUserFactory
 )
-
 from selenium_tests.pages import ArticlePage
 
 class ArticleCommentsSeleniumTests(BaseSeleniumTests):

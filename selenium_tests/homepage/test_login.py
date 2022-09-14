@@ -1,14 +1,9 @@
 from selenium_tests.base import BaseSeleniumTests
-
 from wagtail.core.models import Site
-
 from iogt_users.factories import AdminUserFactory
 from home.factories import HomePageFactory
 from wagtail_factories import SiteFactory
-
 from selenium_tests.pages import LoginPage
-from selenium_tests.pages import HomePage
-
 from selenium.webdriver.common.by import By
 
 class LoginSeleniumTests(BaseSeleniumTests):
@@ -16,7 +11,6 @@ class LoginSeleniumTests(BaseSeleniumTests):
     def setUp(self):
         
         Site.objects.all().delete()
-
         self.home = HomePageFactory()
         self.site = SiteFactory(
             site_name='IoGT',
