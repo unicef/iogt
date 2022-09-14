@@ -22,7 +22,7 @@ class ArticleNavigationSeleniumTests(BaseSeleniumTests):
 
         self.visit_page(self.article01)
         article_page = ArticlePage(self.selenium)
-        self.assertTrue(article_page.confirm_image(), 'Image should be present and visible')
+        self.assertTrue(article_page.has_lead_image(), 'Image should be present and visible')
         
     
         

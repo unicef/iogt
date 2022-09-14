@@ -71,7 +71,7 @@ class ArticlePage(BasePage):
     def submit_comment(self, text):
         self.comment_area = self.driver.find_element(By.NAME, Locator.article_comment_area)
         self.comment_area.send_keys(text)
-        self.leave_comment_button = self.driver.find_element(By.XPATH, Locator.article_leave_comment)
+        self.leave_comment_button = self.driver.find_element(By.CSS_SELECTOR, Locator.article_leave_comment)
         self.driver.execute_script("arguments[0].click();", self.leave_comment_button)
 
     def retrieve_comments(self):

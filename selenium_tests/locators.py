@@ -16,7 +16,7 @@ class Locator(object):
     article_comment_area = "comment"
     article_reply_comment_area = "comment"
     article_comment_holder = 'comments-holder'
-    article_leave_comment = "//input[@value='Leave comment']"
+    article_leave_comment = "input[value='Leave comment']"
     article_delete_comment = "//a[contains(text(),'Remove')]"
     article_reply_comment = "//a[contains(text(),'Reply')]"
     article_navigate_next = 'article__navigation--next'
