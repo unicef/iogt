@@ -11,6 +11,8 @@ class BasePage(object):
     def __init__(self, driver: WebDriver) -> None:
         self.driver = driver
 
+        # self.login_button = driver.find_element(By.XPATH, Locator.login_button)
+
     def url_matches(self, path: str) -> bool:
         return urlparse(self.driver.current_url).path == path
 
@@ -47,14 +49,7 @@ class LoginPage(BasePage):
         self.login_password.send_keys('test@123')
         self.login_submit.click()
 
-class HomePage(BasePage):
 
-    def __init__(self, driver: WebDriver) -> None:
-        self.driver = driver
-        self.login_button = driver.find_element(By.XPATH, Locator.login_button)
- 
-    def get_login(self):
-        return self.login_button
 
 class ArticlePage(BasePage):
 
