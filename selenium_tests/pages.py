@@ -60,7 +60,7 @@ class ArticlePage(BasePage):
     def title(self) -> str:
         return self.driver.find_element(By.TAG_NAME, Locator.article_heading).text
 
-    def confirm_image(self):
+    def has_lead_image(self):
         lead_image = self.driver.find_element(By.CLASS_NAME, Locator.article_lead_image)
         return (
             lead_image.size['width'] > 0
