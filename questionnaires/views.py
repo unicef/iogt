@@ -1,11 +1,13 @@
 import csv
-import datetime
 import json
 from collections import defaultdict
 
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
 from django.utils import timezone
 from wagtail.admin.views.mixins import SpreadsheetExportMixin, Echo
 from wagtail.contrib.forms.forms import SelectDateForm
@@ -15,9 +17,12 @@ from wagtail.contrib.forms.views import (
     FormPagesListView as WagtailFormPagesListView,
     SafePaginateListView,
 )
+from wagtail.core.models import Page
 from xlsxwriter.workbook import Workbook
 
+from questionnaires.forms import GenerateDashboardForm
 from questionnaires.models import UserSubmission, SurveyFormField, PollFormField, QuizFormField
+from questionnaires.superset.client import DashboardGenerator
 
 User = get_user_model()
 
@@ -176,3 +181,20 @@ class FormDataPerUserView(SpreadsheetExportMixin, SafePaginateListView):
     def get_filename(self):
         timestamp = timezone.now().strftime(settings.EXPORT_FILENAME_TIMESTAMP_FORMAT)
         return f'{self.user.username}-submission_{timestamp}'
+
+
+def generate_dashboard(request, pk):
+    if request.method == 'POST':
+        form = GenerateDashboardForm(request.POST)
+        if form.is_valid():
+            questionnaire = get_object_or_404(Page, pk=pk).specific
+            data = form.cleaned_data
+            dg = DashboardGenerator(
+                request.user, questionnaire, data.get('superset_username'), data.get('superset_password'))
+            dg.generate()
+            messages.add_message(request, messages.SUCCESS, 'Dashboard generated successfully.')
+            return HttpResponseRedirect(reverse('wagtailforms:index'))
+    else:
+        form = GenerateDashboardForm()
+
+    return render(request, 'questionnaires/generate_dashboard.html', {'form': form})
