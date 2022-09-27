@@ -1,13 +1,6 @@
 from django.conf import settings
-from django.utils import timezone
 from requests import Session, Request
 from rest_framework import status
-
-from home.models import SiteSettings
-from questionnaires.models import UserSubmission
-from questionnaires.superset.dashboard import Dashboard
-from questionnaires.superset.charts import CHART_TYPE_MAP, TotalSubmissionsChart
-from questionnaires.superset.datasets import Dataset
 
 
 class SupersetClient:
@@ -43,6 +36,7 @@ class SupersetClient:
         elif response.status_code == status.HTTP_401_UNAUTHORIZED:
             raise Exception('Unauthorized: Invalid username or password.')
         else:
+            print(response, response.content)
             raise Exception('Something went wrong.')
 
     def _api_caller(self, request):
@@ -78,6 +72,10 @@ class SupersetClient:
         request = Request(method='POST', url=self.dataset_url, headers=self._get_headers(), json=data)
         return self._api_caller(request)
 
+    def get_dataset(self, id):
+        request = Request(method='GET', url=f'{self.dataset_url}/{id}', headers=self._get_headers())
+        return self._api_caller(request)
+
     def update_dataset(self, id, data):
         request = Request(method='PUT', url=f'{self.dataset_url}/{id}', headers=self._get_headers(), json=data)
         return self._api_caller(request)
@@ -85,42 +83,3 @@ class SupersetClient:
     def create_chart(self, data):
         request = Request(method='POST', url=f'{self.chart_url}', headers=self._get_headers(), json=data)
         return self._api_caller(request)
-
-
-class DashboardGenerator:
-    def __init__(self, user, questionnaire, superset_username, superset_password):
-        self.user = user
-        self.questionnaire = questionnaire
-        self.superset_username = superset_username
-        self.superset_password = superset_password
-
-    def generate(self):
-        client = SupersetClient()
-        client.authenticate(self.superset_username, self.superset_password)
-        database_resp = client.get_databases()
-        database_id = None
-        for database in database_resp.get('result'):
-            if database['database_name'] == settings.SUPERSET_DATABASE_NAME:
-                database_id = database.get('id')
-
-        dashboard = Dashboard(dashboard_title=self.questionnaire.title)
-        dashboard_resp = client.create_dashboard(data=dashboard.post_body)
-        dashboard_id = dashboard_resp['id']
-        dataset_name = f'{SiteSettings.get_for_default_site()}_autodashboard_' \
-                       f'{self.questionnaire.__class__.__name__.lower()}_{self.questionnaire.id}_' \
-                       f'{self.questionnaire.title}_{timezone.now().strftime("%Y-%m-%d %H:%M:%S")}'
-        dataset = Dataset(
-            database_id=database_id, table_name=UserSubmission._meta.db_table, dataset_name=dataset_name,
-            page_id=self.questionnaire.id)
-        dataset_post_resp = client.create_dataset(data=dataset.post_body)
-        dataset_id = dataset_post_resp['id']
-        client.update_dataset(id=dataset_id, data=dataset.put_body)
-        chart = TotalSubmissionsChart(dashboard_id=dashboard_id, dataset_id=dataset_id, name='Total Submissions')
-        client.create_chart(data=chart.post_body)
-        for question in self.questionnaire.get_form_fields():
-            chart_class = CHART_TYPE_MAP.get(question.field_type)
-            if chart_class:
-                chart = chart_class(
-                    dashboard_id=dashboard_id, dataset_id=dataset_id, name=question.label,
-                    clean_name=question.clean_name)
-                client.create_chart(data=chart.post_body)

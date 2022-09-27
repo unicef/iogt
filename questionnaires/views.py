@@ -22,7 +22,7 @@ from xlsxwriter.workbook import Workbook
 
 from questionnaires.forms import GenerateDashboardForm
 from questionnaires.models import UserSubmission, SurveyFormField, PollFormField, QuizFormField
-from questionnaires.superset.client import DashboardGenerator
+from questionnaires.superset.utils import DashboardGenerator
 
 User = get_user_model()
 
