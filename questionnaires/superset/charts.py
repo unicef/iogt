@@ -41,6 +41,8 @@ class BarChart(Chart):
         return json.dumps({
             "groupby": [self.clean_name],
             "metrics": ["count"],
+            "show_legend": False,
+            "y_axis_label": "COUNT",
         })
 
 
