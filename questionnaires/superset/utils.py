@@ -11,6 +11,7 @@ from questionnaires.superset.charts import (
     TableChart,
     BigNumberTotalChart,
     BigNumberTotalMeanChart,
+    BigNumberTotalOpenEndedQuestionChart,
 )
 from questionnaires.superset.client import SupersetClient
 from questionnaires.superset.dashboard import Dashboard
@@ -21,8 +22,8 @@ CHART_TYPE_MAP = {
     'checkboxes': BarChart,
     'dropdown': BarChart,
     'email': TableChart,
-    'singleline': BigNumberTotalChart,
-    'multiline': BigNumberTotalChart,
+    'singleline': BigNumberTotalOpenEndedQuestionChart,
+    'multiline': BigNumberTotalOpenEndedQuestionChart,
     'number': BigNumberTotalMeanChart,
     'positivenumber': BigNumberTotalMeanChart,
     'radio': BarChart,
@@ -88,7 +89,20 @@ class DashboardGenerator:
                     "column_name": question.clean_name,
                     "expression": calculated_column_expression.format(question.clean_name),
                 })
-        client.update_dataset(id=dataset_id, data=dataset.put_body(columns))
+
+        metrics = copy(dataset_detail.get('result', {}).get('metrics'))
+        for metric in metrics:
+            metric.pop('changed_on', None)
+            metric.pop('created_on', None)
+            metric.pop('uuid', None)
+
+        metrics.append({
+            "expression": "COUNT(*)",
+            "metric_name": "response_count",
+            "metric_type": "count",
+            "verbose_name": "Responses",
+        })
+        client.update_dataset(id=dataset_id, data=dataset.put_body(columns, metrics))
 
         chart = BigNumberTotalChart(dashboard_id=dashboard_id, dataset_id=dataset_id, name='Total Submissions')
         client.create_chart(data=chart.post_body())

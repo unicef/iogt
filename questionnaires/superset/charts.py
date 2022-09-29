@@ -30,7 +30,9 @@ class PieChart(Chart):
     def params(self):
         return json.dumps({
             "groupby": [self.clean_name],
-            "metric": "count",
+            "metric": "response_count",
+            "show_legend": False,
+            "label_type": "key_percent",
         })
 
 
@@ -40,9 +42,9 @@ class BarChart(Chart):
     def params(self):
         return json.dumps({
             "groupby": [self.clean_name],
-            "metrics": ["count"],
+            "metrics": ["response_count"],
             "show_legend": False,
-            "y_axis_label": "COUNT",
+            "y_axis_label": "Responses",
         })
 
 
@@ -51,8 +53,15 @@ class TableChart(Chart):
 
     def params(self):
         return json.dumps({
+            "adhoc_filters": [
+                {
+                    "clause": "WHERE",
+                    "expressionType": "SQL",
+                    "sqlExpression": f"((form_data::json)->'{self.clean_name}')::text <> '\"\"'",
+                }
+            ],
             "groupby": [self.clean_name],
-            "metrics": ["count"],
+            "metrics": ["response_count"],
         })
 
 
@@ -61,7 +70,25 @@ class BigNumberTotalChart(Chart):
 
     def params(self):
         return json.dumps({
-            "metric": "count",
+            "metric": "response_count",
+            "subheader": "Responses"
+        })
+
+
+class BigNumberTotalOpenEndedQuestionChart(Chart):
+    viz_type = 'big_number_total'
+
+    def params(self):
+        return json.dumps({
+            "adhoc_filters": [
+                {
+                    "clause": "WHERE",
+                    "expressionType": "SQL",
+                    "sqlExpression": f"((form_data::json)->'{self.clean_name}')::text <> '\"\"'",
+                }
+            ],
+            "metric": "response_count",
+            "subheader": "Responses"
         })
 
 
@@ -70,6 +97,7 @@ class BigNumberTotalMeanChart(BigNumberTotalChart):
         return json.dumps({
             "metric": {
                 "expressionType": "SQL",
-                "sqlExpression": f"PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY (form_data::json->>'{self.clean_name}')::DECIMAL)",
+                "sqlExpression": f"AVG((form_data::json->>'{self.clean_name}')::DECIMAL)",
             },
+            "subheader": "Mean of responses",
         })

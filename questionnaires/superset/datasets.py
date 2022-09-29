@@ -11,12 +11,13 @@ class Dataset:
             'table_name': self.table_name,
         }
 
-    def put_body(self, columns):
+    def put_body(self, columns, metrics):
         sql = f"SELECT * " \
               f"FROM {self.table_name} " \
               f"WHERE page_id = {self.page_id}"
         return {
             'sql': sql,
             'table_name': self.dataset_name,
-            'columns': columns
+            'columns': columns,
+            'metrics': metrics,
         }
