@@ -112,15 +112,18 @@ class CannedResponse(models.Model):
 
 
 class CommentModeration(models.Model):
-    is_valid = models.BooleanField(null=True, blank=True)
-    is_manual_validated = models.BooleanField(default=False)
-    manual_validated_by = models.ForeignKey(
-        User, related_name='comment_moderations', null=True, on_delete=models.SET_NULL)
+    class CommentModerationStatus(models.TextChoices):
+        UNMODERATED = "UNMODERATED", "Unmoderated"
+        PUBLISHED = "PUBLISHED", "Published"
+        UNPUBLISHED = "UNPUBLISHED", "Unpublished"
+        UNSURE = "UNSURE", "Unsure"
+
+    status = models.CharField(max_length=255, choices=CommentModerationStatus.choices, default=CommentModerationStatus.UNMODERATED)
     comment = models.OneToOneField(
         to='django_comments_xtd.XtdComment', related_name='comment_moderation', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.comment.id} | is_valid={self.is_valid}'
+        return f'{self.comment.id} | {self.status}'
 
 
 @receiver(post_save, sender=XtdComment)
@@ -130,4 +133,4 @@ def comment_moderation_handler(sender, instance, created, **kwargs):
         is_valid = moderator.is_valid(instance)
         instance.is_public = is_valid
         instance.save(update_fields=['is_public'])
-        CommentModeration.objects.create(is_valid=is_valid, comment_id=instance.id)
+        CommentModeration.objects.create(comment_id=instance.id)

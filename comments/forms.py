@@ -2,7 +2,7 @@ from django import forms
 from django_comments_xtd.forms import XtdCommentForm as BaseCommentForm
 from django.utils.translation import gettext as _
 
-from comments.models import CannedResponse
+from comments.models import CannedResponse, CommentModeration
 
 
 class CommentForm(BaseCommentForm):
@@ -48,26 +48,6 @@ class AdminCommentForm(CommentForm):
 
 
 class CommentFilterForm(forms.Form):
-    is_valid = forms.ChoiceField(
-        label='Is AI validated?', choices=[(None, 'All'), (True, 'Yes'), (False, 'No')], required=False)
-    is_flagged = forms.ChoiceField(
-        label='Is flagged?', choices=[(None, 'All'), (True, 'Yes'), (False, 'No')], required=False)
-    is_removed = forms.ChoiceField(
-        label='Is hidden?', choices=[(None, 'All'), (True, 'Yes'), (False, 'No')], required=False)
-    is_public = forms.ChoiceField(
-        label='Is published?', choices=[(None, 'All'), (True, 'Yes'), (False, 'No')], required=False)
+    status = forms.ChoiceField(label='Status', choices=CommentModeration.CommentModerationStatus.choices, required=False)
     from_date = forms.DateField(label='From', required=False, widget=forms.DateInput(attrs={'type': 'date'}))
     to_date = forms.DateField(label='To', required=False, widget=forms.DateInput(attrs={'type': 'date'}))
-
-    def clean(self):
-        cleaned_data = super().clean()
-        for field_name in ['is_valid', 'is_flagged', 'is_removed', 'is_public', 'from_date', 'to_date']:
-            field_value = cleaned_data[field_name]
-            if field_value == 'True':
-                cleaned_data[field_name] = True
-            elif field_value == 'False':
-                cleaned_data[field_name] = False
-            else:
-                cleaned_data[field_name] = field_value or ''
-
-        return cleaned_data

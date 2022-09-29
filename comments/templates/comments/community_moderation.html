@@ -39,15 +39,7 @@
                             {% else %}
                                 <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='publish' %}>{% translate 'Publish' %}</a>
                             {% endif %}
-                            {% if comment.is_removed %}
-                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='show' %}>{% translate 'Show' %}</a>
-                            {% else %}
-                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='hide' %}>{% translate 'Hide' %}</a>
-                            {% endif %}
-                            {% if comment.num_flags %}
-                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='clear_flags' %}>{% translate 'Clear Flags' %}</a>
-                            {% endif %}
-                            <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='manual_validated' %}>{% translate 'Validate' %}</a>
+                            <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='unsure' %}>{% translate 'Unsure' %}</a>
                         </div>
                     </td>
                 </tr>

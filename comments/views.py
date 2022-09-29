@@ -16,22 +16,33 @@ from django_comments_xtd.models import XtdComment
 from django.utils.translation import ugettext as _
 
 from comments.forms import AdminCommentForm, CommentFilterForm
-from comments.models import CannedResponse
+from comments.models import CannedResponse, CommentModeration
 
 
 def update(request, comment_pk, action):
     get_comment_with_children_filter = Q(parent_id=comment_pk) | Q(pk=comment_pk)
     comments = XtdComment.objects.filter(get_comment_with_children_filter)
+    comment_moderations = []
     verb = ''
-    if action == 'unpublish':
+    if action == 'unsure':
+        for comment in comments:
+            comment_moderation = comment.comment_moderation
+            comment_moderation.status = CommentModeration.CommentModerationStatus.UNSURE
+            comment_moderations.append(comment_moderation)
+        verb = 'unsure'
+    elif action == 'unpublish':
         for comment in comments:
             comment.is_public = False
+            comment_moderation = comment.comment_moderation
+            comment_moderation.status = CommentModeration.CommentModerationStatus.UNPUBLISHED
+            comment_moderations.append(comment_moderation)
         verb = 'unpublished'
     elif action == 'publish':
         for comment in comments:
             comment.is_public = True
-            comment.comment_moderation.is_valid = True
-            comment.comment_moderation.save(update_fields=['is_valid'])
+            comment_moderation = comment.comment_moderation
+            comment_moderation.status = CommentModeration.CommentModerationStatus.PUBLISHED
+            comment_moderations.append(comment_moderation)
         verb = 'published'
     elif action == 'hide':
         for comment in comments:
@@ -45,13 +56,8 @@ def update(request, comment_pk, action):
         comment = XtdComment.objects.get(pk=comment_pk)
         comment.flags.all().delete()
         verb = 'cleared'
-    elif action == 'manual_validated':
-        for comment in comments:
-            comment.comment_moderation.is_manual_validated = True
-            comment.comment_moderation.manual_validated_by = request.user
-            comment.comment_moderation.save(update_fields=['is_manual_validated', 'manual_validated_by'])
-        verb = 'validated'
     XtdComment.objects.bulk_update(comments, ['is_public', 'is_removed'])
+    CommentModeration.objects.bulk_update(comment_moderations, ['status'])
 
     messages.success(request, _(f'The comment has been {verb} successfully!'))
 
@@ -123,29 +129,16 @@ class CommentsCommunityModerationView(ListView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        queryset = super().get_queryset().filter(
-            comment_moderation__is_manual_validated=False).annotate(num_flags=Count('flags'))
+        queryset = super().get_queryset()
         form = CommentFilterForm(self.request.GET)
         if form.is_valid():
             data = form.cleaned_data
-            is_valid = data['is_valid']
-            is_flagged = data['is_flagged']
-            is_removed = data['is_removed']
-            is_public = data['is_public']
+            status = data['status']
             from_date = data['from_date']
             to_date = data['to_date']
 
-            if is_valid != '':
-                queryset = queryset.filter(comment_moderation__is_valid=is_valid)
-            if is_flagged != '':
-                if is_flagged:
-                    queryset = queryset.filter(num_flags__gt=0)
-                else:
-                    queryset = queryset.filter(num_flags=0)
-            if is_removed != '':
-                queryset = queryset.filter(is_removed=is_removed)
-            if is_public != '':
-                queryset = queryset.filter(is_public=is_public)
+            queryset = queryset.filter(comment_moderation__status=status)
+
             if to_date:
                 if from_date:
                     queryset = queryset.filter(submit_date__date__range=[from_date, to_date])

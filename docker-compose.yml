@@ -24,7 +24,7 @@ services:
       VAPID_ADMIN_EMAIL: ''
       COMMENTS_COMMUNITY_MODERATION: 'enable'
       COMMENTS_COMMUNITY_MODERATOR_CLASS: 'comments.clients.StubModerator'
-      HIVE_MODERATION_API_KEY: ''
+      BLACKLISTED_WORDS: 'hell,crap'
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./:/app/
