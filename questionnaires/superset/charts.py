@@ -21,7 +21,7 @@ class Chart:
         }
 
     def params(self):
-        raise json.dumps({})
+        return json.dumps({})
 
 
 class PieChart(Chart):
@@ -29,7 +29,7 @@ class PieChart(Chart):
 
     def params(self):
         return json.dumps({
-            "groupby": [self.clean_name],
+            "groupby": [self.name],
             "metric": "response_count",
             "show_legend": False,
             "label_type": "key_percent",
@@ -41,7 +41,7 @@ class BarChart(Chart):
 
     def params(self):
         return json.dumps({
-            "groupby": [self.clean_name],
+            "groupby": [self.name],
             "metrics": ["response_count"],
             "show_legend": False,
             "y_axis_label": "Responses",
@@ -60,7 +60,7 @@ class TableChart(Chart):
                     "sqlExpression": f"((form_data::json)->'{self.clean_name}')::text <> '\"\"'",
                 }
             ],
-            "groupby": [self.clean_name],
+            "groupby": [self.name],
             "metrics": ["response_count"],
         })
 
@@ -75,7 +75,7 @@ class BigNumberTotalChart(Chart):
         })
 
 
-class BigNumberTotalOpenEndedQuestionChart(Chart):
+class BigNumberTotalOpenEndedQuestionChart(BigNumberTotalChart):
     viz_type = 'big_number_total'
 
     def params(self):

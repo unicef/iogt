@@ -189,10 +189,14 @@ def generate_dashboard(request, pk):
         if form.is_valid():
             questionnaire = get_object_or_404(Page, pk=pk).specific
             data = form.cleaned_data
-            dg = DashboardGenerator(
+            dashboard_generator = DashboardGenerator(
                 request.user, questionnaire, data.get('superset_username'), data.get('superset_password'))
-            dg.generate()
-            messages.add_message(request, messages.SUCCESS, 'Dashboard generated successfully.')
+            dashboard_url = dashboard_generator.generate()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                f'Dashboard generated successfully. Click <a href="{dashboard_url}" '
+                f'style="color: #FFFFFF; text-decoration: underline;" target="_blank">here</a> to view.')
             return HttpResponseRedirect(reverse('wagtailforms:index'))
     else:
         form = GenerateDashboardForm()

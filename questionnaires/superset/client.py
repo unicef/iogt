@@ -13,6 +13,7 @@ class SupersetClient:
     dashboard_url = f'{api_url}/dashboard'
     dataset_url = f'{api_url}/dataset'
     chart_url = f'{api_url}/chart'
+
     session = Session()
 
     def _get_csrf_token(self):
@@ -36,8 +37,7 @@ class SupersetClient:
         elif response.status_code == status.HTTP_401_UNAUTHORIZED:
             raise Exception('Unauthorized: Invalid username or password.')
         else:
-            print(response, response.content)
-            raise Exception('Something went wrong.')
+            raise Exception(f'Something went wrong. Status: {response.status_code}')
 
     def _api_caller(self, request):
         request = self.session.prepare_request(request)
@@ -66,6 +66,10 @@ class SupersetClient:
 
     def create_dashboard(self, data):
         request = Request(method='POST', url=self.dashboard_url, headers=self._get_headers(), json=data)
+        return self._api_caller(request)
+
+    def get_dashboard(self, id):
+        request = Request(method='GET', url=f'{self.dashboard_url}/{id}', headers=self._get_auth_headers())
         return self._api_caller(request)
 
     def create_dataset(self, data):

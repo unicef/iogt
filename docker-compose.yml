@@ -10,7 +10,7 @@ services:
       DB_NAME: postgres
       DB_USER: postgres
       DB_PASSWORD: iogt
-      DB_HOST: database
+      DB_HOST: db
       DB_PORT: '5432'
       DJANGO_SETTINGS_MODULE: iogt.settings.docker_compose_dev
       COMMIT_HASH: asdfghjkl
@@ -31,7 +31,7 @@ services:
       - "8000:8000"
     depends_on:
       - elasticsearch
-      - database
+      - db
       - redis
 
   elasticsearch:
@@ -43,7 +43,7 @@ services:
     ports:
       - "9200:9200"
 
-  database:
+  db:
     image: postgres:alpine
     restart: unless-stopped
     environment:
