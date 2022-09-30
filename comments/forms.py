@@ -48,6 +48,6 @@ class AdminCommentForm(CommentForm):
 
 
 class CommentFilterForm(forms.Form):
-    status = forms.ChoiceField(label='Status', choices=CommentModeration.CommentModerationStatus.choices, required=False)
+    state = forms.ChoiceField(label='Moderation', choices=CommentModeration.CommentModerationState.choices, required=False)
     from_date = forms.DateField(label='From', required=False, widget=forms.DateInput(attrs={'type': 'date'}))
     to_date = forms.DateField(label='To', required=False, widget=forms.DateInput(attrs={'type': 'date'}))

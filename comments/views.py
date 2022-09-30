@@ -24,25 +24,34 @@ def update(request, comment_pk, action):
     comments = XtdComment.objects.filter(get_comment_with_children_filter)
     comment_moderations = []
     verb = ''
-    if action == 'unsure':
+    if action == 'approve':
+        for comment in comments:
+            comment.is_public = True
+            comment.flags.all().delete()
+            comment_moderation = comment.comment_moderation
+            comment_moderation.state = CommentModeration.CommentModerationState.APPROVED
+            comment_moderations.append(comment_moderation)
+        verb = 'approved'
+    elif action == 'reject':
+        for comment in comments:
+            comment.is_public = False
+            comment_moderation = comment.comment_moderation
+            comment_moderation.state = CommentModeration.CommentModerationState.REJECTED
+            comment_moderations.append(comment_moderation)
+        verb = 'rejected'
+    elif action == 'unsure':
         for comment in comments:
             comment_moderation = comment.comment_moderation
-            comment_moderation.status = CommentModeration.CommentModerationStatus.UNSURE
+            comment_moderation.state = CommentModeration.CommentModerationState.UNSURE
             comment_moderations.append(comment_moderation)
         verb = 'unsure'
     elif action == 'unpublish':
         for comment in comments:
             comment.is_public = False
-            comment_moderation = comment.comment_moderation
-            comment_moderation.status = CommentModeration.CommentModerationStatus.UNPUBLISHED
-            comment_moderations.append(comment_moderation)
         verb = 'unpublished'
     elif action == 'publish':
         for comment in comments:
             comment.is_public = True
-            comment_moderation = comment.comment_moderation
-            comment_moderation.status = CommentModeration.CommentModerationStatus.PUBLISHED
-            comment_moderations.append(comment_moderation)
         verb = 'published'
     elif action == 'hide':
         for comment in comments:
@@ -57,7 +66,7 @@ def update(request, comment_pk, action):
         comment.flags.all().delete()
         verb = 'cleared'
     XtdComment.objects.bulk_update(comments, ['is_public', 'is_removed'])
-    CommentModeration.objects.bulk_update(comment_moderations, ['status'])
+    CommentModeration.objects.bulk_update(comment_moderations, ['state'])
 
     messages.success(request, _(f'The comment has been {verb} successfully!'))
 
@@ -133,11 +142,11 @@ class CommentsCommunityModerationView(ListView):
         form = CommentFilterForm(self.request.GET)
         if form.is_valid():
             data = form.cleaned_data
-            status = data['status'] or CommentModeration.CommentModerationStatus.UNMODERATED
+            state = data['state'] or CommentModeration.CommentModerationState.UNMODERATED
             from_date = data['from_date']
             to_date = data['to_date']
 
-            queryset = queryset.filter(comment_moderation__status=status)
+            queryset = queryset.filter(comment_moderation__state=state)
 
             if to_date:
                 if from_date:

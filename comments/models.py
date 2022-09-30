@@ -7,10 +7,10 @@ from django_comments_xtd.models import XtdComment
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.core.models import Page
 
-from comments import get_community_moderation_class
+from comments import get_comments_moderation_class
 
 User = get_user_model()
-Moderator = get_community_moderation_class()
+Moderator = get_comments_moderation_class()
 
 
 class CommentStatus:
@@ -112,25 +112,24 @@ class CannedResponse(models.Model):
 
 
 class CommentModeration(models.Model):
-    class CommentModerationStatus(models.TextChoices):
+    class CommentModerationState(models.TextChoices):
         UNMODERATED = "UNMODERATED", "Unmoderated"
-        PUBLISHED = "PUBLISHED", "Published"
-        UNPUBLISHED = "UNPUBLISHED", "Unpublished"
+        APPROVED = "APPROVED", "Approved"
+        REJECTED = "REJECTED", "Rejected"
         UNSURE = "UNSURE", "Unsure"
 
-    status = models.CharField(max_length=255, choices=CommentModerationStatus.choices, default=CommentModerationStatus.UNMODERATED)
+    state = models.CharField(max_length=255, choices=CommentModerationState.choices, default=CommentModerationState.UNMODERATED)
     comment = models.OneToOneField(
         to='django_comments_xtd.XtdComment', related_name='comment_moderation', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.comment.id} | {self.status}'
+        return f'{self.comment.id} | {self.state}'
 
 
 @receiver(post_save, sender=XtdComment)
 def comment_moderation_handler(sender, instance, created, **kwargs):
     if created:
         moderator = Moderator()
-        is_valid = moderator.is_valid(instance)
-        instance.is_public = is_valid
+        instance.is_public = moderator.moderate(instance)
         instance.save(update_fields=['is_public'])
         CommentModeration.objects.create(comment_id=instance.id)

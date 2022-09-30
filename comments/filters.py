@@ -20,19 +20,35 @@ class FlaggedFilter(SimpleListFilter):
         return queryset
 
 
-class StatusFilter(SimpleListFilter):
-    title = "Status?"
+class ModerationFilter(SimpleListFilter):
+    title = "Moderation?"
     parameter_name = "status"
 
     def lookups(self, request, model_admin):
         return [
-            (CommentModeration.CommentModerationStatus.UNMODERATED, 'Unmoderated'),
-            (CommentModeration.CommentModerationStatus.PUBLISHED, 'Published'),
-            (CommentModeration.CommentModerationStatus.UNPUBLISHED, 'Unpublished'),
-            (CommentModeration.CommentModerationStatus.UNSURE, 'Unsure'),
+            (CommentModeration.CommentModerationState.UNMODERATED, 'Unmoderated'),
+            (CommentModeration.CommentModerationState.APPROVED, 'Approved'),
+            (CommentModeration.CommentModerationState.REJECTED, 'Rejected'),
+            (CommentModeration.CommentModerationState.UNSURE, 'Unsure'),
         ]
 
     def queryset(self, request, queryset):
         if self.value():
-            return queryset.filter(comment_moderation__status=self.value())
+            return queryset.filter(comment_moderation__state=self.value())
+        return queryset
+
+
+class PublishedFilter(SimpleListFilter):
+    title = "Published?"
+    parameter_name = "is_published"
+
+    def lookups(self, request, model_admin):
+        return [
+            (True, 'Yes'),
+            (False, 'No')
+        ]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(is_public=self.value())
         return queryset

@@ -5,7 +5,7 @@ from django_comments_xtd.models import XtdComment
 from wagtail.contrib.modeladmin.options import ModelAdminGroup, ModelAdmin, modeladmin_register
 
 from .button_helpers import XtdCommentAdminButtonHelper
-from .filters import FlaggedFilter, StatusFilter
+from .filters import FlaggedFilter, ModerationFilter, PublishedFilter
 from .models import CannedResponse
 
 
@@ -13,20 +13,26 @@ class XtdCommentAdmin(ModelAdmin):
     model = XtdComment
     menu_label = 'All Comments'
     menu_icon = 'edit'
-    list_display = ('comment', 'user', 'status', 'num_flags', 'num_replies', 'submit_date', 'view_live')
-    list_filter = (FlaggedFilter, StatusFilter, 'submit_date',)
+    list_display = ('comment', 'user', 'published', 'moderation', 'num_flags', 'num_replies', 'submit_date', 'view_live')
+    list_filter = (FlaggedFilter, PublishedFilter, ModerationFilter, 'submit_date',)
     form_fields_exclude = ('thread_id', 'parent_id', 'level', 'order', 'followup', 'nested_count',
                            'content_type', 'object_id', 'user_email', 'user_url')
     search_fields = ('comment',)
     list_export = (
-        'comment', 'user', 'num_flags', 'num_replies', 'status', 'submit_date', 'article',
+        'comment', 'user', 'published', 'moderation', 'num_flags', 'num_replies', 'submit_date', 'article',
         'article_url', 'article_language_code',
     )
     button_helper_class = XtdCommentAdminButtonHelper
     menu_order = 601
 
-    def status(self, obj):
-        return format_html(obj.comment_moderation.status)
+    def published(self, obj):
+        rv = 'No'
+        if obj.is_public:
+            rv = 'Yes'
+        return format_html(rv)
+
+    def moderation(self, obj):
+        return format_html(obj.comment_moderation.state)
 
     def get_queryset(self, request):
         return super().get_queryset(request).prefetch_related('flags')
