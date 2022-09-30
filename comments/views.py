@@ -133,7 +133,7 @@ class CommentsCommunityModerationView(ListView):
         form = CommentFilterForm(self.request.GET)
         if form.is_valid():
             data = form.cleaned_data
-            status = data['status']
+            status = data['status'] or CommentModeration.CommentModerationStatus.UNMODERATED
             from_date = data['from_date']
             to_date = data['to_date']
 
