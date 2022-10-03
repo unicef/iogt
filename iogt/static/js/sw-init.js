@@ -4,7 +4,9 @@ const registerSW = async () => {
         const isPushNotificationRegistered = getItem('isPushNotificationRegistered', false);
         if (!isPushNotificationRegistered) {
             if (isAuthenticated) {
-                registerPushNotification(registration);
+                // disable push notification subscription for now
+                // for reference see issue https://github.com/unicef/iogt/issues/1388
+                // registerPushNotification(registration);
             }
         }
     }
