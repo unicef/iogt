@@ -137,16 +137,20 @@ class CommentsCommunityModerationView(ListView):
             )
         return super().dispatch(request, *args, **kwargs)
 
+    def _get_form(self):
+        return CommentFilterForm(self.request.GET or {'state': CommentModeration.CommentModerationState.UNMODERATED})
+
     def get_queryset(self):
-        queryset = super().get_queryset()
-        form = CommentFilterForm(self.request.GET)
+        queryset = super().get_queryset().filter(comment_moderation__isnull=False)
+        form = self._get_form()
         if form.is_valid():
             data = form.cleaned_data
-            state = data['state'] or CommentModeration.CommentModerationState.UNMODERATED
+            state = data['state']
             from_date = data['from_date']
             to_date = data['to_date']
 
-            queryset = queryset.filter(comment_moderation__state=state)
+            if state != 'ALL':
+                queryset = queryset.filter(comment_moderation__state=state)
 
             if to_date:
                 if from_date:
@@ -159,7 +163,7 @@ class CommentsCommunityModerationView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        form = CommentFilterForm(self.request.GET)
+        form = self._get_form()
         if form.is_valid():
             data = form.cleaned_data
             context.update({
