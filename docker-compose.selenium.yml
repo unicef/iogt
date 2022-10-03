@@ -14,6 +14,7 @@ services:
       WAGTAILTRANSFER_SOURCE_BASE_URL: https://example.com/wagtail-transfer/
       WAGTAILTRANSFER_SOURCE_SECRET_KEY: wagtailtransfer-source-secret-key
       BASE_URL: 'http://localhost:8000'
+      COMMENTS_COMMUNITY_MODERATOR_CLASS: 'comments.clients.AlwaysApproveModerator'
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./:/app/
