@@ -141,7 +141,7 @@ class CommentsCommunityModerationView(ListView):
         return CommentFilterForm(self.request.GET or {'state': CommentModeration.CommentModerationState.UNMODERATED})
 
     def get_queryset(self):
-        queryset = super().get_queryset().filter(comment_moderation__isnull=False)
+        queryset = super().get_queryset().filter(comment_moderation__isnull=False).order_by('-submit_date')
         form = self._get_form()
         if form.is_valid():
             data = form.cleaned_data
