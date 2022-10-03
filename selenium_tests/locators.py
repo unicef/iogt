@@ -22,11 +22,3 @@ class Locator(object):
     article_navigate_next = 'article__navigation--next'
     article_navigate_previous = 'article__navigation--previous'
 
-#Locators for base element
-    base_element = (By.TAG_NAME, 'html')
-
-#Locator for footer
-    footer_element = (By.CSS_SELECTOR, '.footer-main .bottom-level')
-
-#Locator for navbar
-    navbar_element = ((By.CSS_SELECTOR, '.footer-main .top-level'))
