@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags comments comments_xtd  wagtailuserbar menu_tags  home_tags questionnaires_tags sass_tags i18n %}
+
+{% block content %}
+    <h1>{% translate 'Comment Moderation' %}</h1>
+    <h3>{% translate 'Filters' %}</h3>
+    <form action="" method="get">
+        <div class="comment-moderation-field-wrapper">
+            {% for field in form %}
+                <div>
+                    <label>
+                        {{ field.label }}
+                    </label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="comment-moderation-button">
+            <button type="submit">{% translate 'Apply' %}</button>
+        </div>
+    </form>
+    {% if comments %}
+        <table class="comment-moderation-table">
+            <thead>
+                <tr>
+                    <th>{% translate 'Comments' %}</th>
+                    <th class="width-32">{% translate 'Actions' %}</th>
+                </tr>
+            </thead>
+            {% for comment in comments %}
+                <tr>
+                    <td class="comment-moderation-comment">
+                        {{ comment.comment }}
+                    </td>
+                    <td class="width-32">
+                        <div class="action-btn">
+                            {% if comment.comment_moderation.state == 'UNMODERATED' %}
+                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='approve' %}>{% translate 'Approve' %}</a>
+                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='reject' %}>{% translate 'Reject' %}</a>
+                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='unsure' %}>{% translate 'Unsure' %}</a>
+                            {% elif comment.comment_moderation.state == 'APPROVED' %}
+                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='reject' %}>{% translate 'Reject' %}</a>
+                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='unsure' %}>{% translate 'Unsure' %}</a>
+                            {% elif comment.comment_moderation.state == 'REJECTED' %}
+                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='approve' %}>{% translate 'Approve' %}</a>
+                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='unsure' %}>{% translate 'Unsure' %}</a>
+                            {% elif comment.comment_moderation.state == 'UNSURE' %}
+                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='approve' %}>{% translate 'Approve' %}</a>
+                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='reject' %}>{% translate 'Reject' %}</a>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% if is_paginated %}
+            <div class="pagination comment-moderator-pagination">
+                <span class="page-links">
+                    {% if page_obj.has_previous %}
+                        <a class="comment-moderation previous-btn" href="?{{ params }}&page={{ page_obj.previous_page_number }}">{% translate 'Previous' %}</a>
+                        <span></span>
+                    {% endif %}
+                    {% if page_obj.has_next %}
+                        <span></span>
+                        <a class="comment-moderation next-btn" href="?{{ params }}&page={{ page_obj.next_page_number }}">{% translate 'Next' %}</a>
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
+    {% else %}
+        <div>{% translate 'No comments found.' %}</div>
+    {% endif %}
+{% endblock content %}
