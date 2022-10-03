@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
+from django_comments.signals import comment_was_flagged
 from django_comments_xtd.models import XtdComment
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.core.models import Page
@@ -133,3 +134,11 @@ def comment_moderation_handler(sender, instance, created, **kwargs):
         instance.is_public = moderator.moderate(instance)
         instance.save(update_fields=['is_public'])
         CommentModeration.objects.create(comment_id=instance.id)
+
+
+@receiver(comment_was_flagged, sender=XtdComment)
+def comment_flagged(sender, comment, **kwargs):
+    if hasattr(comment, 'comment_moderation'):
+        comment_moderation = comment.comment_moderation
+        comment_moderation.state = CommentModeration.CommentModerationState.UNMODERATED
+        comment_moderation.save(update_fields=['state'])
