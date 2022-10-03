@@ -18,48 +18,50 @@ class RegistrationSurveyRedirectMiddleware:
 
     def __call__(self, request):
         if not request.user.is_superuser:
-            request_path = request.path_info
-            registration_survey = SiteSettings.for_request(request).registration_survey
-            if registration_survey:
-                registration_survey = registration_survey.localized
-                is_registration_survey_url = request_path == registration_survey.url
-            else:
-                is_registration_survey_url = False
+            return self.get_response(request)
 
-            allowed_url_names = ['account_logout']
-            language = translation.get_language()
-            try:
-                current_url = resolve(request_path).url_name
-            except Resolver404:
-                current_url = translate_url(request_path, language)
-            is_url_allowed = current_url in allowed_url_names or is_registration_survey_url
+        request_path = request.path_info
+        registration_survey = SiteSettings.for_request(request).registration_survey
+        if registration_survey:
+            registration_survey = registration_survey.localized
+            is_registration_survey_url = request_path == registration_survey.url
+        else:
+            is_registration_survey_url = False
 
-            user = request.user
-            is_registered_user = not user.is_anonymous
+        allowed_url_names = ['account_logout']
+        language = translation.get_language()
+        try:
+            current_url = resolve(request_path).url_name
+        except Resolver404:
+            current_url = translate_url(request_path, language)
+        is_url_allowed = current_url in allowed_url_names or is_registration_survey_url
 
-            language = translation.get_language()
-            if (request_path.startswith(('/media/', f'/{language}/images/', f'/{language}/jsi18n/'))
-                    or is_url_allowed
-                    or not is_registered_user):
-                return self.get_response(request)
+        user = request.user
+        is_registered_user = not user.is_anonymous
 
-            should_redirect_to_registration_survey = False
-            if (not user.has_filled_registration_survey
-                    and registration_survey
-                    and registration_survey.has_required_fields()):
-                should_redirect_to_registration_survey = True
-                if user.has_viewed_registration_survey and not user.has_filled_registration_survey:
-                    messages.add_message(
-                        request, messages.ERROR, _('Please complete the questions marked as required to continue'))
+        language = translation.get_language()
+        if (request_path.startswith(('/media/', f'/{language}/images/', f'/{language}/jsi18n/'))
+                or is_url_allowed
+                or not is_registered_user):
+            return self.get_response(request)
 
-            elif (not user.has_filled_registration_survey
-                    and not user.has_viewed_registration_survey
-                    and registration_survey):
-                should_redirect_to_registration_survey = True
+        should_redirect_to_registration_survey = False
+        if (not user.has_filled_registration_survey
+                and registration_survey
+                and registration_survey.has_required_fields()):
+            should_redirect_to_registration_survey = True
+            if user.has_viewed_registration_survey and not user.has_filled_registration_survey:
+                messages.add_message(
+                    request, messages.ERROR, _('Please complete the questions marked as required to continue'))
 
-            if should_redirect_to_registration_survey:
-                user.has_viewed_registration_survey = True
-                user.save(update_fields=['has_viewed_registration_survey'])
-                return redirect(registration_survey.localized.url)
+        elif (not user.has_filled_registration_survey
+                and not user.has_viewed_registration_survey
+                and registration_survey):
+            should_redirect_to_registration_survey = True
+
+        if should_redirect_to_registration_survey:
+            user.has_viewed_registration_survey = True
+            user.save(update_fields=['has_viewed_registration_survey'])
+            return redirect(registration_survey.localized.url)
 
         return self.get_response(request)
