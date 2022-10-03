@@ -20,7 +20,7 @@ class UserFactory(DjangoModelFactory):
 class AdminUserFactory(DjangoModelFactory):
     first_name = 'John'
     last_name = 'Doe'
-    username = factory.Sequence(lambda n: f'user{n}@example.com')
+    username = factory.Sequence(lambda n: f'admin{n}@example.com')
     password = factory.LazyFunction(lambda: make_password('test@123'))
     has_filled_registration_survey = True
     is_superuser = True

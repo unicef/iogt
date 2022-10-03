@@ -3,7 +3,7 @@ from rest_framework import status
 from wagtail.core.models import Site
 
 from home.factories import SiteSettingsFactory, HomePageFactory
-from iogt_users.factories import UserFactory
+from iogt_users.factories import UserFactory, AdminUserFactory
 from wagtail_factories import SiteFactory
 from questionnaires.factories import SurveyFactory
 
@@ -11,7 +11,7 @@ from questionnaires.factories import SurveyFactory
 class PostRegistrationRedirectTests(TestCase):
     def setUp(self):
         self.user = UserFactory(has_filled_registration_survey=False)
-        self.admin_user = UserFactory()
+        self.admin_user = AdminUserFactory(has_filled_registration_survey=False)
 
         Site.objects.all().delete()
         self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
@@ -28,5 +28,10 @@ class PostRegistrationRedirectTests(TestCase):
         self.assertEqual(response.url, self.registration_survey.url)
 
     def test_anonymous_user_can_browse_public_urls(self):
+        response = self.client.get(self.home_page.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_admin_log_in_without_filling_registration_survey_form(self):
+        self.client.force_login(self.admin_user)
         response = self.client.get(self.home_page.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
