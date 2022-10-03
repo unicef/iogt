@@ -513,5 +513,5 @@ WEBPUSH_SETTINGS = {
 }
 
 COMMENTS_COMMUNITY_MODERATION = os.getenv('COMMENTS_COMMUNITY_MODERATION') == 'enable'
-COMMENT_MODERATION_CLASS = os.getenv('COMMENT_MODERATION_CLASS', 'comments.clients.StubModerator')
+COMMENT_MODERATION_CLASS = os.getenv('COMMENT_MODERATION_CLASS', 'comments.clients.AlwaysApproveModerator')
 BLACKLISTED_WORDS = os.getenv('BLACKLISTED_WORDS', '').split(',')

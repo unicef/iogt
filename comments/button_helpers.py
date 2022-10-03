@@ -65,7 +65,6 @@ class XtdCommentAdminButtonHelper(ButtonHelper):
 
     def get_buttons_for_obj(self, obj, *args, **kwargs):
         buttons = super().get_buttons_for_obj(obj, exclude='delete', *args, **kwargs)
-        # buttons.append(self.hide_show_toggle_button(comment=obj))
         buttons.append(self.publish_unpublish_toggle_button(comment=obj))
         buttons.append(self.clear_flags_button(comment=obj))
         buttons.append(self.comment_reply_button(comment=obj))

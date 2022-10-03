@@ -23,8 +23,8 @@ services:
       VAPID_PRIVATE_KEY: ''
       VAPID_ADMIN_EMAIL: ''
       COMMENTS_COMMUNITY_MODERATION: 'enable'
-      COMMENTS_COMMUNITY_MODERATOR_CLASS: 'comments.clients.StubModerator'
-      BLACKLISTED_WORDS: 'hell,crap'
+      COMMENTS_COMMUNITY_MODERATOR_CLASS: 'comments.clients.AlwaysApproveModerator'
+      BLACKLISTED_WORDS: ''
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./:/app/

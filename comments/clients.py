@@ -19,7 +19,7 @@ class BlacklistedWordsModerator(BaseModerator):
         return True
 
 
-class StubModerator(BaseModerator):
+class AlwaysApproveModerator(BaseModerator):
     @classmethod
     def moderate(cls, comment):
         return True
