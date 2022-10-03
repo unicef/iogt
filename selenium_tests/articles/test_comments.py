@@ -1,5 +1,3 @@
-import time
-
 from selenium.webdriver.common.by import By
 from selenium_tests.base import BaseSeleniumTests
 from home.factories import (

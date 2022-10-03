@@ -2,9 +2,6 @@ from typing import List
 from urllib.parse import urlparse
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
-from selenium_tests.locators import Locator
-from iogt_users.factories import AdminUserFactory, UserFactory
-
 
 class BasePage(object):
 
