@@ -25,6 +25,8 @@ services:
       COMMENTS_COMMUNITY_MODERATION: 'enable'
       COMMENTS_COMMUNITY_MODERATOR_CLASS: 'comments.clients.AlwaysApproveModerator'
       BLACKLISTED_WORDS: ''
+      SUPERSET_BASE_URL: ''
+      SUPERSET_DATABASE_NAME: ''
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./:/app/
@@ -50,7 +52,7 @@ services:
     environment:
       POSTGRES_PASSWORD: iogt
     volumes:
-      - /var/lib/postgresql/data
+      - pg-data01:/var/lib/postgresql/data
       - ./initdb.d:/docker-entrypoint-initdb.d
     ports:
       - 5432:5432
@@ -62,3 +64,4 @@ services:
 
 volumes:
   es-data01:
+  pg-data01:
