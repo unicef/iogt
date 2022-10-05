@@ -50,7 +50,7 @@ class FormDataPerUserView(SpreadsheetExportMixin, SafePaginateListView):
     """
     template_name = "questionnaires/form_data.html"
     context_object_name = 'form_pages'
-    list_export = ['ID', 'Name', 'Submission Date', 'Field', 'Value']
+    list_export = ['Page ID', 'Page Title', 'Submission ID', 'Submission Date', 'Admin Label', 'Value']
     select_date_form = SelectDateForm
     page_ids = []
     user = None
@@ -133,7 +133,7 @@ class FormDataPerUserView(SpreadsheetExportMixin, SafePaginateListView):
             data.update({
                 form_fields_dict.get(item.page_id, {}).get(clean_name, clean_name): answer,
             })
-        return [dict(zip(self.list_export, [item.id, item.page.title, item.submit_time, field, value]))
+        return [dict(zip(self.list_export, [item.page_id, item.page.title, item.id, item.submit_time, field, value]))
                 for field, value in data.items()]
 
     def stream_csv(self, queryset):
