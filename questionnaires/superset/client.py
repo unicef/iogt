@@ -14,7 +14,8 @@ class SupersetClient:
     dataset_url = f'{api_url}/dataset'
     chart_url = f'{api_url}/chart'
 
-    session = Session()
+    def __init__(self):
+        self.session = Session()
 
     def _get_csrf_token(self):
         return {
