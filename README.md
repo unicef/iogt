@@ -170,6 +170,13 @@ npm install
 node_modules/.bin/cypress open
 ```
 
+## Technical Report
+
+
+## Hide View Live button from admin panel
+1. Inherit class from DisplayViewLiveOnAdminMixin `home.models`
+2. View Live and preview button will be hide for this page on admin panel
+
 ## Adding new localizable strings to the code base
 
 After adding new strings to the code base that are user-facing (see https://docs.djangoproject.com/en/4.0/topics/i18n/translation/ ), follow the following process:
