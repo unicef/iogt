@@ -174,6 +174,8 @@ node_modules/.bin/cypress open
 
 
 ## Hide View Live button from admin panel
+If you want to hide view live and preview button from admin panel then do the following steps
+
 1. Inherit class from DisplayViewLiveOnAdminMixin `home.models`
 2. View Live and preview button will be hide for this page on admin panel
 

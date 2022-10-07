@@ -42,9 +42,9 @@
                                 {% if page.has_unpublished_changes and page.is_previewable %}
                                     <li><a href="{% url 'wagtailadmin_pages:view_draft' page.id %}" class="button button-small button-secondary" target="_blank" rel="noopener noreferrer">{% trans 'Draft' %}</a></li>
                                 {% endif %}
-                                <!--- this is != False because if it will True or None then page should be display,
-                                      if it will be false, then the view live button will be hide --->
                                 {% if page.live and page.should_display_view_live_on_admin != False %}
+                                    <!--- Using != False the admin will be able to see the view live and preview button on admin panel.
+                                          The function will return None or True if admin wants to display view live and preview button. --->
                                     {% with page_url=page.url %}
                                         {% if page_url is not None %}
                                             <li><a href="{{ page_url }}" class="button button-small button-secondary" target="_blank" rel="noopener noreferrer">{% trans 'Live' %}</a></li>
