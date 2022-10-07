@@ -8,11 +8,11 @@ class SupersetClient:
     security_url = f'{api_url}/security'
     login_url = f'{security_url}/login'
     refresh_url = f'{security_url}/refresh'
-    csrf_token_url = f'{security_url}/csrf_token'
-    database_url = f'{api_url}/database'
-    dashboard_url = f'{api_url}/dashboard'
-    dataset_url = f'{api_url}/dataset'
-    chart_url = f'{api_url}/chart'
+    csrf_token_url = f'{security_url}/csrf_token/'
+    database_url = f'{api_url}/database/'
+    dashboard_url = f'{api_url}/dashboard/'
+    dataset_url = f'{api_url}/dataset/'
+    chart_url = f'{api_url}/chart/'
 
     def __init__(self):
         self.session = Session()
@@ -70,7 +70,7 @@ class SupersetClient:
         return self._api_caller(request)
 
     def get_dashboard(self, id):
-        request = Request(method='GET', url=f'{self.dashboard_url}/{id}', headers=self._get_auth_headers())
+        request = Request(method='GET', url=f'{self.dashboard_url}{id}', headers=self._get_auth_headers())
         return self._api_caller(request)
 
     def create_dataset(self, data):
@@ -78,11 +78,11 @@ class SupersetClient:
         return self._api_caller(request)
 
     def get_dataset(self, id):
-        request = Request(method='GET', url=f'{self.dataset_url}/{id}', headers=self._get_headers())
+        request = Request(method='GET', url=f'{self.dataset_url}{id}', headers=self._get_headers())
         return self._api_caller(request)
 
     def update_dataset(self, id, data):
-        request = Request(method='PUT', url=f'{self.dataset_url}/{id}', headers=self._get_headers(), json=data)
+        request = Request(method='PUT', url=f'{self.dataset_url}{id}', headers=self._get_headers(), json=data)
         return self._api_caller(request)
 
     def create_chart(self, data):
