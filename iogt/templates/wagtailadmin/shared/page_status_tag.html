@@ -1,5 +1,5 @@
 {% load i18n %}
-{% if page.should_view_live_on_admin != False %}
+{% if page.should_display_view_live_on_admin != False %}
     {% if page.live %}
         {% with page_url=page.url %}
             {% if page_url is not None %}

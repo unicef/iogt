@@ -49,7 +49,7 @@ from .blocks import (
     EmbeddedQuizBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock, ArticleBlock, DownloadButtonBlock,
 )
 from .forms import SectionPageForm
-from .mixins import PageUtilsMixin, TitleIconMixin, ViewLiveMixIn
+from .mixins import PageUtilsMixin, TitleIconMixin, DisplayViewLiveOnAdminMixin
 from .utils.image import convert_svg_to_png_bytes
 from .utils.progress_manager import ProgressManager
 import iogt.iogt_globals as globals_
@@ -127,7 +127,7 @@ class ArticleTaggedItem(TaggedItemBase):
                                  on_delete=models.CASCADE)
 
 
-class SectionIndexPage(Page, ViewLiveMixIn):
+class SectionIndexPage(Page, DisplayViewLiveOnAdminMixin):
     parent_page_types = ['home.HomePage']
     subpage_types = ['home.Section']
 
@@ -461,7 +461,7 @@ class Article(AbstractArticle):
         return response
 
 
-class MiscellaneousIndexPage(Page, ViewLiveMixIn):
+class MiscellaneousIndexPage(Page, DisplayViewLiveOnAdminMixin):
     parent_page_types = ['home.HomePage']
     subpage_types = ['home.OfflineContentIndexPage']
 
@@ -475,12 +475,12 @@ class OfflineContentIndexPage(AbstractArticle):
         verbose_name = 'Offline Content Index Page'
 
 
-class BannerIndexPage(Page, ViewLiveMixIn):
+class BannerIndexPage(Page, DisplayViewLiveOnAdminMixin):
     parent_page_types = ['home.HomePage']
     subpage_types = ['home.BannerPage']
 
 
-class BannerPage(Page, PageUtilsMixin, ViewLiveMixIn):
+class BannerPage(Page, PageUtilsMixin, DisplayViewLiveOnAdminMixin):
     parent_page_types = ['home.BannerIndexPage']
     subpage_types = []
 
@@ -511,7 +511,7 @@ class BannerPage(Page, PageUtilsMixin, ViewLiveMixIn):
         return image_urls
 
 
-class FooterIndexPage(Page, ViewLiveMixIn):
+class FooterIndexPage(Page, DisplayViewLiveOnAdminMixin):
     parent_page_types = ['home.HomePage']
     subpage_types = [
         'home.Section', 'home.Article', 'home.PageLinkPage', 'questionnaires.Poll',

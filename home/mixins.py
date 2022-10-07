@@ -97,6 +97,10 @@ class TitleIconMixin:
         return icon
 
 
-class ViewLiveMixIn:
-    def should_view_live_on_admin(self):
+class DisplayViewLiveOnAdminMixin:
+    """
+    This function is used to display view live on admin panel
+    Button of view live will be hide for all child classes if return False
+    """
+    def should_display_view_live_on_admin(self):
         return False
