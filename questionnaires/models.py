@@ -33,6 +33,7 @@ from questionnaires.blocks import SkipState, SkipLogicField
 from questionnaires.edit_handlers import FormSubmissionsPanel
 from questionnaires.forms import CustomFormBuilder, SurveyForm, QuizForm
 from questionnaires.utils import SkipLogicPaginator, FormHelper
+from iogt.mixins import DisplayViewLiveOnAdminMixin
 
 
 FORM_FIELD_CHOICES = (
@@ -916,16 +917,16 @@ class Quiz(QuestionnairePage, AbstractForm):
         verbose_name_plural = _("quizzes")
 
 
-class PollIndexPage(Page):
+class PollIndexPage(Page, DisplayViewLiveOnAdminMixin):
     parent_page_types = ['home.HomePage']
     subpage_types = ['questionnaires.Poll']
 
 
-class SurveyIndexPage(Page):
+class SurveyIndexPage(Page, DisplayViewLiveOnAdminMixin):
     parent_page_types = ['home.HomePage']
     subpage_types = ['questionnaires.Survey']
 
 
-class QuizIndexPage(Page):
+class QuizIndexPage(Page, DisplayViewLiveOnAdminMixin):
     parent_page_types = ['home.HomePage']
     subpage_types = ['questionnaires.Quiz']

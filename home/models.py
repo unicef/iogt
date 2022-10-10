@@ -49,9 +49,10 @@ from .blocks import (
     EmbeddedQuizBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock, ArticleBlock, DownloadButtonBlock,
 )
 from .forms import SectionPageForm
-from .mixins import PageUtilsMixin, TitleIconMixin, DisplayViewLiveOnAdminMixin
+from .mixins import PageUtilsMixin, TitleIconMixin
 from .utils.image import convert_svg_to_png_bytes
 from .utils.progress_manager import ProgressManager
+from iogt.mixins import DisplayViewLiveOnAdminMixin
 import iogt.iogt_globals as globals_
 
 User = get_user_model()

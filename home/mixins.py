@@ -95,9 +95,3 @@ class TitleIconMixin:
             icon = Icon(self.image_icon.get_rendition('fill-32x32').url, False)
 
         return icon
-
-
-class DisplayViewLiveOnAdminMixin:
-    """Using this class admin able to toggle the visibility of view live and preview button."""
-    def should_display_view_live_on_admin(self):
-        return False
