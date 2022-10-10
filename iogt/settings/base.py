@@ -135,6 +135,7 @@ TEMPLATES = [
                 'home.processors.commit_hash',
                 'home.processors.show_footers',
                 'messaging.processors.add_vapid_public_key',
+                'notifications.processors.push_notification',
             ],
         },
     },
@@ -518,3 +519,5 @@ BLACKLISTED_WORDS = os.getenv('BLACKLISTED_WORDS', '').split(',')
 
 SUPERSET_BASE_URL = os.getenv('SUPERSET_BASE_URL')
 SUPERSET_DATABASE_NAME = os.getenv('SUPERSET_DATABASE_NAME')
+
+PUSH_NOTIFICATION = os.getenv('PUSH_NOTIFICATION', 'disable') == 'enable'
