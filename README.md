@@ -181,3 +181,8 @@ This process updates PO files as necessary and compiles a list of strings that a
 
 **Remark:** The file `common/translation_utils/translations.csv` is NOT updated in the process.
 Even though it has a column "is in use", its data is currently not updated automatically, and similarly, new strings are not added automatically.
+
+
+## Updating show in menu for existing pages
+
+1. Run `./manage.py update_show_in_menu`
