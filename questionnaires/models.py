@@ -634,7 +634,7 @@ class Poll(QuestionnairePage, AbstractForm):
         if len(submissions) > 0 and self.show_results_with_no_votes:
             for _, label, choices in data_fields:
                 results[label] = {
-                    choice: 0 for choice in choices.split('|') if len(choice) > 0
+                    choice.strip(): 0 for choice in choices.split('|') if len(choice) > 0
                 }
 
         for submission in submissions:
