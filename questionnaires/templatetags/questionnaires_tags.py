@@ -141,9 +141,9 @@ def get_item(dictionary, key):
 
 
 @register.filter
-def get_value_from_querydict(querydict, key):
+def get_values_from_querydict(querydict, key):
     dictionary = dict(querydict)
-    return dictionary.get(key)[0]
+    return dictionary[key]
 
 
 @register.simple_tag
