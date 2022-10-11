@@ -143,7 +143,7 @@ def get_item(dictionary, key):
 @register.filter
 def get_values_from_querydict(querydict, key):
     dictionary = dict(querydict)
-    return dictionary[key]
+    return dictionary.get(key)
 
 
 @register.simple_tag
