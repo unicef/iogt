@@ -1,5 +1,5 @@
+from django.conf import settings
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
-from wagtail.core import hooks
 
 from notifications.models import Notification
 from notifications.views import CreateNotificationView
@@ -16,4 +16,5 @@ class NotificationModelAdmin(ModelAdmin):
     create_view_class = CreateNotificationView
 
 
-modeladmin_register(NotificationModelAdmin)
+if settings.PUSH_NOTIFICATION:
+    modeladmin_register(NotificationModelAdmin)
