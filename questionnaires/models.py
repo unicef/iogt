@@ -31,7 +31,7 @@ from wagtail.images.blocks import ImageChooserBlock
 
 from questionnaires.blocks import SkipState, SkipLogicField
 from questionnaires.edit_handlers import FormSubmissionsPanel
-from questionnaires.forms import CustomFormBuilder, SurveyForm, QuizForm
+from questionnaires.forms import CustomFormBuilder, SurveyForm, QuizForm, PollForm
 from questionnaires.utils import SkipLogicPaginator, FormHelper
 
 
@@ -542,6 +542,7 @@ class PollFormField(AbstractFormField):
 
 
 class Poll(QuestionnairePage, AbstractForm):
+    base_form_class = PollForm
     form_builder = CustomFormBuilder
     template = "poll/poll.html"
     parent_page_types = [
@@ -634,7 +635,7 @@ class Poll(QuestionnairePage, AbstractForm):
         if len(submissions) > 0 and self.show_results_with_no_votes:
             for _, label, choices in data_fields:
                 results[label] = {
-                    choice.strip(): 0 for choice in choices.split('|') if len(choice) > 0
+                    choice: 0 for choice in choices.split('|') if len(choice) > 0
                 }
 
         for submission in submissions:

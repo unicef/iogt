@@ -248,3 +248,19 @@ class QuizForm(WagtailAdminPageForm):
         if field not in self._clean_errors:
             self._clean_errors[field] = list()
         self._clean_errors[field].append(message)
+
+class PollForm(WagtailAdminPageForm):
+    form_field_name = 'poll_form_fields'
+    _clean_errors = None
+
+    def save(self, commit):
+        for form in self.formsets[self.form_field_name]:
+            field_type = form.instance.field_type
+
+            if field_type in ['checkboxes', 'dropdown', 'radio']:
+                choices = ''
+                for choice in form.instance.choices.split('|'):
+                    choices += choice.strip() + '|'
+                form.instance.choices = choices[:-1]
+
+        return super().save(commit)
