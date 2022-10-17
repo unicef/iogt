@@ -1,5 +1,5 @@
 class Dataset:
-    def __init__(self, database_id, owner_id, table_name, dataset_name, page_id, ):
+    def __init__(self, database_id, owner_id, table_name, dataset_name, page_id):
         self.database_id = database_id
         self.owner_id = owner_id
         self.table_name = table_name

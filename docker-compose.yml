@@ -68,8 +68,3 @@ services:
 volumes:
   es-data01:
   pg-data01:
-
-networks:
-  default:
-    name: superset_default
-    external: true
