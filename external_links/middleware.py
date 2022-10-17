@@ -33,7 +33,7 @@ class RewriteExternalLinksMiddleware:
         external_link_root = reverse('external-link')
 
         # neither external_link_root nor request.path include hostname
-        if response.streaming:
+        if response.streaming or request.path.startswith('/admin'):
             return response
 
         html_content_type = 'text/html' in response.get('content-type', '')

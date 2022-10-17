@@ -249,6 +249,12 @@ class QuizForm(WagtailAdminPageForm):
             self._clean_errors[field] = list()
         self._clean_errors[field].append(message)
 
+
+class GenerateDashboardForm(forms.Form):
+    superset_username = forms.CharField()
+    superset_password = forms.CharField(widget=forms.PasswordInput)
+
+
 class PollForm(WagtailAdminPageForm):
     form_field_name = 'poll_form_fields'
     _clean_errors = None
