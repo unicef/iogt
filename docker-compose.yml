@@ -27,8 +27,8 @@ services:
       BLACKLISTED_WORDS: ''
       SUPERSET_BASE_URL: ''
       SUPERSET_DATABASE_NAME: ''
-      SUPERSET_SUPERUSER_USERNAME: ''
-      SUPERSET_SUPERUSER_PASSWORD: ''
+      SUPERSET_USERNAME: ''
+      SUPERSET_PASSWORD: ''
       PUSH_NOTIFICATION: 'enable'
     command: python manage.py runserver 0.0.0.0:8000
     volumes:

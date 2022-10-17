@@ -52,7 +52,7 @@ class DashboardGenerator:
         self.client = SupersetClient()
         self.client.authenticate(superset_username, superset_password)
         self.admin_client = SupersetClient()
-        self.admin_client.authenticate(settings.SUPERSET_SUPERUSER_USERNAME, settings.SUPERSET_SUPERUSER_PASSWORD)
+        self.admin_client.authenticate(settings.SUPERSET_USERNAME, settings.SUPERSET_PASSWORD)
         self.table_name = UserSubmission._meta.db_table
         self.current_datetime = timezone.now().strftime("%Y-%m-%d %H:%M:%S")
 
