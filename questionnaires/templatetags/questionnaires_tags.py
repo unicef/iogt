@@ -172,7 +172,9 @@ def get_answer_options(field, field_option, fields_info):
     label = field_option.choice_label
     correct_answers = fields_info.get(field.name, {}).get('correct_answer_list', [])
     is_selected = field_option.data.get('selected', False)
+    is_display_unselected_answers = field.form.page.display_unselected_answers
     rv = ''
+
     if is_selected and label in correct_answers:
         rv = {
             'class': 'success',
@@ -183,12 +185,12 @@ def get_answer_options(field, field_option, fields_info):
             'class': 'error',
             'aria_label': 'Checkbox with X, indicating incorrect and selected',
         }
-    elif not is_selected and label in correct_answers:
+    elif is_display_unselected_answers and not is_selected and label in correct_answers:
         rv = {
             'class': 'clear-tick',
             'aria_label': 'Checkbox with tick, indicating correct but not selected',
         }
-    elif not is_selected and label not in correct_answers:
+    elif is_display_unselected_answers and not is_selected and label not in correct_answers:
         rv = {
             'class': 'clear-cross',
             'aria_label': 'Checkbox with X, indicating incorrect and not selected',

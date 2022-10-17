@@ -783,6 +783,11 @@ class QuizFormField(AbstractFormField):
 class Quiz(QuestionnairePage, AbstractForm):
     base_form_class = QuizForm
     form_builder = CustomFormBuilder
+    display_unselected_answers = models.BooleanField(default=False)
+
+    settings_panels = AbstractForm.settings_panels + [
+        FieldPanel('display_unselected_answers')
+    ]
 
     parent_page_types = [
         "home.HomePage", "home.Section", "home.Article", "questionnaires.QuizIndexPage", 'home.FooterIndexPage',
