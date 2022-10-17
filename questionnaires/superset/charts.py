@@ -4,8 +4,9 @@ import json
 class Chart:
     viz_type = None
 
-    def __init__(self, dashboard_id, dataset_id, name, clean_name=None):
+    def __init__(self, dashboard_id, owner_id, dataset_id, name, clean_name=None):
         self.dashboard_id = dashboard_id
+        self.owner_id = owner_id
         self.dataset_id = dataset_id
         self.name = name
         self.clean_name = clean_name
@@ -18,6 +19,9 @@ class Chart:
             'slice_name': self.name,
             'viz_type': self.viz_type,
             'params': self.params(),
+            'owners': [
+                self.owner_id,
+            ],
         }
 
     def params(self):

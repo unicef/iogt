@@ -68,14 +68,15 @@ class DashboardGenerator:
         dashboard_id = resp.get('id')
         resp = self.client.get_dashboard(dashboard_id)
         dashboard_url = resp.get('result', {}).get('url')
-        return dashboard_id, f'{settings.SUPERSET_BASE_URL}{dashboard_url}'
+        owner_id = resp.get('result', {}).get('owners', [{}])[0].get('id')
+        return dashboard_id, f'{settings.SUPERSET_BASE_URL}{dashboard_url}', owner_id
 
-    def _create_dataset(self, database_id):
+    def _create_dataset(self, database_id, owner_id):
         dataset_name = f'{SiteSettings.get_for_default_site()}_autodashboard_' \
                        f'{self.questionnaire.__class__.__name__.lower()}_{self.questionnaire.id}_' \
                        f'{self.questionnaire.title}_{self.current_datetime}'
         dataset = Dataset(
-            database_id=database_id, table_name=self.table_name, dataset_name=dataset_name,
+            database_id=database_id, owner_id=owner_id, table_name=self.table_name, dataset_name=dataset_name,
             page_id=self.questionnaire.id)
         resp = self.client.create_dataset(data=dataset.post_body())
         dataset_id = resp.get('id')
@@ -112,22 +113,24 @@ class DashboardGenerator:
 
         return dataset_id
 
-    def _create_charts(self, dashboard_id, dataset_id):
-        chart = BigNumberTotalChart(dashboard_id=dashboard_id, dataset_id=dataset_id, name='Total Submissions')
+    def _create_charts(self, dashboard_id, dataset_id, owner_id):
+        chart = BigNumberTotalChart(
+            dashboard_id=dashboard_id, owner_id=owner_id, dataset_id=dataset_id, name='Total Submissions')
         self.client.create_chart(data=chart.post_body())
 
         for question in self.questions:
             chart_class = CHART_TYPE_MAP.get(question.field_type)
             if chart_class:
                 chart = chart_class(
-                    dashboard_id=dashboard_id, dataset_id=dataset_id, name=question.label,
+                    dashboard_id=dashboard_id, owner_id=owner_id, dataset_id=dataset_id, name=question.label,
                     clean_name=question.clean_name)
                 self.client.create_chart(data=chart.post_body())
 
     def generate(self):
         database_id = self._get_database_id()
-        dashboard_id, dashboard_url = self._create_dashboard()
-        dataset_id = self._create_dataset(database_id)
-        self._create_charts(dashboard_id, dataset_id)
+        dashboard_id, dashboard_url, owner_id = self._create_dashboard()
+        self.client.authenticate(settings.SUPERSET_SUPERUSER_USERNAME, settings.SUPERSET_SUPERUSER_PASSWORD)
+        dataset_id = self._create_dataset(database_id, owner_id)
+        self._create_charts(dashboard_id, dataset_id, owner_id)
 
         return dashboard_url
