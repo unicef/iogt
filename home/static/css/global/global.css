@@ -1192,7 +1192,7 @@ body.rtl {
 }
 
 .content-container {
-  margin: 0 3.7%;
+  margin: 0 32px;
 }
 
 .content .footer-main {
@@ -1789,13 +1789,6 @@ body.rtl {
 @media screen and (max-width: 767px) {
   .btn-primary {
     font-size: 14px;
-  }
-}
-
-@media screen and (max-width: 359px) {
-  .btn-primary {
-    font-weight: normal;
-    font-size: 12px;
   }
 }
 

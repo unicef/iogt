@@ -2547,3 +2547,43 @@ input[type=checkbox], input[type=radio] {
 .comments__submit {
     padding: 12px;
 }
+
+@media screen and (max-width: 767px) {
+  .comment-moderation-table thead {
+    display: none;
+  }
+  .comment-moderation-table td {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100% !important;
+    padding: 16px;
+  }
+  .comment-moderation-table td .action-btn {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .comment-moderation-table td .action-btn a {
+    border: 1px solid #303030;
+    padding: 4px 18px;
+    border-radius: 8px;
+  }
+  .comment-moderation-table td .action-btn a:not(:last-child) {
+    margin-right: 16px;
+  }
+  .comment-moderation-comment {
+    white-space: unset;
+    text-overflow: unset;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .comment-moderation-table td .action-btn a {
+    width: 100%;
+    text-align: center;
+  }
+  .comment-moderation-table td .action-btn a:not(:last-child) {
+    margin-right: 0;
+    margin-bottom: 12px
+  }
+}
