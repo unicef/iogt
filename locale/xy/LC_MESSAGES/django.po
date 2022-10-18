@@ -1186,9 +1186,9 @@ msgid ""
 "and thus it doesn't make sense to install the offline app again (the button "
 "will be disabled in this case). [Currently not implemented]"
 msgstr ""
-"([not-needed]-This text appears when the user is navigating the site via the"
-" offline app and thus it doesn't make sense to install the offline app again"
-" (the button will be disabled in this case). [Currently not implemented])"
+"([unused]-This text appears when the user is navigating the site via the "
+"offline app and thus it doesn't make sense to install the offline app again "
+"(the button will be disabled in this case). [Currently not implemented])"
 
 msgid "Reloading translations..."
 msgstr "([unused]-Reloading translations...)"
@@ -1660,4 +1660,83 @@ msgstr ""
 "the user)"
 
 msgid "Need internet access to visit external site."
-msgstr "([needs-translation]-Need internet access to visit external site.)"
+msgstr ""
+"([needs-translation-(partial)]-Need internet access to visit external site.)"
+
+msgid "Comment Moderation"
+msgstr "([needs-translation-(partial)]-Comment Moderation)"
+
+msgid "Filters"
+msgstr "([needs-translation-(partial)]-Filters)"
+
+msgid "Apply"
+msgstr "([needs-translation-(partial)]-Apply)"
+
+msgid "Actions"
+msgstr "([needs-translation-(partial)]-Actions)"
+
+msgid "Unsure"
+msgstr "([needs-translation-(partial)]-Unsure)"
+
+msgid "No comment found."
+msgstr "([needs-translation-(partial)]-No comment found.)"
+
+msgid ""
+"This text appears when the user is navigating the site via the offline app "
+"and thus it doesn't make sense to install the offline app again (the button "
+"will be disabled in this case)."
+msgstr ""
+"([not-needed]-This text appears when the user is navigating the site via the"
+" offline app and thus it doesn't make sense to install the offline app again"
+" (the button will be disabled in this case).)"
+
+msgid "Ukraine"
+msgstr "([not-needed]-Ukraine)"
+
+msgid ""
+"\r\n"
+"            The content you are trying to reach is not available. To see offline content click <a href=\"%(offline_content_index_page_url)s\">here</a>\r\n"
+"        "
+msgstr ""
+"([unused]-\r\n"
+"            The content you are trying to reach is not available. To see offline content click <a href=\"%(offline_content_index_page_url)s\">here</a>\r\n"
+"        )"
+
+msgid "Origin"
+msgstr "([not-needed]-Origin)"
+
+msgid "Permissions"
+msgstr "([not-needed]-Permissions)"
+
+msgid "Object permissions"
+msgstr "([not-needed]-Object permissions)"
+
+msgid "Add"
+msgstr "([not-needed]-Add)"
+
+msgid "Change"
+msgstr "([not-needed]-Change)"
+
+msgid "Other permissions"
+msgstr "([not-needed]-Other permissions)"
+
+msgid "Download Form Data (XLSX)"
+msgstr "([not-needed]-Download Form Data (XLSX))"
+
+msgid "Download Form Data (CSV)"
+msgstr "([not-needed]-Download Form Data (CSV))"
+
+msgid "Generate Dashboard"
+msgstr "([not-needed]-Generate Dashboard)"
+
+msgid "No form pages have been created."
+msgstr "([not-needed]-No form pages have been created.)"
+
+msgid ""
+"\n"
+"            The content you are trying to reach is not available. To see offline content click <a href=\"%(offline_content_index_page_url)s\">here</a>\n"
+"        "
+msgstr ""
+"([needs-translation]-\n"
+"            The content you are trying to reach is not available. To see offline content click <a href=\"%(offline_content_index_page_url)s\">here</a>\n"
+"        )"
