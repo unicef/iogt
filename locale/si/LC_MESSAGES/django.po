@@ -59,7 +59,7 @@ msgid "Report"
 msgstr "වාර්තා කරන්න"
 
 msgid "Related Articles"
-msgstr "අදාළ ලිපි "
+msgstr "අදාළ ලිපි"
 
 msgid "This comment has been reported."
 msgstr "මෙම අදහස වාර්තා කර ඇත"
@@ -72,13 +72,13 @@ msgstr ""
 " කරනු ඇත"
 
 msgid "articles"
-msgstr "ලිපි "
+msgstr "ලිපි"
 
 msgid "Search the site..."
 msgstr "වෙබ් අඩවියේ සොයන්න…"
 
 msgid "Search results for:"
-msgstr "සෙවුම් ප්‍රතිඵල "
+msgstr "සෙවුම් ප්‍රතිඵල"
 
 msgid "No search results were found for"
 msgstr "සෙවුම් ප්‍රතිඵල කිසිවක් හමු නොවීය"
@@ -313,7 +313,7 @@ msgid "Report this comment?"
 msgstr "මෙම අදහස වාර්තා කරන්නද?"
 
 msgid "Display name"
-msgstr "නම "
+msgstr "නම"
 
 msgid "Reported by %(comment_report_count)s user"
 msgid_plural "Reported by %(comment_report_count)s users"
@@ -355,4 +355,22 @@ msgid "Please complete the questions marked as required to continue"
 msgstr ""
 
 msgid "Need internet access to visit external site."
+msgstr ""
+
+msgid "Comment Moderation"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Apply"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Unsure"
+msgstr ""
+
+msgid "No comment found."
 msgstr ""

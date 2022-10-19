@@ -215,7 +215,7 @@ msgid "Correct answer"
 msgstr "सही जवाफ"
 
 msgid "Download"
-msgstr "डाउनलोड "
+msgstr "डाउनलोड"
 
 msgid ""
 "You are leaving the <b>Internet of Good Things</b> to visit an external "
@@ -329,7 +329,7 @@ msgstr ""
 "गर्न सक्नुहुन्छ ।"
 
 msgid "Username not available."
-msgstr "प्रयोगकर्ताको नाम (username) उपलब्ध छैन "
+msgstr "प्रयोगकर्ताको नाम (username) उपलब्ध छैन"
 
 msgid "Display name not available."
 msgstr "नाम उपलब्ध छैन"
@@ -338,7 +338,7 @@ msgid "You have already completed this quiz."
 msgstr "तपाईँले यो हाजिरजवाफ पहिले नै पूरा गरिसक्नुभएको छ"
 
 msgid "You have already completed this poll."
-msgstr "तपाईँले यो सर्वेक्षण पहिल्यै पूरा गरिसक्नु भएको छ "
+msgstr "तपाईँले यो सर्वेक्षण पहिल्यै पूरा गरिसक्नु भएको छ"
 
 msgid ""
 "If you cannot view the above video, you can instead %(start_link)sdownload "
@@ -358,4 +358,22 @@ msgid "Please complete the questions marked as required to continue"
 msgstr ""
 
 msgid "Need internet access to visit external site."
+msgstr ""
+
+msgid "Comment Moderation"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Apply"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Unsure"
+msgstr ""
+
+msgid "No comment found."
 msgstr ""
