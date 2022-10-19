@@ -698,9 +698,6 @@ Unsure,,translate,django,needs translation (partial),,,
 No comment found.,,translate,django,needs translation (partial),,,
 This text appears when the user is navigating the site via the offline app and thus it doesn't make sense to install the offline app again (the button will be disabled in this case).,,not needed,,not needed,,,
 Ukraine,,not needed,,not needed,,,
-"
-            The content you are trying to reach is not available. To see offline content click <a href=""%(offline_content_index_page_url)s"">here</a>
-        ",,not needed,,unused,,,
 Origin,,not needed,,not needed,,,
 Permissions,,not needed,,not needed,,,
 Object permissions,,not needed,,not needed,,,
@@ -711,6 +708,4 @@ Download Form Data (XLSX),,not needed,,not needed,,,
 Download Form Data (CSV),,not needed,,not needed,,,
 Generate Dashboard,,not needed,,not needed,,,
 No form pages have been created.,,not needed,,not needed,,,
-"
-            The content you are trying to reach is not available. To see offline content click <a href=""%(offline_content_index_page_url)s"">here</a>
-        ",,,,needs translation,,,
+"The content you are trying to reach is not available. To see offline content click <a href=""%(offline_content_index_page_url)s"">here</a>",,translate,,needs translation,,,
