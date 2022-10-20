@@ -38,10 +38,10 @@ msgid "Log in"
 msgstr "உள்நுழைய"
 
 msgid "Back"
-msgstr "முந்தைய "
+msgstr "முந்தைய"
 
 msgid "BACK"
-msgstr "முந்தைய "
+msgstr "முந்தைய"
 
 msgid "Previous"
 msgstr "முந்தையது"
@@ -62,7 +62,7 @@ msgid "Related Articles"
 msgstr "தொடர்புடைய பொதுவிதிகள் / தொடர்புடைய கட்டுரைகள்"
 
 msgid "This comment has been reported."
-msgstr "இக்கருத்துரை புகாரளிக்கப்பட்டுள்ளது "
+msgstr "இக்கருத்துரை புகாரளிக்கப்பட்டுள்ளது"
 
 msgid ""
 "It will be reviewed by the team and may be removed if it breaks our Platform"
@@ -144,7 +144,7 @@ msgid "Your results!"
 msgstr "உங்கள் பெறுபேறுகள்!"
 
 msgid "Replay Quiz"
-msgstr "புதிரினை மீண்டும் செயற்படுத்தவும் / விளையாடவும் "
+msgstr "புதிரினை மீண்டும் செயற்படுத்தவும் / விளையாடவும்"
 
 msgid "Incorrect"
 msgstr "தவறு"
@@ -162,10 +162,10 @@ msgid "Reply"
 msgstr "விடையளிக்கவும்."
 
 msgid "Page not found"
-msgstr "பக்கம் கிடைக்கவில்லை. "
+msgstr "பக்கம் கிடைக்கவில்லை."
 
 msgid "Sorry, this page could not be found."
-msgstr "மன்னிக்கவும். இப்பக்கத்தினை கண்டுபிடிக்க முடியவில்லை. "
+msgstr "மன்னிக்கவும். இப்பக்கத்தினை கண்டுபிடிக்க முடியவில்லை."
 
 msgid "Internal server error"
 msgstr "உள்ளக சேவையக வழு"
@@ -209,7 +209,7 @@ msgid "Check if applies"
 msgstr "பொருந்துமா என சரிபார்க்கவும்"
 
 msgid "New comments have been disabled for this page."
-msgstr "இப்பக்கத்தில் புதிய கருத்துக்களைப் பதிவிடுவது நிறுத்தப்பட்டுள்ளது.  "
+msgstr "இப்பக்கத்தில் புதிய கருத்துக்களைப் பதிவிடுவது நிறுத்தப்பட்டுள்ளது."
 
 msgid "Correct answer"
 msgstr "சரியான விடை."
@@ -223,7 +223,7 @@ msgid ""
 msgstr ""
 "நீங்கள் வெளி வலைத்தளமொன்றை பார்வையிட <b>Internet of Good Things</b>  "
 "இலிருந்து வெளியே செல்கிறீர்கள். உங்கள் இணையவசதி வழங்குநரால் ஏற்புடைய தரவுக் "
-"கட்டணங்கள் அறவிடப்படலாம். "
+"கட்டணங்கள் அறவிடப்படலாம்."
 
 msgid "Continue to external site"
 msgstr "வெளிப்புற தளத்திற்கு தொடரவும்"
@@ -238,7 +238,7 @@ msgid "New 4-digit PIN"
 msgstr "புதிய 4 எண்ணியல் (டிஜிடல்) தனிநபர் அடையாள இலக்கம்."
 
 msgid "Confirm new 4-digit PIN"
-msgstr "புதிய 4 இலக்க (டிஜிடல்) தனிநபர் அடையாள இலக்கத்தை உறுதிப்படுத்தவும். "
+msgstr "புதிய 4 இலக்க (டிஜிடல்) தனிநபர் அடையாள இலக்கத்தை உறுதிப்படுத்தவும்."
 
 msgid "Log out"
 msgstr "வெளியேறு"
@@ -332,7 +332,7 @@ msgid ""
 msgstr ""
 "மன்னிக்கவும். %(page_title)s இல் கிடைக்கவில்லை. உங்களுக்கு தொடர்ந்து  "
 "%(language)s உலாவ வேண்டுமெனின் மீண்டும் முகப் பக்கத்துக்குச் செல்ல இங்கே "
-"கிளிக் செய்யவும். "
+"கிளிக் செய்யவும்."
 
 msgid "Username not available."
 msgstr "பயனர் பெயர் (username) கிடைக்கவில்லை."
@@ -364,4 +364,22 @@ msgid "Please complete the questions marked as required to continue"
 msgstr ""
 
 msgid "Need internet access to visit external site."
+msgstr ""
+
+msgid "Comment Moderation"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Apply"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Unsure"
+msgstr ""
+
+msgid "No comment found."
 msgstr ""

@@ -135,6 +135,7 @@ TEMPLATES = [
                 'home.processors.commit_hash',
                 'home.processors.show_footers',
                 'messaging.processors.add_vapid_public_key',
+                'notifications.processors.push_notification',
             ],
         },
     },
@@ -307,6 +308,7 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('tg', _('Tajik')),
     ('ta', _('Tamil')),
     ('ti', _('Tigrinya')),
+    ('uk', _('Ukraine')),
     ('ur', _('Urdu')),
     ('uz', _('Uzbek')),
     ('zu', _('Zulu')),
@@ -511,3 +513,14 @@ WEBPUSH_SETTINGS = {
     'VAPID_PRIVATE_KEY': os.getenv('VAPID_PRIVATE_KEY'),
     'VAPID_ADMIN_EMAIL': os.getenv('VAPID_ADMIN_EMAIL'),
 }
+
+COMMENTS_COMMUNITY_MODERATION = os.getenv('COMMENTS_COMMUNITY_MODERATION') == 'enable'
+COMMENT_MODERATION_CLASS = os.getenv('COMMENT_MODERATION_CLASS', 'comments.clients.AlwaysApproveModerator')
+BLACKLISTED_WORDS = os.getenv('BLACKLISTED_WORDS', '').split(',')
+
+SUPERSET_BASE_URL = os.getenv('SUPERSET_BASE_URL')
+SUPERSET_DATABASE_NAME = os.getenv('SUPERSET_DATABASE_NAME')
+SUPERSET_USERNAME = os.getenv('SUPERSET_USERNAME')
+SUPERSET_PASSWORD = os.getenv('SUPERSET_PASSWORD')
+
+PUSH_NOTIFICATION = os.getenv('PUSH_NOTIFICATION', 'disable') == 'enable'
