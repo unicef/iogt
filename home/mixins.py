@@ -95,3 +95,4 @@ class TitleIconMixin:
             icon = Icon(self.image_icon.get_rendition('fill-32x32').url, False)
 
         return icon
+

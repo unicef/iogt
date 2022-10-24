@@ -543,6 +543,7 @@ class FooterPage(Article, TitleIconMixin):
 class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
     parent_page_types = ['home.FooterIndexPage', 'home.Section']
     subpage_types = []
+    Override_the_Page_title_from_the_destination_Page = models.BooleanField(default=False)
 
     icon = models.ForeignKey(
         Svg,
@@ -565,12 +566,16 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
     content_panels = Page.content_panels + [
         SvgChooserPanel('icon'),
         ImageChooserPanel('image_icon'),
-        PageChooserPanel('page'),
+        MultiFieldPanel([
+            PageChooserPanel('page'),
+            FieldPanel('Override_the_Page_title_from_the_destination_Page'),
+        ], heading=_('Page')),
         FieldPanel('external_link'),
     ]
 
     def get_page(self):
-        return self.page.specific if self.page and self.page.live else self
+        return self.page.specific if self.page and self.page.live and self.Override_the_Page_title_from_the_destination_Page else self
+
 
     def get_icon(self):
         icon = super().get_icon()
@@ -589,7 +594,6 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
         return url
 
     url = property(get_url)
-
 
 @register_setting
 class SiteSettings(BaseSetting):
