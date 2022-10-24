@@ -1,10 +1,6 @@
-from wagtail.core.models import Site
-from wagtail_factories import SiteFactory
-
 from selenium_tests.base import BaseSeleniumTests
 from home.factories import (
     FooterIndexPageFactory,
-    HomePageFactory,
     SectionFactory,
     SectionIndexFactory,
 )
@@ -12,15 +8,7 @@ from home.factories import (
 class FooterSeleniumTests(BaseSeleniumTests):
 
     def setUp(self):
-        Site.objects.all().delete()
-        self.home = HomePageFactory()
-        self.site = SiteFactory(
-            site_name='IoGT',
-            hostname=self.host,
-            port=self.port,
-            is_default_site=True,
-            root_page=self.home
-        )
+        self.setup_blank_site()
         self.footer_index = FooterIndexPageFactory(parent=self.site.root_page)
         self.sections_index = SectionIndexFactory(parent=self.site.root_page)
 
