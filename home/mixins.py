@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from django.utils.functional import cached_property
 from wagtail.images.models import Rendition
+from wagtailmedia.models import Media
 
 
 class PageUtilsMixin:
@@ -61,8 +62,23 @@ class PageUtilsMixin:
 
         return image_urls
 
+    def _get_stream_data_media_urls(self, stream_data):
+        media_urls = []
+
+        for block in stream_data:
+            if block['type'] == 'media':
+                media = Media.objects.filter(id=block['value']).first()
+                if media:
+                    media_urls.append(media.url)
+
+        return media_urls
+
     @property
     def get_image_urls(self):
+        raise NotImplementedError
+
+    @property
+    def get_media_urls(self):
         raise NotImplementedError
 
 

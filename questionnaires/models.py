@@ -280,6 +280,15 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
 
         return image_urls
 
+    @property
+    def get_media_urls(self):
+        media_urls = []
+
+        media_urls += self._get_stream_data_media_urls(self.description.stream_data)
+        media_urls += self._get_stream_data_image_urls(self.thank_you_text.stream_data)
+
+        return media_urls
+
     class Meta:
         abstract = True
 

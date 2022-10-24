@@ -94,6 +94,10 @@ class HomePage(Page, PageUtilsMixin, TitleIconMixin):
     def get_image_urls(self):
         return self._get_stream_data_image_urls(self.home_featured_content.stream_data)
 
+    @property
+    def get_media_urls(self):
+        return self._get_stream_data_media_urls(self.home_featured_content.stream_data)
+
 
 class FeaturedContent(Orderable):
     source = ParentalKey(Page, related_name='featured_content',
@@ -275,6 +279,10 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
 
         return image_urls
 
+    @property
+    def get_media_urls(self):
+        return self._get_stream_data_media_urls(self.body.stream_data)
+
     class Meta:
         verbose_name = _("section")
         verbose_name_plural = _("sections")
@@ -417,6 +425,10 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         image_urls += self._get_stream_data_image_urls(self.body.stream_data)
 
         return image_urls
+
+    @property
+    def get_media_urls(self):
+        return self._get_stream_data_media_urls(self.body.stream_data)
 
     class Meta:
         abstract = True

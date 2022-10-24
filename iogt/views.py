@@ -121,10 +121,12 @@ class PageTreeAPIView(APIView):
                 page_urls.append(page.url)
         translation.activate(active_locale.language_code)
         image_urls = []
+        media_urls = []
         for page in pages:
             if isinstance(page, (HomePage, Section, Article, Poll, Survey, Quiz)):
                 page_urls.append(page.url)
                 image_urls += page.get_image_urls
+                media_urls += page.get_media_urls
 
         for svg_to_png_map in SVGToPNGMap.objects.all():
             image_urls.append(svg_to_png_map.url)
@@ -150,6 +152,7 @@ class PageTreeAPIView(APIView):
         urls = set(flatten(
             page_urls +
             image_urls +
+            media_urls +
             static_urls
         ))
         return Response(urls)
