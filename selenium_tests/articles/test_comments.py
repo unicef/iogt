@@ -49,8 +49,7 @@ class ArticleCommentsSeleniumTests(BaseSeleniumTests):
 
         #delete comment
         article_page.comments_section.delete_last_comment()
-        body_text = self.selenium.find_element(By.TAG_NAME, 'body').text
-        self.assertIn('The comment has been removed successfully!', body_text)
+        self.assertIn('The comment has been removed successfully!', article_page.get_messages_text())
 
     def test_user_flagging_comments(self):
         #login as a normal user
@@ -72,8 +71,7 @@ class ArticleCommentsSeleniumTests(BaseSeleniumTests):
         article_page = ArticlePage(self.selenium)
         article_page.comments_section.report_last_comment()
         self.visit_page(self.article01)
-        body_text = self.selenium.find_element(By.TAG_NAME, 'body').text
-        self.assertIn('This comment has been reported.', body_text)
+        self.assertIn('This comment has been reported.', article_page.comments_section.html.text)
 
     def test_moderator_removing_others_comments(self):
         #login as a normal user
@@ -94,16 +92,15 @@ class ArticleCommentsSeleniumTests(BaseSeleniumTests):
         self.visit_page(self.article01)
         article_page = ArticlePage(self.selenium)
         article_page.comments_section.delete_last_comment()
-        body_text = self.selenium.find_element(By.TAG_NAME, 'body').text
-        self.assertIn('The comment has been removed successfully!', body_text)
+        self.assertIn('The comment has been removed successfully!', article_page.get_messages_text())
 
     def test_commenting_restrictions(self):
         #login as a normal user
         login_page = self.visit_login_page()
         login_page.login_user(self.user)
         self.visit_page(self.article02)
-        body_text = self.selenium.find_element(By.TAG_NAME, 'body').text
-        self.assertIn('New comments have been disabled for this page', body_text)        
+        article_page = ArticlePage(self.selenium)
+        self.assertIn('New comments have been disabled for this page', article_page.comments_section.html.text)        
 
     def test_reply_article_comment(self):
         #login as an admin so we can leave a comment
