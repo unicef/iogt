@@ -25,7 +25,9 @@
 
                 <li>
                     <input type="submit" value="{% trans 'Save' %}" class="button" />
-                    {% if can_delete and site is not None and not site.is_default_site %}
+                    {% if can_delete and site is None %}
+                        <a href="{{ view.get_delete_url }}" class="button button-secondary no">{{ view.delete_item_label }}</a>
+                    {% elif can_delete and site is not None and not site.is_default_site %}
                         <a href="{{ view.get_delete_url }}" class="button button-secondary no">{{ view.delete_item_label }}</a>
                     {% endif %}
                 </li>
