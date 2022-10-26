@@ -759,7 +759,7 @@ class SiteSettings(BaseSetting):
 
     @classmethod
     def get_for_default_site(cls):
-        default_site = Site.objects.filter(is_default_site=True).first()
+        default_site = Site.objects.filter(is_default_site=True).first() or Site.objects.first()
         return cls.for_site(default_site)
 
     def __str__(self):

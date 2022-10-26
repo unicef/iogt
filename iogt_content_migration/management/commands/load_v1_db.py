@@ -2224,7 +2224,7 @@ class Command(BaseCommand):
         )
 
     def get_admin_url(self, id):
-        site = Site.objects.filter(is_default_site=True).first()
+        site = Site.objects.filter(is_default_site=True).first() or Site.objects.first()
         return f"{site.root_url}{reverse('wagtailadmin_pages:edit', args=(id,))}"
 
     def print_post_migration_report(self):

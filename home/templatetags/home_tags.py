@@ -117,7 +117,7 @@ def locale_set(locale, url):
 @register.simple_tag
 def translated_home_page_url(language_code):
     locale = Locale.objects.get(language_code=language_code)
-    default_home_page = Site.objects.filter(is_default_site=True).first().root_page
+    default_home_page = Site.objects.filter(is_default_site=True).first().root_page or Site.objects.first().root_page
     home_page = default_home_page.get_translation_or_none(locale)
     page = home_page or default_home_page
     return page.url

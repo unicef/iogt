@@ -106,7 +106,7 @@ class GlobalDataMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        site = Site.objects.filter(is_default_site=True).first()
+        site = Site.objects.filter(is_default_site=True).first() or Site.objects.first()
         locale = Locale.get_active()
         language_code = locale.language_code
         globals_.site = site
