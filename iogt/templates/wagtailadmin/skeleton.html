@@ -5,6 +5,7 @@
 <html class="no-js" lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}">
 <head>
     <meta charset="utf-8" />
+    <!--TODO: make sure to update this template on wagtail upgrade-->
     <meta name="vapid-key" content="{{ vapid_public_key }}">
     <title>{% block branding_title %}Wagtail{% endblock %} - {% block titletag %}{% endblock %}</title>
     <meta name="description" content="" />
@@ -69,6 +70,7 @@
         }
         loadIconSprite();
     </script>
+    <!--TODO: make sure to update this template on wagtail upgrade-->
     <script>
         var serviceWorkerURL = '{% url "sw.js" %}';
         {% if request.user.is_authenticated %}
