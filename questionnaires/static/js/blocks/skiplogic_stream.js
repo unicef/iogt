@@ -40,13 +40,6 @@
                 question.setAnswerLabel('Skip Logic Options', 'Skip Value')
             }
         };
-        question.updateQuestionHelpText = () => {
-            if (question.fieldSelect().val() ==='date') {
-                question.setQuestionHelpText(gettext('Date must be in this (YYYY-MM-DD) format'));
-            } else if (question.fieldSelect().val() === 'datetime') {
-                question.setQuestionHelpText(gettext('Datetime must be in this YYYY-MM-DDTHH:SS format'));
-            }
-        };
         return question;
     };
 
