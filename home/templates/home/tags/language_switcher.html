@@ -1,16 +1,18 @@
 {% load generic_components %}
-<div class="language_drop">
-    <a href="#" style="{% language_picker_style %}">
-        {{ current_language.name_local }}
-        <span class="arrow"></span>
-    </a>
-    <ul class="drop">
-    {% for option in language_options %}
-        <li class="{% if option.selected %}selected{% endif %}">
-            <a href="{{ option.url }}" rel="alternate" hreflang="{{ option.language.code }}">
-                {{ option.language.name_local }}
-            </a>
-        </li>
-    {% endfor %}
-    </ul>
-</div>
+{% if language_options|length > 1 %}
+    <div class="language_drop">
+        <a href="#" style="{% language_picker_style %}">
+            {{ current_language.name_local }}
+            <span class="arrow"></span>
+        </a>
+        <ul class="drop">
+        {% for option in language_options %}
+            <li class="{% if option.selected %}selected{% endif %}">
+                <a href="{{ option.url }}" rel="alternate" hreflang="{{ option.language.code }}">
+                    {{ option.language.name_local }}
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+{% endif %}
