@@ -3,6 +3,7 @@ from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.permissions import IsAuthenticated
 from wagtail.contrib.forms.utils import get_forms_for_user
 
 from questionnaires.filters import QuestionnaireFilter, UserSubmissionFilter
@@ -32,6 +33,7 @@ from questionnaires.serializers import (
     }
 ))
 class QuestionnairesListAPIView(ListAPIView):
+    permission_classes = (IsAuthenticated,)
     serializer_class = QuestionnairePageSerializer
     filterset_class = QuestionnaireFilter
     pagination_class = IoGTPagination
@@ -49,6 +51,8 @@ class QuestionnairesListAPIView(ListAPIView):
     }
 ))
 class QuestionnaireDetailAPIView(RetrieveAPIView):
+    permission_classes = (IsAuthenticated,)
+
     def get_queryset(self):
         return get_forms_for_user(self.request.user).specific().order_by('-last_published_at')
 
@@ -76,6 +80,7 @@ class QuestionnaireDetailAPIView(RetrieveAPIView):
     }
 ))
 class QuestionnaireSubmissionsAPIView(ListAPIView):
+    permission_classes = (IsAuthenticated,)
     serializer_class = UserSubmissionSerializer
     filterset_class = UserSubmissionFilter
     pagination_class = IoGTPagination
