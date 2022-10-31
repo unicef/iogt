@@ -1,4 +1,4 @@
-{% load static wagtailcore_tags i18n questionnaires_tags %}
+{% load static wagtailcore_tags wagtailimages_tags i18n questionnaires_tags %}
 
 {% block extra_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/questionnaires.css' %}">
@@ -9,6 +9,7 @@
     <h1 class="title {{ questionnaire.get_type }}-page__title">{{ questionnaire.title }}</h1>
     {% if user.is_authenticated or request.is_preview or questionnaire.allow_anonymous_submissions %}
         {% if form %}
+            {% image questionnaire.lead_image width-360 class='article__lead-img-featured' %}
             {{ questionnaire.description }}
             <form action="{% get_action_url questionnaire questionnaire fields_step request form %}" method="POST">
                 {% csrf_token %}
