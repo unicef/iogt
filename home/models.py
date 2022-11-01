@@ -845,7 +845,7 @@ class IogtFlatMenuItem(AbstractFlatMenuItem, TitleIconMixin):
 
     def get_font_color(self):
         theme_settings = globals_.theme_settings
-        return self.font_color or theme_settings.navbar_font_color
+        return self.font_color or theme_settings.flat_menus_navbar_font_color
 
     def get_single_column_view(self):
         return 'single-column-view' if self.display_only_in_single_column_view else ''
