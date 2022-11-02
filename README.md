@@ -147,7 +147,7 @@ In `iogt/settings/local.py`, define [parameters from wagtail-transfer](https://g
 WAGTAILTRANSFER_SECRET_KEY = 'fake_secret_key'
 WAGTAILTRANSFER_SOURCES = {
    'iogt_global': {
-      'BASE_URL': 'http://fake-iogt-url.org',
+      'BASE_URL': 'http://fake-iogt-url.org/wagtail-transfer/',
       'SECRET_KEY': 'fake_secret_key_2',
    },
 }
