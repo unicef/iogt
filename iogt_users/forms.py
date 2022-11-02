@@ -32,10 +32,10 @@ class AccountSignupForm(SignupForm):
     def __init__(self, *args, **kwargs):
         super(AccountSignupForm, self).__init__(*args, **kwargs)
         self.fields.pop('email')
-        self.fields["password1"] = IogtPasswordField(label=_("4-digit PIN"), autocomplete="new-password")
+        self.fields["password1"] = IogtPasswordField(label=_("Enter a 4-digit PIN or a longer password"), autocomplete="new-password")
 
         if 'password2' in self.fields:
-            self.fields["password2"] = IogtPasswordField(label=_("4-digit PIN"), autocomplete="new-password")
+            self.fields["password2"] = IogtPasswordField(label=_("Repeat your 4-digital PIN or longer password"), autocomplete="new-password")
 
         if hasattr(self, "field_order"):
             set_form_field_order(self, self.field_order)
