@@ -64,6 +64,8 @@ class HomePage(Page, PageUtilsMixin, TitleIconMixin):
     show_in_menus_default = True
 
     home_featured_content = StreamField([
+        ('heading', blocks.CharBlock(form_classname="full title", template='blocks/heading.html')),
+        ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
         ('page_button', PageButtonBlock()),
         ('embedded_poll', EmbeddedPollBlock()),
         ('embedded_survey', EmbeddedSurveyBlock()),
