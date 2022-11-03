@@ -24,6 +24,9 @@ class BasePage(object):
     def get_messages_text(self):
         return self.driver.find_element(*self.message_text_locator).text
 
+    def safe_click(self, button):
+        self.driver.execute_script("arguments[0].click();", button)
+
     @property
     def footer(self) -> 'FooterElement':
         return FooterElement(self.driver)
@@ -100,11 +103,12 @@ class ArticlePage(BasePage):
         )
          
     def navigate_next(self):
-        self.driver.find_element(*self.navigate_next_locator).click() 
+
+        self.safe_click(self.driver.find_element(*self.navigate_next_locator))
         return BasePage(self.driver)  
 
     def navigate_previous(self):
-        self.driver.find_element(*self.navigate_previous_locator).click()
+        self.safe_click(self.driver.find_element(*self.navigate_previous_locator))
         return BasePage(self.driver)        
 
 
