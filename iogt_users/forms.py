@@ -66,9 +66,9 @@ class ChangePasswordForm(BaseChangePasswordForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["oldpassword"] = IogtPasswordField(label=_("Old 4-digit PIN"), autocomplete='old-password')
-        self.fields["password1"] = IogtPasswordField(label=_("New 4-digit PIN"), autocomplete='old-password')
-        self.fields["password2"] = IogtPasswordField(label=_("Confirm new 4-digit PIN"), autocomplete='old-password')
+        self.fields["oldpassword"] = IogtPasswordField(label=_("Enter your old 4-digit PIN or a longer password"), autocomplete='old-password')
+        self.fields["password1"] = IogtPasswordField(label=_("Enter your new 4-digit PIN or a longer password"), autocomplete='old-password')
+        self.fields["password2"] = IogtPasswordField(label=_("Repeat your new 4-digit PIN or longer password"), autocomplete='old-password')
 
 
 class CustomUserCreationForm(UserCreationForm):
