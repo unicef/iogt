@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags comments comments_xtd  wagtailuserbar menu_tags  home_tags questionnaires_tags sass_tags i18n %}
+{% load static wagtailcore_tags wagtailimages_tags wagtailimages_tags_patch comments comments_xtd  wagtailuserbar menu_tags  home_tags questionnaires_tags sass_tags i18n %}
 {% get_current_language as LANGUAGE_CODE %}
 {% get_language_info for LANGUAGE_CODE as lang %}
 {% get_available_languages as LANGUAGES %}
@@ -8,7 +8,8 @@
 
 {% block content %}
     <article class='article'>
-        {% image page.lead_image width-360 class='article__lead-img-featured' %}
+        {% get_image_maximum_width as width_size %}
+        {% image page.lead_image width_size class='article__lead-img-featured' %}
         {% if user_progress %}
             {% render_user_progress user_progress False %}
         {% endif %}

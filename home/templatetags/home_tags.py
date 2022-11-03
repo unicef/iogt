@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import translate_url, reverse, resolve, Resolver404
 from wagtail.core.models import Locale, Site, Page
 
-from home.models import SectionIndexPage, Section, Article, FooterIndexPage, PageLinkPage, LocaleDetail, HomePage
+from home.models import SectionIndexPage, Section, Article, FooterIndexPage, PageLinkPage, LocaleDetail, HomePage, SiteSettings
 from iogt.settings.base import LANGUAGES
 
 register = template.Library()
@@ -143,3 +143,8 @@ def render_redirect_from_with_help_text(field):
                       f'See "https://docs.wagtail.io/en/stable/editor_manual/managing_redirects.html" for more details.'
 
     return {'field': field, 'red_help_text': True}
+
+
+@register.simple_tag
+def get_image_maximum_width():
+    return 'width-' + str(SiteSettings.objects.get().maximum_width_of_image)

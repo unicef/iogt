@@ -682,6 +682,7 @@ class SiteSettings(BaseSetting):
                                             blank=True,
                                             on_delete=models.SET_NULL)
     opt_in_to_google_web_light = models.BooleanField(default=False)
+    maximum_width_of_image = models.IntegerField(default=360)
 
     panels = [
         ImageChooserPanel('logo'),
@@ -754,6 +755,12 @@ class SiteSettings(BaseSetting):
                 FieldPanel('opt_in_to_google_web_light'),
             ],
             heading="Opt in to Google web light",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('maximum_width_of_image'),
+            ],
+            heading="Maximum width of images",
         ),
     ]
 
