@@ -9,13 +9,22 @@ from wagtail.users.forms import UserEditForm as WagtailUserEditForm, \
 
 from .fields import IogtPasswordField
 from .models import User
+from allauth.account import app_settings
 
 
 class AccountSignupForm(SignupForm):
-    display_name = forms.CharField(
-        label=_("Display name"),
+    username = forms.CharField(
+        label=_("Choose a username that you will use to login to IoGT"),
+        min_length=app_settings.USERNAME_MIN_LENGTH,
         widget=forms.TextInput(
-            attrs={"placeholder": _("Display name"),}
+            attrs={"placeholder": _("Choose a username that you will use to login to IoGT"), "autocomplete": "username"}
+        ),
+    )
+
+    display_name = forms.CharField(
+        label=_("Choose a username that you will use to login to IoGT"),
+        widget=forms.TextInput(
+            attrs={"placeholder": _("Choose a username that you will use to login to IoGT"),}
         ),
         required=False,
     )
@@ -35,7 +44,7 @@ class AccountSignupForm(SignupForm):
         self.fields["password1"] = IogtPasswordField(label=_("Enter a 4-digit PIN or a longer password"), autocomplete="new-password")
 
         if 'password2' in self.fields:
-            self.fields["password2"] = IogtPasswordField(label=_("Repeat your 4-digital PIN or longer password"), autocomplete="new-password")
+            self.fields["password2"] = IogtPasswordField(label=_("Repeat your 4-digit PIN or longer password"), autocomplete="new-password")
 
         if hasattr(self, "field_order"):
             set_form_field_order(self, self.field_order)
