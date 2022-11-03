@@ -1,5 +1,5 @@
 {% load home_tags %}
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags wagtailimages_tags wagtailimages_tags_patch %}
 
 {% if article %}
     <div class="article-card">
@@ -18,9 +18,10 @@
             </div>
             <div class="img-holder {% render_is_complete article %}">
                 {% if is_first_content %}
-                    {% image article.lead_image width-360 class='' %}
+                    {% get_image_maximum_width as width_size %}
+                    {% image article.lead_image width_size class='' %}
                 {% else %}
-                    {% image article.lead_image width-180 class='' %}
+                    {% image article.lead_image width-100 class='' %}
                 {% endif %}
             </div>
         </a>

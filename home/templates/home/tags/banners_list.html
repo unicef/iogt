@@ -1,13 +1,14 @@
-{% load static wagtailcore_tags wagtailimages_tags i18n %}
+{% load static wagtailcore_tags wagtailimages_tags wagtailimages_tags_patch home_tags i18n %}
 
 <section class='banner-holder'>
     {% for banner in banners %}
+        {% get_image_maximum_width as width_size %}
         {% if banner.banner_link_page %}
             <a href="{% pageurl banner.banner_link_page %}">
-                {% image banner.banner_image width-360 %}
+                {% image banner.banner_image width_size %}
             </a>
         {% else %}
-            <span>{% image banner.banner_image width-360 %}</span>
+            <span>{% image banner.banner_image width_size %}</span>
         {% endif %}
     {% endfor %}
 </section>

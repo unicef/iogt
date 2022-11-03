@@ -1,3 +1,4 @@
-{% load wagtailimages_tags %}
+{% load wagtailimages_tags wagtailimages_tags_patch home_tags %}
 
-{% image value width-360 %}
+{% get_image_maximum_width as width_size %}
+{% image value width_size %}
