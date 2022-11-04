@@ -22,9 +22,9 @@ class AccountSignupForm(SignupForm):
     )
 
     display_name = forms.CharField(
-        label=_("Choose a username that you will use to login to IoGT"),
+        label=_("Choose a display name that will be shown publicly if you post to the IoGT site"),
         widget=forms.TextInput(
-            attrs={"placeholder": _("Choose a username that you will use to login to IoGT"),}
+            attrs={"placeholder": _("Choose a display name that will be shown publicly if you post to the IoGT site"),}
         ),
         required=False,
     )
