@@ -14,7 +14,7 @@ from allauth.account import app_settings
 
 class AccountSignupForm(SignupForm):
     username = forms.CharField(
-        label=_("Choose a username that you will use to login to IoGT"),
+        label=_("Username"),
         min_length=app_settings.USERNAME_MIN_LENGTH,
         widget=forms.TextInput(
             attrs={"placeholder": _("Choose a username that you will use to login to IoGT"), "autocomplete": "username"}
@@ -22,9 +22,9 @@ class AccountSignupForm(SignupForm):
     )
 
     display_name = forms.CharField(
-        label=_("Choose a display name that will be shown publicly if you post to the IoGT site"),
+        label=_("Display Name"),
         widget=forms.TextInput(
-            attrs={"placeholder": _("Choose a display name that will be shown publicly if you post to the IoGT site"),}
+            attrs={"placeholder": _("Choose a display name that will be shown publicly if you post to the IoGT site, e.g, next to comments you post"),}
         ),
         required=False,
     )
