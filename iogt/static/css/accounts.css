@@ -95,3 +95,8 @@ form input[type="checkbox"] {
     font-weight: 500;
     line-height: 14px;
 }
+
+.fieldWrapper input[type=checkbox] {
+    transform: translateY(3px);
+    margin-left: 5px;
+}
