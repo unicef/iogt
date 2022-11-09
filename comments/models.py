@@ -1,8 +1,17 @@
+from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils import timezone
+from django_comments.signals import comment_was_flagged
 from django_comments_xtd.models import XtdComment
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.core.models import Page
+
+from comments import get_comments_moderation_class
+
+User = get_user_model()
+Moderator = get_comments_moderation_class()
 
 
 class CommentStatus:
@@ -101,3 +110,35 @@ class CannedResponse(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class CommentModeration(models.Model):
+    class CommentModerationState(models.TextChoices):
+        UNMODERATED = "UNMODERATED", "Unmoderated"
+        APPROVED = "APPROVED", "Approved"
+        REJECTED = "REJECTED", "Rejected"
+        UNSURE = "UNSURE", "Unsure"
+
+    state = models.CharField(max_length=255, choices=CommentModerationState.choices, default=CommentModerationState.UNMODERATED)
+    comment = models.OneToOneField(
+        to='django_comments_xtd.XtdComment', related_name='comment_moderation', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.comment.id} | {self.state}'
+
+
+@receiver(post_save, sender=XtdComment)
+def comment_moderation_handler(sender, instance, created, **kwargs):
+    if created:
+        moderator = Moderator()
+        instance.is_public = moderator.moderate(instance)
+        instance.save(update_fields=['is_public'])
+        CommentModeration.objects.create(comment_id=instance.id)
+
+
+@receiver(comment_was_flagged, sender=XtdComment)
+def comment_flagged(sender, comment, **kwargs):
+    if hasattr(comment, 'comment_moderation'):
+        comment_moderation = comment.comment_moderation
+        comment_moderation.state = CommentModeration.CommentModerationState.UNMODERATED
+        comment_moderation.save(update_fields=['state'])

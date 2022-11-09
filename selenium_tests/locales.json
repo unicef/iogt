@@ -1,0 +1,9 @@
+[
+{
+  "model": "wagtailcore.locale",
+  "pk": 1,
+  "fields": {
+    "language_code": "en"
+  }
+}
+]

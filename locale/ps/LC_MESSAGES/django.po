@@ -111,7 +111,7 @@ msgid "Reset PIN"
 msgstr "پن بیا تنظیم کړئ"
 
 msgid "Your PIN has been changed successfully."
-msgstr "په بریالیتوب سره بدل شوی PINستاسو "
+msgstr "په بریالیتوب سره بدل شوی PINستاسو"
 
 msgid "I accept the Terms and Conditions."
 msgstr "زه اصول او شرایط منم."
@@ -173,7 +173,7 @@ msgstr "د داخلي سرور تېروتنه"
 msgid "1 result"
 msgid_plural "%(counter)s results"
 msgstr[0] "۱ نتیجه"
-msgstr[1] "%(counter)s نتیجه "
+msgstr[1] "%(counter)s نتیجه"
 
 msgid "poll"
 msgstr "ټولپوښتنه"
@@ -185,7 +185,7 @@ msgid "quiz"
 msgstr "امتحان"
 
 msgid "This field is required."
-msgstr "دا ډګر په کار دی "
+msgstr "دا ډګر په کار دی"
 
 msgid "Send"
 msgstr "واستوی"
@@ -209,7 +209,7 @@ msgid "Check if applies"
 msgstr "وګورئ چې آیا پلی کېږي"
 
 msgid "New comments have been disabled for this page."
-msgstr "د دې پاڼې لپاره د نویو نظرونو ورکړه غیر فعال شوي دي. "
+msgstr "د دې پاڼې لپاره د نویو نظرونو ورکړه غیر فعال شوي دي."
 
 msgid "Correct answer"
 msgstr "سم ځواب"
@@ -241,7 +241,7 @@ msgid "Confirm new 4-digit PIN"
 msgstr "4 رقمي نوی پېن کوډ تایید کړئ"
 
 msgid "Log out"
-msgstr "وتل "
+msgstr "وتل"
 
 msgid "section"
 msgstr "برخه"
@@ -327,7 +327,7 @@ msgid ""
 msgstr ""
 "بښه غواړو،%(page_title)s په %(language)s کې شته. که چېرې غواړئ په "
 "%(language)s  کې لټون ته ادامه ورکړئ، اصلي پاڼې ته د ګرځېدو لپاره لاندې کلیک"
-" وکړئ. "
+" وکړئ."
 
 msgid "Username not available."
 msgstr "یوزر نوم نه شته."
@@ -359,4 +359,22 @@ msgid "Please complete the questions marked as required to continue"
 msgstr ""
 
 msgid "Need internet access to visit external site."
+msgstr ""
+
+msgid "Comment Moderation"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Apply"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Unsure"
+msgstr ""
+
+msgid "No comment found."
 msgstr ""

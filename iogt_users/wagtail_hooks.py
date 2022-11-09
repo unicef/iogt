@@ -19,7 +19,7 @@ class UserButtonHelper(ButtonHelper):
     def form_data_button(self, obj):
         text = "Form Data"
         return {
-            "url": f'{reverse("form_data")}?user_id={obj.id}',
+            "url": f'{reverse("form_data_per_user")}?user_id={obj.id}',
             "label": text,
             "classname": self.finalise_classname(self.view_button_classnames),
             "title": text,

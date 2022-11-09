@@ -23,7 +23,6 @@ translatable_strings = [
     'Log out',
     'section',
     'article',
-    'Install this website as an app on your device?',
     'Remember me',
     'You have signed out.',
     'Enter a valid username. This value may contain only letters, numbers, and @/./+/-/_ characters.',
@@ -40,7 +39,6 @@ translatable_strings = [
     'Your comment',
     '%(counter)s results',
     'Are you sure you want to log out?',
-    "Your app is now ready to install. If using Android, choose 'Add to home screen' and you should be all set! If you are using a iOS device, you can install it by clicking 'Share', scrolling down and tapping 'Add to Home Screen.",
     'Your browser does not support video playback.',
     'Your browser does not support audio playback.',
     "Don't display my username next to my comment",
@@ -61,6 +59,5 @@ translatable_strings = [
     'Date must be in this (YYYY-MM-DD) format',
     'Datetime must be in this YYYY-MM-DDTHH:SS format',
     'Date must be in this (YYYY-MM-DD) format',
-    'Datetime must be in this YYYY-MM-DDTHH:SS format',
-    'Need internet access to visit external site.'
+    'Datetime must be in this YYYY-MM-DDTHH:SS format'
 ]

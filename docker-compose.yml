@@ -10,7 +10,7 @@ services:
       DB_NAME: postgres
       DB_USER: postgres
       DB_PASSWORD: iogt
-      DB_HOST: db
+      DB_HOST: database
       DB_PORT: '5432'
       DJANGO_SETTINGS_MODULE: iogt.settings.docker_compose_dev
       COMMIT_HASH: asdfghjkl
@@ -22,6 +22,14 @@ services:
       VAPID_PUBLIC_KEY: ''
       VAPID_PRIVATE_KEY: ''
       VAPID_ADMIN_EMAIL: ''
+      COMMENTS_COMMUNITY_MODERATION: 'enable'
+      COMMENT_MODERATION_CLASS: 'comments.clients.AlwaysApproveModerator'
+      BLACKLISTED_WORDS: ''
+      SUPERSET_BASE_URL: ''
+      SUPERSET_DATABASE_NAME: ''
+      SUPERSET_USERNAME: ''
+      SUPERSET_PASSWORD: ''
+      PUSH_NOTIFICATION: 'enable'
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./:/app/
@@ -29,7 +37,7 @@ services:
       - "8000:8000"
     depends_on:
       - elasticsearch
-      - db
+      - database
       - redis
 
   elasticsearch:
@@ -41,13 +49,13 @@ services:
     ports:
       - "9200:9200"
 
-  db:
+  database:
     image: postgres:alpine
     restart: unless-stopped
     environment:
       POSTGRES_PASSWORD: iogt
     volumes:
-      - /var/lib/postgresql/data
+      - pg-data01:/var/lib/postgresql/data
       - ./initdb.d:/docker-entrypoint-initdb.d
     ports:
       - 5432:5432
@@ -59,3 +67,4 @@ services:
 
 volumes:
   es-data01:
+  pg-data01:

@@ -3,7 +3,7 @@ const registerSW = async () => {
         const registration = await navigator.serviceWorker.register(serviceWorkerURL, {scope: '/'});
         const isPushNotificationRegistered = getItem('isPushNotificationRegistered', false);
         if (!isPushNotificationRegistered) {
-            if (isAuthenticated) {
+            if (isAuthenticated && pushNotification) {
                 registerPushNotification(registration);
             }
         }

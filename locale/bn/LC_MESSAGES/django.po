@@ -17,83 +17,83 @@ msgid "quizzes"
 msgstr "কুইজ"
 
 msgid "Log in to participate"
-msgstr "অংশ নেয়ার জন্য লগ ইন করুন "
+msgstr "অংশ নেয়ার জন্য লগ ইন করুন"
 
 msgid "Log in / Create account"
-msgstr "লগ ইন করুন/ একাউন্ট তৈরি করুন "
+msgstr "লগ ইন করুন/ একাউন্ট তৈরি করুন"
 
 msgid "© The Internet of Good Things"
 msgstr "© The Internet of Good Things"
 
 msgid "Profile"
-msgstr "প্রোফাইল "
+msgstr "প্রোফাইল"
 
 msgid "Chat"
-msgstr "কথোপকথন "
+msgstr "কথোপকথন"
 
 msgid "More"
-msgstr "আরও "
+msgstr "আরও"
 
 msgid "Log in"
 msgstr "লগ ইন"
 
 msgid "Back"
-msgstr "ফিরে যান "
+msgstr "ফিরে যান"
 
 msgid "BACK"
-msgstr "ফিরে যান "
+msgstr "ফিরে যান"
 
 msgid "Previous"
 msgstr "পূর্ববর্তী"
 
 msgid "Next"
-msgstr "পরবর্তী "
+msgstr "পরবর্তী"
 
 msgid "Comments"
-msgstr "মন্তব্য "
+msgstr "মন্তব্য"
 
 msgid "Please log in or create your account"
-msgstr " অনুগ্রহ করে লগ ইন করুন অথবা একাউন্ট তৈরি করুন"
+msgstr "অনুগ্রহ করে লগ ইন করুন অথবা একাউন্ট তৈরি করুন"
 
 msgid "Report"
-msgstr "রিপোর্ট করুন "
+msgstr "রিপোর্ট করুন"
 
 msgid "Related Articles"
 msgstr "এ সম্পর্কিত আর্টিকেল"
 
 msgid "This comment has been reported."
-msgstr "এই মন্তব্যটি নিয়ে রিপোর্ট করা হয়েছে "
+msgstr "এই মন্তব্যটি নিয়ে রিপোর্ট করা হয়েছে"
 
 msgid ""
 "It will be reviewed by the team and may be removed if it breaks our Platform"
 " Rules"
 msgstr ""
 "এটি নিয়ে যথাযথ টিম পরীক্ষা করে দেখবে এবং প্ল্যাটফর্মের নিয়ম ভঙ্গ করলে সরিয়ে "
-"ফেলা হতে পারে। "
+"ফেলা হতে পারে।"
 
 msgid "articles"
 msgstr "আর্টিকেল"
 
 msgid "Search the site..."
-msgstr "সাইটটি খুজে দেখুন "
+msgstr "সাইটটি খুজে দেখুন"
 
 msgid "Search results for:"
-msgstr "অনুসন্ধানের ফলাফল "
+msgstr "অনুসন্ধানের ফলাফল"
 
 msgid "No search results were found for"
-msgstr "অনুসন্ধানে কোন কিছু পাওয়া যায়নি "
+msgstr "অনুসন্ধানে কোন কিছু পাওয়া যায়নি"
 
 msgid "Username"
-msgstr "ইউজার নেম "
+msgstr "ইউজার নেম"
 
 msgid "Create your account"
-msgstr "আপনার একাউন্ট তৈরি করুন "
+msgstr "আপনার একাউন্ট তৈরি করুন"
 
 msgid "Forgot PIN"
-msgstr "পিন ভুলে গিয়েছি "
+msgstr "পিন ভুলে গিয়েছি"
 
 msgid "Cancel"
-msgstr "বাতিল করুন "
+msgstr "বাতিল করুন"
 
 msgid "Hey, %(username)s"
 msgstr "হ্যালো, %(username)s"
@@ -102,84 +102,84 @@ msgid "Change Digital Pin"
 msgstr "পিন নম্বর পরিবর্তন করুন"
 
 msgid "Personal Details"
-msgstr "ব্যক্তিগত তথ্যসমূহ "
+msgstr "ব্যক্তিগত তথ্যসমূহ"
 
 msgid "Save changes"
-msgstr "পরিবর্তনগুলো সংরক্ষণ করুন "
+msgstr "পরিবর্তনগুলো সংরক্ষণ করুন"
 
 msgid "Reset PIN"
-msgstr "পিন পুনরায় সেট করুন "
+msgstr "পিন পুনরায় সেট করুন"
 
 msgid "Your PIN has been changed successfully."
-msgstr "আপনার পিন নম্বর সফলভাবে পরিবর্তিত হয়েছে "
+msgstr "আপনার পিন নম্বর সফলভাবে পরিবর্তিত হয়েছে"
 
 msgid "I accept the Terms and Conditions."
-msgstr "যথাযথ নিয়ম ও শর্তগুলো গ্রহন করছি "
+msgstr "যথাযথ নিয়ম ও শর্তগুলো গ্রহন করছি"
 
 msgid "You have read %(read)s out of %(total)s"
-msgstr "আপনি %(read)s   এর মাঝে মোট %(total)s  টি পড়েছেন "
+msgstr "আপনি %(read)s   এর মাঝে মোট %(total)s  টি পড়েছেন"
 
 msgid "%(counter)s of %(total)s questions"
-msgstr "%(total)s  টি প্রশ্নের %(counter)s শতাংশ "
+msgstr "%(total)s  টি প্রশ্নের %(counter)s শতাংশ"
 
 msgid "Select one"
-msgstr "একটি বেছে নিন "
+msgstr "একটি বেছে নিন"
 
 msgid "Optional"
-msgstr "ঐচ্ছিক "
+msgstr "ঐচ্ছিক"
 
 msgid "No limit"
-msgstr "সীমা হীন "
+msgstr "সীমা হীন"
 
 msgid "Go to homepage"
-msgstr "হোম পেজে ফিরে যান "
+msgstr "হোম পেজে ফিরে যান"
 
 msgid "You have already completed this survey."
-msgstr "আপনার ইতিমধ্যে জরিপটি সম্পন্ন করেছেন "
+msgstr "আপনার ইতিমধ্যে জরিপটি সম্পন্ন করেছেন"
 
 msgid "Check all that apply"
-msgstr "প্রযোজ্য হলে সব গুলো চেক করুন "
+msgstr "প্রযোজ্য হলে সব গুলো চেক করুন"
 
 msgid "Your results!"
-msgstr "আপনার ফলাফল "
+msgstr "আপনার ফলাফল"
 
 msgid "Replay Quiz"
-msgstr "পুনরায় কুইজে অংশ নিন "
+msgstr "পুনরায় কুইজে অংশ নিন"
 
 msgid "Incorrect"
-msgstr " ভুল "
+msgstr "ভুল"
 
 msgid "Correct"
 msgstr "সঠিক"
 
 msgid "Your answer"
-msgstr " আপনার উত্তর "
+msgstr "আপনার উত্তর"
 
 msgid "Leave comment"
-msgstr "মন্তব্য লিখুন "
+msgstr "মন্তব্য লিখুন"
 
 msgid "Reply"
 msgstr "উত্তর দিন"
 
 msgid "Page not found"
-msgstr "পেজ খুঁজে পাওয়া যায়নি "
+msgstr "পেজ খুঁজে পাওয়া যায়নি"
 
 msgid "Sorry, this page could not be found."
 msgstr "দুঃখিত, পেজটি খুঁজে পাওয়া যায়নি"
 
 msgid "Internal server error"
-msgstr "অভ্যন্তরীণ সার্ভার সমস্যা "
+msgstr "অভ্যন্তরীণ সার্ভার সমস্যা"
 
 msgid "1 result"
 msgid_plural "%(counter)s results"
-msgstr[0] "1 ফলাফল "
-msgstr[1] "%(counter)s ফলাফল "
+msgstr[0] "1 ফলাফল"
+msgstr[1] "%(counter)s ফলাফল"
 
 msgid "poll"
-msgstr "জরিপ "
+msgstr "জরিপ"
 
 msgid "survey"
-msgstr "জরিপ "
+msgstr "জরিপ"
 
 msgid "quiz"
 msgstr "কুইজ"
@@ -191,28 +191,28 @@ msgid "Send"
 msgstr "প্রেরণ"
 
 msgid "Remove this comment?"
-msgstr "এই মন্তব্য কি সরিয়ে ফেলবো? "
+msgstr "এই মন্তব্য কি সরিয়ে ফেলবো?"
 
 msgid "Remove"
 msgstr "সরিয়ে ফেলুন"
 
 msgid "This comment has been removed."
-msgstr "মন্তব্যটি সরিয়ে ফেলা হয়েছে "
+msgstr "মন্তব্যটি সরিয়ে ফেলা হয়েছে"
 
 msgid "moderator"
-msgstr "মডারেটর "
+msgstr "মডারেটর"
 
 msgid "sections"
-msgstr "সেকশন সমূহ "
+msgstr "সেকশন সমূহ"
 
 msgid "Check if applies"
-msgstr "এটা প্রযোজ্য হলে বলুন "
+msgstr "এটা প্রযোজ্য হলে বলুন"
 
 msgid "New comments have been disabled for this page."
-msgstr "নতুন মন্তব্যগুলো এই পেজে অকার্যকর করা হয়েছে "
+msgstr "নতুন মন্তব্যগুলো এই পেজে অকার্যকর করা হয়েছে"
 
 msgid "Correct answer"
-msgstr "সঠিক উত্তর "
+msgstr "সঠিক উত্তর"
 
 msgid "Download"
 msgstr "ডাউনলোড"
@@ -223,13 +223,13 @@ msgid ""
 msgstr ""
 "আপনি পেজটি   <b>Internet of Good Things</b> ছেড়ে এক্সটারনাল সাইটে প্রবেশ "
 "করতে যাচ্ছেন এবং আপনার ইন্টারনেট সেবা প্রতিষ্ঠান থেকে ডাটা চার্জ প্রযোজ্য "
-"হবে "
+"হবে"
 
 msgid "Continue to external site"
-msgstr "বাহ্যিক সাইটে ঢুকছি "
+msgstr "বাহ্যিক সাইটে ঢুকছি"
 
 msgid "4-digit PIN"
-msgstr "চার সংখ্যার পিন "
+msgstr "চার সংখ্যার পিন"
 
 msgid "Old 4-digit PIN"
 msgstr "পুরনো চার সংখ্যার পিন"
@@ -241,19 +241,19 @@ msgid "Confirm new 4-digit PIN"
 msgstr "চার সংখ্যার পিন নম্বর নিশ্চিত করুন"
 
 msgid "Log out"
-msgstr "লগ আউট "
+msgstr "লগ আউট"
 
 msgid "section"
-msgstr "সেকশন "
+msgstr "সেকশন"
 
 msgid "article"
-msgstr "আর্টিকেল "
+msgstr "আর্টিকেল"
 
 msgid "Remember me"
-msgstr "আমাকে মনে রাখুন "
+msgstr "আমাকে মনে রাখুন"
 
 msgid "You have signed out."
-msgstr "আপনি সাইন আউট করেছেন "
+msgstr "আপনি সাইন আউট করেছেন"
 
 msgid ""
 "Enter a valid username. This value may contain only letters, numbers, and "
@@ -263,64 +263,64 @@ msgstr ""
 "characters থাকতে পারে। "
 
 msgid "You must type the same password each time."
-msgstr "প্রতিবার আপনাকে অবশ্যই একই পাসওয়ার্ড টাইপ করতে হবে "
+msgstr "প্রতিবার আপনাকে অবশ্যই একই পাসওয়ার্ড টাইপ করতে হবে"
 
 msgid "This password is too short. It must contain at least 4 characters."
 msgstr ""
-"এই পাসওয়ার্ডটি  অতিরিক্ত ছোট। এটা কমপক্ষে চার অক্ষর বা বর্ণের হতে হবে। "
+"এই পাসওয়ার্ডটি  অতিরিক্ত ছোট। এটা কমপক্ষে চার অক্ষর বা বর্ণের হতে হবে।"
 
 msgid "Please type your current password."
-msgstr "অনুগ্রহপূর্বক আপনার বর্তমান পাসওয়ার্ডটি টাইপ করুন  "
+msgstr "অনুগ্রহপূর্বক আপনার বর্তমান পাসওয়ার্ডটি টাইপ করুন"
 
 msgid "Password successfully changed."
 msgstr "পাসওয়ার্ড সফলভাবে পরিবর্তিত হয়েছে"
 
 msgid "Enter a valid date/time."
-msgstr "সঠিক তারিখ/সময় প্রবেশ করান "
+msgstr "সঠিক তারিখ/সময় প্রবেশ করান"
 
 msgid "Enter a valid date."
-msgstr "সঠিক তারিখ প্রবেশ করান "
+msgstr "সঠিক তারিখ প্রবেশ করান"
 
 msgid "Enter a valid URL."
-msgstr "সঠিক ওয়েবলিংক প্রবেশ করান  "
+msgstr "সঠিক ওয়েবলিংক প্রবেশ করান"
 
 msgid "Enter a valid email address."
-msgstr "সঠিক ইমেইল ঠিকানা প্রবেশ করান  "
+msgstr "সঠিক ইমেইল ঠিকানা প্রবেশ করান"
 
 msgid "Enter a valid integer."
-msgstr "সঠিক সংখ্যা প্রবেশ করান "
+msgstr "সঠিক সংখ্যা প্রবেশ করান"
 
 msgid "Ensure this value is greater than or equal to %(limit_value)s."
-msgstr "নিশ্চিত করুন এটি %(limit_value)s. এর চেয়ে বড় অথবা সমান "
+msgstr "নিশ্চিত করুন এটি %(limit_value)s. এর চেয়ে বড় অথবা সমান"
 
 msgid "Your comment"
-msgstr "আপনার মন্তব্য "
+msgstr "আপনার মন্তব্য"
 
 msgid "Are you sure you want to log out?"
 msgstr "আপনি কি নিশ্চিত লগ আউট করতে চান?"
 
 msgid "Your browser does not support video playback."
-msgstr "আপনার ব্রাউজার এই ভিডিও চালানোর জন্য উপযোগী নয় "
+msgstr "আপনার ব্রাউজার এই ভিডিও চালানোর জন্য উপযোগী নয়"
 
 msgid "Your browser does not support audio playback."
-msgstr "আপনার ব্রাউজার এই অডিও চালানোর জন্য উপযোগী নয় "
+msgstr "আপনার ব্রাউজার এই অডিও চালানোর জন্য উপযোগী নয়"
 
 msgid "Don't display my username next to my comment"
-msgstr "আমার মন্তব্যের ঠিক পাশেই আমার ইউজার নেম দেখাবেন না "
+msgstr "আমার মন্তব্যের ঠিক পাশেই আমার ইউজার নেম দেখাবেন না"
 
 msgid "Anonymous"
 msgstr "অজানা"
 
 msgid "Report this comment?"
-msgstr "এই মন্তব্য কি রিপোর্টে বাতিল করবো?  "
+msgstr "এই মন্তব্য কি রিপোর্টে বাতিল করবো?"
 
 msgid "Display name"
-msgstr "ডিসপ্লে তে দেখা যাওয়া নাম "
+msgstr "ডিসপ্লে তে দেখা যাওয়া নাম"
 
 msgid "Reported by %(comment_report_count)s user"
 msgid_plural "Reported by %(comment_report_count)s users"
-msgstr[0] "%(comment_report_count)s  ইউজার কর্তৃক বাতিল করা হয়েছে "
-msgstr[1] "%(comment_report_count)s সংখ্যক ব্যবহারকারী কর্তৃক রিপোর্ট  কৃত "
+msgstr[0] "%(comment_report_count)s  ইউজার কর্তৃক বাতিল করা হয়েছে"
+msgstr[1] "%(comment_report_count)s সংখ্যক ব্যবহারকারী কর্তৃক রিপোর্ট  কৃত"
 
 msgid ""
 "Sorry, %(page_title)s is not available in %(language)s. If you want to keep "
@@ -330,16 +330,16 @@ msgstr ""
 "ব্রাউজ   %(language)s করতে চাইলে নিচে ক্লিক করে হোমপেজে ফিরে যান "
 
 msgid "Username not available."
-msgstr "এই ইউজার নেম পাওয়া যায়নি "
+msgstr "এই ইউজার নেম পাওয়া যায়নি"
 
 msgid "Display name not available."
-msgstr "ডিসপ্লে তে এই নাম পাওয়া যায়নি "
+msgstr "ডিসপ্লে তে এই নাম পাওয়া যায়নি"
 
 msgid "You have already completed this quiz."
 msgstr "আপনি ইতিমধ্যে কুইজের উত্তর সম্পন্ন করেছেন"
 
 msgid "You have already completed this poll."
-msgstr "আপনি ইতিমধ্যে কুইজের উত্তর সম্পন্ন করেছেন "
+msgstr "আপনি ইতিমধ্যে কুইজের উত্তর সম্পন্ন করেছেন"
 
 msgid ""
 "If you cannot view the above video, you can instead %(start_link)sdownload "
@@ -359,4 +359,22 @@ msgid "Please complete the questions marked as required to continue"
 msgstr ""
 
 msgid "Need internet access to visit external site."
+msgstr ""
+
+msgid "Comment Moderation"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Apply"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Unsure"
+msgstr ""
+
+msgid "No comment found."
 msgstr ""

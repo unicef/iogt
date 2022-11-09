@@ -61,7 +61,6 @@
 
 .featured-content a {
   text-decoration: none;
-  font-family: Poppins;
   font-style: normal;
   font-weight: bold;
   font-size: 10px;
@@ -93,7 +92,6 @@
   display: flex;
   flex-direction: column;
   text-decoration: none;
-  font-family: Poppins;
   font-style: normal;
   font-weight: bold;
   font-size: 10px;
@@ -134,7 +132,6 @@
           justify-content: space-between;
   padding: 8px 12px;
   border-bottom: 1px solid #EFEFEF;
-  font-family: Poppins;
   font-style: normal;
   font-weight: bold;
   font-size: 10px;
@@ -200,7 +197,6 @@
 .article__content {
   padding: 0px 12px;
   padding: 0 !important;
-  font-family: Poppins;
 }
 
 .article__content img,
@@ -327,7 +323,6 @@
   height: 32px;
   border-radius: 18px;
   margin-bottom: 12px;
-  font-family: Poppins;
   font-style: normal;
   font-weight: 600;
 }
@@ -372,7 +367,6 @@
 }
 
 .comments {
-  font-family: Poppins;
   font-style: normal;
 }
 
@@ -538,7 +532,6 @@
   margin-top: 1px;
   padding: 12px;
   background: #F7F7F9;
-  font-family: Poppins;
   font-style: normal;
 }
 
@@ -744,8 +737,6 @@ body.rtl {
 }
 
 .article-card {
-  /* margin: 0px 12px; */
-  font-family: Poppins;
   font-style: normal;
 }
 
@@ -914,7 +905,6 @@ body.rtl {
 }
 
 .questionnaire-components p {
-  font-family: Poppins;
   font-style: normal;
   padding-right: 20px;
   margin: 0;
@@ -1018,7 +1008,6 @@ body.rtl {
     height: 26px;
     background: #0094F4;
     border-radius: 8px;
-    font-family: Poppins;
     font-style: normal;
     font-weight: 600;
     font-size: 16px;
@@ -1192,7 +1181,7 @@ body.rtl {
 }
 
 .content-container {
-  margin: 0 3.7%;
+  margin: 0 32px;
 }
 
 .content .footer-main {
@@ -1214,7 +1203,6 @@ body.rtl {
 .search__form input {
   border: none;
   background: #F7F7F9;
-  font-family: 'Poppins';
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
@@ -1279,7 +1267,6 @@ body.rtl {
   background: #FDD256;
   border: none;
   border-radius: 8px;
-  font-family: Poppins;
   font-style: normal;
   font-weight: 600;
   font-size: 12px;
@@ -1341,7 +1328,6 @@ body.rtl {
   min-width: 80px;
   /* max-width: 80px; */
   text-decoration: none;
-  font-family: Poppins;
   font-style: normal;
   font-weight: 600;
   font-size: 12px;
@@ -1396,7 +1382,6 @@ body.rtl {
 }
 
 .language_drop .drop a {
-  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 10px;
@@ -1789,13 +1774,6 @@ body.rtl {
 @media screen and (max-width: 767px) {
   .btn-primary {
     font-size: 14px;
-  }
-}
-
-@media screen and (max-width: 359px) {
-  .btn-primary {
-    font-weight: normal;
-    font-size: 12px;
   }
 }
 

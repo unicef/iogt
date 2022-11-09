@@ -1,25 +1,51 @@
 from urllib.parse import urlparse, urlunparse, urlencode, parse_qsl
 
-from django.db.models import Q
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
+from django.db.models import Q, Count
 from django.contrib import messages
 from django.shortcuts import redirect, get_object_or_404
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_POST
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 from django_comments.views.comments import post_comment
 from django_comments_xtd.models import XtdComment
 from django.utils.translation import ugettext as _
 
-from comments.forms import AdminCommentForm
-from comments.models import CannedResponse
+from comments.forms import AdminCommentForm, CommentFilterForm
+from comments.models import CannedResponse, CommentModeration
 
 
 def update(request, comment_pk, action):
     get_comment_with_children_filter = Q(parent_id=comment_pk) | Q(pk=comment_pk)
     comments = XtdComment.objects.filter(get_comment_with_children_filter)
+    comment_moderations = []
     verb = ''
-    if action == 'unpublish':
+    if action == 'approve':
+        for comment in comments:
+            comment.is_public = True
+            comment.flags.all().delete()
+            comment_moderation = comment.comment_moderation
+            comment_moderation.state = CommentModeration.CommentModerationState.APPROVED
+            comment_moderations.append(comment_moderation)
+        verb = 'approved'
+    elif action == 'reject':
+        for comment in comments:
+            comment.is_public = False
+            comment_moderation = comment.comment_moderation
+            comment_moderation.state = CommentModeration.CommentModerationState.REJECTED
+            comment_moderations.append(comment_moderation)
+        verb = 'rejected'
+    elif action == 'unsure':
+        for comment in comments:
+            comment_moderation = comment.comment_moderation
+            comment_moderation.state = CommentModeration.CommentModerationState.UNSURE
+            comment_moderations.append(comment_moderation)
+        verb = 'unsure'
+    elif action == 'unpublish':
         for comment in comments:
             comment.is_public = False
         verb = 'unpublished'
@@ -40,6 +66,7 @@ def update(request, comment_pk, action):
         comment.flags.all().delete()
         verb = 'cleared'
     XtdComment.objects.bulk_update(comments, ['is_public', 'is_removed'])
+    CommentModeration.objects.bulk_update(comment_moderations, ['state'])
 
     messages.success(request, _(f'The comment has been {verb} successfully!'))
 
@@ -94,3 +121,53 @@ class ProcessCannedResponseView(View):
 
         referer_url = urlunparse(parsed_url)
         return redirect(to=referer_url)
+
+
+class CommentsCommunityModerationView(ListView):
+    model = XtdComment
+    template_name = 'comments/community_moderation.html'
+    context_object_name = 'comments'
+    paginate_by = 10
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        if not settings.COMMENTS_COMMUNITY_MODERATION or not request.user.has_perm('django_comments_xtd.can_moderate'):
+            raise PermissionDenied(
+                "You do not have permission."
+            )
+        return super().dispatch(request, *args, **kwargs)
+
+    def _get_form(self):
+        return CommentFilterForm(self.request.GET or {'state': CommentModeration.CommentModerationState.UNMODERATED})
+
+    def get_queryset(self):
+        queryset = super().get_queryset().filter(comment_moderation__isnull=False).order_by('-submit_date')
+        form = self._get_form()
+        if form.is_valid():
+            data = form.cleaned_data
+            state = data['state']
+            from_date = data['from_date']
+            to_date = data['to_date']
+
+            if state != 'ALL':
+                queryset = queryset.filter(comment_moderation__state=state)
+
+            if to_date:
+                if from_date:
+                    queryset = queryset.filter(submit_date__date__range=[from_date, to_date])
+                else:
+                    queryset = queryset.filter(submit_date__date__lte=to_date)
+            elif from_date:
+                queryset = queryset.filter(submit_date__date__gte=from_date)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        form = self._get_form()
+        if form.is_valid():
+            data = form.cleaned_data
+            context.update({
+                'form': form,
+                'params': urlencode(data)
+            })
+        return context
