@@ -108,6 +108,8 @@ class BannerIndexPageFactory(PageFactory):
 
 class BannerFactory(PageFactory):
 
+    title = factory.Sequence(lambda n: f'banner{n}')
+    banner_image = factory.SubFactory(ImageFactory)
     class Meta:
         model = BannerPage
 

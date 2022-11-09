@@ -8,6 +8,7 @@ class BasePage(object):
     body_text_locator = (By.TAG_NAME, 'body')
     content_text_locator = (By.CLASS_NAME, 'content')
     message_text_locator = (By.CLASS_NAME, 'messages')
+    search_button_locator = (By.CLASS_NAME, 'xs-home-header__search')
 
     def __init__(self, driver: WebDriver) -> None:
         self.driver = driver        
@@ -27,6 +28,9 @@ class BasePage(object):
     def safe_click(self, button):
         self.driver.execute_script("arguments[0].click();", button)
 
+    def small_search_button_select(self):
+        return self.safe_click(self.driver.find_element(*self.search_button_locator))
+
     @property
     def footer(self) -> 'FooterElement':
         return FooterElement(self.driver)
@@ -34,6 +38,26 @@ class BasePage(object):
     @property
     def navbar(self) -> 'NavbarElement':
         return NavbarElement(self.driver)
+
+class HomePage(BasePage):
+
+    banner_area_locator = (By.CSS_SELECTOR, "section[class='banner-holder']")
+    banner_image_locator = (By.CSS_SELECTOR, "img[alt='An image']")
+
+    def __init__(self, driver: WebDriver) -> None:
+        self.driver = driver
+
+    def has_banner(self):
+        banner = self.driver.find_element(*self.banner_area_locator)
+        return (
+            banner.size['width'] > 0
+            and banner.size['height'] > 0
+            and banner.is_displayed()
+        )
+    
+    def click_banner(self):
+        banner_image = self.driver.find_element(*self.banner_image_locator)
+        banner_image.click()
 
 
 class LoginPage(BasePage):    
@@ -75,6 +99,20 @@ class LogoutPage(BasePage):
     def logout_user(self):
         self.logout_submit.click()
 
+class SearchPage(BasePage):
+      
+    search_area_locator = (By.CLASS_NAME, "profile-form__input")
+    search_button_locator = (By.CSS_SELECTOR, "button[type='submit']")
+
+    def __init__(self, driver: WebDriver) -> None:
+        self.driver = driver      
+        self.search_area = self.driver.find_element(*self.search_area_locator)
+        self.search_submit = driver.find_element(*self.search_button_locator)
+
+    def search(self, searchtext):
+       
+        self.search_area.send_keys(searchtext)
+        self.search_submit.click()
 
 class ArticlePage(BasePage):
 
