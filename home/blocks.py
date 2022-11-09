@@ -83,6 +83,7 @@ class EmbeddedQuestionnaireChooserBlock(blocks.PageChooserBlock):
 
 
 class EmbeddedQuestionnaireBlock(blocks.StructBlock):
+    title = blocks.CharBlock(required=False)
     direct_display = blocks.BooleanBlock(required=False)
 
 
@@ -92,6 +93,9 @@ class EmbeddedPollBlock(EmbeddedQuestionnaireBlock):
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context)
         poll = value.get('poll')
+        if value['title']:
+            poll.specific.title = value['title']
+
         if poll and poll.live:
             context.update({
                 'direct_display': value['direct_display'],
@@ -109,6 +113,9 @@ class EmbeddedSurveyBlock(EmbeddedQuestionnaireBlock):
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context)
         survey = value.get('survey')
+        if value['title']:
+            survey.specific.title = value['title']
+
         if survey and survey.live:
             context.update({
                 'direct_display': value['direct_display'],
@@ -126,6 +133,9 @@ class EmbeddedQuizBlock(EmbeddedQuestionnaireBlock):
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context)
         quiz = value.get('quiz')
+        if value['title']:
+            quiz.specific.title = value['title']
+
         if quiz and quiz.live:
             context.update({
                 'direct_display': value['direct_display'],
@@ -156,12 +166,16 @@ class PageButtonBlock(blocks.StructBlock):
 
 
 class ArticleBlock(blocks.StructBlock):
+    title = blocks.CharBlock(required=False)
     display_section_title = blocks.BooleanBlock(required=False)
     article = PageChooserBlock(target_model='home.Article')
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context)
         article = value.get('article')
+        if value['title']:
+            article.specific.title = value['title']
+
         if article and article.live:
             context.update({
                 'display_section_title': value['display_section_title'],
