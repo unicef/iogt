@@ -6,7 +6,7 @@
 
 <div class="questionnaire-container container"
      style="color:{{ font_color }}; background:{{ background_color }};">
-    <h1 class="title {{ questionnaire.get_type }}-page__title">{{ questionnaire.title }}</h1>
+    <h1 class="title {{ questionnaire.get_type }}-page__title">{{ title }}</h1>
     {% if user.is_authenticated or request.is_preview or questionnaire.allow_anonymous_submissions %}
         {% if form %}
             {{ questionnaire.description }}

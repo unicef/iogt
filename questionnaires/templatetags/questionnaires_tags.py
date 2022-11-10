@@ -78,7 +78,7 @@ def get_action_url(page, self, fields_step, request, form):
 
 
 @register.inclusion_tag('questionnaires/tags/questionnaire_template_wrapper.html', takes_context=True)
-def render_questionnaire_form(context, page, background_color=None, font_color=None):
+def render_questionnaire_form(context, page, title, background_color=None, font_color=None):
     theme_settings = globals_.theme_settings
 
     font_color = font_color or theme_settings.section_listing_questionnaire_font_color
@@ -109,6 +109,7 @@ def render_questionnaire_form(context, page, background_color=None, font_color=N
         'font_color': font_color,
         'background_color': background_color,
         'questionnaire': page,
+        'title': title,
     })
 
     multiple_submission_filter = (

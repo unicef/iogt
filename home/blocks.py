@@ -93,13 +93,11 @@ class EmbeddedPollBlock(EmbeddedQuestionnaireBlock):
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context)
         poll = value.get('poll')
-        if value['title']:
-            poll.specific.title = value['title']
-
         if poll and poll.live:
             context.update({
                 'direct_display': value['direct_display'],
                 'questionnaire': poll.specific,
+                'title': value['title'] if value['title'] else poll.specific.title,
             })
         return context
 
@@ -113,13 +111,11 @@ class EmbeddedSurveyBlock(EmbeddedQuestionnaireBlock):
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context)
         survey = value.get('survey')
-        if value['title']:
-            survey.specific.title = value['title']
-
         if survey and survey.live:
             context.update({
                 'direct_display': value['direct_display'],
                 'questionnaire': survey.specific,
+                'title': value['title'] if value['title'] else survey.specific.title
             })
         return context
 
@@ -133,13 +129,11 @@ class EmbeddedQuizBlock(EmbeddedQuestionnaireBlock):
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context)
         quiz = value.get('quiz')
-        if value['title']:
-            quiz.specific.title = value['title']
-
         if quiz and quiz.live:
             context.update({
                 'direct_display': value['direct_display'],
                 'questionnaire': quiz.specific,
+                'title': value['title'] if value['title'] else quiz.specific.title,
             })
         return context
 
@@ -173,13 +167,11 @@ class ArticleBlock(blocks.StructBlock):
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context)
         article = value.get('article')
-        if value['title']:
-            article.specific.title = value['title']
-
         if article and article.live:
             context.update({
                 'display_section_title': value['display_section_title'],
                 'article': article.specific,
+                'title': value['title'] if value['title'] else article.specific.title
             })
         return context
 
