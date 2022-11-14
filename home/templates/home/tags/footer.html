@@ -4,7 +4,7 @@
 <footer class="bottom-level">
     <nav>
         {% for footer in footers %}
-            {% primary_button title=footer.get_title href=footer.url icon=footer.get_icon %}
+            {% primary_button title=footer.title href=footer.url icon=footer.get_icon %}
         {% endfor %}
         {% if request.user.is_anonymous %}
             {% url 'account_login' as login_url %}
