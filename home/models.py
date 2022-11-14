@@ -543,8 +543,14 @@ class FooterPage(Article, TitleIconMixin):
 class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
     parent_page_types = ['home.FooterIndexPage', 'home.Section']
     subpage_types = []
-    Override_the_Page_title_from_the_destination_Page = models.BooleanField(default=False)
-
+    override_the_page_title_from_the_destination_page = models.CharField(max_length=255, blank=True, null=True)
+    override_the_lead_image_from_the_destination_page = models.ForeignKey(
+        'wagtailimages.Image',
+        on_delete=models.PROTECT,
+        related_name='+',
+        blank=True,
+        null=True
+    )
     icon = models.ForeignKey(
         Svg,
         related_name='+',
@@ -568,14 +574,11 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
         ImageChooserPanel('image_icon'),
         MultiFieldPanel([
             PageChooserPanel('page'),
-            FieldPanel('Override_the_Page_title_from_the_destination_Page'),
+            FieldPanel('override_the_page_title_from_the_destination_page'),
+            ImageChooserPanel('override_the_lead_image_from_the_destination_page'),
         ], heading=_('Page')),
         FieldPanel('external_link'),
     ]
-
-    def get_page(self):
-        return self.page.specific if self.page and self.page.live and self.Override_the_Page_title_from_the_destination_Page else self
-
 
     def get_icon(self):
         icon = super().get_icon()

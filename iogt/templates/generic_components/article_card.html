@@ -11,17 +11,19 @@
                         {{ article.top_level_section.title|upper }}
                     </p>
                 {% endif %}
-                <p class="article-title">{{ article.title }}</p>
+                {% block title %}<p class="article-title">{{ article.title }}</p> {% endblock %}
                 {% if article.index_page_description %}
                     <p class="sm-paragraph">{{ article.index_page_description }}</p>
                 {% endif %}
             </div>
             <div class="img-holder {% render_is_complete article %}">
-                {% if is_first_content %}
-                    {% image article.lead_image width-360 class='' %}
-                {% else %}
-                    {% image article.lead_image width-180 class='' %}
-                {% endif %}
+                {% block lead_image %}
+                    {% if is_first_content %}
+                        {% image article.lead_image width-360 class='' %}
+                    {% else %}
+                        {% image article.lead_image width-180 class='' %}
+                    {% endif %}
+                {% endblock %}
             </div>
         </a>
     </div>

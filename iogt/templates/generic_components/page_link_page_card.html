@@ -1,0 +1,11 @@
+{% extends template %}
+{% load wagtailimages_tags %}
+
+{% block title %}<p class="article-title">{{ title }}</p> {% endblock %}
+{% block lead_image %}
+    {% if is_first_content %}
+        {% image lead_image width-360 class='' %}
+    {% else %}
+        {% image lead_image width-180 class='' %}
+    {% endif %}
+{% endblock %}
