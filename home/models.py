@@ -238,7 +238,8 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         context = super().get_context(request)
         featured_content = self.featured_content.all().first()
         context['featured_content'] = featured_content.content.specific if featured_content and featured_content.content.live else None
-        context['children'] = self.get_children().live().specific()
+        children = self.get_children().live().specific()
+        context['children'] = [child for child in children if not isinstance(child, PageLinkPage) or (child.page and child.page.live)]
         context['user_progress'] = self.get_user_progress_dict(request)
 
         return context
@@ -543,13 +544,21 @@ class FooterPage(Article, TitleIconMixin):
 class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
     parent_page_types = ['home.FooterIndexPage', 'home.Section']
     subpage_types = []
-    override_the_page_title_from_the_destination_page = models.CharField(max_length=255, blank=True, null=True)
-    override_the_lead_image_from_the_destination_page = models.ForeignKey(
+    override_title = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        help_text=_(
+            "Override the page title from the destination page")
+    )
+    override_lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
         related_name='+',
         blank=True,
-        null=True
+        null=True,
+        help_text=_(
+            "Override the lead image from the destination page")
     )
     icon = models.ForeignKey(
         Svg,
@@ -566,6 +575,9 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
         null=True
     )
 
+    def get_page(self):
+        return self.page.specific if self.page and self.page.live else self
+
     page = models.ForeignKey(Page, null=True, blank=True, related_name='page_link_pages', on_delete=models.PROTECT)
     external_link = models.URLField(null=True, blank=True)
 
@@ -574,8 +586,8 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
         ImageChooserPanel('image_icon'),
         MultiFieldPanel([
             PageChooserPanel('page'),
-            FieldPanel('override_the_page_title_from_the_destination_page'),
-            ImageChooserPanel('override_the_lead_image_from_the_destination_page'),
+            FieldPanel('override_title'),
+            ImageChooserPanel('override_lead_image'),
         ], heading=_('Page')),
         FieldPanel('external_link'),
     ]

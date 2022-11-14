@@ -84,31 +84,31 @@ def render_page_link_page_card(context, page, background_color=None, font_color=
 
     font_color = font_color or theme_settings.article_card_font_color
     background_color = background_color or theme_settings.article_card_background_color
-    child = page.page.specific
+    linked_page = page.page.specific
 
-    if isinstance(child, Section):
+    if isinstance(linked_page, Section):
         template = 'generic_components/section_card.html'
         context.update({
-            'section': child,
-            'is_first_content': child.is_first_content,
-            'lead_image': page.override_the_lead_image_from_the_destination_page if page.override_the_lead_image_from_the_destination_page else child.lead_image,
+            'section': linked_page,
+            'is_first_content': linked_page.is_first_content,
+            'lead_image': page.override_lead_image if page.override_lead_image else child.lead_image,
         })
-    elif isinstance(child, Article):
+    elif isinstance(linked_page, Article):
         template = 'generic_components/article_card.html'
         context.update({
-            'article': child,
-            'is_first_content': child.is_first_content,
+            'article': linked_page,
+            'is_first_content': linked_page.is_first_content,
             'lead_image': page.override_the_lead_image_from_the_destination_page if page.override_the_lead_image_from_the_destination_page else child.lead_image,
         })
     else:
         template = 'generic_components/questionnaire_card.html'
         context.update({
-            'questionnaire': child,
+            'questionnaire': linked_page,
         })
 
     context.update({
         'template': template,
-        'title': page.override_the_page_title_from_the_destination_page if page.override_the_page_title_from_the_destination_page else child.title,
+        'title': page.override_title if page.override_title else linked_page.title,
         'background_color': background_color,
         'font_color': font_color
     })
