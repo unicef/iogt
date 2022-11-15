@@ -638,7 +638,6 @@ class Poll(QuestionnairePage, AbstractForm):
         for submission in submissions:
             data = submission.get_data()
             answer = data.get(name)
-
             question_stats = results.get(label, {})
             if type(answer) != list:
                 answer = [answer]
