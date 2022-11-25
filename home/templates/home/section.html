@@ -8,7 +8,7 @@
 
 {% block content %}
     <div class="section-img">
-        {% image page.lead_image width-360 class='lead-img' %}
+        {% render_image page.lead_image settings.home.SiteSettings.maximum_width img_class='lead-img' %}
         <div class="image-overlay__text">{{ page.title }}</div>
     </div>
     {% if user_progress %}

@@ -143,3 +143,22 @@ def render_redirect_from_with_help_text(field):
                       f'See "https://docs.wagtail.io/en/stable/editor_manual/managing_redirects.html" for more details.'
 
     return {'field': field, 'red_help_text': True}
+
+
+@register.inclusion_tag('home/tags/image.html', takes_context=True)
+def render_image(context, image, width, img_class=None):
+    context.update({
+        'image': image,
+        'width': width,
+        'class': img_class,
+    })
+
+    return context
+
+
+@register.filter
+def divide(value, arg):
+    try:
+        return int(int(value) / int(arg))
+    except (ValueError, ZeroDivisionError):
+        return None

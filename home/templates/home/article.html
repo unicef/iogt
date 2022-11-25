@@ -8,7 +8,7 @@
 
 {% block content %}
     <article class='article'>
-        {% image page.lead_image width-360 class='article__lead-img-featured' %}
+        {% render_image page.lead_image settings.home.SiteSettings.maximum_width img_class='article__lead-img-featured' %}
         {% if user_progress %}
             {% render_user_progress user_progress False %}
         {% endif %}
