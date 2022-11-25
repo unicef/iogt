@@ -683,12 +683,12 @@ class SiteSettings(BaseSetting):
                                             on_delete=models.SET_NULL)
     opt_in_to_google_web_light = models.BooleanField(default=False)
     WIDTH_CHOICES = (
-        (360, '360px'),
-        (430, '430px'),
-        (800, '800px'),
-        (533, '533px'),
-        (1080, '1080px'),
-        (1600, '1600px'),
+        (360, 'Default - Images resized to maximum width of 360px, a balance for smartphone and featurephone screen sizes (width-360)'),
+        (430, 'Larger - Images resized to maximum width of 430px, designed for most smartphones (width-430)'),
+        (533, 'Larger - Images resized to maximum width of 533px, experimental (width-533)'),
+        (800, 'Larger - Images resized to maximum width of 800px, experimental (width-800)'),
+        (1080, 'Larger - Images resized to maximum width of 1080px, experimental (width-1080)'),
+        (1600, 'Larger - Images resized to maximum width of 1600px, experimental (width-1600)'),
     )
     maximum_width = models.IntegerField(choices=WIDTH_CHOICES, default=360)
 

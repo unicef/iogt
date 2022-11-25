@@ -8,7 +8,7 @@
 
 {% block content %}
     <article class='article'>
-        {% render_image page.lead_images img_class='article__lead-img-featured' %}
+        {% render_image page.lead_image img_class='article__lead-img-featured' %}
         {% if user_progress %}
             {% render_user_progress user_progress False %}
         {% endif %}
