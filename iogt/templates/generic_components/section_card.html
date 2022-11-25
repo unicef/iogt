@@ -6,9 +6,9 @@
         <div class="section-header"><p class="section-title">{{ section.title }}</p></div>
         <div class="img-holder {% render_is_complete section %}">
             {% if is_first_content %}
-                {% render_image section.lead_image settings.home.SiteSettings.maximum_width %}
+                {% render_image section.lead_image %}
             {% else %}
-                {% render_image section.lead_image settings.home.SiteSettings.maximum_width|divide:2 %}
+                {% render_image section.lead_image half_width=True %}
             {% endif %}
         </div>
     </a>

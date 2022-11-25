@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import translate_url, reverse, resolve, Resolver404
 from wagtail.core.models import Locale, Site, Page
 
-from home.models import SectionIndexPage, Section, Article, FooterIndexPage, PageLinkPage, LocaleDetail, HomePage
+from home.models import SectionIndexPage, Section, Article, FooterIndexPage, PageLinkPage, LocaleDetail, HomePage, SiteSettings
 from iogt.settings.base import LANGUAGES
 
 register = template.Library()
@@ -146,19 +146,14 @@ def render_redirect_from_with_help_text(field):
 
 
 @register.inclusion_tag('home/tags/image.html', takes_context=True)
-def render_image(context, image, width, img_class=None):
+def render_image(context, image, half_width=False, img_class=None):
+    width = SiteSettings.get_for_default_site().maximum_width
+    if half_width:
+        width //= 2
+
     context.update({
         'image': image,
         'width': width,
         'class': img_class,
     })
-
     return context
-
-
-@register.filter
-def divide(value, arg):
-    try:
-        return int(int(value) / int(arg))
-    except (ValueError, ZeroDivisionError):
-        return None

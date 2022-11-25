@@ -4,10 +4,10 @@
     {% for banner in banners %}
         {% if banner.banner_link_page %}
             <a href="{% pageurl banner.banner_link_page %}">
-                {% render_image banner.banner_image settings.home.SiteSettings.maximum_width %}
+                {% render_image banner.banner_image %}
             </a>
         {% else %}
-            {% render_image banner.banner_image settings.home.SiteSettings.maximum_width %}
+            {% render_image banner.banner_image %}
         {% endif %}
     {% endfor %}
 </section>

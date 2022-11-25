@@ -18,9 +18,9 @@
             </div>
             <div class="img-holder {% render_is_complete article %}">
                 {% if is_first_content %}
-                    {% render_image article.lead_image settings.home.SiteSettings.maximum_width %}
+                    {% render_image article.lead_image %}
                 {% else %}
-                    {% render_image article.lead_image settings.home.SiteSettings.maximum_width|divide:2 %}
+                    {% render_image article.lead_image half_width=True %}
                 {% endif %}
             </div>
         </a>
