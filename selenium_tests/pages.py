@@ -8,6 +8,7 @@ class BasePage(object):
     body_text_locator = (By.TAG_NAME, 'body')
     content_text_locator = (By.CLASS_NAME, 'content')
     message_text_locator = (By.CLASS_NAME, 'messages')
+    search_button_locator = (By.CLASS_NAME, 'xs-home-header__search')
 
     def __init__(self, driver: WebDriver) -> None:
         self.driver = driver        
@@ -24,6 +25,9 @@ class BasePage(object):
     def get_messages_text(self):
         return self.driver.find_element(*self.message_text_locator).text
 
+    def small_search_button_select(self):
+        return self.driver.find_element(*self.search_button_locator).click()
+
     @property
     def footer(self) -> 'FooterElement':
         return FooterElement(self.driver)
@@ -31,6 +35,34 @@ class BasePage(object):
     @property
     def navbar(self) -> 'NavbarElement':
         return NavbarElement(self.driver)
+
+class CoreTestFunctions():
+    def safe_click(self, button):
+        self.driver.execute_script("arguments[0].click();", button)
+
+    def visible_with_size(self, item):
+        return (
+            item.size['width'] > 0
+            and item.size['height'] > 0
+            and item.is_displayed()
+        )
+
+class HomePage(BasePage, CoreTestFunctions):
+
+    banner_area_locator = (By.CSS_SELECTOR, "section[class='banner-holder']")
+    banner_image_locator = (By.CSS_SELECTOR, "img[alt='An image']")
+
+    def __init__(self, driver: WebDriver) -> None:
+        self.driver = driver
+
+    def has_banner(self):
+        banner = self.driver.find_element(*self.banner_area_locator)
+        print()
+        return self.visible_with_size(banner)            
+    
+    def click_banner(self):
+        banner_image = self.driver.find_element(*self.banner_image_locator)
+        banner_image.click()
 
 
 class LoginPage(BasePage):    
@@ -72,8 +104,22 @@ class LogoutPage(BasePage):
     def logout_user(self):
         self.logout_submit.click()
 
+class SearchPage(BasePage):
+      
+    search_area_locator = (By.CLASS_NAME, "profile-form__input")
+    search_button_locator = (By.CSS_SELECTOR, "button[type='submit']")
 
-class ArticlePage(BasePage):
+    def __init__(self, driver: WebDriver) -> None:
+        self.driver = driver      
+        self.search_area = self.driver.find_element(*self.search_area_locator)
+        self.search_submit = driver.find_element(*self.search_button_locator)
+
+    def search(self, searchtext):
+       
+        self.search_area.send_keys(searchtext)
+        self.search_submit.click()
+
+class ArticlePage(BasePage, CoreTestFunctions):
 
     heading_locator = (By.TAG_NAME, 'h1')
     lead_image_locator = (By.CLASS_NAME, 'article__lead-img-featured')
@@ -93,30 +139,24 @@ class ArticlePage(BasePage):
 
     def has_lead_image(self):
         lead_image = self.driver.find_element(*self.lead_image_locator)
-        return (
-            lead_image.size['width'] > 0
-            and lead_image.size['height'] > 0
-            and lead_image.is_displayed()
-        )
+        return self.visible_with_size(lead_image)
          
     def navigate_next(self):
-        self.driver.find_element(*self.navigate_next_locator).click() 
+
+        self.safe_click(self.driver.find_element(*self.navigate_next_locator))
         return BasePage(self.driver)  
 
     def navigate_previous(self):
-        self.driver.find_element(*self.navigate_previous_locator).click()
+        self.safe_click(self.driver.find_element(*self.navigate_previous_locator))
         return BasePage(self.driver)        
 
 
-class BaseElement():
+class BaseElement(CoreTestFunctions):
     locator = (By.TAG_NAME, 'html')
 
     def __init__(self, driver: WebDriver) -> None:
         self.driver = driver
         self.html = self.driver.find_element(*self.locator)
-
-    def safe_click(self, button):
-        self.driver.execute_script("arguments[0].click();", button)
 
     @property
     def is_displayed(self) -> bool:
@@ -164,7 +204,7 @@ class FooterElement(BaseElement):
             for el in self.html.find_elements(By.CSS_SELECTOR, 'nav a')
         ]
 
-class FooterItemElement():
+class FooterItemElement(CoreTestFunctions):
     def __init__(self, driver, el) -> None:
         self.driver = driver
         self.html = el
@@ -176,11 +216,7 @@ class FooterItemElement():
     @property
     def has_icon(self) -> bool:
         icon = self.html.find_element(By.TAG_NAME, 'img')
-        return (
-            icon.size['width'] > 0
-            and icon.size['height'] > 0
-            and icon.is_displayed()
-        )
+        return self.visible_with_size(icon)
 
     @property
     def background_color(self):
