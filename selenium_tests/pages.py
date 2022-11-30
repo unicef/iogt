@@ -25,11 +25,8 @@ class BasePage(object):
     def get_messages_text(self):
         return self.driver.find_element(*self.message_text_locator).text
 
-    def safe_click(self, button):
-        self.driver.execute_script("arguments[0].click();", button)
-
     def small_search_button_select(self):
-        return self.safe_click(self.driver.find_element(*self.search_button_locator))
+        return self.driver.find_element(*self.search_button_locator).click()
 
     @property
     def footer(self) -> 'FooterElement':
@@ -39,7 +36,18 @@ class BasePage(object):
     def navbar(self) -> 'NavbarElement':
         return NavbarElement(self.driver)
 
-class HomePage(BasePage):
+class CoreTestFunctions():
+    def safe_click(self, button):
+        self.driver.execute_script("arguments[0].click();", button)
+
+    def visible_with_size(self, item):
+        return (
+            item.size['width'] > 0
+            and item.size['height'] > 0
+            and item.is_displayed()
+        )
+
+class HomePage(BasePage, CoreTestFunctions):
 
     banner_area_locator = (By.CSS_SELECTOR, "section[class='banner-holder']")
     banner_image_locator = (By.CSS_SELECTOR, "img[alt='An image']")
@@ -49,11 +57,8 @@ class HomePage(BasePage):
 
     def has_banner(self):
         banner = self.driver.find_element(*self.banner_area_locator)
-        return (
-            banner.size['width'] > 0
-            and banner.size['height'] > 0
-            and banner.is_displayed()
-        )
+        print()
+        return self.visible_with_size(banner)            
     
     def click_banner(self):
         banner_image = self.driver.find_element(*self.banner_image_locator)
@@ -114,7 +119,7 @@ class SearchPage(BasePage):
         self.search_area.send_keys(searchtext)
         self.search_submit.click()
 
-class ArticlePage(BasePage):
+class ArticlePage(BasePage, CoreTestFunctions):
 
     heading_locator = (By.TAG_NAME, 'h1')
     lead_image_locator = (By.CLASS_NAME, 'article__lead-img-featured')
@@ -134,11 +139,7 @@ class ArticlePage(BasePage):
 
     def has_lead_image(self):
         lead_image = self.driver.find_element(*self.lead_image_locator)
-        return (
-            lead_image.size['width'] > 0
-            and lead_image.size['height'] > 0
-            and lead_image.is_displayed()
-        )
+        return self.visible_with_size(lead_image)
          
     def navigate_next(self):
 
@@ -150,15 +151,12 @@ class ArticlePage(BasePage):
         return BasePage(self.driver)        
 
 
-class BaseElement():
+class BaseElement(CoreTestFunctions):
     locator = (By.TAG_NAME, 'html')
 
     def __init__(self, driver: WebDriver) -> None:
         self.driver = driver
         self.html = self.driver.find_element(*self.locator)
-
-    def safe_click(self, button):
-        self.driver.execute_script("arguments[0].click();", button)
 
     @property
     def is_displayed(self) -> bool:
@@ -206,7 +204,7 @@ class FooterElement(BaseElement):
             for el in self.html.find_elements(By.CSS_SELECTOR, 'nav a')
         ]
 
-class FooterItemElement():
+class FooterItemElement(CoreTestFunctions):
     def __init__(self, driver, el) -> None:
         self.driver = driver
         self.html = el
@@ -218,11 +216,7 @@ class FooterItemElement():
     @property
     def has_icon(self) -> bool:
         icon = self.html.find_element(By.TAG_NAME, 'img')
-        return (
-            icon.size['width'] > 0
-            and icon.size['height'] > 0
-            and icon.is_displayed()
-        )
+        return self.visible_with_size(icon)
 
     @property
     def background_color(self):
