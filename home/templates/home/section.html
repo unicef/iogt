@@ -9,7 +9,7 @@
 {% block content %}
     <div class="section-img">
         {% image page.lead_image width-360 class='lead-img' %}
-        <div class="image-overlay__text {% if not page.lead_image %}no-lead-image{% endif %}">{{ page.title }}</div>
+        <div class="image-overlay__text {% if not page.lead_image %}text-align-center{% endif %}">{{ page.title }}</div>
     </div>
     {% if user_progress %}
         {% render_user_progress user_progress %}
