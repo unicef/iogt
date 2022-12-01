@@ -5,6 +5,15 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 
+def safe_click(driver, button):
+    driver.execute_script("arguments[0].click();", button)
+
+def visible_with_size(item):
+    return (
+        item.size['width'] > 0
+        and item.size['height'] > 0
+        and item.is_displayed()
+    )
 class BasePage(object):
 
     body_text_locator = (By.TAG_NAME, 'body')
@@ -38,18 +47,7 @@ class BasePage(object):
     def navbar(self) -> 'NavbarElement':
         return NavbarElement(self.driver)
 
-class CoreTestFunctions():
-    def safe_click(self, button):
-        self.driver.execute_script("arguments[0].click();", button)
-
-    def visible_with_size(self, item):
-        return (
-            item.size['width'] > 0
-            and item.size['height'] > 0
-            and item.is_displayed()
-        )
-
-class HomePage(BasePage, CoreTestFunctions):
+class HomePage(BasePage):
 
     banner_area_locator = (By.CSS_SELECTOR, "section[class='banner-holder']")
     banner_image_locator = (By.CSS_SELECTOR, "img[alt='An image']")
@@ -60,7 +58,7 @@ class HomePage(BasePage, CoreTestFunctions):
     def has_banner(self):
         banner = self.driver.find_element(*self.banner_area_locator)
         print()
-        return self.visible_with_size(banner)            
+        return visible_with_size(banner)            
     
     def click_banner(self):
         banner_image = self.driver.find_element(*self.banner_image_locator)
@@ -121,7 +119,7 @@ class SearchPage(BasePage):
         self.search_area.send_keys(searchtext)
         self.search_submit.click()
 
-class ArticlePage(BasePage, CoreTestFunctions):
+class ArticlePage(BasePage):
 
     heading_locator = (By.TAG_NAME, 'h1')
     lead_image_locator = (By.CLASS_NAME, 'article__lead-img-featured')
@@ -141,18 +139,18 @@ class ArticlePage(BasePage, CoreTestFunctions):
 
     def has_lead_image(self):
         lead_image = self.driver.find_element(*self.lead_image_locator)
-        return self.visible_with_size(lead_image)
+        return visible_with_size(lead_image)
          
     def navigate_next(self):
 
-        self.safe_click(self.driver.find_element(*self.navigate_next_locator))
+        safe_click(self.driver, self.driver.find_element(*self.navigate_next_locator))
         return BasePage(self.driver)  
 
     def navigate_previous(self):
-        self.safe_click(self.driver.find_element(*self.navigate_previous_locator))
+        safe_click(self.driver, self.driver.find_element(*self.navigate_previous_locator))
         return BasePage(self.driver)
 
-class QuestionnairePage(BasePage, CoreTestFunctions):
+class QuestionnairePage(BasePage):
 
     heading_locator = (By.TAG_NAME, 'h1')
     checkbox_locator = (By.CSS_SELECTOR, "input[type='checkbox']")
@@ -219,7 +217,7 @@ class QuestionnairePage(BasePage, CoreTestFunctions):
         self.input.send_keys(url)
 
 
-class BaseElement(CoreTestFunctions):
+class BaseElement():
     locator = (By.TAG_NAME, 'html')
 
     def __init__(self, driver: WebDriver) -> None:
@@ -245,21 +243,21 @@ class CommentsSectionElement(BaseElement):
     def submit_comment(self, text):
         self.comment_area = self.driver.find_element(*self.comment_area_locator)
         self.comment_area.send_keys(text)
-        self.safe_click(self.driver.find_element(*self.leave_comment_locator))
+        safe_click(self.driver, self.driver.find_element(*self.leave_comment_locator))
 
     def retrieve_comments(self):
         self.comment_holder = self.driver.find_element(*self.comment_holder_locator)
         return self.comment_holder.text
 
     def delete_last_comment(self):
-        self.safe_click(self.driver.find_element(*self.delete_comment_locator))
+        safe_click(self.driver, self.driver.find_element(*self.delete_comment_locator))
 
     def reply_last_comment(self, reply):
-        self.safe_click(self.driver.find_element(*self.reply_comment_locator))
+        safe_click(self.driver, self.driver.find_element(*self.reply_comment_locator))
         self.submit_comment(reply)
 
     def report_last_comment(self):
-        self.safe_click(self.driver.find_element(*self.report_comment_locator))
+        safe_click(self.driver, self.driver.find_element(*self.report_comment_locator))
         self.driver.find_element(*self.report_button_locator).click()
 
 class FooterElement(BaseElement):
@@ -272,7 +270,7 @@ class FooterElement(BaseElement):
             for el in self.html.find_elements(By.CSS_SELECTOR, 'nav a')
         ]
 
-class FooterItemElement(CoreTestFunctions):
+class FooterItemElement():
     def __init__(self, driver, el) -> None:
         self.driver = driver
         self.html = el
@@ -284,7 +282,7 @@ class FooterItemElement(CoreTestFunctions):
     @property
     def has_icon(self) -> bool:
         icon = self.html.find_element(By.TAG_NAME, 'img')
-        return self.visible_with_size(icon)
+        return visible_with_size(icon)
 
     @property
     def background_color(self):
