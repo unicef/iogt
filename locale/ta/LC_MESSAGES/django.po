@@ -346,20 +346,6 @@ msgstr "நீங்கள் ஏற்கனவே இந்த புதிர
 msgid "You have already completed this poll."
 msgstr "நீங்கள் ஏற்கனவே இக்கருத்துக் கணிப்பீட்டினை பூர்த்திசெய்துள்ளீர்கள்."
 
-msgid ""
-"If you cannot view the above video, you can instead %(start_link)sdownload "
-"it%(end_link)s."
-msgstr ""
-"மேலுள்ள காணொளியைப் பார்வையிட முடியாதெனின், அதற்குப் பதிலாக உங்களுக்கு அதை "
-"பதிவிறக்கம் செய்ய முடியும்."
-
-msgid ""
-"If you cannot listen to the above audio, you can instead "
-"%(start_link)sdownload it%(end_link)s."
-msgstr ""
-"மேலுள்ள ஓடியோவுக்கு செவிமடுக்க முடியாதெனின், அதற்குப் பதிலாக, %(start_link) "
-"அதை பதிவிறக்கம் செய்ய முடியும். %(end_link)s.. "
-
 msgid "Please complete the questions marked as required to continue"
 msgstr ""
 
@@ -382,4 +368,19 @@ msgid "Unsure"
 msgstr ""
 
 msgid "No comment found."
+msgstr ""
+
+msgid ""
+"The content you are trying to reach is not available. To see offline content"
+" click <a href=\"%(offline_content_index_page_url)s\">here</a>"
+msgstr ""
+
+msgid ""
+"If you cannot view the above video, you can instead <a "
+"href=\"%(video_url)s\" download>download it</a>."
+msgstr ""
+
+msgid ""
+"If you cannot listen to the above audio, you can instead <a "
+"href=\"%(audio_url)s\" download>download it</a>."
 msgstr ""

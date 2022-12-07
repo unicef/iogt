@@ -341,20 +341,6 @@ msgstr "تاسو له دې وړاندې دغه ازموینه بشپړه کړې 
 msgid "You have already completed this poll."
 msgstr "تاسو له دې وړاندې دغه نظر پوښتنه بشپړه کړې ده."
 
-msgid ""
-"If you cannot view the above video, you can instead %(start_link)sdownload "
-"it%(end_link)s."
-msgstr ""
-"که چېرې پورته ویډیو نه شئ کتلی، پرځای یې کولی شئ %(start_link)s ډونلوډ کړئ "
-"%(end_link)s."
-
-msgid ""
-"If you cannot listen to the above audio, you can instead "
-"%(start_link)sdownload it%(end_link)s."
-msgstr ""
-"که چېرې پورته غږ نه شئ اورېدلی، پرځای یې کولای شئ %(start_link)s ډونلوډ کړئ "
-"%(end_link)s."
-
 msgid "Please complete the questions marked as required to continue"
 msgstr ""
 
@@ -377,4 +363,19 @@ msgid "Unsure"
 msgstr ""
 
 msgid "No comment found."
+msgstr ""
+
+msgid ""
+"The content you are trying to reach is not available. To see offline content"
+" click <a href=\"%(offline_content_index_page_url)s\">here</a>"
+msgstr ""
+
+msgid ""
+"If you cannot view the above video, you can instead <a "
+"href=\"%(video_url)s\" download>download it</a>."
+msgstr ""
+
+msgid ""
+"If you cannot listen to the above audio, you can instead <a "
+"href=\"%(audio_url)s\" download>download it</a>."
 msgstr ""

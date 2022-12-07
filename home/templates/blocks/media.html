@@ -1,0 +1,25 @@
+{% load wagtailcore_tags i18n %}
+
+{% if value.type == 'video' %}
+    <div>
+        <video preload="none" width="320" height="240" controls>
+            {% for source in value.sources %}
+                <source src="{{ source.src }}" type="{{ source.type }}">
+            {% endfor %}
+            {% translate "Your browser does not support video playback." %}
+        </video>
+    </div>
+    <p class='article__content--video'>
+        {% blocktranslate with video_url=value.url %}If you cannot view the above video, you can instead <a href="{{ video_url }}" download>download it</a>.{% endblocktranslate %}
+    </p>
+{% else %}
+    <div>
+        <audio preload="none" controls>
+            {% for source in value.sources %}
+                <source src="{{ source.src }}" type="{{ source.type }}">
+            {% endfor %}
+            {% translate "Your browser does not support audio playback." %}
+        </audio>
+    </div>
+    <p class='article__content--audio'>{% blocktranslate with audio_url=value.url %}If you cannot listen to the above audio, you can instead <a href="{{ audio_url }}" download>download it</a>.{% endblocktranslate %}</p>
+{% endif %}
