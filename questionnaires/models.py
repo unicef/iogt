@@ -90,7 +90,7 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
         help_text=_("Check this to allow multiple form submissions for users"),
     )
     submit_button_text = models.CharField(
-        max_length=40, null=True, default="Submit", help_text=_("Submit button text")
+        max_length=40, null=True, default=_("Submit"), help_text=_("Submit button text")
     )
 
     direct_display = models.BooleanField(default=False)

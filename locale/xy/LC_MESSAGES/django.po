@@ -1730,3 +1730,6 @@ msgstr ""
 "([needs-translation]-The content you are trying to reach is not available. "
 "To see offline content click <a "
 "href=\"%(offline_content_index_page_url)s\">here</a>)"
+
+msgid "Submit"
+msgstr "([has-partial-translation]-Submit)"
