@@ -10,3 +10,4 @@
 - Set `VAPID_PUBLIC_KEY` env. variable from `public_key.txt`
 - Set `VAPID_PRIVATE_KEY` env. variable from `private_key.txt`
 - Set `VAPID_ADMIN_EMAIL` env. variables accordingly
+  - It’s best if this email is not a personal email address, but rather a group email so that if a person leaves an organization, is unavailable for an extended period, or otherwise can’t respond, someone else on the list can. Push Notification Service Provider will only use this if we notice a problem with your feed and need to contact you.
