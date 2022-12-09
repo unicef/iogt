@@ -341,6 +341,20 @@ msgstr "আপনি ইতিমধ্যে কুইজের উত্তর
 msgid "You have already completed this poll."
 msgstr "আপনি ইতিমধ্যে কুইজের উত্তর সম্পন্ন করেছেন"
 
+msgid ""
+"If you cannot view the above video, you can instead <a "
+"href=\"%(video_url)s\" download>download it</a>."
+msgstr ""
+"আপনি যদি উপরের ভিডিওটি দেখতে না পারেন তবে আপনি এর পরিবর্তে <a "
+"href=\"%(video_url)s\" ডাউনলোড>এটি ডাউনলোড করতে পারেন</a>৷\r\n"
+
+msgid ""
+"If you cannot listen to the above audio, you can instead <a "
+"href=\"%(audio_url)s\" download>download it</a>."
+msgstr ""
+"আপনি যদি উপরের অডিও শুনতে না পারেন, তাহলে আপনি এর পরিবর্তে <a "
+"href=\"%(audio_url)s\" ডাউনলোড>এটি ডাউনলোড করতে পারেন</a>৷"
+
 msgid "Please complete the questions marked as required to continue"
 msgstr ""
 
@@ -368,14 +382,4 @@ msgstr ""
 msgid ""
 "The content you are trying to reach is not available. To see offline content"
 " click <a href=\"%(offline_content_index_page_url)s\">here</a>"
-msgstr ""
-
-msgid ""
-"If you cannot view the above video, you can instead <a "
-"href=\"%(video_url)s\" download>download it</a>."
-msgstr ""
-
-msgid ""
-"If you cannot listen to the above audio, you can instead <a "
-"href=\"%(audio_url)s\" download>download it</a>."
 msgstr ""
