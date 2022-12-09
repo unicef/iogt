@@ -181,3 +181,27 @@ This process updates PO files as necessary and compiles a list of strings that a
 
 **Remark:** The file `common/translation_utils/translations.csv` is NOT updated in the process.
 Even though it has a column "is in use", its data is currently not updated automatically, and similarly, new strings are not added automatically.
+
+## Release Process
+- We will be following 2 branches deployment process
+
+### develop branch
+- Checkout feature branch from develop branch
+- Implement the feature in the new branch
+- Create a pull request against the develop branch
+- Squash and merge the pull request into develop branch
+- Latest develop branch is mostly deployed on dev/stage server
+
+### main branch
+- At the end of release cycle (2 weeks) create a pull request from develop branch to main branch
+- Specify major or minor release with current date
+  - e.g., release-09-12-2022, minor-release-09-12-2022
+- Merge develop branch into main branch
+- Latest main branch is always deployed on the prod server
+
+### Hotfixes
+- Checkout feature branch from main branch
+- Implement the feature in the new branch
+- Create a pull request against the main branch
+- Squash and merge the pull request into main branch
+- Back merge main branch into develop branch
