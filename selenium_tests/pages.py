@@ -222,8 +222,17 @@ class QuestionnairePage(BasePage):
 
 class QuestionnaireResultsPage(BasePage):
 
-    heading_locator = (By.TAG_NAME, 'h1')
+    poll_result_locator = (By.CLASS_NAME, 'polls-widget__form')
+    quiz_result_locator = (By.CLASS_NAME, 'quiz-answer-banner__answers')
 
+    def __init__(self, driver: WebDriver) -> None:
+        self.driver = driver
+
+    def get_poll_results_text(self):
+        return self.driver.find_element(*self.poll_result_locator).text
+
+    def get_quiz_results_text(self):
+        return self.driver.find_element(*self.quiz_result_locator).text
 
 class BaseElement():
     locator = (By.TAG_NAME, 'html')

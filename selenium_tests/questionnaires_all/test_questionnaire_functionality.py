@@ -8,7 +8,7 @@ from home.factories import SectionFactory
 from questionnaires.factories import SurveyFactory, SurveyFormFieldFactory
 from selenium_tests.pages import QuestionnairePage, QuestionnaireResultsPage, LoginPage
 
-class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
+class QuestionnaireFunctionalitySeleniumTests(BaseSeleniumTests):
 
     def setUp(self):
         Site.objects.all().delete()
