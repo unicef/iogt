@@ -163,6 +163,7 @@ class QuestionnairePage(BasePage):
     radio_locator = (By.CSS_SELECTOR, "input[type='radio']")
     url_locator = (By.CSS_SELECTOR, "input[type='url']")
     submit_locator = (By.CSS_SELECTOR, "button[type='submit']")
+    login_submit_locator = (By.PARTIAL_LINK_TEXT, "Log in to participate")
 
     def __init__(self, driver: WebDriver) -> None:
         self.driver = driver
@@ -172,25 +173,28 @@ class QuestionnairePage(BasePage):
         return self.driver.find_element(*self.heading_locator).text
 
     def submit_response(self):
-        self.driver.find_element(*self.submit_locator).click()
+        safe_click(self.driver,self.driver.find_element(*self.submit_locator))
+
+    def login_button_submit(self):
+        safe_click(self.driver,self.driver.find_element(*self.login_submit_locator))
 
     def select_checkbox(self):
         self.driver.find_element(*self.checkbox_locator).click()
 
     def select_checkboxes(self, option):
-        self.driver.find_element(By.CSS_SELECTOR, "input[value='" + option + "']").click()
+        safe_click(self.driver, self.driver.find_element(By.CSS_SELECTOR, "input[value='" + option + "']"))
 
     def enter_date(self, date):
-        self.date_input = self.driver.find_element(*self.date_locator)
-        self.date_input.click()
-        self.date_input.send_keys(date)
+        date_input = self.driver.find_element(*self.date_locator)
+        date_input.click()
+        date_input.send_keys(date)
 
     def enter_date_time(self, date, time):
-        self.date_input = self.driver.find_element(*self.date_time_locator)
-        self.date_input.click()
-        self.date_input.send_keys(date)
-        self.date_input.send_keys(Keys.TAB)
-        self.date_input.send_keys(time)
+        date_input = self.driver.find_element(*self.date_time_locator)
+        date_input.click()
+        date_input.send_keys(date)
+        date_input.send_keys(Keys.TAB)
+        date_input.send_keys(time)
 
     def use_dropdown(self, question, selection):
         select = Select(self.driver.find_element(By.NAME,question))
@@ -198,23 +202,27 @@ class QuestionnairePage(BasePage):
         return select.first_selected_option.text
 
     def enter_email(self, email):
-        self.email = self.driver.find_element(*self.email_locator)
-        self.email.send_keys(email)
+        input = self.driver.find_element(*self.email_locator)
+        input.send_keys(email)
 
     def enter_text(self, text):
-        self.input = self.driver.find_element(*self.text_locator)
-        self.input.send_keys(text)
+        input = self.driver.find_element(*self.text_locator)
+        input.send_keys(text)
 
     def enter_number(self, number):
-        self.input = self.driver.find_element(*self.number_locator)
-        self.input.send_keys(number)
+        input = self.driver.find_element(*self.number_locator)
+        input.send_keys(number)
 
     def select_radio(self, option):
         self.driver.find_element(By.CSS_SELECTOR, "input[value='" + option + "']").click()
 
     def enter_url(self, url):
-        self.input = self.driver.find_element(*self.url_locator)
-        self.input.send_keys(url)
+        input = self.driver.find_element(*self.url_locator)
+        input.send_keys(url)
+
+class QuestionnaireResultsPage(BasePage):
+
+    heading_locator = (By.TAG_NAME, 'h1')
 
 
 class BaseElement():
@@ -259,6 +267,7 @@ class CommentsSectionElement(BaseElement):
     def report_last_comment(self):
         safe_click(self.driver, self.driver.find_element(*self.report_comment_locator))
         self.driver.find_element(*self.report_button_locator).click()
+    
 
 class FooterElement(BaseElement):
     locator = (By.CSS_SELECTOR, '.footer-main .bottom-level')

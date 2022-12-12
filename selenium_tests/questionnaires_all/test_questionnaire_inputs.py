@@ -19,7 +19,7 @@ class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
 
     def test_checkbox(self): 
 
-        self.Q1 = SurveyFormFieldFactory(
+        SurveyFormFieldFactory(
             page=self.survey01, 
             required = True,
             choices = "true|false",  
@@ -34,7 +34,7 @@ class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
         
     def test_checkboxes(self):    
 
-        self.Q2 = SurveyFormFieldFactory(
+        SurveyFormFieldFactory(
             page=self.survey01, 
             required = True,
             choices = "A|B|C",  
@@ -49,7 +49,7 @@ class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
 
     def test_date(self):
 
-        self.Q3 = SurveyFormFieldFactory(
+        SurveyFormFieldFactory(
             page=self.survey01, 
             required = True,  
             default_value='',  
@@ -63,9 +63,8 @@ class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
 
     def test_date_time(self):
 
-        self.Q4 = SurveyFormFieldFactory(
+        SurveyFormFieldFactory(
             page=self.survey01, 
-            sort_order=3,
             required = True,  
             default_value='',  
             field_type='datetime', 
@@ -78,9 +77,8 @@ class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
 
     def test_dropdown(self):
 
-        self.Q5 = SurveyFormFieldFactory(
+        Question = SurveyFormFieldFactory(
             page=self.survey01, 
-            sort_order=4,
             required = True,
             choices = "A|B|C",  
             default_value='',  
@@ -89,15 +87,14 @@ class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
 
         self.visit_page(self.survey01)
         survey_page = QuestionnairePage(self.selenium)
-        selection = survey_page.use_dropdown(self.Q5.label, "C")
+        selection = survey_page.use_dropdown(Question.label, "C")
         self.assertIn("C", selection)
         survey_page.submit_response()
 
     def test_email(self):
 
-        self.Q6 = SurveyFormFieldFactory(
+        SurveyFormFieldFactory(
             page=self.survey01, 
-            sort_order=5,
             required = True,  
             default_value='',  
             field_type='email', 
@@ -110,9 +107,8 @@ class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
 
     def test_singleline(self):
 
-        self.Q7 = SurveyFormFieldFactory(
+        SurveyFormFieldFactory(
             page=self.survey01, 
-            sort_order=6,
             required = True,  
             default_value='',  
             field_type='singleline', 
@@ -125,9 +121,8 @@ class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
 
     def test_multiline(self):
 
-        self.Q8 = SurveyFormFieldFactory(
+        SurveyFormFieldFactory(
             page=self.survey01, 
-            sort_order=7,
             required = True,  
             default_value='',  
             field_type='multiline', 
@@ -143,9 +138,8 @@ class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
 
     def test_number(self):
 
-        self.Q9 = SurveyFormFieldFactory(
+        SurveyFormFieldFactory(
             page=self.survey01, 
-            sort_order=8,
             required = True,  
             default_value='',  
             field_type='number', 
@@ -158,9 +152,8 @@ class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
 
     def test_radio(self):
 
-        self.Q10 = SurveyFormFieldFactory(
+        SurveyFormFieldFactory(
             page=self.survey01, 
-            sort_order=10,
             required = True,
             choices = "A|B|C",  
             default_value='',  
@@ -174,9 +167,8 @@ class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
 
     def test_url(self):
 
-        self.Q11 = SurveyFormFieldFactory(
+        SurveyFormFieldFactory(
             page=self.survey01, 
-            sort_order=11,
             required = True,  
             default_value='',  
             field_type='url', 
