@@ -642,13 +642,6 @@ msgstr "([unused]-Your browser does not support the video tag.)"
 msgid "Your browser does not support the audio element."
 msgstr "([unused]-Your browser does not support the audio element.)"
 
-msgid ""
-"If you cannot listen to the above audio, perhaps would you like to "
-"%(start_link)s download it? %(end_link)s."
-msgstr ""
-"([unused]-If you cannot listen to the above audio, perhaps would you like to"
-" %(start_link)s download it? %(end_link)s.)"
-
 msgid "[This page is not available in English]"
 msgstr "([unused]-[This page is not available in English])"
 
@@ -1577,13 +1570,6 @@ msgstr "([not-needed]-Replay Survey)"
 
 msgid "Replay"
 msgstr "([not-needed]-Replay)"
-
-msgid ""
-"If you cannot listen to the above audio, you can instead "
-"%(start_link)sdownload it%(end_link)s."
-msgstr ""
-"([unused]-If you cannot listen to the above audio, you can instead "
-"%(start_link)sdownload it%(end_link)s.)"
 
 msgid "Full width"
 msgstr "([not-needed]-Full width)"
