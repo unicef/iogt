@@ -49,11 +49,10 @@ $(document).ready(() => {
     const loginCreateAccountBtns = $('.login-create-account-btn');
     const logoutBtn = $('.logout-btn');
     const externalLinks = $('a[href*="/external-link/?next="]');
-    const disabledLanguages = $('.disabled-language');
-
+    const disabledLanguages = $('a[href*="/translation-not-found/?page="]');
 
     const disableForOfflineAccess = () => {
-        disabledLanguages.show();
+        disabledLanguages.addClass('disabled-language');
         searchFormHolder.hide();
         readContent.removeClass('complete');
         commentForm.hide();

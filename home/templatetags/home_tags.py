@@ -31,7 +31,6 @@ def language_switcher(context, page):
 
     for locale in locales:
         option = {}
-        translation_available = True
         try:
             language = translation.get_language_info(locale.language_code)
             option['language'] = language
@@ -52,12 +51,10 @@ def language_switcher(context, page):
                 else:
                     translated_url = translate_url(reverse('translation-not-found'), locale.language_code)
                     url = f'{translated_url}?page={page.id}'
-                    translation_available = False
             else:  # If the current URL belongs to a django view
                 url = translate_url(context.request.path_info, locale.language_code)
 
             option['url'] = url
-            option['translation_available'] = translation_available
             language_options.append(option)
 
     context.update({

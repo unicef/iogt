@@ -6,7 +6,7 @@
     </a>
     <ul class="drop">
     {% for option in language_options %}
-        <li class="{% if option.selected %}selected{% endif %} {% if not option.translation_available %} disabled-language {% endif %}">
+        <li class="{% if option.selected %}selected{% endif %}">
             <a href="{{ option.url }}" rel="alternate" hreflang="{{ option.language.code }}">
                 {{ option.language.name_local }}
             </a>
