@@ -181,7 +181,6 @@ The comment has been updated successfully!,Comment,not needed,,unused,,,
 Sent Reply successfully,Comment,not needed,,not needed,,,
 Your browser does not support the video tag.,,remove,,unused,,,redundant?
 Your browser does not support the audio element.,,remove,,unused,,,redundant?
-"If you cannot listen to the above audio, perhaps would you like to %(start_link)s download it? %(end_link)s.",FE,remove,,unused,,,rephrase?
 [This page is not available in English],FE,translate,,unused,,,"v1 has: That page is not translatable (missing: mg, ru, zu, ti, tg, uz, kaa)"
 sections,FE,translate,,has partial translation,,,
 articles,FE,translate,,has translation,,,
