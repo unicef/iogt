@@ -1,6 +1,7 @@
 from selenium_tests.base import BaseSeleniumTests
 from wagtail.core.models import Site
 from iogt_users.factories import AdminUserFactory
+from home.factories import SectionFactory
 from questionnaires.factories import PollFactory
 from selenium_tests.pages import QuestionnairePage, SectionPage
 import home.models as models
