@@ -1,7 +1,4 @@
-import time
-
 from selenium_tests.base import BaseSeleniumTests
-from selenium.webdriver.support.ui import Select
 from wagtail.core.models import Site
 from iogt_users.factories import AdminUserFactory
 from home.factories import SectionFactory
@@ -15,7 +12,6 @@ class QuizSeleniumTests(BaseSeleniumTests):
         self.setup_blank_site()
         self.user = AdminUserFactory()
         self.section01 = SectionFactory(parent=self.home, owner=self.user)
-        
 
     def test_correct_quiz(self):
         quiz01 = QuizFactory(

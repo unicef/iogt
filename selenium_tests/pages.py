@@ -150,6 +150,26 @@ class ArticlePage(BasePage):
         safe_click(self.driver, self.driver.find_element(*self.navigate_previous_locator))
         return BasePage(self.driver)
 
+class SectionPage(BasePage):
+
+    heading_locator = (By.CLASS_NAME, 'image-overlay__text')
+    lead_image_locator = (By.CLASS_NAME, 'lead-img')
+    
+
+    def __init__(self, driver: WebDriver) -> None:
+        self.driver = driver
+        
+    @property
+    def title(self) -> str:
+        return self.driver.find_element(*self.heading_locator).text
+
+    def has_lead_image(self):
+        lead_image = self.driver.find_element(*self.lead_image_locator)
+        return visible_with_size(lead_image)
+         
+    def navigate_featured_content(self, LinkText):
+        safe_click(self.driver, self.driver.find_element(By.PARTIAL_LINK_TEXT, LinkText))
+
 class QuestionnairePage(BasePage):
 
     heading_locator = (By.TAG_NAME, 'h1')
@@ -224,6 +244,7 @@ class QuestionnaireResultsPage(BasePage):
 
     poll_result_locator = (By.CLASS_NAME, 'polls-widget__form')
     quiz_result_locator = (By.CLASS_NAME, 'quiz-answer-banner__answers')
+    back_button_locator = (By.PARTIAL_LINK_TEXT, 'Back')
 
     def __init__(self, driver: WebDriver) -> None:
         self.driver = driver
@@ -233,6 +254,9 @@ class QuestionnaireResultsPage(BasePage):
 
     def get_quiz_results_text(self):
         return self.driver.find_element(*self.quiz_result_locator).text
+
+    def go_back(self):
+        safe_click(self.driver, self.driver.find_element(*self.back_button_locator))
 
 class BaseElement():
     locator = (By.TAG_NAME, 'html')
