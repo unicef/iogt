@@ -1,9 +1,7 @@
 from django.test import TestCase
 from django.http import HttpRequest
-from django.utils import translation
 from translation_manager.models import TranslationEntry
-from wagtail.core.models import Site, Locale
-from wagtail_localize.models import Translation
+from wagtail.core.models import Site
 from wagtail_localize.operations import TranslationCreator
 
 from home.wagtail_hooks import limit_page_chooser
@@ -63,41 +61,39 @@ class LimitPageChooserHookTests(TestCase):
 
 class MediaTranslationTest(TestCase):
     def setUp(self):
-        Site.objects.all().delete()
-        self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
-        self.en_home_page = HomePageFactory(parent=self.site.root_page)
+        self.site = Site.objects.get(is_default_site=True)
+        self.bn_locale = LocaleFactory(language_code='bn')
+        bn_translation_creator = TranslationCreator(user=None, target_locales=[self.bn_locale])
+        self.en_home_page = self.site.root_page
+        bn_translation_creator.create_translations(self.en_home_page)
+        self.bn_home_page = self.en_home_page.get_translation(self.bn_locale)
         self.en_article = ArticleFactory(
             parent=self.en_home_page,
             body__0__media=MediaFactory(type='video'),
             body__1__media=MediaFactory(type='audio'),
         )
+        bn_translation_creator.create_translations(self.en_article)
+        self.bn_article = self.en_article.get_translation(self.bn_locale)
 
     def test_media_block_translation_of_english_language(self):
         response = self.client.get(self.en_article.url)
+
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, f"If you cannot view the above video, you can instead <a href='{self.article.body[0].value.url}' download>download it</a>.")
-        self.assertContains(response, f"If you cannot listen to the above audio, you can instead <a href='{self.article.body[1].value.url}' download>download it</a>.")
+        self.assertContains(response, f"If you cannot view the above video, you can instead <a href='{self.en_article.body[0].value.url}' download>download it</a>.")
+        self.assertContains(response, f"If you cannot listen to the above audio, you can instead <a href='{self.en_article.body[1].value.url}' download>download it</a>.")
 
     def test_media_block_translation_of_bengali_language(self):
-        bn_locale = LocaleFactory(language_code='bn')
-        translator = TranslationCreator(user=None, target_locales=[bn_locale])
-        translator.create_translations(self.en_home_page)
-        bn_home_page = self.en_home_page.get_translation(locale=bn_locale)
-        bn_article = ArticleFactory(
-            parent=bn_home_page,
-            locale=bn_locale,
-            body__0__media=MediaFactory(type='video'),
-            body__1__media=MediaFactory(type='audio'),
-        )
+        TranslationEntry.objects.create(
+            original="If you cannot view the above video, you can instead %(start_link)sdownload it%(end_link)s.",
+            translation="উপরের ভিডিও দেখা না গেলে %(start_link)s এর পরিবর্তে এটা %(end_link)s ডাউনলোড করুন",
+            language=self.bn_locale.language_code)
+        TranslationEntry.objects.create(
+            original="If you cannot listen to the above audio, you can instead %(start_link)sdownload it%(end_link)s.",
+            translation="উপরের অডিও শুনতে না পেলে %(start_link)s এর পরিবর্তে এটা %(end_link)s ডাউনলোড করুন",
+            language=self.bn_locale.language_code)
 
-        TranslationEntry.objects.create(original="If you cannot view the above video, you can instead %(start_link)sdownload it%(end_link)s.",
-                                        translation="উপরের ভিডিও দেখা না গেলে %(start_link)s এর পরিবর্তে এটা %(end_link)s ডাউনলোড করুন",
-                                        language='bn')
-        TranslationEntry.objects.create(original="If you cannot listen to the above audio, you can instead %(start_link)sdownload it%(end_link)s.",
-                                        translation="উপরের অডিও শুনতে না পেলে %(start_link)s এর পরিবর্তে এটা %(end_link)s ডাউনলোড করুন",
-                                        language='bn')
-        translation.activate('bn')
-        response = self.client.get(bn_article.url)
+        response = self.client.get(self.bn_article.url)
+
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "উপরের ভিডিও দেখা না গেলে %(start_link)s এর পরিবর্তে এটা %(end_link)s ডাউনলোড করুন")
-        self.assertContains(response, "উপরের অডিও শুনতে না পেলে %(start_link)s এর পরিবর্তে এটা %(end_link)s ডাউনলোড করুন")
+        self.assertContains(response, f"উপরের ভিডিও দেখা না গেলে <a href='{self.bn_article.body[0].value.url}' download> এর পরিবর্তে এটা </a> ডাউনলোড করুন")
+        self.assertContains(response, f"উপরের অডিও শুনতে না পেলে <a href='{self.bn_article.body[1].value.url}' download> এর পরিবর্তে এটা </a> ডাউনলোড করুন")
