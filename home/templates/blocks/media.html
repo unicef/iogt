@@ -9,7 +9,7 @@
             {% translate "Your browser does not support video playback." %}
         </video>
     </div>
-    <p class='article__content--video'>{% blocktranslate with start_link="<a href='"|add:value.url|add:"' download>"|safe end_link='</a>'|safe %}If you cannot view the above video, you can instead {{ start_link }}download it{{ end_link }}.{% endblocktranslate %}</p>
+    <p class='article__content--video'>{% blocktranslate %}If you cannot view the above video, you can instead {{ start_link }}download it{{ end_link }}.{% endblocktranslate %}</p>
 {% else %}
     <div>
         <audio preload="none" controls>
@@ -19,5 +19,5 @@
             {% translate "Your browser does not support audio playback." %}
         </audio>
     </div>
-    <p class='article__content--audio'>{% blocktranslate with start_link="<a href='"|add:value.url|add:"' download>"|safe end_link='</a>'|safe %}If you cannot listen to the above audio, you can instead {{ start_link }}download it{{ end_link }}.{% endblocktranslate %}</p>
+    <p class='article__content--audio'>{% blocktranslate %}If you cannot listen to the above audio, you can instead {{ start_link }}download it{{ end_link }}.{% endblocktranslate %}</p>
 {% endif %}

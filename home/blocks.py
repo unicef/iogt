@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.forms.utils import flatatt
 from django.utils.html import format_html, format_html_join
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
 
 from wagtail.core import blocks
@@ -11,6 +12,14 @@ from wagtailmedia.blocks import AbstractMediaChooserBlock
 
 
 class MediaBlock(AbstractMediaChooserBlock):
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context)
+        context.update({
+            'start_link': mark_safe(f'<a href="{value.url}" download>'),
+            'end_link': mark_safe('</a>'),
+        })
+        return context
+
     class Meta:
         template = 'blocks/media.html'
 
