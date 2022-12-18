@@ -52,7 +52,7 @@ class MediaFactory(CollectionMemberFactory):
     class Meta:
         model = get_media_model()
 
-    title = "A media"
+    title = factory.Sequence(lambda n: f'media{n}')
     file = factory.django.FileField()
 
 
@@ -61,14 +61,6 @@ class MediaBlockFactory(BlockFactory):
 
     class Meta:
         model = MediaBlock
-
-    @classmethod
-    def _build(cls, model_class, media):
-        return media
-
-    @classmethod
-    def _create(cls, model_class, media):
-        return media
 
 
 class ArticleFactory(PageFactory):

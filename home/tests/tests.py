@@ -62,38 +62,37 @@ class LimitPageChooserHookTests(TestCase):
 class MediaTranslationTest(TestCase):
     def setUp(self):
         self.site = Site.objects.get(is_default_site=True)
-        self.bn_locale = LocaleFactory(language_code='bn')
-        bn_translation_creator = TranslationCreator(user=None, target_locales=[self.bn_locale])
         self.en_home_page = self.site.root_page
-        bn_translation_creator.create_translations(self.en_home_page)
-        self.bn_home_page = self.en_home_page.get_translation(self.bn_locale)
         self.en_article = ArticleFactory(
             parent=self.en_home_page,
             body__0__media=MediaFactory(type='video'),
             body__1__media=MediaFactory(type='audio'),
         )
-        bn_translation_creator.create_translations(self.en_article)
-        self.bn_article = self.en_article.get_translation(self.bn_locale)
 
     def test_media_block_translation_of_english_language(self):
         response = self.client.get(self.en_article.url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, f"If you cannot view the above video, you can instead <a href='{self.en_article.body[0].value.url}' download>download it</a>.")
-        self.assertContains(response, f"If you cannot listen to the above audio, you can instead <a href='{self.en_article.body[1].value.url}' download>download it</a>.")
+        self.assertContains(response, f'If you cannot view the above video, you can instead <a href="{self.en_article.body[0].value.url}" download>download it</a>.')
+        self.assertContains(response, f'If you cannot listen to the above audio, you can instead <a href="{self.en_article.body[1].value.url}" download>download it</a>.')
 
     def test_media_block_translation_of_bengali_language(self):
+        bn_locale = LocaleFactory(language_code='bn')
+        bn_translation_creator = TranslationCreator(user=None, target_locales=[bn_locale])
+        bn_translation_creator.create_translations(self.en_article)
+        bn_article = self.en_article.get_translation(bn_locale)
+
         TranslationEntry.objects.create(
             original="If you cannot view the above video, you can instead %(start_link)sdownload it%(end_link)s.",
             translation="উপরের ভিডিও দেখা না গেলে %(start_link)s এর পরিবর্তে এটা %(end_link)s ডাউনলোড করুন",
-            language=self.bn_locale.language_code)
+            language=bn_locale.language_code)
         TranslationEntry.objects.create(
             original="If you cannot listen to the above audio, you can instead %(start_link)sdownload it%(end_link)s.",
             translation="উপরের অডিও শুনতে না পেলে %(start_link)s এর পরিবর্তে এটা %(end_link)s ডাউনলোড করুন",
-            language=self.bn_locale.language_code)
+            language=bn_locale.language_code)
 
-        response = self.client.get(self.bn_article.url)
+        response = self.client.get(bn_article.url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, f"উপরের ভিডিও দেখা না গেলে <a href='{self.bn_article.body[0].value.url}' download> এর পরিবর্তে এটা </a> ডাউনলোড করুন")
-        self.assertContains(response, f"উপরের অডিও শুনতে না পেলে <a href='{self.bn_article.body[1].value.url}' download> এর পরিবর্তে এটা </a> ডাউনলোড করুন")
+        self.assertContains(response, f'উপরের ভিডিও দেখা না গেলে <a href="{bn_article.body[0].value.url}" download> এর পরিবর্তে এটা </a> ডাউনলোড করুন')
+        self.assertContains(response, f'উপরের অডিও শুনতে না পেলে <a href="{bn_article.body[1].value.url}" download> এর পরিবর্তে এটা </a> ডাউনলোড করুন')
