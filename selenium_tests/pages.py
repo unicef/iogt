@@ -211,7 +211,7 @@ class QuestionnairePage(BasePage):
 
     def enter_date_time(self, date, time):
         date_input = self.driver.find_element(*self.date_time_locator)
-        date_input.click()
+        safe_click(self.driver, date_input)
         date_input.send_keys(date)
         date_input.send_keys(Keys.TAB)
         date_input.send_keys(time)

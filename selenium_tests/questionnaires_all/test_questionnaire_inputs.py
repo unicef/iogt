@@ -68,9 +68,7 @@ class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
         results_page = QuestionnaireResultsPage(self.selenium)
         self.assertIn("Thankyou for completing the survey", results_page.get_content_text())
 
-
-    #Skip for now as failing when running headless and not sure why
-    def skip_test_date_time(self):
+    def test_date_time(self):
 
         SurveyFormFieldFactory(
             page=self.survey01, 
@@ -81,9 +79,8 @@ class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
 
         self.visit_page(self.survey01)
         survey_page = QuestionnairePage(self.selenium)
-        survey_page.enter_date_time("11111111", "1111AM")
+        survey_page.enter_date_time("12122000", "1111AM")
         survey_page.submit_response()
-        breakpoint()
         results_page = QuestionnaireResultsPage(self.selenium)
         results_page_content = results_page.get_content_text()
         self.assertIn("Thankyou for completing the survey", results_page_content)

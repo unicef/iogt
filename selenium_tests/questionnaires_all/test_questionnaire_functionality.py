@@ -165,11 +165,116 @@ class QuestionnaireFunctionalitySeleniumTests(BaseSeleniumTests):
         results_page.go_back()
         current_page = QuestionnairePage(self.selenium)
         self.assertIn(survey01.title, current_page.title)
-        
-        
 
+    def test_skip_question(self):
+        survey01 = SurveyFactory(
+            parent=self.section01, 
+            owner=self.user,
+            allow_multiple_submissions = True,
+            multi_step = True,
+            thank_you_text="[{\"type\": \"paragraph\", \"value\": \"<p>Thankyou for completing the survey</p>\"}]"
+            )
 
+        SurveyFormFieldFactory(
+            page=survey01,
+            pk= 1,
+            sort_order= 0,
+            required=True,
+            choices= "A|B|C",
+            clean_name= "question_1",
+            label= "XXXX",
+            field_type= "radio",
+            admin_label= "q1",
+            skip_logic= "[{\"type\": \"skip_logic\", \"value\": {\"choice\": \"A\", \"skip_logic\": \"next\", \"question\": null}, \"id\": \"60a035c2-7e67-4c41-90c7-8be3a94faefb\"}, {\"type\": \"skip_logic\", \"value\": {\"choice\": \"B\", \"skip_logic\": \"question\", \"question\": 3}, \"id\": \"6b470d57-a397-4eec-a747-d62652fc56c2\"}, {\"type\": \"skip_logic\", \"value\": {\"choice\": \"C\", \"skip_logic\": \"end\", \"question\": null}, \"id\": \"8d0ccb1e-6d44-4d95-aeab-ea66512f5c68\"}]",
+            default_value= "",
+            page_break=True
+        )
 
+        SurveyFormFieldFactory(
+            page=survey01,
+            pk= 2,
+            sort_order= 1,
+            required=False,
+            choices= "",
+            help_text= "",
+            clean_name = "question_2",
+            label= "YYYY",
+            field_type= "singleline",
+            admin_label= "q2",
+            skip_logic= "[]",
+            default_value= "",
+            page_break=True
+        )
+
+        SurveyFormFieldFactory(
+            page=survey01,
+            pk= 3,
+            sort_order= 2,
+            required=False,
+            choices= "",
+            help_text= "",
+            clean_name= "question_3",
+            label= "ZZZZ",
+            field_type= "singleline",
+            admin_label= "q3",
+            skip_logic= "[]",
+            default_value= "",
+            page_break=True
+        )
         
+        self.visit_page(survey01)
+        survey_page = QuestionnairePage(self.selenium)
+        survey_page.select_checkboxes("B")
+        survey_page.submit_response()
+        current_question = QuestionnairePage(self.selenium)
+        self.assertIn("ZZZZ", current_question.get_content_text())
+        survey_page.submit_response()
+        results_page = QuestionnaireResultsPage(self.selenium)
+        self.assertIn("Thankyou for completing the survey", results_page.get_content_text())
+
+    def test_skip_end_survey(self):
+        survey01 = SurveyFactory(
+            parent=self.section01, 
+            owner=self.user,
+            allow_multiple_submissions = True,
+            multi_step = True,
+            thank_you_text="[{\"type\": \"paragraph\", \"value\": \"<p>Thankyou for completing the survey</p>\"}]"
+            )
+
+        SurveyFormFieldFactory(
+            page=survey01,
+            pk= 1,
+            sort_order= 0,
+            required=True,
+            choices= "A|C",
+            clean_name= "question_1",
+            label= "XXXX",
+            field_type= "radio",
+            admin_label= "q1",
+            skip_logic= "[{\"type\": \"skip_logic\", \"value\": {\"choice\": \"A\", \"skip_logic\": \"next\", \"question\": null}, \"id\": \"60a035c2-7e67-4c41-90c7-8be3a94faefb\"}, {\"type\": \"skip_logic\", \"value\": {\"choice\": \"C\", \"skip_logic\": \"end\", \"question\": null}, \"id\": \"8d0ccb1e-6d44-4d95-aeab-ea66512f5c68\"}]",
+            default_value= "",
+            page_break=True
+        )
+
+        SurveyFormFieldFactory(
+            page=survey01,
+            pk= 2,
+            sort_order= 1,
+            required=False,
+            choices= "",
+            help_text= "",
+            clean_name = "question_2",
+            label= "YYYY",
+            field_type= "singleline",
+            admin_label= "q2",
+            skip_logic= "[]",
+            default_value= "",
+            page_break=True
+        )
         
-        
+        self.visit_page(survey01)
+        survey_page = QuestionnairePage(self.selenium)
+        survey_page.select_checkboxes("C")
+        survey_page.submit_response()
+        results_page = QuestionnaireResultsPage(self.selenium)
+        self.assertIn("Thankyou for completing the survey", results_page.get_content_text())     
