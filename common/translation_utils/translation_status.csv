@@ -181,6 +181,8 @@ The comment has been updated successfully!,Comment,not needed,,unused,,,
 Sent Reply successfully,Comment,not needed,,not needed,,,
 Your browser does not support the video tag.,,remove,,unused,,,redundant?
 Your browser does not support the audio element.,,remove,,unused,,,redundant?
+"If you cannot view the above video, perhaps would you like to %(start_link)s download it? %(end_link)s.",FE,remove,,unused,,,rephrase?
+"If you cannot listen to the above audio, perhaps would you like to %(start_link)s download it? %(end_link)s.",FE,remove,,unused,,,rephrase?
 [This page is not available in English],FE,translate,,unused,,,"v1 has: That page is not translatable (missing: mg, ru, zu, ti, tg, uz, kaa)"
 sections,FE,translate,,has partial translation,,,
 articles,FE,translate,,has translation,,,
@@ -428,6 +430,8 @@ Replay Survey,,not needed,,not needed,,,
 Replay,,not needed,,not needed,,,
 pop,,not needed,js,not needed,,,
 shift,,not needed,js,not needed,,,
+"If you cannot view the above video, you can instead %(start_link)sdownload it%(end_link)s.",,translate,,has partial translation,,,
+"If you cannot listen to the above audio, you can instead %(start_link)sdownload it%(end_link)s.",,translate,,has partial translation,,,
 Full width,,not needed,,not needed,,,
 Left-aligned,,not needed,,not needed,,,
 Right-aligned,,not needed,,not needed,,,
@@ -705,6 +709,3 @@ Download Form Data (CSV),,not needed,,not needed,,,
 Generate Dashboard,,not needed,,not needed,,,
 No form pages have been created.,,not needed,,not needed,,,
 "The content you are trying to reach is not available. To see offline content click <a href=""%(offline_content_index_page_url)s"">here</a>",,translate,,needs translation,,,
-Custom permissions,,,,needs translation,,,
-"If you cannot view the above video, you can instead %(start_link)sdownload it%(end_link)s.",,translate,,has partial translation,,,
-"If you cannot listen to the above audio, you can instead %(start_link)sdownload it%(end_link)s.",,translate,,has partial translation,,,
