@@ -374,8 +374,3 @@ msgstr ""
 
 msgid "No comment found."
 msgstr ""
-
-msgid ""
-"The content you are trying to reach is not available. To see offline content"
-" click <a href=\"%(offline_content_index_page_url)s\">here</a>"
-msgstr ""
