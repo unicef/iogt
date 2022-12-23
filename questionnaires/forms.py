@@ -3,11 +3,13 @@ from collections import defaultdict
 
 from django.core.exceptions import ValidationError
 from django import forms
-from django.forms.utils import ErrorList
+from django.forms.utils import ErrorList, ErrorDict
 from django.utils.translation import gettext_lazy as _
 
 from wagtail.admin.forms import WagtailAdminPageForm
 from wagtail.contrib.forms.forms import FormBuilder
+from wagtail.core.blocks import StreamBlockValidationError
+from wagtail.core.blocks.struct_block import StructBlockValidationError
 
 from questionnaires.blocks import VALID_SKIP_SELECTORS, SkipState, VALID_SKIP_LOGIC
 
@@ -169,25 +171,27 @@ class SurveyForm(WagtailAdminPageForm):
     @property
     def clean_errors(self):
         if self._clean_errors.keys():
-            params = {
-                key: ErrorList(
-                    [ValidationError('Error in form', params=value)]
-                )
-                for key, value in self._clean_errors.items()
-                if isinstance(key, int)
-            }
             errors = {
                 key: ValidationError(value)
                 for key, value in self._clean_errors.items()
                 if isinstance(key, str)
             }
-            errors.update({
-                'skip_logic': ErrorList([ValidationError(
-                    'Skip Logic Error',
-                    params=params,
-                )])
-            })
-            return errors
+
+            blocks_errors = {}
+            for block_index, errors_dict in self._clean_errors.items():
+                if isinstance(block_index, int):
+                    block_errors = {}
+                    for field, errors_list in errors_dict.items():
+                        block_errors[field] = ErrorList([ValidationError(message) for message in errors_list])
+                    else:
+                        blocks_errors[block_index] = ErrorList([StructBlockValidationError(block_errors=block_errors)])
+            else:
+                stream_block_errors = StreamBlockValidationError(block_errors=blocks_errors, non_block_errors=ErrorList())
+                errors.update({
+                    "skip_logic": ErrorList([stream_block_errors]),
+                })
+
+            return ErrorDict(errors)
 
     def add_form_field_error(self, field, message):
         if field not in self._clean_errors:
