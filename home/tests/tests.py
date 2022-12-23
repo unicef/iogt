@@ -1,11 +1,13 @@
 from django.test import TestCase
 from django.http import HttpRequest
+from translation_manager.models import TranslationEntry
 from wagtail.core.models import Site
+from wagtail_localize.operations import TranslationCreator
 
 from home.wagtail_hooks import limit_page_chooser
-from home.factories import SectionFactory, ArticleFactory, HomePageFactory
+from home.factories import SectionFactory, ArticleFactory, HomePageFactory, SurveyFactory, LocaleFactory
 from wagtail_factories import SiteFactory
-
+from bs4 import BeautifulSoup
 
 class LimitPageChooserHookTests(TestCase):
     def setUp(self):
@@ -55,3 +57,35 @@ class LimitPageChooserHookTests(TestCase):
         pages_after = limit_page_chooser(pages_before, request)
 
         self.assertEqual(pages_after, pages_before)
+
+
+class SurveyTranslationTest(TestCase):
+    def setUp(self):
+        self.site = Site.objects.get(is_default_site=True)
+        self.en_home_page = self.site.root_page
+        self.en_survey = SurveyFactory(parent=self.en_home_page)
+
+    def test_survey_translation_of_english_language(self):
+        response = self.client.get(self.en_survey.url)
+        soup = BeautifulSoup(response.content)
+        submit_button_text = soup.find("button", {"type": "submit"}).text.strip()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(submit_button_text, 'Submit')
+
+    def test_survey_translation_of_arabic_language(self):
+        ar_locale = LocaleFactory(language_code='ar')
+        ar_translation_creator = TranslationCreator(user=None, target_locales=[ar_locale])
+        ar_translation_creator.create_translations(self.en_survey)
+        ar_survey = self.en_survey.get_translation(ar_locale)
+        TranslationEntry.objects.create(
+            original="Submit",
+            translation="إرسال",
+            language=ar_locale.language_code)
+
+        response = self.client.get(ar_survey.url)
+        soup = BeautifulSoup(response.content)
+        submit_button_text = soup.find("button", {"type": "submit"}).text.strip()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(submit_button_text, "إرسال")

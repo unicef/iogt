@@ -20,6 +20,7 @@ from home.models import (
     SectionIndexPage,
     SiteSettings,
 )
+from questionnaires.models import Survey
 
 
 class HomePageFactory(PageFactory):
@@ -97,3 +98,10 @@ class FooterIndexPageFactory(PageFactory):
 
     class Meta:
         model = FooterIndexPage
+
+
+class SurveyFactory(PageFactory):
+    title = factory.Sequence(lambda n: f'survey{n}')
+
+    class Meta:
+        model = Survey
