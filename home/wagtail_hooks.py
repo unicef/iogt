@@ -8,9 +8,9 @@ from django.utils.translation import gettext_lazy as _
 from translation_manager.models import TranslationEntry
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from django.templatetags.static import static
-from django.utils.html import format_html
+from django.utils.html import format_html, format_html_join
 from wagtail.core import hooks
-from wagtail.core.models import Page
+from wagtail.core.models import Page, Locale
 from wagtail.core.models import PageViewRestriction
 
 from home.models import FooterIndexPage, BannerIndexPage, Section, \
@@ -81,10 +81,17 @@ def global_admin_css():
 
 @hooks.register('insert_global_admin_js', order=100)
 def global_admin_js():
-    return format_html(
-        '<script src="{}"></script>',
-        static("js/global/admin.js")
+    language_code = Locale.get_active().language_code
+    js_files = [
+        'js/iogt.js',
+        'js/sw-init.js',
+        'js/global/admin.js',
+    ]
+    js_includes = format_html_join('\n', '<script src="{0}"></script>',
+        ((static(filename),) for filename in js_files)
     )
+    js_includes = f'{js_includes}\n<script src="/{language_code}/jsi18n/"></script>'
+    return js_includes
 
 
 class LimitedTranslatableStringsFilter(SimpleListFilter):
