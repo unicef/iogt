@@ -65,7 +65,8 @@ class ImageResizeTest(TestCase):
         SiteSettings.objects.all().delete()
         self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
         self.site_settings = SiteSettingsFactory(site=self.site)
-        self.article = ArticleFactory(parent=self.site_settings.site.root_page)
+        self.section = SectionFactory(parent=self.site_settings.site.root_page)
+        self.article = ArticleFactory(parent=self.section)
 
     def test_default_image_maximum_width_360(self):
         response = self.client.get(self.article.url)
@@ -79,16 +80,15 @@ class ImageResizeTest(TestCase):
         self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
         self.assertEqual(rendered_image.get('src'), image_rendition.url)
 
-    def test_larger_image_maximum_width_800(self):
-        self.site_settings.default_image_resize_rule_width = 800
-        self.site_settings.save()
-        response = self.client.get(self.article.url)
+    def test_default_image_half_maximum_width_180(self):
+        response = self.client.get(self.section.url)
         soup = BeautifulSoup(response.content)
-        rendered_image = soup.find("img", {"class": "article__lead-img-featured"})
-        image_rendition = self.article.lead_image.get_rendition('width-800')
+        rendered_image = soup.find("div", {"class": "article-card"}).find("img")
+        image_rendition = self.article.lead_image.get_rendition('width-180')
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(rendered_image.get('alt'), image_rendition.alt)
         self.assertEqual(int(rendered_image.get('width')), image_rendition.width)
         self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
         self.assertEqual(rendered_image.get('src'), image_rendition.url)
+
