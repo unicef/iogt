@@ -1,10 +1,12 @@
+from bs4 import BeautifulSoup
 from django.test import TestCase
 from django.http import HttpRequest
 from wagtail.core.models import Site
 
 from home.wagtail_hooks import limit_page_chooser
-from home.factories import SectionFactory, ArticleFactory, HomePageFactory
+from home.factories import SectionFactory, ArticleFactory, HomePageFactory, SiteSettingsFactory
 from wagtail_factories import SiteFactory
+from home.models import SiteSettings
 
 
 class LimitPageChooserHookTests(TestCase):
@@ -55,3 +57,38 @@ class LimitPageChooserHookTests(TestCase):
         pages_after = limit_page_chooser(pages_before, request)
 
         self.assertEqual(pages_after, pages_before)
+
+
+class ImageResizeTest(TestCase):
+    def setUp(self):
+        Site.objects.all().delete()
+        SiteSettings.objects.all().delete()
+        self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
+        self.site_settings = SiteSettingsFactory(site=self.site)
+        self.article = ArticleFactory(parent=self.site_settings.site.root_page)
+
+    def test_default_image_maximum_width_360(self):
+        response = self.client.get(self.article.url)
+        soup = BeautifulSoup(response.content)
+        rendered_image = soup.find("img", {"class": "article__lead-img-featured"})
+        image_rendition = self.article.lead_image.get_rendition('width-360')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(rendered_image.get('alt'), image_rendition.alt)
+        self.assertEqual(int(rendered_image.get('width')), image_rendition.width)
+        self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
+        self.assertEqual(rendered_image.get('src'), image_rendition.url)
+
+    def test_larger_image_maximum_width_800(self):
+        self.site_settings.default_image_resize_rule_width = 800
+        self.site_settings.save()
+        response = self.client.get(self.article.url)
+        soup = BeautifulSoup(response.content)
+        rendered_image = soup.find("img", {"class": "article__lead-img-featured"})
+        image_rendition = self.article.lead_image.get_rendition('width-800')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(rendered_image.get('alt'), image_rendition.alt)
+        self.assertEqual(int(rendered_image.get('width')), image_rendition.width)
+        self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
+        self.assertEqual(rendered_image.get('src'), image_rendition.url)
