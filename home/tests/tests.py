@@ -7,6 +7,7 @@ from wagtail_localize.operations import TranslationCreator
 from home.wagtail_hooks import limit_page_chooser
 from home.factories import SectionFactory, ArticleFactory, HomePageFactory, MediaFactory, LocaleFactory
 from wagtail_factories import SiteFactory
+from bs4 import BeautifulSoup
 
 
 class LimitPageChooserHookTests(TestCase):
@@ -71,10 +72,17 @@ class MediaTranslationTest(TestCase):
 
     def test_media_block_translation_of_english_language(self):
         response = self.client.get(self.en_article.url)
+        soup = BeautifulSoup(response.content)
+        video_text = soup.find("p", {"class": "article__content--video"}).text.strip()
+        video_link = soup.find("p", {"class": "article__content--video"}).find("a").get("href")
+        audio_text = soup.find("p", {"class": "article__content--audio"}).text.strip()
+        audio_link = soup.find("p", {"class": "article__content--audio"}).find("a").get("href")
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, f'If you cannot view the above video, you can instead <a href="{self.en_article.body[0].value.url}" download>download it</a>.')
-        self.assertContains(response, f'If you cannot listen to the above audio, you can instead <a href="{self.en_article.body[1].value.url}" download>download it</a>.')
+        self.assertEqual(video_text, 'If you cannot view the above video, you can instead download it.')
+        self.assertEqual(video_link, self.en_article.body[0].value.url)
+        self.assertEqual(audio_text, 'If you cannot listen to the above audio, you can instead download it.')
+        self.assertEqual(audio_link, self.en_article.body[1].value.url)
 
     def test_media_block_translation_of_bengali_language(self):
         bn_locale = LocaleFactory(language_code='bn')
@@ -92,7 +100,14 @@ class MediaTranslationTest(TestCase):
             language=bn_locale.language_code)
 
         response = self.client.get(bn_article.url)
+        soup = BeautifulSoup(response.content)
+        video_text = soup.find("p", {"class": "article__content--video"}).text.strip()
+        video_link = soup.find("p", {"class": "article__content--video"}).find("a").get("href")
+        audio_text = soup.find("p", {"class": "article__content--audio"}).text.strip()
+        audio_link = soup.find("p", {"class": "article__content--audio"}).find("a").get("href")
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, f'উপরের ভিডিও দেখা না গেলে <a href="{bn_article.body[0].value.url}" download> এর পরিবর্তে এটা </a> ডাউনলোড করুন')
-        self.assertContains(response, f'উপরের অডিও শুনতে না পেলে <a href="{bn_article.body[1].value.url}" download> এর পরিবর্তে এটা </a> ডাউনলোড করুন')
+        self.assertEqual(video_text, 'উপরের ভিডিও দেখা না গেলে  এর পরিবর্তে এটা  ডাউনলোড করুন')
+        self.assertEqual(video_link, self.en_article.body[0].value.url)
+        self.assertEqual(audio_text, 'উপরের অডিও শুনতে না পেলে  এর পরিবর্তে এটা  ডাউনলোড করুন')
+        self.assertEqual(audio_link, self.en_article.body[1].value.url)
