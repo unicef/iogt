@@ -1,9 +1,10 @@
+from bs4 import BeautifulSoup
 from django.test import TestCase
 from django.http import HttpRequest
 from wagtail.core.models import Site
 
 from home.wagtail_hooks import limit_page_chooser
-from home.factories import SectionFactory, ArticleFactory, HomePageFactory
+from home.factories import SectionFactory, ArticleFactory, HomePageFactory, ArticleBlockFactory
 from wagtail_factories import SiteFactory
 
 
@@ -55,3 +56,29 @@ class LimitPageChooserHookTests(TestCase):
         pages_after = limit_page_chooser(pages_before, request)
 
         self.assertEqual(pages_after, pages_before)
+
+
+class HomePageFeaturedItemTest(TestCase):
+    def setUp(self):
+        self.site = Site.objects.get(is_default_site=True)
+        self.home_page = HomePageFactory(
+            parent=self.site.root_page,
+            home_featured_content__0__article=ArticleBlockFactory(),
+            home_featured_content__1__article=ArticleBlockFactory(title='new title'),
+        )
+
+    def test_home_page_featured_item_with_empty_title(self):
+        response = self.client.get(self.home_page.url)
+        parsed_response = BeautifulSoup(response.content)
+        title = parsed_response.find("p", {"class": "article-title"}).text
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(title, self.home_page.home_featured_content[0].value['article'].title)
+
+    def test_home_page_featured_item_with_new_title(self):
+        response = self.client.get(self.home_page.url)
+        parsed_response = BeautifulSoup(response.content)
+        title = parsed_response.find("p", {"class": "article-title"}).findNext("p", {"class": "article-title"}).text
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(title, self.home_page.home_featured_content[1].value['title'])

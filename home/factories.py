@@ -8,7 +8,10 @@ from wagtail_factories import (
     PageFactory,
     StreamFieldFactory,
 )
+from wagtail_factories.blocks import StructBlockFactory
+
 from comments.models import CommentStatus
+from home.blocks import ArticleBlock
 from home.models import (
     Article,
     FooterIndexPage,
@@ -22,8 +25,36 @@ from home.models import (
 )
 
 
+class ArticleFactory(PageFactory):
+    title = factory.Sequence(lambda n: f'article{n}')
+    lead_image = factory.SubFactory(ImageFactory)
+    commenting_status = CommentStatus.OPEN
+    body = StreamFieldFactory(
+        {
+            "image": ImageChooserBlockFactory,
+        }
+    )
+
+    class Meta:
+        model = Article
+
+
+class ArticleBlockFactory(StructBlockFactory):
+    title = ''
+    display_section_title = True
+    article = factory.SubFactory(ArticleFactory)
+
+    class Meta:
+        model = ArticleBlock
+
+
 class HomePageFactory(PageFactory):
     title = factory.Sequence(lambda n: f'homepage{n}')
+    home_featured_content = StreamFieldFactory(
+        {
+            "article": factory.SubFactory(ArticleBlockFactory),
+        }
+    )
 
     class Meta:
         model = HomePage
@@ -42,34 +73,17 @@ class SectionFactory(PageFactory):
     class Meta:
         model = Section
 
-
-class ArticleFactory(PageFactory):
-    title = factory.Sequence(lambda n: f'article{n}')
-    lead_image = factory.SubFactory(ImageFactory)
-    commenting_status = CommentStatus.OPEN
-    body = StreamFieldFactory(
-        {
-            "image": ImageChooserBlockFactory,
-        }
-    )
-
-    class Meta:
-        model = Article
-
-
 class MiscellaneousIndexPageFactory(PageFactory):
     title = factory.Sequence(lambda n: f'miscellaneous{n}')
 
     class Meta:
         model = MiscellaneousIndexPage
 
-
 class OfflineContentIndexPageFactory(ArticleFactory):
     title = factory.Sequence(lambda n: f'offline-content-index{n}')
 
     class Meta:
         model = OfflineContentIndexPage
-
 
 class SVGToPNGMapFactory(DjangoModelFactory):
     png_image_file = factory.LazyAttribute(
