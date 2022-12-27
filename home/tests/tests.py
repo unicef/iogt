@@ -61,8 +61,6 @@ class LimitPageChooserHookTests(TestCase):
 
 class ImageResizeTest(TestCase):
     def setUp(self):
-        Site.objects.all().delete()
-        SiteSettings.objects.all().delete()
         self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
         self.site_settings = SiteSettingsFactory(site=self.site)
         self.section = SectionFactory(parent=self.site_settings.site.root_page)
@@ -70,8 +68,8 @@ class ImageResizeTest(TestCase):
 
     def test_default_image_maximum_width_360(self):
         response = self.client.get(self.article.url)
-        soup = BeautifulSoup(response.content)
-        rendered_image = soup.find("img", {"class": "article__lead-img-featured"})
+        parsed_response = BeautifulSoup(response.content)
+        rendered_image = parsed_response.find("img", {"class": "article__lead-img-featured"})
         image_rendition = self.article.lead_image.get_rendition('width-360')
 
         self.assertEqual(response.status_code, 200)
@@ -82,8 +80,8 @@ class ImageResizeTest(TestCase):
 
     def test_default_image_half_maximum_width_180(self):
         response = self.client.get(self.section.url)
-        soup = BeautifulSoup(response.content)
-        rendered_image = soup.find("div", {"class": "article-card"}).find("img")
+        parsed_response = BeautifulSoup(response.content)
+        rendered_image = parsed_response.find("div", {"class": "article-card"}).find("img")
         image_rendition = self.article.lead_image.get_rendition('width-180')
 
         self.assertEqual(response.status_code, 200)
