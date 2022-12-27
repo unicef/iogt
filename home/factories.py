@@ -79,11 +79,13 @@ class MiscellaneousIndexPageFactory(PageFactory):
     class Meta:
         model = MiscellaneousIndexPage
 
+
 class OfflineContentIndexPageFactory(ArticleFactory):
     title = factory.Sequence(lambda n: f'offline-content-index{n}')
 
     class Meta:
         model = OfflineContentIndexPage
+
 
 class SVGToPNGMapFactory(DjangoModelFactory):
     png_image_file = factory.LazyAttribute(
