@@ -148,7 +148,7 @@ def render_redirect_from_with_help_text(field):
 @register.inclusion_tag('home/tags/image.html', takes_context=True)
 def render_image(context, image, half_width=False, img_class=None):
     site = SiteSettings.get_for_default_site()
-    width = site.default_image_resize_rule_width if site.default_image_resize_rule_width else 360
+    width = site.image_maximum_width if site.image_maximum_width else 360
     if half_width:
         width //= 2
 

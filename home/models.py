@@ -691,7 +691,7 @@ class SiteSettings(BaseSetting):
         (1080, 'Larger - Images resized to maximum width of 1080px, experimental (width-1080)'),
         (1600, 'Larger - Images resized to maximum width of 1600px, experimental (width-1600)'),
     )
-    default_image_resize_rule_width = models.IntegerField(
+    image_maximum_width = models.IntegerField(
         choices=WIDTH_CHOICES,
         default=360,
         help_text=mark_safe("""
@@ -781,7 +781,7 @@ class SiteSettings(BaseSetting):
         ),
         MultiFieldPanel(
             [
-                FieldPanel('default_image_resize_rule_width'),
+                FieldPanel('image_maximum_width'),
             ],
             heading="Default image resize width",
         ),
