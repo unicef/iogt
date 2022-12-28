@@ -150,7 +150,7 @@ class HomePageFeaturedItemTest(TestCase):
         quiz_title = parsed_response.find("div", {"class": "block-embedded_quiz"}).find("p").findNext("p").text
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(article_title, self.home_page.home_featured_content[0].value['title'])
-        self.assertEqual(poll_title, self.home_page.home_featured_content[1].value['title'])
-        self.assertEqual(survey_title, self.home_page.home_featured_content[2].value['title'])
-        self.assertEqual(quiz_title, self.home_page.home_featured_content[3].value['title'])
+        self.assertEqual(article_title, "new article title")
+        self.assertEqual(poll_title, "new poll title")
+        self.assertEqual(survey_title, "new survey title")
+        self.assertEqual(quiz_title, "new quiz title")
