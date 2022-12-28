@@ -4,7 +4,7 @@ from django.http import HttpRequest
 from wagtail.core.models import Site
 
 from home.wagtail_hooks import limit_page_chooser
-from home.factories import SectionFactory, ArticleFactory, HomePageFactory, ArticleBlockFactory, SectionIndexFactory
+from home.factories import SectionFactory, ArticleFactory, HomePageFactory, SectionIndexFactory
 from wagtail_factories import SiteFactory
 
 
