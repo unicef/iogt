@@ -97,7 +97,7 @@ class EmbeddedPollBlock(EmbeddedQuestionnaireBlock):
             context.update({
                 'direct_display': value['direct_display'],
                 'questionnaire': poll.specific,
-                'title': value['title'] if value['title'] else poll.specific.title,
+                'title': value['title'] or poll.specific.title,
             })
         return context
 
@@ -115,7 +115,7 @@ class EmbeddedSurveyBlock(EmbeddedQuestionnaireBlock):
             context.update({
                 'direct_display': value['direct_display'],
                 'questionnaire': survey.specific,
-                'title': value['title'] if value['title'] else survey.specific.title
+                'title': value['title'] or survey.specific.title
             })
         return context
 
@@ -133,7 +133,7 @@ class EmbeddedQuizBlock(EmbeddedQuestionnaireBlock):
             context.update({
                 'direct_display': value['direct_display'],
                 'questionnaire': quiz.specific,
-                'title': value['title'] if value['title'] else quiz.specific.title,
+                'title': value['title'] or quiz.specific.title,
             })
         return context
 
@@ -171,7 +171,7 @@ class ArticleBlock(blocks.StructBlock):
             context.update({
                 'display_section_title': value['display_section_title'],
                 'article': article.specific,
-                'title': value['title'] if value['title'] else article.specific.title
+                'title': value['title'] or article.specific.title
             })
         return context
 
