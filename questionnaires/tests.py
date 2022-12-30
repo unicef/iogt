@@ -1029,7 +1029,7 @@ class FormDataPerUserAdminTests(TestCase):
 class QuestionnaireLeadImageTest(TestCase):
     def setUp(self):
         self.site = Site.objects.get(is_default_site=True)
-        self.home_page = self.site.root_page.specific
+        self.home_page = self.site.root_page
 
     def test_lead_image_of_survey(self):
         survey = SurveyFactory(parent=self.home_page)
