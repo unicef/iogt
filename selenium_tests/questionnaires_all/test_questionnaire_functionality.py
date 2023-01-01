@@ -1,4 +1,5 @@
 import time
+import json
 
 from selenium_tests.base import BaseSeleniumTests
 from selenium.webdriver.support.ui import Select
@@ -175,9 +176,34 @@ class QuestionnaireFunctionalitySeleniumTests(BaseSeleniumTests):
             thank_you_text="[{\"type\": \"paragraph\", \"value\": \"<p>Thankyou for completing the survey</p>\"}]"
             )
 
+        skip_logic = [
+            {
+                'type': 'skip_logic',
+                'value': {
+                    'choice': 'A',
+                    'skip_logic': 'next'
+                    },
+            }, 
+            {
+                'type': 'skip_logic', 
+                'value': {
+                    'choice': 'B', 
+                    'skip_logic': 'question', 
+                    'question': 3
+                    },
+            }, 
+            {
+                'type': 'skip_logic', 
+                'value': {
+                    'choice': 'C', 
+                    'skip_logic': 'next', 
+                    }, 
+            }
+        ]
+        json_skip_logic = json.dumps(skip_logic)
+
         SurveyFormFieldFactory(
             page=survey01,
-            pk= 1,
             sort_order= 0,
             required=True,
             choices= "A|B|C",
@@ -185,14 +211,13 @@ class QuestionnaireFunctionalitySeleniumTests(BaseSeleniumTests):
             label= "XXXX",
             field_type= "radio",
             admin_label= "q1",
-            skip_logic= "[{\"type\": \"skip_logic\", \"value\": {\"choice\": \"A\", \"skip_logic\": \"next\", \"question\": null}, \"id\": \"60a035c2-7e67-4c41-90c7-8be3a94faefb\"}, {\"type\": \"skip_logic\", \"value\": {\"choice\": \"B\", \"skip_logic\": \"question\", \"question\": 3}, \"id\": \"6b470d57-a397-4eec-a747-d62652fc56c2\"}, {\"type\": \"skip_logic\", \"value\": {\"choice\": \"C\", \"skip_logic\": \"end\", \"question\": null}, \"id\": \"8d0ccb1e-6d44-4d95-aeab-ea66512f5c68\"}]",
+            skip_logic= json_skip_logic,
             default_value= "",
             page_break=True
         )
 
         SurveyFormFieldFactory(
             page=survey01,
-            pk= 2,
             sort_order= 1,
             required=False,
             choices= "",
@@ -208,7 +233,6 @@ class QuestionnaireFunctionalitySeleniumTests(BaseSeleniumTests):
 
         SurveyFormFieldFactory(
             page=survey01,
-            pk= 3,
             sort_order= 2,
             required=False,
             choices= "",
@@ -240,10 +264,27 @@ class QuestionnaireFunctionalitySeleniumTests(BaseSeleniumTests):
             multi_step = True,
             thank_you_text="[{\"type\": \"paragraph\", \"value\": \"<p>Thankyou for completing the survey</p>\"}]"
             )
+        
+        skip_logic = [
+            {
+                'type': 'skip_logic',
+                'value': {
+                    'choice': 'A',
+                    'skip_logic': 'next',
+                    },
+            }, 
+            {
+                'type': 'skip_logic', 
+                'value': {
+                    'choice': 'C', 
+                    'skip_logic': 'end', 
+                    }, 
+            }
+        ]
+        json_skip_logic = json.dumps(skip_logic)
 
         SurveyFormFieldFactory(
             page=survey01,
-            pk= 1,
             sort_order= 0,
             required=True,
             choices= "A|C",
@@ -251,14 +292,13 @@ class QuestionnaireFunctionalitySeleniumTests(BaseSeleniumTests):
             label= "XXXX",
             field_type= "radio",
             admin_label= "q1",
-            skip_logic= "[{\"type\": \"skip_logic\", \"value\": {\"choice\": \"A\", \"skip_logic\": \"next\", \"question\": null}, \"id\": \"60a035c2-7e67-4c41-90c7-8be3a94faefb\"}, {\"type\": \"skip_logic\", \"value\": {\"choice\": \"C\", \"skip_logic\": \"end\", \"question\": null}, \"id\": \"8d0ccb1e-6d44-4d95-aeab-ea66512f5c68\"}]",
+            skip_logic= json_skip_logic,
             default_value= "",
             page_break=True
         )
 
         SurveyFormFieldFactory(
             page=survey01,
-            pk= 2,
             sort_order= 1,
             required=False,
             choices= "",
@@ -277,4 +317,4 @@ class QuestionnaireFunctionalitySeleniumTests(BaseSeleniumTests):
         survey_page.select_checkboxes("C")
         survey_page.submit_response()
         results_page = QuestionnaireResultsPage(self.selenium)
-        self.assertIn("Thankyou for completing the survey", results_page.get_content_text())     
+        self.assertIn("Thankyou for completing the survey", results_page.get_content_text())
