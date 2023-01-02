@@ -1,3 +1,4 @@
+import factory
 from bs4 import BeautifulSoup
 from django.test import TestCase
 from django.http import HttpRequest
@@ -5,7 +6,7 @@ from wagtail.core.models import Site
 
 from home.wagtail_hooks import limit_page_chooser
 from home.factories import SectionFactory, ArticleFactory, HomePageFactory, SectionIndexFactory, PageLinkPageFactory
-from wagtail_factories import SiteFactory
+from wagtail_factories import SiteFactory, ImageFactory
 
 
 class LimitPageChooserHookTests(TestCase):
@@ -65,16 +66,16 @@ class PageLinkPageTest(TestCase):
         self.home_page = self.site.root_page
         self.section_index_page = SectionIndexFactory(parent=self.home_page)
         self.section = SectionFactory(parent=self.section_index_page)
+        self.section2 = SectionFactory(parent=self.section_index_page)
+        self.article = ArticleFactory(parent=self.home_page)
 
     def test_page_link_page_article_listing(self):
-        article = ArticleFactory(parent=self.section)
-        page_link_page = PageLinkPageFactory(parent=self.section, page=article)
-
+        page_link_page = PageLinkPageFactory(parent=self.section, page=self.article)
         response = self.client.get(self.section.url)
         parsed_response = BeautifulSoup(response.content)
         rendered_title = parsed_response.find("p", {"class": "article-title"}).text
         rendered_image = parsed_response.find("div", {"class": "img-holder"}).find("img")
-        image_rendition = article.lead_image.get_rendition('width-180')
+        image_rendition = self.article.lead_image.get_rendition('width-180')
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(rendered_title, page_link_page.get_page().title)
@@ -83,18 +84,58 @@ class PageLinkPageTest(TestCase):
         self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
         self.assertEqual(rendered_image.get('src'), image_rendition.url)
 
+    def test_page_link_page_override_article_listing(self):
+        page_link_page = PageLinkPageFactory(
+            parent=self.section,
+            page=self.article,
+            override_title='new title',
+            override_lead_image=ImageFactory()
+        )
+
+        response = self.client.get(self.section.url)
+        parsed_response = BeautifulSoup(response.content)
+        rendered_title = parsed_response.find("p", {"class": "article-title"}).text
+        rendered_image = parsed_response.find("div", {"class": "article-card"}).find("img")
+        image_rendition = page_link_page.specific.override_lead_image.get_rendition('width-180')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(rendered_title, 'new title')
+        self.assertEqual(rendered_image.get('alt'), image_rendition.alt)
+        self.assertEqual(int(rendered_image.get('width')), image_rendition.width)
+        self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
+        self.assertEqual(rendered_image.get('src'), image_rendition.url)
+
     def test_page_link_page_section_listing(self):
-        section2 = SectionFactory(parent=self.section_index_page)
-        page_link_page = PageLinkPageFactory(parent=self.section, page=section2)
+        page_link_page = PageLinkPageFactory(parent=self.section, page=self.section2)
+        response = self.client.get(self.section.url)
+        parsed_response = BeautifulSoup(response.content)
+        rendered_title = parsed_response.find("p", {"class": "article-title"}).text
+        rendered_image = parsed_response.find("div", {"class": "section-card"}).find("img")
+        image_rendition = self.section2.lead_image.get_rendition('width-180')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(rendered_title, page_link_page.get_page().title)
+        self.assertEqual(rendered_image.get('alt'), image_rendition.alt)
+        self.assertEqual(int(rendered_image.get('width')), image_rendition.width)
+        self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
+        self.assertEqual(rendered_image.get('src'), image_rendition.url)
+
+    def test_page_link_page_override_section_listing(self):
+        page_link_page = PageLinkPageFactory(
+            parent=self.section,
+            page=self.section2,
+            override_title='new title',
+            override_lead_image=ImageFactory()
+        )
 
         response = self.client.get(self.section.url)
         parsed_response = BeautifulSoup(response.content)
         rendered_title = parsed_response.find("p", {"class": "article-title"}).text
         rendered_image = parsed_response.find("div", {"class": "section-card"}).find("img")
-        image_rendition = section2.lead_image.get_rendition('width-180')
+        image_rendition = page_link_page.specific.override_lead_image.get_rendition('width-180')
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(rendered_title, page_link_page.get_page().title)
+        self.assertEqual(rendered_title, 'new title')
         self.assertEqual(rendered_image.get('alt'), image_rendition.alt)
         self.assertEqual(int(rendered_image.get('width')), image_rendition.width)
         self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
