@@ -90,14 +90,14 @@ def render_page_link_page_card(context, page, background_color=None, font_color=
         template = 'generic_components/section_card.html'
         context.update({
             'section': linked_page,
-            'is_first_content': linked_page.is_first_content,
+            'is_first_content': page.is_first_content,
             'lead_image': page.override_lead_image or linked_page.lead_image,
         })
     elif isinstance(linked_page, Article):
         template = 'generic_components/article_card.html'
         context.update({
             'article': linked_page,
-            'is_first_content': linked_page.is_first_content,
+            'is_first_content': page.is_first_content,
             'lead_image': page.override_lead_image or linked_page.lead_image,
         })
     else:
