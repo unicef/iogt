@@ -108,7 +108,7 @@ def render_page_link_page_card(context, page, background_color=None, font_color=
 
     context.update({
         'template': template,
-        'title': page.override_title if page.override_title else linked_page.title,
+        'title': page.override_title or linked_page.title,
         'background_color': background_color,
         'font_color': font_color
     })
