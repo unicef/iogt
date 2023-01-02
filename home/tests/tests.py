@@ -8,6 +8,8 @@ from home.wagtail_hooks import limit_page_chooser
 from home.factories import SectionFactory, ArticleFactory, HomePageFactory, SectionIndexFactory, PageLinkPageFactory
 from wagtail_factories import SiteFactory, ImageFactory
 
+from questionnaires.factories import PollFactory
+
 
 class LimitPageChooserHookTests(TestCase):
     def setUp(self):
@@ -65,20 +67,21 @@ class PageLinkPageTest(TestCase):
         self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
         self.home_page = self.site.root_page
         self.section_index_page = SectionIndexFactory(parent=self.home_page)
-        self.section = SectionFactory(parent=self.section_index_page)
-        self.section2 = SectionFactory(parent=self.section_index_page)
-        self.article = ArticleFactory(parent=self.home_page)
+        self.section1 = SectionFactory(parent=self.section_index_page)
+        self.section2 = SectionFactory(parent=self.section_index_page, title='section title')
+        self.article = ArticleFactory(parent=self.home_page, title='article title')
+        self.poll = PollFactory(parent=self.home_page, title='poll title')
 
     def test_linked_page_article_in_section_listing(self):
-        page_link_page = PageLinkPageFactory(parent=self.section, page=self.article)
-        response = self.client.get(self.section.url)
+        PageLinkPageFactory(parent=self.section1, page=self.article)
+        response = self.client.get(self.section1.url)
         parsed_response = BeautifulSoup(response.content)
         rendered_title = parsed_response.find("p", {"class": "article-title"}).text
         rendered_image = parsed_response.find("div", {"class": "article-card"}).find("img")
         image_rendition = self.article.lead_image.get_rendition('width-180')
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(rendered_title, page_link_page.get_page().title)
+        self.assertEqual(rendered_title, 'article title')
         self.assertEqual(rendered_image.get('alt'), image_rendition.alt)
         self.assertEqual(int(rendered_image.get('width')), image_rendition.width)
         self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
@@ -86,13 +89,13 @@ class PageLinkPageTest(TestCase):
 
     def test_linked_page_override_article_in_section_listing(self):
         page_link_page = PageLinkPageFactory(
-            parent=self.section,
+            parent=self.section1,
             page=self.article,
             override_title='new title',
             override_lead_image=ImageFactory()
         )
 
-        response = self.client.get(self.section.url)
+        response = self.client.get(self.section1.url)
         parsed_response = BeautifulSoup(response.content)
         rendered_title = parsed_response.find("p", {"class": "article-title"}).text
         rendered_image = parsed_response.find("div", {"class": "article-card"}).find("img")
@@ -106,15 +109,15 @@ class PageLinkPageTest(TestCase):
         self.assertEqual(rendered_image.get('src'), image_rendition.url)
 
     def test_linked_page_section_in_section_listing(self):
-        page_link_page = PageLinkPageFactory(parent=self.section, page=self.section2)
-        response = self.client.get(self.section.url)
+        PageLinkPageFactory(parent=self.section1, page=self.section2)
+        response = self.client.get(self.section1.url)
         parsed_response = BeautifulSoup(response.content)
-        rendered_title = parsed_response.find("p", {"class": "article-title"}).text
+        rendered_title = parsed_response.find("p", {"class": "section-title"}).text
         rendered_image = parsed_response.find("div", {"class": "section-card"}).find("img")
         image_rendition = self.section2.lead_image.get_rendition('width-180')
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(rendered_title, page_link_page.get_page().title)
+        self.assertEqual(rendered_title, 'section title')
         self.assertEqual(rendered_image.get('alt'), image_rendition.alt)
         self.assertEqual(int(rendered_image.get('width')), image_rendition.width)
         self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
@@ -122,15 +125,15 @@ class PageLinkPageTest(TestCase):
 
     def test_linked_page_override_section_in_section_listing(self):
         page_link_page = PageLinkPageFactory(
-            parent=self.section,
+            parent=self.section1,
             page=self.section2,
             override_title='new title',
             override_lead_image=ImageFactory()
         )
 
-        response = self.client.get(self.section.url)
+        response = self.client.get(self.section1.url)
         parsed_response = BeautifulSoup(response.content)
-        rendered_title = parsed_response.find("p", {"class": "article-title"}).text
+        rendered_title = parsed_response.find("p", {"class": "section-title"}).text
         rendered_image = parsed_response.find("div", {"class": "section-card"}).find("img")
         image_rendition = page_link_page.override_lead_image.get_rendition('width-180')
 
@@ -140,3 +143,21 @@ class PageLinkPageTest(TestCase):
         self.assertEqual(int(rendered_image.get('width')), image_rendition.width)
         self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
         self.assertEqual(rendered_image.get('src'), image_rendition.url)
+
+    def test_linked_page_questionnaire_in_section_listing(self):
+        PageLinkPageFactory(parent=self.section1, page=self.poll)
+        response = self.client.get(self.section1.url)
+        parsed_response = BeautifulSoup(response.content)
+        rendered_title = parsed_response.find("div", {"class": "questionnaire-components__component"}).findAll("p")[1].text
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(rendered_title, 'poll title')
+
+    def test_linked_page_override_questionnaire_in_section_listing(self):
+        PageLinkPageFactory(parent=self.section1, page=self.poll, override_title='new poll title')
+        response = self.client.get(self.section1.url)
+        parsed_response = BeautifulSoup(response.content)
+        rendered_title = parsed_response.find("div", {"class": "questionnaire-components__component"}).findAll("p")[1].text
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(rendered_title, 'new poll title')

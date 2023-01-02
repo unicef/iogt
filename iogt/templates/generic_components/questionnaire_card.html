@@ -5,7 +5,7 @@
         <a href="{% pageurl questionnaire %}" style="color:{{ font_color }}; background:{{ background_color }};">
             <div>
                 <p>{% translate questionnaire.get_type|upper %}</p>
-                {% block title %}<p>{{ questionnaire.title }}</p>{% endblock %}
+                <p>{% block title %}{{ questionnaire.title }}{% endblock %}</p>
                 {% include 'questionnaires/tags/index_page_description_lines.html' with questionnaire=questionnaire %}
             </div>
             {% include 'home/tags/angle_bracket.html' %}

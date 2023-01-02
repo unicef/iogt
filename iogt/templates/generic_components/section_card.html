@@ -3,7 +3,7 @@
 <div class="section-card">
     <a href="{% pageurl section %}" class='sub-section {% if is_first_content %}first-content{% endif %}'
        style="color:{{ font_color }}; background:{{ background_color }};">
-        {% block title %}<div class="section-header"><p class="section-title">{{ section.title }}</p></div>{% endblock %}
+        <div class="section-header"><p class="section-title">{% block title %}{{ section.title }}{% endblock %}</p></div>
         {% block lead_image %}
             <div class="img-holder {% render_is_complete section %}">
                 {% if is_first_content %}

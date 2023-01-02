@@ -11,7 +11,7 @@
                         {{ article.top_level_section.title|upper }}
                     </p>
                 {% endif %}
-                {% block title %}<p class="article-title">{{ article.title }}</p> {% endblock %}
+                <p class="article-title">{% block title %}{{ article.title }}{% endblock %}</p>
                 {% if article.index_page_description %}
                     <p class="sm-paragraph">{{ article.index_page_description }}</p>
                 {% endif %}
