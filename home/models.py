@@ -575,9 +575,6 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
         null=True
     )
 
-    def get_page(self):
-        return self.page.specific if self.page and self.page.live else self
-
     page = models.ForeignKey(Page, null=True, blank=True, related_name='page_link_pages', on_delete=models.PROTECT)
     external_link = models.URLField(null=True, blank=True)
 
@@ -591,6 +588,9 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
         ], heading=_('Page')),
         FieldPanel('external_link'),
     ]
+
+    def get_page(self):
+        return self.page.specific if self.page and self.page.live else self
 
     def get_icon(self):
         icon = super().get_icon()
