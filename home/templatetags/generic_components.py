@@ -84,21 +84,21 @@ def render_page_link_page_card(context, page, background_color=None, font_color=
 
     font_color = font_color or theme_settings.article_card_font_color
     background_color = background_color or theme_settings.article_card_background_color
-    linked_page = page.page.specific
+    linked_page = page.get_page()
 
     if isinstance(linked_page, Section):
         template = 'generic_components/section_card.html'
         context.update({
             'section': linked_page,
             'is_first_content': linked_page.is_first_content,
-            'lead_image': page.override_lead_image if page.override_lead_image else child.lead_image,
+            'lead_image': page.override_lead_image or linked_page.lead_image,
         })
     elif isinstance(linked_page, Article):
         template = 'generic_components/article_card.html'
         context.update({
             'article': linked_page,
             'is_first_content': linked_page.is_first_content,
-            'lead_image': page.override_the_lead_image_from_the_destination_page if page.override_the_lead_image_from_the_destination_page else child.lead_image,
+            'lead_image': page.override_lead_image or linked_page.lead_image,
         })
     else:
         template = 'generic_components/questionnaire_card.html'
