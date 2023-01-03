@@ -13,8 +13,6 @@
                     {% render_article_card child is_first_content %}
                 {% elif child.get_type == 'poll' or child.get_type == 'survey' or child.get_type == 'quiz' %}
                     {% render_questionnaire_wrapper child child.direct_display %}
-                {% elif child.get_type == 'pagelinkpage' %}
-                    {% render_page_link_page_card child %}
                 {% endif %}
             {% endwith %}
         {% endfor %}

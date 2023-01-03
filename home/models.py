@@ -12,6 +12,7 @@ from django.core.cache import cache
 from django.db import models
 from django.utils.deconstruct import deconstructible
 from django.utils.encoding import force_str
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from iogt.settings.base import WAGTAIL_CONTENT_LANGUAGES
@@ -589,8 +590,18 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
         FieldPanel('external_link'),
     ]
 
+    def get_title(self):
+        return self.override_title or self.page.title
+
+    def get_lead_image(self):
+        return self.override_lead_image or (hasattr(self.page.specific, 'lead_image') and self.page.specific.lead_image)
+
     def get_page(self):
         return self.page.specific if self.page and self.page.live else self
+
+    @cached_property
+    def get_type(self):
+        return self.page.specific.get_type if self.page else self.__class__.__name__.lower()
 
     def get_icon(self):
         icon = super().get_icon()
@@ -609,6 +620,7 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
         return url
 
     url = property(get_url)
+
 
 @register_setting
 class SiteSettings(BaseSetting):

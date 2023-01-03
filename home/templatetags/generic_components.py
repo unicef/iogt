@@ -6,7 +6,7 @@ from django.urls import reverse
 from google_analytics import CAMPAIGN_TRACKING_PARAMS
 
 import iogt.iogt_globals as globals_
-from home.models import Section, Article
+
 
 register = template.Library()
 
@@ -74,43 +74,6 @@ def render_questionnaire_card(context, page, background_color=None, font_color=N
         'questionnaire': page,
         'background_color': background_color,
         'font_color': font_color
-    })
-    return context
-
-
-@register.inclusion_tag('generic_components/page_link_page_card.html', takes_context=True)
-def render_page_link_page_card(context, page, background_color=None, font_color=None):
-    theme_settings = globals_.theme_settings
-
-    font_color = font_color or theme_settings.article_card_font_color
-    background_color = background_color or theme_settings.article_card_background_color
-    linked_page = page.get_page()
-
-    if isinstance(linked_page, Section):
-        template = 'generic_components/section_card.html'
-        context.update({
-            'section': linked_page,
-            'is_first_content': page.is_first_content,
-            'lead_image': page.override_lead_image or linked_page.lead_image,
-        })
-    elif isinstance(linked_page, Article):
-        template = 'generic_components/article_card.html'
-        context.update({
-            'article': linked_page,
-            'is_first_content': page.is_first_content,
-            'lead_image': page.override_lead_image or linked_page.lead_image,
-        })
-    else:
-        template = 'generic_components/questionnaire_card.html'
-        context.update({
-            'questionnaire': linked_page,
-        })
-
-    context.update({
-        'template': template,
-        'title': page.override_title or linked_page.title,
-        'background_color': background_color,
-        'font_color': font_color,
     })
     return context
 
