@@ -3,9 +3,11 @@ describe("Polls with total rather than percentage tests", () => {
 
     it("Visits the polls page and submits it", () => {
         cy.visitUrl(url);
+        cy.get("select.quest-item__input.cust-select").select('1');
 
         cy.submit(".survey-page__btn", "Submit");
         cy.url().should("include", `/?back_url=${url}`);
+
 
         cy.get(".cust-check__percent")
             .each(($el) => {
