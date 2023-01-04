@@ -1034,19 +1034,19 @@ class PollTest(TestCase):
         self.poll = PollFactory(parent=self.home_page,)
 
     def test_drop_down_defaults_to_the_blank_option(self):
-        PollFormFieldFactory(page=self.poll, field_type='dropdown', choices='c1|c2|c3')
+        PollFormFieldFactory(page=self.poll, field_type='dropdown', choices='c1|c2')
 
         response = self.client.get(self.poll.url)
         parsed_response = BeautifulSoup(response.content)
         default_drop_down_option = parsed_response.find('div', {'class': 'quest-item'}).find('select').find('option').text
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(default_drop_down_option, ' ')
+        self.assertEqual(default_drop_down_option, '')
 
     def test_drop_down_blank_option_submission_for_required_field(self):
-        PollFormFieldFactory(page=self.poll, field_type='dropdown', choices='c1|c2|c3')
+        poll_question = PollFormFieldFactory(page=self.poll, field_type='dropdown', choices='c1|c2')
 
-        response = self.client.post(self.poll.url)
+        response = self.client.post(self.poll.url, {poll_question.clean_name: ''})
         parsed_response = BeautifulSoup(response.content)
         field_required_text = parsed_response.find('div', {'class': 'quest-item'}).find('p', {'class': 'cust-input__error'}).text
 

@@ -3,7 +3,7 @@
 
 <div class="quest-item__content">
     <select name="{{ field.name }}" class="quest-item__input cust-select" {% if is_multiselect %}multiple{% endif %}>
-        <option lablel=" "> </option>
+        <option lablel=""></option>
         {% for option in field %}
             {{ option }}
         {% endfor %}

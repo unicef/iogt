@@ -627,7 +627,7 @@ class Poll(QuestionnairePage, AbstractForm):
         field = self.get_form_fields().first()
         name, label, choices = field.clean_name, field.label, field.choices
         submissions = self.get_submission_class().objects.filter(page=self)
-        submissions = [submission for submission in submissions if submission.get_data().get(name)]
+        submissions = [submission for submission in submissions if submission.get_data().get(name) != '']
 
         # Default result counts to zero so choices with no votes are included
         if self.show_results_with_no_votes:
