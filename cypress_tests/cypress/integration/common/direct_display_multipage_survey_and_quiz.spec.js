@@ -18,6 +18,8 @@ describe("Tests for multi-page embedded forms", () => {
         //cy.get(".quiz-page__content>div>.quest-item__header>div>p").contains("1 of 2 questions");
         cy.get(".quiz-page__content>div>.quest-item__content>label>input").check();
         cy.get(".quiz-page__btns").last().click();
+
+        cy.get("select.quest-item__input.cust-select").select('c1');
         cy.submit(".survey-page__btn", "Submit");
         cy.thanksText(".block-paragraph", "thanks");
     });
