@@ -630,7 +630,7 @@ class Poll(QuestionnairePage, AbstractForm):
         submissions = [submission for submission in submissions if submission.get_data().get(name)]
 
         # Default result counts to zero so choices with no votes are included
-        if len(submissions) > 0 and self.show_results_with_no_votes:
+        if self.show_results_with_no_votes:
             results[label] = {
                 choice: 0 for choice in choices.split('|') if len(choice) > 0
             }
@@ -647,7 +647,7 @@ class Poll(QuestionnairePage, AbstractForm):
 
             results[label] = question_stats
 
-        if self.result_as_percentage:
+        if submissions and self.result_as_percentage:
             total_submissions = len(submissions)
             for key in results:
                 for k, v in results[key].items():
