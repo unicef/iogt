@@ -15,14 +15,6 @@ WAGTAILSEARCH_BACKENDS = {
 }
 
 
-WAGTAILTRANSFER_SECRET_KEY = os.environ.get('WAGTAILTRANSFER_SECRET_KEY')
-WAGTAILTRANSFER_SOURCES = {
-   os.environ.get('WAGTAILTRANSFER_SOURCE_NAME', 'default'): {
-      'BASE_URL': os.environ.get('WAGTAILTRANSFER_SOURCE_BASE_URL'),
-      'SECRET_KEY': os.environ.get('WAGTAILTRANSFER_SOURCE_SECRET_KEY'),
-   },
-}
-
 # Uncomment if you want to run Postgres
 # DATABASES = {
 #     'default': {
