@@ -1,4 +1,5 @@
-{% load static wagtailcore_tags wagtailimages_tags i18n generic_components image_tags %}
+{% load comment_tags %}
+{% load static wagtailcore_tags wagtailimages_tags i18n generic_components image_tags comments_xtd %}
 
 <footer class="bottom-level">
     <nav>
@@ -9,6 +10,8 @@
             {% url 'account_login' as login_url %}
             {% primary_button title='Log in / Create account' href=login_url icon_path='icons/login.svg' extra_classnames='login-create-account-btn' %}
         {% else %}
+            {% comments_moderation_button %}
+
             {% url 'user_profile' as profile_url %}
             {% primary_button title='Profile' href=profile_url icon_path='icons/profile.svg' %}
 

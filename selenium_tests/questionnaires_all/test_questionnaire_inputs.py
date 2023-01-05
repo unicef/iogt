@@ -1,22 +1,18 @@
-import time
 from selenium_tests.base import BaseSeleniumTests
 from selenium.webdriver.support.ui import Select
 from wagtail.core.models import Site
 from questionnaires.models import SurveyFormField
-
 from iogt_users.factories import AdminUserFactory
-from home.factories import ArticleFactory, HomePageFactory, SectionFactory
+from home.factories import ArticleFactory, SectionFactory
 from questionnaires.factories import SurveyFactory
-from wagtail_factories import SiteFactory
 
 class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
 
     def setUp(self):
         Site.objects.all().delete()
-        self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
+        self.setup_blank_site()
         self.user = AdminUserFactory()
-        self.home_page = HomePageFactory(parent=self.site.root_page, owner=self.user)
-        self.section01 = SectionFactory(parent=self.home_page, owner=self.user)
+        self.section01 = SectionFactory(parent=self.home, owner=self.user)
         self.article01 = ArticleFactory(parent=self.section01, owner=self.user)
         self.survey01 = SurveyFactory(parent=self.section01, owner=self.user)
 
