@@ -19,20 +19,6 @@ msgstr "සමාවන්න, දෝෂයක් ඇති බව පෙනේ.
 msgid "You cannot submit when offline"
 msgstr "අන්තර්ජාලය සමඟ සම්බන්ධ නොමැති විට ඔබට ඉදිරිපත් කළ නොහැක"
 
-msgid ""
-"Your app is now ready to install. If using Android, choose 'Add to home "
-"screen' and you should be all set! If you are using a iOS device, you can "
-"install it by clicking 'Share', scrolling down and tapping 'Add to Home "
-"Screen."
-msgstr ""
-"ඔබගේ යෙදුම (App) දැන් ඇතුළත් කිරීමට සූදානම්ය. ඇන්ඩ්‍රොයිඩ් (Android) භාවිතා "
-"කරන්නේ නම්, 'මුල් තිරයට එක් කරන්න' (Add to home screen) තෝරන්න. ඔබ iOS "
-"උපාංගයක් භාවිතා කරන්නේ නම්, ඔබට එය 'Share' ක්ලික් කර තිරයේ පහළට ගමන් කර  "
-"'මුල් තිරයට එක් කරන්න' (Add to Home Screen) ක්ලික් කිරීමෙන් ඇතුළත් කර ගත හැක"
-
-msgid "Install this website as an app on your device?"
-msgstr "මෙම වෙබ් අඩවිය ඔබගේ උපාංගයේ යෙදුමක් (App) ලෙස ඇතුළත් කරන්න?"
-
 msgid "Date must be in this (YYYY-MM-DD) format"
 msgstr ""
 

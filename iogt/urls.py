@@ -65,7 +65,7 @@ urlpatterns = api_url_patterns + [
     path('wagtail-transfer/', include(wagtailtransfer_urls)),
     path('sitemap/', SitemapAPIView.as_view(), name='sitemap'),
     path("manifest.webmanifest", get_manifest, name="manifest"),
-    path('comments/', include('comments.urls')),
+    *i18n_patterns(path('comments/', include('comments.urls'))),
     *i18n_patterns(path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog')),
     path('health-check/', include('health_check.urls')),
     path('page-tree/<int:page_id>/', PageTreeAPIView.as_view(), name='page_tree'),

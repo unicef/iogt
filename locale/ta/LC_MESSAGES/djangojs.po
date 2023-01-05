@@ -19,21 +19,7 @@ msgstr ""
 "முயற்சிக்கவும்."
 
 msgid "You cannot submit when offline"
-msgstr "இணைப்பில் இல்லாத போது உங்களுக்கு சமர்ப்பிக்க முடியாது. "
-
-msgid ""
-"Your app is now ready to install. If using Android, choose 'Add to home "
-"screen' and you should be all set! If you are using a iOS device, you can "
-"install it by clicking 'Share', scrolling down and tapping 'Add to Home "
-"Screen."
-msgstr ""
-"உங்கள் செயலி இப்போது நிறுவுவதற்குத் தயார். நீங்கள் ஆன்ட்ரோய்டு பாவிப்பதாயின்"
-" “முகப் பக்கத்துக்கு சேர்க்கவும்” இனைத் தெரிவுசெய்யவும். நீங்கள் iOS சாதனம் "
-"ஒன்றை பாவிப்பதாயின் ”Share” கிளிக் செய்யவும், “திரையை கீழே உருட்டுதல்” இனை "
-"சொடுக்கியும் “Add to home screen” இனைத் தட்டுவதன் மூலம் நிறுவ முடியும். "
-
-msgid "Install this website as an app on your device?"
-msgstr "இவ்வலைத்தளத்தை ஒரு செயலியாக உங்கள் சாதனத்தில் நிறுவவும்?"
+msgstr "இணைப்பில் இல்லாத போது உங்களுக்கு சமர்ப்பிக்க முடியாது."
 
 msgid "Date must be in this (YYYY-MM-DD) format"
 msgstr ""

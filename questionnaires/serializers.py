@@ -44,9 +44,9 @@ class BaseFormFieldSerializer(serializers.ModelSerializer):
 
 
 class BaseQuestionnairePageDetailSerializer(serializers.ModelSerializer):
-    description = serializers.JSONField(source='description.stream_data')
-    thank_you_text = serializers.JSONField(source='thank_you_text.stream_data')
-    terms_and_conditions = serializers.JSONField(source='terms_and_conditions.stream_data')
+    description = serializers.JSONField(source='description.get_prep_value')
+    thank_you_text = serializers.JSONField(source='thank_you_text.get_prep_value')
+    terms_and_conditions = serializers.JSONField(source='terms_and_conditions.get_prep_value')
     url = serializers.CharField(source='full_url')
 
     class Meta:
@@ -76,7 +76,7 @@ class PollPageDetailSerializer(BaseQuestionnairePageDetailSerializer):
 
 
 class SurveyFormFieldSerializer(BaseFormFieldSerializer):
-    skip_logic = serializers.JSONField(source='skip_logic.stream_data')
+    skip_logic = serializers.JSONField(source='skip_logic.get_prep_value')
 
     class Meta:
         model = SurveyFormField

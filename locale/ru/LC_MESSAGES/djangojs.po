@@ -17,20 +17,10 @@ msgid "Sorry, there seems to be an error. Please try again soon."
 msgstr "К сожалению, возникла ошибка. Пожалуйста, попробуйте еще раз позже."
 
 msgid "You cannot submit when offline"
-msgstr ""
-
-msgid ""
-"Your app is now ready to install. If using Android, choose 'Add to home "
-"screen' and you should be all set! If you are using a iOS device, you can "
-"install it by clicking 'Share', scrolling down and tapping 'Add to Home "
-"Screen."
-msgstr ""
-
-msgid "Install this website as an app on your device?"
-msgstr ""
+msgstr "Отправка в автономном режиме невозможна"
 
 msgid "Date must be in this (YYYY-MM-DD) format"
-msgstr ""
+msgstr "Дата должна быть указана в формате (ГГГГ-ММ-ДД)"
 
 msgid "Datetime must be in this YYYY-MM-DDTHH:SS format"
-msgstr ""
+msgstr "Дата и время должны быть в указаны в формате: ГГГГ-ММ-ДДВЧЧ:СС"

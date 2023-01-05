@@ -1,0 +1,381 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-07-31 09:38+0000\n"
+"PO-Revision-Date: 2021-07-31 09:38+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "quizzes"
+msgstr "Тести"
+
+msgid "Log in to participate"
+msgstr "Увійдіть, щоб взяти участь"
+
+msgid "Log in / Create account"
+msgstr "Увійти/створити обліковий запис"
+
+msgid "© The Internet of Good Things"
+msgstr "© Інтернет хороших речей"
+
+msgid "Profile"
+msgstr "Профіль"
+
+msgid "Chat"
+msgstr "Чат"
+
+msgid "More"
+msgstr "Більше"
+
+msgid "Log in"
+msgstr "Вхід"
+
+msgid "Back"
+msgstr "Назад"
+
+msgid "BACK"
+msgstr "Назад"
+
+msgid "Previous"
+msgstr "Назад"
+
+msgid "Next"
+msgstr "Далі"
+
+msgid "Comments"
+msgstr "Коментарі"
+
+msgid "Please log in or create your account"
+msgstr "Увійдіть або створіть обліковий запис"
+
+msgid "Report"
+msgstr "Звіт"
+
+msgid "Related Articles"
+msgstr "Пов’язані статті"
+
+msgid "This comment has been reported."
+msgstr "Надіслано скаргу на цей коментар."
+
+msgid ""
+"It will be reviewed by the team and may be removed if it breaks our Platform"
+" Rules"
+msgstr ""
+"Команда розгляне його та, можливо, видалить, якщо він порушує наші Правила "
+"платформи"
+
+msgid "articles"
+msgstr "Статті"
+
+msgid "Search the site..."
+msgstr "Пошук по сайту…"
+
+msgid "Search results for:"
+msgstr "Результати пошуку для:"
+
+msgid "No search results were found for"
+msgstr "Не отримано результатів пошуку для"
+
+msgid "Username"
+msgstr "Ім’я користувача"
+
+msgid "Create your account"
+msgstr "Створіть свій обліковий запис"
+
+msgid "Forgot PIN"
+msgstr "Забули PIN-код"
+
+msgid "Cancel"
+msgstr "Скасувати"
+
+msgid "Hey, %(username)s"
+msgstr "Вітаємо, %(username)s"
+
+msgid "Change Digital Pin"
+msgstr "Змінити цифровий PIN-код"
+
+msgid "Personal Details"
+msgstr "Особисті дані"
+
+msgid "Save changes"
+msgstr "Зберегти зміни"
+
+msgid "Reset PIN"
+msgstr "Скинути PIN-код"
+
+msgid "Your PIN has been changed successfully."
+msgstr "Ваш PIN-код успішно змінено."
+
+msgid "I accept the Terms and Conditions."
+msgstr "Я приймаю Умови та положення."
+
+msgid "You have read %(read)s out of %(total)s"
+msgstr "Ви прочитали %(read)s з %(total)s"
+
+msgid "%(counter)s of %(total)s questions"
+msgstr "%(counter)s з %(total)s запитань"
+
+msgid "Select one"
+msgstr "Виберіть один варіант"
+
+msgid "Optional"
+msgstr "Додатково"
+
+msgid "No limit"
+msgstr "Без обмежень"
+
+msgid "Go to homepage"
+msgstr "На головну"
+
+msgid "You have already completed this survey."
+msgstr "Ви вже пройшли це дослідження."
+
+msgid "Check all that apply"
+msgstr "Позначте всі варіанти, що підходять"
+
+msgid "Your results!"
+msgstr "Ваші результати!"
+
+msgid "Replay Quiz"
+msgstr "Відтворити на тест"
+
+msgid "Incorrect"
+msgstr "Неправильно"
+
+msgid "Correct"
+msgstr "Правильно"
+
+msgid "Your answer"
+msgstr "Ваша відповідь"
+
+msgid "Leave comment"
+msgstr "Залишити коментар"
+
+msgid "Reply"
+msgstr "Відповідь"
+
+msgid "Page not found"
+msgstr "Сторінку не знайдено"
+
+msgid "Sorry, this page could not be found."
+msgstr "На жаль, не вдалося знайти цю сторінку."
+
+msgid "Internal server error"
+msgstr "Внутрішня помилка сервера"
+
+msgid "1 result"
+msgid_plural "%(counter)s results"
+msgstr[0] "1 результат"
+msgstr[1] "%(counter)s pезультати"
+
+msgid "poll"
+msgstr "опитування"
+
+msgid "survey"
+msgstr "опитування"
+
+msgid "quiz"
+msgstr "тест"
+
+msgid "This field is required."
+msgstr "Це поле обов’язкове."
+
+msgid "Send"
+msgstr "Надіслати"
+
+msgid "Remove this comment?"
+msgstr "Видалити цей коментар?"
+
+msgid "Remove"
+msgstr "Видалити"
+
+msgid "This comment has been removed."
+msgstr "Цей коментар видалено."
+
+msgid "moderator"
+msgstr "модератор"
+
+msgid "sections"
+msgstr "розділи"
+
+msgid "Check if applies"
+msgstr "Перевірте, чи застосовується"
+
+msgid "New comments have been disabled for this page."
+msgstr "Нові коментарі вимкнені для цієї сторінки."
+
+msgid "Correct answer"
+msgstr "Правильна відповідь"
+
+msgid "Download"
+msgstr "Завантажити"
+
+msgid ""
+"You are leaving the <b>Internet of Good Things</b> to visit an external "
+"website and standard data charges by your network provider might apply"
+msgstr ""
+"Ви залишаєте <b>Інтернет хороших речей</b>, щоб відвідати зовнішній вебсайт,"
+" і ваш постачальник мережі може стягувати стандартну плату за передавання "
+"даних"
+
+msgid "Continue to external site"
+msgstr "Перейти до зовнішнього сайту"
+
+msgid "4-digit PIN"
+msgstr "4-значний PIN-код"
+
+msgid "Old 4-digit PIN"
+msgstr "Старий 4-значний PIN-код"
+
+msgid "New 4-digit PIN"
+msgstr "Новий 4-значний PIN-код"
+
+msgid "Confirm new 4-digit PIN"
+msgstr "Підтвердьте новий 4-значний PIN-код"
+
+msgid "Log out"
+msgstr "Вийти"
+
+msgid "section"
+msgstr "розділ"
+
+msgid "article"
+msgstr "стаття"
+
+msgid "Remember me"
+msgstr "Запам’ятати мене"
+
+msgid "You have signed out."
+msgstr "Ви вийшли із системи."
+
+msgid ""
+"Enter a valid username. This value may contain only letters, numbers, and "
+"@/./+/-/_ characters."
+msgstr ""
+"Введіть припустиме ім’я користувача. Це значення може містити лише літери, "
+"цифри та символи @/./+/-/_."
+
+msgid "You must type the same password each time."
+msgstr "Щоразу потрібно вводити один і той самий пароль."
+
+msgid "This password is too short. It must contain at least 4 characters."
+msgstr "Пароль закороткий. Він повинен містити принаймні 4 символи."
+
+msgid "Please type your current password."
+msgstr "Введіть поточний пароль."
+
+msgid "Password successfully changed."
+msgstr "Пароль успішно змінено."
+
+msgid "Enter a valid date/time."
+msgstr "Введіть припустиму дату/час."
+
+msgid "Enter a valid date."
+msgstr "Введіть припустиму дату."
+
+msgid "Enter a valid URL."
+msgstr "Введіть припустиму URL-адресу."
+
+msgid "Enter a valid email address."
+msgstr "Введіть припустиму адресу електронної пошти."
+
+msgid "Enter a valid integer."
+msgstr "Введіть припустиме ціле число."
+
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+"Переконайтеся, що це значення дорівнює або більше ніж %(limit_value)s."
+
+msgid "Your comment"
+msgstr "Ваш коментар"
+
+msgid "Are you sure you want to log out?"
+msgstr "Ви впевнені, що хочете вийти?"
+
+msgid "Your browser does not support video playback."
+msgstr "Ваш браузер не підтримує відтворення відео."
+
+msgid "Your browser does not support audio playback."
+msgstr "Ваш браузер не підтримує відтворення аудіо."
+
+msgid "Don't display my username next to my comment"
+msgstr "Не відображати моє ім’я користувача поруч із моїм коментарем"
+
+msgid "Anonymous"
+msgstr "Анонім"
+
+msgid "Report this comment?"
+msgstr "Поскаржитися на цей коментар?"
+
+msgid "Display name"
+msgstr "Відображуване ім’я"
+
+msgid "Reported by %(comment_report_count)s user"
+msgid_plural "Reported by %(comment_report_count)s users"
+msgstr[0] "Поскаржився користувач (%(comment_report_count)s)"
+msgstr[1] ""
+
+msgid ""
+"Sorry, %(page_title)s is not available in %(language)s. If you want to keep "
+"browsing in %(language)s you can click below to return to the homepage."
+msgstr ""
+"На жаль, сторінка %(page_title)s недоступна цими мовами (%(language)s). Якщо"
+" ви хочете продовжити перегляд цими мовами (%(language)s), натисніть нижче, "
+"щоб повернутися на головну сторінку."
+
+msgid "Username not available."
+msgstr "Ім’я користувача недоступне."
+
+msgid "Display name not available."
+msgstr "Відображуване ім’я недоступне."
+
+msgid "You have already completed this quiz."
+msgstr "Ви вже завершили цей тест."
+
+msgid "You have already completed this poll."
+msgstr "Ви вже завершили це опитування."
+
+msgid ""
+"If you cannot view the above video, you can instead %(start_link)sdownload "
+"it%(end_link)s."
+msgstr ""
+"Якщо ви не можете переглянути наведене вище відео, його можна "
+"%(start_link)sзавантажити%(end_link)s."
+
+msgid ""
+"If you cannot listen to the above audio, you can instead "
+"%(start_link)sdownload it%(end_link)s."
+msgstr ""
+"Якщо ви не можете прослухати наведене вище аудіо, його можна "
+"%(start_link)sзавантажити%(end_link)s."
+
+msgid "Please complete the questions marked as required to continue"
+msgstr ""
+
+msgid "Need internet access to visit external site."
+msgstr ""
+
+msgid "Comment Moderation"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Apply"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Unsure"
+msgstr ""
+
+msgid "No comment found."
+msgstr ""

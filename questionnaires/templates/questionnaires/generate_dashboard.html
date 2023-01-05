@@ -1,0 +1,37 @@
+{% extends "wagtailadmin/base.html" %}
+{% load i18n wagtailadmin_tags %}
+{% block titletag %}{% trans "Generate Dashboard" %}{% endblock %}
+{% block extra_js %}
+    {{ block.super }}
+
+    <script>
+    </script>
+{% endblock %}
+{% block content %}
+    <header class="nice-padding">
+        <form action="" method="get" novalidate>
+            {% if user_id %}
+                <input type="hidden" name="user_id" value="{{ user_id }}">
+            {% endif %}
+            <div class="row">
+                <div class="left">
+                    <div class="col header-title">
+                        <h1>
+                          {% icon name="form" class_name="header-title-icon" %}
+                          {% trans "Generate Dashboard" %}
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </header>
+    <div class="nice-padding">
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <br>
+            <br>
+            <input type="submit" class="button button-secondary">
+        </form>
+    </div>
+{% endblock %}

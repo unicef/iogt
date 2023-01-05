@@ -20,20 +20,6 @@ msgstr ""
 msgid "You cannot submit when offline"
 msgstr "در حالت آفلاین نمی توانید درخواست را ارائه کنید"
 
-msgid ""
-"Your app is now ready to install. If using Android, choose 'Add to home "
-"screen' and you should be all set! If you are using a iOS device, you can "
-"install it by clicking 'Share', scrolling down and tapping 'Add to Home "
-"Screen."
-msgstr ""
-"اپلیکیشن شما اکنون آمادۀ نصب است. اگر از اندروید استفاده می کنید، گزینۀ “add to home screen” را انتخاب کنید و باید آمادگی کامل داشته باشید.\n"
-"\n"
-"\n"
-"اگر از دستگاه ios استفاده می کنید، می توانید آن را با کلیک کردن بالای Share نصب کنید. برای این کار به قسمت پایین رفته و بر روی Add to Home Screen کلیک کنید."
-
-msgid "Install this website as an app on your device?"
-msgstr "آیا این ویب سایت به عنوان یک اپلیکیشن در دستگاه¬تان نصب شود؟"
-
 msgid "Date must be in this (YYYY-MM-DD) format"
 msgstr ""
 
