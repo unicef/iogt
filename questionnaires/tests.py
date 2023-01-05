@@ -1032,12 +1032,12 @@ class QuestionnaireTest(TestCase):
         self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
         self.home_page = self.site.root_page
         self.poll = PollFactory(parent=self.home_page)
-        self.poll2 = PollFactory(parent=self.home_page)
+        self.page_button_page = PollFactory(parent=self.home_page)
 
     def test_page_button_block_in_thank_you_description(self):
         self.poll.thank_you_text.append((
             'page_button', {
-                'page': self.poll2,
+                'page': self.page_button_page,
                 'text': 'Thank you',
             }
         ))
@@ -1051,4 +1051,4 @@ class QuestionnaireTest(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(page_button.text, 'Thank you')
-        self.assertEqual(page_button['href'], self.poll2.url)
+        self.assertEqual(page_button['href'], self.page_button_page.url)
