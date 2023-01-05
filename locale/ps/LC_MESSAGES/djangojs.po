@@ -19,20 +19,6 @@ msgstr "بخښنه غواړو، ښکاري چې یوه تېروتنه وي. مه
 msgid "You cannot submit when offline"
 msgstr "تاسو نه شی کولای په افلاین بڼه یې واستوئ"
 
-msgid ""
-"Your app is now ready to install. If using Android, choose 'Add to home "
-"screen' and you should be all set! If you are using a iOS device, you can "
-"install it by clicking 'Share', scrolling down and tapping 'Add to Home "
-"Screen."
-msgstr ""
-"ستاسو اپلیکېشن اوس د نصبولو لپاره چمتو دی. که چېرې له اندرایډ سیسټم څخه ګټه اخلئ، «اصلي پاڼې ته د زیاتولو» ټنۍ وټاکئ او باید چمتو اوسی! \n"
-"\n"
-"که چېرې له iOS وسیلې څخه ګټه اخلئ، کولای شی د «شریکولو» پر تڼۍ د کلیک له لارې یې نصب کړئ. د دې لپاره لاندې راشئ او په «اصلي پاڼې ته د زیاتولو» تڼۍ کلیک وکړئ."
-
-msgid "Install this website as an app on your device?"
-msgstr ""
-"آیا دغه وېب سایټ د یوه اپلیکېشن په توګه ستاسو پر وسیله نصب یا انسټال شي؟"
-
 msgid "Date must be in this (YYYY-MM-DD) format"
 msgstr ""
 

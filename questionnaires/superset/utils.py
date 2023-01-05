@@ -51,6 +51,8 @@ class DashboardGenerator:
         self.questions = questionnaire.get_form_fields().order_by('sort_order')
         self.client = SupersetClient()
         self.client.authenticate(superset_username, superset_password)
+        self.admin_client = SupersetClient()
+        self.admin_client.authenticate(settings.SUPERSET_USERNAME, settings.SUPERSET_PASSWORD)
         self.table_name = UserSubmission._meta.db_table
         self.current_datetime = timezone.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -67,17 +69,19 @@ class DashboardGenerator:
         resp = self.client.create_dashboard(data=dashboard.post_body())
         dashboard_id = resp.get('id')
         resp = self.client.get_dashboard(dashboard_id)
-        dashboard_url = resp.get('result', {}).get('url')
-        return dashboard_id, f'{settings.SUPERSET_BASE_URL}{dashboard_url}'
+        result = resp.get('result', {})
+        dashboard_url = result.get('url')
+        owner_id = result.get('owners', [{}])[0].get('id')
+        return dashboard_id, f'{settings.SUPERSET_BASE_URL}{dashboard_url}', owner_id
 
-    def _create_dataset(self, database_id):
+    def _create_dataset(self, database_id, owner_id):
         dataset_name = f'{SiteSettings.get_for_default_site()}_autodashboard_' \
                        f'{self.questionnaire.__class__.__name__.lower()}_{self.questionnaire.id}_' \
                        f'{self.questionnaire.title}_{self.current_datetime}'
         dataset = Dataset(
-            database_id=database_id, table_name=self.table_name, dataset_name=dataset_name,
+            database_id=database_id, owner_id=owner_id, table_name=self.table_name, dataset_name=dataset_name,
             page_id=self.questionnaire.id)
-        resp = self.client.create_dataset(data=dataset.post_body())
+        resp = self.admin_client.create_dataset(data=dataset.post_body())
         dataset_id = resp.get('id')
 
         dataset_detail = self.client.get_dataset(dataset_id)
@@ -108,7 +112,7 @@ class DashboardGenerator:
             "metric_type": "count",
             "verbose_name": "Responses",
         })
-        self.client.update_dataset(id=dataset_id, data=dataset.put_body(columns, metrics))
+        self.admin_client.update_dataset(id=dataset_id, data=dataset.put_body(columns, metrics))
 
         return dataset_id
 
@@ -126,8 +130,8 @@ class DashboardGenerator:
 
     def generate(self):
         database_id = self._get_database_id()
-        dashboard_id, dashboard_url = self._create_dashboard()
-        dataset_id = self._create_dataset(database_id)
+        dashboard_id, dashboard_url, owner_id = self._create_dashboard()
+        dataset_id = self._create_dataset(database_id, owner_id)
         self._create_charts(dashboard_id, dataset_id)
 
         return dashboard_url

@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "quizzes"
-msgstr "тесты"
+msgstr "Тесты"
 
 msgid "Log in to participate"
 msgstr "Войти в систему и принять участие"
@@ -41,7 +41,7 @@ msgid "Back"
 msgstr "Назад"
 
 msgid "BACK"
-msgstr "НАЗАД"
+msgstr "Назад"
 
 msgid "Previous"
 msgstr "Назад"
@@ -70,7 +70,7 @@ msgid ""
 msgstr "Если он не соответствует правилам платформы, наша команда удалит его"
 
 msgid "articles"
-msgstr "статьи"
+msgstr "Статьи"
 
 msgid "Search the site..."
 msgstr "Поиск на сайте..."
@@ -170,179 +170,210 @@ msgstr "Ошибка сервера"
 
 msgid "1 result"
 msgid_plural "%(counter)s results"
-msgstr[0] ""
+msgstr[0] "1 результат"
 msgstr[1] ""
 
 msgid "poll"
-msgstr ""
+msgstr "опрос"
 
 msgid "survey"
-msgstr ""
+msgstr "исследование"
 
 msgid "quiz"
-msgstr ""
+msgstr "викторина"
 
 msgid "This field is required."
-msgstr ""
+msgstr "Это поле является обязательным для заполнения."
 
 msgid "Send"
-msgstr ""
+msgstr "Отправить"
 
 msgid "Remove this comment?"
-msgstr ""
+msgstr "Удалить этот комментарий?"
 
 msgid "Remove"
-msgstr ""
+msgstr "Удалить"
 
 msgid "This comment has been removed."
-msgstr ""
+msgstr "Этот комментарий был удален."
 
 msgid "moderator"
-msgstr ""
+msgstr "модератор"
 
 msgid "sections"
-msgstr ""
+msgstr "разделы"
 
 msgid "Check if applies"
-msgstr ""
+msgstr "Отметьте, если применимо"
 
 msgid "New comments have been disabled for this page."
-msgstr ""
+msgstr "Новые комментарии были отключены для этой страницы."
 
 msgid "Correct answer"
-msgstr ""
+msgstr "Верный ответ"
 
 msgid "Download"
-msgstr ""
+msgstr "Скачать"
 
 msgid ""
 "You are leaving the <b>Internet of Good Things</b> to visit an external "
 "website and standard data charges by your network provider might apply"
 msgstr ""
+"Вы покидаете веб-сайт <b>Internet of Good Things</b> и переходите на "
+"сторонний веб-сайт, в связи с чем вашим сетевым провайдером может взиматься "
+"стандартная плата за передачу данных"
 
 msgid "Continue to external site"
-msgstr ""
+msgstr "Перейти на сторонний веб-сайт"
 
 msgid "4-digit PIN"
-msgstr ""
+msgstr "4-значный PIN-код"
 
 msgid "Old 4-digit PIN"
-msgstr ""
+msgstr "Старый 4-значный PIN-код"
 
 msgid "New 4-digit PIN"
-msgstr ""
+msgstr "Новый 4-значный PIN-код"
 
 msgid "Confirm new 4-digit PIN"
-msgstr ""
+msgstr "Подтвердите новый 4-значный PIN-код"
 
 msgid "Log out"
-msgstr ""
+msgstr "Выйти"
 
 msgid "section"
-msgstr ""
+msgstr "раздел"
 
 msgid "article"
-msgstr ""
+msgstr "статья"
 
 msgid "Remember me"
-msgstr ""
+msgstr "Запомнить меня"
 
 msgid "You have signed out."
-msgstr ""
+msgstr "Вы вышли из системы."
 
 msgid ""
 "Enter a valid username. This value may contain only letters, numbers, and "
 "@/./+/-/_ characters."
 msgstr ""
+"Введите действительное имя пользователя. Это значение может содержать только"
+" буквы, цифры и символы @/./+/-/_."
 
 msgid "You must type the same password each time."
-msgstr ""
+msgstr "Каждый раз необходимо вводить один и тот же пароль."
 
 msgid "This password is too short. It must contain at least 4 characters."
 msgstr ""
+"Слишком короткий пароль. Пароль должен содержать не менее 4-х символов."
 
 msgid "Please type your current password."
-msgstr ""
+msgstr "Пожалуйста, введите ваш пароль."
 
 msgid "Password successfully changed."
-msgstr ""
+msgstr "Пароль успешно изменен."
 
 msgid "Enter a valid date/time."
-msgstr ""
+msgstr "Введите допустимую дату/время."
 
 msgid "Enter a valid date."
-msgstr ""
+msgstr "Введите допустимую дату."
 
 msgid "Enter a valid URL."
-msgstr ""
+msgstr "Введите действительный URL-адрес."
 
 msgid "Enter a valid email address."
-msgstr ""
+msgstr "Введите действительный адрес электронной почты."
 
 msgid "Enter a valid integer."
-msgstr ""
+msgstr "Введите действительное целое число."
 
 msgid "Ensure this value is greater than or equal to %(limit_value)s."
-msgstr ""
+msgstr "Убедитесь, что это значение больше или равно %(limit_value)s."
 
 msgid "Your comment"
-msgstr ""
+msgstr "Ваш комментарий"
 
 msgid "Are you sure you want to log out?"
-msgstr ""
+msgstr "Вы уверены, что хотите выйти?"
 
 msgid "Your browser does not support video playback."
-msgstr ""
+msgstr "Ваш браузер не поддерживает воспроизведение видео."
 
 msgid "Your browser does not support audio playback."
-msgstr ""
+msgstr "Ваш браузер не поддерживает воспроизведение аудио."
 
 msgid "Don't display my username next to my comment"
-msgstr ""
+msgstr "Не отображать мой логин рядом с комментарием"
 
 msgid "Anonymous"
-msgstr ""
+msgstr "Анонимно"
 
 msgid "Report this comment?"
-msgstr ""
+msgstr "Пожаловаться на этот комментарий?"
 
 msgid "Display name"
-msgstr ""
+msgstr "Отображаемое имя"
 
 msgid "Reported by %(comment_report_count)s user"
 msgid_plural "Reported by %(comment_report_count)s users"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Жалоба от %(comment_report_count)s пользователя"
+msgstr[1] "Жалоба от %(comment_report_count)s пользователя"
 
 msgid ""
 "Sorry, %(page_title)s is not available in %(language)s. If you want to keep "
 "browsing in %(language)s you can click below to return to the homepage."
 msgstr ""
+"К сожалению, %(page_title)s недоступно на %(language)s. Если вы хотите "
+"продолжить просмотр на %(language)s, нажмите ниже, чтобы вернуться на "
+"главную страницу."
 
 msgid "Username not available."
-msgstr ""
+msgstr "Имя пользователя недоступно."
 
 msgid "Display name not available."
-msgstr ""
+msgstr "Отображаемое имя недоступно."
 
 msgid "You have already completed this quiz."
-msgstr ""
+msgstr "Вы уже прошли эту викторину."
 
 msgid "You have already completed this poll."
-msgstr ""
+msgstr "Вы уже прошли этот опрос."
 
 msgid ""
 "If you cannot view the above video, you can instead %(start_link)sdownload "
 "it%(end_link)s."
 msgstr ""
+"Если вы не можете просмотреть это видео, вы можете %(start_link)sскачать "
+"его%(end_link)s."
 
 msgid ""
 "If you cannot listen to the above audio, you can instead "
 "%(start_link)sdownload it%(end_link)s."
 msgstr ""
+"Если вы не можете прослушать это аудио, вы можете %(start_link)sскачать "
+"его%(end_link)s."
 
 msgid "Please complete the questions marked as required to continue"
 msgstr ""
 
 msgid "Need internet access to visit external site."
+msgstr ""
+
+msgid "Comment Moderation"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Apply"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Unsure"
+msgstr ""
+
+msgid "No comment found."
 msgstr ""

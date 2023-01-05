@@ -276,8 +276,8 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
         if self.image_icon:
             image_urls += self._get_renditions(self.image_icon)
 
-        image_urls += self._get_stream_data_image_urls(self.description.stream_data)
-        image_urls += self._get_stream_data_image_urls(self.thank_you_text.stream_data)
+        image_urls += self._get_stream_data_image_urls(self.description.raw_data)
+        image_urls += self._get_stream_data_image_urls(self.thank_you_text.raw_data)
 
         return image_urls
 

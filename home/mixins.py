@@ -48,10 +48,10 @@ class PageUtilsMixin:
 
         return image_urls
 
-    def _get_stream_data_image_urls(self, stream_data):
+    def _get_stream_data_image_urls(self, raw_data):
         image_urls = []
 
-        for block in stream_data:
+        for block in raw_data:
             if block['type'] == 'image':
                 image_urls += self._get_renditions(block['value'])
             if block['type'] == 'paragraph':

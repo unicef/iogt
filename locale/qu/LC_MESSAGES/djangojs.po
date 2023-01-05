@@ -19,16 +19,6 @@ msgstr "Kishpichiway, ñallami kutin yaikuy."
 msgid "You cannot submit when offline"
 msgstr ""
 
-msgid ""
-"Your app is now ready to install. If using Android, choose 'Add to home "
-"screen' and you should be all set! If you are using a iOS device, you can "
-"install it by clicking 'Share', scrolling down and tapping 'Add to Home "
-"Screen."
-msgstr ""
-
-msgid "Install this website as an app on your device?"
-msgstr ""
-
 msgid "Date must be in this (YYYY-MM-DD) format"
 msgstr ""
 
