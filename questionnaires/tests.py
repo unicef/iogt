@@ -1036,17 +1036,17 @@ class PollTest(TestCase):
         self.poll = PollFactory(parent=self.home_page,)
 
     def test_multi_select_option_results_for_checkboxes(self):
-        poll_question = PollFormFieldFactory(page=self.poll, field_type='dropdown', choices='c1|c2|c3')
+        poll_question = PollFormFieldFactory(page=self.poll, field_type='checkboxes', choices='c1|c2|c3')
 
         response = self.client.post(self.poll.url, {poll_question.clean_name: ('c1', 'c2')})
         parsed_response = BeautifulSoup(response.content)
         results = parsed_response.findAll('div', {'class': 'cust-check__title'})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(results), 2)
-        # self.assertEqual(results[0].find('div', {'class': 'cust-check__title-left'}).text.strip(), 'c1\nYour answer')
-        # self.assertEqual(" ".join(results[0].find('div', {'class': 'cust-check__title-right'}).text.split()), '100 %')
-        # self.assertEqual(results[1].find('div', {'class': 'cust-check__title-left'}).text.strip(), 'c2\nYour answer')
-        # self.assertEqual(" ".join(results[1].find('div', {'class': 'cust-check__title-right'}).text.split()), '100 %')
-        # self.assertEqual(results[1].find('div', {'class': 'cust-check__title-left'}).text.strip(), 'c2')
-        # self.assertEqual(" ".join(results[1].find('div', {'class': 'cust-check__title-right'}).text.split()), '0 %')
+        self.assertEqual(len(results), 3)
+        self.assertEqual(results[0].find('div', {'class': 'cust-check__title-left'}).text.strip(), 'c1\nYour answer')
+        self.assertEqual(" ".join(results[0].find('div', {'class': 'cust-check__title-right'}).text.split()), '100 %')
+        self.assertEqual(results[1].find('div', {'class': 'cust-check__title-left'}).text.strip(), 'c2\nYour answer')
+        self.assertEqual(" ".join(results[1].find('div', {'class': 'cust-check__title-right'}).text.split()), '100 %')
+        self.assertEqual(results[2].find('div', {'class': 'cust-check__title-left'}).text.strip(), 'c3')
+        self.assertEqual(" ".join(results[2].find('div', {'class': 'cust-check__title-right'}).text.split()), '0 %')
