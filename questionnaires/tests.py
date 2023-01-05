@@ -4,6 +4,7 @@ import json
 from datetime import timedelta
 
 import pytz
+from bs4 import BeautifulSoup
 from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
@@ -1023,3 +1024,41 @@ class FormDataPerUserAdminTests(TestCase):
             f'{self.user_submission_02.id},Survey 01,2022-08-31 23:00:00+00:00,question_01,c2\r\n'
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(byte_response.decode(), expected_response)
+
+
+class QuizTest(TestCase):
+    def setUp(self):
+        Site.objects.all().delete()
+        self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
+        self.home_page = self.site.root_page
+        self.quiz = QuizFactory(parent=self.home_page)
+        self.quiz_question = QuizFormFieldFactory(
+            page=self.quiz, field_type='checkboxes', choices='c1|c2|c3|c4', correct_answer='c2|c3'
+        )
+
+    def test_display_feedback_on_unselected_answers(self):
+        response = self.client.post(self.quiz.url, {self.quiz_question.clean_name: ('c1', 'c2')})
+        parsed_response = BeautifulSoup(response.content)
+        results = parsed_response.findAll('div', {'class': 'quest-item__content'})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(results), 4)
+        self.assertIsNotNone(results[0].find('label', {'class': 'error'}))
+        self.assertIsNotNone(results[1].find('label', {'class': 'success'}))
+        self.assertIsNotNone(results[2].find('label', {'class': 'clear-tick'}))
+        self.assertIsNotNone(results[3].find('label', {'class': 'clear-cross'}))
+
+    def test_hide_feedback_on_unselected_answers(self):
+        self.quiz.display_feedback = False
+        self.quiz.save()
+
+        response = self.client.post(self.quiz.url, {self.quiz_question.clean_name: ('c1', 'c2')})
+        parsed_response = BeautifulSoup(response.content)
+        results = parsed_response.findAll('div', {'class': 'quest-item__content'})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(results), 4)
+        self.assertIsNotNone(results[0].find('label', {'class': 'error'}))
+        self.assertIsNotNone(results[1].find('label', {'class': 'success'}))
+        self.assertIsNone(results[2].find('label', {'class': ['clear-tick', 'error', 'success', 'clear-cross']}))
+        self.assertIsNone(results[3].find('label', {'class': ['clear-tick', 'error', 'success', 'clear-cross']}))
