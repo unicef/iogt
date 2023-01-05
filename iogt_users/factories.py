@@ -17,17 +17,8 @@ class UserFactory(DjangoModelFactory):
         model = get_user_model()
 
 
-class AdminUserFactory(DjangoModelFactory):
-    first_name = 'John'
-    last_name = 'Doe'
-    username = factory.Sequence(lambda n: f'admin{n}@example.com')
-    password = factory.LazyFunction(lambda: make_password('test@123'))
-    has_filled_registration_survey = True
+class AdminUserFactory(UserFactory):
     is_superuser = True
-
-    class Meta:
-        model = get_user_model()
-
 
 class GroupFactory(DjangoModelFactory):
     class Meta:

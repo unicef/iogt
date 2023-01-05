@@ -246,7 +246,7 @@ msgid "section"
 msgstr "खंड"
 
 msgid "article"
-msgstr "आर्टिकल "
+msgstr "आर्टिकल"
 
 msgid "Remember me"
 msgstr "मुझे याद रखें"
@@ -310,7 +310,7 @@ msgid "Anonymous"
 msgstr "अज्ञात"
 
 msgid "Report this comment?"
-msgstr "इस टिप्पणी की रिपोर्ट करनी है? "
+msgstr "इस टिप्पणी की रिपोर्ट करनी है?"
 
 msgid "Display name"
 msgstr "डिस्प्ले नाम"
@@ -358,4 +358,22 @@ msgid "Please complete the questions marked as required to continue"
 msgstr ""
 
 msgid "Need internet access to visit external site."
+msgstr ""
+
+msgid "Comment Moderation"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Apply"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Unsure"
+msgstr ""
+
+msgid "No comment found."
 msgstr ""

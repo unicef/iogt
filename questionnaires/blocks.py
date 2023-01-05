@@ -1,11 +1,13 @@
-from django import forms
 from django.core.exceptions import ValidationError
-from django.templatetags.static import static
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from wagtail.core import blocks
 from wagtail.core.fields import StreamField
+from wagtail.core.telepath import register
+
+from questionnaires.adapters import SkipLogicStreamBlockAdapter, SkipLogicBlockAdapter
+from questionnaires.widgets import SelectAndHiddenWidget
 
 
 class SkipState:
@@ -40,40 +42,8 @@ class SkipLogicField(StreamField):
 
 
 class SkipLogicStreamBlock(blocks.StreamBlock):
-    @property
-    def media(self):
-        media = super(SkipLogicStreamBlock, self).media
-        media.add_js(
-            [static('js/blocks/skiplogic_stream.js')]
-        )
-        media.add_css(
-            {'all': [static('css/blocks/skiplogic.css')]}
-        )
-        return media
-
-    def js_initializer(self):
-        init = super(SkipLogicStreamBlock, self).js_initializer()
-        return 'SkipLogic' + init
-
     class Meta:
-        required = False
-
-
-class SelectAndHiddenWidget(forms.MultiWidget):
-    def __init__(self, *args, **kwargs):
-        widgets = [forms.HiddenInput, forms.Select]
-        super(SelectAndHiddenWidget, self).__init__(
-            widgets=widgets,
-            *args,
-            **kwargs
-        )
-
-    def decompress(self, value):
-        return [value, None]
-
-    def value_from_datadict(self, *args):
-        value = super(SelectAndHiddenWidget, self).value_from_datadict(*args)
-        return value[1]
+        form_classname = 'skip-logic-stream-block'
 
 
 class QuestionSelectBlock(blocks.IntegerBlock):
@@ -98,14 +68,6 @@ class SkipLogicBlock(blocks.StructBlock):
         help_text=_('Please save the survey as a draft to populate or update the list of questions.'),
     )
 
-    @property
-    def media(self):
-        return forms.Media(js=[static('js/blocks/skiplogic.js')])
-
-    def js_initializer(self):
-        opts = {'validSkipSelectors': VALID_SKIP_SELECTORS}
-        return "SkipLogic(%s)" % blocks.utils.js_dict(opts)
-
     def clean(self, value):
         cleaned_data = super(SkipLogicBlock, self).clean(value)
         logic = cleaned_data['skip_logic']
@@ -120,3 +82,10 @@ class SkipLogicBlock(blocks.StructBlock):
             cleaned_data['question'] = None
 
         return cleaned_data
+
+    class Meta:
+        form_classname = 'skip-logic-block struct-block'
+
+
+register(SkipLogicStreamBlockAdapter(), SkipLogicStreamBlock)
+register(SkipLogicBlockAdapter(), SkipLogicBlock)

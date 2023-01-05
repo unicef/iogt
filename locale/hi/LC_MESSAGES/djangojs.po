@@ -19,20 +19,6 @@ msgstr "क्षमा करें, शायद कोई त्रुटि 
 msgid "You cannot submit when offline"
 msgstr "ऑफ़लाइन होने पर आप सबमिट नहीं कर सकते"
 
-msgid ""
-"Your app is now ready to install. If using Android, choose 'Add to home "
-"screen' and you should be all set! If you are using a iOS device, you can "
-"install it by clicking 'Share', scrolling down and tapping 'Add to Home "
-"Screen."
-msgstr ""
-"आपका ऐप अब इंस्टॉल होने के लिए तैयार है। यदि एंड्रॉइड का उपयोग कर रहे हैं, "
-"तो 'होम स्क्रीन में जोड़ें' चुनें और आपको पूरी तरह तैयार होना चाहिए! यदि आप "
-"आईओएस डिवाइस का उपयोग कर रहे हैं, तो आप इसे 'शेयर' पर क्लिक करके, नीचे "
-"स्क्रॉल करके और 'होम स्क्रीन में जोड़ें' टैप करके इंस्टॉल कर सकते हैं।"
-
-msgid "Install this website as an app on your device?"
-msgstr "इस वेबसाइट को आपके डिवाइस पर ऐप की तरह इंस्टॉल करें?"
-
 msgid "Date must be in this (YYYY-MM-DD) format"
 msgstr ""
 
