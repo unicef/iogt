@@ -4,6 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from wagtail.core.models import Site
+from wagtail.images.models import Image
 
 from home.factories import (
     SectionFactory,
@@ -36,7 +37,8 @@ class PageTreeAPIViewTests(TestCase):
         self.article = ArticleFactory(parent=self.en_home_page, body=[("image", ImageFactory())])
         self.section_lead_image_rendition = self.section.lead_image.get_rendition('fill-360x360')
         self.article_lead_image_rendition = self.article.lead_image.get_rendition('fill-360x360')
-        self.article_body_image_rendition = self.article.body.stream_data[0][1].get_rendition('fill-360x360')
+        self.article_body_image_rendition = Image.objects.get(
+            id=self.article.body.raw_data[0]['value']).get_rendition('fill-360x360')
         self.svg_to_png_map = SVGToPNGMapFactory()
 
     def test_root_page_is_returned(self):

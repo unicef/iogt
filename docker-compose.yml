@@ -10,7 +10,7 @@ services:
       DB_NAME: postgres
       DB_USER: postgres
       DB_PASSWORD: iogt
-      DB_HOST: db
+      DB_HOST: database
       DB_PORT: '5432'
       DJANGO_SETTINGS_MODULE: iogt.settings.docker_compose_dev
       COMMIT_HASH: asdfghjkl
@@ -27,6 +27,8 @@ services:
       BLACKLISTED_WORDS: ''
       SUPERSET_BASE_URL: ''
       SUPERSET_DATABASE_NAME: ''
+      SUPERSET_USERNAME: ''
+      SUPERSET_PASSWORD: ''
       PUSH_NOTIFICATION: 'enable'
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
@@ -35,8 +37,7 @@ services:
       - "8000:8000"
     depends_on:
       - elasticsearch
-      - db
-      - redis
+      - database
 
   elasticsearch:
     image: 'docker.elastic.co/elasticsearch/elasticsearch:7.12.1'
@@ -47,7 +48,7 @@ services:
     ports:
       - "9200:9200"
 
-  db:
+  database:
     image: postgres:alpine
     restart: unless-stopped
     environment:
@@ -58,10 +59,6 @@ services:
     ports:
       - 5432:5432
 
-  redis:
-    image: redis:6.2-buster
-    volumes:
-      - /var/lib/redis/data
 
 volumes:
   es-data01:

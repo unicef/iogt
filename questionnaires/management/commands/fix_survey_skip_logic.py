@@ -9,7 +9,7 @@ class Command(BaseCommand):
         survey_form_fields = SurveyFormField.objects.all()
         for survey_form_field in survey_form_fields:
             if survey_form_field.skip_logic:
-                skip_logics = survey_form_field.skip_logic.stream_data
+                skip_logics = survey_form_field.skip_logic.raw_data
                 for skip_logic in skip_logics:
                     skip_logic.get('value', {}).pop('survey', None)
 

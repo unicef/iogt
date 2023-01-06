@@ -116,7 +116,7 @@ msgid "I accept the Terms and Conditions."
 msgstr "من ضوابط و شرایط را می پذیرم."
 
 msgid "You have read %(read)s out of %(total)s"
-msgstr "را خوانده اید (total)s% از (read)s% شما "
+msgstr "را خوانده اید (total)s% از (read)s% شما"
 
 msgid "%(counter)s of %(total)s questions"
 msgstr "%(counter)s از %(total)s سوال"
@@ -172,7 +172,7 @@ msgstr "خطای سرور داخلی"
 msgid "1 result"
 msgid_plural "%(counter)s results"
 msgstr[0] "1 نتیجه"
-msgstr[1] "%(counter)s نتیجه "
+msgstr[1] "%(counter)s نتیجه"
 
 msgid "poll"
 msgstr "نظرسنجی"
@@ -187,7 +187,7 @@ msgid "This field is required."
 msgstr "این زمینه مورد نیاز است"
 
 msgid "Send"
-msgstr "ارسال "
+msgstr "ارسال"
 
 msgid "Remove this comment?"
 msgstr "آیا این کامنت/نظر حذف شود؟"
@@ -214,7 +214,7 @@ msgid "Correct answer"
 msgstr "جواب صحیح"
 
 msgid "Download"
-msgstr "دانلود "
+msgstr "دانلود"
 
 msgid ""
 "You are leaving the <b>Internet of Good Things</b> to visit an external "
@@ -222,13 +222,13 @@ msgid ""
 msgstr ""
 "شما در حال خروج از <b>Internet of Good Things</b> برای بازدید از یک ویب سایت"
 " جدید هستید و هزینۀ معلوماتی استندرد ممکن است توسط فراهم کنندۀ انترنت بالای "
-"شما وضع گردد. "
+"شما وضع گردد."
 
 msgid "Continue to external site"
 msgstr "ادامه به ویب سایت بیرونی"
 
 msgid "4-digit PIN"
-msgstr "پین کود  (PIN) چهار رقمی   "
+msgstr "پین کود  (PIN) چهار رقمی"
 
 msgid "Old 4-digit PIN"
 msgstr "پین کود چهارقمی قدیمی"
@@ -358,4 +358,22 @@ msgid "Please complete the questions marked as required to continue"
 msgstr ""
 
 msgid "Need internet access to visit external site."
+msgstr ""
+
+msgid "Comment Moderation"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Apply"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Unsure"
+msgstr ""
+
+msgid "No comment found."
 msgstr ""
