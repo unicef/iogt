@@ -3,7 +3,8 @@ from django.utils import timezone
 from factory.django import DjangoModelFactory
 from wagtail_factories import PageFactory
 
-from questionnaires.models import Survey, Poll, Quiz, PollFormField, SurveyFormField, QuizFormField, UserSubmission
+from questionnaires.models import Survey, Poll, Quiz, PollFormField, SurveyFormField, QuizFormField, UserSubmission, \
+    PollIndexPage
 
 
 class PollFormFieldFactory(DjangoModelFactory):
@@ -67,3 +68,8 @@ class QuizFactory(PageFactory):
 class UserSubmissionFactory(DjangoModelFactory):
     class Meta:
         model = UserSubmission
+
+
+class PollIndexPageFactory(DjangoModelFactory):
+    class Meta:
+        model = PollIndexPage

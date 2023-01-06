@@ -2,10 +2,8 @@ import datetime
 import io
 import json
 from datetime import timedelta
-from urllib.parse import urlencode
 
 import pytz
-from bs4 import BeautifulSoup
 from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
@@ -15,13 +13,13 @@ from rest_framework import status
 from rest_framework.test import APIClient
 from wagtail.core.models import Site, Page
 from wagtail_factories import SiteFactory
-from questionnaires.models import PollForm
 
 from home.factories import HomePageFactory
 from iogt_users.factories import (
     UserFactory,
     GroupFactory,
-    GroupPagePermissionFactory, AdminUserFactory,
+    GroupPagePermissionFactory,
+    AdminUserFactory,
 )
 from questionnaires.factories import (
     PollFactory,
@@ -30,7 +28,8 @@ from questionnaires.factories import (
     PollFormFieldFactory,
     SurveyFormFieldFactory,
     QuizFormFieldFactory,
-    UserSubmissionFactory
+    UserSubmissionFactory,
+    PollIndexPageFactory,
 )
 
 
@@ -1033,69 +1032,58 @@ class PollTest(TestCase):
         Site.objects.all().delete()
         self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
         self.home_page = self.site.root_page
+        self.poll_index_page = PollIndexPageFactory(parent=self.home_page)
         self.user = AdminUserFactory()
+        self.client.force_login(self.user)
 
     def test_poll_question_choices_with_surrounding_spaces(self):
-        self.client.force_login(self.user)
         data = {
-            'title': "Poll 01",
-            'allow_anonymous_submissions': 'on',
-            'show_results': 'on',
-            'result_as_percentage': 'on',
-            'allow_multiple_submissions': 'on',
-            'show_results_with_no_votes': 'on',
-            'submit_button_text': 'Submit',
-            'description-count': 0,
-            'thank_you_text-count': 0,
-            'terms_and_conditions-count': 0,
-            'poll_form_fields-TOTAL_FORMS': 1,
-            'poll_form_fields-INITIAL_FORMS': 1,
-            'poll_form_fields-MIN_NUM_FORMS': 1,
-            'poll_form_fields-MAX_NUM_FORMS': 1,
-            'poll_form_fields-0-label': "Q01",
-            'poll_form_fields-0-clean_name': "",
-            'poll_form_fields-0-help_text': "",
-            'poll_form_fields-0-required': 'on',
-            'poll_form_fields-0-field_type': "checkboxes",
-            'poll_form_fields-0-choices': "c1|c2|c3",
-            'poll_form_fields-0-default_value': "",
-            'poll_form_fields-0-admin_label': "Q01",
-            'poll_form_fields-0-id': "",
-            'poll_form_fields-0-ORDER': "",
-            'poll_form_fields-0-DELETE': "",
-            'slug': "poll-01",
+            "next": "",
+            "comment_notifications": "on",
+            "title": "Poll 01",
+            "allow_anonymous_submissions": "on",
+            "show_results": "on",
+            "result_as_percentage": "on",
+            "allow_multiple_submissions": "on",
+            "show_results_with_no_votes": "on",
+            "submit_button_text": "Submit",
+            "description-count": "0",
+            "thank_you_text-count": "0",
+            "index_page_description": "",
+            "index_page_description_line_2": "",
+            "terms_and_conditions-count": "0",
+            "icon":  "",
+            "image_icon": "",
+            "poll_form_fields-TOTAL_FORMS": "1",
+            "poll_form_fields-INITIAL_FORMS": "0",
+            "poll_form_fields-MIN_NUM_FORMS": "1",
+            "poll_form_fields-MAX_NUM_FORMS": "1",
+            "poll_form_fields-0-label": "Q1",
+            "poll_form_fields-0-clean_name": "",
+            "poll_form_fields-0-help_text": "",
+            "poll_form_fields-0-required": "on",
+            "poll_form_fields-0-field_type": "checkboxes",
+            "poll_form_fields-0-choices": " c1 | c2 | c3 ",
+            "poll_form_fields-0-default_value": "",
+            "poll_form_fields-0-admin_label": "Q1",
+            "poll_form_fields-0-id": "",
+            "poll_form_fields-0-ORDER": "",
+            "poll_form_fields-0-DELETE": "",
+            "slug": "poll-01",
             "seo_title": "",
             "search_description": "",
             "go_live_at": "",
             "expire_at": "",
-            'comments-TOTAL_FORMS': 0,
-            'comments-INITIAL_FORMS': 0,
-            'comments-MIN_NUM_FORMS': 0,
-            'comments-MAX_NUM_FORMS': "",
-            'action-publish': 'action-publish'
+            "comments-TOTAL_FORMS": "0",
+            "comments-INITIAL_FORMS": "0",
+            "comments-MIN_NUM_FORMS": "0",
+            "comments-MAX_NUM_FORMS": "",
+            "action-publish": "action-publish"
         }
 
-        response = self.client.post(reverse('wagtailadmin_pages:add', args=('questionnaires', 'poll', self.home_page.id)),
-                         data=data)
+        response = self.client.post(
+            reverse('wagtailadmin_pages:add', args=('questionnaires', 'poll', self.poll_index_page.id)), data=data)
 
-        # Find the page and check it
-        page = Page.objects.get(path__startswith=self.home_page.path, slug='poll-01').specific
-
-        # Should be redirected to edit page
-        self.assertRedirects(response, reverse('wagtailadmin_pages:edit', args=(page.id,)))
-        # response = self.client.post(reverse('wagtailadmin_pages:add', args=('questionnaires', 'poll', self.home_page.id)), data=data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        print(1)
-        print(1)
-
-        # parsed_response = BeautifulSoup(response.content)
-        # results = parsed_response.findAll('div', {'class': 'cust-check__title'})
-        #
-        # self.assertEqual(len(results), 3)
-        # self.assertEqual(results[0].find('div', {'class': 'cust-check__title-left'}).text.strip(), 'c1\nYour answer')
-        # self.assertEqual(" ".join(results[0].find('div', {'class': 'cust-check__title-right'}).text.split()), '100 %')
-        # self.assertEqual(results[1].find('div', {'class': 'cust-check__title-left'}).text.strip(), 'c2')
-        # self.assertEqual(" ".join(results[1].find('div', {'class': 'cust-check__title-right'}).text.split()), '0 %')
-        # self.assertEqual(results[2].find('div', {'class': 'cust-check__title-left'}).text.strip(), 'c3')
-        # self.assertEqual(" ".join(results[2].find('div', {'class': 'cust-check__title-right'}).text.split()), '0 %')
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
+        page = Page.objects.get(path__startswith=self.poll_index_page.path, slug='poll-01').specific
+        self.assertEqual(page.get_form_fields().first().choices, 'c1|c2|c3')
