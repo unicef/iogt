@@ -4,6 +4,7 @@ import json
 from datetime import timedelta
 
 import pytz
+from bs4 import BeautifulSoup
 from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
@@ -1023,3 +1024,28 @@ class FormDataPerUserAdminTests(TestCase):
             f'{self.user_submission_02.id},Survey 01,2022-08-31 23:00:00+00:00,question_01,c2\r\n'
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(byte_response.decode(), expected_response)
+
+
+class PollTest(TestCase):
+    def setUp(self):
+        Site.objects.all().delete()
+        self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
+        self.home_page = self.site.root_page
+        self.poll = PollFactory(parent=self.home_page)
+
+    def test_poll_question_choices_with_surrounding_spaces(self):
+        poll_question = PollFormFieldFactory(page=self.poll, field_type='dropdown', choices='c1  |  c2 |  c3')
+        self.poll.save()
+
+        response = self.client.post(self.poll.url, {poll_question.clean_name: 'c1'})
+        parsed_response = BeautifulSoup(response.content)
+        results = parsed_response.findAll('div', {'class': 'cust-check__title'})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(results), 3)
+        self.assertEqual(results[0].find('div', {'class': 'cust-check__title-left'}).text.strip(), 'c1\nYour answer')
+        self.assertEqual(" ".join(results[0].find('div', {'class': 'cust-check__title-right'}).text.split()), '100 %')
+        self.assertEqual(results[1].find('div', {'class': 'cust-check__title-left'}).text.strip(), 'c2')
+        self.assertEqual(" ".join(results[1].find('div', {'class': 'cust-check__title-right'}).text.split()), '0 %')
+        self.assertEqual(results[2].find('div', {'class': 'cust-check__title-left'}).text.strip(), 'c3')
+        self.assertEqual(" ".join(results[2].find('div', {'class': 'cust-check__title-right'}).text.split()), '0 %')
