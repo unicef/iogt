@@ -138,14 +138,13 @@ def store_to_db(self, pofile, locale, store_translations=False):
     messages = polib.pofile(pofile)
     translations = TranslationEntry.objects.filter(language=language)
 
-    tdict = {}
-    for t in translations:
-        if t.original not in tdict:
-            tdict.update({t.original: {}})
-        tdict[t.original][t.language] = t.translation
-
+    tdict = {
+        (t.original, t.language, t.domain): t.translation
+        for t in translations
+    }
 
     translations_to_keep = []
+    to_create = []
     for m in messages:
         occs = []
         for occ in m.occurrences:
@@ -164,24 +163,21 @@ def store_to_db(self, pofile, locale, store_translations=False):
         else:
             locale_dir_name = get_locale_parent_dirname(pofile)
 
-        t = TranslationEntry.objects.filter(original=m.msgid, language=language, domain=domain).first()
-        if t:
-            if t.translation:
-                translations_to_keep.append(m.msgid)
-                continue
+        if tdict.get((m.msgid, language, domain)):
+            translations_to_keep.append(m.msgid)
+            continue
 
-        t, created = TranslationEntry.objects.update_or_create(
+        t = TranslationEntry(
             original=m.msgid,
             language=language,
             domain=domain,
-            defaults={
-                "occurrences": "\n".join(occs),
-                "translation": translation,
-                "locale_parent_dir": locale_dir_name,
-                "is_published": True,
-                "locale_path": locale_path,
-            }
+            occurrences="\n".join(occs),
+            translation=translation,
+            locale_parent_dir=locale_dir_name,
+            is_published=True,
+            locale_path=locale_path,
         )
+        to_create.append(t)
 
         translations_to_keep.append(m.msgid)
 
@@ -193,6 +189,7 @@ def store_to_db(self, pofile, locale, store_translations=False):
             self.tors[locale_path][language][domain] = []
         self.tors[locale_path][language][domain].append(t.original)
 
+    TranslationEntry.objects.bulk_create(to_create)
     return translations_to_keep
 
 
@@ -205,7 +202,7 @@ def load_data_from_po(self):
     from translation_manager.models import TranslationEntry
 
     translations_to_keep = []
-    for lang, lang_name in settings.LANGUAGES:
+    for lang, _ in settings.LANGUAGES:
         for path in settings.LOCALE_PATHS:
             locale = get_dirname_from_lang(lang)
             po_pattern = os.path.join(path, locale, "LC_MESSAGES", "*.po")
