@@ -12,17 +12,15 @@ from comments.models import CommentStatus
 from home.models import (
     Article,
     FooterIndexPage,
-    BannerIndexPage,
-    BannerPage,
     HomePage,
     MiscellaneousIndexPage,
     OfflineContentIndexPage,
     SVGToPNGMap,
     Section,
     SectionIndexPage,
-    SiteSettings,
+    SiteSettings, IogtFlatMenuItem,
 )
-
+from wagtailmenus.models import FlatMenu
 
 class HomePageFactory(PageFactory):
     title = factory.Sequence(lambda n: f'homepage{n}')
@@ -100,16 +98,12 @@ class FooterIndexPageFactory(PageFactory):
     class Meta:
         model = FooterIndexPage
 
-class BannerIndexPageFactory(PageFactory):
-    title = 'Banners'
 
+class FlatMenuFactory(DjangoModelFactory):
     class Meta:
-        model = BannerIndexPage
+        model = FlatMenu
 
-class BannerFactory(PageFactory):
 
-    title = factory.Sequence(lambda n: f'banner{n}')
-    banner_image = factory.SubFactory(ImageFactory)
+class IogtFlatMenuItemFactory(DjangoModelFactory):
     class Meta:
-        model = BannerPage
-
+        model = IogtFlatMenuItem
