@@ -186,3 +186,7 @@ Even though it has a column "is in use", its data is currently not updated autom
 ## Updating show in menu for existing pages
 
 1. Run `./manage.py update_show_in_menu`
+
+
+## Apache Superset Setup and Configuration
+- See [here](questionnaires/superset/README.md)
