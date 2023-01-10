@@ -1,11 +1,15 @@
+from bs4 import BeautifulSoup
 from django.test import TestCase
 from django.http import HttpRequest
+from rest_framework import status
 from wagtail.core.models import Site
 
 from home.wagtail_hooks import limit_page_chooser
-from home.factories import SectionFactory, ArticleFactory, HomePageFactory
+from home.factories import SectionFactory, ArticleFactory, HomePageFactory, FlatMenuFactory, IogtFlatMenuItemFactory
 from wagtail_factories import SiteFactory
 
+from questionnaires.factories import QuizFactory, SurveyFactory, PollFactory
+from home.models import IogtFlatMenuItem
 
 class LimitPageChooserHookTests(TestCase):
     def setUp(self):
@@ -55,3 +59,34 @@ class LimitPageChooserHookTests(TestCase):
         pages_after = limit_page_chooser(pages_before, request)
 
         self.assertEqual(pages_after, pages_before)
+
+
+class FlatMenuTest(TestCase):
+    def setUp(self):
+        self.site = Site.objects.get(is_default_site=True)
+        self.home_page = self.site.root_page
+        self.flat_menu = FlatMenuFactory(site=self.site, handle='en_menu_live', title='Flat Menu')
+        self.article = ArticleFactory(parent=self.home_page, title='test article')
+        self.survey = SurveyFactory(parent=self.home_page, title='test survey')
+        self.quiz = QuizFactory(parent=self.home_page, title='test quiz')
+        self.poll = PollFactory(parent=self.home_page, title='test poll')
+
+    def test_flat_menu_item_display(self):
+        IogtFlatMenuItemFactory(menu=self.flat_menu, link_page=self.article, link_text=self.article.title)
+        IogtFlatMenuItemFactory(menu=self.flat_menu, link_page=self.survey, link_text=self.survey.title)
+        IogtFlatMenuItemFactory(menu=self.flat_menu, link_page=self.quiz, link_text=self.quiz.title)
+        IogtFlatMenuItemFactory(menu=self.flat_menu, link_page=self.poll, link_text=self.poll.title)
+
+        response = self.client.get(self.home_page.url)
+        parsed_response = BeautifulSoup(response.content)
+        flat_menu_items = parsed_response.findAll('a', {'class': 'btn-primary menu-item'})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(flat_menu_items[0].text.strip(), 'test article')
+        self.assertEqual(flat_menu_items[0]['href'], self.article.url)
+        self.assertEqual(flat_menu_items[1].text.strip(), 'test survey')
+        self.assertEqual(flat_menu_items[1]['href'], self.survey.url)
+        self.assertEqual(flat_menu_items[2].text.strip(), 'test quiz')
+        self.assertEqual(flat_menu_items[2]['href'], self.quiz.url)
+        self.assertEqual(flat_menu_items[3].text.strip(), 'test poll')
+        self.assertEqual(flat_menu_items[3]['href'], self.poll.url)
