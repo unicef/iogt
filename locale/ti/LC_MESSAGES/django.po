@@ -346,3 +346,21 @@ msgstr ""
 
 msgid "Need internet access to visit external site."
 msgstr ""
+
+msgid "Comment Moderation"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Apply"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Unsure"
+msgstr ""
+
+msgid "No comment found."
+msgstr ""

@@ -87,6 +87,11 @@
     {% else %}
         var isAuthenticated = false;
     {% endif %}
+    {% if push_notification %}
+        var pushNotification = true;
+    {% else %}
+        var pushNotification = false;
+    {% endif %}
 </script>
 <script src="{% url 'javascript-catalog' %}"></script>
 <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
