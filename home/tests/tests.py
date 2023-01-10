@@ -63,7 +63,8 @@ class LimitPageChooserHookTests(TestCase):
 
 class FlatMenuTest(TestCase):
     def setUp(self):
-        self.site = Site.objects.get(is_default_site=True)
+        Site.objects.all().delete()
+        self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True, root_page=HomePageFactory())
         self.home_page = self.site.root_page
         self.flat_menu = FlatMenuFactory(site=self.site, handle='en_menu_live', title='Flat Menu')
         self.article = ArticleFactory(parent=self.home_page, title='test article')
@@ -90,3 +91,4 @@ class FlatMenuTest(TestCase):
         self.assertEqual(flat_menu_items[2]['href'], self.quiz.url)
         self.assertEqual(flat_menu_items[3].text.strip(), 'test poll')
         self.assertEqual(flat_menu_items[3]['href'], self.poll.url)
+
