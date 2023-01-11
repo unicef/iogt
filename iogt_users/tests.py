@@ -13,8 +13,9 @@ class PostRegistrationRedirectTests(TestCase):
     def setUp(self):
         self.user = UserFactory(has_filled_registration_survey=False)
         self.admin_user = AdminUserFactory(has_filled_registration_survey=False)
-        self.group = GroupFactory()
         self.admin_access_permission = Permission.objects.get(codename='access_admin')
+        self.group = GroupFactory()
+        self.group.permissions.add(self.admin_access_permission)
 
         Site.objects.all().delete()
         self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
@@ -41,7 +42,6 @@ class PostRegistrationRedirectTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_user_log_in_with_admin_access_without_filling_registration_survey_form(self):
-        self.group.permissions.add(self.admin_access_permission)
         self.user.groups.add(self.group)
         self.client.force_login(self.user)
         response = self.client.get(self.home_page.url)
