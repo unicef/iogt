@@ -1030,8 +1030,9 @@ class FormDataPerUserAdminTests(TestCase):
 
 class DateTimeFieldTest(TestCase):
     def setUp(self):
-        self.site = Site.objects.get(is_default_site=True)
-        self.en_home_page = self.site.root_page
+        Site.objects.all().delete()
+        self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True, root_page=HomePageFactory())
+        self.en_home_page = self.site.root_page.specific
         self.en_survey = SurveyFactory(parent=self.en_home_page)
         SurveyFormFieldFactory(page=self.en_survey, field_type='date', help_text='')
         SurveyFormFieldFactory(page=self.en_survey, field_type='datetime', help_text='')
