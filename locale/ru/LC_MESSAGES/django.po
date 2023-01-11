@@ -354,6 +354,12 @@ msgstr ""
 "Если вы не можете прослушать это аудио, вы можете %(start_link)sскачать "
 "его%(end_link)s."
 
+msgid "Date must be in this (YYYY-MM-DD) format"
+msgstr "Дата должна быть указана в формате (ГГГГ-ММ-ДД)"
+
+msgid "Datetime must be in this YYYY-MM-DDTHH:SS format"
+msgstr "Дата и время должны быть в указаны в формате: ГГГГ-ММ-ДДВЧЧ:СС"
+
 msgid "Please complete the questions marked as required to continue"
 msgstr ""
 
@@ -376,4 +382,9 @@ msgid "Unsure"
 msgstr ""
 
 msgid "No comment found."
+msgstr ""
+
+msgid ""
+"The content you are trying to reach is not available. To see offline content"
+" click <a href=\"%(offline_content_index_page_url)s\">here</a>"
 msgstr ""

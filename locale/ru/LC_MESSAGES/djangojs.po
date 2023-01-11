@@ -18,9 +18,3 @@ msgstr "К сожалению, возникла ошибка. Пожалуйст
 
 msgid "You cannot submit when offline"
 msgstr "Отправка в автономном режиме невозможна"
-
-msgid "Date must be in this (YYYY-MM-DD) format"
-msgstr "Дата должна быть указана в формате (ГГГГ-ММ-ДД)"
-
-msgid "Datetime must be in this YYYY-MM-DDTHH:SS format"
-msgstr "Дата и время должны быть в указаны в формате: ГГГГ-ММ-ДДВЧЧ:СС"

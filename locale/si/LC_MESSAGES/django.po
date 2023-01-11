@@ -351,6 +351,12 @@ msgid ""
 "%(start_link)sdownload it%(end_link)s."
 msgstr "ඔබට ඉහත ශ්‍රව්‍යයට සවන් දීමට නොහැකි නම්, ඔබට එය බාගත කළ හැකිය"
 
+msgid "Date must be in this (YYYY-MM-DD) format"
+msgstr ""
+
+msgid "Datetime must be in this YYYY-MM-DDTHH:SS format"
+msgstr ""
+
 msgid "Please complete the questions marked as required to continue"
 msgstr ""
 
@@ -373,4 +379,9 @@ msgid "Unsure"
 msgstr ""
 
 msgid "No comment found."
+msgstr ""
+
+msgid ""
+"The content you are trying to reach is not available. To see offline content"
+" click <a href=\"%(offline_content_index_page_url)s\">here</a>"
 msgstr ""
