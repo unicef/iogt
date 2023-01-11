@@ -4,6 +4,7 @@ import json
 from datetime import timedelta
 
 import pytz
+from bs4 import BeautifulSoup
 from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
@@ -11,10 +12,12 @@ from django.utils import timezone
 from openpyxl import load_workbook
 from rest_framework import status
 from rest_framework.test import APIClient
+from translation_manager.models import TranslationEntry
 from wagtail.core.models import Site
 from wagtail_factories import SiteFactory
+from wagtail_localize.operations import TranslationCreator
 
-from home.factories import HomePageFactory
+from home.factories import HomePageFactory, LocaleFactory
 from iogt_users.factories import (
     UserFactory,
     GroupFactory,
@@ -1023,3 +1026,48 @@ class FormDataPerUserAdminTests(TestCase):
             f'{self.user_submission_02.id},Survey 01,2022-08-31 23:00:00+00:00,question_01,c2\r\n'
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(byte_response.decode(), expected_response)
+
+
+class DateTimeFieldTest(TestCase):
+    def setUp(self):
+        self.site = Site.objects.get(is_default_site=True)
+        self.en_home_page = self.site.root_page
+        self.en_survey = SurveyFactory(parent=self.en_home_page)
+        SurveyFormFieldFactory(page=self.en_survey, field_type='date', help_text='')
+        SurveyFormFieldFactory(page=self.en_survey, field_type='datetime', help_text='')
+
+    def test_help_text_translation_of_english_language(self):
+        response = self.client.get(self.en_survey.url)
+        parsed_response = BeautifulSoup(response.content)
+        help_texts = parsed_response.findAll("div", {"class": "quest-item"})
+        date_help_text = help_texts[0].find("div", {"class": "quest-item__header"}).text.strip()
+        date_time_help_text = help_texts[1].find("div", {"class": "quest-item__header"}).text.strip()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(date_help_text, 'Date must be in this (YYYY-MM-DD) format')
+        self.assertEqual(date_time_help_text, 'Datetime must be in this YYYY-MM-DDTHH:SS format')
+
+    def test_survey_translation_of_arabic_language(self):
+        ru_locale = LocaleFactory(language_code='ru')
+        ru_translation_creator = TranslationCreator(user=None, target_locales=[ru_locale])
+        ru_translation_creator.create_translations(self.en_survey)
+        ru_survey = self.en_survey.get_translation(ru_locale)
+
+        TranslationEntry.objects.create(
+            original="Date must be in this (YYYY-MM-DD) format",
+            translation="Дата должна быть указана в формате (ГГГГ-ММ-ДД)",
+            language=ru_locale.language_code)
+        TranslationEntry.objects.create(
+            original="Datetime must be in this YYYY-MM-DDTHH:SS format",
+            translation="Дата и время должны быть в указаны в формате: ГГГГ-ММ-ДДВЧЧ:СС",
+            language=ru_locale.language_code)
+
+        response = self.client.get(ru_survey.url)
+        parsed_response = BeautifulSoup(response.content)
+        help_texts = parsed_response.findAll("div", {"class": "quest-item"})
+        date_help_text = help_texts[0].find("div", {"class": "quest-item__header"}).text.strip()
+        date_time_help_text = help_texts[1].find("div", {"class": "quest-item__header"}).text.strip()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(date_help_text, 'Дата должна быть указана в формате (ГГГГ-ММ-ДД)')
+        self.assertEqual(date_time_help_text, 'Дата и время должны быть в указаны в формате: ГГГГ-ММ-ДДВЧЧ:СС')
