@@ -17,7 +17,7 @@ class RegistrationSurveyRedirectMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if request.user.is_superuser:
+        if request.user.has_perm('wagtailadmin.access_admin'):
             return self.get_response(request)
 
         request_path = request.path_info
