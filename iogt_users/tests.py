@@ -40,7 +40,7 @@ class PostRegistrationRedirectTests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_user_with_admin_access_log_in_without_filling_registration_survey_form(self):
+    def test_user_log_in_with_admin_access_without_filling_registration_survey_form(self):
         self.group.permissions.add(self.admin_access_permission)
         self.user.groups.add(self.group)
         self.client.force_login(self.user)
