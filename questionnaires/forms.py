@@ -22,7 +22,7 @@ class CustomFormBuilder(FormBuilder):
 
     def create_datetime_field(self, field, options):
         options.update({
-            'widget': forms.DateInput(attrs={'type': 'datetime-local'}),
+            'widget': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         })
 
         return forms.DateTimeField(**options)
