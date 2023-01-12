@@ -13,8 +13,8 @@ from openpyxl import load_workbook
 from rest_framework import status
 from rest_framework.test import APIClient
 from translation_manager.models import TranslationEntry
-from wagtail.core.models import Site, Page
-from wagtail_factories import SiteFactory
+from wagtail.core.models import Site
+from wagtail_factories import SiteFactory, PageFactory
 from wagtail_localize.operations import TranslationCreator
 
 from home.factories import HomePageFactory, LocaleFactory
@@ -1030,12 +1030,12 @@ class FormDataPerUserAdminTests(TestCase):
 
 class DateTimeFieldTest(TestCase):
     def setUp(self):
-        Site.objects.all().delete()
-        self.root_page = Page.objects.get(depth=1)
+        self.root_page = PageFactory(parent=None)
         self.en_home_page = HomePageFactory(parent=self.root_page)
-        self.site = SiteFactory(site_name='IoGT', is_default_site=True, root_page=self.en_home_page)
+        self.site = SiteFactory(hostname='testserver', port=80, root_page=self.en_home_page)
 
-        self.en_survey = SurveyFactory(parent=self.en_home_page)
+        self.survey_index_page = SurveyIndexPageFactory(parent=self.en_home_page)
+        self.en_survey = SurveyFactory(parent=self.survey_index_page)
         SurveyFormFieldFactory(page=self.en_survey, field_type='date', help_text='')
         SurveyFormFieldFactory(page=self.en_survey, field_type='datetime', help_text='')
 
