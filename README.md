@@ -162,13 +162,6 @@ Note: the names of transfer sources may only contain letters, numbers and unders
 [5]: https://wagtail.io/
 [6]: https://github.com/wagtail/wagtail/wiki/Release-schedule
 
-## Cypress Tests
-```
-make cypress
-cd cypress_tests/
-npm install
-node_modules/.bin/cypress open
-```
 
 ## Adding new localizable strings to the code base
 
@@ -181,3 +174,6 @@ This process updates PO files as necessary and compiles a list of strings that a
 
 **Remark:** The file `common/translation_utils/translations.csv` is NOT updated in the process.
 Even though it has a column "is in use", its data is currently not updated automatically, and similarly, new strings are not added automatically.
+
+## Apache Superset Setup and Configuration
+- See [here](questionnaires/superset/README.md)
