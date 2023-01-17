@@ -147,7 +147,7 @@ In `iogt/settings/local.py`, define [parameters from wagtail-transfer](https://g
 WAGTAILTRANSFER_SECRET_KEY = 'fake_secret_key'
 WAGTAILTRANSFER_SOURCES = {
    'iogt_global': {
-      'BASE_URL': 'http://fake-iogt-url.org',
+      'BASE_URL': 'http://fake-iogt-url.org/wagtail-transfer/',
       'SECRET_KEY': 'fake_secret_key_2',
    },
 }
@@ -162,13 +162,6 @@ Note: the names of transfer sources may only contain letters, numbers and unders
 [5]: https://wagtail.io/
 [6]: https://github.com/wagtail/wagtail/wiki/Release-schedule
 
-## Cypress Tests
-```
-make cypress
-cd cypress_tests/
-npm install
-node_modules/.bin/cypress open
-```
 
 ## Hiding View Live button from admin panel
 If you want to hide view live and preview button from admin panel then do the following steps
@@ -187,3 +180,6 @@ This process updates PO files as necessary and compiles a list of strings that a
 
 **Remark:** The file `common/translation_utils/translations.csv` is NOT updated in the process.
 Even though it has a column "is in use", its data is currently not updated automatically, and similarly, new strings are not added automatically.
+
+## Apache Superset Setup and Configuration
+- See [here](questionnaires/superset/README.md)
