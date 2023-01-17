@@ -2,7 +2,7 @@
 build:
 	docker-compose build
 down:
-	docker-compose down
+	docker-compose down --remove-orphans
 makemigrations:
 	docker-compose run django python manage.py makemigrations
 migrate:

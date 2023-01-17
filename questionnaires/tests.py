@@ -8,11 +8,13 @@ from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
+from django_webtest import WebTest
 from openpyxl import load_workbook
 from rest_framework import status
 from rest_framework.test import APIClient
 from wagtail.core.models import Site, Page
 from wagtail_factories import SiteFactory
+from webtest.forms import Hidden
 
 from home.factories import HomePageFactory
 from iogt_users.factories import (
@@ -1027,37 +1029,37 @@ class FormDataPerUserAdminTests(TestCase):
         self.assertEqual(byte_response.decode(), expected_response)
 
 
-class PollTest(TestCase):
+class PollTest(WebTest):
     def setUp(self):
-        Site.objects.all().delete()
-        self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
-        self.home_page = self.site.root_page
-        self.poll_index_page = PollIndexPageFactory(parent=self.home_page)
+        root_page = Page.objects.filter(depth=1).first()
+        home_page = HomePageFactory(parent=root_page)
+        SiteFactory(hostname='testserver', root_page=home_page)
+        self.poll_index_page = PollIndexPageFactory(parent=home_page)
         self.user = AdminUserFactory()
         self.client.force_login(self.user)
 
+    def _add_dynamic_field(self, form, name, value):
+        field = Hidden(form, tag='input', name=name, value=value, pos=999)
+        form.fields[name] = [field]
+        form.field_order.append((name, field))
+
     def test_poll_question_choices_with_surrounding_spaces(self):
-        data = {
-            "title": "Poll 01",
-            "submit_button_text": "Submit",
-            "description-count": "0",
-            "thank_you_text-count": "0",
-            "terms_and_conditions-count": "0",
-            "poll_form_fields-TOTAL_FORMS": "1",
-            "poll_form_fields-INITIAL_FORMS": "0",
-            "poll_form_fields-MIN_NUM_FORMS": "1",
-            "poll_form_fields-MAX_NUM_FORMS": "1",
-            "poll_form_fields-0-label": "Q1",
-            "poll_form_fields-0-field_type": "checkboxes",
-            "poll_form_fields-0-choices": " c1 | c2 | c3 ",
-            "poll_form_fields-0-admin_label": "Q1",
-            "slug": "poll-01",
-            "action-publish": "action-publish"
-        }
+        form = self.app.get(
+            reverse('wagtailadmin_pages:add', args=('questionnaires', 'poll', self.poll_index_page.id)),
+            user=self.user.username
+        ).forms[1]
+        form['title'] = 'Poll 01'
+        form['slug'] = 'poll-01'
+        form['poll_form_fields-0-label'] = 'Q1'
+        form['poll_form_fields-0-field_type'] = 'checkboxes'
+        form['poll_form_fields-0-choices'] = ' c1 | c2 | c3 '
+        form['poll_form_fields-0-admin_label'] = 'Q1'
+        self._add_dynamic_field(form, 'description-count', '0')
+        self._add_dynamic_field(form, 'thank_you_text-count', '0')
+        self._add_dynamic_field(form, 'terms_and_conditions-count', '0')
 
-        response = self.client.post(
-            reverse('wagtailadmin_pages:add', args=('questionnaires', 'poll', self.poll_index_page.id)), data=data)
+        response = form.submit().follow()
 
-        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         page = Page.objects.get(path__startswith=self.poll_index_page.path, slug='poll-01').specific
         self.assertEqual(page.get_form_fields().first().choices, 'c1|c2|c3')
