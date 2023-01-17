@@ -17,7 +17,9 @@ class MediaBlock(AbstractMediaChooserBlock):
         context.update({
             'start_link': mark_safe(f'<a href="{value.url}" download>'),
             'end_link': mark_safe('</a>'),
+            'template': 'blocks/media-video.html' if value.type == 'video' else 'blocks/media-audio.html'
         })
+
         return context
 
     class Meta:
