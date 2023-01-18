@@ -2,12 +2,24 @@ from typing import List
 from urllib.parse import urlparse
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import Select
 
+def safe_click(driver, button):
+    driver.execute_script("arguments[0].click();", button)
+
+def visible_with_size(item):
+    return (
+        item.size['width'] > 0
+        and item.size['height'] > 0
+        and item.is_displayed()
+    )
 class BasePage(object):
 
     body_text_locator = (By.TAG_NAME, 'body')
     content_text_locator = (By.CLASS_NAME, 'content')
     message_text_locator = (By.CLASS_NAME, 'messages')
+    search_button_locator = (By.CLASS_NAME, 'xs-home-header__search')
 
     def __init__(self, driver: WebDriver) -> None:
         self.driver = driver        
@@ -24,6 +36,9 @@ class BasePage(object):
     def get_messages_text(self):
         return self.driver.find_element(*self.message_text_locator).text
 
+    def small_search_button_select(self):
+        return self.driver.find_element(*self.search_button_locator).click()
+
     @property
     def footer(self) -> 'FooterElement':
         return FooterElement(self.driver)
@@ -31,6 +46,23 @@ class BasePage(object):
     @property
     def navbar(self) -> 'NavbarElement':
         return NavbarElement(self.driver)
+
+class HomePage(BasePage):
+
+    banner_area_locator = (By.CSS_SELECTOR, "section[class='banner-holder']")
+    banner_image_locator = (By.CSS_SELECTOR, "img[alt='An image']")
+
+    def __init__(self, driver: WebDriver) -> None:
+        self.driver = driver
+
+    def has_banner(self):
+        banner = self.driver.find_element(*self.banner_area_locator)
+        print()
+        return visible_with_size(banner)            
+    
+    def click_banner(self):
+        banner_image = self.driver.find_element(*self.banner_image_locator)
+        banner_image.click()
 
 
 class LoginPage(BasePage):    
@@ -72,6 +104,20 @@ class LogoutPage(BasePage):
     def logout_user(self):
         self.logout_submit.click()
 
+class SearchPage(BasePage):
+      
+    search_area_locator = (By.CLASS_NAME, "profile-form__input")
+    search_button_locator = (By.CSS_SELECTOR, "button[type='submit']")
+
+    def __init__(self, driver: WebDriver) -> None:
+        self.driver = driver      
+        self.search_area = self.driver.find_element(*self.search_area_locator)
+        self.search_submit = driver.find_element(*self.search_button_locator)
+
+    def search(self, searchtext):
+       
+        self.search_area.send_keys(searchtext)
+        self.search_submit.click()
 
 class ArticlePage(BasePage):
 
@@ -93,20 +139,124 @@ class ArticlePage(BasePage):
 
     def has_lead_image(self):
         lead_image = self.driver.find_element(*self.lead_image_locator)
-        return (
-            lead_image.size['width'] > 0
-            and lead_image.size['height'] > 0
-            and lead_image.is_displayed()
-        )
+        return visible_with_size(lead_image)
          
     def navigate_next(self):
-        self.driver.find_element(*self.navigate_next_locator).click() 
+
+        safe_click(self.driver, self.driver.find_element(*self.navigate_next_locator))
         return BasePage(self.driver)  
 
     def navigate_previous(self):
-        self.driver.find_element(*self.navigate_previous_locator).click()
-        return BasePage(self.driver)        
+        safe_click(self.driver, self.driver.find_element(*self.navigate_previous_locator))
+        return BasePage(self.driver)
 
+class SectionPage(BasePage):
+
+    heading_locator = (By.CLASS_NAME, 'image-overlay__text')
+    lead_image_locator = (By.CLASS_NAME, 'lead-img')
+    
+
+    def __init__(self, driver: WebDriver) -> None:
+        self.driver = driver
+        
+    @property
+    def title(self) -> str:
+        return self.driver.find_element(*self.heading_locator).text
+
+    def has_lead_image(self):
+        lead_image = self.driver.find_element(*self.lead_image_locator)
+        return visible_with_size(lead_image)
+         
+    def navigate_featured_content(self, LinkText):
+        safe_click(self.driver, self.driver.find_element(By.PARTIAL_LINK_TEXT, LinkText))
+
+class QuestionnairePage(BasePage):
+
+    heading_locator = (By.TAG_NAME, 'h1')
+    checkbox_locator = (By.CSS_SELECTOR, "input[type='checkbox']")
+    date_locator = (By.CSS_SELECTOR, "input[type='date']")
+    date_time_locator = (By.CSS_SELECTOR, "input[type='datetime-local']")
+    dropdown_locator = (By.CLASS_NAME, 'quest-item__input')
+    email_locator = (By.CSS_SELECTOR, "input[type='email']")
+    text_locator = (By.CLASS_NAME, 'cust-input')
+    number_locator = (By.CSS_SELECTOR, "input[type='number']")
+    radio_locator = (By.CSS_SELECTOR, "input[type='radio']")
+    url_locator = (By.CSS_SELECTOR, "input[type='url']")
+    submit_locator = (By.CSS_SELECTOR, "button[type='submit']")
+    login_submit_locator = (By.PARTIAL_LINK_TEXT, "Log in to participate")
+
+    def __init__(self, driver: WebDriver) -> None:
+        self.driver = driver
+        
+    @property
+    def title(self) -> str:
+        return self.driver.find_element(*self.heading_locator).text
+
+    def submit_response(self):
+        safe_click(self.driver,self.driver.find_element(*self.submit_locator))
+
+    def login_button_submit(self):
+        safe_click(self.driver,self.driver.find_element(*self.login_submit_locator))
+
+    def select_checkbox(self):
+        self.driver.find_element(*self.checkbox_locator).click()
+
+    def select_checkboxes(self, option):
+        safe_click(self.driver, self.driver.find_element(By.CSS_SELECTOR, "input[value='" + option + "']"))
+
+    def enter_date(self, date):
+        date_input = self.driver.find_element(*self.date_locator)
+        date_input.click()
+        date_input.send_keys(date)
+
+    def enter_date_time(self, date, time):
+        date_input = self.driver.find_element(*self.date_time_locator)
+        safe_click(self.driver, date_input)
+        date_input.send_keys(date)
+        date_input.send_keys(Keys.TAB)
+        date_input.send_keys(time)
+
+    def use_dropdown(self, question, selection):
+        select = Select(self.driver.find_element(By.NAME,question))
+        select.select_by_visible_text(selection)
+        return select.first_selected_option.text
+
+    def enter_email(self, email):
+        input = self.driver.find_element(*self.email_locator)
+        input.send_keys(email)
+
+    def enter_text(self, text):
+        input = self.driver.find_element(*self.text_locator)
+        input.send_keys(text)
+
+    def enter_number(self, number):
+        input = self.driver.find_element(*self.number_locator)
+        input.send_keys(number)
+
+    def select_radio(self, option):
+        self.driver.find_element(By.CSS_SELECTOR, "input[value='" + option + "']").click()
+
+    def enter_url(self, url):
+        input = self.driver.find_element(*self.url_locator)
+        input.send_keys(url)
+
+class QuestionnaireResultsPage(BasePage):
+
+    poll_result_locator = (By.CLASS_NAME, 'polls-widget__form')
+    quiz_result_locator = (By.CLASS_NAME, 'quiz-answer-banner__answers')
+    back_button_locator = (By.PARTIAL_LINK_TEXT, 'Back')
+
+    def __init__(self, driver: WebDriver) -> None:
+        self.driver = driver
+
+    def get_poll_results_text(self):
+        return self.driver.find_element(*self.poll_result_locator).text
+
+    def get_quiz_results_text(self):
+        return self.driver.find_element(*self.quiz_result_locator).text
+
+    def go_back(self):
+        safe_click(self.driver, self.driver.find_element(*self.back_button_locator))
 
 class BaseElement():
     locator = (By.TAG_NAME, 'html')
@@ -114,9 +264,6 @@ class BaseElement():
     def __init__(self, driver: WebDriver) -> None:
         self.driver = driver
         self.html = self.driver.find_element(*self.locator)
-
-    def safe_click(self, button):
-        self.driver.execute_script("arguments[0].click();", button)
 
     @property
     def is_displayed(self) -> bool:
@@ -137,22 +284,23 @@ class CommentsSectionElement(BaseElement):
     def submit_comment(self, text):
         self.comment_area = self.driver.find_element(*self.comment_area_locator)
         self.comment_area.send_keys(text)
-        self.safe_click(self.driver.find_element(*self.leave_comment_locator))
+        safe_click(self.driver, self.driver.find_element(*self.leave_comment_locator))
 
     def retrieve_comments(self):
         self.comment_holder = self.driver.find_element(*self.comment_holder_locator)
         return self.comment_holder.text
 
     def delete_last_comment(self):
-        self.safe_click(self.driver.find_element(*self.delete_comment_locator))
+        safe_click(self.driver, self.driver.find_element(*self.delete_comment_locator))
 
     def reply_last_comment(self, reply):
-        self.safe_click(self.driver.find_element(*self.reply_comment_locator))
+        safe_click(self.driver, self.driver.find_element(*self.reply_comment_locator))
         self.submit_comment(reply)
 
     def report_last_comment(self):
-        self.safe_click(self.driver.find_element(*self.report_comment_locator))
-        self.driver.find_element(*self.report_button_locator).click() 
+        safe_click(self.driver, self.driver.find_element(*self.report_comment_locator))
+        self.driver.find_element(*self.report_button_locator).click()
+    
 
 class FooterElement(BaseElement):
     locator = (By.CSS_SELECTOR, '.footer-main .bottom-level')
@@ -176,11 +324,7 @@ class FooterItemElement():
     @property
     def has_icon(self) -> bool:
         icon = self.html.find_element(By.TAG_NAME, 'img')
-        return (
-            icon.size['width'] > 0
-            and icon.size['height'] > 0
-            and icon.is_displayed()
-        )
+        return visible_with_size(icon)
 
     @property
     def background_color(self):

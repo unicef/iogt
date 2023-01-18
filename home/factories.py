@@ -12,6 +12,8 @@ from comments.models import CommentStatus
 from home.models import (
     Article,
     FooterIndexPage,
+    BannerIndexPage,
+    BannerPage,
     HomePage,
     MiscellaneousIndexPage,
     OfflineContentIndexPage,
@@ -97,3 +99,17 @@ class FooterIndexPageFactory(PageFactory):
 
     class Meta:
         model = FooterIndexPage
+
+class BannerIndexPageFactory(PageFactory):
+    title = 'Banners'
+
+    class Meta:
+        model = BannerIndexPage
+
+class BannerFactory(PageFactory):
+
+    title = factory.Sequence(lambda n: f'banner{n}')
+    banner_image = factory.SubFactory(ImageFactory)
+    class Meta:
+        model = BannerPage
+
