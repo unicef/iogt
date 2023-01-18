@@ -2584,6 +2584,6 @@ input[type=checkbox], input[type=radio] {
   }
 }
 
-.text-align-center{
+.no-lead-image{
   text-align: center;
 }
