@@ -1,6 +1,7 @@
 from typing import List
 from urllib.parse import urlparse
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.relative_locator import locate_with
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
@@ -20,6 +21,8 @@ class BasePage(object):
     content_text_locator = (By.CLASS_NAME, 'content')
     message_text_locator = (By.CLASS_NAME, 'messages')
     search_button_locator = (By.CLASS_NAME, 'xs-home-header__search')
+    navbar_locator = (By.CSS_SELECTOR, '.top-level')
+    footer_locator = (By.CSS_SELECTOR, '.bottom-level')
 
     def __init__(self, driver: WebDriver) -> None:
         self.driver = driver        
@@ -38,6 +41,16 @@ class BasePage(object):
 
     def small_search_button_select(self):
         return self.driver.find_element(*self.search_button_locator).click()
+    
+    def navbar_below_content(self):
+        content = self.driver.find_element(*self.content_text_locator)
+        navbar = self.driver.find_element(locate_with(*self.navbar_locator).below(content))
+        return navbar.is_displayed()        
+    
+    def footers_below_navbar(self):
+        navbar = self.driver.find_element(*self.navbar_locator)
+        footer = self.driver.find_element(locate_with(*self.footer_locator).below(navbar))
+        return footer.is_displayed()
 
     @property
     def footer(self) -> 'FooterElement':
