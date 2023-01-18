@@ -68,7 +68,11 @@ def field_counter(form, forloop, form_length, fields_step, questionnaire):
 
 @register.inclusion_tag('questionnaires/tags/submit_button.html')
 def render_submit_button(fields_step, page):
-    return {"fields_step": fields_step, "page": page}
+    submit_button_text = page.submit_button_text
+    if hasattr(page, "multi_step") and page.multi_step and fields_step.paginator.num_pages != fields_step.number:
+        submit_button_text = "Next"
+
+    return {'submit_button_text': submit_button_text}
 
 
 @register.inclusion_tag('questionnaires/tags/action_url.html')

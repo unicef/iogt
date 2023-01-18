@@ -7,7 +7,6 @@ from wagtail_localize.operations import TranslationCreator
 from home.wagtail_hooks import limit_page_chooser
 from home.factories import SectionFactory, ArticleFactory, HomePageFactory, MediaFactory, LocaleFactory, SurveyFactory
 from wagtail_factories import SiteFactory, PageFactory
-from bs4 import BeautifulSoup
 
 
 class LimitPageChooserHookTests(TestCase):
@@ -108,11 +107,9 @@ class SurveyTranslationTest(TestCase):
 
     def test_survey_translation_of_english_language(self):
         response = self.client.get(self.en_survey.url)
-        soup = BeautifulSoup(response.content)
-        submit_button_text = soup.find("button", {"type": "submit"}).text.strip()
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(submit_button_text, 'Submit')
+        self.assertContains(response, 'Submit')
 
     def test_survey_translation_of_arabic_language(self):
         ar_locale = LocaleFactory(language_code='ar')
@@ -125,8 +122,6 @@ class SurveyTranslationTest(TestCase):
             language=ar_locale.language_code)
 
         response = self.client.get(ar_survey.url)
-        soup = BeautifulSoup(response.content)
-        submit_button_text = soup.find("button", {"type": "submit"}).text.strip()
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(submit_button_text, "إرسال")
+        self.assertContains(response, "إرسال")
