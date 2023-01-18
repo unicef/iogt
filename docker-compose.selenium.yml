@@ -49,7 +49,7 @@ services:
       - 5900:5900
 
   firefox:
-    image: selenium/node-firefox:3.141.59-20210929
+    image: selenium/node-firefox-debug:3.141.59-20210929
     volumes:
       - /dev/shm:/dev/shm
     depends_on:
@@ -57,3 +57,6 @@ services:
     environment:
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
+    ports:
+      - 5901:5900
+    

@@ -49,16 +49,11 @@ class FooterSeleniumTests(BaseSeleniumTests):
             section.title,
             'Section title is the link text'
         )
-        self.assertEqual(
-            item.background_color,
-            'rgba(0, 170, 0, 1)',
-            'Navbar item background color must match section background color'
-        )
-        self.assertEqual(
-            item.font_color,
-            'rgba(221, 221, 221, 1)',
-            'Navbar item font color must match section font color'
-        )
+        #Chrome and firefox have different colour formats so have covered with an or statement
+        self.assertTrue(item.background_color == 'rgba(0, 170, 0, 1)' or item.background_color == 'rgb(0, 170, 0)')
+            
+        self.assertTrue(item.font_color == 'rgba(221, 221, 221, 1)' or item.font_color == 'rgb(221, 221, 221)')
+            
         section_page = item.click()
         self.assertTrue(
             section_page.url_matches(section.url),

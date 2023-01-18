@@ -4,9 +4,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
+from selenium.common.exceptions import WebDriverException
 
 def safe_click(driver, button):
-    driver.execute_script("arguments[0].click();", button)
+    try:
+        button.click()
+    except WebDriverException:
+        driver.execute_script("arguments[0].click();", button)
 
 def visible_with_size(item):
     return (
@@ -206,15 +210,26 @@ class QuestionnairePage(BasePage):
 
     def enter_date(self, date):
         date_input = self.driver.find_element(*self.date_locator)
-        date_input.click()
-        date_input.send_keys(date)
+        safe_click(self.driver, date_input)
+        
+        if self.driver.browser == "Chrome":
+            #This is the process for chrome
+            date_input.send_keys(date)
+        else:    
+            #This is the process for firefox
+            date_input.send_keys("2011-11-11")
 
     def enter_date_time(self, date, time):
         date_input = self.driver.find_element(*self.date_time_locator)
         safe_click(self.driver, date_input)
-        date_input.send_keys(date)
-        date_input.send_keys(Keys.TAB)
-        date_input.send_keys(time)
+        if self.driver.browser == "Chrome":
+            #This is the process for chrome
+            date_input.send_keys(date)
+            date_input.send_keys(Keys.TAB)
+            date_input.send_keys(time)
+        else:        
+            #This is what works for Firefox
+            date_input.send_keys("2000-10-31T01:30")        
 
     def use_dropdown(self, question, selection):
         select = Select(self.driver.find_element(By.NAME,question))
@@ -227,7 +242,13 @@ class QuestionnairePage(BasePage):
 
     def enter_text(self, text):
         input = self.driver.find_element(*self.text_locator)
-        input.send_keys(text)
+        detailinput = input.find_element(By.CSS_SELECTOR, "input[type='text']")
+        detailinput.send_keys(text)
+
+    def enter_multiline_text(self, text):
+        input = self.driver.find_element(*self.text_locator)
+        detailinput = input.find_element(By.CSS_SELECTOR, "textarea")
+        detailinput.send_keys(text)
 
     def enter_number(self, number):
         input = self.driver.find_element(*self.number_locator)

@@ -18,7 +18,7 @@ class BaseSeleniumTests(LiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
-        options = webdriver.ChromeOptions()
+        options = webdriver.FirefoxOptions()
         options.add_argument('--ignore-ssl-errors=yes')
         options.add_argument('--ignore-certificate-errors')
         options.add_argument("--window-size=480,720")
@@ -26,9 +26,10 @@ class BaseSeleniumTests(LiveServerTestCase):
         options.add_argument("--headless")
         cls.selenium = webdriver.Remote(
             command_executor='http://selenium-hub:4444/wd/hub',
-            desired_capabilities=DesiredCapabilities.CHROME,
+            desired_capabilities=DesiredCapabilities.FIREFOX,
             options=options
         )
+        cls.selenium.browser = "Firefox"
         cls.selenium.implicitly_wait(10)
         super(BaseSeleniumTests, cls).setUpClass()
 
