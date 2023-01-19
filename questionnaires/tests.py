@@ -12,7 +12,7 @@ from django.utils import timezone
 from openpyxl import load_workbook
 from rest_framework import status
 from rest_framework.test import APIClient
-from wagtail.core.models import Site
+from wagtail.core.models import Site, Page
 from wagtail_factories import SiteFactory
 
 from home.factories import HomePageFactory
@@ -1028,17 +1028,17 @@ class FormDataPerUserAdminTests(TestCase):
 
 class PollTest(TestCase):
     def setUp(self):
-        Site.objects.all().delete()
-        self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
-        self.home_page = self.site.root_page
-        self.poll = PollFactory(parent=self.home_page,)
+        root_page = Page.objects.filter(depth=1).first()
+        home_page = HomePageFactory(parent=root_page)
+        SiteFactory(hostname='testserver', port=80, root_page=home_page)
+        self.poll = PollFactory(parent=home_page)
 
     def test_drop_down_defaults_to_the_blank_option(self):
         PollFormFieldFactory(page=self.poll, field_type='dropdown', choices='c1|c2')
 
         response = self.client.get(self.poll.url)
         parsed_response = BeautifulSoup(response.content)
-        default_drop_down_option = parsed_response.find('div', {'class': 'quest-item'}).find('select').find('option').text
+        default_drop_down_option = parsed_response.select_one('.quest-item select option').text
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(default_drop_down_option, '')
@@ -1048,7 +1048,7 @@ class PollTest(TestCase):
 
         response = self.client.post(self.poll.url, {poll_question.clean_name: ''})
         parsed_response = BeautifulSoup(response.content)
-        field_required_text = parsed_response.find('div', {'class': 'quest-item'}).find('p', {'class': 'cust-input__error'}).text
+        field_required_text = parsed_response.select_one('.quest-item .cust-input__error').text
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(field_required_text, 'This field is required.')
@@ -1058,25 +1058,25 @@ class PollTest(TestCase):
 
         response = self.client.post(self.poll.url, {poll_question.clean_name: ''})
         parsed_response = BeautifulSoup(response.content)
-        results = parsed_response.findAll('div', {'class': 'cust-check__title'})
+        results = parsed_response.select('.cust-check__title')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(results), 2)
-        self.assertEqual(results[0].find('div', {'class': 'cust-check__title-left'}).text.strip(), 'c1')
-        self.assertEqual(" ".join(results[0].find('div', {'class': 'cust-check__title-right'}).text.split()), '0 %')
-        self.assertEqual(results[1].find('div', {'class': 'cust-check__title-left'}).text.strip(), 'c2')
-        self.assertEqual(" ".join(results[1].find('div', {'class': 'cust-check__title-right'}).text.split()), '0 %')
+        self.assertEqual(results[0].select_one('.cust-check__title-left').text.strip(), 'c1')
+        self.assertEqual(" ".join(results[0].select_one('.cust-check__title-right').text.split()), '0 %')
+        self.assertEqual(results[1].select_one('.cust-check__title-left').text.strip(), 'c2')
+        self.assertEqual(" ".join(results[1].select_one('.cust-check__title-right').text.split()), '0 %')
 
     def test_drop_down_non_blank_option_submission(self):
         poll_question = PollFormFieldFactory(page=self.poll, field_type='dropdown', choices='c1|c2')
 
         response = self.client.post(self.poll.url, {f'{poll_question.clean_name}': 'c1'})
         parsed_response = BeautifulSoup(response.content)
-        results = parsed_response.findAll('div', {'class': 'cust-check__title'})
+        results = parsed_response.select('.cust-check__title')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(results), 2)
-        self.assertEqual(results[0].find('div', {'class': 'cust-check__title-left'}).text.strip(), 'c1\nYour answer')
-        self.assertEqual(" ".join(results[0].find('div', {'class': 'cust-check__title-right'}).text.split()), '100 %')
-        self.assertEqual(results[1].find('div', {'class': 'cust-check__title-left'}).text.strip(), 'c2')
-        self.assertEqual(" ".join(results[1].find('div', {'class': 'cust-check__title-right'}).text.split()), '0 %')
+        self.assertEqual(results[0].select_one('.cust-check__title-left').text.strip(), 'c1\nYour answer')
+        self.assertEqual(" ".join(results[0].select_one('.cust-check__title-right').text.split()), '100 %')
+        self.assertEqual(results[1].select_one('.cust-check__title-left').text.strip(), 'c2')
+        self.assertEqual(" ".join(results[1].select_one('.cust-check__title-right').text.split()), '0 %')

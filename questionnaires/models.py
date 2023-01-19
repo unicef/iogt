@@ -642,8 +642,8 @@ class Poll(QuestionnairePage, AbstractForm):
             if type(answer) != list:
                 answer = [answer]
 
-            for answer_ in answer:
-                question_stats[answer_] = question_stats.get(answer_, 0) + 1
+            for choice in answer:
+                question_stats[choice] = question_stats.get(choice, 0) + 1
 
             results[label] = question_stats
 
