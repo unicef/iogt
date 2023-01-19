@@ -40,7 +40,27 @@ def render_text_field(field):
 
 @register.inclusion_tag('questionnaires/tags/field_description.html')
 def field_description(field):
-    return {"field": field}
+    field_type = field.widget_type
+    description = ''
+
+    if not field.field.required or field.help_text or field_type == "radioselect" or field_type == "select" or field_type == "checkboxselectmultiple" \
+            or field_type == "selectmultiple" or field_type == "checkbox" or field_type == "date" or field_type == "datetime":
+        if not field.field.required:
+            description = 'Optional'
+        elif field.help_text:
+            description = field.help_text
+        elif field_type == "radioselect" or field_type == "select":
+            description = 'Select one'
+        elif field_type == "checkboxselectmultiple" or field_type == "selectmultiple":
+            description = 'Check all that apply'
+        elif field_type == "checkbox":
+            description = 'Check if applies'
+        elif field_type == "date":
+            description = 'Date must be in this (YYYY-MM-DD) format'
+        elif field_type == "datetime":
+            description = 'Datetime must be in this YYYY-MM-DDTHH:SS format'
+
+    return {'description': description}
 
 
 @register.inclusion_tag('questionnaires/tags/render_fields.html')

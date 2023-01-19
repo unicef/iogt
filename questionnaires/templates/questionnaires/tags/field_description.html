@@ -1,26 +1,7 @@
 {% load i18n %}
 
-{% with type=field.widget_type %}
-    {% if not field.field.required or field.help_text or type == "radioselect" or type == "select" or type == "checkboxselectmultiple" or type == "selectmultiple" or type == "checkbox" or type == "date" or type == "datetime" %}
-        <p class="quest-item__step-desc">
-        <span>
-            {% if not field.field.required %}
-                {% translate "Optional" %}<br>
-            {% endif %}
-            {% if field.help_text %}
-                {% translate field.help_text %}
-            {% elif type == "radioselect" or type == "select" %}
-                {% translate "Select one" %}
-            {% elif  type == "checkboxselectmultiple" or type == "selectmultiple" %}
-                {% translate "Check all that apply" %}
-            {% elif type == "checkbox" %}
-                {% translate "Check if applies" %}
-            {% elif type == "date" %}
-                {% translate "Date must be in this (YYYY-MM-DD) format" %}
-            {% elif type == "datetime" %}
-                {% translate "Datetime must be in this YYYY-MM-DDTHH:SS format" %}
-            {% endif %}
-        </span>
-        </p>
-    {% endif %}
-{% endwith %}
+<p class="quest-item__step-desc">
+    <span>
+        {% translate description %}<br>
+    </span>
+</p>
