@@ -1,7 +1,12 @@
 {% load i18n %}
 
-<p class="quest-item__step-desc">
-    <span>
-        {% translate description %}<br>
-    </span>
-</p>
+{% if not field.field.required or description %}
+    <p class="quest-item__step-desc">
+        <span>
+            {% if not field.field.required %}
+                {% translate "Optional" %}<br>
+            {% endif %}
+            {% translate description %}
+        </span>
+    </p>
+{% endif %}
