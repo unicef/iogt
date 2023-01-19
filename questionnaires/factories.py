@@ -3,16 +3,18 @@ from django.utils import timezone
 from factory.django import DjangoModelFactory
 from wagtail_factories import PageFactory
 
-from questionnaires.models import Survey, Poll, Quiz, PollFormField, SurveyFormField, QuizFormField, UserSubmission
-
-
-class PollFormFieldFactory(DjangoModelFactory):
-    label = factory.Sequence(lambda n: f'question{n}')
-    admin_label = factory.Sequence(lambda n: f'question{n}')
-    help_text = factory.Sequence(lambda n: f'help text{n}')
-
-    class Meta:
-        model = PollFormField
+from questionnaires.models import (
+    Poll, 
+    PollFormField, 
+    PollIndexPage,
+    Quiz,
+    QuizFormField, 
+    QuizIndexPage,
+    Survey,
+    SurveyFormField,
+    SurveyIndexPage,  
+    UserSubmission
+)
 
 
 class PollFactory(PageFactory):
@@ -24,14 +26,43 @@ class PollFactory(PageFactory):
     class Meta:
         model = Poll
 
-
-class SurveyFormFieldFactory(DjangoModelFactory):
+class PollFormFieldFactory(DjangoModelFactory):
     label = factory.Sequence(lambda n: f'question{n}')
     admin_label = factory.Sequence(lambda n: f'question{n}')
     help_text = factory.Sequence(lambda n: f'help text{n}')
 
     class Meta:
-        model = SurveyFormField
+        model = PollFormField
+
+class PollIndexPageFactory(PageFactory):
+    title = 'Banners'
+
+    class Meta:
+        model = PollIndexPage
+
+class QuizFactory(PageFactory):
+    title = factory.Sequence(lambda n: f'quiz{n}')
+    last_published_at = timezone.now()
+    index_page_description = factory.Sequence(lambda n: f'index page description{n}')
+    index_page_description_line_2 = factory.Sequence(lambda n: f'index page description line 2{n}')
+
+    class Meta:
+        model = Quiz
+
+class QuizFormFieldFactory(DjangoModelFactory):
+    label = factory.Sequence(lambda n: f'question{n}')
+    admin_label = factory.Sequence(lambda n: f'question{n}')
+    help_text = factory.Sequence(lambda n: f'help text{n}')
+    feedback = factory.Sequence(lambda n: f'feedback{n}')
+
+    class Meta:
+        model = QuizFormField
+
+class QuizIndexPageFactory(PageFactory):
+    title = 'Quizzes'
+
+    class Meta:
+        model = QuizIndexPage
 
 
 class SurveyFactory(PageFactory):
@@ -43,26 +74,19 @@ class SurveyFactory(PageFactory):
     class Meta:
         model = Survey
 
-
-class QuizFormFieldFactory(DjangoModelFactory):
+class SurveyFormFieldFactory(DjangoModelFactory):
     label = factory.Sequence(lambda n: f'question{n}')
     admin_label = factory.Sequence(lambda n: f'question{n}')
     help_text = factory.Sequence(lambda n: f'help text{n}')
-    feedback = factory.Sequence(lambda n: f'feedback{n}')
 
     class Meta:
-        model = QuizFormField
+        model = SurveyFormField
 
-
-class QuizFactory(PageFactory):
-    title = factory.Sequence(lambda n: f'quiz{n}')
-    last_published_at = timezone.now()
-    index_page_description = factory.Sequence(lambda n: f'index page description{n}')
-    index_page_description_line_2 = factory.Sequence(lambda n: f'index page description line 2{n}')
+class SurveyIndexPageFactory(PageFactory):
+    title = 'Surveys'
 
     class Meta:
-        model = Quiz
-
+        model = SurveyIndexPage
 
 class UserSubmissionFactory(DjangoModelFactory):
     class Meta:
