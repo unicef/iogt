@@ -12,7 +12,7 @@ from django.core.files.images import ImageFile
 from wagtail.documents.models import Document
 from wagtail.images.models import Image
 from wagtail_localize.models import Translation
-from wagtail_localize.views.submit_translations import TranslationCreator
+from wagtail_localize.operations import TranslationCreator
 from wagtailmarkdown.utils import _get_bleach_kwargs
 from wagtailmedia.models import Media
 from wagtailsvg.models import Svg
@@ -1668,27 +1668,23 @@ class Command(BaseCommand):
     def add_article_as_featured_content_in_home_page(self, article):
         home_page = self.home_page.get_translation_or_none(article.locale)
         if home_page:
-            home_featured_content = home_page.home_featured_content.stream_data
-            home_featured_content.append({
-                'type': 'article',
-                'value': {
-                    'article': article.id,
+            home_page.home_featured_content.append((
+                'article', {
+                    'article': article,
                     'display_section_title': True,
-                },
-            })
+                }
+            ))
             home_page.save()
 
     def add_section_as_featured_content_in_home_page(self, section):
         home_page = self.home_page.get_translation_or_none(section.locale)
         if home_page:
-            home_featured_content = home_page.home_featured_content.stream_data
-            home_featured_content.append({
-                'type': 'page_button',
-                'value': {
-                    'page': section.id,
+            home_page.home_featured_content.append((
+                'page_button', {
+                    'page': section,
                     'text': '',
-                },
-            })
+                }
+            ))
             home_page.save()
 
     def attach_banners_to_home_page(self):
@@ -1922,17 +1918,14 @@ class Command(BaseCommand):
         poll_index_pages = self.poll_index_page.get_translations(inclusive=True)
         for poll_index_page in poll_index_pages:
             home_page = self.home_page.get_translation_or_none(poll_index_page.locale)
-            home_featured_content = home_page.home_featured_content.stream_data
             polls = poll_index_page.get_children().live()
             for poll in polls:
-                home_featured_content.append({
-                    'type': 'embedded_poll',
-                    'value': {
+                home_page.home_featured_content.append((
+                    'embedded_poll', {
                         'direct_display': True,
-                        'poll': poll.id,
-                    },
-                })
-            home_page.home_featured_content = json.dumps(home_featured_content)
+                        'poll': poll,
+                    }
+                ))
             home_page.save()
 
         self.stdout.write('Added polls from poll index page to home page featured content.')
@@ -1943,17 +1936,14 @@ class Command(BaseCommand):
         survey_index_pages = self.survey_index_page.get_translations(inclusive=True)
         for survey_index_page in survey_index_pages:
             home_page = self.home_page.get_translation_or_none(survey_index_page.locale)
-            home_featured_content = home_page.home_featured_content.stream_data
             surveys = survey_index_page.get_children().live()
             for survey in surveys:
-                home_featured_content.append({
-                    'type': 'embedded_survey',
-                    'value': {
+                home_page.home_featured_content.append((
+                    'embedded_survey', {
                         'direct_display': survey.specific.direct_display,
-                        'survey': survey.id,
-                    },
-                })
-            home_page.home_featured_content = json.dumps(home_featured_content)
+                        'survey': survey,
+                    }
+                ))
             home_page.save()
 
         self.stdout.write('Added surveys from survey index page to home page featured content.')

@@ -92,7 +92,7 @@ class HomePage(Page, PageUtilsMixin, TitleIconMixin):
 
     @property
     def get_image_urls(self):
-        return self._get_stream_data_image_urls(self.home_featured_content.stream_data)
+        return self._get_stream_data_image_urls(self.home_featured_content.raw_data)
 
     @property
     def get_media_urls(self):
@@ -275,7 +275,7 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         if self.image_icon:
             image_urls += self._get_renditions(self.image_icon)
 
-        image_urls += self._get_stream_data_image_urls(self.body.stream_data)
+        image_urls += self._get_stream_data_image_urls(self.body.raw_data)
 
         return image_urls
 
@@ -422,7 +422,7 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         if self.image_icon:
             image_urls += self._get_renditions(self.image_icon)
 
-        image_urls += self._get_stream_data_image_urls(self.body.stream_data)
+        image_urls += self._get_stream_data_image_urls(self.body.raw_data)
 
         return image_urls
 
@@ -451,7 +451,10 @@ class Article(AbstractArticle):
         MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
     ]
 
-    edit_handler_list = AbstractArticle.edit_handler_list + [
+    edit_handler_list = [
+        ObjectList(content_panels, heading='Content'),
+        ObjectList(Page.settings_panels, heading='Settings'),
+        ObjectList(CommentableMixin.comments_panels, heading='Comments'),
         ObjectList(promote_panels, heading='Promote'),
     ]
 
