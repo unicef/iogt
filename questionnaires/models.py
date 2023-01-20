@@ -285,7 +285,7 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
         media_urls = []
 
         media_urls += self._get_stream_data_media_urls(self.description.raw_data)
-        media_urls += self._get_stream_data_image_urls(self.thank_you_text.raw_data)
+        media_urls += self._get_stream_data_media_urls(self.thank_you_text.raw_data)
 
         return media_urls
 
