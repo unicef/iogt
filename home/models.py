@@ -96,7 +96,7 @@ class HomePage(Page, PageUtilsMixin, TitleIconMixin):
 
     @property
     def get_media_urls(self):
-        return self._get_stream_data_media_urls(self.home_featured_content.stream_data)
+        return self._get_stream_data_media_urls(self.home_featured_content.raw_data)
 
 
 class FeaturedContent(Orderable):
@@ -281,7 +281,7 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
 
     @property
     def get_media_urls(self):
-        return self._get_stream_data_media_urls(self.body.stream_data)
+        return self._get_stream_data_media_urls(self.body.raw_data)
 
     class Meta:
         verbose_name = _("section")
@@ -428,7 +428,7 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
 
     @property
     def get_media_urls(self):
-        return self._get_stream_data_media_urls(self.body.stream_data)
+        return self._get_stream_data_media_urls(self.body.raw_data)
 
     class Meta:
         abstract = True

@@ -5,6 +5,7 @@ from django.urls import reverse
 from rest_framework import status
 from wagtail.core.models import Site
 from wagtail.images.models import Image
+from wagtailmedia.models import Media
 
 from home.factories import (
     SectionFactory,
@@ -13,7 +14,7 @@ from home.factories import (
     SVGToPNGMapFactory,
     LocaleFactory,
     OfflineContentIndexPageFactory,
-    MiscellaneousIndexPageFactory
+    MiscellaneousIndexPageFactory, MediaFactory
 )
 from wagtail_factories import ImageFactory, SiteFactory
 
@@ -34,11 +35,15 @@ class PageTreeAPIViewTests(TestCase):
         self.en_offline_content_index_page = OfflineContentIndexPageFactory(parent=self.en_miscellaneous_index_page)
         self.ar_offline_content_index_page = OfflineContentIndexPageFactory(parent=self.ar_miscellaneous_index_page)
         self.section = SectionFactory(parent=self.en_home_page)
-        self.article = ArticleFactory(parent=self.en_home_page, body=[("image", ImageFactory())])
+        self.article = ArticleFactory(parent=self.en_home_page, body=[("image", ImageFactory()),
+                                                                      ("media", MediaFactory(type='video')),
+                                                                      ("media", MediaFactory(type='audio'))])
         self.section_lead_image_rendition = self.section.lead_image.get_rendition('fill-360x360')
         self.article_lead_image_rendition = self.article.lead_image.get_rendition('fill-360x360')
         self.article_body_image_rendition = Image.objects.get(
             id=self.article.body.raw_data[0]['value']).get_rendition('fill-360x360')
+        self.article_body_video = Media.objects.get(id=self.article.body.raw_data[1]['value'])
+        self.article_body_audio = Media.objects.get(id=self.article.body.raw_data[2]['value'])
         self.svg_to_png_map = SVGToPNGMapFactory()
 
     def test_root_page_is_returned(self):
@@ -62,6 +67,13 @@ class PageTreeAPIViewTests(TestCase):
         self.assertIn(self.article_lead_image_rendition.url, response.data)
         self.assertIn(self.article_body_image_rendition.url, response.data)
         self.assertIn(self.svg_to_png_map.url, response.data)
+
+    def test_medias_are_returned(self):
+        response = self.client.get(reverse(self.url_name, kwargs={'page_id': self.en_home_page.id}))
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn(self.article_body_video.url, response.data)
+        self.assertIn(self.article_body_audio.url, response.data)
 
     def test_static_assets_are_returned(self):
         response = self.client.get(reverse(self.url_name, kwargs={'page_id': self.en_home_page.id}))
