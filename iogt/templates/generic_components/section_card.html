@@ -6,9 +6,9 @@
         <div class="section-header"><p class="section-title">{{ section.title }}</p></div>
         <div class="img-holder {% render_is_complete section %}">
             {% if is_first_content %}
-                {% image section.lead_image width-360 class='' %}
+                {% image section.lead_image width-700 class='' %}
             {% else %}
-                {% image section.lead_image width-180 class='' %}
+                {% image section.lead_image width-350 class='' %}
             {% endif %}
         </div>
     </a>
