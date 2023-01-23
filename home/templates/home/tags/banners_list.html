@@ -4,10 +4,10 @@
     {% for banner in banners %}
         {% if banner.banner_link_page %}
             <a href="{% pageurl banner.banner_link_page %}">
-                {% image banner.banner_image width-700 %}
+                {% image banner.banner_image width-750 %}
             </a>
         {% else %}
-            <span>{% image banner.banner_image width-700 %}</span>
+            <span>{% image banner.banner_image width-750 %}</span>
         {% endif %}
     {% endfor %}
 </section>
