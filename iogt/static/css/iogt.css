@@ -2585,5 +2585,5 @@ input[type=checkbox], input[type=radio] {
 }
 
 .no-lead-image{
-  text-align: center;
+  width: 100% !important;
 }
