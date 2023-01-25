@@ -61,6 +61,8 @@ services:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+    ports:
+      - "5901:5900"
 
   selenium-hub:
     image: selenium/hub:4.7.2-20221219
