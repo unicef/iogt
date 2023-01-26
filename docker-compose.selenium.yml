@@ -32,6 +32,7 @@ services:
 
   chrome:
     image: selenium/node-chrome:4.7.2-20221219
+    shm_size: 2gb
     depends_on:
       - selenium-hub
     environment:
