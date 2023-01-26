@@ -806,7 +806,7 @@ body.rtl {
 
 .article-card .img-holder, .section-card .img-holder {
   border-radius: 8px;
-  flex:0 0 50%;
+  flex: 0 0 50%;
   height: auto;
 }
 
