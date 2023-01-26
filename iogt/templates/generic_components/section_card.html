@@ -4,12 +4,14 @@
     <a href="{% pageurl section %}" class='sub-section {% if is_first_content %}first-content{% endif %}'
        style="color:{{ font_color }}; background:{{ background_color }};">
         <div class="section-header"><p class="section-title">{{ section.title }}</p></div>
-        <div class="img-holder {% render_is_complete section %}">
-            {% if is_first_content %}
-                {% image section.lead_image width-750 class='' %}
-            {% else %}
-                {% image section.lead_image width-375 class='' %}
-            {% endif %}
-        </div>
+        {% if section.lead_image %}
+            <div class="img-holder {% render_is_complete section %}">
+                {% if is_first_content %}
+                    {% image section.lead_image width-750 class='' %}
+                {% else %}
+                    {% image section.lead_image width-375 class='' %}
+                {% endif %}
+            </div>
+        {% endif %}
     </a>
 </div>
