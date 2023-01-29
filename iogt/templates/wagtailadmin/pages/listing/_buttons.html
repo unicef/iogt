@@ -1,0 +1,7 @@
+{% for button in buttons %}
+  {% if button.show %}
+    {% if button.label != 'View live' or page.should_display_view_live_on_admin != False %}
+        <li>{{ button|safe }}</li>
+    {% endif %}
+  {% endif %}
+{% endfor %}

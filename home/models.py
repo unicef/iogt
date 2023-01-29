@@ -52,6 +52,7 @@ from .forms import SectionPageForm
 from .mixins import PageUtilsMixin, TitleIconMixin
 from .utils.image import convert_svg_to_png_bytes
 from .utils.progress_manager import ProgressManager
+from iogt.mixins import DisplayViewLiveOnAdminMixin
 import iogt.iogt_globals as globals_
 
 User = get_user_model()
@@ -127,7 +128,7 @@ class ArticleTaggedItem(TaggedItemBase):
                                  on_delete=models.CASCADE)
 
 
-class SectionIndexPage(Page):
+class SectionIndexPage(Page, DisplayViewLiveOnAdminMixin):
     parent_page_types = ['home.HomePage']
     subpage_types = ['home.Section']
 
@@ -464,7 +465,7 @@ class Article(AbstractArticle):
         return response
 
 
-class MiscellaneousIndexPage(Page):
+class MiscellaneousIndexPage(Page, DisplayViewLiveOnAdminMixin):
     parent_page_types = ['home.HomePage']
     subpage_types = ['home.OfflineContentIndexPage']
 
@@ -478,12 +479,12 @@ class OfflineContentIndexPage(AbstractArticle):
         verbose_name = 'Offline Content Index Page'
 
 
-class BannerIndexPage(Page):
+class BannerIndexPage(Page, DisplayViewLiveOnAdminMixin):
     parent_page_types = ['home.HomePage']
     subpage_types = ['home.BannerPage']
 
 
-class BannerPage(Page, PageUtilsMixin):
+class BannerPage(Page, PageUtilsMixin, DisplayViewLiveOnAdminMixin):
     parent_page_types = ['home.BannerIndexPage']
     subpage_types = []
 
@@ -514,7 +515,7 @@ class BannerPage(Page, PageUtilsMixin):
         return image_urls
 
 
-class FooterIndexPage(Page):
+class FooterIndexPage(Page, DisplayViewLiveOnAdminMixin):
     parent_page_types = ['home.HomePage']
     subpage_types = [
         'home.Section', 'home.Article', 'home.PageLinkPage', 'questionnaires.Poll',

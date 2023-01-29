@@ -163,6 +163,12 @@ Note: the names of transfer sources may only contain letters, numbers and unders
 [6]: https://github.com/wagtail/wagtail/wiki/Release-schedule
 
 
+## Hiding View Live button from admin panel
+If you want to hide view live and preview button from admin panel then do the following steps
+
+1. Inherit class from DisplayViewLiveOnAdminMixin 
+2. View Live and preview button will be hidden for this page on admin panel
+
 ## Adding new localizable strings to the code base
 
 After adding new strings to the code base that are user-facing (see https://docs.djangoproject.com/en/4.0/topics/i18n/translation/ ), follow the following process:
