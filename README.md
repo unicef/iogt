@@ -154,15 +154,6 @@ WAGTAILTRANSFER_SOURCES = {
 ```
 Note: the names of transfer sources may only contain letters, numbers and underscores.
 
-
-[1]: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment
-[2]: https://www.unicef.org/innovation/IoGT
-[3]: https://github.com/unicef/iogt/blob/develop/LICENSE
-[4]: https://www.djangoproject.com/
-[5]: https://wagtail.io/
-[6]: https://github.com/wagtail/wagtail/wiki/Release-schedule
-
-
 ## Adding new localizable strings to the code base
 
 After adding new strings to the code base that are user-facing (see https://docs.djangoproject.com/en/4.0/topics/i18n/translation/ ), follow the following process:
@@ -177,3 +168,16 @@ Even though it has a column "is in use", its data is currently not updated autom
 
 ## Apache Superset Setup and Configuration
 - See [here](questionnaires/superset/README.md)
+
+## Page caching
+
+Page caching is provided by Wagtail Cache and is deactivated by default. To start caching pages, follow the [activation intructions][7].
+
+
+[1]: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment
+[2]: https://www.unicef.org/innovation/IoGT
+[3]: https://github.com/unicef/iogt/blob/develop/LICENSE
+[4]: https://www.djangoproject.com/
+[5]: https://wagtail.io/
+[6]: https://github.com/wagtail/wagtail/wiki/Release-schedule
+[7]: ./docs/cache.md
