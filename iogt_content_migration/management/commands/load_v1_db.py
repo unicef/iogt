@@ -12,7 +12,7 @@ from django.core.files.images import ImageFile
 from wagtail.documents.models import Document
 from wagtail.images.models import Image
 from wagtail_localize.models import Translation
-from wagtail_localize.views.submit_translations import TranslationCreator
+from wagtail_localize.operations import TranslationCreator
 from wagtailmarkdown.utils import _get_bleach_kwargs
 from wagtailmedia.models import Media
 from wagtailsvg.models import Svg
