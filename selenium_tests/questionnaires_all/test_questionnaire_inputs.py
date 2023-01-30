@@ -1,9 +1,15 @@
+import json
+
+from django.urls import reverse
+from selenium.webdriver.support.select import Select
+
 from selenium_tests.base import BaseSeleniumTests
 from wagtail.core.models import Site
 from iogt_users.factories import AdminUserFactory
 from home.factories import SectionFactory
 from questionnaires.factories import SurveyFactory, SurveyFormFieldFactory
 from selenium_tests.pages import QuestionnairePage, QuestionnaireResultsPage
+
 
 class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
 
@@ -17,6 +23,7 @@ class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
             owner=self.user,
             thank_you_text="[{\"type\": \"paragraph\", \"value\": \"<p>Thankyou for completing the survey</p>\"}]"
             )
+        self.visit_login_page().login_user(self.user)
 
     def test_checkbox(self): 
 
@@ -203,4 +210,38 @@ class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
         results_page = QuestionnaireResultsPage(self.selenium)
         self.assertIn("Thankyou for completing the survey", results_page.get_content_text())
         
-        
+    def test_skip_logic_validation_errors_on_admin_panel(self):
+        skip_logic = json.dumps(
+            [
+                {
+                    "type": "skip_logic",
+                    "value": {
+                        "choice": "true",
+                        "skip_logic": "next",
+                        "question": None
+                    }
+                },
+                {
+                    "type": "skip_logic",
+                    "value": {
+                        "choice": "false",
+                        "skip_logic": "next",
+                        "question": None
+                    }
+                }
+            ]
+        )
+
+        SurveyFormFieldFactory(label='Q1', page=self.survey01, required=True, field_type='checkbox', skip_logic=skip_logic)
+        SurveyFormFieldFactory(label='Q2', page=self.survey01, required=True, field_type='checkbox', skip_logic=skip_logic)
+        SurveyFormFieldFactory(label='Q3', page=self.survey01, required=True, field_type='checkbox', skip_logic=skip_logic)
+
+        self.visit_url(reverse('wagtailadmin_pages:edit', args=(self.survey01.id,)))
+
+        select_skip_logic = Select(self.selenium.find_element_by_id("survey_form_fields-0-skip_logic-0-value-skip_logic"))
+        select_skip_logic.select_by_value("question")
+        select_question = Select(self.selenium.find_element_by_id("survey_form_fields-0-skip_logic-0-value-question_1"))
+        select_question.select_by_value("3")
+        self.selenium.find_elements_by_css_selector("button[type='submit']")[1].click()
+
+        self.assertIn("Skip to question Q3 with in-between required questions isn't allowed.", self.selenium.page_source)
