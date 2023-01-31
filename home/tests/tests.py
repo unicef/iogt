@@ -1,26 +1,18 @@
-from bs4 import BeautifulSoup
 from django.test import TestCase
 from django.http import HttpRequest
-<<<<<<< HEAD
 from rest_framework import status
-=======
 from translation_manager.models import TranslationEntry
->>>>>>> develop
 from wagtail.core.models import Site
 from wagtail_localize.operations import TranslationCreator
 
 from home.wagtail_hooks import limit_page_chooser
-<<<<<<< HEAD
-from home.factories import SectionFactory, ArticleFactory, HomePageFactory, FlatMenuFactory, IogtFlatMenuItemFactory
-from wagtail_factories import SiteFactory
-=======
-from home.factories import SectionFactory, ArticleFactory, HomePageFactory, MediaFactory, LocaleFactory
+from home.factories import SectionFactory, ArticleFactory, HomePageFactory, MediaFactory, \
+    LocaleFactory, FlatMenuFactory, IogtFlatMenuItemFactory
 from wagtail_factories import SiteFactory, PageFactory
 from bs4 import BeautifulSoup
->>>>>>> develop
 
 from questionnaires.factories import QuizFactory, SurveyFactory, PollFactory
-from home.models import IogtFlatMenuItem
+
 
 class LimitPageChooserHookTests(TestCase):
     def setUp(self):
