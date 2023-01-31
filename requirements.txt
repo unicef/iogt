@@ -18,7 +18,7 @@ wagtail-markdown==0.7.0
 Markdown==3.3.7
 wagtail==2.15.*
 wagtail-cache~=1.2.1
-wagtailmedia==0.7.0
+wagtailmedia==0.10.*
 wagtailmenus~=3.0
 wagtailsvg==0.0.14
 whitenoise==5.2.*

@@ -1,21 +1,24 @@
-# Switch on
+# Overview
+
+The page cache is provided by [Wagtail Cache][2] and is not enabled, by default. This guide leans towards Redis as the cache backend, but it should be possible to use any cache backend supported by Django 3.1.
+
+# Activate
 
 Set the following environment variables:
-```
-CACHE_BACKEND=django_redis.cache.RedisCache
-CACHE_LOCATION=redis://redis:6379
-CACHE_TIMEOUT=300
-```
+
+- CACHE\_BACKEND: The class that will handle the caching e.g. 'django_redis.cache.RedisCache'.
+- CACHE\_LOCATION: The URL of your Redis server / cluster e.g. redis://your-redis:6379.
+- CACHE\_TIMEOUT: Number of seconds until a cached entry is considered stale e.g. 300 for five minutes.
 
 These environment variables will be used to set [cache arguments][1] in the app's Django settings.
 
+# Deactivate
+
+To switch off all caching features, it is sufficient to simply unset the `CACHE_BACKEND` environment variable.
+
 # Administration
 
-The page cache is provided by [Wagtail Cache][2]. The page cache can be cleared from the Wagtail Admin by navigating to _Settings > Cache_, or _/admin/cache/_.
-
-# Switch off
-
-To switch off all caching features, it should be sufficient to simply unset the `CACHE_BACKEND` environment variable.
+The page cache can be cleared from the Wagtail Admin by navigating to _Settings > Cache_, or _/admin/cache/_.
 
 # In development
 
@@ -32,7 +35,7 @@ services:
     depends_on:
       - cache
   cache:
-    image: redis:6.2-buster
+    image: redis
 ```
 
 
