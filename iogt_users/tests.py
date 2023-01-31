@@ -4,7 +4,7 @@ from wagtail.core.models import Site
 
 from home.factories import SiteSettingsFactory, HomePageFactory
 from iogt_users.factories import UserFactory, AdminUserFactory, GroupFactory
-from wagtail_factories import SiteFactory
+from wagtail_factories import SiteFactory, PageFactory
 from questionnaires.factories import SurveyFactory
 from django.contrib.auth.models import Permission
 
@@ -12,14 +12,10 @@ from django.contrib.auth.models import Permission
 class PostRegistrationRedirectTests(TestCase):
     def setUp(self):
         self.user = UserFactory(has_filled_registration_survey=False)
-        self.admin_user = AdminUserFactory(has_filled_registration_survey=False)
-        self.admin_access_permission = Permission.objects.get(codename='access_admin')
-        self.group = GroupFactory()
-        self.group.permissions.add(self.admin_access_permission)
 
-        Site.objects.all().delete()
-        self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
-        self.home_page = HomePageFactory(parent=self.site.root_page)
+        root_page = PageFactory(parent=None)
+        self.home_page = HomePageFactory(parent=root_page)
+        self.site = SiteFactory(hostname='testserver', port=80, root_page=self.home_page)
 
         self.registration_survey = SurveyFactory(parent=self.home_page)
         self.site_settings = SiteSettingsFactory.create(
@@ -36,13 +32,19 @@ class PostRegistrationRedirectTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_admin_log_in_without_filling_registration_survey_form(self):
-        self.client.force_login(self.admin_user)
+        admin_user = AdminUserFactory(has_filled_registration_survey=False)
+
+        self.client.force_login(admin_user)
         response = self.client.get(self.home_page.url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_user_log_in_with_admin_access_without_filling_registration_survey_form(self):
-        self.user.groups.add(self.group)
+        admin_access_permission = Permission.objects.get(codename='access_admin')
+        group = GroupFactory()
+        group.permissions.add(admin_access_permission)
+
+        self.user.groups.add(group)
         self.client.force_login(self.user)
         response = self.client.get(self.home_page.url)
 
