@@ -146,7 +146,7 @@ class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
 
         self.visit_page(self.survey01)
         survey_page = QuestionnairePage(self.selenium)
-        survey_page.enter_text("""Testing some multiline text
+        survey_page.enter_multiline_text("""Testing some multiline text
         Checking that everying
         Looks ok
         when there are multiple lines""")

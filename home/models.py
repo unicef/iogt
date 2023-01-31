@@ -439,7 +439,10 @@ class Article(AbstractArticle):
         MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
     ]
 
-    edit_handler_list = AbstractArticle.edit_handler_list + [
+    edit_handler_list = [
+        ObjectList(content_panels, heading='Content'),
+        ObjectList(Page.settings_panels, heading='Settings'),
+        ObjectList(CommentableMixin.comments_panels, heading='Comments'),
         ObjectList(promote_panels, heading='Promote'),
     ]
 

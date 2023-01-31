@@ -1,12 +1,23 @@
 from bs4 import BeautifulSoup
 from django.test import TestCase
 from django.http import HttpRequest
+<<<<<<< HEAD
 from rest_framework import status
+=======
+from translation_manager.models import TranslationEntry
+>>>>>>> develop
 from wagtail.core.models import Site
+from wagtail_localize.operations import TranslationCreator
 
 from home.wagtail_hooks import limit_page_chooser
+<<<<<<< HEAD
 from home.factories import SectionFactory, ArticleFactory, HomePageFactory, FlatMenuFactory, IogtFlatMenuItemFactory
 from wagtail_factories import SiteFactory
+=======
+from home.factories import SectionFactory, ArticleFactory, HomePageFactory, MediaFactory, LocaleFactory
+from wagtail_factories import SiteFactory, PageFactory
+from bs4 import BeautifulSoup
+>>>>>>> develop
 
 from questionnaires.factories import QuizFactory, SurveyFactory, PollFactory
 from home.models import IogtFlatMenuItem
@@ -61,6 +72,46 @@ class LimitPageChooserHookTests(TestCase):
         self.assertEqual(pages_after, pages_before)
 
 
+class MediaTranslationTest(TestCase):
+    def setUp(self):
+        root_page = PageFactory(parent=None)
+        en_home_page = HomePageFactory(parent=root_page)
+        SiteFactory(hostname='testserver', port=80, root_page=en_home_page)
+        self.en_article = ArticleFactory(
+            parent=en_home_page,
+            body__0__media=MediaFactory(type='video'),
+            body__1__media=MediaFactory(type='audio'),
+        )
+
+    def test_media_block_translation_of_english_language(self):
+        response = self.client.get(self.en_article.url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, f"If you cannot view the above video, you can instead <a href=\"{self.en_article.body[0].value.url}\" download>download it</a>", count=1)
+        self.assertContains(response, f"If you cannot listen to the above audio, you can instead <a href=\"{self.en_article.body[1].value.url}\" download>download it</a>", count=1)
+
+    def test_media_block_translation_of_bengali_language(self):
+        bn_locale = LocaleFactory(language_code='bn')
+        bn_translation_creator = TranslationCreator(user=None, target_locales=[bn_locale])
+        bn_translation_creator.create_translations(self.en_article)
+        bn_article = self.en_article.get_translation(bn_locale)
+
+        TranslationEntry.objects.create(
+            original="If you cannot view the above video, you can instead %(start_link)sdownload it%(end_link)s.",
+            translation="উপরের ভিডিও দেখা না গেলে %(start_link)s এর পরিবর্তে এটা %(end_link)s ডাউনলোড করুন",
+            language=bn_locale.language_code)
+        TranslationEntry.objects.create(
+            original="If you cannot listen to the above audio, you can instead %(start_link)sdownload it%(end_link)s.",
+            translation="উপরের অডিও শুনতে না পেলে %(start_link)s এর পরিবর্তে এটা %(end_link)s ডাউনলোড করুন",
+            language=bn_locale.language_code)
+
+        response = self.client.get(bn_article.url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, f"উপরের ভিডিও দেখা না গেলে <a href=\"{self.en_article.body[0].value.url}\" download> এর পরিবর্তে এটা </a> ডাউনলোড করুন", count=1)
+        self.assertContains(response, f"উপরের অডিও শুনতে না পেলে <a href=\"{self.en_article.body[1].value.url}\" download> এর পরিবর্তে এটা </a> ডাউনলোড করুন", count=1)
+
+
 class FlatMenuTest(TestCase):
     def setUp(self):
         Site.objects.all().delete()
@@ -91,4 +142,3 @@ class FlatMenuTest(TestCase):
         self.assertEqual(flat_menu_items[2]['href'], self.quiz.url)
         self.assertEqual(flat_menu_items[3].text.strip(), 'test poll')
         self.assertEqual(flat_menu_items[3]['href'], self.poll.url)
-

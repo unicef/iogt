@@ -8,7 +8,12 @@ from wagtail_factories import (
     PageFactory,
     StreamFieldFactory,
 )
+from wagtail_factories.blocks import ChooserBlockFactory, BlockFactory
+from wagtail_factories.factories import CollectionMemberFactory
+from wagtailmedia.models import get_media_model
+
 from comments.models import CommentStatus
+from home.blocks import MediaBlock
 from home.models import (
     Article,
     FooterIndexPage,
@@ -45,13 +50,29 @@ class SectionFactory(PageFactory):
         model = Section
 
 
+class MediaFactory(CollectionMemberFactory):
+    class Meta:
+        model = get_media_model()
+
+    title = factory.Sequence(lambda n: f'media{n}')
+    file = factory.django.FileField()
+
+
+class MediaBlockFactory(BlockFactory):
+    media = factory.SubFactory(MediaFactory)
+
+    class Meta:
+        model = MediaBlock
+
+
 class ArticleFactory(PageFactory):
     title = factory.Sequence(lambda n: f'article{n}')
     lead_image = factory.SubFactory(ImageFactory)
     commenting_status = CommentStatus.OPEN
     body = StreamFieldFactory(
         {
-            "image": ImageChooserBlockFactory,
+            "image": factory.SubFactory(ImageChooserBlockFactory),
+            "media": factory.SubFactory(MediaBlockFactory),
         }
     )
 

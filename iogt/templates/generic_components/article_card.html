@@ -16,13 +16,15 @@
                     <p class="sm-paragraph">{{ article.index_page_description }}</p>
                 {% endif %}
             </div>
-            <div class="img-holder {% render_is_complete article %}">
-                {% if is_first_content %}
-                    {% image article.lead_image width-360 class='' %}
-                {% else %}
-                    {% image article.lead_image width-180 class='' %}
-                {% endif %}
-            </div>
+            {% if article.lead_image %}
+                <div class="img-holder {% render_is_complete article %}">
+                    {% if is_first_content %}
+                        {% image article.lead_image width-360 class='' %}
+                    {% else %}
+                        {% image article.lead_image width-180 class='' %}
+                    {% endif %}
+                </div>
+            {% endif %}
         </a>
     </div>
 {% endif %}
