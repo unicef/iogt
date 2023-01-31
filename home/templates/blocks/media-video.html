@@ -1,0 +1,11 @@
+{% load wagtailcore_tags i18n %}
+
+<div>
+    <video preload="none" width="320" height="240" controls>
+        {% for source in value.sources %}
+            <source src="{{ source.src }}" type="{{ source.type }}">
+        {% endfor %}
+        {% translate "Your browser does not support video playback." %}
+    </video>
+</div>
+<p class='article__content--video'>{% blocktranslate %}If you cannot view the above video, you can instead {{ start_link }}download it{{ end_link }}.{% endblocktranslate %}</p>
