@@ -17,7 +17,7 @@
                 {% endif %}
             </div>
 
-            {% if article.lead_image %}
+            {% if article.get_lead_image %}
                 <div class="img-holder {% render_is_complete article.get_page %}">
                     {% if is_first_content %}
                         {% image aricle.get_lead_image width-360 class='' %}
