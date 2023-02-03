@@ -172,7 +172,7 @@
 
 @media only screen and (min-width: 360px) {
   .sub-section {
-    padding: 8px 20px;
+    padding: 8px 20px 8px 0px;
     font-size: 16px;
     line-height: 22px;
   }
@@ -704,6 +704,10 @@
   position: relative;
 }
 
+.section-card .img-holder {
+  padding-left: 20px;
+}
+
 .article-card .img-holder.complete:after, .section-card .img-holder.complete:after {
   position: absolute;
   left: 0;
@@ -762,7 +766,6 @@ body.rtl {
 }
 
 .article-card .article-header, .section-card .section-header {
-  width: 50%;
   padding-left: 10px;
   padding-right: 10px;
 }
@@ -807,7 +810,7 @@ body.rtl {
 
 .article-card .img-holder, .section-card .img-holder {
   border-radius: 8px;
-  width: 50%;
+  flex: 0 0 50%;
   height: auto;
 }
 
@@ -842,9 +845,6 @@ body.rtl {
     font-size: 16px;
     margin-right: 5px;
     line-height: 24px;
-  }
-  .article-card .article-header, .section-card .section-header {
-    width: 50%;
   }
 
   .article-card .article-header p, .section-card .section-header p {
@@ -1486,7 +1486,7 @@ body.rtl {
 
 .rtl .form-holder .js-search-btn img {
   padding-left: 0;
-  padding-right: 10px;
+  padding-right: 15px;
   border-left-width: 0;
   border-right: 1px solid #EFEFEF;
   margin-left: 0;
