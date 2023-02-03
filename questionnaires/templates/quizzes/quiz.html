@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static i18n home_tags questionnaires_tags wagtailcore_tags %}
+{% load static i18n home_tags questionnaires_tags wagtailcore_tags wagtailimages_tags %}
 {% get_current_language as LANGUAGE_CODE %}
 
 {% block extra_css %}
@@ -11,6 +11,7 @@
     <div class="quiz-page">
         <div class="container">
             <h1 class="title quiz-page__title">{{ page.title }}</h1>
+            {% image page.lead_image width-360 class='article__lead-img-featured' %}
             {% if page.description %}
                 <div class="quiz-page__description">{{ page.description }}</div>
             {% endif %}

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load home_tags questionnaires_tags %}
-{% load static wagtailcore_tags i18n %}
+{% load static wagtailcore_tags wagtailimages_tags i18n %}
 {% get_current_language as LANGUAGE_CODE %}
 
 {% block title %}{{ page.title }}{% endblock %}
@@ -14,6 +14,7 @@
     <div class="survey-page">
         <div class="container">
             <h1 class="title survey-page__title">{{ page.title }}</h1>
+            {% image page.lead_image width-360 class='article__lead-img-featured' %}
             {% if page.description %}
                 <div class="survey-page__description">{{ page.description }}</div>{% endif %}
             {% if user.is_authenticated or request.is_preview or page.allow_anonymous_submissions %}

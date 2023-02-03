@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load home_tags %}
-{% load static i18n wagtailcore_tags questionnaires_tags %}
+{% load static i18n wagtailcore_tags wagtailimages_tags questionnaires_tags %}
 
 {% block extra_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/questionnaire.css' %}">
@@ -13,6 +13,7 @@
             <div class="container">
                 <div class="polls-widget__wrap">
                     <h1 class="title polls-widget__title">{{ page.title }}</h1>
+                    {% image page.lead_image width-360 class='article__lead-img-featured' %}
                     {% if page.description %}
                         <div class="polls-widget__description">{{ page.description }}</div>
                     {% endif %}

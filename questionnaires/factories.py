@@ -1,24 +1,25 @@
 import factory
 from django.utils import timezone
 from factory.django import DjangoModelFactory
-from wagtail_factories import PageFactory
+from wagtail_factories import PageFactory, ImageFactory
 
 from questionnaires.models import (
-    Poll, 
-    PollFormField, 
+    Poll,
+    PollFormField,
     PollIndexPage,
     Quiz,
-    QuizFormField, 
+    QuizFormField,
     QuizIndexPage,
     Survey,
     SurveyFormField,
-    SurveyIndexPage,  
+    SurveyIndexPage,
     UserSubmission
 )
 
 
 class PollFactory(PageFactory):
     title = factory.Sequence(lambda n: f'poll{n}')
+    lead_image = factory.SubFactory(ImageFactory)
     last_published_at = timezone.now()
     index_page_description = factory.Sequence(lambda n: f'index page description{n}')
     index_page_description_line_2 = factory.Sequence(lambda n: f'index page description line 2{n}')
@@ -42,6 +43,7 @@ class PollIndexPageFactory(PageFactory):
 
 class QuizFactory(PageFactory):
     title = factory.Sequence(lambda n: f'quiz{n}')
+    lead_image = factory.SubFactory(ImageFactory)
     last_published_at = timezone.now()
     index_page_description = factory.Sequence(lambda n: f'index page description{n}')
     index_page_description_line_2 = factory.Sequence(lambda n: f'index page description line 2{n}')
@@ -67,6 +69,7 @@ class QuizIndexPageFactory(PageFactory):
 
 class SurveyFactory(PageFactory):
     title = factory.Sequence(lambda n: f'survey{n}')
+    lead_image = factory.SubFactory(ImageFactory)
     last_published_at = timezone.now()
     index_page_description = factory.Sequence(lambda n: f'index page description{n}')
     index_page_description_line_2 = factory.Sequence(lambda n: f'index page description line 2{n}')

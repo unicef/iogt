@@ -56,6 +56,14 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
     parent_page_types = []
     subpage_types = []
 
+    lead_image = models.ForeignKey(
+        'wagtailimages.Image',
+        on_delete=models.PROTECT,
+        related_name='+',
+        blank=True,
+        null=True
+    )
+
     description = StreamField(
         [
             ('heading', blocks.CharBlock(form_classname="full title", template='blocks/heading.html')),
@@ -383,6 +391,7 @@ class Survey(QuestionnairePage, AbstractForm):
 
     content_panels = Page.content_panels + [
         FormSubmissionsPanel(),
+        ImageChooserPanel('lead_image'),
         MultiFieldPanel(
             [
                 FieldPanel("allow_anonymous_submissions"),
@@ -571,6 +580,7 @@ class Poll(QuestionnairePage, AbstractForm):
 
     content_panels = Page.content_panels + [
         FormSubmissionsPanel(),
+        ImageChooserPanel('lead_image'),
         MultiFieldPanel(
             [
                 FieldPanel("allow_anonymous_submissions"),
@@ -798,6 +808,7 @@ class Quiz(QuestionnairePage, AbstractForm):
 
     content_panels = Page.content_panels + [
         FormSubmissionsPanel(),
+        ImageChooserPanel('lead_image'),
         MultiFieldPanel(
             [
                 FieldPanel("allow_anonymous_submissions"),

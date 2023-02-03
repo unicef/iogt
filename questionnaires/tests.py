@@ -4,6 +4,7 @@ import json
 from datetime import timedelta
 
 import pytz
+from bs4 import BeautifulSoup
 from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
@@ -1023,3 +1024,49 @@ class FormDataPerUserAdminTests(TestCase):
             f'{self.user_submission_02.id},Survey 01,2022-08-31 23:00:00+00:00,question_01,c2\r\n'
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(byte_response.decode(), expected_response)
+
+
+class QuestionnaireLeadImageTest(TestCase):
+    def setUp(self):
+        Site.objects.all().delete()
+        self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
+        self.home_page = self.site.root_page
+
+    def test_lead_image_of_survey(self):
+        survey = SurveyFactory(parent=self.home_page)
+        response = self.client.get(survey.url)
+        parsed_response = BeautifulSoup(response.content)
+        rendered_image = parsed_response.find("img", {"class": "article__lead-img-featured"})
+        image_rendition = survey.lead_image.get_rendition('width-360')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(rendered_image.get('alt'), image_rendition.alt)
+        self.assertEqual(int(rendered_image.get('width')), image_rendition.width)
+        self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
+        self.assertEqual(rendered_image.get('src'), image_rendition.url)
+
+    def test_lead_image_of_poll(self):
+        poll = PollFactory(parent=self.home_page)
+        response = self.client.get(poll.url)
+        parsed_response = BeautifulSoup(response.content)
+        rendered_image = parsed_response.find("img", {"class": "article__lead-img-featured"})
+        image_rendition = poll.lead_image.get_rendition('width-360')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(rendered_image.get('alt'), image_rendition.alt)
+        self.assertEqual(int(rendered_image.get('width')), image_rendition.width)
+        self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
+        self.assertEqual(rendered_image.get('src'), image_rendition.url)
+
+    def test_lead_image_of_quiz(self):
+        quiz = QuizFactory(parent=self.home_page)
+        response = self.client.get(quiz.url)
+        parsed_response = BeautifulSoup(response.content)
+        rendered_image = parsed_response.find("img", {"class": "article__lead-img-featured"})
+        image_rendition = quiz.lead_image.get_rendition('width-360')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(rendered_image.get('alt'), image_rendition.alt)
+        self.assertEqual(int(rendered_image.get('width')), image_rendition.width)
+        self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
+        self.assertEqual(rendered_image.get('src'), image_rendition.url)
