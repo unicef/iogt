@@ -45,7 +45,6 @@ wheels/
 .git
 .gitignore
 /*initdb.d/
-/cypress_tests/
 Makefile
 app.yml
 docker-compose*.yml

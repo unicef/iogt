@@ -12,14 +12,9 @@ class LoginSeleniumTests(BaseSeleniumTests):
         
     def test_login(self):
 
-        # Tried to test this by clicking the button from the homepage but couldn't get this to work..
-        # self.visit_page(self.home)
-        # home_page = HomePage(self.selenium)
-        # home_page.login_button.click() 
-
         login_page = self.visit_login_page()        
         login_page.login_user(self.user)
+    
+        self.assertIn(self.user.username, login_page.get_content_text())
         
-        body_text = self.selenium.find_element(By.TAG_NAME, 'body').text
-        self.assertIn(self.user.username, body_text)
         
