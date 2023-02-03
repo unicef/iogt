@@ -98,3 +98,29 @@ class MediaTranslationTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, f"উপরের ভিডিও দেখা না গেলে <a href=\"{self.en_article.body[0].value.url}\" download> এর পরিবর্তে এটা </a> ডাউনলোড করুন", count=1)
         self.assertContains(response, f"উপরের অডিও শুনতে না পেলে <a href=\"{self.en_article.body[1].value.url}\" download> এর পরিবর্তে এটা </a> ডাউনলোড করুন", count=1)
+
+
+class LanguageSelectorTest(TestCase):
+    def setUp(self):
+        self.site = Site.objects.get(is_default_site=True)
+        self.home_page = self.site.root_page
+
+    def test_language_selector_drop_down_for_one_language(self):
+        response = self.client.get(self.home_page.url)
+        parsed_response = BeautifulSoup(response.content)
+        language_drop_down = parsed_response.find("div", {"class": "language_drop"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNone(language_drop_down)
+
+    def test_language_selector_drop_down_for_multiple_languages(self):
+        bn_locale = LocaleFactory(language_code='bn')
+        bn_translation_creator = TranslationCreator(user=None, target_locales=[bn_locale])
+        bn_translation_creator.create_translations(self.home_page)
+
+        response = self.client.get(self.home_page.url)
+        parsed_response = BeautifulSoup(response.content)
+        language_drop_down = parsed_response.find("div", {"class": "language_drop"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNotNone(language_drop_down)
