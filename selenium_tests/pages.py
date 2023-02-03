@@ -7,6 +7,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import WebDriverException
 
+
 def safe_click(driver, button):
     try:
         button.click()
@@ -224,14 +225,14 @@ class QuestionnairePage(BasePage):
         safe_click(self.driver,self.driver.find_element(*self.login_submit_locator))
 
     def select_checkbox(self):
-        self.driver.find_element(*self.checkbox_locator).click()
+        safe_click(self.driver, self.driver.find_element(*self.checkbox_locator))
 
     def select_checkboxes(self, option):
         safe_click(self.driver, self.driver.find_element(By.CSS_SELECTOR, "input[value='" + option + "']"))
 
     def enter_date(self, date):
         date_input = self.driver.find_element(*self.date_locator)
-        date_input.click()
+        safe_click(self.driver, date_input)
         date_input.send_keys(date)
 
     def enter_date_time(self, date, time):
