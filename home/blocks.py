@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.forms.utils import flatatt
 from django.utils.html import format_html, format_html_join
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
 
 from wagtail.core import blocks
@@ -11,52 +12,18 @@ from wagtailmedia.blocks import AbstractMediaChooserBlock
 
 
 class MediaBlock(AbstractMediaChooserBlock):
-    def render_basic(self, value, context=None):
-        if not value:
-            return ''
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context)
+        context.update({
+            'start_link': mark_safe(f'<a href="{value.url}" download>'),
+            'end_link': mark_safe('</a>'),
+            'template': 'blocks/media-video.html' if value.type == 'video' else 'blocks/media-audio.html'
+        })
 
-        video_not_supported_text = _("Your browser does not support video playback.")
-        audio_not_supported_text = _("Your browser does not support audio playback.")
-        # Translators: Translators: This message appears below embedded video and audio on the site. Many feature phones won't be able to play embedded video/audio, so the site offers an opportunity to download the file. Part of this message (between %(start_link)s and %(end_link)s ) is a clickable download link.
-        download_video_text = _('If you cannot view the above video, you can'
-                ' instead %(start_link)sdownload it%(end_link)s.') % {
-                        'start_link': '<a href={2} download>',
-                        'end_link': '</a>'
-                }
-        # Translators: Translators: This message appears below embedded video and audio on the site. Many feature phones won't be able to play embedded video/audio, so the site offers an opportunity to download the file. Part of this message (between %(start_link)s and %(end_link)s ) is a clickable download link.
-        download_audio_text = _('If you cannot listen to the above audio, you can'
-                ' instead %(start_link)sdownload it%(end_link)s.') % {
-                        'start_link': '<a href={2} download>',
-                        'end_link': '</a>'
-                }
+        return context
 
-        if value.type == 'video':
-            player_code = '''
-            <div>
-                <video preload="none" width="320" height="240" {1} controls>
-                    {0}
-                    ''' + video_not_supported_text + '''
-                </video>
-            </div>
-            <p class='article__content--video'>''' + download_video_text + '''</p>
-            '''
-        else:
-            player_code = '''
-            <div>
-                <audio preload="none" controls>
-                    {0}
-                    ''' + audio_not_supported_text + '''
-                </audio>
-            </div>
-            <p class='article__content--audio'>''' + download_audio_text + '''</p>
-            '''
-
-        thumbnail = f'poster={value.thumbnail.url}' if value.thumbnail else ''
-
-        return format_html(player_code, format_html_join(
-            '\n', "<source{0}>",
-            [[flatatt(s)] for s in value.sources]
-        ), thumbnail, value.url)
+    class Meta:
+        template = 'blocks/media.html'
 
 
 class SocialMediaLinkBlock(blocks.StructBlock):

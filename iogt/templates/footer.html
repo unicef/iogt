@@ -7,17 +7,19 @@
 {% get_current_language as LANGUAGE_CODE %}
 
 <footer class='footer-main'>
- {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
-    <div id="menu" class="footer-head">
-        {% include "header.html" %}
-    </div>
-    <div class='footer'>
-        <div class="section-container">
-            {% render_top_level_sections %}
-            {% if show_footers %}
-                {% render_footer %}
-            {% endif %}
-            <p class='footer__copyright'>{% translate "© The Internet of Good Things"%}</p>
+    {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
+    <div id="menu">
+        <div class="footer-head">
+            {% include "header.html" %}
+        </div>
+        <div class='footer'>
+            <div class="section-container">
+                {% render_top_level_sections %}
+                {% if show_footers %}
+                    {% render_footer %}
+                {% endif %}
+                <p class='footer__copyright'>{% translate "© The Internet of Good Things" %}</p>
+            </div>
         </div>
     </div>
 </footer>
