@@ -43,6 +43,7 @@ class PollIndexPageFactory(PageFactory):
 
 class QuizFactory(PageFactory):
     title = factory.Sequence(lambda n: f'quiz{n}')
+    lead_image = factory.SubFactory(ImageFactory)
     last_published_at = timezone.now()
     index_page_description = factory.Sequence(lambda n: f'index page description{n}')
     index_page_description_line_2 = factory.Sequence(lambda n: f'index page description line 2{n}')
@@ -83,7 +84,6 @@ class SurveyFormFieldFactory(DjangoModelFactory):
 
     class Meta:
         model = SurveyFormField
-
 
 class SurveyIndexPageFactory(PageFactory):
     title = 'Surveys'
