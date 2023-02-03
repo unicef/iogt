@@ -101,7 +101,7 @@
                                 </div>
                             {% endif %}
                         {% endif %}
-                        {% if fields_info|get_item:field.name|get_item:'feedback' != None %}
+                        {% if field.form.page.display_feedback and fields_info|get_item:field.name|get_item:'feedback' != None %}
                             <div class="quest-item__message">
                                 <p>{{ fields_info|get_item:field.name|get_item:'feedback' }}</p>
                             </div>
