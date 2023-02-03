@@ -12,6 +12,8 @@ from django.utils.html import format_html
 from wagtail.core import hooks
 from wagtail.core.models import Page
 from wagtail.core.models import PageViewRestriction
+from wagtail.admin import widgets as wagtailadmin_widgets
+
 
 from home.models import FooterIndexPage, BannerIndexPage, Section, \
     SectionIndexPage, LocaleDetail
@@ -85,6 +87,18 @@ def global_admin_js():
         '<script src="{}"></script>',
         static("js/global/admin.js")
     )
+
+
+@hooks.register('register_page_listing_buttons')
+def page_listing_buttons(page, page_perms, is_parent=False, next_url=None):
+    # Using more menu's "Sort menu order" button from wagtail
+    if is_parent:
+        yield wagtailadmin_widgets.PageListingButton(
+            _('Sort child pages'),
+            '?ordering=ord',
+            attrs={'title': _("Change ordering of child pages of '%(title)s'") % {'title': page.get_admin_display_title()}},
+            priority=60
+        )
 
 
 class LimitedTranslatableStringsFilter(SimpleListFilter):
