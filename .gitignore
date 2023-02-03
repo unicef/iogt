@@ -125,6 +125,5 @@ docker-compose.override.yml
 *.mo
 
 iogt_content_migration/content/
-cypress_tests/node_modules/
 
 iogt_content_migration/content
