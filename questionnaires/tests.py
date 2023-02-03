@@ -4,6 +4,7 @@ import json
 from datetime import timedelta
 
 import pytz
+from bs4 import BeautifulSoup
 from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
@@ -1023,3 +1024,31 @@ class FormDataPerUserAdminTests(TestCase):
             f'{self.user_submission_02.id},Survey 01,2022-08-31 23:00:00+00:00,question_01,c2\r\n'
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(byte_response.decode(), expected_response)
+
+
+class QuestionnaireTest(TestCase):
+    def setUp(self):
+        Site.objects.all().delete()
+        self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
+        self.home_page = self.site.root_page
+        self.poll = PollFactory(parent=self.home_page)
+        self.page_button_page = PollFactory(parent=self.home_page)
+
+    def test_page_button_block_in_thank_you_description(self):
+        self.poll.thank_you_text.append((
+            'page_button', {
+                'page': self.page_button_page,
+                'text': 'Thank you',
+            }
+        ))
+        self.poll.save()
+
+        poll_question = PollFormFieldFactory(page=self.poll, field_type='dropdown', choices='c1|c2|c3')
+
+        response = self.client.post(self.poll.url, {poll_question.clean_name: 'c1'})
+        parsed_response = BeautifulSoup(response.content)
+        page_button = parsed_response.find("div", {"class": "block-page_button"}).find("a")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(page_button.text, 'Thank you')
+        self.assertEqual(page_button['href'], self.page_button_page.url)

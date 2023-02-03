@@ -74,6 +74,7 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
             ("paragraph", blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
             ("media", MediaBlock(icon="media")),
             ("image", ImageChooserBlock(template='blocks/image.html')),
+            ('page_button', PageButtonBlock()),
         ],
         null=True,
         blank=True,
