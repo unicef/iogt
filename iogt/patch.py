@@ -1,18 +1,5 @@
 from django.templatetags import i18n
-from translation_manager import utils
 import iogt.iogt_globals as globals_
-
-
-def get_dirname_from_lang(lang):
-    "Converts lang in format en-gb to format en_GB"
-
-    return lang
-
-
-def get_lang_from_dirname(dirname):
-    "Converts lang in format en_GB to format en-gb"
-
-    return dirname
 
 
 def _translate_node_render(self, context):
@@ -120,80 +107,5 @@ def _translate_block_node_render(self, context, nested=False):
         return result
 
 
-utils.get_dirname_from_lang = get_dirname_from_lang
-utils.get_lang_from_dirname = get_lang_from_dirname
 i18n.TranslateNode.render = _translate_node_render
 i18n.BlockTranslateNode.render = _translate_block_node_render
-
-
-def store_to_db(self, pofile, locale, store_translations=False):
-    import os
-    import polib
-
-    from translation_manager.models import TranslationEntry
-    from translation_manager.utils import get_relative_locale_path, get_locale_parent_dirname
-
-    language = get_lang_from_dirname(locale)
-    domain = os.path.splitext(os.path.basename(pofile))[0]
-    messages = polib.pofile(pofile)
-    translations = TranslationEntry.objects.filter(language=language)
-
-    tdict = {
-        (t.original, t.language, t.domain): t
-        for t in translations
-    }
-
-    to_create = []
-    to_delete = []
-    for m in messages:
-        occs = []
-        for occ in m.occurrences:
-            path = ":".join(occ)
-            occs.append(path)
-
-        if store_translations:
-            translation = m.msgstr
-        else:
-            translation = ""
-
-        locale_path = get_relative_locale_path(pofile)
-
-        if os.path.split(pofile)[-1] == 'angularjs.po':
-            locale_dir_name = ''
-        else:
-            locale_dir_name = get_locale_parent_dirname(pofile)
-
-        entry = tdict.get((m.msgid, language, domain))
-
-        t = TranslationEntry(
-            original=m.msgid,
-            language=language,
-            domain=domain,
-            occurrences="\n".join(occs),
-            translation=translation,
-            locale_parent_dir=locale_dir_name,
-            is_published=True,
-            locale_path=locale_path,
-        )
-
-        if not entry:
-            to_create.append(t)
-        elif entry.translation == '' and entry.translation != translation:
-            to_delete.append(entry)
-            to_create.append(t)
-
-        if locale_path not in self.tors:
-            self.tors[locale_path] = {}
-        if language not in self.tors[locale_path]:
-            self.tors[locale_path][language] = {}
-        if domain not in self.tors[locale_path][language]:
-            self.tors[locale_path][language][domain] = []
-        self.tors[locale_path][language][domain].append(t.original)
-
-    TranslationEntry.objects.filter(id__in=[t.id for t in to_delete]).delete()
-    TranslationEntry.objects.bulk_create(to_create)
-
-
-def patch_store_to_db():
-    from translation_manager.manager import Manager
-    Manager.store_to_db = store_to_db
