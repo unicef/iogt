@@ -139,12 +139,12 @@ def store_to_db(self, pofile, locale, store_translations=False):
     translations = TranslationEntry.objects.filter(language=language)
 
     tdict = {
-        (t.original, t.language, t.domain): t.translation
+        (t.original, t.language, t.domain): t
         for t in translations
     }
 
-    translations_to_keep = []
     to_create = []
+    to_delete = []
     for m in messages:
         occs = []
         for occ in m.occurrences:
@@ -163,9 +163,7 @@ def store_to_db(self, pofile, locale, store_translations=False):
         else:
             locale_dir_name = get_locale_parent_dirname(pofile)
 
-        if tdict.get((m.msgid, language, domain)):
-            translations_to_keep.append(m.msgid)
-            continue
+        entry = tdict.get((m.msgid, language, domain))
 
         t = TranslationEntry(
             original=m.msgid,
@@ -177,9 +175,12 @@ def store_to_db(self, pofile, locale, store_translations=False):
             is_published=True,
             locale_path=locale_path,
         )
-        to_create.append(t)
 
-        translations_to_keep.append(m.msgid)
+        if not entry:
+            to_create.append(t)
+        elif entry.translation == '' and entry.translation != translation:
+            to_delete.append(entry)
+            to_create.append(t)
 
         if locale_path not in self.tors:
             self.tors[locale_path] = {}
@@ -189,33 +190,10 @@ def store_to_db(self, pofile, locale, store_translations=False):
             self.tors[locale_path][language][domain] = []
         self.tors[locale_path][language][domain].append(t.original)
 
+    TranslationEntry.objects.filter(id__in=[t.id for t in to_delete]).delete()
     TranslationEntry.objects.bulk_create(to_create)
-    return translations_to_keep
-
-
-def load_data_from_po(self):
-    import os
-    from glob import glob
-
-    from django.conf import settings
-    from django.db.models import Q
-    from translation_manager.models import TranslationEntry
-
-    translations_to_keep = []
-    for lang, _ in settings.LANGUAGES:
-        for path in settings.LOCALE_PATHS:
-            locale = get_dirname_from_lang(lang)
-            po_pattern = os.path.join(path, locale, "LC_MESSAGES", "*.po")
-            for pofile in glob(po_pattern):
-                translations_to_keep += self.store_to_db(pofile=pofile, locale=locale, store_translations=True)
-
-    self.postprocess()
-    TranslationEntry.objects.exclude(Q(Q(original__in=translations_to_keep) | ~Q(translation=''))).delete()
-    TranslationEntry.objects.filter(Q(Q(original__in=translations_to_keep) | ~Q(translation=''))).update(is_published=True)
 
 
 def patch_store_to_db():
     from translation_manager.manager import Manager
-
     Manager.store_to_db = store_to_db
-    Manager.load_data_from_po = load_data_from_po

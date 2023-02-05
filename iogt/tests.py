@@ -1,9 +1,13 @@
+from pathlib import Path
 import unittest
 
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 from rest_framework import status
+from translation_manager.manager import Manager as TranslationManager
+from translation_manager.models import TranslationEntry
 from wagtail.core.models import Site
+from wagtail_factories import ImageFactory, SiteFactory
 from wagtail.images.models import Image
 
 from home.factories import (
@@ -15,8 +19,7 @@ from home.factories import (
     OfflineContentIndexPageFactory,
     MiscellaneousIndexPageFactory
 )
-from wagtail_factories import ImageFactory, SiteFactory
-
+import iogt.patch
 from iogt.utils import has_md5_hash
 
 
@@ -111,3 +114,74 @@ class TestUtils(unittest.TestCase):
 
         for value in without_md5_hash:
             self.assertFalse(has_md5_hash(value))
+
+class LoadTranslationsFromFileTests(TestCase):
+
+    LANGUAGES = [ ('es', 'Spanish') ]
+    LOCALE_PATHS = [ Path(__file__).parent / 'locale_test' ]
+
+    def setUp(self):
+        iogt.patch.patch_store_to_db()
+        self.manager = TranslationManager()
+
+
+    @override_settings(LOCALE_PATHS=LOCALE_PATHS, LANGUAGES=LANGUAGES)
+    def test_existing_translated_entry_is_preserved(self):
+        self.create_entry('test_case_1', 'test_case_1_translation_existing')
+
+        self.manager.load_data_from_po()
+
+        entry = TranslationEntry.objects.get(original='test_case_1')
+        self.assertEqual(entry.translation, 'test_case_1_translation_existing')
+        self.assertTrue(entry.is_published)
+
+
+    @override_settings(LOCALE_PATHS=LOCALE_PATHS, LANGUAGES=LANGUAGES)
+    def test_untranslated_entry_is_replaced_with_translated_entry(self):
+        self.create_entry('test_case_2', '')
+
+        self.manager.load_data_from_po()
+
+        entry = TranslationEntry.objects.get(original='test_case_2')
+        self.assertEqual(entry.translation, 'test_case_2_translation_update')
+        self.assertTrue(entry.is_published)
+
+
+    @override_settings(LOCALE_PATHS=LOCALE_PATHS, LANGUAGES=LANGUAGES)
+    def test_new_entry_created_from_file(self):
+        self.manager.load_data_from_po()
+
+        entry = TranslationEntry.objects.get(original='test_case_3.1')
+        self.assertEqual(entry.translation, 'test_case_3.1_translation')
+        self.assertEqual(entry.language, 'es')
+        self.assertEqual(entry.domain, 'django')
+        self.assertEqual(entry.locale_path, 'iogt/locale_test')
+        self.assertEqual(entry.locale_parent_dir, 'iogt')
+        self.assertTrue(entry.is_published)
+
+        entry = TranslationEntry.objects.get(original='test_case_3.2')
+        self.assertEqual(entry.translation, '')
+        self.assertTrue(entry.is_published)
+
+
+    @override_settings(LOCALE_PATHS=LOCALE_PATHS, LANGUAGES=LANGUAGES)
+    def test_existing_untranslated_entry_is_preserved_if_no_translation_in_file(self):
+        self.create_entry('test_case_4', '')
+
+        self.manager.load_data_from_po()
+
+        entry = TranslationEntry.objects.get(original='test_case_4')
+        self.assertEqual(entry.translation, '')
+        self.assertTrue(entry.is_published)
+
+
+    def create_entry(self, original, translation):
+        TranslationEntry(
+            original=original,
+            language='es',
+            translation=translation,
+            domain='django',
+            locale_path='iogt/locale_test',
+            locale_parent_dir='iogt',
+            is_published=True
+        ).save()
