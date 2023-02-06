@@ -18,8 +18,7 @@ class PostRegistrationRedirectTests(TestCase):
         self.site = SiteFactory(hostname='testserver', port=80, root_page=self.home_page)
 
         self.registration_survey = SurveyFactory(parent=self.home_page)
-        self.site_settings = SiteSettingsFactory.create(
-            registration_survey=self.registration_survey, site=self.site)
+        SiteSettingsFactory.create(registration_survey=self.registration_survey, site=self.site)
 
     def test_user_locked_out_without_filling_registration_survey_form(self):
         self.client.force_login(self.user)
@@ -31,7 +30,7 @@ class PostRegistrationRedirectTests(TestCase):
         response = self.client.get(self.home_page.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_admin_without_filling_registration_survey_form(self):
+    def test_superuser_without_filling_registration_survey(self):
         admin_user = AdminUserFactory(has_filled_registration_survey=False)
 
         self.client.force_login(admin_user)
@@ -39,7 +38,7 @@ class PostRegistrationRedirectTests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_user_with_admin_access_do_not_need_to_fill_registration_survey_form(self):
+    def test_user_with_admin_access_do_not_need_to_fill_registration_survey(self):
         admin_access_permission = Permission.objects.get(codename='access_admin')
         group = GroupFactory()
         group.permissions.add(admin_access_permission)
