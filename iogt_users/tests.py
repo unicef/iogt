@@ -30,7 +30,7 @@ class PostRegistrationRedirectTests(TestCase):
         response = self.client.get(self.home_page.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_superuser_without_filling_registration_survey(self):
+    def test_superuser_should_not_complete_registration_survey(self):
         admin_user = AdminUserFactory(has_filled_registration_survey=False)
 
         self.client.force_login(admin_user)
@@ -38,7 +38,7 @@ class PostRegistrationRedirectTests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_user_with_admin_access_do_not_need_to_fill_registration_survey(self):
+    def test_user_with_admin_access_should_not_complete_registration_survey(self):
         admin_access_permission = Permission.objects.get(codename='access_admin')
         group = GroupFactory()
         group.permissions.add(admin_access_permission)
