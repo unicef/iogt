@@ -48,3 +48,11 @@ class PostRegistrationRedirectTests(TestCase):
         response = self.client.get(self.home_page.url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_user_should_not_redirect_after_filling_registration_survey(self):
+        self.user.has_filled_registration_survey = True
+        self.user.save()
+        self.client.force_login(self.user)
+        response = self.client.get(self.home_page.url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
