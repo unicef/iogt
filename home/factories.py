@@ -25,9 +25,9 @@ from home.models import (
     SVGToPNGMap,
     Section,
     SectionIndexPage,
-    SiteSettings, IogtFlatMenuItem,
+    SiteSettings,
 )
-from wagtailmenus.models import FlatMenu
+
 
 class HomePageFactory(PageFactory):
     title = factory.Sequence(lambda n: f'homepage{n}')
@@ -121,27 +121,16 @@ class FooterIndexPageFactory(PageFactory):
     class Meta:
         model = FooterIndexPage
 
-
 class BannerIndexPageFactory(PageFactory):
     title = 'Banners'
 
     class Meta:
         model = BannerIndexPage
 
-
 class BannerFactory(PageFactory):
+
     title = factory.Sequence(lambda n: f'banner{n}')
     banner_image = factory.SubFactory(ImageFactory)
-
     class Meta:
         model = BannerPage
 
-
-class FlatMenuFactory(DjangoModelFactory):
-    class Meta:
-        model = FlatMenu
-
-
-class IogtFlatMenuItemFactory(DjangoModelFactory):
-    class Meta:
-        model = IogtFlatMenuItem

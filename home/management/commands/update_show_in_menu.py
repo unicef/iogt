@@ -2,7 +2,11 @@ from django.core.management.base import BaseCommand
 
 from wagtail.core.models import Page
 
+from home.models import HomePage, Section, Article, PageLinkPage
+from questionnaires.models import QuestionnairePage
+
+
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
-        Page.objects.all().update(show_in_menus=True)
+        Page.objects.type(HomePage, Section, Article, PageLinkPage, QuestionnairePage).update(show_in_menus=True)
