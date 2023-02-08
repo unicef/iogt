@@ -70,3 +70,29 @@ class PollSeleniumTests(BaseSeleniumTests):
         poll_result = results_page.get_poll_results_text()
         self.assertIn("67 %", poll_result)
         self.assertIn("33 %", poll_result)
+
+    def test_multi_select_option_results_for_checkboxes(self):
+        poll01 = PollFactory(
+            parent=self.section01,
+            owner=self.user,
+            result_as_percentage=True
+            )
+        PollFormFieldFactory(
+            page=poll01,
+            required=True,
+            choices="A|B|C",
+            default_value='',
+            field_type='checkboxes',
+        )
+
+        self.visit_page(poll01)
+        poll_page = QuestionnairePage(self.selenium)
+        poll_page.select_checkboxes("A")
+        poll_page.select_checkboxes("B")
+        poll_page.submit_response()
+        results_page = QuestionnaireResultsPage(self.selenium)
+        poll_result = results_page.get_poll_results_text()
+
+        self.assertIn("A\nYour answer\n100 %", poll_result)
+        self.assertIn("B\nYour answer\n100 %", poll_result)
+        self.assertIn("C\n0 %", poll_result)
