@@ -18,21 +18,21 @@
                             <div class="polls-widget__description">{{ page.thank_you_text }}</div>
                         {% endif %}
                         {% if page.show_results %}
-                            {% for answer, count, selected in results %}
-                                <div class="cust-check cust-check--white polls-widget__item{% if selected %} cust-check--active{% endif %}">
+                            {% for answer, count, is_selected in results %}
+                                <div class="cust-check cust-check--white polls-widget__item{% if is_selected %} cust-check--active{% endif %}">
                                     <div class="cust-check__title">
                                         <div class="cust-check__title-left">
                                             <span>{{ answer }}</span>
-                                                {% if selected %}
+                                                {% if is_selected %}
                                                     <span class="cust-check__subtitle">{% translate "Your answer" %}</span>
                                                 {% endif %}
                                         </div>
                                         <div class="cust-check__title-right">
-                                            <span class="cust-check__percent">{{ count |floatformat:"0" }}
+                                            <span class="cust-check__percent">{{ count }}
                                                 {% if result_as_percentage %}%{% endif %}</span>
                                         </div>
                                         <div class="cust-check__percent-item"
-                                             style="width: {{ count |floatformat:"0" }}%"></div>
+                                             style="width: {{ count }}%"></div>
                                     </div>
                                 </div>
                             {% endfor %}

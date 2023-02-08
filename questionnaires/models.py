@@ -622,8 +622,9 @@ class Poll(QuestionnairePage, AbstractForm):
     def get_submission_class(self):
         return UserSubmission
 
-    def get_results(self, query_dict=None):
+    def get_results(self, data=None):
         results = dict()
+        results_list = []
         data_fields = [
             (field.clean_name, field.label, field.choices)
             for field in self.get_form_fields()
@@ -632,8 +633,8 @@ class Poll(QuestionnairePage, AbstractForm):
 
         # Default result counts to zero so choices with no votes are included
         if len(submissions) > 0 and self.show_results_with_no_votes:
-            for _, label, choices in data_fields:
-                results[label] = {
+            for clean_name, label, choices in data_fields:
+                results[clean_name] = {
                     choice: 0 for choice in choices.split('|') if len(choice) > 0
                 }
 
@@ -650,14 +651,14 @@ class Poll(QuestionnairePage, AbstractForm):
                     # Just skip them.
                     continue
 
-                question_stats = results.get(label, {})
+                question_stats = results.get(name, {})
                 if type(answer) != list:
                     answer = [answer]
 
                 for answer_ in answer:
                     question_stats[answer_] = question_stats.get(answer_, 0) + 1
 
-                results[label] = question_stats
+                results[name] = question_stats
 
         if self.result_as_percentage:
             total_submissions = len(submissions)
@@ -665,13 +666,10 @@ class Poll(QuestionnairePage, AbstractForm):
                 for k, v in results[key].items():
                     results[key][k] = round(v/total_submissions, 4) * 100
 
-        results_list = []
-
         for question, answers in results.items():
-            current_answer = question.lower().replace(" ", "_").replace("__", "_").replace('?', '')
             for answer, count in answers.items():
-                selected = query_dict and (answer in dict(query_dict).get(current_answer))
-                results_list.append((answer, count, selected))
+                is_selected = data and (answer in dict(data).get(question))
+                results_list.append((answer, round(count), is_selected))
 
         return results_list
 
