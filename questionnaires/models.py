@@ -668,14 +668,14 @@ class Poll(QuestionnairePage, AbstractForm):
 
         for question, answers in results.items():
             for answer, count in answers.items():
-                is_selected = data and (answer in dict(data).get(question))
+                is_selected = data and (answer in data.get(question))
                 results_list.append((answer, round(count), is_selected))
 
         return results_list
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
-        results = self.get_results(request.POST)
+        results = self.get_results(dict(request.POST))
 
         context.update({
             'results': results,
