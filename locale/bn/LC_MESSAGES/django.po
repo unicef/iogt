@@ -355,6 +355,12 @@ msgstr ""
 "উপরের অডিও শুনতে না পেলে %(start_link)s এর পরিবর্তে এটা %(end_link)s ডাউনলোড"
 " করুন"
 
+msgid "Date must be in this (YYYY-MM-DD) format"
+msgstr ""
+
+msgid "Datetime must be in this YYYY-MM-DDTHH:SS format"
+msgstr ""
+
 msgid "Please complete the questions marked as required to continue"
 msgstr ""
 
@@ -377,4 +383,9 @@ msgid "Unsure"
 msgstr ""
 
 msgid "No comment found."
+msgstr ""
+
+msgid ""
+"The content you are trying to reach is not available. To see offline content"
+" click <a href=\"%(offline_content_index_page_url)s\">here</a>"
 msgstr ""

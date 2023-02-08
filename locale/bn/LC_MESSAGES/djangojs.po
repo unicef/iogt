@@ -18,9 +18,3 @@ msgstr "দুঃখিত, কোথাও ভুল হচ্ছে। অন�
 
 msgid "You cannot submit when offline"
 msgstr "অফলাইনে থাকা অবস্থায় সাবমিট করা যায়না"
-
-msgid "Date must be in this (YYYY-MM-DD) format"
-msgstr ""
-
-msgid "Datetime must be in this YYYY-MM-DDTHH:SS format"
-msgstr ""

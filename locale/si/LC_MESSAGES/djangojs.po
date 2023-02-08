@@ -18,9 +18,3 @@ msgstr "සමාවන්න, දෝෂයක් ඇති බව පෙනේ.
 
 msgid "You cannot submit when offline"
 msgstr "අන්තර්ජාලය සමඟ සම්බන්ධ නොමැති විට ඔබට ඉදිරිපත් කළ නොහැක"
-
-msgid "Date must be in this (YYYY-MM-DD) format"
-msgstr ""
-
-msgid "Datetime must be in this YYYY-MM-DDTHH:SS format"
-msgstr ""

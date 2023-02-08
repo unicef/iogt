@@ -18,9 +18,3 @@ msgstr "Lo sentimos, parece haber un error. Inténtalo nuevamente."
 
 msgid "You cannot submit when offline"
 msgstr ""
-
-msgid "Date must be in this (YYYY-MM-DD) format"
-msgstr ""
-
-msgid "Datetime must be in this YYYY-MM-DDTHH:SS format"
-msgstr ""

@@ -4,15 +4,15 @@ from factory.django import DjangoModelFactory
 from wagtail_factories import PageFactory
 
 from questionnaires.models import (
-    Poll, 
-    PollFormField, 
+    Poll,
+    PollFormField,
     PollIndexPage,
     Quiz,
-    QuizFormField, 
+    QuizFormField,
     QuizIndexPage,
     Survey,
     SurveyFormField,
-    SurveyIndexPage,  
+    SurveyIndexPage,
     UserSubmission
 )
 

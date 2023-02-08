@@ -56,8 +56,7 @@ translatable_strings = [
     'If you cannot view the above video, you can instead %(start_link)sdownload it%(end_link)s.',
     'If you cannot listen to the above audio, you can instead %(start_link)sdownload it%(end_link)s.',
     'You cannot submit when offline',
-    'Date must be in this (YYYY-MM-DD) format',
-    'Datetime must be in this YYYY-MM-DDTHH:SS format',
+    'The content you are trying to reach is not available. To see offline content click <a href="%(offline_content_index_page_url)s">here</a>',
     'Date must be in this (YYYY-MM-DD) format',
     'Datetime must be in this YYYY-MM-DDTHH:SS format'
 ]

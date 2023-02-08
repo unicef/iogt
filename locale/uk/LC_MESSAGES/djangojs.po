@@ -18,9 +18,3 @@ msgstr "На жаль, сталася помилка. Повторіть спр�
 
 msgid "You cannot submit when offline"
 msgstr "Неможливо надіслати в режимі офлайн"
-
-msgid "Date must be in this (YYYY-MM-DD) format"
-msgstr "Дата повинна бути в цьому форматі (РРРР-ММ-ДД)"
-
-msgid "Datetime must be in this YYYY-MM-DDTHH:SS format"
-msgstr "Дата й час повинні бути в цьому форматі: YYYY-MM-DDTHH:SS"

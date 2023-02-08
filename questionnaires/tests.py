@@ -11,10 +11,12 @@ from django.utils import timezone
 from openpyxl import load_workbook
 from rest_framework import status
 from rest_framework.test import APIClient
-from wagtail.core.models import Site
+from translation_manager.models import TranslationEntry
+from wagtail.core.models import Site, Page
 from wagtail_factories import SiteFactory
+from wagtail_localize.operations import TranslationCreator
 
-from home.factories import HomePageFactory
+from home.factories import HomePageFactory, LocaleFactory
 from iogt_users.factories import (
     UserFactory,
     GroupFactory,
@@ -27,7 +29,7 @@ from questionnaires.factories import (
     PollFormFieldFactory,
     SurveyFormFieldFactory,
     QuizFormFieldFactory,
-    UserSubmissionFactory
+    UserSubmissionFactory, SurveyIndexPageFactory
 )
 
 
@@ -1023,3 +1025,43 @@ class FormDataPerUserAdminTests(TestCase):
             f'{self.user_submission_02.id},Survey 01,2022-08-31 23:00:00+00:00,question_01,c2\r\n'
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(byte_response.decode(), expected_response)
+
+
+class DateTimeFieldTest(TestCase):
+    def setUp(self):
+        root_page = Page.objects.filter(depth=1).first()
+        en_home_page = HomePageFactory(parent=root_page)
+        SiteFactory(hostname='testserver', port=80, root_page=en_home_page)
+
+        survey_index_page = SurveyIndexPageFactory(parent=en_home_page)
+        self.en_survey = SurveyFactory(parent=survey_index_page)
+        SurveyFormFieldFactory(page=self.en_survey, field_type='date', help_text='')
+        SurveyFormFieldFactory(page=self.en_survey, field_type='datetime', help_text='')
+
+    def test_help_text_translation_of_english_language(self):
+        response = self.client.get(self.en_survey.url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Date must be in this (YYYY-MM-DD) format')
+        self.assertContains(response, 'Datetime must be in this YYYY-MM-DDTHH:SS format')
+
+    def test_survey_translation_of_arabic_language(self):
+        ru_locale = LocaleFactory(language_code='ru')
+        ru_translation_creator = TranslationCreator(user=None, target_locales=[ru_locale])
+        ru_translation_creator.create_translations(self.en_survey)
+        ru_survey = self.en_survey.get_translation(ru_locale)
+
+        TranslationEntry.objects.create(
+            original="Date must be in this (YYYY-MM-DD) format",
+            translation="Дата должна быть указана в формате (ГГГГ-ММ-ДД)",
+            language=ru_locale.language_code)
+        TranslationEntry.objects.create(
+            original="Datetime must be in this YYYY-MM-DDTHH:SS format",
+            translation="Дата и время должны быть в указаны в формате: ГГГГ-ММ-ДДВЧЧ:СС",
+            language=ru_locale.language_code)
+
+        response = self.client.get(ru_survey.url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Дата должна быть указана в формате (ГГГГ-ММ-ДД)')
+        self.assertContains(response, 'Дата и время должны быть в указаны в формате: ГГГГ-ММ-ДДВЧЧ:СС')
