@@ -4,9 +4,7 @@ import json
 from datetime import timedelta
 
 import pytz
-from bs4 import BeautifulSoup
 from django.contrib.auth.models import Permission
-from django.http import HttpRequest
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone

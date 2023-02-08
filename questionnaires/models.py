@@ -665,15 +665,15 @@ class Poll(QuestionnairePage, AbstractForm):
                 for k, v in results[key].items():
                     results[key][k] = round(v/total_submissions, 4) * 100
 
-        poll_results = []
+        results_list = []
 
         for question, answers in results.items():
             current_answer = question.lower().replace(" ", "_").replace("__", "_").replace('?', '')
             for answer, count in answers.items():
                 selected = query_dict and (answer in dict(query_dict).get(current_answer))
-                poll_results.append((answer, count, selected))
+                results_list.append((answer, count, selected))
 
-        return poll_results
+        return results_list
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
