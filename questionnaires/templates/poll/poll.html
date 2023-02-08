@@ -41,23 +41,20 @@
                         {% else %}
                             {% include 'questionnaires/tags/already_completed.html' %}
                             {% if page.show_results %}
-                                {% for question, answers in results.items %}
-                                    {% snake_case question as current_answer %}
-                                    {% for answer, count in answers.items %}
-                                        <div class="cust-check cust-check--white polls-widget__item">
-                                            <div class="cust-check__title">
-                                                <div class="cust-check__title-left">
-                                                    <span>{{ answer }}</span>
-                                                </div>
-                                                <div class="cust-check__title-right">
-                                                    <span class="cust-check__percent">{{ count|floatformat:"0" }}
-                                                        {% if result_as_percentage %}%{% endif %}</span>
-                                                </div>
-                                                <div class="cust-check__percent-item"
-                                                     style="width: {{ count |floatformat:"0" }}%"></div>
+                                {% for answer, count, selected in results %}
+                                    <div class="cust-check cust-check--white polls-widget__item">
+                                        <div class="cust-check__title">
+                                            <div class="cust-check__title-left">
+                                                <span>{{ answer }}</span>
                                             </div>
+                                            <div class="cust-check__title-right">
+                                                <span class="cust-check__percent">{{ count|floatformat:"0" }}
+                                                    {% if result_as_percentage %}%{% endif %}</span>
+                                            </div>
+                                            <div class="cust-check__percent-item"
+                                                 style="width: {{ count |floatformat:"0" }}%"></div>
                                         </div>
-                                    {% endfor %}
+                                    </div>
                                 {% endfor %}
                             {% endif %}
                         {% endif %}
