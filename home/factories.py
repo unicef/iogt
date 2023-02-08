@@ -25,7 +25,7 @@ from home.models import (
     SVGToPNGMap,
     Section,
     SectionIndexPage,
-    SiteSettings,
+    SiteSettings, PageLinkPage,
 )
 
 
@@ -121,6 +121,12 @@ class FooterIndexPageFactory(PageFactory):
     class Meta:
         model = FooterIndexPage
 
+class PageLinkPageFactory(PageFactory):
+    title = factory.Sequence(lambda n: f'page-link-page{n}')
+
+    class Meta:
+        model = PageLinkPage
+
 class BannerIndexPageFactory(PageFactory):
     title = 'Banners'
 
@@ -133,4 +139,3 @@ class BannerFactory(PageFactory):
     banner_image = factory.SubFactory(ImageFactory)
     class Meta:
         model = BannerPage
-

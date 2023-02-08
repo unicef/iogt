@@ -6,7 +6,7 @@
 {% block content %}
     <section class='child-pages'>
         {% for child in children %}
-            {% with child=child.get_page is_first_content=child.is_first_content %}
+            {% with is_first_content=child.is_first_content %}
                 {% if child.get_type == 'section' %}
                     {% render_section_card child is_first_content %}
                 {% elif child.get_type == 'article' %}

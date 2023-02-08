@@ -12,6 +12,7 @@ from django.core.cache import cache
 from django.db import models
 from django.utils.deconstruct import deconstructible
 from django.utils.encoding import force_str
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from iogt.settings.base import WAGTAIL_CONTENT_LANGUAGES
@@ -238,7 +239,8 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         context = super().get_context(request)
         featured_content = self.featured_content.all().first()
         context['featured_content'] = featured_content.content.specific if featured_content and featured_content.content.live else None
-        context['children'] = self.get_children().live().specific()
+        children = self.get_children().live().specific()
+        context['children'] = [child for child in children if not isinstance(child, PageLinkPage) or (child.page and child.page.live)]
         context['user_progress'] = self.get_user_progress_dict(request)
 
         return context
@@ -546,7 +548,22 @@ class FooterPage(Article, TitleIconMixin):
 class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
     parent_page_types = ['home.FooterIndexPage', 'home.Section']
     subpage_types = []
-
+    override_title = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        help_text=_(
+            "Override the page title from the destination page")
+    )
+    override_lead_image = models.ForeignKey(
+        'wagtailimages.Image',
+        on_delete=models.PROTECT,
+        related_name='+',
+        blank=True,
+        null=True,
+        help_text=_(
+            "Override the lead image from the destination page")
+    )
     icon = models.ForeignKey(
         Svg,
         related_name='+',
@@ -568,12 +585,26 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
     content_panels = Page.content_panels + [
         SvgChooserPanel('icon'),
         ImageChooserPanel('image_icon'),
-        PageChooserPanel('page'),
+        MultiFieldPanel([
+            PageChooserPanel('page'),
+            FieldPanel('override_title'),
+            ImageChooserPanel('override_lead_image'),
+        ], heading=_('Page')),
         FieldPanel('external_link'),
     ]
 
+    def get_title(self):
+        return self.override_title or self.page.title
+
+    def get_lead_image(self):
+        return self.override_lead_image or (hasattr(self.page.specific, 'lead_image') and self.page.specific.lead_image)
+
     def get_page(self):
         return self.page.specific if self.page and self.page.live else self
+
+    @cached_property
+    def get_type(self):
+        return self.page.specific.get_type if self.page else self.__class__.__name__.lower()
 
     def get_icon(self):
         icon = super().get_icon()

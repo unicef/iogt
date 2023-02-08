@@ -70,6 +70,11 @@ class TitleIconMixin:
     """
     This mixin is used for duck-typing
     """
+    def get_title(self):
+        return self.title
+
+    def get_lead_image(self):
+        return self.lead_image
 
     def get_page(self):
         return self
