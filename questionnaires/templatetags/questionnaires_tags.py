@@ -140,12 +140,6 @@ def get_item(dictionary, key):
     return dictionary.get(key)
 
 
-@register.filter
-def get_values_from_querydict(querydict, key):
-    dictionary = dict(querydict)
-    return dictionary.get(key)
-
-
 @register.simple_tag
 def snake_case(text):
     return text.lower().replace(" ", "_").replace("__", "_").replace('?', '')
