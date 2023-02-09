@@ -183,6 +183,23 @@ class FormDataPerUserView(SpreadsheetExportMixin, SafePaginateListView):
         return f'{self.user.username}-submission_{timestamp}'
 
 
+class ExperimentalFormDataPerUserView(FormDataPerUserView):
+    list_export = ['Page ID', 'Page Title', 'Submission ID', 'Submission Date', 'Admin Label', 'Value']
+
+    def get_rows(self, item, form_fields_dict):
+        data = {
+            'User': item.user.username,
+            'URL': item.page.full_url,
+        }
+        for clean_name, answer in json.loads(item.form_data).items():
+            data.update({
+                form_fields_dict.get(item.page_id, {}).get(clean_name, clean_name): answer,
+            })
+
+        return [dict(zip(self.list_export, [item.page_id, item.page.title, item.id, item.submit_time, field, value]))
+                for field, value in data.items()]
+
+
 def generate_dashboard(request, pk):
     if request.method == 'POST':
         form = GenerateDashboardForm(request.POST)

@@ -5,7 +5,8 @@ from django.templatetags.static import static
 from wagtail.core import hooks
 from wagtail.core.models import Locale
 
-from questionnaires.views import FormPagesListView, FormDataPerUserView, generate_dashboard
+from questionnaires.views import FormPagesListView, FormDataPerUserView, generate_dashboard, \
+    ExperimentalFormDataPerUserView
 
 
 @hooks.register('insert_editor_js', order=0)
@@ -26,5 +27,6 @@ def register_custom_form_pages_list_view():
     return [
       path('forms/', FormPagesListView.as_view(), name='index'),
       path('form-data/', FormDataPerUserView.as_view(), name='form_data_per_user'),
+      path('experimental-form-data/', ExperimentalFormDataPerUserView.as_view(), name='experimental_form_data_per_user'),
       path('generate-dashboard/<int:pk>/', generate_dashboard, name='generate_dashboard'),
   ]
