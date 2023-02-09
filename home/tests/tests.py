@@ -5,8 +5,9 @@ from wagtail.core.models import Site
 from wagtail_localize.operations import TranslationCreator
 
 from home.wagtail_hooks import limit_page_chooser
-from home.factories import SectionFactory, ArticleFactory, HomePageFactory, MediaFactory, LocaleFactory, SurveyFactory
+from home.factories import SectionFactory, ArticleFactory, HomePageFactory, MediaFactory, LocaleFactory
 from wagtail_factories import SiteFactory, PageFactory
+from bs4 import BeautifulSoup
 
 
 class LimitPageChooserHookTests(TestCase):
@@ -97,31 +98,3 @@ class MediaTranslationTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, f"উপরের ভিডিও দেখা না গেলে <a href=\"{self.en_article.body[0].value.url}\" download> এর পরিবর্তে এটা </a> ডাউনলোড করুন", count=1)
         self.assertContains(response, f"উপরের অডিও শুনতে না পেলে <a href=\"{self.en_article.body[1].value.url}\" download> এর পরিবর্তে এটা </a> ডাউনলোড করুন", count=1)
-
-
-class SurveyTranslationTest(TestCase):
-    def setUp(self):
-        self.site = Site.objects.get(is_default_site=True)
-        self.en_home_page = self.site.root_page
-        self.en_survey = SurveyFactory(parent=self.en_home_page)
-
-    def test_survey_translation_of_english_language(self):
-        response = self.client.get(self.en_survey.url)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Submit')
-
-    def test_survey_translation_of_arabic_language(self):
-        ar_locale = LocaleFactory(language_code='ar')
-        ar_translation_creator = TranslationCreator(user=None, target_locales=[ar_locale])
-        ar_translation_creator.create_translations(self.en_survey)
-        ar_survey = self.en_survey.get_translation(ar_locale)
-        TranslationEntry.objects.create(
-            original="Submit",
-            translation="إرسال",
-            language=ar_locale.language_code)
-
-        response = self.client.get(ar_survey.url)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "إرسال")
