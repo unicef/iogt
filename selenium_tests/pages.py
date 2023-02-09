@@ -1,12 +1,17 @@
 from typing import List
 from urllib.parse import urlparse
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.relative_locator import locate_with
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
+from selenium.common.exceptions import WebDriverException
 
 def safe_click(driver, button):
-    driver.execute_script("arguments[0].click();", button)
+    try:
+        button.click()
+    except WebDriverException:
+        driver.execute_script("arguments[0].click();", button)
 
 def visible_with_size(item):
     return (
@@ -20,6 +25,8 @@ class BasePage(object):
     content_text_locator = (By.CLASS_NAME, 'content')
     message_text_locator = (By.CLASS_NAME, 'messages')
     search_button_locator = (By.CLASS_NAME, 'xs-home-header__search')
+    navbar_locator = (By.CSS_SELECTOR, '.top-level')
+    footer_locator = (By.CSS_SELECTOR, '.bottom-level')
 
     def __init__(self, driver: WebDriver) -> None:
         self.driver = driver        
@@ -38,6 +45,24 @@ class BasePage(object):
 
     def small_search_button_select(self):
         return self.driver.find_element(*self.search_button_locator).click()
+    
+    def footer_below_navbar_below_content(self):
+        content = self.driver.find_element(*self.content_text_locator)
+        navbar = self.driver.find_element(locate_with(*self.navbar_locator).below(content))
+        footer = self.driver.find_element(locate_with(*self.footer_locator).below(navbar))
+        if navbar.is_displayed() and footer.is_displayed():
+            return True
+        else:
+            return False
+    
+    def footer_rightof_content_rightof_navbar(self):
+        navbar = self.driver.find_element(*self.navbar_locator)
+        content = self.driver.find_element(locate_with(*self.content_text_locator).to_right_of(navbar))        
+        footer = self.driver.find_element(locate_with(*self.footer_locator).to_right_of(content))
+        if content.is_displayed() and footer.is_displayed():
+            return True
+        else:
+            return False
 
     @property
     def footer(self) -> 'FooterElement':
@@ -227,7 +252,13 @@ class QuestionnairePage(BasePage):
 
     def enter_text(self, text):
         input = self.driver.find_element(*self.text_locator)
-        input.send_keys(text)
+        detailinput = input.find_element(By.CSS_SELECTOR, "input[type='text']")
+        detailinput.send_keys(text)
+
+    def enter_multiline_text(self, text):
+        input = self.driver.find_element(*self.text_locator)
+        detailinput = input.find_element(By.CSS_SELECTOR, "textarea")
+        detailinput.send_keys(text)
 
     def enter_number(self, number):
         input = self.driver.find_element(*self.number_locator)
