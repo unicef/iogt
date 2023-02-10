@@ -888,7 +888,7 @@ class FormDataPerUserAdminTests(TestCase):
         for stream in response.streaming_content:
             byte_response += stream
         expected_response = \
-            f'Page ID,Page Title,Submission ID,Submission Date,Admin Label,Value\r\n' \
+            f'Page ID,Page Title,Submission ID,Submission Date,Field,Value\r\n' \
             f'{self.poll.id},{self.poll.title},{self.user_submission_01.id},{self.user_submission_01.submit_time},User,{self.user_01.username}\r\n' \
             f'{self.poll.id},{self.poll.title},{self.user_submission_01.id},{self.user_submission_01.submit_time},URL,{self.poll.full_url}\r\n' \
             f'{self.poll.id},{self.poll.title},{self.user_submission_01.id},{self.user_submission_01.submit_time},{self.poll_question.clean_name},c1\r\n' \

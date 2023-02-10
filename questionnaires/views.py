@@ -184,7 +184,7 @@ class FormDataPerUserView(SpreadsheetExportMixin, SafePaginateListView):
 
 
 class ExperimentalFormDataPerUserView(FormDataPerUserView):
-    list_export = ['Page ID', 'Page Title', 'Submission ID', 'Submission Date', 'Admin Label', 'Value']
+    list_export = ['Page ID', 'Page Title', 'Submission ID', 'Submission Date', 'Field', 'Value']
 
     def get_rows(self, item, form_fields_dict):
         data = {
