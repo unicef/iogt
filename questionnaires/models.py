@@ -735,7 +735,7 @@ class QuizFormField(AbstractFormField):
         verbose_name=_('Survey Question'),
         default=False,
         help_text=_(
-            'Do not show this question on the results page, or include in quiz scoring'
+            'Do not show this question on the results page, or include in quiz scoring.'
         )
     )
 
@@ -883,33 +883,32 @@ class Quiz(QuestionnairePage, AbstractForm):
             total_correct = 0
             form_data = dict(form.data)
             for field in self.get_form_fields():
+                correct_answer = field.correct_answer.split('|')
+
+                if field.field_type == 'checkbox':
+                    answer = 'true' if form_data.get(field.clean_name) else 'false'
+                else:
+                    answer = form_data.get(field.clean_name)
+
+                if type(answer) != list:
+                    answer = [str(answer)]
+
+                if field.field_type in ['radio', 'dropdown']:
+                    is_correct = set(answer).issubset(set(correct_answer))
+                else:
+                    is_correct = set(answer) == set(correct_answer)
+
                 if not field.survey_question:
-                    correct_answer = field.correct_answer.split('|')
-
-                    if field.field_type == 'checkbox':
-                        answer = 'true' if form_data.get(field.clean_name) else 'false'
-                    else:
-                        answer = form_data.get(field.clean_name)
-
-                    if type(answer) != list:
-                        answer = [str(answer)]
-
-                    if field.field_type in ['radio', 'dropdown']:
-                        is_correct = set(answer).issubset(set(correct_answer))
-                    else:
-                        is_correct = set(answer) == set(correct_answer)
-
-                    if not field.survey_question:
-                        if is_correct:
-                            total_correct += 1
-                        total += 1
-                    fields_info[field.clean_name] = {
-                        'feedback': field.feedback,
-                        'correct_answer': field.correct_answer,
-                        'correct_answer_list': correct_answer,
-                        'is_correct': is_correct,
-                        'survey_question': field.survey_question,
-                    }
+                    if is_correct:
+                        total_correct += 1
+                    total += 1
+                fields_info[field.clean_name] = {
+                    'feedback': field.feedback,
+                    'correct_answer': field.correct_answer,
+                    'correct_answer_list': correct_answer,
+                    'is_correct': is_correct,
+                    'survey_question': field.survey_question,
+                }
 
             context['form'] = form
             context['fields_info'] = fields_info
