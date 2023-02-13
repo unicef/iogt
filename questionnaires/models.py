@@ -735,7 +735,7 @@ class QuizFormField(AbstractFormField):
         verbose_name=_('Survey Question'),
         default=False,
         help_text=_(
-            'Do not show this question on the results page, or include in quiz scoring.'
+            'Check this to do not show this question on the results page, or include in quiz scoring.'
         )
     )
 
