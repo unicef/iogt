@@ -678,7 +678,7 @@ msgid "Select one"
 msgstr "([has-partial-translation]-Select one)"
 
 msgid "Check all that apply"
-msgstr "([has-partial-translation]-Check all that apply)"
+msgstr "([has-translation]-Check all that apply)"
 
 msgid "Check if applies"
 msgstr "([has-partial-translation]-Check if applies)"

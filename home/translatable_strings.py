@@ -18,7 +18,6 @@ translatable_strings = [
     '%(counter)s of %(total)s questions',
     'Optional',
     'Select one',
-    'Check all that apply',
     'Check if applies',
     'Comments',
     'Please log in or create your account',
