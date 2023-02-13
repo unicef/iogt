@@ -14,7 +14,7 @@ class QuizSeleniumTests(BaseSeleniumTests):
         section01 = SectionFactory(parent=self.home, owner=user)
         self.quiz01 = QuizFactory(
             parent=section01,
-            owner=self.user,
+            owner=user,
         )
 
     def test_correct_quiz(self):
