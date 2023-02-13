@@ -14,161 +14,159 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "quizzes"
-msgstr "ibazwa"
+msgstr ""
 
 msgid "Log in to participate"
-msgstr "Injira kugirango utange umusanzu"
+msgstr ""
 
 msgid "Log in / Create account"
-msgstr "Kwinjira/ Fungura konti"
+msgstr ""
 
 msgid "© The Internet of Good Things"
-msgstr "© The Internet of Good Things"
+msgstr ""
 
 msgid "Profile"
-msgstr "Umwirondoro"
+msgstr ""
 
 msgid "Chat"
-msgstr "Kwandika ubutumwa"
+msgstr ""
 
 msgid "More"
-msgstr "Ibindi"
+msgstr ""
 
 msgid "Log in"
-msgstr "Kwinjira"
+msgstr ""
 
 msgid "Back"
-msgstr "Gusubira inyuma"
+msgstr ""
 
 msgid "BACK"
-msgstr "GUSUBIRA INYUMA"
+msgstr ""
 
 msgid "Previous"
-msgstr "Ahabanje"
+msgstr ""
 
 msgid "Next"
-msgstr "Ibikurikiyeho"
+msgstr ""
 
 msgid "Comments"
-msgstr "Ibitekerezo"
+msgstr ""
 
 msgid "Please log in or create your account"
-msgstr "Injiramo cyangwa ufungure konti"
+msgstr ""
 
 msgid "Report"
-msgstr "Raporo"
+msgstr ""
 
 msgid "Related Articles"
-msgstr "Inyandiko zerekeye"
+msgstr ""
 
 msgid "This comment has been reported."
-msgstr "Icyi gitekerezo cyawe bacyireze."
+msgstr ""
 
 msgid ""
 "It will be reviewed by the team and may be removed if it breaks our Platform"
 " Rules"
 msgstr ""
-"Cyiraza gusuzumwa n’ikipe yacu kandi gishobora gukurwaho mu gihe "
-"kitubahiriza Amabwiriza y’Urubuga rwacu"
 
 msgid "articles"
-msgstr "inyandiko"
+msgstr ""
 
 msgid "Search the site..."
-msgstr "Shakisha urubuga..."
+msgstr ""
 
 msgid "Search results for:"
-msgstr "Amakuru ku gushakisha:"
+msgstr ""
 
 msgid "No search results were found for"
-msgstr "Nta makuru yabonetse ku byo muri gushakisha"
+msgstr ""
 
 msgid "Username"
-msgstr "Izina ryo gukoresha"
+msgstr ""
 
 msgid "Create your account"
-msgstr "Fungura konti"
+msgstr ""
 
 msgid "Forgot PIN"
-msgstr "Nibagiwe umubare w’ibanga"
+msgstr ""
 
 msgid "Cancel"
-msgstr "Hagarika"
+msgstr ""
 
 msgid "Hey, %(username)s"
-msgstr "Muraho, %(username)s"
+msgstr ""
 
 msgid "Change Digital Pin"
-msgstr "Guhindura umubare w’ibanga"
+msgstr ""
 
 msgid "Personal Details"
-msgstr "Amakuru y’Umwirondoro"
+msgstr ""
 
 msgid "Save changes"
-msgstr "Bika amakuru yahindutse"
+msgstr ""
 
 msgid "Reset PIN"
-msgstr "Kugarura Umubare w’ibanga"
+msgstr ""
 
 msgid "Your PIN has been changed successfully."
-msgstr "Guhindura Umubare w’ibanga byagenze neza."
+msgstr ""
 
 msgid "I accept the Terms and Conditions."
-msgstr "Nemeye Amategeko n’Amabwiriza."
+msgstr ""
 
 msgid "You have read %(read)s out of %(total)s"
-msgstr "Wasomye %(read)s muri %(total)s"
+msgstr ""
 
 msgid "%(counter)s of %(total)s questions"
-msgstr "Ibibazo %(counter)s muri %(total)s"
+msgstr ""
 
 msgid "Select one"
-msgstr "Hitamo kimwe"
+msgstr ""
 
 msgid "Optional"
-msgstr "Ufite amahitamo"
+msgstr ""
 
 msgid "No limit"
-msgstr "Nta mbibi"
+msgstr ""
 
 msgid "Go to homepage"
-msgstr "Subira ahabanza"
+msgstr ""
 
 msgid "You have already completed this survey."
-msgstr "Ubu bushakashatsi wamaze kubwuzuza."
+msgstr ""
 
 msgid "Check all that apply"
-msgstr "Hitamo ibishoboka byose"
+msgstr ""
 
 msgid "Your results!"
-msgstr "Amanota yawe!"
+msgstr ""
 
 msgid "Replay Quiz"
-msgstr "Gusubiramo Ibazwa"
+msgstr ""
 
 msgid "Incorrect"
-msgstr "Wabyishe"
+msgstr ""
 
 msgid "Correct"
-msgstr "Wabikoze"
+msgstr ""
 
 msgid "Your answer"
-msgstr "Igisubizo cyawe"
+msgstr ""
 
 msgid "Leave comment"
-msgstr "Dusangize igitekerezo"
+msgstr ""
 
 msgid "Reply"
-msgstr "Subiza"
+msgstr ""
 
 msgid "Page not found"
-msgstr "Iyi paji twayibuze"
+msgstr ""
 
 msgid "Sorry, this page could not be found."
-msgstr "Mwihangane, iyi paji twayibuze."
+msgstr ""
 
 msgid "Internal server error"
-msgstr "Seriveri yacu yagize ikibazo"
+msgstr ""
 
 msgid "1 result"
 msgid_plural "%(counter)s results"
@@ -176,13 +174,13 @@ msgstr[0] ""
 msgstr[1] ""
 
 msgid "poll"
-msgstr ""
+msgstr "anket"
 
 msgid "survey"
 msgstr ""
 
 msgid "quiz"
-msgstr ""
+msgstr "bilgi yarışması"
 
 msgid "This field is required."
 msgstr ""

@@ -15,8 +15,8 @@ msgstr ""
 
 msgid "Sorry, there seems to be an error. Please try again soon."
 msgstr ""
-"([has-translation]-Sorry, there seems to be an error. Please try again "
-"soon.)"
+"([has-partial-translation]-Sorry, there seems to be an error. Please try "
+"again soon.)"
 
 msgid "Install this website as an app on your device?"
 msgstr "([unused]-Install this website as an app on your device?)"

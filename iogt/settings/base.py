@@ -311,6 +311,7 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('tg', _('Tajik')),
     ('ta', _('Tamil')),
     ('ti', _('Tigrinya')),
+    ('tu', _('Turkish')),
     ('uk', _('Ukraine')),
     ('ur', _('Urdu')),
     ('uz', _('Uzbek')),
