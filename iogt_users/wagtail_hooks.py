@@ -37,7 +37,8 @@ class UserButtonHelper(ButtonHelper):
     def get_buttons_for_obj(self, obj, exclude=None, classnames_add=None, classnames_exclude=None):
         btns = super().get_buttons_for_obj(obj, exclude, classnames_add, classnames_exclude)
         btns.append(self.form_data_button(obj))
-        btns.append(self.experimental_form_data_button(obj))
+        if settings.EXPERIMENTAL_FORM_DATA:
+            btns.append(self.experimental_form_data_button(obj))
         return btns
 
 

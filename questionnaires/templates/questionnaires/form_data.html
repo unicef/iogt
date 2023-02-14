@@ -71,7 +71,9 @@
                 </div>
             </div>
         </form>
-          <h3 style="color: darkred">Warning: In 3 months, the format of form data files in XLSX and CSV will be altered and updated with the implementation of experimental form data.</h3>
+          {% if EXPERIMENTAL_FORM_DATA %}
+             <h3 style="color: darkred">Warning: In 3 months, the format of form data files in XLSX and CSV will be altered and updated with the implementation of experimental form data.</h3>
+          {% endif %}
     </header>
     <div class="nice-padding">
         <div id="form-results" class="forms">
