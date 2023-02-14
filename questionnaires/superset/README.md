@@ -112,3 +112,46 @@ docker-compose up
 ```
 docker-compose up
 ```
+
+## Share Dashboard
+
+### How to Share Dashboard Publicly
+
+Anyone with the link will be able to view the dashboard.
+
+- Click "Settings" menu on upper right corner
+- Click on "List Roles" menu item
+- Click on "+" icon to add a new role
+- Add following permissions and save
+  - can read on CssTemplate
+  - can read on Chart
+  - can read on Dashboard
+  - can read on DashboardPermalinkRestApi
+  - can dashboard permalink on Superset
+  - can dashboard on Superset
+  - can explore json on Superset
+  - datasource access on [dataset-used-for-dashboard]
+
+### How to Share Dashboard Privately
+
+Anyone with this and "Gamma" role will be able to view the dashboard.
+
+- Click "Settings" menu on upper right corner
+- Click on "List Roles" menu item
+- Click on "+" icon to add a new role
+- Add following permission and save
+  - datasource access on [dataset-used-for-dashboard]
+- Assign this role and "Gamma" role to user
+
+### How to Generate the Link to Share
+
+- Open dashboard and click "..." menu on upper right corner
+- Click on "Share" menu item
+- Click "Copy permalink to clipboard"
+
+### Embedded/Fullscreen View
+
+- Open the copied link from previous step
+- Click "..." menu on upper right corner
+- Click "Enter fullscreen"
+- Copy the URL from address bar
