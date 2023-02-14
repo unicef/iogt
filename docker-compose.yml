@@ -30,7 +30,7 @@ services:
       SUPERSET_USERNAME: ''
       SUPERSET_PASSWORD: ''
       PUSH_NOTIFICATION: 'enable'
-      EXPERIMENTAL_FORM_DATA: 'False'
+      EXPERIMENTAL_FORM_DATA: 'True'
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./:/app/
