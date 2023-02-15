@@ -108,10 +108,11 @@ class SurveyForm(WagtailAdminPageForm):
                             _(f'{data["field_type"]} must include at least 2 Answer Options.'),
                         )
 
-                if data["skip_logic"] and self.data.get('multi_step', 'off') == 'off':
-                    should_be_multi_step = True
-
                 for j, logic in enumerate(data['skip_logic']):
+                    if (logic.value['skip_logic'] in [SkipState.QUESTION, SkipState.END]
+                            and self.data.get('multi_step', 'off') == 'off'):
+                        should_be_multi_step = True
+
                     if not logic.value['choice']:
                         self.add_stream_field_error(
                             j,

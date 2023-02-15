@@ -232,7 +232,6 @@ class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
                 }
             ]
         )
-
         SurveyFormFieldFactory(label='Q1', page=self.survey01, required=True, field_type='checkbox', skip_logic=skip_logic)
         SurveyFormFieldFactory(label='Q2', page=self.survey01, required=True, field_type='checkbox', skip_logic=skip_logic)
         SurveyFormFieldFactory(label='Q3', page=self.survey01, required=True, field_type='checkbox', skip_logic=skip_logic)
@@ -246,3 +245,33 @@ class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
         self.selenium.find_elements(By.CSS_SELECTOR, "button[type='submit']")[1].click()
 
         self.assertIn("Skip to question Q3 with in-between required questions isn't allowed.", self.selenium.page_source)
+
+    def test_skip_logic_requires_multi_step_enabled_on_admin_panel(self):
+        skip_logic = json.dumps(
+            [
+                {
+                    "type": "skip_logic",
+                    "value": {
+                        "choice": "true",
+                        "skip_logic": "end",
+                        "question": None
+                    }
+                },
+                {
+                    "type": "skip_logic",
+                    "value": {
+                        "choice": "false",
+                        "skip_logic": "next",
+                        "question": None
+                    }
+                }
+            ]
+        )
+        SurveyFormFieldFactory(label='Q1', page=self.survey01, required=True, field_type='checkbox', skip_logic=skip_logic)
+        SurveyFormFieldFactory(label='Q2', page=self.survey01, required=True, field_type='checkbox', skip_logic=skip_logic)
+
+        self.visit_url(reverse('wagtailadmin_pages:edit', args=(self.survey01.id,)))
+
+        self.selenium.find_elements(By.CSS_SELECTOR, "button[type='submit']")[1].click()
+
+        self.assertIn("Multi-step must be enabled with skip logic.", self.selenium.page_source)
