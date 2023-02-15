@@ -727,7 +727,10 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         response = self.client.get(reverse(self.url, kwargs={'pk': poll.id}))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, [])
+        self.assertEqual(response.data['count'], 0)
+        self.assertIsNone(response.data['next'])
+        self.assertIsNone(response.data['previous'])
+        self.assertEqual(response.data['results'], [])
 
 
 class FormDataPerUserAdminTests(TestCase):
