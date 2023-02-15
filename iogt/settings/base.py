@@ -139,6 +139,7 @@ TEMPLATES = [
                 'home.processors.show_footers',
                 'messaging.processors.add_vapid_public_key',
                 'notifications.processors.push_notification',
+                'home.processors.jquery',
             ],
         },
     },
@@ -534,3 +535,4 @@ SUPERSET_USERNAME = os.getenv('SUPERSET_USERNAME')
 SUPERSET_PASSWORD = os.getenv('SUPERSET_PASSWORD')
 
 PUSH_NOTIFICATION = os.getenv('PUSH_NOTIFICATION', 'disable') == 'enable'
+JQUERY = os.getenv('JQUERY', 'disable') == 'enable'
