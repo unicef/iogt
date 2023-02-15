@@ -71,6 +71,7 @@ class SurveyForm(WagtailAdminPageForm):
     def clean(self):
         cleaned_data = super().clean()
 
+        should_be_multi_step = False
         question_data = {}
         for form in self.formsets[self.form_field_name]:
             form.is_valid()
@@ -106,6 +107,9 @@ class SurveyForm(WagtailAdminPageForm):
                             'field_type',
                             _(f'{data["field_type"]} must include at least 2 Answer Options.'),
                         )
+
+                if data["skip_logic"] and self.data.get('multi_step', 'off') == 'off':
+                    should_be_multi_step = True
 
                 for j, logic in enumerate(data['skip_logic']):
                     if not logic.value['choice']:
@@ -145,6 +149,9 @@ class SurveyForm(WagtailAdminPageForm):
                             )
                 if self.clean_errors:
                     form._errors = self.clean_errors
+
+        if should_be_multi_step:
+            self.add_error("multi_step", "Multi-step must be enabled with skip logic.")
 
         return cleaned_data
 
