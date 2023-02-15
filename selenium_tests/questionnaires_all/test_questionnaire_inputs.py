@@ -1,6 +1,7 @@
 import json
 
 from django.urls import reverse
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 
 from selenium_tests.base import BaseSeleniumTests
@@ -238,10 +239,10 @@ class QuestionnaireInputsSeleniumTests(BaseSeleniumTests):
 
         self.visit_url(reverse('wagtailadmin_pages:edit', args=(self.survey01.id,)))
 
-        select_skip_logic = Select(self.selenium.find_element_by_id("survey_form_fields-0-skip_logic-0-value-skip_logic"))
+        select_skip_logic = Select(self.selenium.find_element(By.ID, "survey_form_fields-0-skip_logic-0-value-skip_logic"))
         select_skip_logic.select_by_value("question")
-        select_question = Select(self.selenium.find_element_by_id("survey_form_fields-0-skip_logic-0-value-question_1"))
+        select_question = Select(self.selenium.find_element(By.ID, "survey_form_fields-0-skip_logic-0-value-question_1"))
         select_question.select_by_value("3")
-        self.selenium.find_elements_by_css_selector("button[type='submit']")[1].click()
+        self.selenium.find_elements(By.CSS_SELECTOR, "button[type='submit']")[1].click()
 
         self.assertIn("Skip to question Q3 with in-between required questions isn't allowed.", self.selenium.page_source)
