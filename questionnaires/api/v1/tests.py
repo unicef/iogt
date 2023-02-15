@@ -38,7 +38,7 @@ class QuestionnairesListAPIViewTests(TestCase):
         self.user.groups.add(self.group)
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
-        self.url = reverse('questionnaires_list')
+        self.url = reverse('v1_questionnaires_list')
 
         Site.objects.all().delete()
         self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
@@ -252,7 +252,7 @@ class QuestionnaireDetailAPIViewTests(TestCase):
         self.user.groups.add(self.group)
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
-        self.url = 'questionnaire_detail'
+        self.url = 'v1_questionnaire_detail'
 
         Site.objects.all().delete()
         self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
@@ -413,7 +413,7 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         self.user.groups.add(self.group)
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
-        self.url = 'questionnaire_submissions'
+        self.url = 'v1_questionnaire_submissions'
 
         Site.objects.all().delete()
         self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)

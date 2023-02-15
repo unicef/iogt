@@ -7,7 +7,7 @@ from questionnaires.api.v1.views import (
 )
 
 urlpatterns = [
-    path('', QuestionnairesListAPIView.as_view(), name='questionnaires_list'),
-    path('<int:pk>/', QuestionnaireDetailAPIView.as_view(), name='questionnaire_detail'),
-    path('<int:pk>/submissions/', QuestionnaireSubmissionsAPIView.as_view(), name='questionnaire_submissions'),
+    path('', QuestionnairesListAPIView.as_view(), name='v1_questionnaires_list'),
+    path('<int:pk>/', QuestionnaireDetailAPIView.as_view(), name='v1_questionnaire_detail'),
+    path('<int:pk>/submissions/', QuestionnaireSubmissionsAPIView.as_view(), name='v1_questionnaire_submissions'),
 ]
