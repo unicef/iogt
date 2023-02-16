@@ -115,7 +115,7 @@ class FormDataPerUserView(SpreadsheetExportMixin, SafePaginateListView):
         context.update({
             'select_date_form': self.select_date_form,
             'user_id': self.user.id,
-            'EXPERIMENTAL_FORM_DATA': settings.EXPERIMENTAL_FORM_DATA,
+            'experimental_form_data': settings.EXPERIMENTAL_FORM_DATA,
         })
         return context
 

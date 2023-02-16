@@ -71,8 +71,14 @@
                 </div>
             </div>
         </form>
-          {% if EXPERIMENTAL_FORM_DATA %}
-             <h3 style="color: darkred">Warning: In 3 months, the format of form data files in XLSX and CSV will be altered and updated with the implementation of experimental form data.</h3>
+          {% if experimental_form_data %}
+            <span class="warning">
+			    <span class="svg-wrapper">
+                    <img src='{% versioned_static "icons/warning.svg" %}' />
+			    </span>
+                In 3 months, the format of form data files in XLSX and CSV will be altered and updated with the
+                implementation of experimental form data.
+		    </span>
           {% endif %}
     </header>
     <div class="nice-padding">

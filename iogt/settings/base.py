@@ -535,4 +535,4 @@ SUPERSET_PASSWORD = os.getenv('SUPERSET_PASSWORD')
 
 PUSH_NOTIFICATION = os.getenv('PUSH_NOTIFICATION', 'disable') == 'enable'
 
-EXPERIMENTAL_FORM_DATA = os.getenv('EXPERIMENTAL_FORM_DATA', 'False') == 'True'
+EXPERIMENTAL_FORM_DATA = os.getenv('EXPERIMENTAL_FORM_DATA', 'disable') == 'enable'
