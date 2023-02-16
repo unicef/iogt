@@ -115,13 +115,35 @@ docker-compose up
 
 ## Share Dashboard
 
-### How to Share Dashboard Publicly
+In Superset, anyone can view a dashboard if they have the permanent link to it, whether or not they have an account on the Superset platform. But, they can only view the data in that dashboard if they have permission to read the dataset(s) for the dashboard.
 
-Anyone with the link will be able to view the dashboard.
+There are two things to consider when sharing a dashboard:
+- Do you want your dashboard (and dataset) to be available publicly? OR only to specific, authenticated users?
+- Do you want your dashboard to appear within the Superset interface, alongside the Menu buttons? OR do you want so share the dashboard without the typical Superset interface?
+
+The first step in sharing the dashboard is sharing the dataset - either publicly, or to specific authenticated users.
+
+The second step in sharing the dashboard is creating the permalink URL - showing the dashboard in the Superset interface, or on its own.
+
+### How to Share a Dataset Publicly
+
+This is a pre-requisite to publicly sharing your dashboard. Keep in mind that when you make this dataset public, hypothetically any of the data can be exposed publicly.
+
+1. After you share your dashboard, which uses part of the data, someone may create a new dashboard from your dataset - they may or may not notice that your dataset is public - which publicly exposes other parts of your dataset that you didn't expect.
+
+2. Other Superset users that have higher permissions, like running SQL queries against their own datasets, may also be able to use those higher permissions on your public dataset.
+
+For this reason, it's strongly recommended to take these steps unless all data in your dataset can TRULY be made public:
+
+1. Make a copy of your original private dataset, and label it clearly, eg "PUBLIC_Survey A_Dataset B_Dashboard Z"
+2. Limit the data in this dataset to only what you need for your public dashboard visualizations
+3. Adjust your dashboard to use this public dataset instead of your original private dataset
+
+All data in this dataset should be considered viewable publicly. If someone has the URL to your dashboard, they will be able to view your visualizations without a Superset account.
 
 - Click "Settings" menu on upper right corner
 - Click on "List Roles" menu item
-- Click on "+" icon to add a new role
+- Click on "+" icon to add a new role and name it clearly, for example "Public Access to Dataset PUBLIC_Survey A_Dataset B_Dashboard Z"
 - Add following permissions and save
   - can read on CssTemplate
   - can read on Chart
@@ -132,24 +154,30 @@ Anyone with the link will be able to view the dashboard.
   - can explore json on Superset
   - datasource access on [dataset-used-for-dashboard]
 
-### How to Share Dashboard Privately
+Be very careful when setting the "datasource access" permission. Make sure to choose a dataset you know can be public. If you name your public datasets starting with "PUBLIC" it will be easy to not accidentally make a private dataset public.
 
-Anyone with this and "Gamma" role will be able to view the dashboard.
+### How to Share a Dataset Privately
+
+As with making datasets public, if you give a specific user access to your dataset then you should assume they can access all its data.
+
+Anyone with both this role AND "Gamma" role will be able to view the dashboard. Anyone with both this role AND higher permissions than "Gamma" will be able to use their higher permissions to access the data, for example through SQL queries.
 
 - Click "Settings" menu on upper right corner
 - Click on "List Roles" menu item
-- Click on "+" icon to add a new role
+- Click on "+" icon to add a new role and name it clearly, for example "Access to Dataset Survey A_Dataset B_Dashboard Z"
 - Add following permission and save
   - datasource access on [dataset-used-for-dashboard]
-- Assign this role and "Gamma" role to user
+- Assign this role to the user, and the "Gamma" role if they don't already have higher permissions
 
-### How to Generate the Link to Share
+### How to Generate a Dashboard Link to Share Publicly or Privately
+
+To create the URL to your dashboard, to share publicly or privately:
 
 - Open dashboard and click "..." menu on upper right corner
 - Click on "Share" menu item
 - Click "Copy permalink to clipboard"
 
-### Embedded/Fullscreen View
+To get a fullscreen view or an embeddable view of the dashboard, without Superset menus
 
 - Open the copied link from previous step
 - Click "..." menu on upper right corner
