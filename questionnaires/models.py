@@ -731,12 +731,20 @@ class QuizFormField(AbstractFormField):
         blank=True,
         help_text=_('Feedback message for user answer.')
     )
+    survey_question = models.BooleanField(
+        verbose_name=_('Survey Question'),
+        default=False,
+        help_text=_(
+            'Check this to do not show this question on the results page, or include in quiz scoring.'
+        )
+    )
 
     panels = [
         FieldPanel('label'),
         FieldPanel('clean_name', classname='disabled-clean-name'),
         FieldPanel('help_text'),
         FieldPanel('required'),
+        FieldPanel('survey_question'),
         FieldPanel('field_type', classname="formbuilder-type"),
         FieldPanel('choices', classname="formbuilder-choices"),
         FieldPanel('default_value', classname="formbuilder-default"),
@@ -890,14 +898,16 @@ class Quiz(QuestionnairePage, AbstractForm):
                 else:
                     is_correct = set(answer) == set(correct_answer)
 
-                if is_correct:
-                    total_correct += 1
-                total += 1
+                if not field.survey_question:
+                    if is_correct:
+                        total_correct += 1
+                    total += 1
                 fields_info[field.clean_name] = {
                     'feedback': field.feedback,
                     'correct_answer': field.correct_answer,
                     'correct_answer_list': correct_answer,
                     'is_correct': is_correct,
+                    'survey_question': field.survey_question,
                 }
 
             context['form'] = form
