@@ -14,11 +14,7 @@ jobs:
   django-unit-tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Use Node.js 16.x
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16.x'
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: make test
       - uses: actions/upload-artifact@v2
         with:
@@ -28,11 +24,7 @@ jobs:
   selenium-tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Use Node.js 16.x
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16.x'
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: make selenium-test
       - uses: actions/upload-artifact@v2
         with:
