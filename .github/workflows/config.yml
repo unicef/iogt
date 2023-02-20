@@ -14,13 +14,11 @@ jobs:
   django-unit-tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: v2.x
       - name: Use Node.js 16.x
         uses: actions/setup-node@v2
         with:
           node-version: '16.x'
+      - uses: actions/checkout@v2
       - run: make test
       - uses: actions/upload-artifact@v2
         with:
@@ -30,15 +28,14 @@ jobs:
   selenium-tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: v2.x
       - name: Use Node.js 16.x
         uses: actions/setup-node@v2
         with:
           node-version: '16.x'
+      - uses: actions/checkout@v2
       - run: make selenium-test
       - uses: actions/upload-artifact@v2
         with:
           name: django-coverage-report
           path: htmlcov
+
