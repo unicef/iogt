@@ -13,7 +13,7 @@ from wagtail.core import hooks
 from wagtail.core.models import Page
 from wagtail.core.models import PageViewRestriction
 from wagtail.admin import widgets as wagtailadmin_widgets
-
+from wagtail.images.models import Rendition
 
 from home.models import FooterIndexPage, BannerIndexPage, Section, \
     SectionIndexPage, LocaleDetail
@@ -161,5 +161,16 @@ class LocaleDetailAdmin(ModelAdmin):
     menu_order = 700
 
 
+class ImageRenditionAdmin(ModelAdmin):
+    model = Rendition
+    menu_label = 'Image Renditions'
+    menu_icon = 'image'
+    list_display = ('id', 'image', 'filter_spec', 'width', 'height')
+    search_fields = ('image__title',)
+    add_to_settings_menu = True
+
+
 modeladmin_register(TranslationEntryAdmin)
 modeladmin_register(LocaleDetailAdmin)
+modeladmin_register(ImageRenditionAdmin)
+
