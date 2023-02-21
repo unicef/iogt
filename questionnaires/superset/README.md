@@ -183,3 +183,7 @@ To get a fullscreen view or an embeddable view of the dashboard, without Superse
 - Click "..." menu on upper right corner
 - Click "Enter fullscreen"
 - Copy the URL from address bar
+
+To get a fullscreen/embeddable dashboard **without** its title, change standalone=true in the URL to standalone=2.
+
+This can be useful if your dashboard title isn't very clean - for example it starts with "PUBLIC". You could use a markdown block at the top of your dashboard as an alternative header.
