@@ -325,6 +325,7 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         ('list', blocks.ListBlock(MarkdownBlock(icon='code'))),
         ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
         ('page_button', PageButtonBlock()),
+        ('random_page_button', RandomPageButtonBlock()),
         ('embedded_poll', EmbeddedPollBlock()),
         ('embedded_survey', EmbeddedSurveyBlock()),
         ('embedded_quiz', EmbeddedQuizBlock()),
