@@ -23,9 +23,9 @@ $(document).ready(function () {
         'for the Pages they can access.</h4>')
 
     if (window.location.pathname.indexOf('/admin/redirects/') === 0) {
-        if (window.location.pathname.indexOf('/admin/redirects/add/') === 0){
+      if (window.location.pathname.indexOf('/admin/redirects/add/') === 0){
         $('#id_is_permanent').removeAttr('checked');
-        }
+      }
       $('#id_is_permanent').parent().next('p').html('Recommendation: Do not use permanent redirects if you are setting ' +
           'up a promotion, QR code, or similar. Use permanent redirects if you are permanently moving the location of ' +
           'content on your site.<br><strong>Cons:</strong> If you change or even delete a permanent redirect after you create it, the ' +
