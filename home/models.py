@@ -47,6 +47,7 @@ from comments.models import CommentableMixin, CannedResponse
 from .blocks import (
     MediaBlock, SocialMediaLinkBlock, SocialMediaShareButtonBlock, EmbeddedPollBlock, EmbeddedSurveyBlock,
     EmbeddedQuizBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock, ArticleBlock, DownloadButtonBlock,
+    RandomPageButtonBlock,
 )
 from .forms import SectionPageForm
 from .mixins import PageUtilsMixin, TitleIconMixin
@@ -65,6 +66,7 @@ class HomePage(Page, PageUtilsMixin, TitleIconMixin):
 
     home_featured_content = StreamField([
         ('page_button', PageButtonBlock()),
+        ('random_page_button', RandomPageButtonBlock()),
         ('embedded_poll', EmbeddedPollBlock()),
         ('embedded_survey', EmbeddedSurveyBlock()),
         ('embedded_quiz', EmbeddedQuizBlock()),

@@ -1,3 +1,5 @@
+import random
+
 from django.conf import settings
 from django.forms.utils import flatatt
 from django.utils.html import format_html, format_html_join
@@ -179,3 +181,25 @@ class DownloadButtonBlock(blocks.StructBlock):
 
     class Meta:
         template = 'blocks/download_button.html'
+
+
+class RandomPageButtonBlock(blocks.StructBlock):
+    pages = blocks.StreamBlock(
+        [("page", blocks.PageChooserBlock())]
+    )
+    text = blocks.CharBlock(required=False, max_length=255)
+
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context)
+        button_pages = value.get('pages')
+        button_page = random.choice(button_pages).value if button_pages else None
+
+        if button_page and button_page.live:
+            context.update({
+                'button_page': button_page.specific,
+                'text': value.get('text') or button_page.title
+            })
+        return context
+
+    class Meta:
+        template = 'blocks/page_button.html'
