@@ -32,6 +32,7 @@ $(document).ready(function () {
           'users who already accessed it will still continue to behave as if the original redirect is in place. This is' +
           'because permanent redirects are normally stored by the user\'s browser until they delete their browser cache.' +
           'Your browser may also store the permanent redirect until you clear its cache. <br><strong>Pros:</strong> Permanent redirects' +
-          'ensure search engines forget the old page (the \'Redirect from\') and index the new page instead.');
+          'ensure search engines forget the old page (the \'Redirect from\') and index the new page instead.'
+      ).css({'color': 'red'});
     }
 });
