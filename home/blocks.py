@@ -191,10 +191,10 @@ class RandomPageButtonBlock(blocks.StructBlock):
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context)
-        button_pages = value.get('pages')
-        button_page = random.choice(button_pages).value if button_pages else None
+        live_pages = [page.value for page in value.get('pages') if page.value.live]
+        button_page = random.choice(live_pages) if live_pages else None
 
-        if button_page and button_page.live:
+        if button_page:
             context.update({
                 'button_page': button_page.specific,
                 'text': value.get('text') or button_page.title
