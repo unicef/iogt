@@ -6,7 +6,7 @@ from wagtail.contrib.modeladmin.options import ModelAdminGroup, ModelAdmin, mode
 
 from .button_helpers import XtdCommentAdminButtonHelper
 from .filters import FlaggedFilter, ModerationFilter, PublishedFilter
-from .models import CannedResponse
+from .models import CannedResponse, CommunityCommentModeration
 
 
 class XtdCommentAdmin(ModelAdmin):
@@ -24,6 +24,10 @@ class XtdCommentAdmin(ModelAdmin):
     )
     button_helper_class = XtdCommentAdminButtonHelper
     menu_order = 601
+
+    def get_permissions_for_registration(self):
+        permissions = super().get_permissions_for_registration()
+        return permissions.exclude(name='Can moderate comments')
 
     def published(self, obj):
         rv = 'No'
@@ -77,11 +81,20 @@ class CannedResponseAdmin(ModelAdmin):
     menu_order = 602
 
 
+class CommunityCommentModerationAdmin(ModelAdmin):
+    model = CommunityCommentModeration
+    menu_label = 'Community Comment Moderation'
+
+    def get_permissions_for_registration(self):
+        permissions = super().get_permissions_for_registration()
+        return permissions.filter(codename__in=['can_moderate_on_public_site', 'can_moderate_on_admin_panel'])
+
+
 class CommentsGroup(ModelAdminGroup):
     menu_label = 'Comments'
     menu_icon = 'openquote'
     menu_order = 600
-    items = (XtdCommentAdmin, CannedResponseAdmin)
+    items = (XtdCommentAdmin, CannedResponseAdmin, CommunityCommentModerationAdmin)
 
 
 modeladmin_register(CommentsGroup)

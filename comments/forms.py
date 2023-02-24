@@ -2,7 +2,7 @@ from django import forms
 from django_comments_xtd.forms import XtdCommentForm as BaseCommentForm
 from django.utils.translation import gettext as _
 
-from comments.models import CannedResponse, CommentModeration
+from comments.models import CannedResponse, CommunityCommentModeration
 
 
 class CommentForm(BaseCommentForm):
@@ -50,10 +50,10 @@ class AdminCommentForm(CommentForm):
 class CommentFilterForm(forms.Form):
     state = forms.ChoiceField(label='Moderation',
                               choices=(('ALL', 'All'),
-                                       (CommentModeration.CommentModerationState.UNMODERATED, 'Unmoderated'),
-                                       (CommentModeration.CommentModerationState.APPROVED, 'Approved'),
-                                       (CommentModeration.CommentModerationState.REJECTED, 'Rejected'),
-                                       (CommentModeration.CommentModerationState.UNSURE, 'Unsure')),
+                                       (CommunityCommentModeration.CommentModerationState.UNMODERATED, 'Unmoderated'),
+                                       (CommunityCommentModeration.CommentModerationState.APPROVED, 'Approved'),
+                                       (CommunityCommentModeration.CommentModerationState.REJECTED, 'Rejected'),
+                                       (CommunityCommentModeration.CommentModerationState.UNSURE, 'Unsure')),
                               required=False)
     from_date = forms.DateField(label='From', required=False, widget=forms.DateInput(attrs={'type': 'date'}))
     to_date = forms.DateField(label='To', required=False, widget=forms.DateInput(attrs={'type': 'date'}))

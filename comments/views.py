@@ -16,7 +16,7 @@ from django_comments_xtd.models import XtdComment
 from django.utils.translation import ugettext as _
 
 from comments.forms import AdminCommentForm, CommentFilterForm
-from comments.models import CannedResponse, CommentModeration
+from comments.models import CannedResponse, CommunityCommentModeration
 
 
 def update(request, comment_pk, action):
@@ -29,20 +29,20 @@ def update(request, comment_pk, action):
             comment.is_public = True
             comment.flags.all().delete()
             comment_moderation = comment.comment_moderation
-            comment_moderation.state = CommentModeration.CommentModerationState.APPROVED
+            comment_moderation.state = CommunityCommentModeration.CommentModerationState.APPROVED
             comment_moderations.append(comment_moderation)
         verb = 'approved'
     elif action == 'reject':
         for comment in comments:
             comment.is_public = False
             comment_moderation = comment.comment_moderation
-            comment_moderation.state = CommentModeration.CommentModerationState.REJECTED
+            comment_moderation.state = CommunityCommentModeration.CommentModerationState.REJECTED
             comment_moderations.append(comment_moderation)
         verb = 'rejected'
     elif action == 'unsure':
         for comment in comments:
             comment_moderation = comment.comment_moderation
-            comment_moderation.state = CommentModeration.CommentModerationState.UNSURE
+            comment_moderation.state = CommunityCommentModeration.CommentModerationState.UNSURE
             comment_moderations.append(comment_moderation)
         verb = 'unsure'
     elif action == 'unpublish':
@@ -66,7 +66,7 @@ def update(request, comment_pk, action):
         comment.flags.all().delete()
         verb = 'cleared'
     XtdComment.objects.bulk_update(comments, ['is_public', 'is_removed'])
-    CommentModeration.objects.bulk_update(comment_moderations, ['state'])
+    CommunityCommentModeration.objects.bulk_update(comment_moderations, ['state'])
 
     messages.success(request, _(f'The comment has been {verb} successfully!'))
 
@@ -108,7 +108,7 @@ class ProcessCannedResponseView(View):
         canned_response_id = request.POST.get('canned_responses')
         parsed_url = urlparse(referer)
 
-        if not request.user.has_perm('django_comments_xtd.can_moderate'):
+        if not request.user.has_perm('comments.can_moderate_on_public_site'):
             messages.error(request, _("You do not have the permission to perform this action."))
         else:
             query_dict = dict(parse_qsl(parsed_url.query))
@@ -131,14 +131,14 @@ class CommentsCommunityModerationView(ListView):
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        if not settings.COMMENTS_COMMUNITY_MODERATION or not request.user.has_perm('django_comments_xtd.can_moderate'):
+        if not settings.COMMENTS_COMMUNITY_MODERATION or not request.user.has_perm('comments.can_moderate_on_public_site'):
             raise PermissionDenied(
                 "You do not have permission."
             )
         return super().dispatch(request, *args, **kwargs)
 
     def _get_form(self):
-        return CommentFilterForm(self.request.GET or {'state': CommentModeration.CommentModerationState.UNMODERATED})
+        return CommentFilterForm(self.request.GET or {'state': CommunityCommentModeration.CommentModerationState.UNMODERATED})
 
     def get_queryset(self):
         queryset = super().get_queryset().filter(comment_moderation__isnull=False).order_by('-submit_date')
