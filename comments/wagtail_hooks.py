@@ -27,7 +27,7 @@ class XtdCommentAdmin(ModelAdmin):
 
     def get_permissions_for_registration(self):
         permissions = super().get_permissions_for_registration()
-        return permissions.exclude(name='Can moderate comments')
+        return permissions.exclude(codename='can_moderate')
 
     def published(self, obj):
         rv = 'No'
@@ -94,7 +94,8 @@ class CommentsGroup(ModelAdminGroup):
     menu_label = 'Comments'
     menu_icon = 'openquote'
     menu_order = 600
-    items = (XtdCommentAdmin, CannedResponseAdmin, CommunityCommentModerationAdmin)
+    items = (XtdCommentAdmin, CannedResponseAdmin)
 
 
 modeladmin_register(CommentsGroup)
+modeladmin_register(CommunityCommentModerationAdmin)
