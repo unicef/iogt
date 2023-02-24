@@ -83,7 +83,6 @@ class CannedResponseAdmin(ModelAdmin):
 
 class CommunityCommentModerationAdmin(ModelAdmin):
     model = CommunityCommentModeration
-    menu_label = 'Community Comment Moderation'
 
     def get_permissions_for_registration(self):
         permissions = super().get_permissions_for_registration()
