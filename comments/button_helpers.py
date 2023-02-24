@@ -67,6 +67,6 @@ class XtdCommentAdminButtonHelper(ButtonHelper):
         buttons = super().get_buttons_for_obj(obj, exclude='delete', *args, **kwargs)
         if self.request.user.has_perm('comments.can_moderate_on_admin_panel'):
             buttons.append(self.publish_unpublish_toggle_button(comment=obj))
-        buttons.append(self.clear_flags_button(comment=obj))
+            buttons.append(self.clear_flags_button(comment=obj))
         buttons.append(self.comment_reply_button(comment=obj))
         return buttons
