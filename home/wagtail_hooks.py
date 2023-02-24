@@ -101,6 +101,11 @@ def page_listing_buttons(page, page_perms, is_parent=False, next_url=None):
         )
 
 
+@hooks.register('construct_main_menu')
+def hide_snippets_menu_item(request, menu_items):
+  menu_items[:] = [item for item in menu_items if item.name != 'community-comment-moderation']
+
+
 class LimitedTranslatableStringsFilter(SimpleListFilter):
     title = _('limited translatable strings')
     parameter_name = 'limited'
