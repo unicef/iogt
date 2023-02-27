@@ -20,15 +20,17 @@ def _translate_node_render(self, context):
     from django.utils.safestring import SafeData
     from django.utils.safestring import mark_safe
     from django.core.cache import cache
+    from translation_manager.models import TranslationEntry
 
-    lookup = (self.filter_expression.var.literal or 
-                self.filter_expression.var._resolve_lookup(context))
+    lookup = self.filter_expression.var.literal or self.filter_expression.var._resolve_lookup(context)
 
     try:
         translation_entry = cache.get(f'{globals_.locale.language_code}_translation_map')[
             (lookup, globals_.locale.language_code)]
     except (KeyError, TypeError):
-        translation_entry = None
+        translation_entry = TranslationEntry.objects.filter(
+            language=globals_.locale.language_code, original=lookup
+        ).first()
 
     if translation_entry and translation_entry.translation:
         return translation_entry.translation

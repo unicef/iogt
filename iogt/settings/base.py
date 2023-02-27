@@ -486,7 +486,7 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=365),
 }
 
-CACHE_BACKEND = os.getenv('CACHE_BACKEND')
+CACHE_BACKEND = os.getenv('CACHE_BACKEND', 'django.core.cache.backends.dummy.DummyCache')
 if CACHE_BACKEND:
     DJANGO_REDIS_IGNORE_EXCEPTIONS = True
     SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
