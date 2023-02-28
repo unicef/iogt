@@ -143,7 +143,7 @@ All data in this dataset should be considered viewable publicly. If someone has 
 
 - Click "Settings" menu on upper right corner
 - Click on "List Roles" menu item
-- Click on "+" icon to add a new role and name it clearly, for example "Public Access to Dataset PUBLIC_Survey A_Dataset B_Dashboard Z"
+- Click on "edit" icon of "Public" role
 - Add following permissions and save
   - can read on CssTemplate
   - can read on Chart
