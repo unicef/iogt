@@ -60,6 +60,7 @@ def _translate_block_node_render(self, context, nested=False):
     from django.template import TemplateSyntaxError
     from django.template.base import render_value_in_context
     from django.utils import translation
+    from translation_manager.models import TranslationEntry
 
     if self.message_context:
         message_context = self.message_context.resolve(context)
@@ -90,7 +91,9 @@ def _translate_block_node_render(self, context, nested=False):
         translation_entry = cache.get(f'{globals_.locale.language_code}_translation_map')[
             (singular, globals_.locale.language_code)]
     except (KeyError, TypeError):
-        translation_entry = None
+        translation_entry = TranslationEntry.objects.filter(
+            language=globals_.locale.language_code, original=singular
+        ).first()
 
     if translation_entry and translation_entry.translation:
         result = translation_entry.translation
