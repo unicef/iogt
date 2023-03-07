@@ -28,3 +28,4 @@ class UserSubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserSubmission
         fields = ['id', 'user', 'submit_time', 'page_url', 'submission']
+        ref_name = "User Submission V2"
