@@ -184,3 +184,4 @@ Follow instructions [here](iogt_content_migration/README.md)
 [5]: https://wagtail.io/
 [6]: https://github.com/wagtail/wagtail/wiki/Release-schedule
 [7]: ./docs/cache.md
+[8]: ./docs/troubleshooting.md

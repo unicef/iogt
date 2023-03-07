@@ -55,6 +55,7 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
     template = None
     parent_page_types = []
     subpage_types = []
+    show_in_menus_default = True
 
     description = StreamField(
         [
