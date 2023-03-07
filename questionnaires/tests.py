@@ -12,7 +12,7 @@ from openpyxl import load_workbook
 from rest_framework import status
 from rest_framework.test import APIClient
 from wagtail.core.models import Site
-from wagtail_factories import SiteFactory
+from wagtail_factories import SiteFactory, PageFactory
 
 from home.factories import HomePageFactory
 from iogt_users.factories import (
@@ -1027,10 +1027,10 @@ class FormDataPerUserAdminTests(TestCase):
 
 class PollTest(TestCase):
     def setUp(self):
-        Site.objects.all().delete()
-        self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
-        self.home_page = self.site.root_page
-        self.poll = PollFactory(parent=self.home_page,)
+        root_page = PageFactory(parent=None)
+        home_page = HomePageFactory(parent=root_page)
+        SiteFactory(hostname='testserver', port=80, root_page=home_page)
+        self.poll = PollFactory(parent=home_page)
 
     def test_multi_select_option_results_for_checkboxes(self):
         poll_question = PollFormFieldFactory(page=self.poll, field_type='checkboxes', choices='c1|c2|c3')
@@ -1049,4 +1049,3 @@ class PollTest(TestCase):
         self.assertTrue(results[0][2])
         self.assertTrue(results[1][2])
         self.assertFalse(results[2][2])
-
