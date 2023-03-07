@@ -284,7 +284,7 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
     def get_submit_button_text(self, fields_step=None):
         submit_button_text = self.submit_button_text
         if fields_step and fields_step.paginator.num_pages != fields_step.number:
-            submit_button_text = "Next"
+            submit_button_text = _("Next")
 
         return submit_button_text
 
