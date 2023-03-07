@@ -31,7 +31,7 @@ def primary_button(title, extra_classnames='', href=None, icon_path=None, icon=N
 
 
 @register.inclusion_tag('generic_components/article_card.html', takes_context=True)
-def render_article_card(context, page, is_first_content=False, display_section_title=False, background_color=None, font_color=None):
+def render_article_card(context, page, title=None, is_first_content=False, display_section_title=False, background_color=None, font_color=None):
     theme_settings = globals_.theme_settings
 
     font_color = font_color or theme_settings.article_card_font_color
@@ -42,7 +42,8 @@ def render_article_card(context, page, is_first_content=False, display_section_t
         'is_first_content': is_first_content,
         'display_section_title': display_section_title,
         'background_color': background_color,
-        'font_color': font_color
+        'font_color': font_color,
+        'title': title or page.title
     })
     return context
 
@@ -64,7 +65,7 @@ def render_section_card(context, page, is_first_content=False, background_color=
 
 
 @register.inclusion_tag('generic_components/questionnaire_card.html', takes_context=True)
-def render_questionnaire_card(context, page, background_color=None, font_color=None):
+def render_questionnaire_card(context, page, title=None, background_color=None, font_color=None):
     theme_settings = globals_.theme_settings
 
     font_color = font_color or theme_settings.section_listing_questionnaire_font_color
@@ -73,7 +74,8 @@ def render_questionnaire_card(context, page, background_color=None, font_color=N
     context.update({
         'questionnaire': page,
         'background_color': background_color,
-        'font_color': font_color
+        'font_color': font_color,
+        'title': title or page.title
     })
     return context
 

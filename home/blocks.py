@@ -50,6 +50,7 @@ class EmbeddedQuestionnaireChooserBlock(blocks.PageChooserBlock):
 
 
 class EmbeddedQuestionnaireBlock(blocks.StructBlock):
+    title = blocks.CharBlock(required=False)
     direct_display = blocks.BooleanBlock(required=False)
 
 
@@ -63,6 +64,7 @@ class EmbeddedPollBlock(EmbeddedQuestionnaireBlock):
             context.update({
                 'direct_display': value['direct_display'],
                 'questionnaire': poll.specific,
+                'title': value['title'] or poll.specific.title,
             })
         return context
 
@@ -80,6 +82,7 @@ class EmbeddedSurveyBlock(EmbeddedQuestionnaireBlock):
             context.update({
                 'direct_display': value['direct_display'],
                 'questionnaire': survey.specific,
+                'title': value['title'] or survey.specific.title
             })
         return context
 
@@ -97,6 +100,7 @@ class EmbeddedQuizBlock(EmbeddedQuestionnaireBlock):
             context.update({
                 'direct_display': value['direct_display'],
                 'questionnaire': quiz.specific,
+                'title': value['title'] or quiz.specific.title,
             })
         return context
 
@@ -123,6 +127,7 @@ class PageButtonBlock(blocks.StructBlock):
 
 
 class ArticleBlock(blocks.StructBlock):
+    title = blocks.CharBlock(required=False)
     display_section_title = blocks.BooleanBlock(required=False)
     article = PageChooserBlock(target_model='home.Article')
 
@@ -133,6 +138,7 @@ class ArticleBlock(blocks.StructBlock):
             context.update({
                 'display_section_title': value['display_section_title'],
                 'article': article.specific,
+                'title': value['title'] or article.specific.title
             })
         return context
 

@@ -5,9 +5,11 @@ from wagtail.core.models import Site
 from wagtail_localize.operations import TranslationCreator
 
 from home.wagtail_hooks import limit_page_chooser
-from home.factories import SectionFactory, ArticleFactory, HomePageFactory, MediaFactory, LocaleFactory
+from home.factories import SectionFactory, SectionIndexFactory, ArticleFactory, HomePageFactory, MediaFactory, LocaleFactory
 from wagtail_factories import SiteFactory, PageFactory
 from bs4 import BeautifulSoup
+
+from questionnaires.factories import PollFactory, SurveyFactory, QuizFactory
 
 
 class LimitPageChooserHookTests(TestCase):
@@ -98,3 +100,99 @@ class MediaTranslationTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, f"উপরের ভিডিও দেখা না গেলে <a href=\"{self.en_article.body[0].value.url}\" download> এর পরিবর্তে এটা </a> ডাউনলোড করুন", count=1)
         self.assertContains(response, f"উপরের অডিও শুনতে না পেলে <a href=\"{self.en_article.body[1].value.url}\" download> এর পরিবর্তে এটা </a> ডাউনলোড করুন", count=1)
+
+
+class HomePageFeaturedItemTest(TestCase):
+    def setUp(self):
+        self.site = Site.objects.get(is_default_site=True)
+        self.home_page = self.site.root_page.specific
+        self.section_index_page = SectionIndexFactory(parent=self.home_page)
+        self.section = SectionFactory(parent=self.section_index_page)
+        self.article = ArticleFactory(parent=self.section)
+        self.poll = PollFactory(parent=self.section)
+        self.survey = SurveyFactory(parent=self.section)
+        self.quiz = QuizFactory(parent=self.section)
+
+    def test_home_page_featured_item_with_empty_title(self):
+        self.home_page.home_featured_content.append((
+            'article', {
+                'article': self.article,
+                'display_section_title': True,
+            }
+        ))
+        self.home_page.home_featured_content.append((
+            'embedded_poll', {
+                'poll': self.poll,
+                'direct_display': False,
+            }
+        ))
+        self.home_page.home_featured_content.append((
+            'embedded_survey', {
+                'survey': self.survey,
+                'direct_display': False,
+            }
+        ))
+        self.home_page.home_featured_content.append((
+            'embedded_quiz', {
+                'quiz': self.quiz,
+                'direct_display': False,
+            }
+        ))
+        self.home_page.save()
+
+        response = self.client.get(self.home_page.url)
+        parsed_response = BeautifulSoup(response.content)
+        article_title = parsed_response.find("p", {"class": "article-title"}).text
+        poll_title = parsed_response.find("div", {"class": "block-embedded_poll"}).find("p").findNext("p").text
+        survey_title = parsed_response.find("div", {"class": "block-embedded_survey"}).find("p").findNext("p").text
+        quiz_title = parsed_response.find("div", {"class": "block-embedded_quiz"}).find("p").findNext("p").text
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(article_title, self.home_page.home_featured_content[0].value['article'].title)
+        self.assertEqual(poll_title, self.home_page.home_featured_content[1].value['poll'].title)
+        self.assertEqual(survey_title, self.home_page.home_featured_content[2].value['survey'].title)
+        self.assertEqual(quiz_title, self.home_page.home_featured_content[3].value['quiz'].title)
+
+    def test_home_page_featured_item_with_new_title(self):
+        self.home_page.home_featured_content.append((
+            'article', {
+                'title': 'new article title',
+                'article': self.article,
+                'display_section_title': True,
+            }
+        ))
+        self.home_page.home_featured_content.append((
+            'embedded_poll', {
+                'title': 'new poll title',
+                'poll': self.poll,
+                'direct_display': False,
+            }
+        ))
+        self.home_page.home_featured_content.append((
+            'embedded_survey', {
+                'title': 'new survey title',
+                'survey': self.survey,
+                'direct_display': False,
+            }
+        ))
+        self.home_page.home_featured_content.append((
+            'embedded_quiz', {
+                'title': 'new quiz title',
+                'quiz': self.quiz,
+                'direct_display': False,
+            }
+        ))
+        self.home_page.save()
+
+        response = self.client.get(self.home_page.url)
+        parsed_response = BeautifulSoup(response.content)
+        article_title = parsed_response.find("p", {"class": "article-title"}).text
+        poll_title = parsed_response.find("div", {"class": "block-embedded_poll"}).find("p").findNext("p").text
+        survey_title = parsed_response.find("div", {"class": "block-embedded_survey"}).find("p").findNext("p").text
+        quiz_title = parsed_response.find("div", {"class": "block-embedded_quiz"}).find("p").findNext("p").text
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(article_title, "new article title")
+        self.assertEqual(poll_title, "new poll title")
+        self.assertEqual(survey_title, "new survey title")
+        self.assertEqual(quiz_title, "new quiz title")
