@@ -43,6 +43,8 @@ CALCULATED_COLUMN_EXPRESSION_MAP = {
     'url': "trim(both '\"' from ((form_data::json)->'{}')::text)",
 }
 
+ALLOWED_COLUMNS = ['id', 'form_data', 'submit_time', 'page_id', 'user_id']
+
 
 class DashboardGenerator:
     def __init__(self, user, questionnaire, superset_username, superset_password):
@@ -85,12 +87,14 @@ class DashboardGenerator:
         dataset_id = resp.get('id')
 
         dataset_detail = self.client.get_dataset(dataset_id)
-        columns = copy(dataset_detail.get('result', {}).get('columns'))
-        for column in columns:
-            column.pop('changed_on', None)
-            column.pop('created_on', None)
-            column.pop('type_generic', None)
-            column.pop('uuid', None)
+        columns = []
+        for column in copy(dataset_detail.get('result', {}).get('columns')):
+            if column.get('column_name') in ALLOWED_COLUMNS:
+                column.pop('changed_on', None)
+                column.pop('created_on', None)
+                column.pop('type_generic', None)
+                column.pop('uuid', None)
+                columns.append(column)
 
         for question in self.questions:
             calculated_column_expression = CALCULATED_COLUMN_EXPRESSION_MAP.get(question.field_type)

@@ -16,7 +16,7 @@ class Dataset:
         }
 
     def put_body(self, columns, metrics):
-        sql = f"SELECT * " \
+        sql = f"SELECT id, form_data, submit_time, page_id, user_id " \
               f"FROM {self.table_name} " \
               f"WHERE page_id = {self.page_id}"
         return {
