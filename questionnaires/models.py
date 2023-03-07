@@ -281,6 +281,13 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
 
         return image_urls
 
+    def get_submit_button_text(self, fields_step=None):
+        submit_button_text = self.submit_button_text
+        if fields_step and fields_step.paginator.num_pages != fields_step.number:
+            submit_button_text = "Next"
+
+        return submit_button_text
+
     class Meta:
         abstract = True
 
@@ -678,6 +685,9 @@ class Poll(QuestionnairePage, AbstractForm):
             'back_url': request.GET.get('back_url'),
         })
         return context
+
+    def get_submit_button_text(self, fields_step=None):
+        return self.submit_button_text
 
 
 class QuizFormField(AbstractFormField):
