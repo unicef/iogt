@@ -39,8 +39,6 @@ schema_view = get_schema_view(
         description="IoGT APIs",
     ),
     public=True,
-    authentication_classes=(SessionAuthentication,),
-    permission_classes=(IsAuthenticated,),
     patterns=api_url_patterns
 )
 
