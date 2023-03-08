@@ -7,7 +7,9 @@
             <div class="left">
                 <div class="col">
                     {% block h1 %}<h1 {% if view.header_icon %}class="icon icon-{{ view.header_icon }}"{% endif %}>{{ view.get_page_title }}<span></span></h1>{% endblock %}
-                    <h3>Changes may take up to 5 minutes to reflect on your public IoGT site.</h3>
+                    {% if cache_timeout %}
+                        <h3>Changes may take up to {{ cache_timeout }} minute(s) to reflect on your public IoGT site.</h3>
+                    {% endif %}
                 </div>
                 {% block search %}{% search_form %}{% endblock %}
             </div>

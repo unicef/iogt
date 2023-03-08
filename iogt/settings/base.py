@@ -139,6 +139,7 @@ TEMPLATES = [
                 'home.processors.show_footers',
                 'messaging.processors.add_vapid_public_key',
                 'notifications.processors.push_notification',
+                'home.processors.cache_timeout',
             ],
         },
     },
