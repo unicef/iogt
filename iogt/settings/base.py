@@ -75,7 +75,6 @@ INSTALLED_APPS = [
     'translation_manager',
     'health_check',
     'health_check.db',
-    'health_check.cache',
     'health_check.storage',
     'health_check.contrib.migrations',
     'rest_framework_simplejwt',
@@ -92,6 +91,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
 ]
+
 
 MIDDLEWARE = [
     'wagtailcache.cache.UpdateCacheMiddleware',
@@ -485,35 +485,34 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=365),
 }
-
-CACHE_BACKEND = os.getenv('CACHE_BACKEND')
-if CACHE_BACKEND:
-    DJANGO_REDIS_IGNORE_EXCEPTIONS = True
-    SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
-    WAGTAIL_CACHE_BACKEND = 'pagecache'
-    CACHE_LOCATION = os.getenv('CACHE_LOCATION', '')
-    CACHE_TIMEOUT = int(os.getenv('CACHE_TIMEOUT', '0'))
-    CACHES = {
-        'default': {
-            'BACKEND': CACHE_BACKEND,
-            'LOCATION': CACHE_LOCATION,
-            'TIMEOUT': CACHE_TIMEOUT,
-        },
-        'renditions': {
-            'BACKEND': CACHE_BACKEND,
-            'LOCATION': CACHE_LOCATION,
-            'TIMEOUT': CACHE_TIMEOUT,
-        },
-        'pagecache': {
-            'BACKEND': CACHE_BACKEND,
-            'LOCATION': CACHE_LOCATION,
-            'TIMEOUT': CACHE_TIMEOUT,
-            'KEY_PREFIX': 'pagecache',
-        },
-    }
-else:
-    WAGTAIL_CACHE = False
-    SESSION_ENGINE='django.contrib.sessions.backends.db'
+DUMMY_CACHE_BACKEND = 'django.core.cache.backends.dummy.DummyCache'
+CACHE_BACKEND = os.getenv('CACHE_BACKEND', '') or DUMMY_CACHE_BACKEND
+if CACHE_BACKEND != DUMMY_CACHE_BACKEND:
+    INSTALLED_APPS += [
+        'health_check.cache',
+    ]
+DJANGO_REDIS_IGNORE_EXCEPTIONS = True
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+CACHE_LOCATION = os.getenv('CACHE_LOCATION', '')
+CACHE_TIMEOUT = int(os.getenv('CACHE_TIMEOUT', '0'))
+CACHES = {
+    'default': {
+        'BACKEND': CACHE_BACKEND,
+        'LOCATION': CACHE_LOCATION,
+        'TIMEOUT': CACHE_TIMEOUT,
+    },
+    'renditions': {
+        'BACKEND': CACHE_BACKEND,
+        'LOCATION': CACHE_LOCATION,
+        'TIMEOUT': CACHE_TIMEOUT,
+    },
+    'pagecache': {
+        'BACKEND': CACHE_BACKEND,
+        'LOCATION': CACHE_LOCATION,
+        'TIMEOUT': CACHE_TIMEOUT,
+        'KEY_PREFIX': 'pagecache',
+    },
+}
 
 SITE_VERSION = os.getenv('SITE_VERSION', 'unknown')
 
