@@ -1030,45 +1030,17 @@ class TestQuestionnaireSubmitButtonText(TestCase):
     def setUp(self):
         site = Site.objects.get(is_default_site=True)
         self.en_home_page = site.root_page
-        self.skip_logic = json.dumps(
-            [
-                {
-                    "type": "skip_logic",
-                    "value": {
-                        "choice": "c1",
-                        "skip_logic": "next",
-                        "question": None
-                    }
-                },
-                {
-                    "type": "skip_logic",
-                    "value": {
-                        "choice": "c2",
-                        "skip_logic": "next",
-                        "question": None
-                    }
-                },
-                {
-                    "type": "skip_logic",
-                    "value": {
-                        "choice": "c3",
-                        "skip_logic": "next",
-                        "question": None
-                    }
-                }
-            ]
-        )
 
     def test_survey_submit_button_text_without_multi_step_enabled(self):
         survey = SurveyFactory(parent=self.en_home_page, multi_step=False)
-        SurveyFormFieldFactory(page=survey, field_type='checkboxes', skip_logic=self.skip_logic, default_value='c2')
+        SurveyFormFieldFactory(page=survey, field_type='singleline')
 
         self.assertEqual(survey.get_submit_button_text(), "Submit")
 
     def test_survey_submit_button_text_with_multi_step_enabled(self):
         survey = SurveyFactory(parent=self.en_home_page, multi_step=True)
-        SurveyFormFieldFactory(page=survey, field_type='checkboxes', skip_logic=self.skip_logic, default_value='c2')
-        SurveyFormFieldFactory(page=survey, field_type='dropdown', skip_logic=self.skip_logic, default_value='c2')
+        SurveyFormFieldFactory(page=survey, field_type='multiline')
+        SurveyFormFieldFactory(page=survey, field_type='multiline')
 
         # First page step
         paginator = SkipLogicPaginator(survey.get_form_fields(), {}, {})
@@ -1078,6 +1050,6 @@ class TestQuestionnaireSubmitButtonText(TestCase):
 
     def test_poll_submit_button_text(self):
         poll = PollFactory(parent=self.en_home_page)
-        PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3', default_value='c2')
+        PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3')
 
         self.assertEqual(poll.get_submit_button_text(), "Submit")
