@@ -22,4 +22,17 @@ $(document).ready(function () {
         'Giving a Group the EDIT permission will also allow them to download data for Polls, Surveys, and Quizzes ' +
         'for the Pages they can access.</h4>')
 
+    $('#id_is_permanent').parent().next('p').html('Recommendation: Do not use permanent redirects if you are setting ' +
+        'up a promotion, QR code, or similar. Use permanent redirects if you are permanently moving the location of ' +
+        'content on your site.<br><strong>Cons:</strong> If you change or even delete a permanent redirect after you create it, the ' +
+        'users who already accessed it will still continue to behave as if the original redirect is in place. This is ' +
+        'because permanent redirects are normally stored by the user\'s browser until they delete their browser cache. ' +
+        'Your browser may also store the permanent redirect until you clear its cache. <br><strong>Pros:</strong> Permanent redirects ' +
+        'ensure search engines forget the old page (the \'Redirect from\') and index the new page instead.'
+    ).css({'color': 'red'});
+
+    if (window.location.pathname.indexOf('/admin/redirects/add/') === 0){
+        $('#id_is_permanent').removeAttr('checked');
+    }
+
 });
