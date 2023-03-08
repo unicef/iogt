@@ -1,3 +1,4 @@
+import math
 from django.conf import settings
 from django.urls import reverse
 
@@ -13,3 +14,7 @@ def show_footers(request):
     if start_link:
         show_footers_ = False
     return {'show_footers': show_footers_}
+
+
+def cache_timeout(request):
+    return {'cache_timeout': math.ceil(settings.CACHE_TIMEOUT / 60)}
