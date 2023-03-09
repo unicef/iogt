@@ -378,7 +378,7 @@ class Survey(QuestionnairePage, AbstractForm):
         default=False,
         verbose_name=_("Multi-step"),
         help_text=_("Whether to display the survey questions to the user one at"
-                    " a time, instead of all at once."),
+        " a time, instead of all at once."),
     )
 
     content_panels = Page.content_panels + [
