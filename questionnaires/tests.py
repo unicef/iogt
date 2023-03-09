@@ -1070,7 +1070,7 @@ class PollTest(TestCase):
     def test_drop_down_non_blank_option_submission(self):
         poll_question = PollFormFieldFactory(page=self.poll, field_type='dropdown', choices='c1|c2')
 
-        response = self.client.post(self.poll.url, {f'{poll_question.clean_name}': 'c1'})
+        response = self.client.post(self.poll.url, {poll_question.clean_name: 'c1'})
         parsed_response = BeautifulSoup(response.content)
         results = parsed_response.select('.cust-check__title')
 
