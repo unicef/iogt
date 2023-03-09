@@ -34,6 +34,7 @@ from questionnaires.edit_handlers import FormSubmissionsPanel
 from questionnaires.forms import CustomFormBuilder, SurveyForm, QuizForm
 from questionnaires.utils import SkipLogicPaginator, FormHelper
 
+
 FORM_FIELD_CHOICES = (
     ('checkbox', _('Checkbox')),
     ('checkboxes', _('Checkboxes')),
@@ -138,8 +139,8 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
             Q(session_key=request.session.session_key) if request.user.is_anonymous else Q(user__pk=request.user.pk)
         )
         multiple_submission_check = (
-                not self.allow_multiple_submissions
-                and self.get_submission_class().objects.filter(multiple_submission_filter, page=self).exists()
+            not self.allow_multiple_submissions
+            and self.get_submission_class().objects.filter(multiple_submission_filter, page=self).exists()
         )
         anonymous_user_submission_check = request.user.is_anonymous and not self.allow_anonymous_submissions
         if multiple_submission_check or anonymous_user_submission_check:
