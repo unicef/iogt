@@ -4,6 +4,7 @@ import json
 from datetime import timedelta
 
 import pytz
+from bs4 import BeautifulSoup
 from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
@@ -1032,20 +1033,50 @@ class PollTest(TestCase):
         SiteFactory(hostname='testserver', port=80, root_page=home_page)
         self.poll = PollFactory(parent=home_page)
 
-    def test_multi_select_option_results_for_checkboxes(self):
-        poll_question = PollFormFieldFactory(page=self.poll, field_type='checkboxes', choices='c1|c2|c3')
+    def test_drop_down_defaults_to_the_blank_option(self):
+        PollFormFieldFactory(page=self.poll, field_type='dropdown', choices='c1|c2')
 
-        response = self.client.post(self.poll.url, {poll_question.clean_name: ('c1', 'c2')})
-        results = response.context_data['results']
+        response = self.client.get(self.poll.url)
+        parsed_response = BeautifulSoup(response.content)
+        default_drop_down_option = parsed_response.select_one('.quest-item select option').text
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(results), 3)
-        self.assertEqual(results[0][0], 'c1')
-        self.assertEqual(results[1][0], 'c2')
-        self.assertEqual(results[2][0], 'c3')
-        self.assertEqual(results[0][1], 100.0)
-        self.assertEqual(results[1][1], 100.0)
-        self.assertEqual(results[2][1], 0.0)
-        self.assertTrue(results[0][2])
-        self.assertTrue(results[1][2])
-        self.assertFalse(results[2][2])
+        self.assertEqual(default_drop_down_option, '')
+
+    def test_drop_down_blank_option_submission_for_required_field(self):
+        poll_question = PollFormFieldFactory(page=self.poll, field_type='dropdown', choices='c1|c2')
+
+        response = self.client.post(self.poll.url, {poll_question.clean_name: ''})
+        parsed_response = BeautifulSoup(response.content)
+        field_required_text = parsed_response.select_one('.quest-item .cust-input__error').text
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(field_required_text, 'This field is required.')
+
+    def test_drop_down_blank_option_submission_for_non_required_field(self):
+        poll_question = PollFormFieldFactory(page=self.poll, field_type='dropdown', choices='c1|c2', required=False)
+
+        response = self.client.post(self.poll.url, {poll_question.clean_name: ''})
+        parsed_response = BeautifulSoup(response.content)
+        results = parsed_response.select('.cust-check__title')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(results), 2)
+        self.assertEqual(results[0].select_one('.cust-check__title-left').text.strip(), 'c1')
+        self.assertEqual(" ".join(results[0].select_one('.cust-check__title-right').text.split()), '0 %')
+        self.assertEqual(results[1].select_one('.cust-check__title-left').text.strip(), 'c2')
+        self.assertEqual(" ".join(results[1].select_one('.cust-check__title-right').text.split()), '0 %')
+
+    def test_drop_down_non_blank_option_submission(self):
+        poll_question = PollFormFieldFactory(page=self.poll, field_type='dropdown', choices='c1|c2')
+
+        response = self.client.post(self.poll.url, {poll_question.clean_name: 'c1'})
+        parsed_response = BeautifulSoup(response.content)
+        results = parsed_response.select('.cust-check__title')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(results), 2)
+        self.assertEqual(results[0].select_one('.cust-check__title-left').text.strip(), 'c1\nYour answer')
+        self.assertEqual(" ".join(results[0].select_one('.cust-check__title-right').text.split()), '100 %')
+        self.assertEqual(results[1].select_one('.cust-check__title-left').text.strip(), 'c2')
+        self.assertEqual(" ".join(results[1].select_one('.cust-check__title-right').text.split()), '0 %')
