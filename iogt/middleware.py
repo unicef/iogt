@@ -3,7 +3,7 @@ from urllib.parse import unquote
 from django.conf import settings
 from django.conf.urls.i18n import is_language_prefix_patterns_used
 from django.core.cache import cache
-from django.http.response import HttpResponsePermanentRedirect
+from django.http.response import HttpResponsePermanentRedirect, HttpResponseNotFound
 from django.middleware.locale import LocaleMiddleware as DjangoLocaleMiddleware
 from django.utils import translation
 from django.utils.deprecation import MiddlewareMixin
@@ -87,14 +87,19 @@ class CustomRedirectMiddleware(RedirectMiddleware):
         This custom middleware is written to mitigate broken links from IOGT v1.
         See https://github.com/unicef/iogt/issues/850 for more details.
         """
+
         return_value = super().process_response(request, response)
 
         # If the page is not found by wagtail RedirectMiddleware, look for the page in V1PageURLToV2PageMap.
         # If you find the page, redirect the user to the new page.
         if return_value.status_code == 404:
             url = unquote(request.get_full_path())
-            page = V1PageURLToV2PageMap.get_page_or_none(url)
+            if url.startswith('/en/api/'):
+                return HttpResponseNotFound(
+                    f"Sorry, the requested resource was not found. Please refer to the <a href='/api/docs/'>API documentation</a>."
+                )
 
+            page = V1PageURLToV2PageMap.get_page_or_none(url)
             if page:
                 return HttpResponsePermanentRedirect(page.url)
 
