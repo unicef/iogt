@@ -13,8 +13,7 @@ from openpyxl import load_workbook
 from rest_framework import status
 from rest_framework.test import APIClient
 from wagtail.core.models import Site, Page
-from wagtail_factories import SiteFactory
-
+from wagtail_factories import SiteFactory, PageFactory
 from home.factories import HomePageFactory
 from iogt_users.factories import (
     UserFactory,
@@ -1085,8 +1084,8 @@ class PollTest(TestCase):
 
 class TestQuestionnaireSubmitButtonText(TestCase):
     def setUp(self):
-        site = Site.objects.get(is_default_site=True)
-        self.en_home_page = site.root_page
+        root_page = PageFactory(parent=None)
+        self.en_home_page = HomePageFactory(parent=root_page)
 
     def test_survey_submit_button_text_without_multi_step_enabled(self):
         survey = SurveyFactory(parent=self.en_home_page, multi_step=False)
@@ -1099,11 +1098,13 @@ class TestQuestionnaireSubmitButtonText(TestCase):
         SurveyFormFieldFactory(page=survey, field_type='multiline')
         SurveyFormFieldFactory(page=survey, field_type='multiline')
 
-        # First page step
+        # This page has 2 steps
         paginator = SkipLogicPaginator(survey.get_form_fields(), {}, {})
-        step = paginator.page(1)
+        step1 = paginator.page(1)
+        step2 = paginator.page(2)
 
-        self.assertEqual(survey.get_submit_button_text(step), "Next")
+        self.assertEqual(survey.get_submit_button_text(step1), "Next")
+        self.assertEqual(survey.get_submit_button_text(step2), "Submit")
 
     def test_poll_submit_button_text(self):
         poll = PollFactory(parent=self.en_home_page)
