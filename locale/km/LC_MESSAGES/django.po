@@ -131,6 +131,9 @@ msgstr "ជាជម្រើស"
 msgid "No limit"
 msgstr "គ្មានកំណត់"
 
+msgid "Submit"
+msgstr "ដាក់បញ្ជូន"
+
 msgid "Go to homepage"
 msgstr "ទៅទំព័រដើម"
 

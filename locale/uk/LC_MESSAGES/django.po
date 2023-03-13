@@ -131,6 +131,9 @@ msgstr "Додатково"
 msgid "No limit"
 msgstr "Без обмежень"
 
+msgid "Submit"
+msgstr "Надіслати"
+
 msgid "Go to homepage"
 msgstr "На головну"
 

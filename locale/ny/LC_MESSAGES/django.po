@@ -131,6 +131,9 @@ msgstr "Losankha"
 msgid "No limit"
 msgstr "Palibe malire"
 
+msgid "Submit"
+msgstr "Tumizani"
+
 msgid "Go to homepage"
 msgstr "Pitani pa tsamba loyamba"
 

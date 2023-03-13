@@ -36,7 +36,7 @@
                                     </div>
                                 {% endfor %}
                                 {% include 'questionnaires/tags/terms_and_conditions.html' with questionnaire=page %}
-                                {% render_submit_button fields_step page %}
+                                {% render_submit_button page %}
                             </form>
                         {% else %}
                             {% include 'questionnaires/tags/already_completed.html' %}

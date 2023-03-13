@@ -111,5 +111,6 @@ translatable_strings = [
     'Datetime must be in this YYYY-MM-DDTHH:SS format',
     'Date must be in this (YYYY-MM-DD) format',
     'Datetime must be in this YYYY-MM-DDTHH:SS format',
-    'The content you are trying to reach is not available. To see offline content click <a href="%(offline_content_index_page_url)s">here</a>'
+    'The content you are trying to reach is not available. To see offline content click <a href="%(offline_content_index_page_url)s">here</a>',
+    'Submit'
 ]
