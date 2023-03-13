@@ -131,6 +131,9 @@ msgstr "انتخابی"
 msgid "No limit"
 msgstr "کوئی حد نہیں"
 
+msgid "Submit"
+msgstr "جمع کروائیں"
+
 msgid "Go to homepage"
 msgstr "صفحۂ اول پر جائیں"
 

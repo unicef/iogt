@@ -131,6 +131,9 @@ msgstr "Ongakukhetha"
 msgid "No limit"
 msgstr "Akunamkhawulo"
 
+msgid "Submit"
+msgstr "Thumela"
+
 msgid "Go to homepage"
 msgstr "Iya ekhasini eliyisiqalo"
 

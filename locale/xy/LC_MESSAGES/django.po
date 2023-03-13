@@ -1742,3 +1742,6 @@ msgstr "([not-needed]-Turkish)"
 
 msgid "Custom permissions"
 msgstr "([needs-translation]-Custom permissions)"
+
+msgid "Submit"
+msgstr "([has-partial-translation]-Submit)"

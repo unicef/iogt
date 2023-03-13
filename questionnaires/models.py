@@ -91,7 +91,7 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
         help_text=_("Check this to allow multiple form submissions for users"),
     )
     submit_button_text = models.CharField(
-        max_length=40, null=True, default="Submit", help_text=_("Submit button text")
+        max_length=40, null=True, default=_("Submit"), help_text=_("Submit button text")
     )
 
     direct_display = models.BooleanField(default=False)
@@ -280,6 +280,13 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
         image_urls += self._get_stream_data_image_urls(self.thank_you_text.raw_data)
 
         return image_urls
+
+    def get_submit_button_text(self, fields_step=None):
+        submit_button_text = self.submit_button_text
+        if fields_step and fields_step.paginator.num_pages != fields_step.number:
+            submit_button_text = _("Next")
+
+        return submit_button_text
 
     class Meta:
         abstract = True
@@ -671,6 +678,9 @@ class Poll(QuestionnairePage, AbstractForm):
             'back_url': request.GET.get('back_url'),
         })
         return context
+
+    def get_submit_button_text(self, fields_step=None):
+        return self.submit_button_text
 
 
 class QuizFormField(AbstractFormField):

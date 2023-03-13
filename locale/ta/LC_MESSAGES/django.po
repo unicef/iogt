@@ -131,6 +131,9 @@ msgstr "விருப்பத்துக்குரியது"
 msgid "No limit"
 msgstr "வரையறை இல்லை"
 
+msgid "Submit"
+msgstr ""
+
 msgid "Go to homepage"
 msgstr "முகப்பக்கத்துக்குச் செல்லவும்"
 

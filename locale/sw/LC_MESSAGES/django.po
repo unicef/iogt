@@ -131,6 +131,9 @@ msgstr "Hiari"
 msgid "No limit"
 msgstr "Hakuna kikomo"
 
+msgid "Submit"
+msgstr "Wasilisha"
+
 msgid "Go to homepage"
 msgstr "Nenda kwa ukurasa wa kwanza"
 

@@ -131,6 +131,9 @@ msgstr "Bidashoboka"
 msgid "No limit"
 msgstr "Ntakarimbi"
 
+msgid "Submit"
+msgstr "Tanga"
+
 msgid "Go to homepage"
 msgstr "Kuja kurupapuro writanguriro"
 
