@@ -73,10 +73,15 @@ class LocaleMiddleware(DjangoLocaleMiddleware):
         request.LANGUAGE_CODE = translation.get_language()
 
     def process_response(self, request, response):
-        if request.path.startswith('/api/'):
+        """
+        The purpose of this condition is to prevent the middleware from interfering with API endpoints (/api) that
+        return a 404 error. This can happen if the middleware tries to set the language for a request to an API endpoint
+        (/api) that does not have a translated version, which can result in unexpected behavior or errors.
+        """
+        if request.path.startswith('/api') and response.status_code == 404:
             return response
 
-        return super(LocaleMiddleware, self).process_response(request, response)
+        return super().process_response(request, response)
 
 
 class AdminLocaleMiddleware(MiddlewareMixin):
@@ -100,7 +105,12 @@ class CustomRedirectMiddleware(RedirectMiddleware):
         # If you find the page, redirect the user to the new page.
         if return_value.status_code == 404:
             url = unquote(request.get_full_path())
-            if url.startswith('/api/'):
+            """
+            This is used as a safeguard to prevent broken links from causing problems in the API. If a user tries to 
+            access a URL that starts with '/api' and the page is not found, the middleware will return a custom message 
+            with a link to the API documentation instead of raising an exception or showing a default 404 error page.
+            """
+            if url.startswith('/api'):
                 return HttpResponseNotFound(
                     f"Sorry, the requested resource was not found. Please refer to the <a href='/api/docs/'>API documentation</a>."
                 )
