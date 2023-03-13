@@ -72,6 +72,12 @@ class LocaleMiddleware(DjangoLocaleMiddleware):
         translation.activate(language)
         request.LANGUAGE_CODE = translation.get_language()
 
+    def process_response(self, request, response):
+        if request.path.startswith('/api/'):
+            return response
+
+        return super(LocaleMiddleware, self).process_response(request, response)
+
 
 class AdminLocaleMiddleware(MiddlewareMixin):
     """Ensures that the admin locale doesn't change with user selection"""
@@ -94,7 +100,7 @@ class CustomRedirectMiddleware(RedirectMiddleware):
         # If you find the page, redirect the user to the new page.
         if return_value.status_code == 404:
             url = unquote(request.get_full_path())
-            if url.startswith('/en/api/'):
+            if url.startswith('/api/'):
                 return HttpResponseNotFound(
                     f"Sorry, the requested resource was not found. Please refer to the <a href='/api/docs/'>API documentation</a>."
                 )
