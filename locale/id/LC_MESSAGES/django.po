@@ -131,6 +131,9 @@ msgstr "Opsional"
 msgid "No limit"
 msgstr "Tanpa batasan"
 
+msgid "Submit"
+msgstr "Kirim"
+
 msgid "Go to homepage"
 msgstr "Pergi ke beranda"
 

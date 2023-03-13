@@ -129,6 +129,9 @@ msgstr ""
 msgid "No limit"
 msgstr ""
 
+msgid "Submit"
+msgstr ""
+
 msgid "Go to homepage"
 msgstr ""
 

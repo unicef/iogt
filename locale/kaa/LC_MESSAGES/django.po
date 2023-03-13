@@ -131,6 +131,9 @@ msgstr "Qosımsha (ma’jburiy emes)"
 msgid "No limit"
 msgstr "Sheklew joq"
 
+msgid "Submit"
+msgstr "Tapsırıw"
+
 msgid "Go to homepage"
 msgstr "Bas betke o’tiw"
 
