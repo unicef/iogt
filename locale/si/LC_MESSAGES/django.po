@@ -131,6 +131,9 @@ msgstr "විකල්ප"
 msgid "No limit"
 msgstr "සීමාවක් නැත"
 
+msgid "Submit"
+msgstr ""
+
 msgid "Go to homepage"
 msgstr "මුල් පිටුවට යන්න"
 

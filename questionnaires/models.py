@@ -91,7 +91,7 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
         help_text=_("Check this to allow multiple form submissions for users"),
     )
     submit_button_text = models.CharField(
-        max_length=40, null=True, default="Submit", help_text=_("Submit button text")
+        max_length=40, null=True, default=_("Submit"), help_text=_("Submit button text")
     )
 
     direct_display = models.BooleanField(default=False)
@@ -280,6 +280,13 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
         image_urls += self._get_stream_data_image_urls(self.thank_you_text.raw_data)
 
         return image_urls
+
+    def get_submit_button_text(self, fields_step=None):
+        submit_button_text = self.submit_button_text
+        if fields_step and fields_step.paginator.num_pages != fields_step.number:
+            submit_button_text = _("Next")
+
+        return submit_button_text
 
     class Meta:
         abstract = True
@@ -625,42 +632,30 @@ class Poll(QuestionnairePage, AbstractForm):
 
     def get_results(self):
         results = dict()
-        data_fields = [
-            (field.clean_name, field.label, field.choices)
-            for field in self.get_form_fields()
-        ]
+        field = self.get_form_fields().first()
+        name, label, choices = field.clean_name, field.label, field.choices
         submissions = self.get_submission_class().objects.filter(page=self)
+        submissions = [submission for submission in submissions if submission.get_data().get(name) != '']
 
         # Default result counts to zero so choices with no votes are included
-        if len(submissions) > 0 and self.show_results_with_no_votes:
-            for _, label, choices in data_fields:
-                results[label] = {
-                    choice: 0 for choice in choices.split('|') if len(choice) > 0
-                }
+        if self.show_results_with_no_votes:
+            results[label] = {
+                choice: 0 for choice in choices.split('|') if len(choice) > 0
+            }
 
         for submission in submissions:
             data = submission.get_data()
+            answer = data.get(name)
+            question_stats = results.get(label, {})
+            if type(answer) != list:
+                answer = [answer]
 
-            # Count results for each question
-            for name, label, _ in data_fields:
-                answer = data.get(name)
-                if answer is None:
-                    # Something wrong with data.
-                    # Probably you have changed questions
-                    # and now we are receiving answers for old questions.
-                    # Just skip them.
-                    continue
+            for choice in answer:
+                question_stats[choice] = question_stats.get(choice, 0) + 1
 
-                question_stats = results.get(label, {})
-                if type(answer) != list:
-                    answer = [answer]
+            results[label] = question_stats
 
-                for answer_ in answer:
-                    question_stats[answer_] = question_stats.get(answer_, 0) + 1
-
-                results[label] = question_stats
-
-        if self.result_as_percentage:
+        if submissions and self.result_as_percentage:
             total_submissions = len(submissions)
             for key in results:
                 for k, v in results[key].items():
@@ -678,6 +673,9 @@ class Poll(QuestionnairePage, AbstractForm):
             'back_url': request.GET.get('back_url'),
         })
         return context
+
+    def get_submit_button_text(self, fields_step=None):
+        return self.submit_button_text
 
 
 class QuizFormField(AbstractFormField):

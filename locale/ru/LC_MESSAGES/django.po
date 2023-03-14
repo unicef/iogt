@@ -129,6 +129,9 @@ msgstr "Необязательно"
 msgid "No limit"
 msgstr "Без ограничения"
 
+msgid "Submit"
+msgstr "Отправить"
+
 msgid "Go to homepage"
 msgstr "Вернуться на главную страницу"
 

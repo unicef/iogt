@@ -37,6 +37,7 @@ schema_view = get_schema_view(
         default_version='v1',
         description="IoGT APIs",
     ),
+    url=settings.BASE_URL,
     public=True,
     patterns=api_url_patterns
 )

@@ -131,6 +131,9 @@ msgstr "Ixtiyoriy"
 msgid "No limit"
 msgstr "Chegara yo‘q"
 
+msgid "Submit"
+msgstr "Topshiring"
+
 msgid "Go to homepage"
 msgstr "Bosh sahifaga boring"
 
