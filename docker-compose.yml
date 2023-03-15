@@ -30,6 +30,8 @@ services:
       SUPERSET_USERNAME: ''
       SUPERSET_PASSWORD: ''
       PUSH_NOTIFICATION: 'enable'
+      MATOMO_URL: ''
+      MATOMO_SITE_ID: ''
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./:/app/
