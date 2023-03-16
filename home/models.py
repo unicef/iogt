@@ -672,6 +672,20 @@ class SiteSettings(BaseSetting):
             "Global GA tracking code to be used"
             " to view analytics on more than one site globally")
     )
+    local_matomo_site_id = models.IntegerField(
+        verbose_name=_('Local Matomo Site ID'),
+        null=True,
+        blank=True,
+        help_text=_(
+            "Local Matomo Site ID to be used to view analytics on this site only")
+    )
+    global_matomo_site_id = models.IntegerField(
+        verbose_name=_('Global Matomo Site ID'),
+        null=True,
+        blank=True,
+        help_text=_(
+            "Global Matomo Site ID to be used to view analytics on this site only")
+    )
     social_media_link = StreamField([
         ('social_media_link', SocialMediaLinkBlock()),
     ], null=True, blank=True)
@@ -716,6 +730,13 @@ class SiteSettings(BaseSetting):
                 FieldPanel('global_ga_tracking_code'),
             ],
             heading="GA Tracking Code Settings",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('local_matomo_site_id'),
+                FieldPanel('global_matomo_site_id'),
+            ],
+            heading="Matomo Tracking ID Settings",
         ),
         MultiFieldPanel(
             [

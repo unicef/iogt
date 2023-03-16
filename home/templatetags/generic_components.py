@@ -132,3 +132,15 @@ def google_analytics(context, tracking_code=None, debug=False):
     if params:
         url += '?&' + urlencode(params)
     return url
+
+
+@register.inclusion_tag('matomo_tracking.html')
+def matomo_tracking(global_site=False):
+    if global_site:
+        url = 'https://www.internetofgoodthings.org/'
+        site_id = globals_.site_settings.global_matomo_site_id
+    else:
+        url = globals_.site.root_url
+        site_id = globals_.site_settings.local_matomo_site_id
+
+    return {'site_id': site_id, 'url': url}
