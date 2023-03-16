@@ -42,8 +42,8 @@
     {% block extra_css %}
         {# Override this in templates to add extra stylesheets #}
     {% endblock %}
-    {% matomo_tracking %}
-    {% matomo_tracking global_site=True %}
+    {% matomo_tracking settings.home.SiteSettings.local_matomo_site_id %}
+    {% matomo_tracking settings.home.SiteSettings.global_matomo_site_id %}
 </head>
 
 {% get_current_language_bidi as LANGUAGE_BIDI %}
