@@ -42,8 +42,12 @@
     {% block extra_css %}
         {# Override this in templates to add extra stylesheets #}
     {% endblock %}
-    {% matomo_tracking settings.home.SiteSettings.local_matomo_site_id %}
-    {% matomo_tracking settings.home.SiteSettings.global_matomo_site_id %}
+    {% if settings.home.SiteSettings.local_matomo_site_id %}
+        {% matomo_tracking settings.home.SiteSettings.local_matomo_site_id %}
+    {% endif %}
+    {% if settings.home.SiteSettings.global_matomo_site_id %}
+        {% matomo_tracking settings.home.SiteSettings.global_matomo_site_id %}
+    {% endif %}
 </head>
 
 {% get_current_language_bidi as LANGUAGE_BIDI %}
