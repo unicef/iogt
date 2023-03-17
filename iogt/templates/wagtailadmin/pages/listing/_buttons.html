@@ -1,0 +1,5 @@
+{% for button in buttons %}
+    {% if button.show and button.label != 'View draft' %}
+        <li>{{ button|safe }}</li>
+    {% endif %}
+{% endfor %}
