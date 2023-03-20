@@ -130,7 +130,7 @@
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  padding: 8px 12px;
+  padding: 8px 0px;
   border-bottom: 1px solid #EFEFEF;
   font-style: normal;
   font-weight: bold;
