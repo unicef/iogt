@@ -47,6 +47,7 @@ from comments.models import CommentableMixin, CannedResponse
 from .blocks import (
     MediaBlock, SocialMediaLinkBlock, SocialMediaShareButtonBlock, EmbeddedPollBlock, EmbeddedSurveyBlock,
     EmbeddedQuizBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock, ArticleBlock, DownloadButtonBlock,
+    MatomoTrackingBlock,
 )
 from .forms import SectionPageForm
 from .mixins import PageUtilsMixin, TitleIconMixin
@@ -672,19 +673,19 @@ class SiteSettings(BaseSetting):
             "Global GA tracking code to be used"
             " to view analytics on more than one site globally")
     )
-    local_matomo_site_id = models.IntegerField(
-        verbose_name=_('Local Matomo Site ID'),
+    local_matomo_tracking = StreamField(
+        [('local_matomo_tracking', MatomoTrackingBlock())],
         null=True,
         blank=True,
-        help_text=_(
-            "Local Matomo Site ID to be used to view analytics on this site only")
+        max_num=1,
+        help_text='Local Matomo tracking to be used to view analytics on this site only'
     )
-    global_matomo_site_id = models.IntegerField(
-        verbose_name=_('Global Matomo Site ID'),
+    global_matomo_tracking = StreamField(
+        [('global_matomo_tracking', MatomoTrackingBlock())],
         null=True,
         blank=True,
-        help_text=_(
-            "Global Matomo Site ID to be used to view analytics on this site only")
+        max_num=1,
+        help_text='Global Matomo tracking to be used to view analytics on more than one site globally'
     )
     social_media_link = StreamField([
         ('social_media_link', SocialMediaLinkBlock()),
@@ -733,10 +734,10 @@ class SiteSettings(BaseSetting):
         ),
         MultiFieldPanel(
             [
-                FieldPanel('local_matomo_site_id'),
-                FieldPanel('global_matomo_site_id'),
+                StreamFieldPanel('local_matomo_tracking'),
+                StreamFieldPanel('global_matomo_tracking'),
             ],
-            heading="Matomo Tracking ID Settings",
+            heading="Matomo Tracking Settings",
         ),
         MultiFieldPanel(
             [

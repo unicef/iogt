@@ -179,3 +179,21 @@ class DownloadButtonBlock(blocks.StructBlock):
 
     class Meta:
         template = 'blocks/download_button.html'
+
+
+class MatomoTrackingBlock(blocks.StructBlock):
+    url = blocks.URLBlock(help_text='Matomo URL')
+    site_id = blocks.IntegerBlock(help_text='Matomo Site ID')
+
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context)
+        context.update({
+            'url': value.get('url'),
+            'site_id': value.get('site_id'),
+        })
+
+        return context
+
+    class Meta:
+        icon = 'site'
+        template = 'blocks/matomo_tracking.html'

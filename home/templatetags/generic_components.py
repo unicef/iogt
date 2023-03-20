@@ -132,10 +132,3 @@ def google_analytics(context, tracking_code=None, debug=False):
     if params:
         url += '?&' + urlencode(params)
     return url
-
-
-@register.inclusion_tag('matomo_tracking.html')
-def matomo_tracking(site_id):
-    url = globals_.site.root_url
-
-    return {'site_id': site_id, 'url': url}

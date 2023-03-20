@@ -1,4 +1,4 @@
-{% load static wagtailuserbar home_tags sass_tags wagtailsettings_tags menu_tags generic_components i18n wagtailimages_tags %}
+{% load static wagtailcore_tags wagtailuserbar home_tags sass_tags wagtailsettings_tags menu_tags generic_components i18n wagtailimages_tags %}
 {% get_settings %}
 
 <!--  Commit Hash: {{commit_hash}} -->
@@ -42,11 +42,11 @@
     {% block extra_css %}
         {# Override this in templates to add extra stylesheets #}
     {% endblock %}
-    {% if settings.home.SiteSettings.local_matomo_site_id %}
-        {% matomo_tracking settings.home.SiteSettings.local_matomo_site_id %}
+    {% if settings.home.SiteSettings.local_matomo_tracking %}
+        {% include_block settings.home.SiteSettings.local_matomo_tracking %}
     {% endif %}
-    {% if settings.home.SiteSettings.global_matomo_site_id %}
-        {% matomo_tracking settings.home.SiteSettings.global_matomo_site_id %}
+    {% if settings.home.SiteSettings.global_matomo_tracking %}
+        {% include_block settings.home.SiteSettings.global_matomo_tracking %}
     {% endif %}
 </head>
 
