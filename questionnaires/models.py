@@ -244,7 +244,7 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
             user=None if user.is_anonymous else user,
             session_key=self.session.session_key,
         )
-    
+
     # Required by Wagtail Forms
     def get_submissions_list_view_class(self):
         from questionnaires.views import CustomSubmissionsListView
@@ -339,7 +339,6 @@ class SurveyFormField(AbstractFormField):
         FieldPanel('admin_label'),
         FieldPanel('page_break'),
     ]
-
 
     @property
     def has_skipping(self):
@@ -573,7 +572,7 @@ class Poll(QuestionnairePage, AbstractForm):
         ),
     )
     show_results_with_no_votes = models.BooleanField(
-        default = True,
+        default=True,
         help_text=_("Display options with 0 votes in results.")
     )
 
@@ -630,8 +629,9 @@ class Poll(QuestionnairePage, AbstractForm):
     def get_submission_class(self):
         return UserSubmission
 
-    def get_results(self):
+    def get_results(self, data=None):
         results = dict()
+        results_list = []
         field = self.get_form_fields().first()
         name, label, choices = field.clean_name, field.label, field.choices
         submissions = self.get_submission_class().objects.filter(page=self)
@@ -639,33 +639,38 @@ class Poll(QuestionnairePage, AbstractForm):
 
         # Default result counts to zero so choices with no votes are included
         if self.show_results_with_no_votes:
-            results[label] = {
+            results[name] = {
                 choice: 0 for choice in choices.split('|') if len(choice) > 0
             }
 
         for submission in submissions:
             data = submission.get_data()
             answer = data.get(name)
-            question_stats = results.get(label, {})
+            question_stats = results.get(name, {})
             if type(answer) != list:
                 answer = [answer]
 
             for choice in answer:
                 question_stats[choice] = question_stats.get(choice, 0) + 1
 
-            results[label] = question_stats
+            results[name] = question_stats
 
         if submissions and self.result_as_percentage:
             total_submissions = len(submissions)
             for key in results:
                 for k, v in results[key].items():
-                    results[key][k] = round(v/total_submissions, 4) * 100
+                    results[key][k] = round(v / total_submissions, 4) * 100
 
-        return results
+        for question, answers in results.items():
+            for answer, count in answers.items():
+                is_selected = data and (answer in data.get(question))
+                results_list.append((answer, round(count), is_selected))
+
+        return results_list
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
-        results = self.get_results()
+        results = self.get_results(dict(request.POST))
 
         context.update({
             'results': results,
@@ -792,7 +797,7 @@ class Quiz(QuestionnairePage, AbstractForm):
         default=False,
         verbose_name=_("Multi-step"),
         help_text="Whether to display the survey questions to the user one at"
-        " a time, instead of all at once.",
+                  " a time, instead of all at once.",
     )
 
     content_panels = Page.content_panels + [
