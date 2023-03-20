@@ -1,5 +1,7 @@
 {% for button in buttons %}
-    {% if button.show and button.label != 'View draft' %}
-        <li>{{ button|safe }}</li>
-    {% endif %}
+    {% with page.get_type as page_type %}
+        {% if button.show and page_type != 'poll' and page_type != 'quiz' and page_type != 'survey' or button.label != 'View draft' %}
+            <li>{{ button|safe }}</li>
+        {% endif %}
+    {% endwith %}
 {% endfor %}
