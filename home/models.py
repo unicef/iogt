@@ -673,20 +673,12 @@ class SiteSettings(BaseSetting):
             "Global GA tracking code to be used"
             " to view analytics on more than one site globally")
     )
-    local_matomo_tracking = StreamField(
-        [('local_matomo_tracking', MatomoTrackingBlock())],
-        null=True,
-        blank=True,
-        max_num=1,
-        help_text='Local Matomo tracking to be used to view analytics on this site only'
-    )
-    global_matomo_tracking = StreamField(
-        [('global_matomo_tracking', MatomoTrackingBlock())],
-        null=True,
-        blank=True,
-        max_num=1,
-        help_text='Global Matomo tracking to be used to view analytics on more than one site globally'
-    )
+    local_matomo_tracking = StreamField([
+        ('local_matomo_tracking', MatomoTrackingBlock())
+    ], null=True, blank=True, max_num=1)
+    global_matomo_tracking = StreamField([
+        ('global_matomo_tracking', MatomoTrackingBlock())
+    ], null=True, blank=True, max_num=1)
     social_media_link = StreamField([
         ('social_media_link', SocialMediaLinkBlock()),
     ], null=True, blank=True)
