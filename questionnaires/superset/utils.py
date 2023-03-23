@@ -16,6 +16,7 @@ from questionnaires.superset.charts import (
 from questionnaires.superset.client import SupersetClient
 from questionnaires.superset.dashboard import Dashboard
 from questionnaires.superset.datasets import Dataset
+from questionnaires.superset.constants import ALLOWED_COLUMNS
 
 CHART_TYPE_MAP = {
     'checkbox': PieChart,
@@ -42,8 +43,6 @@ CALCULATED_COLUMN_EXPRESSION_MAP = {
     'radio': "trim(both '\"' from ((form_data::json)->'{}')::text)",
     'url': "trim(both '\"' from ((form_data::json)->'{}')::text)",
 }
-
-ALLOWED_COLUMNS = ['id', 'form_data', 'submit_time', 'page_id', 'user_id']
 
 
 class DashboardGenerator:
@@ -87,14 +86,12 @@ class DashboardGenerator:
         dataset_id = resp.get('id')
 
         dataset_detail = self.client.get_dataset(dataset_id)
-        columns = []
-        for column in copy(dataset_detail.get('result', {}).get('columns')):
-            if column.get('column_name') in ALLOWED_COLUMNS:
-                column.pop('changed_on', None)
-                column.pop('created_on', None)
-                column.pop('type_generic', None)
-                column.pop('uuid', None)
-                columns.append(column)
+
+        columns = [
+            {'column_name': column.get('column_name')}
+            for column in dataset_detail.get('result', {}).get('columns')
+            if column.get('column_name') in ALLOWED_COLUMNS
+        ]
 
         for question in self.questions:
             calculated_column_expression = CALCULATED_COLUMN_EXPRESSION_MAP.get(question.field_type)

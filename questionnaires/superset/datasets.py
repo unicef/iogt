@@ -1,3 +1,6 @@
+from questionnaires.superset.constants import ALLOWED_COLUMNS
+
+
 class Dataset:
     def __init__(self, database_id, owner_id, table_name, dataset_name, page_id):
         self.database_id = database_id
@@ -7,7 +10,12 @@ class Dataset:
         self.page_id = page_id
 
     def post_body(self):
+        sql = f"SELECT {', '.join(ALLOWED_COLUMNS)} " \
+              f"FROM {self.table_name} " \
+              f"WHERE page_id = {self.page_id}"
+
         return {
+            'sql': sql,
             'database': self.database_id,
             'table_name': self.table_name,
             'owners': [
@@ -16,11 +24,7 @@ class Dataset:
         }
 
     def put_body(self, columns, metrics):
-        sql = f"SELECT id, form_data, submit_time, page_id, user_id " \
-              f"FROM {self.table_name} " \
-              f"WHERE page_id = {self.page_id}"
         return {
-            'sql': sql,
             'table_name': self.dataset_name,
             'columns': columns,
             'metrics': metrics,
