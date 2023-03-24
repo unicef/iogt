@@ -42,11 +42,14 @@
     {% block extra_css %}
         {# Override this in templates to add extra stylesheets #}
     {% endblock %}
-    {% if settings.home.SiteSettings.local_matomo_tracking %}
-        {% include_block settings.home.SiteSettings.local_matomo_tracking %}
-    {% endif %}
-    {% if settings.home.SiteSettings.global_matomo_tracking %}
-        {% include_block settings.home.SiteSettings.global_matomo_tracking %}
+
+    {% if matomo_tracking %}
+        {% if settings.home.SiteSettings.local_matomo_tracking %}
+            {% include_block settings.home.SiteSettings.local_matomo_tracking %}
+        {% endif %}
+        {% if settings.home.SiteSettings.global_matomo_tracking %}
+            {% include_block settings.home.SiteSettings.global_matomo_tracking %}
+        {% endif %}
     {% endif %}
 </head>
 

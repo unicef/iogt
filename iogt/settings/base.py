@@ -137,6 +137,7 @@ TEMPLATES = [
                 'django.template.context_processors.i18n',
                 'home.processors.commit_hash',
                 'home.processors.show_footers',
+                'home.processors.matomo_tracking',
                 'messaging.processors.add_vapid_public_key',
                 'notifications.processors.push_notification',
             ],
@@ -537,3 +538,5 @@ SUPERSET_PASSWORD = os.getenv('SUPERSET_PASSWORD')
 PUSH_NOTIFICATION = os.getenv('PUSH_NOTIFICATION', 'disable') == 'enable'
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = int(os.getenv('DATA_UPLOAD_MAX_NUMBER_FIELDS', '') or '1000')
+
+MATOMO_TRACKING = os.getenv('MATOMO_TRACKING', 'disable') == 'enable'

@@ -25,7 +25,7 @@ from wagtail.admin.edit_handlers import (
     ObjectList,
     PageChooserPanel,
     StreamFieldPanel,
-    TabbedInterface
+    TabbedInterface,
 )
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
@@ -726,13 +726,6 @@ class SiteSettings(BaseSetting):
         ),
         MultiFieldPanel(
             [
-                StreamFieldPanel('local_matomo_tracking'),
-                StreamFieldPanel('global_matomo_tracking'),
-            ],
-            heading="Matomo Tracking Settings",
-        ),
-        MultiFieldPanel(
-            [
                 MultiFieldPanel(
                     [
                         StreamFieldPanel('social_media_link'),
@@ -774,6 +767,16 @@ class SiteSettings(BaseSetting):
             heading="Opt in to Google web light",
         ),
     ]
+    if settings.MATOMO_TRACKING:
+        panels.append(
+            MultiFieldPanel(
+                [
+                    StreamFieldPanel('local_matomo_tracking'),
+                    StreamFieldPanel('global_matomo_tracking'),
+                ],
+                heading="Matomo Tracking Settings",
+            )
+        )
 
     @classmethod
     def get_for_default_site(cls):
