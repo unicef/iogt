@@ -131,6 +131,9 @@ msgstr "Opcional"
 msgid "No limit"
 msgstr "Sin límite"
 
+msgid "Submit"
+msgstr "Enviar"
+
 msgid "Go to homepage"
 msgstr "Ir al inicio"
 

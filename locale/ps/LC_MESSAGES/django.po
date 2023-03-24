@@ -131,6 +131,9 @@ msgstr "اختیاری"
 msgid "No limit"
 msgstr "هیڅ حد نشته"
 
+msgid "Submit"
+msgstr ""
+
 msgid "Go to homepage"
 msgstr "د کور پاڼې ته لاړ شئ"
 

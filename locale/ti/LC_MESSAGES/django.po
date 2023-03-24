@@ -129,6 +129,9 @@ msgstr "መማረጺ"
 msgid "No limit"
 msgstr "ደረት የብሉን"
 
+msgid "Submit"
+msgstr "ኣእቱ"
+
 msgid "Go to homepage"
 msgstr "ናብ ገዛ ገጽ ኪድ"
 
