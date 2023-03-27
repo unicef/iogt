@@ -131,6 +131,9 @@ msgstr "ঐচ্ছিক"
 msgid "No limit"
 msgstr "সীমা হীন"
 
+msgid "Submit"
+msgstr ""
+
 msgid "Go to homepage"
 msgstr "হোম পেজে ফিরে যান"
 
@@ -377,4 +380,9 @@ msgid "Unsure"
 msgstr ""
 
 msgid "No comment found."
+msgstr ""
+
+msgid ""
+"The content you are trying to reach is not available. To see offline content"
+" click <a href=\"%(offline_content_index_page_url)s\">here</a>"
 msgstr ""

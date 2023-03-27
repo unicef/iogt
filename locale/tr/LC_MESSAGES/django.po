@@ -14,164 +14,162 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "quizzes"
-msgstr "examenkuna"
+msgstr ""
 
 msgid "Log in to participate"
-msgstr "Particinpankapak yaikuy"
+msgstr ""
 
 msgid "Log in / Create account"
-msgstr "Yaikunkapak / Cuentata ruray"
+msgstr ""
 
 msgid "© The Internet of Good Things"
-msgstr "© The Internet of Good Things"
+msgstr ""
 
 msgid "Profile"
-msgstr "Perfil"
+msgstr ""
 
 msgid "Chat"
-msgstr "Mensajekunata kachay"
+msgstr ""
 
 msgid "More"
-msgstr "Ashtawan"
+msgstr ""
 
 msgid "Log in"
-msgstr "Yaikunkapak"
+msgstr ""
 
 msgid "Back"
-msgstr "Washaman"
+msgstr ""
 
 msgid "BACK"
-msgstr "WASHAMAN"
+msgstr ""
 
 msgid "Previous"
-msgstr "Washaman"
+msgstr ""
 
 msgid "Next"
-msgstr "Kati"
+msgstr ""
 
 msgid "Comments"
-msgstr "Comentariokuna"
+msgstr ""
 
 msgid "Please log in or create your account"
-msgstr "Yaikupai o cuentata ruray"
+msgstr ""
 
 msgid "Report"
-msgstr "Willay"
+msgstr ""
 
 msgid "Related Articles"
-msgstr "Temakuna ashtawan yachankapak"
+msgstr ""
 
 msgid "This comment has been reported."
-msgstr "Kay comentariotaka revisanaman kachashkami kan."
+msgstr ""
 
 msgid ""
 "It will be reviewed by the team and may be removed if it breaks our Platform"
 " Rules"
 msgstr ""
-"Kay comentarioka revisanaman kachashka kan. Kay Paginapa Leykunata mana "
-"paktachikpika kay comentario anchuchiskami kanka"
 
 msgid "articles"
-msgstr "chikan temakuna"
+msgstr ""
 
 msgid "Search the site..."
-msgstr "Kaypi mashkay..."
+msgstr ""
 
 msgid "Search results for:"
-msgstr "Kan mashkakushka temakunapi mashkay:"
+msgstr ""
 
 msgid "No search results were found for"
-msgstr "Kan mashkakushkaka mana tiyanchu"
+msgstr ""
 
 msgid "Username"
-msgstr "Kanpa usuario"
+msgstr ""
 
 msgid "Create your account"
-msgstr "Kanpa cuentata ruray"
+msgstr ""
 
 msgid "Forgot PIN"
-msgstr "PIN cunkarirkani"
+msgstr ""
 
 msgid "Cancel"
-msgstr "Cancelay"
+msgstr ""
 
 msgid "Hey, %(username)s"
-msgstr "Oye, %(username)s"
+msgstr ""
 
 msgid "Change Digital Pin"
-msgstr "Digital Pin cambiay"
+msgstr ""
 
 msgid "Personal Details"
-msgstr "Kanpa datokuna"
+msgstr ""
 
 msgid "Save changes"
-msgstr "Cambiokunataka wakichi"
+msgstr ""
 
 msgid "Reset PIN"
-msgstr "PIN kutin ruray"
+msgstr ""
 
 msgid "Your PIN has been changed successfully."
-msgstr "Kanpa PIN cambiashka kashka."
+msgstr ""
 
 msgid "I accept the Terms and Conditions."
-msgstr "Paginapa Términos y Condiciones ari nircani."
+msgstr ""
 
 msgid "You have read %(read)s out of %(total)s"
-msgstr "Kaykuna leyishka %(read)s de %(total)s"
+msgstr ""
 
 msgid "%(counter)s of %(total)s questions"
-msgstr "Tapuykuna %(counter)s de %(total)s"
+msgstr ""
 
 msgid "Select one"
-msgstr "Shuklla akllay"
+msgstr ""
 
 msgid "Optional"
-msgstr "Munashpaka akllay"
+msgstr ""
 
 msgid "No limit"
-msgstr "Killkaylla"
+msgstr ""
 
 msgid "Submit"
-msgstr "Kachana"
+msgstr ""
 
 msgid "Go to homepage"
-msgstr "Kallari paginaman ri"
+msgstr ""
 
 msgid "You have already completed this survey."
-msgstr "Tukuy tapuykunata kutichishkami kashka."
+msgstr ""
 
 msgid "Check all that apply"
-msgstr "Alli kakpika akllay"
+msgstr "Tüm başvuruyu kontrol et"
 
 msgid "Your results!"
-msgstr "Kanpa notakuna."
+msgstr ""
 
 msgid "Replay Quiz"
-msgstr "Examenta kutin ruray"
+msgstr ""
 
 msgid "Incorrect"
-msgstr "Panda"
+msgstr ""
 
 msgid "Correct"
-msgstr "Alli"
+msgstr ""
 
 msgid "Your answer"
-msgstr "Kanpa respuesta"
+msgstr ""
 
 msgid "Leave comment"
-msgstr "Shuk comentariota saki"
+msgstr ""
 
 msgid "Reply"
-msgstr "Kutichi"
+msgstr ""
 
 msgid "Page not found"
-msgstr "Página mana tiyanchu"
+msgstr ""
 
 msgid "Sorry, this page could not be found."
-msgstr "Kishpichiway, kay pagina mana tiyanchu."
+msgstr ""
 
 msgid "Internal server error"
-msgstr "Internetta mana valinchu"
+msgstr ""
 
 msgid "1 result"
 msgid_plural "%(counter)s results"
@@ -179,13 +177,13 @@ msgstr[0] ""
 msgstr[1] ""
 
 msgid "poll"
-msgstr ""
+msgstr "anket"
 
 msgid "survey"
 msgstr ""
 
 msgid "quiz"
-msgstr ""
+msgstr "bilgi yarışması"
 
 msgid "This field is required."
 msgstr ""
