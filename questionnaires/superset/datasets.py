@@ -1,4 +1,4 @@
-from questionnaires.superset.constants import ALLOWED_COLUMNS
+from questionnaires.superset import ALLOWED_COLUMNS
 
 
 class Dataset:

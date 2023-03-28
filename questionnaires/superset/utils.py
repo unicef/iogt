@@ -16,7 +16,7 @@ from questionnaires.superset.charts import (
 from questionnaires.superset.client import SupersetClient
 from questionnaires.superset.dashboard import Dashboard
 from questionnaires.superset.datasets import Dataset
-from questionnaires.superset.constants import ALLOWED_COLUMNS
+from questionnaires.superset import ALLOWED_COLUMNS
 
 CHART_TYPE_MAP = {
     'checkbox': PieChart,
