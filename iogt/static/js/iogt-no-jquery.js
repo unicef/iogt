@@ -14,12 +14,12 @@ const init = (event) => {
 
     const readContent = document.querySelectorAll('.complete');
     const commentLikeHolders = document.querySelectorAll('.like-holder');
+    const replyLinks = document.querySelectorAll('.reply-link');
     const offlineAppBtns = document.querySelectorAll('.offline-app-btn');
     const chatbotBtns = document.querySelectorAll('.chatbot-btn');
     const questionnaireSubmitBtns = document.querySelectorAll('.questionnaire-submit-btn');
     const externalLinks = document.querySelectorAll('a[href*="/external-link/?next="]');
     const elementsToToggle = [
-        '.reply-link',
         '.download-app-btn',
         '.login-create-account-btn',
         '.change-digital-pin',
@@ -44,8 +44,9 @@ const init = (event) => {
 
     const disableForOfflineAccess = (event) => {
         elementsToToggle.forEach(hide);
+        replyLinks.forEach(hide)
         readContent.forEach((el) => el.classList.remove('complete'));
-        commentLikeHolders.forEach((el) => el.attributes.style = 'display: none !important');
+        commentLikeHolders.forEach((el) => el.setAttribute('style', 'display:none !important'));
         offlineAppBtns.forEach(show);
         chatbotBtns.forEach((btn) => {
             btn.style['pointer-events'] = 'none';
@@ -64,7 +65,8 @@ const init = (event) => {
     const enableForOnlineAccess = (event) => {
         elementsToToggle.forEach(show);
         readContent.forEach((el) => el.classList.add('complete'));
-        commentLikeHolders.forEach((el) => el.attributes.style = 'display: inline-block !important');
+        commentLikeHolders.forEach((el) => el.setAttribute('style', 'display:inline-block !important'));
+        replyLinks.forEach((el) => el.setAttribute('style', 'display:inline-block'));
         offlineAppBtns.forEach(hide);
         chatbotBtns.forEach((btn) => {
             btn.style['pointer-events'] = 'all';

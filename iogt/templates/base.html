@@ -85,26 +85,21 @@
     // for JS enabled devices hide double menu
     document.querySelector('.footer-head').style.display = "none";
 </script>
-{% if jquery %}
-    <script>
-        var serviceWorkerURL = '{% url "sw.js" %}';
-        {% if request.user.is_authenticated %}
-            var isAuthenticated = true;
-        {% else %}
-            var isAuthenticated = false;
-        {% endif %}
-        {% if push_notification %}
-            var pushNotification = true;
-        {% else %}
-            var pushNotification = false;
-        {% endif %}
-    </script>
-    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
-    <script src="{% static 'js/iogt.js' %}"></script>
-    <script src="{% static 'js/sw-init.js' %}"></script>
-{% else %}
-    <script src="{% static 'js/iogt-no-jquery.js' %}"></script>
-{% endif %}
+<script>
+    var serviceWorkerURL = '{% url "sw.js" %}';
+    {% if request.user.is_authenticated %}
+        var isAuthenticated = true;
+    {% else %}
+        var isAuthenticated = false;
+    {% endif %}
+    {% if push_notification %}
+        var pushNotification = true;
+    {% else %}
+        var pushNotification = false;
+    {% endif %}
+</script>
+<script src="{% static 'js/sw-init.js' %}"></script>
+<script src="{% static 'js/iogt-no-jquery.js' %}"></script>
 <noscript>
     <style type="text/css">
         #hideOnNonJSDevice, .hideOnNonJSDevice {
