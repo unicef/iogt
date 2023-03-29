@@ -5,6 +5,12 @@ $(document).ready(function () {
         'them getting displayed.'
     ).css({'color': 'red'});
 
+    $('#id_heading').parent().siblings('p[class=help]')
+        .append('<br>' +
+            '<a href="http://127.0.0.1:8000/admin/settings/home/themesettings/" target="_blank"> ' +
+            "Click here to edit the background color for all Flat Menus in Theme Settings." +
+            '</a>')
+
     $('#tab-content:contains("Download PO file and input translations offline")')
         .find('>:first-child')
         .prepend('<p style="margin-left: 50px; color: red; font-weight: bold;">' +
