@@ -2,8 +2,8 @@ from django.test import TestCase
 from django.http import HttpRequest
 from translation_manager.models import TranslationEntry
 from wagtail.core.models import Site
+from wagtail.core.rich_text import RichText
 from wagtail_localize.operations import TranslationCreator
-
 from home.wagtail_hooks import limit_page_chooser
 from home.factories import SectionFactory, ArticleFactory, HomePageFactory, MediaFactory, LocaleFactory
 from wagtail_factories import SiteFactory, PageFactory
@@ -98,3 +98,31 @@ class MediaTranslationTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, f"উপরের ভিডিও দেখা না গেলে <a href=\"{self.en_article.body[0].value.url}\" download> এর পরিবর্তে এটা </a> ডাউনলোড করুন", count=1)
         self.assertContains(response, f"উপরের অডিও শুনতে না পেলে <a href=\"{self.en_article.body[1].value.url}\" download> এর পরিবর্তে এটা </a> ডাউনলোড করুন", count=1)
+
+
+class HomePageFeaturedItemBlockTest(TestCase):
+    def setUp(self):
+        self.site = Site.objects.get(is_default_site=True)
+        self.home_page = self.site.root_page.specific
+
+    def test_home_page_featured_item_heading_block(self):
+        self.home_page.home_featured_content.append(('heading', 'Test Heading'))
+        self.home_page.save()
+
+        response = self.client.get(self.home_page.url)
+        parsed_response = BeautifulSoup(response.content)
+        heading_block_text = parsed_response.find("div", {"class": "block-heading"}).text.strip()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(heading_block_text, 'Test Heading')
+
+    def test_home_page_featured_item_paragraph_block(self):
+        self.home_page.home_featured_content.append(('paragraph', RichText('<p>Test Paragraph</p>')))
+        self.home_page.save()
+
+        response = self.client.get(self.home_page.url)
+        parsed_response = BeautifulSoup(response.content)
+        paragraph_block_text = parsed_response.find("div", {"class": "block-paragraph"}).text.strip()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(paragraph_block_text, 'Test Paragraph')
