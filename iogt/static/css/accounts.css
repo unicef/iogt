@@ -96,7 +96,12 @@ form input[type="checkbox"] {
     line-height: 14px;
 }
 
+.fieldWrapper {
+    position: relative;
+}
+
 .fieldWrapper input[type=checkbox] {
-    transform: translateY(3px);
+    position: absolute;
+    top: 6px;
     margin-left: 5px;
 }
