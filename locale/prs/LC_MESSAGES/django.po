@@ -230,18 +230,6 @@ msgstr ""
 msgid "Continue to external site"
 msgstr "ادامه به ویب سایت بیرونی"
 
-msgid "4-digit PIN"
-msgstr "پین کود  (PIN) چهار رقمی"
-
-msgid "Old 4-digit PIN"
-msgstr "پین کود چهارقمی قدیمی"
-
-msgid "New 4-digit PIN"
-msgstr "پین کود چهاررقمی جدید"
-
-msgid "Confirm new 4-digit PIN"
-msgstr "پـین کود 4 رقمی جدید را تأیید کنید"
-
 msgid "Log out"
 msgstr "خروج"
 
@@ -315,9 +303,6 @@ msgstr "بی¬نام"
 msgid "Report this comment?"
 msgstr "آیا این کامنت گزارش داده شود؟"
 
-msgid "Display name"
-msgstr "نمایش نام"
-
 msgid "Reported by %(comment_report_count)s user"
 msgid_plural "Reported by %(comment_report_count)s users"
 msgstr[0] "گزارش داده شده توسط %(comment_report_count)s کاربر"
@@ -356,6 +341,29 @@ msgid ""
 msgstr ""
 "اگر صدای فوق را شنیده نمی توانید، به جای آن می توانید %(start_link)s آن را "
 "دانلود کنید %(end_link)s."
+
+msgid "Choose a username that you will use to login to IoGT"
+msgstr ""
+
+msgid "Enter a 4-digit PIN or a longer password"
+msgstr ""
+
+msgid "Repeat your 4-digit PIN or longer password"
+msgstr ""
+
+msgid "Enter your old 4-digit PIN or a longer password"
+msgstr ""
+
+msgid "Enter your new 4-digit PIN or a longer password"
+msgstr ""
+
+msgid "Repeat your new 4-digit PIN or longer password"
+msgstr ""
+
+msgid ""
+"Choose a display name that will be shown publicly if you post to the IoGT "
+"site, e.g, next to comments you post"
+msgstr ""
 
 msgid "Please complete the questions marked as required to continue"
 msgstr ""

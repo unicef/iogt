@@ -231,18 +231,6 @@ msgstr ""
 msgid "Continue to external site"
 msgstr "Перейти до зовнішнього сайту"
 
-msgid "4-digit PIN"
-msgstr "4-значний PIN-код"
-
-msgid "Old 4-digit PIN"
-msgstr "Старий 4-значний PIN-код"
-
-msgid "New 4-digit PIN"
-msgstr "Новий 4-значний PIN-код"
-
-msgid "Confirm new 4-digit PIN"
-msgstr "Підтвердьте новий 4-значний PIN-код"
-
 msgid "Log out"
 msgstr "Вийти"
 
@@ -317,9 +305,6 @@ msgstr "Анонім"
 msgid "Report this comment?"
 msgstr "Поскаржитися на цей коментар?"
 
-msgid "Display name"
-msgstr "Відображуване ім’я"
-
 msgid "Reported by %(comment_report_count)s user"
 msgid_plural "Reported by %(comment_report_count)s users"
 msgstr[0] "Поскаржився користувач (%(comment_report_count)s)"
@@ -358,6 +343,29 @@ msgid ""
 msgstr ""
 "Якщо ви не можете прослухати наведене вище аудіо, його можна "
 "%(start_link)sзавантажити%(end_link)s."
+
+msgid "Choose a username that you will use to login to IoGT"
+msgstr ""
+
+msgid "Enter a 4-digit PIN or a longer password"
+msgstr ""
+
+msgid "Repeat your 4-digit PIN or longer password"
+msgstr ""
+
+msgid "Enter your old 4-digit PIN or a longer password"
+msgstr ""
+
+msgid "Enter your new 4-digit PIN or a longer password"
+msgstr ""
+
+msgid "Repeat your new 4-digit PIN or longer password"
+msgstr ""
+
+msgid ""
+"Choose a display name that will be shown publicly if you post to the IoGT "
+"site, e.g, next to comments you post"
+msgstr ""
 
 msgid "Please complete the questions marked as required to continue"
 msgstr ""

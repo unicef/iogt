@@ -12,7 +12,7 @@
         <div class="profile-form__inputs">
             {% for field in form %}
                 <div class="fieldWrapper">
-                    {{ field.label }}
+                    {% translate field.label %}
                     {{ field }}
                 </div>
                 <br>
