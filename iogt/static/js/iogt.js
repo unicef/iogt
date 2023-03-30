@@ -120,7 +120,7 @@ $(document).ready(() => {
     window.navigator.onLine ? enableForOnlineAccess() : disableForOfflineAccess();
 
     // for JS enabled devices hide double menu
-    $('#menu').hide();
+    $('.footer-head').hide();
 });
 
 const download = pageId => {

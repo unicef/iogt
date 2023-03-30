@@ -32,6 +32,11 @@ class SupersetClient:
         headers.update(self._get_csrf_token())
         return headers
 
+    def _get_params(self):
+        return {
+            'override_columns': 'true'
+        }
+
     def _get_validated_response(self, response):
         if response.ok:
             return response.json()
@@ -82,7 +87,7 @@ class SupersetClient:
         return self._api_caller(request)
 
     def update_dataset(self, id, data):
-        request = Request(method='PUT', url=f'{self.dataset_url}{id}', headers=self._get_headers(), json=data)
+        request = Request(method='PUT', url=f'{self.dataset_url}{id}', params=self._get_params(), headers=self._get_headers(), json=data)
         return self._api_caller(request)
 
     def create_chart(self, data):

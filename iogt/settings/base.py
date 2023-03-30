@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'wagtail.admin',
     'wagtail.core',
     'wagtail.contrib.modeladmin',
+    'wagtailcache',
     'wagtailmenus',
     'wagtailmedia',
     'wagtailmarkdown',
@@ -93,6 +94,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'wagtailcache.cache.UpdateCacheMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -108,6 +110,7 @@ MIDDLEWARE = [
     'external_links.middleware.RewriteExternalLinksMiddleware',
     'iogt.middleware.CacheControlMiddleware',
     'iogt.middleware.GlobalDataMiddleware',
+    'wagtailcache.cache.FetchFromCacheMiddleware',
 ]
 
 # Prevent Wagtail's built in menu from showing in Admin > Settings
@@ -308,6 +311,7 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('tg', _('Tajik')),
     ('ta', _('Tamil')),
     ('ti', _('Tigrinya')),
+    ('tr', _('Turkish')),
     ('uk', _('Ukraine')),
     ('ur', _('Urdu')),
     ('uz', _('Uzbek')),
@@ -473,9 +477,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
@@ -485,24 +486,34 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=365),
 }
 
-SESSION_ENGINE='django.contrib.sessions.backends.db'
-
 CACHE_BACKEND = os.getenv('CACHE_BACKEND')
 if CACHE_BACKEND:
+    DJANGO_REDIS_IGNORE_EXCEPTIONS = True
+    SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+    WAGTAIL_CACHE_BACKEND = 'pagecache'
     CACHE_LOCATION = os.getenv('CACHE_LOCATION', '')
     CACHE_TIMEOUT = int(os.getenv('CACHE_TIMEOUT', '0'))
     CACHES = {
-        "default": {
-            "BACKEND": CACHE_BACKEND,
-            "LOCATION": CACHE_LOCATION,
-            "TIMEOUT": CACHE_TIMEOUT,
+        'default': {
+            'BACKEND': CACHE_BACKEND,
+            'LOCATION': CACHE_LOCATION,
+            'TIMEOUT': CACHE_TIMEOUT,
         },
         'renditions': {
             'BACKEND': CACHE_BACKEND,
             'LOCATION': CACHE_LOCATION,
             'TIMEOUT': CACHE_TIMEOUT,
         },
+        'pagecache': {
+            'BACKEND': CACHE_BACKEND,
+            'LOCATION': CACHE_LOCATION,
+            'TIMEOUT': CACHE_TIMEOUT,
+            'KEY_PREFIX': 'pagecache',
+        },
     }
+else:
+    WAGTAIL_CACHE = False
+    SESSION_ENGINE='django.contrib.sessions.backends.db'
 
 SITE_VERSION = os.getenv('SITE_VERSION', 'unknown')
 
@@ -524,3 +535,5 @@ SUPERSET_USERNAME = os.getenv('SUPERSET_USERNAME')
 SUPERSET_PASSWORD = os.getenv('SUPERSET_PASSWORD')
 
 PUSH_NOTIFICATION = os.getenv('PUSH_NOTIFICATION', 'disable') == 'enable'
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = int(os.getenv('DATA_UPLOAD_MAX_NUMBER_FIELDS', '') or '1000')

@@ -30,29 +30,26 @@
                 {% endfor %}
                 {% include 'questionnaires/tags/terms_and_conditions.html' with questionnaire=questionnaire %}
                 <div class="{{ questionnaire.get_type }}-page__btns">
-                    {% render_submit_button fields_step questionnaire %}
+                    {% render_submit_button questionnaire %}
                 </div>
             </form>
         {% else %}
             {% include 'questionnaires/tags/already_completed.html' with page=questionnaire %}
             {% if questionnaire.show_results %}
-                {% for question, answers in results.items %}
-                    {% snake_case question as current_answer %}
-                    {% for answer, count in answers.items %}
-                        <div class="cust-check cust-check--white polls-widget__item">
-                            <div class="cust-check__title">
-                                <div class="cust-check__title-left">
-                                    <span>{{ answer }}</span>
-                                </div>
-                                <div class="cust-check__title-right">
-                                    <span class="cust-check__percent">{{ count|floatformat:"0" }}
-                                        {% if result_as_percentage %}%{% endif %}</span>
-                                </div>
-                                <div class="cust-check__percent-item"
-                                     style="width: {{ count |floatformat:"0" }}%"></div>
+                 {% for answer, count, is_selected in results %}
+                    <div class="cust-check cust-check--white polls-widget__item">
+                        <div class="cust-check__title">
+                            <div class="cust-check__title-left">
+                                <span>{{ answer }}</span>
                             </div>
+                            <div class="cust-check__title-right">
+                                <span class="cust-check__percent">{{ count }}
+                                    {% if result_as_percentage %}%{% endif %}</span>
+                            </div>
+                            <div class="cust-check__percent-item"
+                                 style="width: {{ count }}%"></div>
                         </div>
-                    {% endfor %}
+                    </div>
                 {% endfor %}
             {% endif %}
         {% endif %}
