@@ -12,7 +12,6 @@ from django.core.cache import cache
 from django.db import models
 from django.utils.deconstruct import deconstructible
 from django.utils.encoding import force_str
-from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from iogt.settings.base import WAGTAIL_CONTENT_LANGUAGES
@@ -687,29 +686,6 @@ class SiteSettings(BaseSetting):
                                             blank=True,
                                             on_delete=models.SET_NULL)
     opt_in_to_google_web_light = models.BooleanField(default=False)
-    WIDTH_CHOICES = (
-        (360, 'Default - Images resized to maximum width of 360px, a balance for smartphone and featurephone screen sizes (width-360)'),
-        (430, 'Larger - Images resized to maximum width of 430px, designed for most smartphones (width-430)'),
-        (533, 'Larger - Images resized to maximum width of 533px, experimental (width-533)'),
-        (800, 'Larger - Images resized to maximum width of 800px, experimental (width-800)'),
-        (1080, 'Larger - Images resized to maximum width of 1080px, experimental (width-1080)'),
-        (1600, 'Larger - Images resized to maximum width of 1600px, experimental (width-1600)'),
-    )
-    image_maximum_width = models.IntegerField(
-        choices=WIDTH_CHOICES,
-        default=360,
-        help_text=mark_safe("""
-        When you upload large images, IoGT resizes the original images to smaller pixel dimensions to reduce file size. 
-        This results in less network usage and less space used on a device when content is downloaded for offline viewing. 
-        By default, IoGT resizes images to 360px width maximum. This is a balanced image size for feature and smart phones 
-        while keeping file size low, but also reduces image quality. If your users have affordable or free internet access,
-        you might consider increasing the resize width so images look better on computers. If you have an zero-rating agreement 
-        with an MNO you should consider what impact increasing the file size of your images will have. More information is available in the 
-        <a href='https://cms-manual.iogt.site/en/sections/setting-up-your-iogt-platform/customizing-iogt-to-your-context/image-resize-width/', target='_blank'> 
-            IoGT CMS Manual
-        </a>.
-        """)
-    )
 
     panels = [
         ImageChooserPanel('logo'),
@@ -782,12 +758,6 @@ class SiteSettings(BaseSetting):
                 FieldPanel('opt_in_to_google_web_light'),
             ],
             heading="Opt in to Google web light",
-        ),
-        MultiFieldPanel(
-            [
-                FieldPanel('image_maximum_width'),
-            ],
-            heading="Default image resize width",
         ),
     ]
 

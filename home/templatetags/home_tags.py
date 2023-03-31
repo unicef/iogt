@@ -3,6 +3,7 @@ import django.utils.translation as translation
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 from django.urls import translate_url, reverse, resolve, Resolver404
+from django.conf import settings
 from wagtail.core.models import Locale, Site, Page
 
 from home.models import SectionIndexPage, Section, Article, FooterIndexPage, PageLinkPage, LocaleDetail, HomePage, SiteSettings
@@ -147,8 +148,7 @@ def render_redirect_from_with_help_text(field):
 
 @register.inclusion_tag('home/tags/image.html', takes_context=True)
 def render_image(context, image, half_width=False, img_class=None):
-    site = SiteSettings.get_for_default_site()
-    width = site.image_maximum_width if site else 360
+    width = settings.IMAGE_MAXIMUM_WIDTH
     if half_width:
         width //= 2
 

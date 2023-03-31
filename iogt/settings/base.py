@@ -537,3 +537,6 @@ SUPERSET_PASSWORD = os.getenv('SUPERSET_PASSWORD')
 PUSH_NOTIFICATION = os.getenv('PUSH_NOTIFICATION', 'disable') == 'enable'
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = int(os.getenv('DATA_UPLOAD_MAX_NUMBER_FIELDS', '') or '1000')
+
+# Width size options are 360, 430, 533, 800, 1080, 1600
+IMAGE_MAXIMUM_WIDTH = int(os.getenv('IMAGE_MAXIMUM_WIDTH', '') or '360')
