@@ -76,7 +76,7 @@ class CustomUserChangeForm(UserChangeForm):
 
 class WagtailAdminUserCreateForm(WagtailUserCreationForm):
     email = forms.EmailField(required=False, label='Email')
-    display_name = forms.CharField(required=False, label='Display Name')
+    moyapay_username = forms.CharField(required=False, label='MoyaPay Username')
     first_name = forms.CharField(required=False, label='First Name')
     last_name = forms.CharField(required=False, label='Last Name')
     terms_accepted = forms.BooleanField(label=_('I accept the Terms and Conditions.'))
@@ -96,6 +96,7 @@ class WagtailAdminUserCreateForm(WagtailUserCreationForm):
 
 class WagtailAdminUserEditForm(WagtailUserEditForm):
     email = forms.EmailField(required=False, label='Email')
+    moyapay_username = forms.CharField(required=False, label='MoyaPay Username')
     display_name = forms.CharField(required=False, label='Display Name')
     first_name = forms.CharField(required=False, label='First Name')
     last_name = forms.CharField(required=False, label='Last Name')
