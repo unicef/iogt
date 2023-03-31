@@ -2,7 +2,7 @@ from selenium_tests.base import BaseSeleniumTests
 from wagtail.core.models import Site
 from iogt_users.factories import AdminUserFactory
 from home.factories import SectionFactory
-from questionnaires.factories import PollFactory
+from questionnaires.factories import PollFactory, PollFormFieldFactory
 from selenium_tests.pages import QuestionnairePage, SectionPage
 import home.models as models
 
@@ -16,6 +16,7 @@ class SectionComponentSeleniumTests(BaseSeleniumTests):
 
     def test_featured(self):
         poll01 = PollFactory(parent=self.home, owner=self.user)
+        PollFormFieldFactory(page=poll01, field_type='checkboxes', choices='c1|c2|c3', default_value='c2')
         models.FeaturedContent.objects.create(source = self.section01, content = poll01)
         self.visit_page(self.section01)
         section_page = SectionPage(self.selenium)

@@ -9,7 +9,7 @@ from wagtail.contrib.forms.utils import get_forms_for_user
 from questionnaires.filters import QuestionnaireFilter, UserSubmissionFilter
 from questionnaires.models import Survey, Poll, Quiz, UserSubmission
 from questionnaires.paginators import IoGTPagination
-from questionnaires.serializers import (
+from questionnaires.api.v1.serializers import (
     QuestionnairePageSerializer,
     SurveyPageDetailSerializer,
     PollPageDetailSerializer,

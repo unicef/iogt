@@ -1,0 +1,374 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-07-31 09:38+0000\n"
+"PO-Revision-Date: 2021-07-31 09:38+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "quizzes"
+msgstr ""
+
+msgid "Log in to participate"
+msgstr ""
+
+msgid "Log in / Create account"
+msgstr ""
+
+msgid "© The Internet of Good Things"
+msgstr ""
+
+msgid "Profile"
+msgstr ""
+
+msgid "Chat"
+msgstr ""
+
+msgid "More"
+msgstr ""
+
+msgid "Log in"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+msgid "BACK"
+msgstr ""
+
+msgid "Previous"
+msgstr ""
+
+msgid "Next"
+msgstr ""
+
+msgid "Comments"
+msgstr ""
+
+msgid "Please log in or create your account"
+msgstr ""
+
+msgid "Report"
+msgstr ""
+
+msgid "Related Articles"
+msgstr ""
+
+msgid "This comment has been reported."
+msgstr ""
+
+msgid ""
+"It will be reviewed by the team and may be removed if it breaks our Platform"
+" Rules"
+msgstr ""
+
+msgid "articles"
+msgstr ""
+
+msgid "Search the site..."
+msgstr ""
+
+msgid "Search results for:"
+msgstr ""
+
+msgid "No search results were found for"
+msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "Create your account"
+msgstr ""
+
+msgid "Forgot PIN"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Hey, %(username)s"
+msgstr ""
+
+msgid "Change Digital Pin"
+msgstr ""
+
+msgid "Personal Details"
+msgstr ""
+
+msgid "Save changes"
+msgstr ""
+
+msgid "Reset PIN"
+msgstr ""
+
+msgid "Your PIN has been changed successfully."
+msgstr ""
+
+msgid "I accept the Terms and Conditions."
+msgstr ""
+
+msgid "You have read %(read)s out of %(total)s"
+msgstr ""
+
+msgid "%(counter)s of %(total)s questions"
+msgstr ""
+
+msgid "Select one"
+msgstr ""
+
+msgid "Optional"
+msgstr ""
+
+msgid "No limit"
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
+msgid "Go to homepage"
+msgstr ""
+
+msgid "You have already completed this survey."
+msgstr ""
+
+msgid "Check all that apply"
+msgstr "Tüm başvuruyu kontrol et"
+
+msgid "Your results!"
+msgstr ""
+
+msgid "Replay Quiz"
+msgstr ""
+
+msgid "Incorrect"
+msgstr ""
+
+msgid "Correct"
+msgstr ""
+
+msgid "Your answer"
+msgstr ""
+
+msgid "Leave comment"
+msgstr ""
+
+msgid "Reply"
+msgstr ""
+
+msgid "Page not found"
+msgstr ""
+
+msgid "Sorry, this page could not be found."
+msgstr ""
+
+msgid "Internal server error"
+msgstr ""
+
+msgid "1 result"
+msgid_plural "%(counter)s results"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "poll"
+msgstr "anket"
+
+msgid "survey"
+msgstr ""
+
+msgid "quiz"
+msgstr "bilgi yarışması"
+
+msgid "This field is required."
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "Remove this comment?"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "This comment has been removed."
+msgstr ""
+
+msgid "moderator"
+msgstr ""
+
+msgid "sections"
+msgstr ""
+
+msgid "Check if applies"
+msgstr ""
+
+msgid "New comments have been disabled for this page."
+msgstr ""
+
+msgid "Correct answer"
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid ""
+"You are leaving the <b>Internet of Good Things</b> to visit an external "
+"website and standard data charges by your network provider might apply"
+msgstr ""
+
+msgid "Continue to external site"
+msgstr ""
+
+msgid "4-digit PIN"
+msgstr ""
+
+msgid "Old 4-digit PIN"
+msgstr ""
+
+msgid "New 4-digit PIN"
+msgstr ""
+
+msgid "Confirm new 4-digit PIN"
+msgstr ""
+
+msgid "Log out"
+msgstr ""
+
+msgid "section"
+msgstr ""
+
+msgid "article"
+msgstr ""
+
+msgid "Remember me"
+msgstr ""
+
+msgid "You have signed out."
+msgstr ""
+
+msgid ""
+"Enter a valid username. This value may contain only letters, numbers, and "
+"@/./+/-/_ characters."
+msgstr ""
+
+msgid "You must type the same password each time."
+msgstr ""
+
+msgid "This password is too short. It must contain at least 4 characters."
+msgstr ""
+
+msgid "Please type your current password."
+msgstr ""
+
+msgid "Password successfully changed."
+msgstr ""
+
+msgid "Enter a valid date/time."
+msgstr ""
+
+msgid "Enter a valid date."
+msgstr ""
+
+msgid "Enter a valid URL."
+msgstr ""
+
+msgid "Enter a valid email address."
+msgstr ""
+
+msgid "Enter a valid integer."
+msgstr ""
+
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+msgid "Your comment"
+msgstr ""
+
+msgid "Are you sure you want to log out?"
+msgstr ""
+
+msgid "Your browser does not support video playback."
+msgstr ""
+
+msgid "Your browser does not support audio playback."
+msgstr ""
+
+msgid "Don't display my username next to my comment"
+msgstr ""
+
+msgid "Anonymous"
+msgstr ""
+
+msgid "Report this comment?"
+msgstr ""
+
+msgid "Display name"
+msgstr ""
+
+msgid "Reported by %(comment_report_count)s user"
+msgid_plural "Reported by %(comment_report_count)s users"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid ""
+"Sorry, %(page_title)s is not available in %(language)s. If you want to keep "
+"browsing in %(language)s you can click below to return to the homepage."
+msgstr ""
+
+msgid "Username not available."
+msgstr ""
+
+msgid "Display name not available."
+msgstr ""
+
+msgid "You have already completed this quiz."
+msgstr ""
+
+msgid "You have already completed this poll."
+msgstr ""
+
+msgid ""
+"If you cannot view the above video, you can instead %(start_link)sdownload "
+"it%(end_link)s."
+msgstr ""
+
+msgid ""
+"If you cannot listen to the above audio, you can instead "
+"%(start_link)sdownload it%(end_link)s."
+msgstr ""
+
+msgid "Please complete the questions marked as required to continue"
+msgstr ""
+
+msgid "Need internet access to visit external site."
+msgstr ""
+
+msgid "Comment Moderation"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Apply"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Unsure"
+msgstr ""
+
+msgid "No comment found."
+msgstr ""
+
+msgid ""
+"The content you are trying to reach is not available. To see offline content"
+" click <a href=\"%(offline_content_index_page_url)s\">here</a>"
+msgstr ""

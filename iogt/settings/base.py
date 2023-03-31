@@ -311,6 +311,7 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('tg', _('Tajik')),
     ('ta', _('Tamil')),
     ('ti', _('Tigrinya')),
+    ('tr', _('Turkish')),
     ('uk', _('Ukraine')),
     ('ur', _('Urdu')),
     ('uz', _('Uzbek')),
@@ -534,3 +535,5 @@ SUPERSET_USERNAME = os.getenv('SUPERSET_USERNAME')
 SUPERSET_PASSWORD = os.getenv('SUPERSET_PASSWORD')
 
 PUSH_NOTIFICATION = os.getenv('PUSH_NOTIFICATION', 'disable') == 'enable'
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = int(os.getenv('DATA_UPLOAD_MAX_NUMBER_FIELDS', '') or '1000')

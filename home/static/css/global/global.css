@@ -130,7 +130,7 @@
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  padding: 8px 12px;
+  padding: 8px 0px;
   border-bottom: 1px solid #EFEFEF;
   font-style: normal;
   font-weight: bold;
@@ -172,7 +172,7 @@
 
 @media only screen and (min-width: 360px) {
   .sub-section {
-    padding: 8px 20px;
+    padding: 8px 0px;
     font-size: 16px;
     line-height: 22px;
   }
@@ -1482,7 +1482,7 @@ body.rtl {
 
 .rtl .form-holder .js-search-btn img {
   padding-left: 0;
-  padding-right: 10px;
+  padding-right: 15px;
   border-left-width: 0;
   border-right: 1px solid #EFEFEF;
   margin-left: 0;

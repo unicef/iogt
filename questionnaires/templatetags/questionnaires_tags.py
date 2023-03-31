@@ -67,8 +67,8 @@ def field_counter(form, forloop, form_length, fields_step, questionnaire):
 
 
 @register.inclusion_tag('questionnaires/tags/submit_button.html')
-def render_submit_button(fields_step, page):
-    return {"fields_step": fields_step, "page": page}
+def render_submit_button(page, fields_step=None):
+    return {'submit_button_text': page.get_submit_button_text(fields_step)}
 
 
 @register.inclusion_tag('questionnaires/tags/action_url.html')
@@ -138,17 +138,6 @@ def render_questionnaire_form(context, page, background_color=None, font_color=N
 @register.filter
 def get_item(dictionary, key):
     return dictionary.get(key)
-
-
-@register.filter
-def get_value_from_querydict(querydict, key):
-    dictionary = dict(querydict)
-    return dictionary.get(key)[0]
-
-
-@register.simple_tag
-def snake_case(text):
-    return text.lower().replace(" ", "_").replace("__", "_").replace('?', '')
 
 
 @register.simple_tag
