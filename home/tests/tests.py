@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.http import HttpRequest
 from translation_manager.models import TranslationEntry
 from wagtail.core.models import Site
@@ -119,11 +119,38 @@ class ImageResizeTest(TestCase):
         self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
         self.assertEqual(rendered_image.get('src'), image_rendition.url)
 
+
     def test_default_image_half_maximum_width_180(self):
         response = self.client.get(self.section.url)
         parsed_response = BeautifulSoup(response.content)
         rendered_image = parsed_response.find("div", {"class": "article-card"}).find("img")
         image_rendition = self.article.lead_image.get_rendition('width-180')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(rendered_image.get('alt'), image_rendition.alt)
+        self.assertEqual(int(rendered_image.get('width')), image_rendition.width)
+        self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
+        self.assertEqual(rendered_image.get('src'), image_rendition.url)
+
+    @override_settings(IMAGE_MAXIMUM_WIDTH=800)
+    def test_custom_image_maximum_width_800(self):
+        response = self.client.get(self.article.url)
+        parsed_response = BeautifulSoup(response.content)
+        rendered_image = parsed_response.find("img", {"class": "article__lead-img-featured"})
+        image_rendition = self.article.lead_image.get_rendition('width-800')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(rendered_image.get('alt'), image_rendition.alt)
+        self.assertEqual(int(rendered_image.get('width')), image_rendition.width)
+        self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
+        self.assertEqual(rendered_image.get('src'), image_rendition.url)
+
+    @override_settings(IMAGE_MAXIMUM_WIDTH=800)
+    def test_custom_image_half_maximum_width_400(self):
+        response = self.client.get(self.section.url)
+        parsed_response = BeautifulSoup(response.content)
+        rendered_image = parsed_response.find("div", {"class": "article-card"}).find("img")
+        image_rendition = self.article.lead_image.get_rendition('width-400')
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(rendered_image.get('alt'), image_rendition.alt)
