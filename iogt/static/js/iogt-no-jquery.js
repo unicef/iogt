@@ -88,6 +88,9 @@ const init = (event) => {
 
     window.navigator.onLine ? enableForOnlineAccess() : disableForOfflineAccess();
     hideFooterMenu();
+
+    // for JS enabled devices hide double menu
+    document.querySelector('.footer-head').style.display = "none";
 };
 
 const download = pageId => {
