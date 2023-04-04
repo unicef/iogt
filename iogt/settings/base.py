@@ -289,6 +289,7 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('ny', _('Chichewa')), # previously 'ch'
     ('prs', _('Dari')),
     ('en', _('English')),
+    ('fa', _('Farsi')),
     ('fr', _('French')),
     ('hi', _('Hindi')),
     ('id', _('Indonesian')),
