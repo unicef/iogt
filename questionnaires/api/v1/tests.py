@@ -12,7 +12,7 @@ from django.utils import timezone
 from openpyxl import load_workbook
 from rest_framework import status
 from rest_framework.test import APIClient
-from wagtail.core.models import Site, Page
+from wagtail.core.models import Site
 from wagtail_factories import SiteFactory, PageFactory
 from home.factories import HomePageFactory
 from iogt_users.factories import (
@@ -741,7 +741,10 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         response = self.client.get(reverse(self.url, kwargs={'pk': poll.id}))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, [])
+        self.assertEqual(response.data['count'], 0)
+        self.assertIsNone(response.data['next'])
+        self.assertIsNone(response.data['previous'])
+        self.assertEqual(response.data['results'], [])
 
 
 class FormDataPerUserAdminTests(TestCase):
@@ -1041,7 +1044,7 @@ class FormDataPerUserAdminTests(TestCase):
 
 class PollTest(TestCase):
     def setUp(self):
-        root_page = Page.objects.filter(depth=1).first()
+        root_page = PageFactory(parent=None)
         home_page = HomePageFactory(parent=root_page)
         SiteFactory(hostname='testserver', port=80, root_page=home_page)
         self.poll = PollFactory(parent=home_page)
