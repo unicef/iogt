@@ -13,3 +13,9 @@ def show_footers(request):
     if start_link:
         show_footers_ = False
     return {'show_footers': show_footers_}
+
+
+def matomo_tracking(request):
+    return {
+        'matomo_tracking': settings.MATOMO_TRACKING,
+    }

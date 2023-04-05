@@ -42,7 +42,7 @@
     {% block extra_css %}
         {# Override this in templates to add extra stylesheets #}
     {% endblock %}
-    {% tracking_code %}
+    {% if matomo_tracking %} {% tracking_code %} {% endif %}
 </head>
 
 {% get_current_language_bidi as LANGUAGE_BIDI %}
