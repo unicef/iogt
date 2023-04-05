@@ -8,3 +8,4 @@ coverage
 selenium==4.7.2
 factory-boy==3.2.*
 wagtail-factories==4.0.*
+django-matomo

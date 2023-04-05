@@ -25,7 +25,7 @@ from wagtail.admin.edit_handlers import (
     ObjectList,
     PageChooserPanel,
     StreamFieldPanel,
-    TabbedInterface,
+    TabbedInterface
 )
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
@@ -47,7 +47,6 @@ from comments.models import CommentableMixin, CannedResponse
 from .blocks import (
     MediaBlock, SocialMediaLinkBlock, SocialMediaShareButtonBlock, EmbeddedPollBlock, EmbeddedSurveyBlock,
     EmbeddedQuizBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock, ArticleBlock, DownloadButtonBlock,
-    MatomoTrackingBlock,
 )
 from .forms import SectionPageForm
 from .mixins import PageUtilsMixin, TitleIconMixin
@@ -673,12 +672,6 @@ class SiteSettings(BaseSetting):
             "Global GA tracking code to be used"
             " to view analytics on more than one site globally")
     )
-    local_matomo_tracking = StreamField([
-        ('local_matomo_tracking', MatomoTrackingBlock())
-    ], null=True, blank=True, max_num=1)
-    global_matomo_tracking = StreamField([
-        ('global_matomo_tracking', MatomoTrackingBlock())
-    ], null=True, blank=True, max_num=1)
     social_media_link = StreamField([
         ('social_media_link', SocialMediaLinkBlock()),
     ], null=True, blank=True)
@@ -767,16 +760,6 @@ class SiteSettings(BaseSetting):
             heading="Opt in to Google web light",
         ),
     ]
-    if settings.MATOMO_TRACKING:
-        panels.append(
-            MultiFieldPanel(
-                [
-                    StreamFieldPanel('local_matomo_tracking'),
-                    StreamFieldPanel('global_matomo_tracking'),
-                ],
-                heading="Matomo Tracking Settings",
-            )
-        )
 
     @classmethod
     def get_for_default_site(cls):

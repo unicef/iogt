@@ -179,12 +179,3 @@ class DownloadButtonBlock(blocks.StructBlock):
 
     class Meta:
         template = 'blocks/download_button.html'
-
-
-class MatomoTrackingBlock(blocks.StructBlock):
-    url = blocks.URLBlock(help_text='Matomo URL')
-    site_id = blocks.IntegerBlock(help_text='Matomo Site ID')
-
-    class Meta:
-        icon = 'site'
-        template = 'blocks/matomo_tracking.html'
