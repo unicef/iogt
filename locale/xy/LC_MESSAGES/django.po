@@ -1764,3 +1764,6 @@ msgstr ""
 
 msgid "Set Password"
 msgstr "([not-needed]-Set Password)"
+
+msgid "Farsi"
+msgstr "([not-needed]-Farsi)"
