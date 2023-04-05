@@ -1,100 +1,96 @@
-$(document).ready(() => {
-    const externalLinkOverlay = $('#external-link-overlay')
+const ready = (callback) => {
+    if (document.readyState != "loading") callback();
+    else document.addEventListener("DOMContentLoaded", callback);
+};
 
-    externalLinkOverlay.click(() => {
-        externalLinkOverlay.css('display', 'none');
-    });
+const init = (event) => {
+    const show = (el) => el.style.display = 'block';
+    const hide = (el) => el.style.display = 'none';
+
+    const externalLinkOverlay = document.querySelector('#external-link-overlay');
+    externalLinkOverlay.addEventListener('click', (event) => hide(event.target));
 
     const submitWhenOffline = gettext('You cannot submit when offline');
 
-    const searchFormHolder = $('.search-form-holder');
-    const readContent = $('.complete')
-    const commentForm = $('.comments__form');
-    const commentLikeHolders = $('.like-holder');
-    const reportComment = $('.report-comment');
-    const commentReplyLinks = $('.reply-link');
-    const downloadAppBtns = $('.download-app-btn');
-    const offlineAppBtns = $('.offline-app-btn');
-    const chatbotBtns = $('.chatbot-btn');
-    const questionnaireSubmitBtns = $('.questionnaire-submit-btn');
-    const progressHolder = $('.progress-holder');
-    const changeDigitalPinBtn = $('.change-digital-pin');
-    const loginCreateAccountBtns = $('.login-create-account-btn');
-    const logoutBtn = $('.logout-btn');
-    const externalLinks = $('a[href*="/external-link/?next="]')
+    const readContent = document.querySelectorAll('.complete');
+    const commentLikeHolders = document.querySelectorAll('.like-holder');
+    const replyLinks = document.querySelectorAll('.reply-link');
+    const offlineAppBtns = document.querySelectorAll('.offline-app-btn');
+    const chatbotBtns = document.querySelectorAll('.chatbot-btn');
+    const questionnaireSubmitBtns = document.querySelectorAll('.questionnaire-submit-btn');
+    const externalLinks = document.querySelectorAll('a[href*="/external-link/?next="]');
+    const elementsToToggle = [
+        '.download-app-btn',
+        '.login-create-account-btn',
+        '.change-digital-pin',
+        '.comments__form',
+        '.logout-btn',
+        '.progress-holder',
+        '.report-comment',
+        '.search-form-holder',
+    ].flatMap(
+        (selector) => Array.from(document.querySelectorAll(selector))
+    );
+    console.log(elementsToToggle);
 
-    const disableForOfflineAccess = () => {
-        searchFormHolder.hide();
-        readContent.removeClass('complete');
-        commentForm.hide();
-        commentLikeHolders.attr('style', 'display: none !important');
-        reportComment.hide();
-        commentReplyLinks.hide();
-        downloadAppBtns.hide();
-        offlineAppBtns.show();
-        chatbotBtns.each((index, btn) => {
-            btn = $(btn);
-            btn.css('pointer-events', 'none');
-            btn.css('background', '#808080');
-        });
-        questionnaireSubmitBtns.each((index, btn) => {
-            btn = $(btn);
-            btn.css('pointer-events', 'none');
-            const span = btn.find('span')
-            span.html(`${span.html()} (${submitWhenOffline})`);
-        });
-        progressHolder.hide();
-        changeDigitalPinBtn.hide();
-        loginCreateAccountBtns.hide();
-        logoutBtn.hide();
-        externalLinks.each((index, link) => {
-            link = $(link);
-            link.click(e => {
-                e.preventDefault();
-                externalLinkOverlay.css('display', 'block');
-            });
-        });
+    const blockExternalLinks = (event) => {
+        event.preventDefault();
+        show(externalLinkOverlay);
     };
-
-    const enableForOnlineAccess = () => {
-        searchFormHolder.show();
-        readContent.addClass('complete');
-        commentForm.show();
-        commentLikeHolders.attr('style', 'display: inline-block !important');
-        reportComment.show();
-        commentReplyLinks.show();
-        downloadAppBtns.show();
-        offlineAppBtns.hide();
-        chatbotBtns.each((index, btn) => {
-            btn = $(btn);
-            btn.css('pointer-events', 'all');
-            btn.css('background', '#F7F7F9');
-        });
-        questionnaireSubmitBtns.each((index, btn) => {
-            btn = $(btn);
-            btn.css('pointer-events', 'all');
-            const span = btn.find('span')
-            span.html(`${span.html().split(`(${submitWhenOffline})`)[0]}`);
-        });
-        progressHolder.show();
-        changeDigitalPinBtn.show();
-        loginCreateAccountBtns.show();
-        logoutBtn.show();
-        externalLinks.show();
-        externalLinks.each((index, link) => {
-            link = $(link);
-            link.off('click');
-        });
-    };
-
-    $(window).on('offline', () => disableForOfflineAccess());
-    $(window).on('online', () => enableForOnlineAccess());
-
-    window.navigator.onLine ? enableForOnlineAccess() : disableForOfflineAccess();
 
     // for JS enabled devices hide double menu
-    $('.footer-head').hide();
-});
+    const hideFooterMenu = () => {
+        hide(document.querySelector('.footer-head'));
+    };
+
+    const disableForOfflineAccess = (event) => {
+        elementsToToggle.forEach(hide);
+        replyLinks.forEach(hide)
+        readContent.forEach((el) => el.classList.remove('complete'));
+        commentLikeHolders.forEach((el) => el.setAttribute('style', 'display:none !important'));
+        offlineAppBtns.forEach(show);
+        chatbotBtns.forEach((btn) => {
+            btn.style['pointer-events'] = 'none';
+            btn.style.background = '#808080';
+        });
+        questionnaireSubmitBtns.forEach((btn) => {
+            btn.style['pointer-events'] = 'none';
+            const span = btn.querySelector('span');
+            span.innerHTML = `${span.innerHTML} (${submitWhenOffline})`;
+        });
+        externalLinks.forEach((link) => {
+            link.addEventListener('click', blockExternalLinks);
+        });
+    };
+
+    const enableForOnlineAccess = (event) => {
+        elementsToToggle.forEach(show);
+        readContent.forEach((el) => el.classList.add('complete'));
+        commentLikeHolders.forEach((el) => el.setAttribute('style', 'display:inline-block !important'));
+        replyLinks.forEach((el) => el.setAttribute('style', 'display:inline-block'));
+        offlineAppBtns.forEach(hide);
+        chatbotBtns.forEach((btn) => {
+            btn.style['pointer-events'] = 'all';
+            btn.style.background = '#F7F7F9';
+        });
+        questionnaireSubmitBtns.forEach((btn) => {
+            btn.style['pointer-events'] = 'all';
+            const span = btn.querySelector('span');
+            span.innerHTML = span.innerHTML.split(`(${submitWhenOffline})`)[0];
+        });
+        externalLinks.forEach((link) => {
+            show(link);
+            link.removeEventListener('click', blockExternalLinks);
+        });
+    };
+
+    window.addEventListener('offline', disableForOfflineAccess);
+    window.addEventListener('online',  enableForOnlineAccess);
+
+    window.navigator.onLine ? enableForOnlineAccess() : disableForOfflineAccess();
+    hideFooterMenu();
+
+};
 
 const download = pageId => {
     fetch(`/page-tree/${pageId}/`)
@@ -104,7 +100,7 @@ const download = pageId => {
                 .then(cache => {
                     cache.addAll(urls);
                 });
-        })
+        });
 };
 
 const getItem = (key, defaultValue) => {
@@ -139,7 +135,7 @@ const urlB64ToUint8Array = base64String => {
     const outputData = outputArray.map((output, index) => rawData.charCodeAt(index));
 
     return outputData;
-}
+};
 
 const subscribe = registration => {
     registration.pushManager.getSubscription()
@@ -200,3 +196,5 @@ const unSubscribePushNotifications = () => {
         });
     }
 };
+
+ready(init);
