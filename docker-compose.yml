@@ -31,7 +31,7 @@ services:
       SUPERSET_PASSWORD: ''
       PUSH_NOTIFICATION: 'enable'
       JQUERY: 'enable'
-      IMAGE_SIZE_PRESET: '750'
+      IMAGE_SIZE_PRESET: ''
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./:/app/
