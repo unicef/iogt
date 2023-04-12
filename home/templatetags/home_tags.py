@@ -148,7 +148,7 @@ def render_redirect_from_with_help_text(field):
 
 @register.inclusion_tag('home/tags/image.html', takes_context=True)
 def render_image(context, image, half_width=False, img_class=None):
-    width = settings.IMAGE_MAXIMUM_WIDTH
+    width = settings.IMAGE_SIZE_PRESET
     if half_width:
         width //= 2
 

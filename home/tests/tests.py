@@ -107,7 +107,7 @@ class ImageResizeTest(TestCase):
         self.section = SectionFactory(parent=self.site_settings.site.root_page)
         self.article = ArticleFactory(parent=self.section)
 
-    def test_default_image_maximum_width_360(self):
+    def test_default_image_within_preset(self):
         response = self.client.get(self.article.url)
         parsed_response = BeautifulSoup(response.content)
         rendered_image = parsed_response.find("img", {"class": "article__lead-img-featured"})
@@ -120,7 +120,7 @@ class ImageResizeTest(TestCase):
         self.assertEqual(rendered_image.get('src'), image_rendition.url)
 
 
-    def test_default_image_half_maximum_width_180(self):
+    def test_half_default_image_within_preset(self):
         response = self.client.get(self.section.url)
         parsed_response = BeautifulSoup(response.content)
         rendered_image = parsed_response.find("div", {"class": "article-card"}).find("img")
@@ -132,12 +132,12 @@ class ImageResizeTest(TestCase):
         self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
         self.assertEqual(rendered_image.get('src'), image_rendition.url)
 
-    @override_settings(IMAGE_MAXIMUM_WIDTH=800)
-    def test_custom_image_maximum_width_800(self):
+    @override_settings(IMAGE_SIZE_PRESET=750)
+    def test_custom_image_within_preset(self):
         response = self.client.get(self.article.url)
         parsed_response = BeautifulSoup(response.content)
         rendered_image = parsed_response.find("img", {"class": "article__lead-img-featured"})
-        image_rendition = self.article.lead_image.get_rendition('width-800')
+        image_rendition = self.article.lead_image.get_rendition('width-750')
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(rendered_image.get('alt'), image_rendition.alt)
@@ -145,12 +145,12 @@ class ImageResizeTest(TestCase):
         self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
         self.assertEqual(rendered_image.get('src'), image_rendition.url)
 
-    @override_settings(IMAGE_MAXIMUM_WIDTH=800)
-    def test_custom_image_half_maximum_width_400(self):
+    @override_settings(IMAGE_SIZE_PRESET=750)
+    def test_half_custom_image_within_preset(self):
         response = self.client.get(self.section.url)
         parsed_response = BeautifulSoup(response.content)
         rendered_image = parsed_response.find("div", {"class": "article-card"}).find("img")
-        image_rendition = self.article.lead_image.get_rendition('width-400')
+        image_rendition = self.article.lead_image.get_rendition('width-375')
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(rendered_image.get('alt'), image_rendition.alt)
