@@ -1750,14 +1750,6 @@ msgid "Repeat your 4-digit PIN or longer password"
 msgstr ""
 "([has-partial-translation]-Repeat your 4-digit PIN or longer password)"
 
-msgid "Enter your old 4-digit PIN or a longer password"
-msgstr ""
-"([has-partial-translation]-Enter your old 4-digit PIN or a longer password)"
-
-msgid "Enter your new 4-digit PIN or a longer password"
-msgstr ""
-"([has-partial-translation]-Enter your new 4-digit PIN or a longer password)"
-
 msgid "Repeat your new 4-digit PIN or longer password"
 msgstr ""
 "([has-partial-translation]-Repeat your new 4-digit PIN or longer password)"
@@ -1767,3 +1759,11 @@ msgstr "([not-needed]-Set Password)"
 
 msgid "Farsi"
 msgstr "([not-needed]-Farsi)"
+
+msgid "Enter your old 4-digit PIN or longer password"
+msgstr ""
+"([has-partial-translation]-Enter your old 4-digit PIN or longer password)"
+
+msgid "Enter your new 4-digit PIN or longer password"
+msgstr ""
+"([has-partial-translation]-Enter your new 4-digit PIN or longer password)"

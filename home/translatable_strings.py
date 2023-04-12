@@ -113,7 +113,7 @@ translatable_strings = [
     'Choose a display name that will be shown publicly if you post to the IoGT site, e.g, next to comments you post',
     'Enter a 4-digit PIN or a longer password',
     'Repeat your 4-digit PIN or longer password',
-    'Enter your old 4-digit PIN or a longer password',
-    'Enter your new 4-digit PIN or a longer password',
-    'Repeat your new 4-digit PIN or longer password'
+    'Repeat your new 4-digit PIN or longer password',
+    'Enter your old 4-digit PIN or longer password',
+    'Enter your new 4-digit PIN or longer password'
 ]

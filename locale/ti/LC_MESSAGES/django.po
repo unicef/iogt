@@ -338,10 +338,10 @@ msgstr ""
 msgid "Repeat your 4-digit PIN or longer password"
 msgstr ""
 
-msgid "Enter your old 4-digit PIN or a longer password"
+msgid "Enter your old 4-digit PIN or longer password"
 msgstr ""
 
-msgid "Enter your new 4-digit PIN or a longer password"
+msgid "Enter your new 4-digit PIN or longer password"
 msgstr ""
 
 msgid "Repeat your new 4-digit PIN or longer password"
