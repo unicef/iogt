@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.http import HttpRequest
+from django.urls import reverse
 from translation_manager.models import TranslationEntry
 from wagtail.core.models import Site
 from wagtail_localize.operations import TranslationCreator
@@ -8,6 +9,8 @@ from home.wagtail_hooks import limit_page_chooser
 from home.factories import SectionFactory, ArticleFactory, HomePageFactory, MediaFactory, LocaleFactory
 from wagtail_factories import SiteFactory, PageFactory
 from bs4 import BeautifulSoup
+
+from iogt_users.factories import AdminUserFactory
 
 
 class LimitPageChooserHookTests(TestCase):
@@ -98,3 +101,23 @@ class MediaTranslationTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, f"উপরের ভিডিও দেখা না গেলে <a href=\"{self.en_article.body[0].value.url}\" download> এর পরিবর্তে এটা </a> ডাউনলোড করুন", count=1)
         self.assertContains(response, f"উপরের অডিও শুনতে না পেলে <a href=\"{self.en_article.body[1].value.url}\" download> এর পরিবর্তে এটা </a> ডাউনলোড করুন", count=1)
+
+
+class SiteTest(TestCase):
+    def setUp(self):
+        self.site01 = SiteFactory(hostname='localhost', port=8000, is_default_site=True)
+        self.site02 = SiteFactory(hostname='testserver', port=80)
+        admin_user = AdminUserFactory()
+        self.client.force_login(admin_user)
+
+    def test_hide_delete_button_on_default_site(self):
+        response = self.client.get(reverse('wagtailsites:edit', args=(self.site01.pk,)))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'Delete site')
+
+    def test_display_delete_button_on_non_default_site(self):
+        response = self.client.get(reverse('wagtailsites:edit', args=(self.site02.pk,)))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Delete site')
