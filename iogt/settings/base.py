@@ -83,6 +83,7 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_yasg',
     'webpush',
+    'matomo',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -137,6 +138,7 @@ TEMPLATES = [
                 'django.template.context_processors.i18n',
                 'home.processors.commit_hash',
                 'home.processors.show_footers',
+                'home.processors.matomo_tracking',
                 'messaging.processors.add_vapid_public_key',
                 'notifications.processors.push_notification',
                 'home.processors.jquery',
@@ -540,6 +542,12 @@ PUSH_NOTIFICATION = os.getenv('PUSH_NOTIFICATION', 'disable') == 'enable'
 JQUERY = os.getenv('JQUERY', 'enable') == 'enable'
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = int(os.getenv('DATA_UPLOAD_MAX_NUMBER_FIELDS', '') or '1000')
+
+# Matomo tracking server and site information
+
+MATOMO_URL = os.getenv('MATOMO_URL', '')
+MATOMO_SITE_ID = int(os.getenv('MATOMO_SITE_ID', '') or '0')
+MATOMO_TRACKING = os.getenv('MATOMO_TRACKING', 'disable') == 'enable'
 
 # Width size options are 360, 750
 IMAGE_SIZE_PRESET = int(os.getenv('IMAGE_SIZE_PRESET', '') or '360')
