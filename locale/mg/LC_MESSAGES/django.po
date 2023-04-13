@@ -131,6 +131,9 @@ msgstr "Tsy voatery"
 msgid "No limit"
 msgstr "Tsy misy fetra"
 
+msgid "Submit"
+msgstr "Alefa"
+
 msgid "Go to homepage"
 msgstr "Miverina any amin’ny pejy fandraisana"
 

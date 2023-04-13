@@ -131,6 +131,9 @@ msgstr "اختياري"
 msgid "No limit"
 msgstr "غير محدود"
 
+msgid "Submit"
+msgstr "إرسال"
+
 msgid "Go to homepage"
 msgstr "اذهب إلى الصفحة الرئيسية"
 

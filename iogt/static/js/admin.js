@@ -21,5 +21,31 @@ $(document).ready(function () {
     $('#id_page_permissions-ADD').parent().prepend('<h4 style="color: #FF0000; font-weight: bold; margin: 5px;">' +
         'Giving a Group the EDIT permission will also allow them to download data for Polls, Surveys, and Quizzes ' +
         'for the Pages they can access.</h4>')
-
 });
+
+function validateFileUpload(fileInput, file_size_threshold) {
+    if (!fileInput.files || !fileInput.files[0])
+        return true;
+    else {
+        var file = fileInput.files[0];
+        if (file.size >= file_size_threshold)
+            return confirm('The file you have uploaded exceeds ' + Math.round(file_size_threshold / 1024 / 1024) + 'mb. ' +
+                'This will prohibit access to the file in a low bandwidth setting, may restrict feature phone access, or ' +
+                'violate your mobile network operator agreements. To reduce file size, try resizing and compressing your ' +
+                'file. Do you want to continue?');
+    }
+
+    return true;
+}
+
+function validateFreeBasicsFileUpload(fileInput, file_size_threshold) {
+    if (!fileInput.files || !fileInput.files[0])
+        return true;
+    else {
+        var file = fileInput.files[0];
+        if (file.size >= file_size_threshold)
+            alert(`File size exceeds facebook free basics limit (${file_size_threshold / 1024}KB).`);
+    }
+
+    return true;
+}

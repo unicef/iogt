@@ -130,6 +130,9 @@ msgstr "اختیاری"
 msgid "No limit"
 msgstr "بدون محدودیت"
 
+msgid "Submit"
+msgstr ""
+
 msgid "Go to homepage"
 msgstr "به صفحه اصلی بروید"
 
