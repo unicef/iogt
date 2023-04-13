@@ -1,11 +1,14 @@
 from typing import List
 from urllib.parse import urlparse
+
+from django.urls import reverse
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.relative_locator import locate_with
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import WebDriverException
+from wagtail.tests.utils import WagtailPageTests
 
 def safe_click(driver, button):
     try:
@@ -372,3 +375,22 @@ class FooterItemElement():
 
 class NavbarElement(FooterElement):
     locator = (By.CSS_SELECTOR, '.footer-main .top-level')
+
+
+class WagtailAdminPage(object):
+    submit_locator = (By.CSS_SELECTOR, "button[type='submit']")
+
+    def __init__(self, driver: WebDriver) -> None:
+        super().__init__()
+        self.driver = driver
+
+    def select_skip_logic(self, skip_logic):
+        selected_skip_logic = Select(self.driver.find_element(By.ID, skip_logic))
+        selected_skip_logic.select_by_value("question")
+
+    def select_skip_logic_question(self, question, selection):
+        select_question = Select(self.driver.find_element(By.ID, question))
+        select_question.select_by_value(selection)
+
+    def submit_response(self):
+        safe_click(self.driver, self.driver.find_elements(*self.submit_locator)[1])
