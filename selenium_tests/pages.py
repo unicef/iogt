@@ -1,14 +1,12 @@
 from typing import List
 from urllib.parse import urlparse
 
-from django.urls import reverse
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.relative_locator import locate_with
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import WebDriverException
-from wagtail.tests.utils import WagtailPageTests
 
 def safe_click(driver, button):
     try:
