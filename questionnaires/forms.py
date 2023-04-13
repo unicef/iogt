@@ -71,7 +71,6 @@ class SurveyForm(WagtailAdminPageForm):
     def clean(self):
         cleaned_data = super().clean()
 
-        should_be_multi_step = False
         question_data = {}
         for form in self.formsets[self.form_field_name]:
             form.is_valid()
@@ -81,7 +80,7 @@ class SurveyForm(WagtailAdminPageForm):
             self._clean_errors = {}
             if form.is_valid():
                 data = form.cleaned_data
-                if self.data.get('multi_step', 'off') == 'off' and data['page_break']:
+                if not cleaned_data['multi_step'] and data['page_break']:
                     self.add_form_field_error(
                         'page_break',
                         _('Page break is only allowed with multi-step enabled.'),
@@ -109,10 +108,6 @@ class SurveyForm(WagtailAdminPageForm):
                         )
 
                 for j, logic in enumerate(data['skip_logic']):
-                    if (logic.value['skip_logic'] in [SkipState.QUESTION, SkipState.END]
-                            and self.data.get('multi_step', 'off') == 'off'):
-                        should_be_multi_step = True
-
                     if not logic.value['choice']:
                         self.add_stream_field_error(
                             j,
@@ -151,7 +146,7 @@ class SurveyForm(WagtailAdminPageForm):
                 if self.clean_errors:
                     form._errors = self.clean_errors
 
-        if should_be_multi_step:
+        if self.should_be_multi_step():
             self.add_error("multi_step", "Multi-step must be enabled with skip logic.")
 
         return cleaned_data
@@ -206,6 +201,24 @@ class SurveyForm(WagtailAdminPageForm):
             self._clean_errors[field] = list()
         self._clean_errors[field].append(message)
 
+    def should_be_multi_step(self):
+        cleaned_data = super().clean()
+        question_data = {}
+
+        for form in self.formsets[self.form_field_name]:
+            form.is_valid()
+            question_data[form.cleaned_data['ORDER']] = form
+
+        for i, form in question_data.items():
+            if form.is_valid():
+                data = form.cleaned_data
+                for logic in data['skip_logic']:
+                    if (logic.value['skip_logic'] in [SkipState.QUESTION, SkipState.END]
+                            and not cleaned_data['multi_step']):
+                        return True
+
+        return False
+
 
 class QuizForm(WagtailAdminPageForm):
     form_field_name = 'quiz_form_fields'
@@ -223,7 +236,7 @@ class QuizForm(WagtailAdminPageForm):
             self._clean_errors = {}
             if form.is_valid():
                 data = form.cleaned_data
-                if self.data.get('multi_step', 'off') == 'off' and data['page_break']:
+                if not cleaned_data['multi_step'] and data['page_break']:
                     self.add_form_field_error(
                         'page_break',
                         _('Page break is only allowed with multi-step enabled.'),
