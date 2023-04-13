@@ -55,8 +55,10 @@ class AdminPanelSeleniumTests(BaseSeleniumTests):
         admin_page.select_skip_logic_question("survey_form_fields-0-skip_logic-0-value-question_1", "3")
         admin_page.submit_response()
 
-        self.assertIn("Skip to question Q3 with in-between required questions isn't allowed.",
-                      self.selenium.page_source)
+        self.assertIn(
+            "Skip to question Q3 with in-between required questions isn't allowed.",
+            self.selenium.page_source
+        )
 
     def test_skip_logic_requires_multi_step_enabled_on_admin_panel(self):
         skip_logic = json.dumps(
@@ -86,4 +88,7 @@ class AdminPanelSeleniumTests(BaseSeleniumTests):
         admin_page = WagtailAdminPage(self.selenium)
         admin_page.submit_response()
 
-        self.assertIn("Multi-step must be enabled with skip logic.", self.selenium.page_source)
+        self.assertIn(
+            "Multi-step is required to properly display questionnaires that include Skip Logic.",
+            self.selenium.page_source
+        )

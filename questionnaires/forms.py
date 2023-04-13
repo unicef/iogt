@@ -147,7 +147,10 @@ class SurveyForm(WagtailAdminPageForm):
                     form._errors = self.clean_errors
 
         if self.should_be_multi_step():
-            self.add_error("multi_step", "Multi-step must be enabled with skip logic.")
+            self.add_error(
+                "multi_step",
+                "Multi-step is required to properly display questionnaires that include Skip Logic."
+            )
 
         return cleaned_data
 
