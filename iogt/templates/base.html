@@ -95,13 +95,13 @@
     {% endif %}
 </script>
 <script src="{% url 'javascript-catalog' %}"></script>
-<script src="{% static 'js/sw-init.js' %}"></script>
 {% if jquery %}
     <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
     <script src="{% static 'js/iogt.js' %}"></script>
 {% else %}
     <script src="{% static 'js/iogt-no-jquery.js' %}"></script>
 {% endif %}
+<script src="{% static 'js/sw-init.js' %}"></script>
 <noscript>
     <style type="text/css">
         #hideOnNonJSDevice, .hideOnNonJSDevice {
