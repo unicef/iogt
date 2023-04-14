@@ -34,7 +34,7 @@ services:
       MATOMO_TRACKING: 'enable'
       MATOMO_URL: ''
       MATOMO_SITE_ID: ''
-
+      IMAGE_SIZE_PRESET: ''
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./:/app/

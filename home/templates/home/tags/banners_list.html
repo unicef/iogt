@@ -1,13 +1,13 @@
-{% load static wagtailcore_tags wagtailimages_tags i18n %}
+{% load static wagtailcore_tags home_tags i18n %}
 
 <section class='banner-holder'>
     {% for banner in banners %}
         {% if banner.banner_link_page %}
             <a href="{% pageurl banner.banner_link_page %}">
-                {% image banner.banner_image width-360 %}
+                {% render_image banner.banner_image %}
             </a>
         {% else %}
-            <span>{% image banner.banner_image width-360 %}</span>
+            <span>{% render_image banner.banner_image %}</span>
         {% endif %}
     {% endfor %}
 </section>

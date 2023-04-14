@@ -548,3 +548,6 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = int(os.getenv('DATA_UPLOAD_MAX_NUMBER_FIELDS', '
 MATOMO_URL = os.getenv('MATOMO_URL', '')
 MATOMO_SITE_ID = int(os.getenv('MATOMO_SITE_ID', '') or '0')
 MATOMO_TRACKING = os.getenv('MATOMO_TRACKING', 'disable') == 'enable'
+
+# Width size options are 360, 750
+IMAGE_SIZE_PRESET = int(os.getenv('IMAGE_SIZE_PRESET', '') or '360')

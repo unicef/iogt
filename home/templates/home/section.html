@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags home_tags questionnaires_tags sass_tags i18n wagtailuserbar menu_tags generic_components %}
+{% load static wagtailcore_tags home_tags questionnaires_tags sass_tags i18n wagtailuserbar menu_tags generic_components %}
 {% get_current_language as LANGUAGE_CODE %}
 {% get_language_info for LANGUAGE_CODE as lang %}
 {% get_available_languages as LANGUAGES %}
@@ -8,7 +8,7 @@
 
 {% block content %}
     <div class="section-img">
-        {% image page.lead_image width-360 class='lead-img' %}
+        {% render_image page.lead_image img_class='lead-img' %}
         <div class="image-overlay__text">{{ page.title }}</div>
     </div>
     {% if user_progress %}
