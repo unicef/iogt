@@ -4,7 +4,7 @@ const ready = (callback) => {
 };
 
 const init = (event) => {
-    const show = (el) => el.style.display = 'block';
+    const show = (el) => el.style.display = '';
     const hide = (el) => el.style.display = 'none';
 
     const externalLinkOverlay = document.querySelector('#external-link-overlay');
@@ -31,7 +31,6 @@ const init = (event) => {
     ].flatMap(
         (selector) => Array.from(document.querySelectorAll(selector))
     );
-    console.log(elementsToToggle);
 
     const blockExternalLinks = (event) => {
         event.preventDefault();
