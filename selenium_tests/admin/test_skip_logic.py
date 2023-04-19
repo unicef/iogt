@@ -1,6 +1,5 @@
 import json
 from django.urls import reverse
-from wagtail.core.models import Site
 
 from iogt_users.factories import AdminUserFactory
 from questionnaires.factories import SurveyFactory, SurveyFormFieldFactory
@@ -10,7 +9,6 @@ from selenium_tests.pages import WagtailAdminPage
 
 class AdminPanelSeleniumTests(BaseSeleniumTests):
     def setUp(self):
-        Site.objects.all().delete()
         self.setup_blank_site()
         admin_user = AdminUserFactory()
         self.visit_login_page().login_user(admin_user)
@@ -20,7 +18,7 @@ class AdminPanelSeleniumTests(BaseSeleniumTests):
             thank_you_text="[{\"type\": \"paragraph\", \"value\": \"<p>Thankyou for completing the survey</p>\"}]"
             )
 
-    def test_skip_logic_validation_errors_on_admin_panel(self):
+    def test_skip_logic_validation_errors_Okaon_admin_panel(self):
         skip_logic = json.dumps(
             [
                 {

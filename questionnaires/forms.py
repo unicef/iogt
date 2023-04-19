@@ -146,7 +146,7 @@ class SurveyForm(WagtailAdminPageForm):
                 if self.clean_errors:
                     form._errors = self.clean_errors
 
-        if self.should_be_multi_step():
+        if self.should_be_multi_step(cleaned_data, question_data):
             self.add_error(
                 "multi_step",
                 "Multi-step is required to properly display questionnaires that include Skip Logic."
@@ -204,15 +204,9 @@ class SurveyForm(WagtailAdminPageForm):
             self._clean_errors[field] = list()
         self._clean_errors[field].append(message)
 
-    def should_be_multi_step(self):
-        cleaned_data = super().clean()
-        question_data = {}
-
-        for form in self.formsets[self.form_field_name]:
-            form.is_valid()
-            question_data[form.cleaned_data['ORDER']] = form
-
-        for i, form in question_data.items():
+    @classmethod
+    def should_be_multi_step(cls, cleaned_data, question_data):
+        for form in question_data.values():
             if form.is_valid():
                 data = form.cleaned_data
                 for logic in data['skip_logic']:
