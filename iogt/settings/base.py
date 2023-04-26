@@ -13,13 +13,18 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 import re
 from datetime import timedelta
-
-import allauth
-from django.contrib import auth
-from django.utils.translation import gettext_lazy as _
+from uuid import uuid4
 
 import django.conf.locale
 import django.conf.global_settings
+from django.core.exceptions import ImproperlyConfigured
+from django.utils.translation import gettext_lazy as _
+
+from iogt.settings.profanity_settings import (  # noqa: F401
+    COMMENTS_ALLOW_PROFANITIES,
+    PROFANITIES_LIST
+)
+
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -456,8 +461,6 @@ SEARCH_RESULTS_PER_PAGE = 10
 
 COMMIT_HASH = os.getenv('COMMIT_HASH')
 
-from .profanity_settings import *
-
 EXPORT_FILENAME_TIMESTAMP_FORMAT = '%Y-%m-%dT%H%M%S'
 
 WAGTAILMARKDOWN = {
@@ -490,34 +493,45 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=365),
 }
 
-CACHE_BACKEND = os.getenv('CACHE_BACKEND')
-if CACHE_BACKEND:
+CACHE = os.getenv('CACHE', '') == 'enable'
+if CACHE:
+    CACHE_LOCATION = os.getenv('CACHE_LOCATION')
+    if not CACHE_LOCATION:
+        raise ImproperlyConfigured(
+            "CACHE_LOCATION must be set if CACHE is set to 'enable'")
+    CACHE_BACKEND = os.getenv(
+        'CACHE_BACKEND',
+        'wagtailcache.compat_backends.django_redis.RedisCache')
     DJANGO_REDIS_IGNORE_EXCEPTIONS = True
     SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+    WAGTAIL_CACHE = True
     WAGTAIL_CACHE_BACKEND = 'pagecache'
-    CACHE_LOCATION = os.getenv('CACHE_LOCATION', '')
-    CACHE_TIMEOUT = int(os.getenv('CACHE_TIMEOUT', '0'))
+    CACHE_TIMEOUT = int(os.getenv('CACHE_TIMEOUT', '300'))
+    KEY_PREFIX = os.getenv('CACHE_KEY_PREFIX', str(uuid4()))
     CACHES = {
         'default': {
             'BACKEND': CACHE_BACKEND,
             'LOCATION': CACHE_LOCATION,
             'TIMEOUT': CACHE_TIMEOUT,
+            'KEY_PREFIX': f'{KEY_PREFIX}_default',
         },
+        # https://docs.wagtail.org/en/v2.15.6/advanced_topics/performance.html#caching-image-renditions
         'renditions': {
             'BACKEND': CACHE_BACKEND,
             'LOCATION': CACHE_LOCATION,
             'TIMEOUT': CACHE_TIMEOUT,
+            'KEY_PREFIX': f'{KEY_PREFIX}_renditions',
         },
         'pagecache': {
             'BACKEND': CACHE_BACKEND,
             'LOCATION': CACHE_LOCATION,
             'TIMEOUT': CACHE_TIMEOUT,
-            'KEY_PREFIX': 'pagecache',
+            'KEY_PREFIX': f'{KEY_PREFIX}_pagecache',
         },
     }
 else:
     WAGTAIL_CACHE = False
-    SESSION_ENGINE='django.contrib.sessions.backends.db'
+    SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 SITE_VERSION = os.getenv('SITE_VERSION', 'unknown')
 
