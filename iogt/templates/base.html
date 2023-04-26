@@ -27,21 +27,8 @@
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="theme-color" content="#493174">
-    <meta property="og:url" content="{{ page.url }}">
-    <meta property="og:site_name" content="{{ page.get_site.site_name }}">
-    <meta property="og:title" content="{{ page.title }}">
-    <meta property="og:description" content="Internet of Good Things.">
-    <meta property="og:type" content="article">
-    <meta property="twitter:site" content="{{ page.get_site.site_name }}">
-    <meta property="twitter:title" content="{{ page.title }}">
-    <meta property="twitter:description" content="Internet of Good Things.">
-    <meta property="twitter:card" content="summary_large_image">
-    {% if page.lead_image %}
-        {% image page.lead_image original as lead_image %}
-        <meta property="og:image" content="{{ lead_image.full_url }}">
-        <meta property="twitter:image" content="{{ lead_image.full_url }}">
-        <meta property="twitter:image:alt" content="{{ page.title }}">
-    {% endif %}
+
+    {% include "home/tags/meta_tags.html" with page=page %}
 
     <link rel="manifest" href="{% url 'manifest' %}">
     {% image settings.home.SiteSettings.apple_touch_icon width-120 as apple_touch_icon %}
