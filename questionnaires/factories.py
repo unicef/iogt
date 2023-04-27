@@ -90,7 +90,7 @@ class SurveyFormFieldFactory(DjangoModelFactory):
         if extracted:
             self.skip_logic = extracted
         elif self.field_type == 'checkbox':
-            skip_logic = json.dumps(
+            self.skip_logic = json.dumps(
                 [
                     {
                         "type": "skip_logic",
@@ -110,7 +110,6 @@ class SurveyFormFieldFactory(DjangoModelFactory):
                     }
                 ]
             )
-            self.skip_logic = skip_logic
 
 
 class SurveyIndexPageFactory(PageFactory):
