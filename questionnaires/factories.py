@@ -1,3 +1,5 @@
+import json
+
 import factory
 from django.utils import timezone
 from factory.django import DjangoModelFactory
@@ -74,6 +76,7 @@ class SurveyFactory(PageFactory):
     class Meta:
         model = Survey
 
+
 class SurveyFormFieldFactory(DjangoModelFactory):
     label = factory.Sequence(lambda n: f'question{n}')
     admin_label = factory.Sequence(lambda n: f'question{n}')
@@ -81,6 +84,34 @@ class SurveyFormFieldFactory(DjangoModelFactory):
 
     class Meta:
         model = SurveyFormField
+
+    @factory.post_generation
+    def skip_logic(self, create, extracted, **kwargs):
+        if extracted:
+            self.skip_logic = extracted
+        elif self.field_type == 'checkbox':
+            skip_logic = json.dumps(
+                [
+                    {
+                        "type": "skip_logic",
+                        "value": {
+                            "choice": "true",
+                            "skip_logic": "next",
+                            "question": None
+                        }
+                    },
+                    {
+                        "type": "skip_logic",
+                        "value": {
+                            "choice": "false",
+                            "skip_logic": "next",
+                            "question": None
+                        }
+                    }
+                ]
+            )
+            self.skip_logic = skip_logic
+
 
 class SurveyIndexPageFactory(PageFactory):
     title = 'Surveys'

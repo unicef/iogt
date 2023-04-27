@@ -18,39 +18,15 @@ class AdminPanelSeleniumTests(BaseSeleniumTests):
             thank_you_text="[{\"type\": \"paragraph\", \"value\": \"<p>Thankyou for completing the survey</p>\"}]"
             )
 
-    def test_skip_logic_validation_errors_Okaon_admin_panel(self):
-        skip_logic = json.dumps(
-            [
-                {
-                    "type": "skip_logic",
-                    "value": {
-                        "choice": "true",
-                        "skip_logic": "next",
-                        "question": None
-                    }
-                },
-                {
-                    "type": "skip_logic",
-                    "value": {
-                        "choice": "false",
-                        "skip_logic": "next",
-                        "question": None
-                    }
-                }
-            ]
-        )
-        SurveyFormFieldFactory(label='Q1', page=self.survey01, required=True, field_type='checkbox',
-                               skip_logic=skip_logic)
-        SurveyFormFieldFactory(label='Q2', page=self.survey01, required=True, field_type='checkbox',
-                               skip_logic=skip_logic)
-        SurveyFormFieldFactory(label='Q3', page=self.survey01, required=True, field_type='checkbox',
-                               skip_logic=skip_logic)
+    def test_skip_logic_validation_errors_on_admin_panel(self):
+        SurveyFormFieldFactory(label='Q1', page=self.survey01, required=True, field_type='checkbox')
+        SurveyFormFieldFactory(label='Q2', page=self.survey01, required=True, field_type='checkbox')
+        SurveyFormFieldFactory(label='Q3', page=self.survey01, required=True, field_type='checkbox')
 
         self.visit_url(reverse('wagtailadmin_pages:edit', args=(self.survey01.id,)))
 
         admin_page = WagtailAdminPage(self.selenium)
-        admin_page.select_skip_logic('survey_form_fields-0-skip_logic-0-value-skip_logic')
-        admin_page.select_skip_logic_question("survey_form_fields-0-skip_logic-0-value-question_1", "3")
+        admin_page.skip_to_question(question=0, skip_logic=0, skip_to=3)
         admin_page.submit_response()
 
         self.assertIn(
@@ -79,8 +55,10 @@ class AdminPanelSeleniumTests(BaseSeleniumTests):
                 }
             ]
         )
-        SurveyFormFieldFactory(label='Q1', page=self.survey01, required=True, field_type='checkbox', skip_logic=skip_logic)
-        SurveyFormFieldFactory(label='Q2', page=self.survey01, required=True, field_type='checkbox', skip_logic=skip_logic)
+        SurveyFormFieldFactory(label='Q1', page=self.survey01, required=True, field_type='checkbox',
+                               skip_logic=skip_logic)
+        SurveyFormFieldFactory(label='Q2', page=self.survey01, required=True, field_type='checkbox',
+                               skip_logic=skip_logic)
 
         self.visit_url(reverse('wagtailadmin_pages:edit', args=(self.survey01.id,)))
         admin_page = WagtailAdminPage(self.selenium)
