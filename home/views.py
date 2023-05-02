@@ -1,16 +1,10 @@
-from django.conf import settings
-from django.contrib import messages
-from django.core.management import call_command
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import TemplateView
-from translation_manager.manager import Manager
-from wagtail.contrib.modeladmin.views import EditView
 
-from iogt.patch import patch_store_to_db
 from .models import ManifestSettings
 
 
