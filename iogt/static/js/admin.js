@@ -21,6 +21,16 @@ $(document).ready(function () {
     $('#id_page_permissions-ADD').parent().prepend('<h4 style="color: #FF0000; font-weight: bold; margin: 5px;">' +
         'Giving a Group the EDIT permission will also allow them to download data for Polls, Surveys, and Quizzes ' +
         'for the Pages they can access.</h4>')
+
+    $('#id_seo_title').parent().siblings('p[class=help]').text(
+        'The name of the page displayed on search engine results as the clickable headline, and automatically loaded ' +
+        'as a title into shares on social media eg Facebook Posts or shared links in WhatsApp.'
+    );
+
+    $('#id_search_description').parent().siblings('p[class=help]').text(
+        'The descriptive text displayed underneath a headline in search engine results, and automatically loaded ' +
+        'as a description into shares on social media eg Facebook Posts or shared links in WhatsApp.'
+    );
 });
 
 function validateFileUpload(fileInput, file_size_threshold) {
