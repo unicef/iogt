@@ -1,4 +1,4 @@
-$(document).ready(function () {
+function customizeUI() {
     $('#id_handle').parent().siblings('p[class=help]').text(
         'The handle must be written in the format "[language_code]_menu_live", e.g. "en_menu_live", for the menu to ' +
         'be live on the website. You can use other handles, e.g. "en_oldmenu", to store other draft menus without ' +
@@ -31,7 +31,7 @@ $(document).ready(function () {
         'The descriptive text displayed underneath a headline in search engine results, and automatically loaded ' +
         'as a description into shares on social media eg Facebook Posts or shared links in WhatsApp.'
     );
-});
+}
 
 function validateFileUpload(fileInput, file_size_threshold) {
     if (!fileInput.files || !fileInput.files[0])
@@ -59,3 +59,5 @@ function validateFreeBasicsFileUpload(fileInput, file_size_threshold) {
 
     return true;
 }
+
+$(document).ready(customizeUI);

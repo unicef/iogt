@@ -10,8 +10,7 @@
     <meta property="twitter:title" content="{% firstof page.seo_title page.title %}">
     <meta property="twitter:description" content="{% firstof page.search_description site_name %}">
     <meta property="twitter:card" content="summary_large_image">
-    {% if page.lead_image %}
-        {% image page.lead_image width-360 as lead_image %}
+    {% if lead_image %}
         <meta property="og:image" content="{{ lead_image.full_url }}">
         <meta property="twitter:image" content="{{ lead_image.full_url }}">
         <meta property="twitter:image:alt" content="{% firstof page.seo_title page.title %}">

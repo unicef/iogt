@@ -158,3 +158,15 @@ def render_image(context, image, half_width=False, img_class=None):
         'class': img_class,
     })
     return context
+
+
+@register.inclusion_tag('home/tags/meta_tags.html', takes_context=True)
+def render_meta_tags(context):
+    width = settings.IMAGE_SIZE_PRESET
+    if hasattr(context['page'], 'lead_image') and context['page'].lead_image:
+        lead_image = context['page'].lead_image.get_rendition(f'width-{width}')
+        context.update({
+            'lead_image': lead_image,
+        })
+
+    return context
