@@ -161,7 +161,7 @@ def render_image(context, image, half_width=False, img_class=None):
 
 
 @register.inclusion_tag('home/tags/meta_tags.html', takes_context=True)
-def render_meta_tags(context):
+def social_meta_tags(context):
     width = settings.IMAGE_SIZE_PRESET
     page = context.get('page')
     if hasattr(page, 'lead_image') and page.lead_image:
@@ -169,5 +169,8 @@ def render_meta_tags(context):
         context.update({
             'lead_image': lead_image,
         })
+    context.update({
+        'site_name': page.get_site().site_name
+    })
 
     return context
