@@ -12,7 +12,5 @@ class Command(BaseCommand):
                     specific_content_type=page.content_type_id,
                     translations__target_locale=page.locale,
                 )
-            except TranslationSource.DoesNotExist:
-                pass
             except TranslationSource.MultipleObjectsReturned:
-                self.stdout.write(f"=======> {page.id} {page.title}")
+                self.stdout.write(f"Page ID:{page.id} Page Title:{page.title}")
