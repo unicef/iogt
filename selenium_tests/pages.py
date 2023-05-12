@@ -1,11 +1,14 @@
 from typing import List
 from urllib.parse import urlparse
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.relative_locator import locate_with
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import WebDriverException
+from wagtail.core.models import Page
+
 
 def safe_click(driver, button):
     try:
@@ -372,3 +375,34 @@ class FooterItemElement():
 
 class NavbarElement(FooterElement):
     locator = (By.CSS_SELECTOR, '.footer-main .top-level')
+
+
+class WagtailAdminPage(object):
+    submit_locator = (By.CSS_SELECTOR, "button[type='submit']")
+
+    def __init__(self, driver: WebDriver) -> None:
+        super().__init__()
+        self.driver = driver
+
+    def _select_skip_to_question(self, question_id):
+        selected_skip_logic = Select(self.driver.find_element(By.ID, question_id))
+        selected_skip_logic.select_by_value("question")
+
+    def _select_skip_to_answer(self, answer_id, skip_to):
+        selected_answer = Select(self.driver.find_element(By.ID, answer_id))
+        selected_answer.select_by_value(f'{skip_to}')
+
+    def _get_page_type(self):
+        page_id = int(self.driver.current_url.split('/')[-3])
+        return Page.objects.get(id=page_id).specific.get_type
+
+    def skip_to_question(self, question, skip_logic, skip_to):
+        page_type = self._get_page_type()
+        skip_logic_question_id = f'{page_type}_form_fields-{question}-skip_logic-{skip_logic}-value-skip_logic'
+        skip_logic_answer_id = f'{page_type}_form_fields-{question}-skip_logic-{skip_logic}-value-question_1'
+
+        self._select_skip_to_question(skip_logic_question_id)
+        self._select_skip_to_answer(skip_logic_answer_id, skip_to)
+
+    def submit_response(self):
+        safe_click(self.driver, self.driver.find_elements(*self.submit_locator)[1])

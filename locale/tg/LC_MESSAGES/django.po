@@ -132,6 +132,9 @@ msgstr "Ихтиёрӣ"
 msgid "No limit"
 msgstr "Номаҳдуд"
 
+msgid "Submit"
+msgstr "Ироа диҳед"
+
 msgid "Go to homepage"
 msgstr "Ба сафҳаи аслӣ равед"
 

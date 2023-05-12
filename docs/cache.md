@@ -1,20 +1,31 @@
 # Overview
 
-The page cache is provided by [Wagtail Cache][2] and is not enabled, by default. This guide leans towards Redis as the cache backend, but it should be possible to use any cache backend supported by Django 3.1.
+IoGT has performance features that can be enabled when a distributed cache, like Redis, is available, including:
+
+- A page cache, provided by [Wagtail Cache][2].
+- A cache for Wagtail image renditions
+- A general-purpose 'default' cache
+
+It is strongly recommended to use Redis as the cache backend, but it should be possible to use any cache backend supported by Django 3.1.
 
 # Activate
 
 Set the following environment variables:
 
-- CACHE\_BACKEND: The class that will handle the caching e.g. 'django_redis.cache.RedisCache'.
+- CACHE: Set to 'enable' to activate caching
 - CACHE\_LOCATION: The URL of your Redis server / cluster e.g. redis://your-redis:6379.
-- CACHE\_TIMEOUT: Number of seconds until a cached entry is considered stale e.g. 300 for five minutes.
+
+Optionally set:
+
+- CACHE\_BACKEND: Only change this if you know what you are doing. Default: 'wagtailcache.compat\_backends.django\_redis.RedisCache' [3]
+- CACHE\_KEY\_PREFIX: Useful for partioning the key space if sharing a Redis instance; each IoGT instance can have a different prefix to avoid interference. Set to empty string ('') to disable prefixing. Default: random UUID
+- CACHE\_TIMEOUT: Number of seconds until a cached entry is considered stale. Default: '300'.
 
 These environment variables will be used to set [cache arguments][1] in the app's Django settings.
 
 # Deactivate
 
-To switch off all caching features, it is sufficient to simply unset the `CACHE_BACKEND` environment variable.
+To switch off caching features, simply unset the `CACHE` environment variable or set it to anything but 'enable'.
 
 # Administration
 
@@ -29,8 +40,9 @@ Example Docker Compose configuration:
 services:
   django:
     environment:
-      CACHE_BACKEND: django_redis.cache.RedisCache
-      CACHE_LOCATION: 'redis://cache:6379'
+      CACHE: enable
+      CACHE_KEY_PREFIX: ''
+      CACHE_LOCATION: redis://cache:6379
       CACHE_TIMEOUT: '300'
     depends_on:
       - cache
@@ -41,3 +53,4 @@ services:
 
 [1]: https://docs.djangoproject.com/en/3.1/topics/cache/#using-a-custom-cache-backend
 [2]: https://docs.coderedcorp.com/wagtail-cache/
+[3]: https://docs.coderedcorp.com/wagtail-cache/getting_started/supported_backends.html#django-redis

@@ -128,10 +128,9 @@ class UserSubmissionSerializer(serializers.ModelSerializer):
             question = instance.page.specific.get_form_fields().filter(clean_name=clean_name).first()
             if question:
                 form_data_.append({
-                    question.admin_label: {
-                        "clean_name": clean_name,
-                        "user_answer": answer,
-                    }
+                    "admin_label": question.admin_label,
+                    "clean_name": clean_name,
+                    "user_answer": answer,
                 })
         return form_data_
 

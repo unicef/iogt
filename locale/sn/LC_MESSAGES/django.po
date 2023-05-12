@@ -131,6 +131,9 @@ msgstr "Kana uchida"
 msgid "No limit"
 msgstr "Zvisina muganhu"
 
+msgid "Submit"
+msgstr "Tumira"
+
 msgid "Go to homepage"
 msgstr "Enda kuhomupeji"
 

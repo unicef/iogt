@@ -190,7 +190,7 @@ articles,FE,translate,,has partial translation,,,
 %(counter)s of %(total)s questions,FE,translate,,has partial translation,,,
 Optional,FE,translate,,has partial translation,,,obsoleted if hints become custom
 Select one,FE,translate,,has partial translation,,,obsoleted if hints become custom
-Check all that apply,FE,translate,,has translation,,,obsoleted if hints become custom
+Check all that apply,FE,translate,,has partial translation,,,obsoleted if hints become custom
 Check if applies,FE,translate,,has partial translation,,,obsoleted if hints become custom; rephrase?
 Comments,FE,translate,,has partial translation,,,
 Please log in or create your account,FE,translate,,has partial translation,,,"rephrease ""please log in to comment"""
@@ -713,3 +713,5 @@ Sort child pages,,,,needs translation,,,
 Change ordering of child pages of '%(title)s',,,,needs translation,,,
 Turkish,,not needed,not needed,not needed,,,
 Custom permissions,,,,needs translation,,,
+Submit,,translate,,has partial translation,,,
+Farsi,,not needed,,not needed,,,

@@ -87,7 +87,7 @@ def global_admin_css():
 def global_admin_js():
     return format_html(
         '<script src="{}"></script>',
-        static("js/global/admin.js")
+        static("js/admin.js")
     )
 
 
