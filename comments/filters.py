@@ -42,10 +42,10 @@ class ModerationFilter(SimpleListFilter):
 
     def lookups(self, request, model_admin):
         return [
-            (CommunityCommentModeration.CommentModerationState.UNMODERATED, 'Unmoderated'),
-            (CommunityCommentModeration.CommentModerationState.APPROVED, 'Approved'),
-            (CommunityCommentModeration.CommentModerationState.REJECTED, 'Rejected'),
-            (CommunityCommentModeration.CommentModerationState.UNSURE, 'Unsure'),
+            (CommunityCommentModeration.State.UNMODERATED, 'Unmoderated'),
+            (CommunityCommentModeration.State.APPROVED, 'Approved'),
+            (CommunityCommentModeration.State.REJECTED, 'Rejected'),
+            (CommunityCommentModeration.State.UNSURE, 'Unsure'),
         ]
 
     def queryset(self, request, queryset):

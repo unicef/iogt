@@ -50,10 +50,10 @@ class AdminCommentForm(CommentForm):
 class CommentFilterForm(forms.Form):
     state = forms.ChoiceField(label='Moderation',
                               choices=(('ALL', 'All'),
-                                       (CommunityCommentModeration.CommentModerationState.UNMODERATED, 'Unmoderated'),
-                                       (CommunityCommentModeration.CommentModerationState.APPROVED, 'Approved'),
-                                       (CommunityCommentModeration.CommentModerationState.REJECTED, 'Rejected'),
-                                       (CommunityCommentModeration.CommentModerationState.UNSURE, 'Unsure')),
+                                       (CommunityCommentModeration.State.UNMODERATED, 'Unmoderated'),
+                                       (CommunityCommentModeration.State.APPROVED, 'Approved'),
+                                       (CommunityCommentModeration.State.REJECTED, 'Rejected'),
+                                       (CommunityCommentModeration.State.UNSURE, 'Unsure')),
                               required=False)
     from_date = forms.DateField(label='From', required=False, widget=forms.DateInput(attrs={'type': 'date'}))
     to_date = forms.DateField(label='To', required=False, widget=forms.DateInput(attrs={'type': 'date'}))

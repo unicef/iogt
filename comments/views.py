@@ -29,20 +29,20 @@ def update(request, comment_pk, action):
             comment.is_public = True
             comment.flags.all().delete()
             comment_moderation = comment.comment_moderation
-            comment_moderation.state = CommunityCommentModeration.CommentModerationState.APPROVED
+            comment_moderation.state = CommunityCommentModeration.State.APPROVED
             comment_moderations.append(comment_moderation)
         verb = 'approved'
     elif action == 'reject':
         for comment in comments:
             comment.is_public = False
             comment_moderation = comment.comment_moderation
-            comment_moderation.state = CommunityCommentModeration.CommentModerationState.REJECTED
+            comment_moderation.state = CommunityCommentModeration.State.REJECTED
             comment_moderations.append(comment_moderation)
         verb = 'rejected'
     elif action == 'unsure':
         for comment in comments:
             comment_moderation = comment.comment_moderation
-            comment_moderation.state = CommunityCommentModeration.CommentModerationState.UNSURE
+            comment_moderation.state = CommunityCommentModeration.State.UNSURE
             comment_moderations.append(comment_moderation)
         verb = 'unsure'
     elif action == 'unpublish':
@@ -138,7 +138,7 @@ class CommentsCommunityModerationView(ListView):
         return super().dispatch(request, *args, **kwargs)
 
     def _get_form(self):
-        return CommentFilterForm(self.request.GET or {'state': CommunityCommentModeration.CommentModerationState.UNMODERATED})
+        return CommentFilterForm(self.request.GET or {'state': CommunityCommentModeration.State.UNMODERATED})
 
     def get_queryset(self):
         queryset = super().get_queryset().filter(comment_moderation__isnull=False).order_by('-submit_date')

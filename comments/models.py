@@ -113,13 +113,13 @@ class CannedResponse(models.Model):
 
 
 class CommunityCommentModeration(models.Model):
-    class CommentModerationState(models.TextChoices):
+    class State(models.TextChoices):
         UNMODERATED = "UNMODERATED", "Unmoderated"
         APPROVED = "APPROVED", "Approved"
         REJECTED = "REJECTED", "Rejected"
         UNSURE = "UNSURE", "Unsure"
 
-    state = models.CharField(max_length=255, choices=CommentModerationState.choices, default=CommentModerationState.UNMODERATED)
+    state = models.CharField(max_length=255, choices=State.choices, default=State.UNMODERATED)
     comment = models.OneToOneField(
         to='django_comments_xtd.XtdComment', related_name='comment_moderation', on_delete=models.CASCADE)
 
@@ -129,7 +129,6 @@ class CommunityCommentModeration(models.Model):
     class Meta:
         permissions = (
             ("can_moderate_on_public_site", "Can moderate comments on PUBLIC SITE"),
-            ("can_moderate_on_admin_panel", "Can moderate comments on ADMIN PANEL"),
         )
 
 
@@ -146,5 +145,5 @@ def comment_moderation_handler(sender, instance, created, **kwargs):
 def comment_flagged(sender, comment, **kwargs):
     if hasattr(comment, 'comment_moderation'):
         comment_moderation = comment.comment_moderation
-        comment_moderation.state = CommunityCommentModeration.CommentModerationState.UNMODERATED
+        comment_moderation.state = CommunityCommentModeration.State.UNMODERATED
         comment_moderation.save(update_fields=['state'])
