@@ -14,6 +14,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 from wagtail.core.models import Site
 from wagtail_factories import SiteFactory, PageFactory
+
 from home.factories import HomePageFactory
 from iogt_users.factories import (
     UserFactory,
@@ -1053,7 +1054,7 @@ class PollTest(TestCase):
         PollFormFieldFactory(page=self.poll, field_type='dropdown', choices='c1|c2')
 
         response = self.client.get(self.poll.url)
-        parsed_response = BeautifulSoup(response.content)
+        parsed_response = parse_html(response.content)
         default_drop_down_option = parsed_response.select_one('.quest-item select option').text
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -1063,7 +1064,7 @@ class PollTest(TestCase):
         poll_question = PollFormFieldFactory(page=self.poll, field_type='dropdown', choices='c1|c2')
 
         response = self.client.post(self.poll.url, {poll_question.clean_name: ''})
-        parsed_response = BeautifulSoup(response.content)
+        parsed_response = parse_html(response.content)
         field_required_text = parsed_response.select_one('.quest-item .cust-input__error').text
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -1073,7 +1074,7 @@ class PollTest(TestCase):
         poll_question = PollFormFieldFactory(page=self.poll, field_type='dropdown', choices='c1|c2', required=False)
 
         response = self.client.post(self.poll.url, {poll_question.clean_name: ''})
-        parsed_response = BeautifulSoup(response.content)
+        parsed_response = parse_html(response.content)
         results = parsed_response.select('.cust-check__title')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -1087,7 +1088,7 @@ class PollTest(TestCase):
         poll_question = PollFormFieldFactory(page=self.poll, field_type='dropdown', choices='c1|c2')
 
         response = self.client.post(self.poll.url, {poll_question.clean_name: 'c1'})
-        parsed_response = BeautifulSoup(response.content)
+        parsed_response = parse_html(response.content)
         results = parsed_response.select('.cust-check__title')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -1127,3 +1128,7 @@ class TestQuestionnaireSubmitButtonText(TestCase):
         PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3')
 
         self.assertEqual(poll.get_submit_button_text(), "Submit")
+
+
+def parse_html(html: str) -> BeautifulSoup:
+    return BeautifulSoup(html, 'lxml')
