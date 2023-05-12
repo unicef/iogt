@@ -38,6 +38,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 INSTALLED_APPS = [
     'home',
     'search',
+    'iogt',
     'iogt_users',
     'comments',
     'iogt_content_migration',
