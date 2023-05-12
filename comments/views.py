@@ -14,11 +14,13 @@ from django.views.generic import TemplateView, ListView
 from django_comments.views.comments import post_comment
 from django_comments_xtd.models import XtdComment
 from django.utils.translation import ugettext as _
+from django.contrib.auth.decorators import permission_required
 
 from comments.forms import AdminCommentForm, CommentFilterForm
 from comments.models import CannedResponse, CommunityCommentModeration
 
 
+@permission_required('comments.can_moderate_on_public_site')
 def update(request, comment_pk, action):
     get_comment_with_children_filter = Q(parent_id=comment_pk) | Q(pk=comment_pk)
     comments = XtdComment.objects.filter(get_comment_with_children_filter)
