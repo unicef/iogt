@@ -1,4 +1,6 @@
 from django.conf import settings
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from django.utils.html import format_html
 from django_comments_xtd.models import XtdComment
@@ -26,7 +28,16 @@ class XtdCommentAdmin(ModelAdmin):
     menu_order = 601
 
     def get_permissions_for_registration(self):
+        content_type = ContentType.objects.get_for_model(self.model)
+        Permission.objects.get_or_create(
+            codename='can_moderate_on_admin_panel',
+            content_type=content_type,
+            defaults={
+                'name': 'Can moderate comments on ADMIN PANEL',
+            }
+        )
         permissions = super().get_permissions_for_registration()
+
         return permissions.exclude(codename='can_moderate')
 
     def published(self, obj):
@@ -86,7 +97,7 @@ class CommunityCommentModerationAdmin(ModelAdmin):
 
     def get_permissions_for_registration(self):
         permissions = super().get_permissions_for_registration()
-        return permissions.filter(codename__in=['can_moderate_on_public_site', 'can_moderate_on_admin_panel'])
+        return permissions.filter(codename='can_moderate_on_public_site')
 
 
 class CommentsGroup(ModelAdminGroup):

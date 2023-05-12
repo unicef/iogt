@@ -48,7 +48,7 @@ def update_menu_items(request, menu_items):
             item.label = _("Form Data")
         if item.name == 'translations':
             item.url = f'{TranslationEntryAdmin().url_helper.get_action_url("index")}?limited=yes'
-        if item.name == 'community-comment-moderation':
+        if item.name == 'community-comment-moderations':
             menu_items.remove(item)
 
 
