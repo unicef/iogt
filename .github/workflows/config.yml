@@ -13,20 +13,24 @@ jobs:
 
   django-unit-tests:
     runs-on: ubuntu-latest
+    env:
+      IOGT_TEST_PARALLEL: "2"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: make test
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: django-coverage-report
           path: htmlcov
 
   selenium-tests:
     runs-on: ubuntu-latest
+    env:
+      IOGT_TEST_PARALLEL: "1"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: make selenium-test
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: django-coverage-report
           path: htmlcov

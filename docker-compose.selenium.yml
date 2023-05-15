@@ -1,50 +1,32 @@
 version: '3.5'
 
 services:
-
   django:
     build:
       context: ./
       dockerfile: Dockerfile.dev
     environment:
-      DJANGO_SETTINGS_MODULE: iogt.settings.docker_compose_dev
-      COMMIT_HASH: asdfghjkl
-      WAGTAILTRANSFER_SECRET_KEY: wagtailtransfer-secret-key
-      WAGTAILTRANSFER_SOURCE_NAME: iogt_global
-      WAGTAILTRANSFER_SOURCE_BASE_URL: https://example.com/wagtail-transfer/
-      WAGTAILTRANSFER_SOURCE_SECRET_KEY: wagtailtransfer-source-secret-key
-      BASE_URL: 'http://localhost:8000'
-    command: python manage.py runserver 0.0.0.0:8000
+      DJANGO_SETTINGS_MODULE: iogt.settings.test
+    command: ["tini", "--", "sleep", "infinity"]
     volumes:
       - ./:/app/
-    ports:
-      - "8000:8000"
     depends_on:
-      - elasticsearch
+      - database
       - selenium-hub
-
-  elasticsearch:
-    image: 'docker.elastic.co/elasticsearch/elasticsearch:7.12.1'
+  database:
+    image: postgres:14-alpine
+    restart: unless-stopped
     environment:
-      - discovery.type=single-node
-    ports:
-      - "9200:9200"
-
+      POSTGRES_PASSWORD: iogt
+  selenium-hub:
+    image: selenium/hub:4.9.1-20230508
   chrome:
-    image: selenium/node-chrome:4.7.2-20221219
+    image: selenium/node-chrome:4.9.1-20230508
     shm_size: 2gb
     depends_on:
       - selenium-hub
     environment:
-      - SE_EVENT_BUS_HOST=selenium-hub
-      - SE_EVENT_BUS_PUBLISH_PORT=4442
-      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-    ports:
-      - "5900:5900"
-
-  selenium-hub:
-    image: selenium/hub:4.7.2-20221219
-    ports:
-      - "4442:4442"
-      - "4443:4443"
-      - "4444:4444"
+      SE_EVENT_BUS_HOST: selenium-hub
+      SE_EVENT_BUS_PUBLISH_PORT: "4442"
+      SE_EVENT_BUS_SUBSCRIBE_PORT: "4443"
+      SE_VNC_NO_PASSWORD: "1"
