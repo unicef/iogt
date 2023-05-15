@@ -19,7 +19,6 @@ services:
       - db
   db:
     image: postgres:alpine
-    restart: unless-stopped
     environment:
       POSTGRES_USER: iogt
       POSTGRES_PASSWORD: iogt
