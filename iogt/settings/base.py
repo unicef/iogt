@@ -251,7 +251,7 @@ WAGTAIL_USER_CUSTOM_FIELDS = ['display_name', 'first_name', 'last_name', 'email'
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-BASE_URL = os.getenv('BASE_URL')
+BASE_URL = os.getenv('BASE_URL', '')
 
 # SITE ID
 SITE_ID = 1
