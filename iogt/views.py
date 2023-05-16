@@ -124,7 +124,7 @@ class PageTreeAPIView(APIView):
         media_urls = []
         for page in pages:
             try:
-                page_urls.append(page.get_all_urls)
+                page_urls.append(page.offline_urls)
             except AttributeError:
                 pass
 

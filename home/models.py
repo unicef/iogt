@@ -92,7 +92,7 @@ class HomePage(Page, PageUtilsMixin, TitleIconMixin):
         return context
 
     @property
-    def get_all_urls(self):
+    def offline_urls(self):
         return [self.url] + collect_urls_from_streamfield(self.home_featured_content)
 
 
@@ -263,7 +263,7 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         return Section.objects.exclude(pk__in=all_descendants)
 
     @property
-    def get_all_urls(self):
+    def offline_urls(self):
         urls = [self.url] + collect_urls_from_streamfield(self.body)
 
         if self.lead_image:
@@ -404,7 +404,7 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         return self.get_ancestors().filter(depth=4).first().specific
 
     @property
-    def get_all_urls(self):
+    def offline_urls(self):
         urls = [self.url] + collect_urls_from_streamfield(self.body)
 
         if self.lead_image:
@@ -502,7 +502,7 @@ class BannerPage(Page, PageUtilsMixin):
     ]
 
     @property
-    def get_all_urls(self):
+    def offline_urls(self):
         return get_all_renditions_urls(self.banner_image)
 
 

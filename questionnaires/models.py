@@ -277,7 +277,7 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
         return data_fields
 
     @property
-    def get_all_urls(self):
+    def offline_urls(self):
         urls = (
             [self.url]
             + collect_urls_from_streamfield(self.description)
