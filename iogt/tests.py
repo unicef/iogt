@@ -4,18 +4,18 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from wagtail.core.models import Site
+from wagtail.core.rich_text import RichText
 from wagtail_factories import ImageFactory, SiteFactory
-from wagtail.images.models import Image
-from wagtailmedia.models import Media
 
 from home.factories import (
-    SectionFactory,
     ArticleFactory,
     HomePageFactory,
-    SVGToPNGMapFactory,
     LocaleFactory,
+    MediaFactory,
+    MiscellaneousIndexPageFactory,
     OfflineContentIndexPageFactory,
-    MiscellaneousIndexPageFactory, MediaFactory
+    SectionFactory,
+    SVGToPNGMapFactory,
 )
 from iogt.utils import has_md5_hash
 
@@ -77,6 +77,22 @@ class PageTreeAPIViewTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn(self.article.body[1].value.url, response.data)
         self.assertIn(self.article.body[2].value.url, response.data)
+
+    def test_image_urls_extracted_from_rich_text(self):
+        image = ImageFactory()
+        source = f'<embed embedtype="image" format="left" id="{image.id}"/>'
+        ArticleFactory(
+            parent=self.en_home_page,
+            body=[('paragraph', RichText(source))]
+        )
+        response = self.client.get(
+            reverse(self.url_name, kwargs={'page_id': self.en_home_page.id})
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        renditions = image.get_rendition_model().objects.filter(image_id=image.id)
+        self.assertEquals(len(renditions), 1)
+        self.assertIn(renditions[0].url, response.data)
 
     def test_static_assets_are_returned(self):
         response = self.client.get(reverse(self.url_name, kwargs={'page_id': self.en_home_page.id}))

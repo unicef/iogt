@@ -1225,11 +1225,11 @@ def get_all_renditions_urls(image):
 
 
 def extract_urls_from_rich_text(text):
-    urls = []
-    for tag in BeautifulSoup(text, "html.parser").find_all('embed'):
-        if tag.attrs['embedtype'] == 'image':
-            urls += get_all_renditions_urls(tag.attrs['id'])
-    return urls
+    return [
+        img['src']
+        for img
+        in BeautifulSoup(str(text), 'lxml').find_all('img')
+    ]
 
 
 def collect_urls_from_streamfield(field):
