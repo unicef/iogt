@@ -4,6 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from wagtail.core.models import Site
+from wagtail_factories import ImageFactory, SiteFactory
 from wagtail.images.models import Image
 from wagtailmedia.models import Media
 
@@ -16,8 +17,6 @@ from home.factories import (
     OfflineContentIndexPageFactory,
     MiscellaneousIndexPageFactory, MediaFactory
 )
-from wagtail_factories import ImageFactory, SiteFactory
-
 from iogt.utils import has_md5_hash
 
 

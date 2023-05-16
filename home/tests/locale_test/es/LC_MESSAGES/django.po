@@ -1,0 +1,35 @@
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-02-05 12:31+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# test_existing_translated_entry_is_preserved
+msgid "test_case_1"
+msgstr "test_case_1_translation"
+
+# test_untranslated_entry_is_replaced_with_translated_entry
+msgid "test_case_2"
+msgstr "test_case_2_translation_update"
+
+# test_new_entry_created_from_file
+msgid "test_case_3.1"
+msgstr "test_case_3.1_translation"
+
+# test_new_entry_created_from_file
+msgid "test_case_3.2"
+msgstr ""
+
+# test_existing_untranslated_entry_is_preserved_if_no_translation_in_file
+msgid "test_case_4"
+msgstr ""

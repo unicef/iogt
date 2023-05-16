@@ -1,58 +1,25 @@
 version: '3.5'
 
 services:
-
   django:
     build:
       context: ./
       dockerfile: Dockerfile.dev
     environment:
-      BASE_URL: 'http://localhost:8000'
-      DB_CONN_MAX_AGE: '600'
       DB_HOST: db
       DB_NAME: iogt
       DB_PASSWORD: iogt
       DB_PORT: '5432'
       DB_USER: iogt
-      DB_SSL_MODE: allow
-      DEBUG: enable
       DJANGO_SETTINGS_MODULE: iogt.settings.test
-      COMMIT_HASH: asdfghjkl
-      SECRET_KEY: secret_key
-      WAGTAILTRANSFER_SECRET_KEY: wagtailtransfer-secret-key
-      WAGTAILTRANSFER_SOURCE_NAME: iogt_global
-      WAGTAILTRANSFER_SOURCE_BASE_URL: https://example.com/wagtail-transfer/
-      WAGTAILTRANSFER_SOURCE_SECRET_KEY: wagtailtransfer-source-secret-key
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./:/app/
-    ports:
-      - '8000:8000'
     depends_on:
-      - elasticsearch
       - db
-
   db:
     image: postgres:alpine
-    restart: unless-stopped
     environment:
       POSTGRES_USER: iogt
       POSTGRES_PASSWORD: iogt
       POSTGRES_DB: iogt
-    volumes:
-      - iogt_postgres_data:/var/lib/postgresql/data/
-    ports:
-      - 5432:5432
-
-  elasticsearch:
-    image: 'docker.elastic.co/elasticsearch/elasticsearch:7.12.1'
-    environment:
-      - discovery.type=single-node
-    volumes:
-      - iogt_elasticsearch_data:/usr/share/elasticsearch/data
-    ports:
-      - "9200:9200"
-
-volumes:
-  iogt_postgres_data:
-  iogt_elasticsearch_data:

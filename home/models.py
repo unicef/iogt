@@ -558,6 +558,7 @@ class FooterPage(Article, TitleIconMixin):
 class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
     parent_page_types = ['home.FooterIndexPage', 'home.Section']
     subpage_types = []
+    show_in_menus_default = True
 
     icon = models.ForeignKey(
         Svg,

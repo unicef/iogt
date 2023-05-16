@@ -13,13 +13,18 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 import re
 from datetime import timedelta
-
-import allauth
-from django.contrib import auth
-from django.utils.translation import gettext_lazy as _
+from uuid import uuid4
 
 import django.conf.locale
 import django.conf.global_settings
+from django.core.exceptions import ImproperlyConfigured
+from django.utils.translation import gettext_lazy as _
+
+from iogt.settings.profanity_settings import (  # noqa: F401
+    COMMENTS_ALLOW_PROFANITIES,
+    PROFANITIES_LIST
+)
+
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -83,6 +88,7 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_yasg',
     'webpush',
+    'matomo',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -137,8 +143,10 @@ TEMPLATES = [
                 'django.template.context_processors.i18n',
                 'home.processors.commit_hash',
                 'home.processors.show_footers',
+                'home.processors.matomo_tracking',
                 'messaging.processors.add_vapid_public_key',
                 'notifications.processors.push_notification',
+                'home.processors.jquery',
             ],
         },
     },
@@ -243,7 +251,7 @@ WAGTAIL_USER_CUSTOM_FIELDS = ['display_name', 'first_name', 'last_name', 'email'
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-BASE_URL = os.getenv('BASE_URL')
+BASE_URL = os.getenv('BASE_URL', '')
 
 # SITE ID
 SITE_ID = 1
@@ -289,6 +297,7 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('ny', _('Chichewa')), # previously 'ch'
     ('prs', _('Dari')),
     ('en', _('English')),
+    ('fa', _('Farsi')),
     ('fr', _('French')),
     ('hi', _('Hindi')),
     ('id', _('Indonesian')),
@@ -311,6 +320,7 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('tg', _('Tajik')),
     ('ta', _('Tamil')),
     ('ti', _('Tigrinya')),
+    ('tr', _('Turkish')),
     ('uk', _('Ukraine')),
     ('ur', _('Urdu')),
     ('uz', _('Uzbek')),
@@ -451,8 +461,6 @@ SEARCH_RESULTS_PER_PAGE = 10
 
 COMMIT_HASH = os.getenv('COMMIT_HASH')
 
-from .profanity_settings import *
-
 EXPORT_FILENAME_TIMESTAMP_FORMAT = '%Y-%m-%dT%H%M%S'
 
 WAGTAILMARKDOWN = {
@@ -472,6 +480,7 @@ WAGTAILTRANSFER_LOOKUP_FIELDS = {
 }
 
 REST_FRAMEWORK = {
+    'DATETIME_FORMAT': '%Y-%m-%dT%H:%M:%S.%fZ',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -485,34 +494,45 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=365),
 }
 
-CACHE_BACKEND = os.getenv('CACHE_BACKEND')
-if CACHE_BACKEND:
+CACHE = os.getenv('CACHE', '') == 'enable'
+if CACHE:
+    CACHE_LOCATION = os.getenv('CACHE_LOCATION')
+    if not CACHE_LOCATION:
+        raise ImproperlyConfigured(
+            "CACHE_LOCATION must be set if CACHE is set to 'enable'")
+    CACHE_BACKEND = os.getenv(
+        'CACHE_BACKEND',
+        'wagtailcache.compat_backends.django_redis.RedisCache')
     DJANGO_REDIS_IGNORE_EXCEPTIONS = True
     SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+    WAGTAIL_CACHE = True
     WAGTAIL_CACHE_BACKEND = 'pagecache'
-    CACHE_LOCATION = os.getenv('CACHE_LOCATION', '')
-    CACHE_TIMEOUT = int(os.getenv('CACHE_TIMEOUT', '0'))
+    CACHE_TIMEOUT = int(os.getenv('CACHE_TIMEOUT', '300'))
+    KEY_PREFIX = os.getenv('CACHE_KEY_PREFIX', str(uuid4()))
     CACHES = {
         'default': {
             'BACKEND': CACHE_BACKEND,
             'LOCATION': CACHE_LOCATION,
             'TIMEOUT': CACHE_TIMEOUT,
+            'KEY_PREFIX': f'{KEY_PREFIX}_default',
         },
+        # https://docs.wagtail.org/en/v2.15.6/advanced_topics/performance.html#caching-image-renditions
         'renditions': {
             'BACKEND': CACHE_BACKEND,
             'LOCATION': CACHE_LOCATION,
             'TIMEOUT': CACHE_TIMEOUT,
+            'KEY_PREFIX': f'{KEY_PREFIX}_renditions',
         },
         'pagecache': {
             'BACKEND': CACHE_BACKEND,
             'LOCATION': CACHE_LOCATION,
             'TIMEOUT': CACHE_TIMEOUT,
-            'KEY_PREFIX': 'pagecache',
+            'KEY_PREFIX': f'{KEY_PREFIX}_pagecache',
         },
     }
 else:
     WAGTAIL_CACHE = False
-    SESSION_ENGINE='django.contrib.sessions.backends.db'
+    SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 SITE_VERSION = os.getenv('SITE_VERSION', 'unknown')
 
@@ -534,3 +554,15 @@ SUPERSET_USERNAME = os.getenv('SUPERSET_USERNAME')
 SUPERSET_PASSWORD = os.getenv('SUPERSET_PASSWORD')
 
 PUSH_NOTIFICATION = os.getenv('PUSH_NOTIFICATION', 'disable') == 'enable'
+JQUERY = os.getenv('JQUERY', 'enable') == 'enable'
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = int(os.getenv('DATA_UPLOAD_MAX_NUMBER_FIELDS', '') or '1000')
+
+# Matomo tracking server and site information
+
+MATOMO_URL = os.getenv('MATOMO_URL', '')
+MATOMO_SITE_ID = int(os.getenv('MATOMO_SITE_ID', '') or '0')
+MATOMO_TRACKING = os.getenv('MATOMO_TRACKING', 'disable') == 'enable'
+
+# Width size options are 360, 750
+IMAGE_SIZE_PRESET = int(os.getenv('IMAGE_SIZE_PRESET', '') or '360')
