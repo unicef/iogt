@@ -34,16 +34,11 @@ class PageTreeAPIViewTests(TestCase):
         self.en_offline_content_index_page = OfflineContentIndexPageFactory(parent=self.en_miscellaneous_index_page)
         self.ar_offline_content_index_page = OfflineContentIndexPageFactory(parent=self.ar_miscellaneous_index_page)
         self.section = SectionFactory(parent=self.en_home_page)
-        self.article = ArticleFactory(parent=self.en_home_page, body=[("image", ImageFactory()),
-                                                                      ("media", MediaFactory(type='video')),
-                                                                      ("media", MediaFactory(type='audio'))])
-        self.section_lead_image_rendition = self.section.lead_image.get_rendition('fill-360x360')
-        self.article_lead_image_rendition = self.article.lead_image.get_rendition('fill-360x360')
-        self.article_body_image_rendition = Image.objects.get(
-            id=self.article.body.raw_data[0]['value']).get_rendition('fill-360x360')
-        self.article_body_video = Media.objects.get(id=self.article.body.raw_data[1]['value'])
-        self.article_body_audio = Media.objects.get(id=self.article.body.raw_data[2]['value'])
-        self.svg_to_png_map = SVGToPNGMapFactory()
+        self.article = ArticleFactory(
+            parent=self.en_home_page,
+            body=[("image", ImageFactory()),
+                  ("media", MediaFactory(type='video')),
+                  ("media", MediaFactory(type='audio'))])
 
     def test_root_page_is_returned(self):
         response = self.client.get(reverse(self.url_name, kwargs={'page_id': self.en_home_page.id}))
@@ -59,20 +54,29 @@ class PageTreeAPIViewTests(TestCase):
         self.assertIn(self.article.url, response.data)
 
     def test_images_are_returned(self):
-        response = self.client.get(reverse(self.url_name, kwargs={'page_id': self.en_home_page.id}))
+        svg_to_png_map = SVGToPNGMapFactory()
+        section_lead_image = get_rendition(self.section.lead_image)
+        article_lead_image = get_rendition(self.article.lead_image)
+        body_image = get_rendition(self.article.body[0].value)
+
+        response = self.client.get(
+            reverse(self.url_name, kwargs={'page_id': self.en_home_page.id})
+        )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn(self.section_lead_image_rendition.url, response.data)
-        self.assertIn(self.article_lead_image_rendition.url, response.data)
-        self.assertIn(self.article_body_image_rendition.url, response.data)
-        self.assertIn(self.svg_to_png_map.url, response.data)
+        self.assertIn(section_lead_image.url, response.data)
+        self.assertIn(article_lead_image.url, response.data)
+        self.assertIn(body_image.url, response.data)
+        self.assertIn(svg_to_png_map.url, response.data)
 
     def test_media_are_returned(self):
-        response = self.client.get(reverse(self.url_name, kwargs={'page_id': self.en_home_page.id}))
+        response = self.client.get(
+            reverse(self.url_name, kwargs={'page_id': self.en_home_page.id})
+        )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn(self.article_body_video.url, response.data)
-        self.assertIn(self.article_body_audio.url, response.data)
+        self.assertIn(self.article.body[1].value.url, response.data)
+        self.assertIn(self.article.body[2].value.url, response.data)
 
     def test_static_assets_are_returned(self):
         response = self.client.get(reverse(self.url_name, kwargs={'page_id': self.en_home_page.id}))
@@ -122,3 +126,7 @@ class TestUtils(unittest.TestCase):
 
         for value in without_md5_hash:
             self.assertFalse(has_md5_hash(value))
+
+
+def get_rendition(image):
+    return image.get_rendition('fill-360x360')
