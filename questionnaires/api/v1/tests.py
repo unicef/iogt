@@ -4,7 +4,6 @@ import json
 from datetime import timedelta
 
 import pytz
-from bs4 import BeautifulSoup
 from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
@@ -16,6 +15,7 @@ from wagtail.core.models import Site
 from wagtail_factories import SiteFactory, PageFactory
 
 from home.factories import HomePageFactory
+from home.tests.tests import parse_html
 from iogt_users.factories import (
     UserFactory,
     GroupFactory,
@@ -1128,7 +1128,3 @@ class TestQuestionnaireSubmitButtonText(TestCase):
         PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3')
 
         self.assertEqual(poll.get_submit_button_text(), "Submit")
-
-
-def parse_html(html: str) -> BeautifulSoup:
-    return BeautifulSoup(html, 'lxml')
