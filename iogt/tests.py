@@ -67,7 +67,7 @@ class PageTreeAPIViewTests(TestCase):
         self.assertIn(self.article_body_image_rendition.url, response.data)
         self.assertIn(self.svg_to_png_map.url, response.data)
 
-    def test_medias_are_returned(self):
+    def test_media_are_returned(self):
         response = self.client.get(reverse(self.url_name, kwargs={'page_id': self.en_home_page.id}))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)

@@ -123,10 +123,10 @@ class PageTreeAPIView(APIView):
         image_urls = []
         media_urls = []
         for page in pages:
-            if isinstance(page, (HomePage, Section, Article, Poll, Survey, Quiz)):
-                page_urls.append(page.url)
-                image_urls += page.get_image_urls
-                media_urls += page.get_media_urls
+            try:
+                page_urls.append(page.get_all_urls)
+            except AttributeError:
+                pass
 
         for svg_to_png_map in SVGToPNGMap.objects.all():
             image_urls.append(svg_to_png_map.url)

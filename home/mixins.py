@@ -1,7 +1,4 @@
-from bs4 import BeautifulSoup
 from django.utils.functional import cached_property
-from wagtail.images.models import Rendition
-from wagtailmedia.models import Media
 
 
 class PageUtilsMixin:
@@ -32,54 +29,6 @@ class PageUtilsMixin:
     @cached_property
     def get_type(self):
         return self.__class__.__name__.lower()
-
-    def _get_renditions(self, image_id):
-        image_urls = []
-        for rendition in Rendition.objects.filter(image_id=image_id):
-            image_urls.append(rendition.url)
-        return image_urls
-
-    def _get_images_from_block(self, value):
-        image_urls = []
-
-        tags = BeautifulSoup(value, "html.parser").find_all('embed')
-        for tag in tags:
-            if tag.attrs['embedtype'] == 'image':
-                image_urls += self._get_renditions(tag.attrs['id'])
-
-        return image_urls
-
-    def _get_stream_data_image_urls(self, raw_data):
-        image_urls = []
-
-        for block in raw_data:
-            if block['type'] == 'image':
-                image_urls += self._get_renditions(block['value'])
-            if block['type'] == 'paragraph':
-                image_urls += self._get_images_from_block(block['value'])
-            if block['type'] == 'download':
-                image_urls += self._get_images_from_block(block['value'].get('description', ''))
-
-        return image_urls
-
-    def _get_stream_data_media_urls(self, stream_data):
-        media_urls = []
-
-        for block in stream_data:
-            if block['type'] == 'media':
-                media = Media.objects.filter(id=block['value']).first()
-                if media:
-                    media_urls.append(media.url)
-
-        return media_urls
-
-    @property
-    def get_image_urls(self):
-        raise NotImplementedError
-
-    @property
-    def get_media_urls(self):
-        raise NotImplementedError
 
 
 class TitleIconMixin:

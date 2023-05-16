@@ -1,6 +1,7 @@
 import logging
 import os
 
+from bs4 import BeautifulSoup
 from django.conf import settings
 from django.contrib.admin.utils import flatten
 from django.contrib.auth import get_user_model
@@ -30,7 +31,7 @@ from wagtail.admin.edit_handlers import (
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
 from wagtail.core import blocks
-from wagtail.core.fields import StreamField, RichTextField
+from wagtail.core.fields import StreamField
 from wagtail.core.models import Orderable, Page, Site, Locale
 from wagtail.core.rich_text import get_text_for_indexing
 from wagtail.images.blocks import ImageChooserBlock
@@ -38,13 +39,13 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.models import Image
 from wagtail.search import index
 from wagtailmarkdown.blocks import MarkdownBlock
-from wagtailmenus.models import AbstractFlatMenuItem, BooleanField
+from wagtailmenus.models import AbstractFlatMenuItem
 from wagtailsvg.models import Svg
 from wagtailsvg.edit_handlers import SvgChooserPanel
 
 from messaging.blocks import ChatBotButtonBlock
-from comments.models import CommentableMixin, CannedResponse
-from .blocks import (
+from comments.models import CommentableMixin
+from home.blocks import (
     MediaBlock, SocialMediaLinkBlock, SocialMediaShareButtonBlock, EmbeddedPollBlock, EmbeddedSurveyBlock,
     EmbeddedQuizBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock, ArticleBlock, DownloadButtonBlock,
 )
@@ -91,12 +92,8 @@ class HomePage(Page, PageUtilsMixin, TitleIconMixin):
         return context
 
     @property
-    def get_image_urls(self):
-        return self._get_stream_data_image_urls(self.home_featured_content.raw_data)
-
-    @property
-    def get_media_urls(self):
-        return self._get_stream_data_media_urls(self.home_featured_content.raw_data)
+    def get_all_urls(self):
+        return [self.url] + collect_urls_from_streamfield(self.home_featured_content)
 
 
 class FeaturedContent(Orderable):
@@ -266,22 +263,16 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         return Section.objects.exclude(pk__in=all_descendants)
 
     @property
-    def get_image_urls(self):
-        image_urls = []
+    def get_all_urls(self):
+        urls = [self.url] + collect_urls_from_streamfield(self.body)
 
         if self.lead_image:
-            image_urls += self._get_renditions(self.lead_image)
+            urls += get_all_renditions_urls(self.lead_image)
 
         if self.image_icon:
-            image_urls += self._get_renditions(self.image_icon)
+            urls += get_all_renditions_urls(self.image_icon)
 
-        image_urls += self._get_stream_data_image_urls(self.body.raw_data)
-
-        return image_urls
-
-    @property
-    def get_media_urls(self):
-        return self._get_stream_data_media_urls(self.body.raw_data)
+        return urls
 
     class Meta:
         verbose_name = _("section")
@@ -413,22 +404,16 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         return self.get_ancestors().filter(depth=4).first().specific
 
     @property
-    def get_image_urls(self):
-        image_urls = []
+    def get_all_urls(self):
+        urls = [self.url] + collect_urls_from_streamfield(self.body)
 
         if self.lead_image:
-            image_urls += self._get_renditions(self.lead_image)
+            urls += get_all_renditions_urls(self.lead_image)
 
         if self.image_icon:
-            image_urls += self._get_renditions(self.image_icon)
+            urls += get_all_renditions_urls(self.image_icon)
 
-        image_urls += self._get_stream_data_image_urls(self.body.raw_data)
-
-        return image_urls
-
-    @property
-    def get_media_urls(self):
-        return self._get_stream_data_media_urls(self.body.raw_data)
+        return urls
 
     class Meta:
         abstract = True
@@ -517,13 +502,8 @@ class BannerPage(Page, PageUtilsMixin):
     ]
 
     @property
-    def get_image_urls(self):
-        image_urls = []
-
-        if self.banner_image:
-            image_urls += self._get_renditions(self.banner_image)
-
-        return image_urls
+    def get_all_urls(self):
+        return get_all_renditions_urls(self.banner_image)
 
 
 class FooterIndexPage(Page):
@@ -1234,3 +1214,35 @@ class LocaleDetail(models.Model):
 
     def __str__(self):
         return f'{self.locale}'
+
+
+def get_all_renditions_urls(image):
+    return [
+        rendition.url
+        for rendition
+        in image.get_rendition_model().objects.filter(image_id=image.id)
+    ]
+
+
+def extract_urls_from_rich_text(text):
+    urls = []
+    for tag in BeautifulSoup(text, "html.parser").find_all('embed'):
+        if tag.attrs['embedtype'] == 'image':
+            urls += get_all_renditions_urls(tag.attrs['id'])
+    return urls
+
+
+def collect_urls_from_streamfield(field):
+    urls = []
+    for block in field:
+        if block.block_type == 'image':
+            urls += get_all_renditions_urls(block.value)
+        if block.block_type == 'paragraph':
+            urls += extract_urls_from_rich_text(block.value)
+        if block.block_type == 'download':
+            urls += extract_urls_from_rich_text(
+                block.value.get('description', '')
+            )
+        if block.block_type == 'media':
+            urls.append(block.value.url)
+    return urls
