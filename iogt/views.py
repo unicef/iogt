@@ -124,7 +124,7 @@ class PageTreeAPIView(APIView):
         no_impl = set()
         for page in pages:
             try:
-                page_urls.append(page.offline_urls)
+                page_urls += page.offline_urls
             except AttributeError:
                 no_impl.add(type(page).__name__)
 
