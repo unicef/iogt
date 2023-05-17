@@ -120,14 +120,22 @@ class PageTreeAPIView(APIView):
             if page:
                 page_urls.append(page.url)
         translation.activate(active_locale.language_code)
-        image_urls = []
-        media_urls = []
+
+        no_impl = set()
         for page in pages:
             try:
                 page_urls.append(page.offline_urls)
             except AttributeError:
-                pass
+                no_impl.add(type(page).__name__)
 
+        if no_impl:
+            types = ", ".join(sorted(no_impl))
+            logger.warn(
+                f"Offline URLs could not be obtained for the following Page types: "
+                f"{types}"
+            )
+
+        image_urls = []
         for svg_to_png_map in SVGToPNGMap.objects.all():
             image_urls.append(svg_to_png_map.url)
 
@@ -152,7 +160,6 @@ class PageTreeAPIView(APIView):
         urls = set(flatten(
             page_urls +
             image_urls +
-            media_urls +
             static_urls
         ))
         return Response(urls)
