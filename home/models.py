@@ -1,7 +1,6 @@
 import logging
 import os
 
-from bs4 import BeautifulSoup
 from django.conf import settings
 from django.contrib.admin.utils import flatten
 from django.contrib.auth import get_user_model
@@ -53,6 +52,10 @@ from .forms import SectionPageForm
 from .mixins import PageUtilsMixin, TitleIconMixin
 from .utils.image import convert_svg_to_png_bytes
 from .utils.progress_manager import ProgressManager
+from home.utils import (
+    collect_urls_from_streamfield,
+    get_all_renditions_urls,
+)
 import iogt.iogt_globals as globals_
 
 User = get_user_model()
@@ -1214,35 +1217,3 @@ class LocaleDetail(models.Model):
 
     def __str__(self):
         return f'{self.locale}'
-
-
-def get_all_renditions_urls(image):
-    return [
-        rendition.url
-        for rendition
-        in image.get_rendition_model().objects.filter(image_id=image.id)
-    ]
-
-
-def extract_urls_from_rich_text(text):
-    return [
-        img['src']
-        for img
-        in BeautifulSoup(str(text), 'lxml').find_all('img')
-    ]
-
-
-def collect_urls_from_streamfield(field):
-    urls = []
-    for block in field:
-        if block.block_type == 'image':
-            urls += get_all_renditions_urls(block.value)
-        if block.block_type == 'paragraph':
-            urls += extract_urls_from_rich_text(block.value)
-        if block.block_type == 'download':
-            urls += extract_urls_from_rich_text(
-                block.value.get('description', '')
-            )
-        if block.block_type == 'media':
-            urls.append(block.value.url)
-    return urls

@@ -24,7 +24,7 @@ from home.blocks import (
     RawHTMLBlock,
 )
 from home.mixins import PageUtilsMixin, TitleIconMixin
-from home.models import (
+from home.utils import (
     collect_urls_from_streamfield,
     get_all_renditions_urls,
 )
