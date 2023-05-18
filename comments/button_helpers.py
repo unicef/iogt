@@ -6,16 +6,15 @@ class XtdCommentAdminButtonHelper(ButtonHelper):
     def hide_show_toggle_button(self, comment):
 
         if comment.is_removed:
-            action = 'show'
+            action = 'show_comment'
             label = 'Show'
         else:
-            action = 'hide'
+            action = 'hide_comment'
             label = 'Hide'
 
         return {
-            'url': reverse('wagtail_comments_xtd_publication', kwargs={
+            'url': reverse(action, kwargs={
                 'comment_pk': comment.pk,
-                'action': action
             }),
             'label': label,
             'classname': 'button button-small button-secondary',
@@ -24,17 +23,16 @@ class XtdCommentAdminButtonHelper(ButtonHelper):
 
     def publish_unpublish_toggle_button(self, comment):
         if comment.is_public:
-            action = 'unpublish'
+            action = 'unpublish_comment'
             label = 'Unpublish'
             cn = 'button no button-small button-secondary'
         else:
-            action = 'publish'
+            action = 'publish_comment'
             label = 'Publish'
             cn = 'button button-small button-secondary'
         return {
-            'url': reverse('wagtail_comments_xtd_publication', kwargs={
+            'url': reverse(action, kwargs={
                 'comment_pk': comment.pk,
-                'action': action
             }),
             'label': label,
             'classname': cn,
@@ -44,9 +42,8 @@ class XtdCommentAdminButtonHelper(ButtonHelper):
     def clear_flags_button(self, comment):
         if comment.flags.count():
             return {
-                'url': reverse('wagtail_comments_xtd_publication', kwargs={
+                'url': reverse('clear_flags', kwargs={
                     'comment_pk': comment.pk,
-                    'action': 'clear_flags'
                 }),
                 'label': 'Clear Flags',
                 'classname': 'button button-small button-secondary',
