@@ -20,7 +20,6 @@ from comments.forms import AdminCommentForm, CommentFilterForm
 from comments.models import CannedResponse, CommunityCommentModeration
 
 
-@permission_required('comments.can_moderate_on_public_site')
 def update(request, comment_pk, action):
     get_comment_with_children_filter = Q(parent_id=comment_pk) | Q(pk=comment_pk)
     comments = XtdComment.objects.filter(get_comment_with_children_filter)
@@ -73,6 +72,139 @@ def update(request, comment_pk, action):
     messages.success(request, _(f'The comment has been {verb} successfully!'))
 
     return redirect(request.META.get('HTTP_REFERER'))
+
+
+class BaseCommentView(View):
+    action_verb = ''
+
+    def get_queryset(self, comment_pk):
+        return XtdComment.objects.filter(Q(parent_id=comment_pk) | Q(pk=comment_pk))
+
+    def get(self, request, comment_pk):
+        comments, comment_moderations = self.handle(request, comment_pk)
+
+        XtdComment.objects.bulk_update(comments, ['is_public', 'is_removed'])
+        CommunityCommentModeration.objects.bulk_update(comment_moderations, ['state'])
+
+        messages.success(request, _(f'The comment has been {self.action_verb} successfully!'))
+
+        return redirect(request.META.get('HTTP_REFERER'))
+
+    def handle(self, request, comment_pk):
+        raise NotImplementedError()
+
+
+class ApproveCommentView(BaseCommentView):
+    action_verb = 'approved'
+
+    def handle(self, request, comment_pk):
+        comments = self.get_queryset(comment_pk)
+        comment_moderations = []
+
+        for comment in comments:
+            comment.is_public = True
+            comment.flags.all().delete()
+            comment_moderation = comment.comment_moderation
+            comment_moderation.state = CommunityCommentModeration.State.APPROVED
+            comment_moderations.append(comment_moderation)
+
+        return comments, comment_moderations
+
+
+class RejectCommentView(BaseCommentView):
+    action_verb = 'rejected'
+
+    def handle(self, request, comment_pk):
+        comments = self.get_queryset(comment_pk)
+        comment_moderations = []
+
+        for comment in comments:
+            comment.is_public = False
+            comment_moderation = comment.comment_moderation
+            comment_moderation.state = CommunityCommentModeration.State.REJECTED
+            comment_moderations.append(comment_moderation)
+
+        return comments, comment_moderations
+
+
+class UnSureCommentView(BaseCommentView):
+    action_verb = 'unsure'
+
+    def handle(self, request, comment_pk):
+        comments = self.get_queryset(comment_pk)
+        comment_moderations = []
+
+        for comment in comments:
+            comment_moderation = comment.comment_moderation
+            comment_moderation.state = CommunityCommentModeration.State.UNSURE
+            comment_moderations.append(comment_moderation)
+
+        return comments, comment_moderations
+
+
+class PublishCommentView(BaseCommentView):
+    action_verb = 'published'
+
+    def handle(self, request, comment_pk):
+        comments = self.get_queryset(comment_pk)
+        comment_moderations = []
+
+        for comment in comments:
+            comment.is_public = True
+
+        return comments, comment_moderations
+
+
+class UnPublishCommentView(BaseCommentView):
+    action_verb = 'unpublished'
+
+    def handle(self, request, comment_pk):
+        comments = self.get_queryset(comment_pk)
+        comment_moderations = []
+
+        for comment in comments:
+            comment.is_public = False
+
+        return comments, comment_moderations
+
+
+class HideCommentView(BaseCommentView):
+    action_verb = 'removed'
+
+    def handle(self, request, comment_pk):
+        comments = self.get_queryset(comment_pk)
+        comment_moderations = []
+
+        for comment in comments:
+            comment.is_removed = True
+
+        return comments, comment_moderations
+
+
+class ShowCommentView(BaseCommentView):
+    action_verb = 'shown'
+
+    def handle(self, request, comment_pk):
+        comments = self.get_queryset(comment_pk)
+        comment_moderations = []
+
+        for comment in comments:
+            comment.is_removed = False
+
+        return comments, comment_moderations
+
+
+class ClearFlagsCommentView(BaseCommentView):
+    action_verb = 'cleared'
+
+    def get_queryset(self, comment_pk):
+        return XtdComment.objects.get(pk=comment_pk)
+
+    def handle(self, request, comment_pk):
+        comment = self.get_queryset(comment_pk)
+        comment.flags.all().delete()
+
+        return comment, []
 
 
 class CommentReplyView(TemplateView):
