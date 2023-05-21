@@ -100,7 +100,7 @@ def create_remote_webdriver(preset: str = "chrome") -> webdriver.Remote:
             f"Invalid webdriver preset ('{preset}'); must be 'chrome' or 'firefox'"
         )
     driver.set_page_load_timeout(60)
-    driver.implicitly_wait(10)
+    driver.implicitly_wait(20)
     return driver
 
 

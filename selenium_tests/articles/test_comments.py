@@ -52,7 +52,6 @@ class ArticleCommentsSeleniumTests(BaseSeleniumTests):
         )
 
     def test_user_flagging_comments(self):
-        self.skipTest("Unstable in CI environment - needs investigation")
         # login as a normal user
         login_page = self.visit_login_page()
         login_page.login_user(self.user2)
