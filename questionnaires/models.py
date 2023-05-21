@@ -17,8 +17,17 @@ from wagtailmarkdown.blocks import MarkdownBlock
 from wagtailsvg.edit_handlers import SvgChooserPanel
 from wagtailsvg.models import Svg
 
-from home.blocks import MediaBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock
+from home.blocks import (
+    MediaBlock,
+    NumberedListBlock,
+    PageButtonBlock,
+    RawHTMLBlock,
+)
 from home.mixins import PageUtilsMixin, TitleIconMixin
+from home.utils import (
+    collect_urls_from_streamfield,
+    get_all_renditions_urls,
+)
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (FieldPanel, InlinePanel,
                                          MultiFieldPanel, StreamFieldPanel)
@@ -235,8 +244,6 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
         return render(request, self.template, context)
 
     def process_form_submission(self, form):
-        from home.models import SiteSettings
-
         user = form.user
         self.get_submission_class().objects.create(
             form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder),
@@ -270,16 +277,17 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
         return data_fields
 
     @property
-    def get_image_urls(self):
-        image_urls = []
+    def offline_urls(self):
+        urls = (
+            [self.url]
+            + collect_urls_from_streamfield(self.description)
+            + collect_urls_from_streamfield(self.thank_you_text)
+        )
 
         if self.image_icon:
-            image_urls += self._get_renditions(self.image_icon)
+            urls += get_all_renditions_urls(self.image_icon)
 
-        image_urls += self._get_stream_data_image_urls(self.description.raw_data)
-        image_urls += self._get_stream_data_image_urls(self.thank_you_text.raw_data)
-
-        return image_urls
+        return urls
 
     def get_submit_button_text(self, fields_step=None):
         submit_button_text = self.submit_button_text
@@ -633,7 +641,7 @@ class Poll(QuestionnairePage, AbstractForm):
         results = dict()
         results_list = []
         field = self.get_form_fields().first()
-        name, label, choices = field.clean_name, field.label, field.choices
+        name, choices = field.clean_name, field.choices
         submissions = self.get_submission_class().objects.filter(page=self)
         submissions = [submission for submission in submissions if submission.get_data().get(name) != '']
 
