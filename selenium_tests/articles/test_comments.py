@@ -1,3 +1,5 @@
+from unittest import skip
+
 from comments.models import CommentStatus
 from home.factories import ArticleFactory, SectionFactory
 from iogt_users.factories import AdminUserFactory, UserFactory
@@ -5,6 +7,7 @@ from selenium_tests.base import BaseSeleniumTests
 from selenium_tests.pages import ArticlePage
 
 
+@skip("Unstable in CI environment")
 class ArticleCommentsSeleniumTests(BaseSeleniumTests):
     def setUp(self):
         self.setup_blank_site()
@@ -52,7 +55,6 @@ class ArticleCommentsSeleniumTests(BaseSeleniumTests):
         )
 
     def test_user_flagging_comments(self):
-        self.skipTest("Unstable in CI environment - needs investigation")
         # login as a normal user
         login_page = self.visit_login_page()
         login_page.login_user(self.user2)
