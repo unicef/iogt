@@ -97,7 +97,7 @@ class CommunityCommentModerationAdmin(ModelAdmin):
 
     def get_permissions_for_registration(self):
         permissions = super().get_permissions_for_registration()
-        return permissions.filter(codename='can_moderate_on_public_site')
+        return permissions.filter(codename='can_community_moderate')
 
 
 class CommentsGroup(ModelAdminGroup):

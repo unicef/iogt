@@ -17,6 +17,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterModelOptions(
             name='communitycommentmoderation',
-            options={'permissions': (('can_moderate_on_public_site', 'Can moderate comments on PUBLIC SITE'),)},
+            options={'permissions': (('can_community_moderate', 'Can moderate comments on PUBLIC SITE'),)},
         ),
     ]
