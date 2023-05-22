@@ -1,13 +1,20 @@
+from bs4 import BeautifulSoup
 from django.test import TestCase, override_settings
 from django.http import HttpRequest
 from translation_manager.models import TranslationEntry
 from wagtail.core.models import Site
+from wagtail_factories import SiteFactory, PageFactory
 from wagtail_localize.operations import TranslationCreator
 
 from home.wagtail_hooks import limit_page_chooser
-from home.factories import SectionFactory, ArticleFactory, HomePageFactory, MediaFactory, LocaleFactory, SiteSettingsFactory
-from wagtail_factories import SiteFactory, PageFactory
-from bs4 import BeautifulSoup
+from home.factories import (
+    SectionFactory,
+    ArticleFactory,
+    HomePageFactory,
+    MediaFactory,
+    LocaleFactory,
+    SiteSettingsFactory
+)
 
 
 class LimitPageChooserHookTests(TestCase):
@@ -109,7 +116,7 @@ class ImageResizeTest(TestCase):
 
     def test_default_image_within_preset(self):
         response = self.client.get(self.article.url)
-        parsed_response = BeautifulSoup(response.content)
+        parsed_response = parse_html(response.content)
         rendered_image = parsed_response.find("img", {"class": "article__lead-img-featured"})
         image_rendition = self.article.lead_image.get_rendition('width-360')
 
@@ -122,7 +129,7 @@ class ImageResizeTest(TestCase):
 
     def test_half_default_image_within_preset(self):
         response = self.client.get(self.section.url)
-        parsed_response = BeautifulSoup(response.content)
+        parsed_response = parse_html(response.content)
         rendered_image = parsed_response.find("div", {"class": "article-card"}).find("img")
         image_rendition = self.article.lead_image.get_rendition('width-180')
 
@@ -135,7 +142,7 @@ class ImageResizeTest(TestCase):
     @override_settings(IMAGE_SIZE_PRESET=750)
     def test_custom_image_within_preset(self):
         response = self.client.get(self.article.url)
-        parsed_response = BeautifulSoup(response.content)
+        parsed_response = parse_html(response.content)
         rendered_image = parsed_response.find("img", {"class": "article__lead-img-featured"})
         image_rendition = self.article.lead_image.get_rendition('width-750')
 
@@ -148,7 +155,7 @@ class ImageResizeTest(TestCase):
     @override_settings(IMAGE_SIZE_PRESET=750)
     def test_half_custom_image_within_preset(self):
         response = self.client.get(self.section.url)
-        parsed_response = BeautifulSoup(response.content)
+        parsed_response = parse_html(response.content)
         rendered_image = parsed_response.find("div", {"class": "article-card"}).find("img")
         image_rendition = self.article.lead_image.get_rendition('width-375')
 
@@ -157,3 +164,7 @@ class ImageResizeTest(TestCase):
         self.assertEqual(int(rendered_image.get('width')), image_rendition.width)
         self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
         self.assertEqual(rendered_image.get('src'), image_rendition.url)
+
+
+def parse_html(html: str) -> BeautifulSoup:
+    return BeautifulSoup(html, 'lxml')
