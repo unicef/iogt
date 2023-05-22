@@ -2,6 +2,7 @@ from urllib.parse import urlparse, urlunparse, urlencode, parse_qsl
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q, Count
 from django.contrib import messages
@@ -19,7 +20,7 @@ from comments.forms import AdminCommentForm, CommentFilterForm
 from comments.models import CannedResponse, CommunityCommentModeration
 
 
-class BaseCommentView(View):
+class BaseCommentView(LoginRequiredMixin, PermissionRequiredMixin, View):
     action_verb = ''
 
     def get_queryset(self, comment_pk):
@@ -40,6 +41,7 @@ class BaseCommentView(View):
 
 
 class ApproveCommentView(BaseCommentView):
+    permission_required = 'comments.can_moderate_on_public_site'
     action_verb = 'approved'
 
     def handle(self, request, comment_pk):
@@ -57,6 +59,7 @@ class ApproveCommentView(BaseCommentView):
 
 
 class RejectCommentView(BaseCommentView):
+    permission_required = 'comments.can_moderate_on_public_site'
     action_verb = 'rejected'
 
     def handle(self, request, comment_pk):
@@ -73,6 +76,7 @@ class RejectCommentView(BaseCommentView):
 
 
 class UnSureCommentView(BaseCommentView):
+    permission_required = 'comments.can_moderate_on_public_site'
     action_verb = 'unsure'
 
     def handle(self, request, comment_pk):
@@ -87,7 +91,20 @@ class UnSureCommentView(BaseCommentView):
         return comments, comment_moderations
 
 
+class HideCommentView(BaseCommentView):
+    permission_required = 'comments.can_moderate_on_public_site'
+    action_verb = 'removed'
+
+    def handle(self, request, comment_pk):
+        comments = self.get_queryset(comment_pk)
+        for comment in comments:
+            comment.is_removed = True
+
+        return comments, []
+
+
 class PublishCommentView(BaseCommentView):
+    permission_required = 'django_comments_xtd.can_moderate_on_admin_panel'
     action_verb = 'published'
 
     def handle(self, request, comment_pk):
@@ -99,6 +116,7 @@ class PublishCommentView(BaseCommentView):
 
 
 class UnPublishCommentView(BaseCommentView):
+    permission_required = 'django_comments_xtd.can_moderate_on_admin_panel'
     action_verb = 'unpublished'
 
     def handle(self, request, comment_pk):
@@ -109,18 +127,8 @@ class UnPublishCommentView(BaseCommentView):
         return comments, []
 
 
-class HideCommentView(BaseCommentView):
-    action_verb = 'removed'
-
-    def handle(self, request, comment_pk):
-        comments = self.get_queryset(comment_pk)
-        for comment in comments:
-            comment.is_removed = True
-
-        return comments, []
-
-
 class ClearFlagsCommentView(BaseCommentView):
+    permission_required = 'django_comments_xtd.can_moderate_on_admin_panel'
     action_verb = 'cleared'
 
     def get_queryset(self, comment_pk):
