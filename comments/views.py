@@ -19,60 +19,6 @@ from comments.forms import AdminCommentForm, CommentFilterForm
 from comments.models import CannedResponse, CommunityCommentModeration
 
 
-def update(request, comment_pk, action):
-    get_comment_with_children_filter = Q(parent_id=comment_pk) | Q(pk=comment_pk)
-    comments = XtdComment.objects.filter(get_comment_with_children_filter)
-    comment_moderations = []
-    verb = ''
-    if action == 'approve':
-        for comment in comments:
-            comment.is_public = True
-            comment.flags.all().delete()
-            comment_moderation = comment.comment_moderation
-            comment_moderation.state = CommunityCommentModeration.State.APPROVED
-            comment_moderations.append(comment_moderation)
-        verb = 'approved'
-    elif action == 'reject':
-        for comment in comments:
-            comment.is_public = False
-            comment_moderation = comment.comment_moderation
-            comment_moderation.state = CommunityCommentModeration.State.REJECTED
-            comment_moderations.append(comment_moderation)
-        verb = 'rejected'
-    elif action == 'unsure':
-        for comment in comments:
-            comment_moderation = comment.comment_moderation
-            comment_moderation.state = CommunityCommentModeration.State.UNSURE
-            comment_moderations.append(comment_moderation)
-        verb = 'unsure'
-    elif action == 'unpublish':
-        for comment in comments:
-            comment.is_public = False
-        verb = 'unpublished'
-    elif action == 'publish':
-        for comment in comments:
-            comment.is_public = True
-        verb = 'published'
-    elif action == 'hide':
-        for comment in comments:
-            comment.is_removed = True
-        verb = 'removed'
-    elif action == 'show':
-        for comment in comments:
-            comment.is_removed = False
-        verb = 'shown'
-    elif action == 'clear_flags':
-        comment = XtdComment.objects.get(pk=comment_pk)
-        comment.flags.all().delete()
-        verb = 'cleared'
-    XtdComment.objects.bulk_update(comments, ['is_public', 'is_removed'])
-    CommunityCommentModeration.objects.bulk_update(comment_moderations, ['state'])
-
-    messages.success(request, _(f'The comment has been {verb} successfully!'))
-
-    return redirect(request.META.get('HTTP_REFERER'))
-
-
 class BaseCommentView(View):
     action_verb = ''
 
@@ -174,17 +120,6 @@ class HideCommentView(BaseCommentView):
         return comments, []
 
 
-class ShowCommentView(BaseCommentView):
-    action_verb = 'shown'
-
-    def handle(self, request, comment_pk):
-        comments = self.get_queryset(comment_pk)
-        for comment in comments:
-            comment.is_removed = False
-
-        return comments, []
-
-
 class ClearFlagsCommentView(BaseCommentView):
     action_verb = 'cleared'
 
@@ -195,7 +130,7 @@ class ClearFlagsCommentView(BaseCommentView):
         comment = self.get_queryset(comment_pk)
         comment.flags.all().delete()
 
-        return comment, []
+        return [], []
 
 
 class CommentReplyView(TemplateView):
