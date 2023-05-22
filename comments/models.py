@@ -128,7 +128,7 @@ class CommunityCommentModeration(models.Model):
 
     class Meta:
         permissions = (
-            ("can_moderate_on_public_site", "Can moderate comments on PUBLIC SITE"),
+            ("can_community_moderate", "Can moderate comments on PUBLIC SITE"),
         )
 
 

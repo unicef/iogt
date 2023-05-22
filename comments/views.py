@@ -41,7 +41,7 @@ class BaseCommentView(LoginRequiredMixin, PermissionRequiredMixin, View):
 
 
 class ApproveCommentView(BaseCommentView):
-    permission_required = 'comments.can_moderate_on_public_site'
+    permission_required = 'comments.can_community_moderate'
     action_verb = 'approved'
 
     def handle(self, request, comment_pk):
@@ -59,7 +59,7 @@ class ApproveCommentView(BaseCommentView):
 
 
 class RejectCommentView(BaseCommentView):
-    permission_required = 'comments.can_moderate_on_public_site'
+    permission_required = 'comments.can_community_moderate'
     action_verb = 'rejected'
 
     def handle(self, request, comment_pk):
@@ -76,7 +76,7 @@ class RejectCommentView(BaseCommentView):
 
 
 class UnSureCommentView(BaseCommentView):
-    permission_required = 'comments.can_moderate_on_public_site'
+    permission_required = 'comments.can_community_moderate'
     action_verb = 'unsure'
 
     def handle(self, request, comment_pk):
@@ -92,7 +92,7 @@ class UnSureCommentView(BaseCommentView):
 
 
 class HideCommentView(BaseCommentView):
-    permission_required = 'comments.can_moderate_on_public_site'
+    permission_required = 'comments.can_community_moderate'
     action_verb = 'removed'
 
     def handle(self, request, comment_pk):
@@ -176,7 +176,7 @@ class ProcessCannedResponseView(View):
         canned_response_id = request.POST.get('canned_responses')
         parsed_url = urlparse(referer)
 
-        if not request.user.has_perm('comments.can_moderate_on_public_site'):
+        if not request.user.has_perm('comments.can_community_moderate'):
             messages.error(request, _("You do not have the permission to perform this action."))
         else:
             query_dict = dict(parse_qsl(parsed_url.query))
@@ -199,7 +199,7 @@ class CommentsCommunityModerationView(ListView):
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        if not settings.COMMENTS_COMMUNITY_MODERATION or not request.user.has_perm('comments.can_moderate_on_public_site'):
+        if not settings.COMMENTS_COMMUNITY_MODERATION or not request.user.has_perm('comments.can_community_moderate'):
             raise PermissionDenied(
                 "You do not have permission."
             )
