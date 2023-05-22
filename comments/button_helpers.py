@@ -3,24 +3,6 @@ from wagtail.contrib.modeladmin.helpers import ButtonHelper
 
 
 class XtdCommentAdminButtonHelper(ButtonHelper):
-    def hide_show_toggle_button(self, comment):
-
-        if comment.is_removed:
-            action = 'show_comment'
-            label = 'Show'
-        else:
-            action = 'hide_comment'
-            label = 'Hide'
-
-        return {
-            'url': reverse(action, kwargs={
-                'comment_pk': comment.pk,
-            }),
-            'label': label,
-            'classname': 'button button-small button-secondary',
-            'title': f'{label} this {self.verbose_name}'
-        }
-
     def publish_unpublish_toggle_button(self, comment):
         if comment.is_public:
             action = 'unpublish_comment'
@@ -62,8 +44,8 @@ class XtdCommentAdminButtonHelper(ButtonHelper):
 
     def get_buttons_for_obj(self, obj, *args, **kwargs):
         buttons = super().get_buttons_for_obj(obj, exclude='delete', *args, **kwargs)
-        if self.request.user.has_perm('django_comments_xtd.can_moderate_on_admin_panel'):
-            buttons.append(self.publish_unpublish_toggle_button(comment=obj))
-            buttons.append(self.clear_flags_button(comment=obj))
+        # if self.request.user.has_perm('django_comments_xtd.can_moderate_on_admin_panel'):
+        buttons.append(self.publish_unpublish_toggle_button(comment=obj))
+        buttons.append(self.clear_flags_button(comment=obj))
         buttons.append(self.comment_reply_button(comment=obj))
         return buttons
