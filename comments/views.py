@@ -14,7 +14,6 @@ from django.views.generic import TemplateView, ListView
 from django_comments.views.comments import post_comment
 from django_comments_xtd.models import XtdComment
 from django.utils.translation import ugettext as _
-from django.contrib.auth.decorators import permission_required
 
 from comments.forms import AdminCommentForm, CommentFilterForm
 from comments.models import CannedResponse, CommunityCommentModeration
@@ -147,12 +146,10 @@ class PublishCommentView(BaseCommentView):
 
     def handle(self, request, comment_pk):
         comments = self.get_queryset(comment_pk)
-        comment_moderations = []
-
         for comment in comments:
             comment.is_public = True
 
-        return comments, comment_moderations
+        return comments, []
 
 
 class UnPublishCommentView(BaseCommentView):
@@ -160,12 +157,10 @@ class UnPublishCommentView(BaseCommentView):
 
     def handle(self, request, comment_pk):
         comments = self.get_queryset(comment_pk)
-        comment_moderations = []
-
         for comment in comments:
             comment.is_public = False
 
-        return comments, comment_moderations
+        return comments, []
 
 
 class HideCommentView(BaseCommentView):
@@ -173,12 +168,10 @@ class HideCommentView(BaseCommentView):
 
     def handle(self, request, comment_pk):
         comments = self.get_queryset(comment_pk)
-        comment_moderations = []
-
         for comment in comments:
             comment.is_removed = True
 
-        return comments, comment_moderations
+        return comments, []
 
 
 class ShowCommentView(BaseCommentView):
@@ -186,12 +179,10 @@ class ShowCommentView(BaseCommentView):
 
     def handle(self, request, comment_pk):
         comments = self.get_queryset(comment_pk)
-        comment_moderations = []
-
         for comment in comments:
             comment.is_removed = False
 
-        return comments, comment_moderations
+        return comments, []
 
 
 class ClearFlagsCommentView(BaseCommentView):
