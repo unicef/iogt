@@ -252,7 +252,7 @@ WAGTAIL_USER_CUSTOM_FIELDS = ['display_name', 'first_name', 'last_name', 'email'
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-BASE_URL = os.getenv('BASE_URL')
+BASE_URL = os.getenv('BASE_URL', '')
 
 # SITE ID
 SITE_ID = 1
@@ -567,3 +567,8 @@ MATOMO_TRACKING = os.getenv('MATOMO_TRACKING', 'disable') == 'enable'
 
 # Width size options are 360, 750
 IMAGE_SIZE_PRESET = int(os.getenv('IMAGE_SIZE_PRESET', '') or '360')
+
+# Default primary key field type introduced in Django 3.2 or later versions
+# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

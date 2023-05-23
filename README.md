@@ -129,10 +129,19 @@ docker-compose run django python manage.py autopopulate_main_menus
 
 ## Running Tests
 
-Run the following command:
+Run the following commands:
 ```
-make test
+make tests
+make selenium-test
 ```
+
+In parallel, for example, with 4 processes:
+```
+IOGT_TEST_PARALLEL=4 make test
+IOGT_TEST_PARALLEL=4 make selenium-test
+```
+
+More details of the Selenium tests can be found in the [Selenium test README][9].
 
 ## Configuring the Chatbot
 
@@ -185,3 +194,4 @@ Follow instructions [here](iogt_content_migration/README.md)
 [6]: https://github.com/wagtail/wagtail/wiki/Release-schedule
 [7]: ./docs/cache.md
 [8]: ./docs/troubleshooting.md
+[9]: ./selenium_tests/README.md

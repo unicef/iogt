@@ -4,9 +4,10 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
 
-RUN apt update -y
-RUN apt install gettext -y
+RUN apt-get update --yes --quiet \
+ && apt-get install --yes --quiet --no-install-recommends gettext tini \
+ && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --upgrade pip
-ADD ./requirements.txt ./requirements.dev.txt ./
-RUN pip install -r requirements.dev.txt
+COPY requirements.txt requirements.dev.txt /
+RUN pip install --no-cache-dir --upgrade pip \
+ && pip install --no-cache-dir -r /requirements.dev.txt
