@@ -19,9 +19,3 @@ def jquery(request):
     return {
         'jquery': settings.JQUERY,
     }
-
-
-def matomo_tracking(request):
-    return {
-        'matomo_tracking': settings.MATOMO_TRACKING,
-    }

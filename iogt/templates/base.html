@@ -1,4 +1,4 @@
-{% load static wagtailuserbar home_tags sass_tags wagtailsettings_tags menu_tags generic_components i18n wagtailimages_tags matomo_tags tracking_tags %}
+{% load static wagtailuserbar home_tags sass_tags wagtailsettings_tags menu_tags generic_components i18n wagtailimages_tags matomo_tags %}
 {% get_settings %}
 
 <!--  Commit Hash: {{commit_hash}} -->
@@ -44,13 +44,12 @@
     {% block extra_css %}
         {# Override this in templates to add extra stylesheets #}
     {% endblock %}
-    {% if matomo_tracking %} {% tracking_code %} {% endif %}
+    {% matomo_tracking_code %}
 </head>
 
 {% get_current_language_bidi as LANGUAGE_BIDI %}
 <body class="{% if LANGUAGE_BIDI %}rtl{% endif %} {% block body_class %}{% endblock %}">
 {% include 'google_analytics_pixel_tracking.html' %}
-{% if matomo_tracking %} {% tracking_matomo_js_disabled_code %} {% endif %}
 {% wagtailuserbar %}
 
 <main id="app">
