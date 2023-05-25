@@ -32,8 +32,8 @@ services:
       PUSH_NOTIFICATION: 'enable'
       JQUERY: 'enable'
       MATOMO_TRACKING: 'enable'
-      MATOMO_URL: ''
-      MATOMO_SITE_ID: ''
+      MATOMO_SERVER_URL: '//localhost/'
+      MATOMO_SITE_ID: '12'
       IMAGE_SIZE_PRESET: ''
     command: python manage.py runserver 0.0.0.0:8000
     volumes:

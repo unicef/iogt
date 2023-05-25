@@ -6,12 +6,10 @@ register = template.Library()
 
 
 @register.inclusion_tag('matomo_tracking_code.html', takes_context=True)
-def matomo_tracking_code(context):
-    site_id = settings.MATOMO_SITE_ID
-    url = settings.MATOMO_URL
-
+def matomo_tracking_tags(context):
     context.update({
-        'site_id': site_id,
-        'url': url
+        'tracking_enabled': settings.MATOMO_TRACKING,
+        'matomo_site_id': settings.MATOMO_SITE_ID,
+        'matomo_server_url': settings.MATOMO_SERVER_URL
     })
     return context
