@@ -48,7 +48,6 @@ Finally, start the server.
 Once running, navigate to http://localhost:8000 in your browser.
 
 ### Add/Update package:
-If you want to add or update a package, follow these steps:
 - Add or update the package and its version specifier according to your needs in <requirements_file>.in file.
 
 Next, run the following commands to generate the compiled <requirements_file>.txt file:
