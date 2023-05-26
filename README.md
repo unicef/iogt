@@ -47,15 +47,6 @@ Finally, start the server.
 
 Once running, navigate to http://localhost:8000 in your browser.
 
-### Add/Update package:
-- Add or update the package and its version specifier according to your needs in <requirements_file>.in file.
-
-Next, run the following commands to generate the compiled <requirements_file>.txt file:
-```
-pip install --upgrade pip
-pip install pip-tools
-pip-compile --generate-hashes --resolver=backtracking -o <requirements_file>.txt <requirements_file>.in
-```
 
 ### Running ElasticSearch (Optional)
 
@@ -88,14 +79,6 @@ It is possible to automatically populate the database with example data for a ba
 Optionally, create the main menu automatically as well.
 ```
 ./manage.py autopopulate_main_menus
-```
-
-### Add/Update package:
-- Add or update the package and its version specifier according to your needs in <requirements_file>.in file.
-
-Next, run the following command to generate the compiled <requirements_file>.txt file:
-```
-make cr
 ```
 
 ### Running Tests
@@ -211,3 +194,4 @@ Follow instructions [here](iogt_content_migration/README.md)
 [7]: ./docs/cache.md
 [8]: ./docs/troubleshooting.md
 [9]: ./selenium_tests/README.md
+[10]: ./docs/packages.md
