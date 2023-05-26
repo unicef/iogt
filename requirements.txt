@@ -30,5 +30,4 @@ django-google-analytics-app==5.0.5
 django-filter==2.4.0
 drf-yasg~=1.21.3
 django-webpush==0.3.4
-django-matomo==0.1.6
 git+https://github.com/IDEMSInternational/wagtail-transfer.git@enh/show-error-for-unimported-referenced-pages#egg=wagtail-transfer
