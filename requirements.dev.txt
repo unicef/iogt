@@ -16,9 +16,9 @@ anyascii==0.3.2 \
     # via
     #   -r /app/requirements.txt
     #   wagtail
-asgiref==3.7.1 \
-    --hash=sha256:33958cb2e4b3cd8b1b06ef295bd8605cde65b11df51d3beab39e2e149a610ab3 \
-    --hash=sha256:8de379fcc383bcfe4507e229fc31209ea23d4831c850f74063b2c11639474dd2
+asgiref==3.7.2 \
+    --hash=sha256:89b2ef2247e3b562a16eef663bc0e2e703ec6468e2fa8a5cd61cd449786d4f6e \
+    --hash=sha256:9e0ce3aa93a819ba5b45120216b23878cf6e8525eb3848653452b4192b92afed
     # via
     #   -r /app/requirements.txt
     #   django
@@ -381,8 +381,8 @@ django==3.2.19 \
     #   drf-yasg
     #   wagtail
     #   wagtail-localize
-django-allauth==0.54.0 \
-    --hash=sha256:120e265f802b65738899c6cb627b827fde46a4d03067034c633f516c2adf3e3e
+django-allauth==0.44.0 \
+    --hash=sha256:e51af457466022f52154d74c8523ac69375120fad2acce6e239635d85e610b25
     # via -r /app/requirements.txt
 django-appconf==1.0.5 \
     --hash=sha256:ae9f864ee1958c815a965ed63b3fba4874eec13de10236ba063a788f9a17389d \
@@ -458,9 +458,8 @@ django-taggit==1.5.1 \
     # via
     #   -r /app/requirements.txt
     #   wagtail
-django-test-plus==2.2.1 \
-    --hash=sha256:5eaacb7a26b88f12df06538ffe4ad44e81636e07003e4863ef704204069bd8bb \
-    --hash=sha256:980a0ef6705421485a63f93fee849420a4563552acfea83255e57372233c2133
+django-test-plus==1.4.0 \
+    --hash=sha256:9c3ca75f9ebb0b72d0a16e98b6d80e94b3d0ff007be5fc946d16b423b808bf16
     # via -r /app/requirements.dev.in
 django-translation-manager==1.3.0 \
     --hash=sha256:1e3143f48f9ba4d5452d72f55195142c434ea63786546251ae694508df4eb7b1 \
@@ -503,13 +502,13 @@ draftjs-exporter==2.1.7 \
     # via
     #   -r /app/requirements.txt
     #   wagtail
-drf-yasg==1.21.5 \
-    --hash=sha256:ba9cf4bf79f259290daee9b400fa4fcdb0e78d2f043fa5e9f6589c939fd06d05 \
-    --hash=sha256:ceef0c3b5dc4389781afd786e6dc3697af2a2fe0d8724ee1f637c23d75bbc5b2
+drf-yasg==1.21.3 \
+    --hash=sha256:85899b8b173cac7d39af3fea205bdc1a599aed8de3389a3bcccc29b37b9b983e \
+    --hash=sha256:b2eebb438fa641503a08dac791be24183ea26dbcfe371a9824ea91f6e3a988aa
     # via -r /app/requirements.txt
-elasticsearch==7.17.9 \
-    --hash=sha256:0e2454645dc00517dee4c6de3863411a9c5f1955d013c5fefa29123dadc92f98 \
-    --hash=sha256:66c4ece2adfe7cc120e2b6a6798a1fd5c777aecf82eec39bb95cef7cfc7ea2b3
+elasticsearch==7.16.0 \
+    --hash=sha256:9a5a2fd53a4fce28f15f358ab13fbcfb06f47fb2c7400ea89c10d6fd3f236ecd \
+    --hash=sha256:d7f8665715ad80e3e99e42388bcc49c1b06162f72acfa1f8febe2baf5570b0ed
     # via -r /app/requirements.txt
 et-xmlfile==1.1.0 \
     --hash=sha256:8eb9e2bc2f8c97e37a2dc85a09ecdcdec9d8a396530a6d5a33b30b9a92da0c5c \
@@ -926,9 +925,9 @@ rcssmin==1.0.6 \
     # via
     #   -r /app/requirements.txt
     #   django-compressor
-redis==3.5.3 \
-    --hash=sha256:0e7e0cfca8660dea8b7d5cd8c4f6c5e29e11f31158c0b0ae91a397f00e5a05a2 \
-    --hash=sha256:432b788c4530cfe16d8d943a09d40ca6c16149727e4afe8c2c9d5580c59d9f24
+redis==3.0.0 \
+    --hash=sha256:78815017ef63db5f42f3e1207f50ffd07b4b4b98ba7ffe78da59b8543b1e9a27 \
+    --hash=sha256:909b50e34b9780cf9201f4a11d4572952141a4da9f8740c561b2befd59dfd8de
     # via
     #   -r /app/requirements.txt
     #   django-redis
@@ -970,9 +969,9 @@ rjsmin==1.1.0 \
     # via
     #   -r /app/requirements.txt
     #   django-compressor
-rq==1.14.1 \
-    --hash=sha256:37e003db1da205e08db6cc4653b7c6ccfd9292000954240308abfce2ebde43ba \
-    --hash=sha256:5fb86038922ddd76eb2d9aa0adeec6dcf64f159dbbe730b26358b1417120dd44
+rq==1.4.3 \
+    --hash=sha256:60509898c9ebc40e4155fde8bf88a204ed1914cc9e1cde3d19188b1c5bd5efbd \
+    --hash=sha256:ee7fb24bc84dba87446264ca7162b2ed7d6d6af3cbd68f0b6b220ce7c23c8ae8
     # via
     #   -r /app/requirements.txt
     #   django-rq
@@ -1215,9 +1214,9 @@ xlrd==2.0.1 \
     # via
     #   -r /app/requirements.txt
     #   tablib
-xlsxwriter==3.1.1 \
-    --hash=sha256:03459ee76f664470c4c63a8977cab624fb259d0fc1faac64dc9cc6f3cc08f945 \
-    --hash=sha256:b50e3bd905d7dafa6ea45210e2cc5600b4ccd104a0d3a4d4d7cf813b78426440
+xlsxwriter==3.1.2 \
+    --hash=sha256:331508ff39d610ecdaf979e458840bc1eab6e6a02cfd5d08f044f0f73636236f \
+    --hash=sha256:78751099a770273f1c98b8d6643351f68f98ae8e6acf9d09d37dc6798f8cd3de
     # via
     #   -r /app/requirements.txt
     #   wagtail

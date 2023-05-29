@@ -3,7 +3,7 @@ pytest
 pytest-django
 Faker
 beautifulsoup4
-django-test-plus>=1.4.0
+django-test-plus==1.4.0
 coverage
 selenium==4.9.1
 factory-boy==3.2.*
