@@ -185,6 +185,9 @@ Page caching is provided by Wagtail Cache and is deactivated by default. To star
 ## Migrating content from IoGT v1
 Follow instructions [here](iogt_content_migration/README.md)
 
+## Add/Update Package
+Follow instructions [here][10]
+
 
 [1]: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment
 [2]: https://www.unicef.org/innovation/IoGT

@@ -283,8 +283,8 @@ django==3.2.19 \
     #   drf-yasg
     #   wagtail
     #   wagtail-localize
-django-allauth==0.44.0 \
-    --hash=sha256:e51af457466022f52154d74c8523ac69375120fad2acce6e239635d85e610b25
+django-allauth==0.54.0 \
+    --hash=sha256:120e265f802b65738899c6cb627b827fde46a4d03067034c633f516c2adf3e3e
     # via -r /app/requirements.in
 django-appconf==1.0.5 \
     --hash=sha256:ae9f864ee1958c815a965ed63b3fba4874eec13de10236ba063a788f9a17389d \
@@ -383,13 +383,13 @@ draftjs-exporter==2.1.7 \
     --hash=sha256:5839cbc29d7bce2fb99837a404ca40c3a07313f2a20e2700de7ad6aa9a9a18fb \
     --hash=sha256:d415a9964690a2cddb66a31ef32dd46c277e9b80434b94e39e3043188ed83e33
     # via wagtail
-drf-yasg==1.21.3 \
-    --hash=sha256:85899b8b173cac7d39af3fea205bdc1a599aed8de3389a3bcccc29b37b9b983e \
-    --hash=sha256:b2eebb438fa641503a08dac791be24183ea26dbcfe371a9824ea91f6e3a988aa
+drf-yasg==1.21.5 \
+    --hash=sha256:ba9cf4bf79f259290daee9b400fa4fcdb0e78d2f043fa5e9f6589c939fd06d05 \
+    --hash=sha256:ceef0c3b5dc4389781afd786e6dc3697af2a2fe0d8724ee1f637c23d75bbc5b2
     # via -r /app/requirements.in
-elasticsearch==7.16.0 \
-    --hash=sha256:9a5a2fd53a4fce28f15f358ab13fbcfb06f47fb2c7400ea89c10d6fd3f236ecd \
-    --hash=sha256:d7f8665715ad80e3e99e42388bcc49c1b06162f72acfa1f8febe2baf5570b0ed
+elasticsearch==7.17.9 \
+    --hash=sha256:0e2454645dc00517dee4c6de3863411a9c5f1955d013c5fefa29123dadc92f98 \
+    --hash=sha256:66c4ece2adfe7cc120e2b6a6798a1fd5c777aecf82eec39bb95cef7cfc7ea2b3
     # via -r /app/requirements.in
 et-xmlfile==1.1.0 \
     --hash=sha256:8eb9e2bc2f8c97e37a2dc85a09ecdcdec9d8a396530a6d5a33b30b9a92da0c5c \
@@ -707,9 +707,9 @@ pywebpush==1.9.4 \
 rcssmin==1.0.6 \
     --hash=sha256:ca87b695d3d7864157773a61263e5abb96006e9ff0e021eff90cbe0e1ba18270
     # via django-compressor
-redis==3.0.0 \
-    --hash=sha256:78815017ef63db5f42f3e1207f50ffd07b4b4b98ba7ffe78da59b8543b1e9a27 \
-    --hash=sha256:909b50e34b9780cf9201f4a11d4572952141a4da9f8740c561b2befd59dfd8de
+redis==3.5.3 \
+    --hash=sha256:0e7e0cfca8660dea8b7d5cd8c4f6c5e29e11f31158c0b0ae91a397f00e5a05a2 \
+    --hash=sha256:432b788c4530cfe16d8d943a09d40ca6c16149727e4afe8c2c9d5580c59d9f24
     # via
     #   -r /app/requirements.in
     #   django-redis
@@ -746,9 +746,9 @@ rjsmin==1.1.0 \
     --hash=sha256:e487a7783ac4339e79ec610b98228eb9ac72178973e3dee16eba0e3feef25924 \
     --hash=sha256:ecd29f1b3e66a4c0753105baec262b331bcbceefc22fbe6f7e8bcd2067bcb4d7
     # via django-compressor
-rq==1.4.3 \
-    --hash=sha256:60509898c9ebc40e4155fde8bf88a204ed1914cc9e1cde3d19188b1c5bd5efbd \
-    --hash=sha256:ee7fb24bc84dba87446264ca7162b2ed7d6d6af3cbd68f0b6b220ce7c23c8ae8
+rq==1.14.1 \
+    --hash=sha256:37e003db1da205e08db6cc4653b7c6ccfd9292000954240308abfce2ebde43ba \
+    --hash=sha256:5fb86038922ddd76eb2d9aa0adeec6dcf64f159dbbe730b26358b1417120dd44
     # via django-rq
 ruamel-yaml==0.17.28 \
     --hash=sha256:3bf6df1c481d2463a633be6ee86e8aece941bb3298a9a0cd6d0865f47b1ddce6 \
