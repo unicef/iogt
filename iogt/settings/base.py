@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'wagtail_transfer',
     'wagtailsvg',
     'wagtail.contrib.settings',
+    'generic_chooser',
 
     'django_comments_xtd',
     'django_comments',
@@ -570,3 +571,5 @@ IMAGE_SIZE_PRESET = int(os.getenv('IMAGE_SIZE_PRESET', '') or '360')
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+WAGTAILSVG_UPLOAD_FOLDER = 'svg'

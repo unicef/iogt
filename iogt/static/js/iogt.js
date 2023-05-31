@@ -175,6 +175,7 @@ const sendSubscriptionToServer = (subscription, statusType) => {
         status_type: statusType,
         subscription: subscription.toJSON(),
         browser: browser,
+        user_agent: navigator.userAgent,
     };
 
     fetch('/webpush/subscribe/', {
