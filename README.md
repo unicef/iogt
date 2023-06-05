@@ -198,4 +198,4 @@ Follow instructions [here][10]
 [7]: ./docs/cache.md
 [8]: ./docs/troubleshooting.md
 [9]: ./selenium_tests/README.md
-[10]: ./docs/packages.md
+[10]: ./docs/dependency-management.md
