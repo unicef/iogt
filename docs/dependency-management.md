@@ -33,5 +33,5 @@ Add or update the package and its version specifier according to your needs in <
 Add or update the package and its version specifier according to your needs in <requirements_file>.in file.
 
 ```
-make cr
+make compile-requirements
 ```
