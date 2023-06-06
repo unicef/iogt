@@ -1,7 +1,7 @@
 from django.contrib.admin import SimpleListFilter
 from django.db.models import Count
 
-from comments.models import CommunityCommentModeration
+from comments.choices import comment_moderation_choices
 
 
 class FlaggedFilter(SimpleListFilter):
@@ -41,12 +41,7 @@ class ModerationFilter(SimpleListFilter):
     parameter_name = "status"
 
     def lookups(self, request, model_admin):
-        return [
-            (CommunityCommentModeration.State.UNMODERATED, 'Unmoderated'),
-            (CommunityCommentModeration.State.APPROVED, 'Approved'),
-            (CommunityCommentModeration.State.REJECTED, 'Rejected'),
-            (CommunityCommentModeration.State.UNSURE, 'Unsure'),
-        ]
+        return comment_moderation_choices()[1:]
 
     def queryset(self, request, queryset):
         if self.value():

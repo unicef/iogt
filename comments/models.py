@@ -9,6 +9,7 @@ from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.core.models import Page
 
 from comments import get_comments_moderation_class
+from comments.choices import CommentModerationState
 
 User = get_user_model()
 Moderator = get_comments_moderation_class()
@@ -113,13 +114,7 @@ class CannedResponse(models.Model):
 
 
 class CommunityCommentModeration(models.Model):
-    class State(models.TextChoices):
-        UNMODERATED = "UNMODERATED", "Unmoderated"
-        APPROVED = "APPROVED", "Approved"
-        REJECTED = "REJECTED", "Rejected"
-        UNSURE = "UNSURE", "Unsure"
-
-    state = models.CharField(max_length=255, choices=State.choices, default=State.UNMODERATED)
+    state = models.CharField(max_length=255, choices=CommentModerationState.choices, default=CommentModerationState.UNMODERATED)
     comment = models.OneToOneField(
         to='django_comments_xtd.XtdComment', related_name='comment_moderation', on_delete=models.CASCADE)
 
@@ -128,7 +123,7 @@ class CommunityCommentModeration(models.Model):
 
     class Meta:
         permissions = (
-            ("can_community_moderate", "Can moderate comments on PUBLIC SITE"),
+            ("can_community_moderate", "Can moderate comments on public site"),
         )
 
 
@@ -145,5 +140,5 @@ def comment_moderation_handler(sender, instance, created, **kwargs):
 def comment_flagged(sender, comment, **kwargs):
     if hasattr(comment, 'comment_moderation'):
         comment_moderation = comment.comment_moderation
-        comment_moderation.state = CommunityCommentModeration.State.UNMODERATED
+        comment_moderation.state = CommentModerationState.UNMODERATED
         comment_moderation.save(update_fields=['state'])
