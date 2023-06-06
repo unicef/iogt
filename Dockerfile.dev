@@ -10,4 +10,5 @@ RUN apt-get update --yes --quiet \
 
 COPY requirements.txt requirements.dev.txt /
 RUN pip install --no-cache-dir --upgrade pip \
+ && pip install --no-cache-dir pip-tools \
  && pip install --no-cache-dir -r /requirements.dev.txt

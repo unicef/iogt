@@ -1,10 +1,10 @@
 -r requirements.txt
+beautifulsoup4
+coverage
+django-test-plus>=1.4.0
+factory-boy==3.2.*
+Faker
 pytest
 pytest-django
-Faker
-beautifulsoup4
-django-test-plus>=1.4.0
-coverage
 selenium==4.9.1
-factory-boy==3.2.*
 wagtail-factories==4.0.*
