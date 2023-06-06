@@ -5,11 +5,11 @@ from wagtail.contrib.modeladmin.helpers import ButtonHelper
 class XtdCommentAdminButtonHelper(ButtonHelper):
     def publish_unpublish_toggle_button(self, comment):
         if comment.is_public:
-            action = 'unpublish_comment'
+            action = 'comment_unpublish'
             label = 'Unpublish'
             cn = 'button no button-small button-secondary'
         else:
-            action = 'publish_comment'
+            action = 'comment_publish'
             label = 'Publish'
             cn = 'button button-small button-secondary'
         return {
@@ -24,7 +24,7 @@ class XtdCommentAdminButtonHelper(ButtonHelper):
     def clear_flags_button(self, comment):
         if comment.flags.count():
             return {
-                'url': reverse('clear_flags', kwargs={
+                'url': reverse('comment_clear_flags', kwargs={
                     'comment_pk': comment.pk,
                 }),
                 'label': 'Clear Flags',

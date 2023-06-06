@@ -18,6 +18,7 @@ from django.utils.translation import ugettext as _
 
 from comments.forms import AdminCommentForm, CommentFilterForm
 from comments.models import CannedResponse, CommunityCommentModeration
+from comments.choices import CommentModerationState
 
 
 class BaseCommentView(LoginRequiredMixin, PermissionRequiredMixin, View):
@@ -52,7 +53,7 @@ class ApproveCommentView(BaseCommentView):
             comment.is_public = True
             comment.flags.all().delete()
             comment_moderation = comment.comment_moderation
-            comment_moderation.state = CommunityCommentModeration.State.APPROVED
+            comment_moderation.state = CommentModerationState.APPROVED
             comment_moderations.append(comment_moderation)
 
         return comments, comment_moderations
@@ -69,7 +70,7 @@ class RejectCommentView(BaseCommentView):
         for comment in comments:
             comment.is_public = False
             comment_moderation = comment.comment_moderation
-            comment_moderation.state = CommunityCommentModeration.State.REJECTED
+            comment_moderation.state = CommentModerationState.REJECTED
             comment_moderations.append(comment_moderation)
 
         return comments, comment_moderations
@@ -85,7 +86,7 @@ class UnSureCommentView(BaseCommentView):
 
         for comment in comments:
             comment_moderation = comment.comment_moderation
-            comment_moderation.state = CommunityCommentModeration.State.UNSURE
+            comment_moderation.state = CommentModerationState.UNSURE
             comment_moderations.append(comment_moderation)
 
         return comments, comment_moderations
@@ -206,7 +207,7 @@ class CommentsCommunityModerationView(ListView):
         return super().dispatch(request, *args, **kwargs)
 
     def _get_form(self):
-        return CommentFilterForm(self.request.GET or {'state': CommunityCommentModeration.State.UNMODERATED})
+        return CommentFilterForm(self.request.GET or {'state': CommentModerationState.UNMODERATED})
 
     def get_queryset(self):
         queryset = super().get_queryset().filter(comment_moderation__isnull=False).order_by('-submit_date')
