@@ -115,7 +115,7 @@ class Command(BaseCommand):
     def populate_group_permissions(self):
         self.stdout.write('Adding group permissions')
 
-        permissions = Permission.objects.filter(codename__in=['can_moderate_on_admin_panel', 'delete_xtdcomment'])
+        permissions = Permission.objects.filter(codename__in=['can_moderate', 'delete_xtdcomment'])
 
         group = Group.objects.get(name='Moderators')
         for permission in permissions:

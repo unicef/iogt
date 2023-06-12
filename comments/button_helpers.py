@@ -44,7 +44,7 @@ class XtdCommentAdminButtonHelper(ButtonHelper):
 
     def get_buttons_for_obj(self, obj, *args, **kwargs):
         buttons = super().get_buttons_for_obj(obj, exclude='delete', *args, **kwargs)
-        if self.request.user.has_perm('django_comments_xtd.can_moderate_on_admin_panel'):
+        if self.request.user.has_perm('django_comments_xtd.can_moderate'):
             buttons.append(self.publish_unpublish_toggle_button(comment=obj))
             buttons.append(self.clear_flags_button(comment=obj))
             buttons.append(self.comment_reply_button(comment=obj))

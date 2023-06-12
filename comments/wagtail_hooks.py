@@ -26,19 +26,18 @@ class XtdCommentAdmin(ModelAdmin):
     )
     button_helper_class = XtdCommentAdminButtonHelper
     menu_order = 601
+    CAN_MODERATE_LABEL = 'Can moderate comments via admin panel'
 
     def get_permissions_for_registration(self):
-        content_type = ContentType.objects.get_for_model(self.model)
-        Permission.objects.get_or_create(
-            codename='can_moderate_on_admin_panel',
-            content_type=content_type,
-            defaults={
-                'name': 'Can moderate comments on ADMIN PANEL',
-            }
+        permission = Permission.objects.get(
+            codename='can_moderate',
+            content_type=ContentType.objects.get_for_model(self.model),
         )
-        permissions = super().get_permissions_for_registration()
+        if permission.name != self.CAN_MODERATE_LABEL:
+            permission.name = self.CAN_MODERATE_LABEL
+            permission.save()
 
-        return permissions.exclude(codename='can_moderate')
+        return super().get_permissions_for_registration()
 
     def published(self, obj):
         rv = 'No'

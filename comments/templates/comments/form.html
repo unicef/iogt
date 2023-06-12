@@ -42,7 +42,7 @@
             </div>
         </div>
 
-        {% if request.user.is_authenticated and perms.django_comments_xtd.can_moderate_on_admin_panel %}
+        {% if request.user.is_authenticated and perms.django_comments_xtd.can_moderate %}
             <div class="row form-group">
                 <div class="col-md-7">
                     {{ form.canned_responses }}
@@ -60,7 +60,7 @@
     </fieldset>
 
     <div class='comments__input-holder'>
-        {% if perms.django_comments_xtd.can_moderate_on_admin_panel %}
+        {% if perms.django_comments_xtd.can_moderate %}
         <div class="comments__submit">
             <input type="submit" class="reply-comment" formaction="{% url 'process_canned_response' %}#id_comment" name="post" value="{% translate 'Add Canned Response' %}"/>
         </div>

@@ -28,7 +28,7 @@
                     <a href="{{ item.comment.url }}" target="_new">
                 {% endif %}
                 {% if item.comment.url %}</a>{% endif %}
-                {% if item.comment.user_name|lower != 'anonymous' and item.comment.user and item.comment.user|has_permission:"django_comments_xtd.can_moderate_on_admin_panel" %}
+                {% if item.comment.user_name|lower != 'anonymous' and item.comment.user and item.comment.user|has_permission:"django_comments_xtd.can_moderate" %}
                     &nbsp;<span class='individual-comment__moderator'>{% translate "moderator" %}</span>{% endif %}
                 &nbsp;&nbsp;
                 <span>
@@ -71,7 +71,7 @@
 
                     {% endif %}
 
-                    {% if perms.django_comments_xtd.can_moderate_on_admin_panel %}
+                    {% if perms.django_comments_xtd.can_moderate %}
                         {% comment %}
                         Had to replace items.flagged_count with item.comment.flags.count because django_comments_xtd
                         uses the django_comments.can_moderate permission to populate flags. This is a hack for
