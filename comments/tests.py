@@ -22,7 +22,7 @@ class CommentModerationTest(TestCase):
         request.user = user
         request.session = 'session'
         request._messages = FallbackStorage(request)
-        request.META['HTTP_REFERER'] = f'http://127.0.0.1:80{request.path}'
+        request.META['HTTP_REFERER'] = request.path
 
         response = view(request, comment_pk=self.comment.id)
 
