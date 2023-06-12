@@ -34,9 +34,8 @@ class AdminCommentModeratorFactory(UserFactory):
     @factory.post_generation
     def assign_permissions(self, create, extracted, **kwargs):
         if create:
-            content_type = ContentType.objects.get_for_model(XtdComment)
-            permission, created = Permission.objects.get_or_create(
-                codename='can_moderate_on_admin_panel',
-                content_type=content_type,
+            permission = Permission.objects.get(
+                codename='can_moderate',
+                content_type=ContentType.objects.get_for_model(XtdComment),
             )
             self.user_permissions.add(permission)

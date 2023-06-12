@@ -105,7 +105,7 @@ class HideCommentView(BaseCommentView):
 
 
 class PublishCommentView(BaseCommentView):
-    permission_required = 'django_comments_xtd.can_moderate_on_admin_panel'
+    permission_required = 'django_comments_xtd.can_moderate'
     action_verb = 'published'
 
     def handle(self, request, comment_pk):
@@ -117,7 +117,7 @@ class PublishCommentView(BaseCommentView):
 
 
 class UnPublishCommentView(BaseCommentView):
-    permission_required = 'django_comments_xtd.can_moderate_on_admin_panel'
+    permission_required = 'django_comments_xtd.can_moderate'
     action_verb = 'unpublished'
 
     def handle(self, request, comment_pk):
@@ -129,7 +129,7 @@ class UnPublishCommentView(BaseCommentView):
 
 
 class ClearFlagsCommentView(BaseCommentView):
-    permission_required = 'django_comments_xtd.can_moderate_on_admin_panel'
+    permission_required = 'django_comments_xtd.can_moderate'
     action_verb = 'cleared'
 
     def get_queryset(self, comment_pk):
