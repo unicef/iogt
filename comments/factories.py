@@ -12,7 +12,7 @@ from iogt_users.factories import UserFactory
 class XtdCommentFactory(DjangoModelFactory):
     comment = "Test comment"
     user = factory.SubFactory(UserFactory)
-    content_object = ArticleFactory()
+    content_object = factory.SubFactory(ArticleFactory)
 
     class Meta:
         model = XtdComment
