@@ -14,7 +14,7 @@ jobs:
   django-unit-tests:
     runs-on: ubuntu-latest
     env:
-      IOGT_TEST_PARALLEL: "2"
+      IOGT_TEST_PARALLEL: "1"
     steps:
       - uses: actions/checkout@v3
       - run: make test
