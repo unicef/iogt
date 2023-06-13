@@ -17,7 +17,7 @@ djangorestframework~=3.13.1
 drf-yasg~=1.21.3
 elasticsearch~=7.16
 libsass==0.21.*
-lxml==4.8.*
+lxml==4.9.*
 Markdown==3.3.7
 psycopg2==2.8.*
 redis~=3.0
