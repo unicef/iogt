@@ -29,7 +29,7 @@ msgid "Home Page Banners"
 msgstr "([not-needed]-Home Page Banners)"
 
 msgid "Username"
-msgstr "([has-translation]-Username)"
+msgstr "([has-partial-translation]-Username)"
 
 msgid "Level"
 msgstr "([not-needed]-Level)"
@@ -444,13 +444,13 @@ msgid "Recommended Articles"
 msgstr "([not-needed]-Recommended Articles)"
 
 msgid "Chat"
-msgstr "([has-translation]-Chat)"
+msgstr "([has-partial-translation]-Chat)"
 
 msgid "Delete Thread"
 msgstr "([TODO]-Delete Thread)"
 
 msgid "Cancel"
-msgstr "([has-translation]-Cancel)"
+msgstr "([has-partial-translation]-Cancel)"
 
 msgid "Send"
 msgstr "([has-partial-translation]-Send)"
@@ -471,7 +471,7 @@ msgid "Reply here..."
 msgstr "([unused]-Reply here...)"
 
 msgid "Reply"
-msgstr "([has-translation]-Reply)"
+msgstr "([has-partial-translation]-Reply)"
 
 msgid "Remove comment"
 msgstr "([not-needed]-Remove comment)"
@@ -520,7 +520,7 @@ msgid "The comment has been flagged."
 msgstr "([not-needed]-The comment has been flagged.)"
 
 msgid "Leave comment"
-msgstr "([has-translation]-Leave comment)"
+msgstr "([has-partial-translation]-Leave comment)"
 
 msgid "Preview your comment"
 msgstr "([not-needed]-Preview your comment)"
@@ -547,7 +547,7 @@ msgid "moderator"
 msgstr "([has-partial-translation]-moderator)"
 
 msgid "Report"
-msgstr "([has-translation]-Report)"
+msgstr "([has-partial-translation]-Report)"
 
 msgid "This is a reported comment"
 msgstr "([unused]-This is a reported comment)"
@@ -663,56 +663,56 @@ msgid "sections"
 msgstr "([has-partial-translation]-sections)"
 
 msgid "articles"
-msgstr "([has-translation]-articles)"
+msgstr "([has-partial-translation]-articles)"
 
 msgid "%(counter)s of 1 question"
 msgstr "([unused]-%(counter)s of 1 question)"
 
 msgid "%(counter)s of %(total)s questions"
-msgstr "([has-translation]-%(counter)s of %(total)s questions)"
+msgstr "([has-partial-translation]-%(counter)s of %(total)s questions)"
 
 msgid "Optional"
-msgstr "([has-translation]-Optional)"
+msgstr "([has-partial-translation]-Optional)"
 
 msgid "Select one"
-msgstr "([has-translation]-Select one)"
+msgstr "([has-partial-translation]-Select one)"
 
 msgid "Check all that apply"
-msgstr "([has-translation]-Check all that apply)"
+msgstr "([has-partial-translation]-Check all that apply)"
 
 msgid "Check if applies"
 msgstr "([has-partial-translation]-Check if applies)"
 
 msgid "Comments"
-msgstr "([has-translation]-Comments)"
+msgstr "([has-partial-translation]-Comments)"
 
 msgid "Please log in or create your account"
-msgstr "([has-translation]-Please log in or create your account)"
+msgstr "([has-partial-translation]-Please log in or create your account)"
 
 msgid "New comments have been disabled for this page."
 msgstr ""
 "([has-partial-translation]-New comments have been disabled for this page.)"
 
 msgid "Related Articles"
-msgstr "([has-translation]-Related Articles)"
+msgstr "([has-partial-translation]-Related Articles)"
 
 msgid "Log in"
-msgstr "([has-translation]-Log in)"
+msgstr "([has-partial-translation]-Log in)"
 
 msgid "Previous"
-msgstr "([has-translation]-Previous)"
+msgstr "([has-partial-translation]-Previous)"
 
 msgid "Page not found"
-msgstr "([has-translation]-Page not found)"
+msgstr "([has-partial-translation]-Page not found)"
 
 msgid "Sorry, this page could not be found."
-msgstr "([has-translation]-Sorry, this page could not be found.)"
+msgstr "([has-partial-translation]-Sorry, this page could not be found.)"
 
 msgid "Internal server error"
-msgstr "([has-translation]-Internal server error)"
+msgstr "([has-partial-translation]-Internal server error)"
 
 msgid "Create your account"
-msgstr "([has-translation]-Create your account)"
+msgstr "([has-partial-translation]-Create your account)"
 
 msgid "Sign Out"
 msgstr "([unused]-Sign Out)"
@@ -754,10 +754,10 @@ msgid "quiz"
 msgstr "([has-partial-translation]-quiz)"
 
 msgid "quizzes"
-msgstr "([has-translation]-quizzes)"
+msgstr "([has-partial-translation]-quizzes)"
 
 msgid "Your answer"
-msgstr "([has-translation]-Your answer)"
+msgstr "([has-partial-translation]-Your answer)"
 
 msgid "POLL"
 msgstr "([unused]-POLL)"
@@ -766,28 +766,28 @@ msgid "QUIZ"
 msgstr "([unused]-QUIZ)"
 
 msgid "Next"
-msgstr "([has-translation]-Next)"
+msgstr "([has-partial-translation]-Next)"
 
 msgid "SURVEY"
 msgstr "([unused]-SURVEY)"
 
 msgid "No limit"
-msgstr "([has-translation]-No limit)"
+msgstr "([has-partial-translation]-No limit)"
 
 msgid "Go to homepage"
-msgstr "([has-translation]-Go to homepage)"
+msgstr "([has-partial-translation]-Go to homepage)"
 
 msgid "Your results!"
-msgstr "([has-translation]-Your results!)"
+msgstr "([has-partial-translation]-Your results!)"
 
 msgid "Correct"
-msgstr "([has-translation]-Correct)"
+msgstr "([has-partial-translation]-Correct)"
 
 msgid "Incorrect"
-msgstr "([has-translation]-Incorrect)"
+msgstr "([has-partial-translation]-Incorrect)"
 
 msgid "Replay Quiz"
-msgstr "([has-translation]-Replay Quiz)"
+msgstr "([has-partial-translation]-Replay Quiz)"
 
 msgid "Correct answer"
 msgstr "([has-partial-translation]-Correct answer)"
@@ -807,7 +807,7 @@ msgid "No results found"
 msgstr "([unused]-No results found)"
 
 msgid "No search results were found for"
-msgstr "([has-translation]-No search results were found for)"
+msgstr "([has-partial-translation]-No search results were found for)"
 
 msgid "It seems we can’t find any results based on your search."
 msgstr "([unused]-It seems we can’t find any results based on your search.)"
@@ -831,10 +831,10 @@ msgid "Set Password"
 msgstr "([not-needed]-Set Password)"
 
 msgid "BACK"
-msgstr "([has-translation]-BACK)"
+msgstr "([has-partial-translation]-BACK)"
 
 msgid "© The Internet of Good Things"
-msgstr "([has-translation]-© The Internet of Good Things)"
+msgstr "([has-partial-translation]-© The Internet of Good Things)"
 
 msgid ""
 "This appears to be your first visit here. Our website is also available as a"
@@ -850,10 +850,10 @@ msgid "Download"
 msgstr "([has-partial-translation]-Download)"
 
 msgid "Search the site..."
-msgstr "([has-translation]-Search the site...)"
+msgstr "([has-partial-translation]-Search the site...)"
 
 msgid "Log in / Create account"
-msgstr "([has-translation]-Log in / Create account)"
+msgstr "([has-partial-translation]-Log in / Create account)"
 
 msgid ""
 "You are leaving the <b>Internet of Good Things</b> to visit an external "
@@ -901,22 +901,22 @@ msgid "Edit my profile"
 msgstr "([unused]-Edit my profile)"
 
 msgid "Hey, %(username)s"
-msgstr "([has-translation]-Hey, %(username)s)"
+msgstr "([has-partial-translation]-Hey, %(username)s)"
 
 msgid "Change Digital Pin"
-msgstr "([has-translation]-Change Digital Pin)"
+msgstr "([has-partial-translation]-Change Digital Pin)"
 
 msgid "Log out"
 msgstr "([has-partial-translation]-Log out)"
 
 msgid "Personal Details"
-msgstr "([has-translation]-Personal Details)"
+msgstr "([has-partial-translation]-Personal Details)"
 
 msgid "Save changes"
-msgstr "([has-translation]-Save changes)"
+msgstr "([has-partial-translation]-Save changes)"
 
 msgid "Back"
-msgstr "([has-translation]-Back)"
+msgstr "([has-partial-translation]-Back)"
 
 msgid ""
 "As a moderator you can delete comments. Deleting a comment does not remove "
@@ -1131,10 +1131,10 @@ msgstr ""
 "more details)"
 
 msgid "Reset PIN"
-msgstr "([has-translation]-Reset PIN)"
+msgstr "([has-partial-translation]-Reset PIN)"
 
 msgid "Forgot PIN"
-msgstr "([has-translation]-Forgot PIN)"
+msgstr "([has-partial-translation]-Forgot PIN)"
 
 msgid ""
 "Enter your email address below, and we'll email instructions for setting a "
@@ -1151,10 +1151,10 @@ msgstr ""
 "address you registered with, and check your spam folder.)"
 
 msgid "Your PIN has been changed successfully."
-msgstr "([has-translation]-Your PIN has been changed successfully.)"
+msgstr "([has-partial-translation]-Your PIN has been changed successfully.)"
 
 msgid "I accept the Terms and Conditions."
-msgstr "([has-translation]-I accept the Terms and Conditions.)"
+msgstr "([has-partial-translation]-I accept the Terms and Conditions.)"
 
 msgid "My Profile"
 msgstr "([unused]-My Profile)"
@@ -1456,23 +1456,23 @@ msgstr ""
 "\"false\".)"
 
 msgid "You have already completed this survey."
-msgstr "([has-translation]-You have already completed this survey.)"
+msgstr "([has-partial-translation]-You have already completed this survey.)"
 
 msgid "Log in to participate"
-msgstr "([has-translation]-Log in to participate)"
+msgstr "([has-partial-translation]-Log in to participate)"
 
 msgid "You have read %(read)s out of %(total)s"
-msgstr "([has-translation]-You have read %(read)s out of %(total)s)"
+msgstr "([has-partial-translation]-You have read %(read)s out of %(total)s)"
 
 msgid "Profile"
-msgstr "([has-translation]-Profile)"
+msgstr "([has-partial-translation]-Profile)"
 
 msgid "Something went wrong. Please try installing the offline app again"
 msgstr ""
 "([unused]-Something went wrong. Please try installing the offline app again)"
 
 msgid "This comment has been reported."
-msgstr "([has-translation]-This comment has been reported.)"
+msgstr "([has-partial-translation]-This comment has been reported.)"
 
 msgid "Your browser does not support video playback."
 msgstr ""
@@ -1490,7 +1490,7 @@ msgid "Anonymous"
 msgstr "([has-partial-translation]-Anonymous)"
 
 msgid "More"
-msgstr "([has-translation]-More)"
+msgstr "([has-partial-translation]-More)"
 
 msgid "Report this comment?"
 msgstr "([has-partial-translation]-Report this comment?)"
@@ -1499,8 +1499,8 @@ msgid ""
 "It will be reviewed by the team and may be removed if it breaks our Platform"
 " Rules"
 msgstr ""
-"([has-translation]-It will be reviewed by the team and may be removed if it "
-"breaks our Platform Rules)"
+"([has-partial-translation]-It will be reviewed by the team and may be "
+"removed if it breaks our Platform Rules)"
 
 msgid "Display name"
 msgstr "([has-partial-translation]-Display name)"
@@ -1630,7 +1630,7 @@ msgid "Sinhala"
 msgstr "([not-needed]-Sinhala)"
 
 msgid "Search results for:"
-msgstr "([has-translation]-Search results for:)"
+msgstr "([has-partial-translation]-Search results for:)"
 
 msgid "Dari"
 msgstr "([not-needed]-Dari)"
@@ -1730,3 +1730,21 @@ msgstr ""
 "([needs-translation]-The content you are trying to reach is not available. "
 "To see offline content click <a "
 "href=\"%(offline_content_index_page_url)s\">here</a>)"
+
+msgid "Sort child pages"
+msgstr "([needs-translation]-Sort child pages)"
+
+msgid "Change ordering of child pages of '%(title)s'"
+msgstr "([needs-translation]-Change ordering of child pages of '%(title)s')"
+
+msgid "Turkish"
+msgstr "([not-needed]-Turkish)"
+
+msgid "Custom permissions"
+msgstr "([needs-translation]-Custom permissions)"
+
+msgid "Submit"
+msgstr "([has-partial-translation]-Submit)"
+
+msgid "Farsi"
+msgstr "([not-needed]-Farsi)"

@@ -91,7 +91,7 @@ class Message(models.Model):
     # Quick replies are encoded as a json string
     quick_replies = models.JSONField(default=list)
     # If sent from RapidPro, the ID the message has in RapidPro.
-    rapidpro_message_id = models.IntegerField(null=True)
+    rapidpro_message_id = models.BigIntegerField(null=True)
     sent_at = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
 

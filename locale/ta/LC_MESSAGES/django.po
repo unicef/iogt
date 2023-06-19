@@ -131,6 +131,9 @@ msgstr "விருப்பத்துக்குரியது"
 msgid "No limit"
 msgstr "வரையறை இல்லை"
 
+msgid "Submit"
+msgstr ""
+
 msgid "Go to homepage"
 msgstr "முகப்பக்கத்துக்குச் செல்லவும்"
 
@@ -382,4 +385,9 @@ msgid "Unsure"
 msgstr ""
 
 msgid "No comment found."
+msgstr ""
+
+msgid ""
+"The content you are trying to reach is not available. To see offline content"
+" click <a href=\"%(offline_content_index_page_url)s\">here</a>"
 msgstr ""

@@ -1,0 +1,13 @@
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% if width == 360 %}
+    {% image image width-360 class=class %}
+{% elif width == 180 %}
+    {% image image width-180 class=class %}
+{% elif width == 750 %}
+    {% image image width-750 class=class %}
+{% elif width == 375 %}
+    {% image image width-375 class=class %}
+{% else %}
+    {% image image width-360 class=class %}
+{% endif %}

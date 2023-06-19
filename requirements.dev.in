@@ -1,0 +1,11 @@
+-r requirements.txt
+beautifulsoup4
+coverage
+django-test-plus>=1.4.0
+factory-boy==3.2.*
+Faker
+pytest
+pytest-django
+selenium==4.9.1
+wagtail-factories==4.0.*
+django-webtest==1.9.*

@@ -30,7 +30,7 @@ from wagtail.admin.edit_handlers import (
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
 from wagtail.core import blocks
-from wagtail.core.fields import StreamField, RichTextField
+from wagtail.core.fields import StreamField
 from wagtail.core.models import Orderable, Page, Site, Locale
 from wagtail.core.rich_text import get_text_for_indexing
 from wagtail.images.blocks import ImageChooserBlock
@@ -38,13 +38,13 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.models import Image
 from wagtail.search import index
 from wagtailmarkdown.blocks import MarkdownBlock
-from wagtailmenus.models import AbstractFlatMenuItem, BooleanField
+from wagtailmenus.models import AbstractFlatMenuItem
 from wagtailsvg.models import Svg
 from wagtailsvg.edit_handlers import SvgChooserPanel
 
 from messaging.blocks import ChatBotButtonBlock
-from comments.models import CommentableMixin, CannedResponse
-from .blocks import (
+from comments.models import CommentableMixin
+from home.blocks import (
     MediaBlock, SocialMediaLinkBlock, SocialMediaShareButtonBlock, EmbeddedPollBlock, EmbeddedSurveyBlock,
     EmbeddedQuizBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock, ArticleBlock, DownloadButtonBlock,
 )
@@ -52,6 +52,10 @@ from .forms import SectionPageForm
 from .mixins import PageUtilsMixin, TitleIconMixin
 from .utils.image import convert_svg_to_png_bytes
 from .utils.progress_manager import ProgressManager
+from home.utils import (
+    collect_urls_from_streamfield,
+    get_all_renditions_urls,
+)
 import iogt.iogt_globals as globals_
 
 User = get_user_model()
@@ -91,8 +95,8 @@ class HomePage(Page, PageUtilsMixin, TitleIconMixin):
         return context
 
     @property
-    def get_image_urls(self):
-        return self._get_stream_data_image_urls(self.home_featured_content.raw_data)
+    def offline_urls(self):
+        return [self.url] + collect_urls_from_streamfield(self.home_featured_content)
 
 
 class FeaturedContent(Orderable):
@@ -262,18 +266,16 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         return Section.objects.exclude(pk__in=all_descendants)
 
     @property
-    def get_image_urls(self):
-        image_urls = []
+    def offline_urls(self):
+        urls = [self.url] + collect_urls_from_streamfield(self.body)
 
         if self.lead_image:
-            image_urls += self._get_renditions(self.lead_image)
+            urls += get_all_renditions_urls(self.lead_image)
 
         if self.image_icon:
-            image_urls += self._get_renditions(self.image_icon)
+            urls += get_all_renditions_urls(self.image_icon)
 
-        image_urls += self._get_stream_data_image_urls(self.body.raw_data)
-
-        return image_urls
+        return urls
 
     class Meta:
         verbose_name = _("section")
@@ -405,18 +407,16 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         return self.get_ancestors().filter(depth=4).first().specific
 
     @property
-    def get_image_urls(self):
-        image_urls = []
+    def offline_urls(self):
+        urls = [self.url] + collect_urls_from_streamfield(self.body)
 
         if self.lead_image:
-            image_urls += self._get_renditions(self.lead_image)
+            urls += get_all_renditions_urls(self.lead_image)
 
         if self.image_icon:
-            image_urls += self._get_renditions(self.image_icon)
+            urls += get_all_renditions_urls(self.image_icon)
 
-        image_urls += self._get_stream_data_image_urls(self.body.raw_data)
-
-        return image_urls
+        return urls
 
     class Meta:
         abstract = True
@@ -505,13 +505,8 @@ class BannerPage(Page, PageUtilsMixin):
     ]
 
     @property
-    def get_image_urls(self):
-        image_urls = []
-
-        if self.banner_image:
-            image_urls += self._get_renditions(self.banner_image)
-
-        return image_urls
+    def offline_urls(self):
+        return get_all_renditions_urls(self.banner_image)
 
 
 class FooterIndexPage(Page):
@@ -546,6 +541,7 @@ class FooterPage(Article, TitleIconMixin):
 class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
     parent_page_types = ['home.FooterIndexPage', 'home.Section']
     subpage_types = []
+    show_in_menus_default = True
 
     icon = models.ForeignKey(
         Svg,

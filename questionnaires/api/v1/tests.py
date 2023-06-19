@@ -12,11 +12,13 @@ from django_webtest import WebTest
 from openpyxl import load_workbook
 from rest_framework import status
 from rest_framework.test import APIClient
-from wagtail.core.models import Site, Page
-from wagtail_factories import SiteFactory
+from wagtail.core.models import Site
+from wagtail_factories import SiteFactory, PageFactory
+from wagtail.core.models import Page
 from webtest.forms import Hidden
 
 from home.factories import HomePageFactory
+from home.tests.tests import parse_html
 from iogt_users.factories import (
     UserFactory,
     GroupFactory,
@@ -33,6 +35,7 @@ from questionnaires.factories import (
     UserSubmissionFactory,
     PollIndexPageFactory,
 )
+from questionnaires.utils import SkipLogicPaginator
 
 
 class QuestionnairesListAPIViewTests(TestCase):
@@ -470,21 +473,24 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         self.assertEqual(response.data['results'][0]['user'], user_01.username)
         self.assertIsNotNone(response.data['results'][0]['submit_time'])
         self.assertEqual(response.data['results'][0]['page_url'], poll.full_url)
-        self.assertEqual(response.data['results'][0]['submission'][0][poll_question.admin_label]['clean_name'], poll_question.clean_name)
-        self.assertEqual(response.data['results'][0]['submission'][0][poll_question.admin_label]['user_answer'], ['c1'])
+        self.assertEqual(response.data['results'][0]['submission'][0]['admin_label'], poll_question.admin_label)
+        self.assertEqual(response.data['results'][0]['submission'][0]['clean_name'], poll_question.clean_name)
+        self.assertEqual(response.data['results'][0]['submission'][0]['user_answer'], ['c1'])
         self.assertEqual(response.data['results'][1]['id'], user_submission_02.id)
         self.assertEqual(response.data['results'][1]['user'], user_02.username)
         self.assertIsNotNone(response.data['results'][1]['submit_time'])
         self.assertEqual(response.data['results'][1]['page_url'], poll.full_url)
-        self.assertEqual(response.data['results'][1]['submission'][0][poll_question.admin_label]['clean_name'], poll_question.clean_name)
-        self.assertEqual(response.data['results'][1]['submission'][0][poll_question.admin_label]['user_answer'], ['c2', 'c3'])
+        self.assertEqual(response.data['results'][1]['submission'][0]['admin_label'], poll_question.admin_label)
+        self.assertEqual(response.data['results'][1]['submission'][0]['clean_name'], poll_question.clean_name)
+        self.assertEqual(response.data['results'][1]['submission'][0]['user_answer'], ['c2', 'c3'])
         self.assertEqual(response.data['results'][2]['id'], user_submission_03.id)
         self.assertEqual(response.data['results'][2]['id'], user_submission_03.id)
         self.assertEqual(response.data['results'][2]['user'], user_03.username)
         self.assertIsNotNone(response.data['results'][2]['submit_time'])
         self.assertEqual(response.data['results'][2]['page_url'], poll.full_url)
-        self.assertEqual(response.data['results'][2]['submission'][0][poll_question.admin_label]['clean_name'], poll_question.clean_name)
-        self.assertEqual(response.data['results'][2]['submission'][0][poll_question.admin_label]['user_answer'], ['c3'])
+        self.assertEqual(response.data['results'][2]['submission'][0]['admin_label'], poll_question.admin_label)
+        self.assertEqual(response.data['results'][2]['submission'][0]['clean_name'], poll_question.clean_name)
+        self.assertEqual(response.data['results'][2]['submission'][0]['user_answer'], ['c3'])
 
     def test_questionnaire_submission_list_submit_time_filter(self):
         current_datetime = timezone.now()
@@ -534,14 +540,16 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         self.assertEqual(response.data['results'][0]['user'], user_01.username)
         self.assertIsNotNone(response.data['results'][0]['submit_time'])
         self.assertEqual(response.data['results'][0]['page_url'], poll.full_url)
-        self.assertEqual(response.data['results'][0]['submission'][0][poll_question.admin_label]['clean_name'], poll_question.clean_name)
-        self.assertEqual(response.data['results'][0]['submission'][0][poll_question.admin_label]['user_answer'], ['c1'])
+        self.assertEqual(response.data['results'][0]['submission'][0]['admin_label'], poll_question.admin_label)
+        self.assertEqual(response.data['results'][0]['submission'][0]['clean_name'], poll_question.clean_name)
+        self.assertEqual(response.data['results'][0]['submission'][0]['user_answer'], ['c1'])
         self.assertEqual(response.data['results'][1]['id'], user_submission_02.id)
         self.assertEqual(response.data['results'][1]['user'], user_02.username)
         self.assertIsNotNone(response.data['results'][1]['submit_time'])
         self.assertEqual(response.data['results'][1]['page_url'], poll.full_url)
-        self.assertEqual(response.data['results'][1]['submission'][0][poll_question.admin_label]['clean_name'], poll_question.clean_name)
-        self.assertEqual(response.data['results'][1]['submission'][0][poll_question.admin_label]['user_answer'], ['c2', 'c3'])
+        self.assertEqual(response.data['results'][1]['submission'][0]['admin_label'], poll_question.admin_label)
+        self.assertEqual(response.data['results'][1]['submission'][0]['clean_name'], poll_question.clean_name)
+        self.assertEqual(response.data['results'][1]['submission'][0]['user_answer'], ['c2', 'c3'])
 
         response = self.client.get(
             f"{reverse(self.url, kwargs={'pk': poll.id})}?submit_time_end={(current_datetime - timedelta(days=1)).date()}")
@@ -553,15 +561,17 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         self.assertEqual(response.data['results'][0]['user'], user_02.username)
         self.assertIsNotNone(response.data['results'][0]['submit_time'])
         self.assertEqual(response.data['results'][0]['page_url'], poll.full_url)
-        self.assertEqual(response.data['results'][0]['submission'][0][poll_question.admin_label]['clean_name'], poll_question.clean_name)
-        self.assertEqual(response.data['results'][0]['submission'][0][poll_question.admin_label]['user_answer'], ['c2', 'c3'])
+        self.assertEqual(response.data['results'][0]['submission'][0]['admin_label'], poll_question.admin_label)
+        self.assertEqual(response.data['results'][0]['submission'][0]['clean_name'], poll_question.clean_name)
+        self.assertEqual(response.data['results'][0]['submission'][0]['user_answer'], ['c2', 'c3'])
         self.assertEqual(response.data['results'][1]['id'], user_submission_03.id)
         self.assertEqual(response.data['results'][1]['id'], user_submission_03.id)
         self.assertEqual(response.data['results'][1]['user'], user_03.username)
         self.assertIsNotNone(response.data['results'][1]['submit_time'])
         self.assertEqual(response.data['results'][1]['page_url'], poll.full_url)
-        self.assertEqual(response.data['results'][1]['submission'][0][poll_question.admin_label]['clean_name'], poll_question.clean_name)
-        self.assertEqual(response.data['results'][1]['submission'][0][poll_question.admin_label]['user_answer'], ['c3'])
+        self.assertEqual(response.data['results'][1]['submission'][0]['admin_label'], poll_question.admin_label)
+        self.assertEqual(response.data['results'][1]['submission'][0]['clean_name'], poll_question.clean_name)
+        self.assertEqual(response.data['results'][1]['submission'][0]['user_answer'], ['c3'])
 
     def test_questionnaire_submission_list_user_ids_filter(self):
         current_datetime = timezone.now()
@@ -611,8 +621,9 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         self.assertEqual(response.data['results'][0]['user'], user_01.username)
         self.assertIsNotNone(response.data['results'][0]['submit_time'])
         self.assertEqual(response.data['results'][0]['page_url'], poll.full_url)
-        self.assertEqual(response.data['results'][0]['submission'][0][poll_question.admin_label]['clean_name'], poll_question.clean_name)
-        self.assertEqual(response.data['results'][0]['submission'][0][poll_question.admin_label]['user_answer'], ['c1'])
+        self.assertEqual(response.data['results'][0]['submission'][0]['admin_label'], poll_question.admin_label)
+        self.assertEqual(response.data['results'][0]['submission'][0]['clean_name'], poll_question.clean_name)
+        self.assertEqual(response.data['results'][0]['submission'][0]['user_answer'], ['c1'])
 
         response = self.client.get(f"{reverse(self.url, kwargs={'pk': poll.id})}?user_ids={user_02.id},{user_03.id}")
 
@@ -623,15 +634,17 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         self.assertEqual(response.data['results'][0]['user'], user_02.username)
         self.assertIsNotNone(response.data['results'][0]['submit_time'])
         self.assertEqual(response.data['results'][0]['page_url'], poll.full_url)
-        self.assertEqual(response.data['results'][0]['submission'][0][poll_question.admin_label]['clean_name'], poll_question.clean_name)
-        self.assertEqual(response.data['results'][0]['submission'][0][poll_question.admin_label]['user_answer'], ['c2', 'c3'])
+        self.assertEqual(response.data['results'][0]['submission'][0]['admin_label'], poll_question.admin_label)
+        self.assertEqual(response.data['results'][0]['submission'][0]['clean_name'], poll_question.clean_name)
+        self.assertEqual(response.data['results'][0]['submission'][0]['user_answer'], ['c2', 'c3'])
         self.assertEqual(response.data['results'][1]['id'], user_submission_03.id)
         self.assertEqual(response.data['results'][1]['id'], user_submission_03.id)
         self.assertEqual(response.data['results'][1]['user'], user_03.username)
         self.assertIsNotNone(response.data['results'][1]['submit_time'])
         self.assertEqual(response.data['results'][1]['page_url'], poll.full_url)
-        self.assertEqual(response.data['results'][1]['submission'][0][poll_question.admin_label]['clean_name'], poll_question.clean_name)
-        self.assertEqual(response.data['results'][1]['submission'][0][poll_question.admin_label]['user_answer'], ['c3'])
+        self.assertEqual(response.data['results'][1]['submission'][0]['admin_label'], poll_question.admin_label)
+        self.assertEqual(response.data['results'][1]['submission'][0]['clean_name'], poll_question.clean_name)
+        self.assertEqual(response.data['results'][1]['submission'][0]['user_answer'], ['c3'])
 
     def test_questionnaire_submission_list_page_size(self):
         current_datetime = timezone.now()
@@ -681,8 +694,9 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         self.assertEqual(response.data['results'][0]['user'], user_01.username)
         self.assertIsNotNone(response.data['results'][0]['submit_time'])
         self.assertEqual(response.data['results'][0]['page_url'], poll.full_url)
-        self.assertEqual(response.data['results'][0]['submission'][0][poll_question.admin_label]['clean_name'], poll_question.clean_name)
-        self.assertEqual(response.data['results'][0]['submission'][0][poll_question.admin_label]['user_answer'], ['c1'])
+        self.assertEqual(response.data['results'][0]['submission'][0]['admin_label'], poll_question.admin_label)
+        self.assertEqual(response.data['results'][0]['submission'][0]['clean_name'], poll_question.clean_name)
+        self.assertEqual(response.data['results'][0]['submission'][0]['user_answer'], ['c1'])
 
         response = self.client.get(f"{reverse(self.url, kwargs={'pk': poll.id})}?page=2&page_size=1")
 
@@ -696,8 +710,9 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         self.assertEqual(response.data['results'][0]['user'], user_02.username)
         self.assertIsNotNone(response.data['results'][0]['submit_time'])
         self.assertEqual(response.data['results'][0]['page_url'], poll.full_url)
-        self.assertEqual(response.data['results'][0]['submission'][0][poll_question.admin_label]['clean_name'], poll_question.clean_name)
-        self.assertEqual(response.data['results'][0]['submission'][0][poll_question.admin_label]['user_answer'], ['c2', 'c3'])
+        self.assertEqual(response.data['results'][0]['submission'][0]['admin_label'], poll_question.admin_label)
+        self.assertEqual(response.data['results'][0]['submission'][0]['clean_name'], poll_question.clean_name)
+        self.assertEqual(response.data['results'][0]['submission'][0]['user_answer'], ['c2', 'c3'])
 
         response = self.client.get(f"{reverse(self.url, kwargs={'pk': poll.id})}?page=3&page_size=1")
 
@@ -710,8 +725,9 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         self.assertEqual(response.data['results'][0]['user'], user_03.username)
         self.assertIsNotNone(response.data['results'][0]['submit_time'])
         self.assertEqual(response.data['results'][0]['page_url'], poll.full_url)
-        self.assertEqual(response.data['results'][0]['submission'][0][poll_question.admin_label]['clean_name'], poll_question.clean_name)
-        self.assertEqual(response.data['results'][0]['submission'][0][poll_question.admin_label]['user_answer'], ['c3'])
+        self.assertEqual(response.data['results'][0]['submission'][0]['admin_label'], poll_question.admin_label)
+        self.assertEqual(response.data['results'][0]['submission'][0]['clean_name'], poll_question.clean_name)
+        self.assertEqual(response.data['results'][0]['submission'][0]['user_answer'], ['c3'])
 
     def test_questionnaires_detail_page_permission(self):
         current_datetime = timezone.now()
@@ -731,7 +747,10 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         response = self.client.get(reverse(self.url, kwargs={'pk': poll.id}))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, [])
+        self.assertEqual(response.data['count'], 0)
+        self.assertIsNone(response.data['next'])
+        self.assertIsNone(response.data['previous'])
+        self.assertEqual(response.data['results'], [])
 
 
 class FormDataPerUserAdminTests(TestCase):
@@ -1029,7 +1048,94 @@ class FormDataPerUserAdminTests(TestCase):
         self.assertEqual(byte_response.decode(), expected_response)
 
 
-class PollTest(WebTest):
+class PollTest(TestCase):
+    def setUp(self):
+        root_page = PageFactory(parent=None)
+        home_page = HomePageFactory(parent=root_page)
+        SiteFactory(hostname='testserver', port=80, root_page=home_page)
+        self.poll = PollFactory(parent=home_page)
+
+    def test_drop_down_defaults_to_the_blank_option(self):
+        PollFormFieldFactory(page=self.poll, field_type='dropdown', choices='c1|c2')
+
+        response = self.client.get(self.poll.url)
+        parsed_response = parse_html(response.content)
+        default_drop_down_option = parsed_response.select_one('.quest-item select option').text
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(default_drop_down_option, '')
+
+    def test_drop_down_blank_option_submission_for_required_field(self):
+        poll_question = PollFormFieldFactory(page=self.poll, field_type='dropdown', choices='c1|c2')
+
+        response = self.client.post(self.poll.url, {poll_question.clean_name: ''})
+        parsed_response = parse_html(response.content)
+        field_required_text = parsed_response.select_one('.quest-item .cust-input__error').text
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(field_required_text, 'This field is required.')
+
+    def test_drop_down_blank_option_submission_for_non_required_field(self):
+        poll_question = PollFormFieldFactory(page=self.poll, field_type='dropdown', choices='c1|c2', required=False)
+
+        response = self.client.post(self.poll.url, {poll_question.clean_name: ''})
+        parsed_response = parse_html(response.content)
+        results = parsed_response.select('.cust-check__title')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(results), 2)
+        self.assertEqual(results[0].select_one('.cust-check__title-left').text.strip(), 'c1')
+        self.assertEqual(" ".join(results[0].select_one('.cust-check__title-right').text.split()), '0 %')
+        self.assertEqual(results[1].select_one('.cust-check__title-left').text.strip(), 'c2')
+        self.assertEqual(" ".join(results[1].select_one('.cust-check__title-right').text.split()), '0 %')
+
+    def test_drop_down_non_blank_option_submission(self):
+        poll_question = PollFormFieldFactory(page=self.poll, field_type='dropdown', choices='c1|c2')
+
+        response = self.client.post(self.poll.url, {poll_question.clean_name: 'c1'})
+        parsed_response = parse_html(response.content)
+        results = parsed_response.select('.cust-check__title')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(results), 2)
+        self.assertEqual(results[0].select_one('.cust-check__title-left').text.strip(), 'c1\nYour answer')
+        self.assertEqual(" ".join(results[0].select_one('.cust-check__title-right').text.split()), '100 %')
+        self.assertEqual(results[1].select_one('.cust-check__title-left').text.strip(), 'c2')
+        self.assertEqual(" ".join(results[1].select_one('.cust-check__title-right').text.split()), '0 %')
+
+
+class TestQuestionnaireSubmitButtonText(TestCase):
+    def setUp(self):
+        root_page = PageFactory(parent=None)
+        self.en_home_page = HomePageFactory(parent=root_page)
+
+    def test_survey_submit_button_text_without_multi_step_enabled(self):
+        survey = SurveyFactory(parent=self.en_home_page, multi_step=False)
+        SurveyFormFieldFactory(page=survey, field_type='singleline')
+
+        self.assertEqual(survey.get_submit_button_text(), "Submit")
+
+    def test_survey_submit_button_text_with_multi_step_enabled(self):
+        survey = SurveyFactory(parent=self.en_home_page, multi_step=True)
+        SurveyFormFieldFactory(page=survey, field_type='multiline')
+        SurveyFormFieldFactory(page=survey, field_type='multiline')
+
+        # This page has 2 steps
+        paginator = SkipLogicPaginator(survey.get_form_fields(), {}, {})
+        step1 = paginator.page(1)
+        step2 = paginator.page(2)
+
+        self.assertEqual(survey.get_submit_button_text(step1), "Next")
+        self.assertEqual(survey.get_submit_button_text(step2), "Submit")
+
+    def test_poll_submit_button_text(self):
+        poll = PollFactory(parent=self.en_home_page)
+        PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3')
+
+        self.assertEqual(poll.get_submit_button_text(), "Submit")
+
+
+class PollSubmissionTest(WebTest):
     def setUp(self):
         root_page = Page.objects.filter(depth=1).first()
         home_page = HomePageFactory(parent=root_page)
