@@ -1137,9 +1137,9 @@ class TestQuestionnaireSubmitButtonText(TestCase):
 
 class PollSubmissionTest(WebTest):
     def setUp(self):
-        root_page = Page.objects.filter(depth=1).first()
+        root_page = PageFactory(parent=None)
         home_page = HomePageFactory(parent=root_page)
-        SiteFactory(hostname='testserver', root_page=home_page)
+        SiteFactory(hostname='testserver', port=80, root_page=home_page)
         self.poll_index_page = PollIndexPageFactory(parent=home_page)
         self.user = AdminUserFactory()
         self.client.force_login(self.user)
