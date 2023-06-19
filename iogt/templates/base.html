@@ -1,4 +1,4 @@
-{% load static wagtailuserbar home_tags sass_tags wagtailsettings_tags menu_tags generic_components i18n wagtailimages_tags %}
+{% load static wagtailuserbar home_tags sass_tags wagtailsettings_tags menu_tags generic_components i18n wagtailimages_tags matomo_tags %}
 {% get_settings %}
 
 <!--  Commit Hash: {{commit_hash}} -->
@@ -27,6 +27,8 @@
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="theme-color" content="#493174">
+    {% social_meta_tags %}
+
     <link rel="manifest" href="{% url 'manifest' %}">
     {% image settings.home.SiteSettings.apple_touch_icon width-120 as apple_touch_icon %}
     <link rel="apple-touch-icon" type="image/jpg" href="{{ apple_touch_icon.url }}"/>
@@ -42,6 +44,7 @@
     {% block extra_css %}
         {# Override this in templates to add extra stylesheets #}
     {% endblock %}
+    {% matomo_tracking_tags %}
 </head>
 
 {% get_current_language_bidi as LANGUAGE_BIDI %}
@@ -94,8 +97,12 @@
     {% endif %}
 </script>
 <script src="{% url 'javascript-catalog' %}"></script>
-<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
-<script src="{% static 'js/iogt.js' %}"></script>
+{% if jquery %}
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'js/iogt.js' %}"></script>
+{% else %}
+    <script src="{% static 'js/iogt-no-jquery.js' %}"></script>
+{% endif %}
 <script src="{% static 'js/sw-init.js' %}"></script>
 <noscript>
     <style type="text/css">

@@ -130,7 +130,7 @@
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  padding: 8px 12px;
+  padding: 8px 0px;
   border-bottom: 1px solid #EFEFEF;
   font-style: normal;
   font-weight: bold;
@@ -172,7 +172,7 @@
 
 @media only screen and (min-width: 360px) {
   .sub-section {
-    padding: 8px 20px 8px 0px;
+    padding: 8px 0px;
     font-size: 16px;
     line-height: 22px;
   }
@@ -702,10 +702,6 @@
 .article-card .img-holder, .section-card .img-holder {
   overflow: hidden;
   position: relative;
-}
-
-.section-card .img-holder {
-  padding-left: 20px;
 }
 
 .article-card .img-holder.complete:after, .section-card .img-holder.complete:after {

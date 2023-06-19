@@ -2,7 +2,7 @@ from selenium_tests.base import BaseSeleniumTests
 from wagtail.core.models import Site
 from iogt_users.factories import AdminUserFactory
 from home.factories import SectionFactory, ArticleFactory
-from questionnaires.factories import PollFactory
+from questionnaires.factories import PollFactory, PollFormFieldFactory
 from selenium_tests.pages import QuestionnairePage, SectionPage, ArticlePage
 
 class SectionContentSeleniumTests(BaseSeleniumTests):
@@ -15,6 +15,7 @@ class SectionContentSeleniumTests(BaseSeleniumTests):
 
     def test_questionnaire(self):
         poll01 = PollFactory(parent=self.section01, owner=self.user)
+        PollFormFieldFactory(page=poll01, field_type='checkboxes', choices='c1|c2|c3', default_value='c2')
         self.visit_page(self.section01)
         section_page = SectionPage(self.selenium)
         section_page.navigate_featured_content(poll01.title)

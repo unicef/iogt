@@ -1,0 +1,14 @@
+<meta property="og:url" content="{{ page.url }}">
+<meta property="og:site_name" content="{{ site_name }}">
+<meta property="og:title" content="{% firstof page.seo_title page.title %}">
+<meta property="og:description" content="{% firstof page.search_description site_name %}">
+<meta property="og:type" content="article">
+<meta property="twitter:site" content="{{ site_name }}">
+<meta property="twitter:title" content="{% firstof page.seo_title page.title %}">
+<meta property="twitter:description" content="{% firstof page.search_description site_name %}">
+<meta property="twitter:card" content="summary_large_image">
+{% if lead_image %}
+    <meta property="og:image" content="{{ lead_image.full_url }}">
+    <meta property="twitter:image" content="{{ lead_image.full_url }}">
+    <meta property="twitter:image:alt" content="{% firstof page.seo_title page.title %}">
+{% endif %}

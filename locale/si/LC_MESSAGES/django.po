@@ -131,6 +131,9 @@ msgstr "විකල්ප"
 msgid "No limit"
 msgstr "සීමාවක් නැත"
 
+msgid "Submit"
+msgstr ""
+
 msgid "Go to homepage"
 msgstr "මුල් පිටුවට යන්න"
 
@@ -373,4 +376,9 @@ msgid "Unsure"
 msgstr ""
 
 msgid "No comment found."
+msgstr ""
+
+msgid ""
+"The content you are trying to reach is not available. To see offline content"
+" click <a href=\"%(offline_content_index_page_url)s\">here</a>"
 msgstr ""

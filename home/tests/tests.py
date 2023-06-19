@@ -1,13 +1,20 @@
-from django.test import TestCase
+from bs4 import BeautifulSoup
+from django.test import TestCase, override_settings
 from django.http import HttpRequest
 from translation_manager.models import TranslationEntry
 from wagtail.core.models import Site
+from wagtail_factories import SiteFactory, PageFactory
 from wagtail_localize.operations import TranslationCreator
 
 from home.wagtail_hooks import limit_page_chooser
-from home.factories import SectionFactory, ArticleFactory, HomePageFactory, MediaFactory, LocaleFactory
-from wagtail_factories import SiteFactory, PageFactory
-from bs4 import BeautifulSoup
+from home.factories import (
+    SectionFactory,
+    ArticleFactory,
+    HomePageFactory,
+    MediaFactory,
+    LocaleFactory,
+    SiteSettingsFactory
+)
 
 
 class LimitPageChooserHookTests(TestCase):
@@ -98,3 +105,66 @@ class MediaTranslationTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, f"উপরের ভিডিও দেখা না গেলে <a href=\"{self.en_article.body[0].value.url}\" download> এর পরিবর্তে এটা </a> ডাউনলোড করুন", count=1)
         self.assertContains(response, f"উপরের অডিও শুনতে না পেলে <a href=\"{self.en_article.body[1].value.url}\" download> এর পরিবর্তে এটা </a> ডাউনলোড করুন", count=1)
+
+
+class ImageResizeTest(TestCase):
+    def setUp(self):
+        self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
+        self.site_settings = SiteSettingsFactory(site=self.site)
+        self.section = SectionFactory(parent=self.site_settings.site.root_page)
+        self.article = ArticleFactory(parent=self.section)
+
+    def test_default_image_within_preset(self):
+        response = self.client.get(self.article.url)
+        parsed_response = parse_html(response.content)
+        rendered_image = parsed_response.find("img", {"class": "article__lead-img-featured"})
+        image_rendition = self.article.lead_image.get_rendition('width-360')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(rendered_image.get('alt'), image_rendition.alt)
+        self.assertEqual(int(rendered_image.get('width')), image_rendition.width)
+        self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
+        self.assertEqual(rendered_image.get('src'), image_rendition.url)
+
+
+    def test_half_default_image_within_preset(self):
+        response = self.client.get(self.section.url)
+        parsed_response = parse_html(response.content)
+        rendered_image = parsed_response.find("div", {"class": "article-card"}).find("img")
+        image_rendition = self.article.lead_image.get_rendition('width-180')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(rendered_image.get('alt'), image_rendition.alt)
+        self.assertEqual(int(rendered_image.get('width')), image_rendition.width)
+        self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
+        self.assertEqual(rendered_image.get('src'), image_rendition.url)
+
+    @override_settings(IMAGE_SIZE_PRESET=750)
+    def test_custom_image_within_preset(self):
+        response = self.client.get(self.article.url)
+        parsed_response = parse_html(response.content)
+        rendered_image = parsed_response.find("img", {"class": "article__lead-img-featured"})
+        image_rendition = self.article.lead_image.get_rendition('width-750')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(rendered_image.get('alt'), image_rendition.alt)
+        self.assertEqual(int(rendered_image.get('width')), image_rendition.width)
+        self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
+        self.assertEqual(rendered_image.get('src'), image_rendition.url)
+
+    @override_settings(IMAGE_SIZE_PRESET=750)
+    def test_half_custom_image_within_preset(self):
+        response = self.client.get(self.section.url)
+        parsed_response = parse_html(response.content)
+        rendered_image = parsed_response.find("div", {"class": "article-card"}).find("img")
+        image_rendition = self.article.lead_image.get_rendition('width-375')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(rendered_image.get('alt'), image_rendition.alt)
+        self.assertEqual(int(rendered_image.get('width')), image_rendition.width)
+        self.assertEqual(int(rendered_image.get('height')), image_rendition.height)
+        self.assertEqual(rendered_image.get('src'), image_rendition.url)
+
+
+def parse_html(html: str) -> BeautifulSoup:
+    return BeautifulSoup(html, 'lxml')
