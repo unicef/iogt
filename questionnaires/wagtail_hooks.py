@@ -5,8 +5,12 @@ from django.templatetags.static import static
 from wagtail.core import hooks
 from wagtail.core.models import Locale
 
-from questionnaires.views import FormPagesListView, FormDataPerUserView, generate_dashboard, \
+from questionnaires.views import (
+    FormPagesListView,
+    FormDataPerUserView,
+    generate_dashboard,
     ExperimentalFormDataPerUserView
+)
 
 
 @hooks.register('insert_editor_js', order=0)

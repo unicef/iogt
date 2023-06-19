@@ -570,5 +570,3 @@ IMAGE_SIZE_PRESET = int(os.getenv('IMAGE_SIZE_PRESET', '') or '360')
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-
-EXPERIMENTAL_FORM_DATA = os.getenv('EXPERIMENTAL_FORM_DATA', 'disable') == 'enable'

@@ -1,5 +1,5 @@
 {% extends "wagtailadmin/base.html" %}
-{% load i18n wagtailadmin_tags %}
+{% load i18n wagtailadmin_tags static %}
 {% block titletag %}{% trans "Form Data" %}{% endblock %}
 {% block extra_js %}
     {{ block.super }}
@@ -71,15 +71,13 @@
                 </div>
             </div>
         </form>
-          {% if experimental_form_data %}
-            <span class="warning">
-			    <span class="svg-wrapper">
-                    <img src='{% versioned_static "icons/warning.svg" %}' />
-			    </span>
-                In 3 months, the format of form data files in XLSX and CSV will be altered and updated with the
-                implementation of experimental form data.
-		    </span>
-          {% endif %}
+        <span class="warning">
+            <span class="svg-wrapper">
+                <img src='{% static "icons/warning.svg" %}' />
+            </span>
+            In 3 months, the format of form data files in XLSX and CSV will be altered and updated with the
+            implementation of experimental form data.
+        </span>
     </header>
     <div class="nice-padding">
         <div id="form-results" class="forms">

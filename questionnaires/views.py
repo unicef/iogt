@@ -115,7 +115,6 @@ class FormDataPerUserView(SpreadsheetExportMixin, SafePaginateListView):
         context.update({
             'select_date_form': self.select_date_form,
             'user_id': self.user.id,
-            'experimental_form_data': settings.EXPERIMENTAL_FORM_DATA,
         })
         return context
 
@@ -130,6 +129,9 @@ class FormDataPerUserView(SpreadsheetExportMixin, SafePaginateListView):
                 })
         return form_fields_dict
 
+    def get_values(self, item, field, value):
+        return [item.id, item.page.title, item.submit_time, field, value]
+
     def get_rows(self, item, form_fields_dict):
         data = {
             'User': item.user.username,
@@ -139,8 +141,7 @@ class FormDataPerUserView(SpreadsheetExportMixin, SafePaginateListView):
             data.update({
                 form_fields_dict.get(item.page_id, {}).get(clean_name, clean_name): answer,
             })
-        return [dict(zip(self.list_export, [item.id, item.page.title, item.submit_time, field, value]))
-                for field, value in data.items()]
+        return [dict(zip(self.list_export, self.get_values(item, field, value))) for field, value in data.items()]
 
     def stream_csv(self, queryset):
         writer = csv.DictWriter(Echo(), fieldnames=self.list_export)
@@ -187,18 +188,8 @@ class FormDataPerUserView(SpreadsheetExportMixin, SafePaginateListView):
 class ExperimentalFormDataPerUserView(FormDataPerUserView):
     list_export = ['Page ID', 'Page Title', 'Submission ID', 'Submission Date', 'Field', 'Value']
 
-    def get_rows(self, item, form_fields_dict):
-        data = {
-            'User': item.user.username,
-            'URL': item.page.full_url,
-        }
-        for clean_name, answer in json.loads(item.form_data).items():
-            data.update({
-                form_fields_dict.get(item.page_id, {}).get(clean_name, clean_name): answer,
-            })
-
-        return [dict(zip(self.list_export, [item.page_id, item.page.title, item.id, item.submit_time, field, value]))
-                for field, value in data.items()]
+    def get_values(self, item, field, value):
+        return [item.page_id, item.page.title, item.id, item.submit_time, field, value]
 
 
 def generate_dashboard(request, pk):

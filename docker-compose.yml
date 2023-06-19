@@ -30,7 +30,6 @@ services:
       SUPERSET_USERNAME: ''
       SUPERSET_PASSWORD: ''
       PUSH_NOTIFICATION: 'enable'
-      EXPERIMENTAL_FORM_DATA: 'enable'
       JQUERY: 'enable'
       MATOMO_TRACKING: 'enable'
       MATOMO_SERVER_URL: ''
