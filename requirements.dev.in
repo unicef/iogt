@@ -8,3 +8,4 @@ pytest
 pytest-django
 selenium==4.9.1
 wagtail-factories==4.0.*
+django-webtest==1.9.*

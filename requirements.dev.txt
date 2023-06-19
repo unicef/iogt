@@ -62,6 +62,7 @@ beautifulsoup4==4.9.3 \
     #   -r /app/requirements.txt
     #   django-google-analytics-app
     #   wagtail
+    #   webtest
 billiard==4.1.0 \
     --hash=sha256:0f50d6be051c6b2b75bfbc8bfd85af195c5739c281d3f5b86a5640c65563614a \
     --hash=sha256:1ad2eeae8e28053d729ba3373d34d9d6e210f6e4d8bf0a9c64f92bd053f1edf5
@@ -507,6 +508,10 @@ django-webpush==0.3.4 \
     --hash=sha256:a123102dede1a959f667e075ed746ac5b7d4a8622320162eba41a507a835e1e4 \
     --hash=sha256:a2613784e822e2dde27086fb20b6d1a2b76e4d5dc8271607aecd45c98a3b7954
     # via -r /app/requirements.txt
+django-webtest==1.9.10 \
+    --hash=sha256:c8c32041791cdae468e443097c432c67cf17cad339e1ab88b01a6c4841ee4c74 \
+    --hash=sha256:ef075e98b38fe3836dc533c2924d3e37c6bb3483008c40567115518a0303b1af
+    # via -r /app/requirements.dev.in
 djangorestframework==3.13.1 \
     --hash=sha256:0c33407ce23acc68eca2a6e46424b008c9c02eceb8cf18581921d0092bc1f2ee \
     --hash=sha256:24c4bf58ed7e85d1fe4ba250ab2da926d263cd57d64b03e8dcef0ac683f8b1aa
@@ -1221,6 +1226,10 @@ wagtailsvg==0.0.14 \
     --hash=sha256:587f64b8560ca212e64fa28ab79d76bb4864141da9bac497d5ab9c7ee9630165 \
     --hash=sha256:74061fc780a1568d4a2d0c3d81e38b2fb7f4ca687d8858af7e2e89b1e28c9d82
     # via -r /app/requirements.txt
+waitress==2.1.2 \
+    --hash=sha256:7500c9625927c8ec60f54377d590f67b30c8e70ef4b8894214ac6e4cad233d2a \
+    --hash=sha256:780a4082c5fbc0fde6a2fcfe5e26e6efc1e8f425730863c04085769781f51eba
+    # via webtest
 wcwidth==0.2.6 \
     --hash=sha256:795b138f6875577cd91bba52baf9e445cd5118fd32723b460e30a0af30ea230e \
     --hash=sha256:a5220780a404dbe3353789870978e472cfe477761f06ee55077256e509b156d0
@@ -1236,6 +1245,14 @@ webencodings==0.5.1 \
     #   cssselect2
     #   html5lib
     #   tinycss2
+webob==1.8.7 \
+    --hash=sha256:73aae30359291c14fa3b956f8b5ca31960e420c28c1bec002547fb04928cf89b \
+    --hash=sha256:b64ef5141be559cfade448f044fa45c2260351edcb6a8ef6b7e00c7dcef0c323
+    # via webtest
+webtest==3.0.0 \
+    --hash=sha256:2a001a9efa40d2a7e5d9cd8d1527c75f41814eb6afce2c3d207402547b1e5ead \
+    --hash=sha256:54bd969725838d9861a9fa27f8d971f79d275d94ae255f5c501f53bb6d9929eb
+    # via django-webtest
 whitenoise==5.2.0 \
     --hash=sha256:05ce0be39ad85740a78750c86a93485c40f08ad8c62a6006de0233765996e5c7 \
     --hash=sha256:05d00198c777028d72d8b0bbd234db605ef6d60e9410125124002518a48e515d

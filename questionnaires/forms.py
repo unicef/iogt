@@ -275,3 +275,20 @@ class QuizForm(WagtailAdminPageForm):
 class GenerateDashboardForm(forms.Form):
     superset_username = forms.CharField()
     superset_password = forms.CharField(widget=forms.PasswordInput)
+
+
+class PollForm(WagtailAdminPageForm):
+    form_field_name = 'poll_form_fields'
+    _clean_errors = None
+
+    def save(self, commit):
+        for form in self.formsets[self.form_field_name]:
+            field_type = form.instance.field_type
+
+            if field_type in ['checkboxes', 'dropdown', 'radio']:
+                choices = ''
+                for choice in form.instance.choices.split('|'):
+                    choices += choice.strip() + '|'
+                form.instance.choices = choices[:-1]
+
+        return super().save(commit)

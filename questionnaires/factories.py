@@ -37,7 +37,7 @@ class PollFormFieldFactory(DjangoModelFactory):
         model = PollFormField
 
 class PollIndexPageFactory(PageFactory):
-    title = 'Banners'
+    title = 'Polls'
 
     class Meta:
         model = PollIndexPage

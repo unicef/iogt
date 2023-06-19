@@ -8,11 +8,14 @@ from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
+from django_webtest import WebTest
 from openpyxl import load_workbook
 from rest_framework import status
 from rest_framework.test import APIClient
 from wagtail.core.models import Site
 from wagtail_factories import SiteFactory, PageFactory
+from wagtail.core.models import Page
+from webtest.forms import Hidden
 
 from home.factories import HomePageFactory
 from home.tests.tests import parse_html
@@ -20,6 +23,7 @@ from iogt_users.factories import (
     UserFactory,
     GroupFactory,
     GroupPagePermissionFactory,
+    AdminUserFactory,
 )
 from questionnaires.factories import (
     PollFactory,
@@ -28,7 +32,8 @@ from questionnaires.factories import (
     PollFormFieldFactory,
     SurveyFormFieldFactory,
     QuizFormFieldFactory,
-    UserSubmissionFactory
+    UserSubmissionFactory,
+    PollIndexPageFactory,
 )
 from questionnaires.utils import SkipLogicPaginator
 
@@ -1128,3 +1133,39 @@ class TestQuestionnaireSubmitButtonText(TestCase):
         PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3')
 
         self.assertEqual(poll.get_submit_button_text(), "Submit")
+
+
+class PollSubmissionTest(WebTest):
+    def setUp(self):
+        root_page = PageFactory(parent=None)
+        home_page = HomePageFactory(parent=root_page)
+        SiteFactory(hostname='testserver', port=80, root_page=home_page)
+        self.poll_index_page = PollIndexPageFactory(parent=home_page)
+        self.user = AdminUserFactory()
+        self.client.force_login(self.user)
+
+    def _add_dynamic_field(self, form, name, value):
+        field = Hidden(form, tag='input', name=name, value=value, pos=999)
+        form.fields[name] = [field]
+        form.field_order.append((name, field))
+
+    def test_poll_question_choices_with_surrounding_spaces(self):
+        form = self.app.get(
+            reverse('wagtailadmin_pages:add', args=('questionnaires', 'poll', self.poll_index_page.id)),
+            user=self.user.username
+        ).forms[1]
+        form['title'] = 'Poll 01'
+        form['slug'] = 'poll-01'
+        form['poll_form_fields-0-label'] = 'Q1'
+        form['poll_form_fields-0-field_type'] = 'checkboxes'
+        form['poll_form_fields-0-choices'] = ' c1 | c2 | c3 '
+        form['poll_form_fields-0-admin_label'] = 'Q1'
+        self._add_dynamic_field(form, 'description-count', '0')
+        self._add_dynamic_field(form, 'thank_you_text-count', '0')
+        self._add_dynamic_field(form, 'terms_and_conditions-count', '0')
+
+        response = form.submit().follow()
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        page = Page.objects.get(path__startswith=self.poll_index_page.path, slug='poll-01').specific
+        self.assertEqual(page.get_form_fields().first().choices, 'c1|c2|c3')
