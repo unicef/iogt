@@ -1087,10 +1087,10 @@ class ThemeSettings(BaseSetting):
         null=True, blank=True, help_text='The background color of the primary button as a HEX code', max_length=8,
         default='#f0f0f0')
 
-    navbar_background_color = models.CharField(
+    flat_menu_background_color = models.CharField(
         null=True, blank=True, help_text='The background color of the navbar as a HEX code', max_length=8,
         default='#0094F4')
-    navbar_font_color = models.CharField(
+    flat_menu_font_color = models.CharField(
         null=True, blank=True, help_text='The font color of the navbar as a HEX code', max_length=8,
         default='#FFFFFF')
 
