@@ -38,27 +38,6 @@ class Command(BaseCommand):
             help='IoGT V1 database password'
         )
         parser.add_argument(
-            '--media-dir',
-            required=True,
-            help='**RELATIVE Path** to IoGT v1 media directory'
-        )
-        parser.add_argument(
-            '--v1-domains',
-            nargs="+",
-            required=True,
-            help="IoGT V1 domains for manually inserted internal links, --v1-domains domain1 domain2 ..."
-        )
-        parser.add_argument(
-            '--v2-domain',
-            required=False,
-            help="IoGT V2 domains to be used for URLs in the migration report"
-        )
-        parser.add_argument(
-            '--sort',
-            required=True,
-            help='Sort page by "type1" or "type2"'
-        )
-        parser.add_argument(
             '--v2-surveys',
             nargs='+',
             required=True,
@@ -67,12 +46,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.db_connect(options)
-        self.media_dir = options.get('media_dir')
-        self.v1_domains_list = options.get('v1_domains')
-        self.sort = options.get('sort')
-        self.v2_domain = options.get('v2_domain')
         self.v2_surveys = map(int, options.get('v2_surveys'))
-
         self.post_migration_report_messages = defaultdict(list)
 
         for v2_survey in self.v2_surveys:
@@ -106,10 +80,14 @@ class Command(BaseCommand):
         return cur
 
     def migrate_survey(self, page_id):
-        survey = Survey.objects.get(id=page_id)
-        v1_survey_id = V1ToV2ObjectMap.objects.get(object_id=page_id).v1_object_id
-        self.migrate_survey_questions(survey, v1_survey_id)
-        self.stdout.write(f"Migrated survey form fields, title={survey.title}")
+        try:
+            survey = Survey.objects.get(id=page_id)
+            content_type = ContentType.objects.get_for_model(Survey)
+            v1_survey_id = V1ToV2ObjectMap.objects.get(content_type=content_type, object_id=page_id).v1_object_id
+            self.migrate_survey_questions(survey, v1_survey_id)
+            self.stdout.write(f"Migrated survey form fields, title={survey.title}")
+        except:
+            self.stdout.write(f"Survey doesn't exist, id={page_id}")
 
     def migrate_survey_questions(self, survey, v1_survey_id):
         self._migrate_survey_questions(survey, v1_survey_id, 'surveys_molosurveyformfield')
@@ -137,25 +115,29 @@ class Command(BaseCommand):
                     skip_logic.get('value', {}).pop('survey')
                 row['skip_logic'] = json.dumps(skip_logics)
 
-            content_type = ContentType.objects.get_for_model(SurveyFormField)
-            object_map = V1ToV2ObjectMap.objects.get(content_type=content_type, v1_object_id=row['smsffid'])
-            if not SurveyFormField.objects.filter(id=object_map.object_id).exists():
-                survey_form_field = SurveyFormField.objects.create(
-                    page=survey, sort_order=row['sort_order'], label=row['label'], required=row['required'],
-                    default_value=row['default_value'], help_text=row['help_text'], field_type=field_type,
-                    admin_label=row['admin_label'], page_break=row['page_break'],
-                    choices='|'.join(row['choices'].split(',')), skip_logic=row['skip_logic']
-                )
-
-                object_map.object_id = survey_form_field.id
-                object_map.save(update_fields=["object_id"])
-                skip_logic_next_actions = [logic['value']['skip_logic'] for logic in json.loads(row['skip_logic'])]
-                if not survey.multi_step and (
-                        'end' in skip_logic_next_actions or 'question' in skip_logic_next_actions):
-                    self.post_migration_report_messages['survey_multistep'].append(
-                        f'skip logic without multi step'
+            try:
+                content_type = ContentType.objects.get_for_model(SurveyFormField)
+                object_map = V1ToV2ObjectMap.objects.get(content_type=content_type, v1_object_id=row['smsffid'])
+                if not SurveyFormField.objects.filter(id=object_map.object_id).exists():
+                    survey_form_field = SurveyFormField.objects.create(
+                        page=survey, sort_order=row['sort_order'], label=row['label'], required=row['required'],
+                        default_value=row['default_value'], help_text=row['help_text'], field_type=field_type,
+                        admin_label=row['admin_label'], page_break=row['page_break'],
+                        choices='|'.join(row['choices'].split(',')), skip_logic=row['skip_logic']
                     )
-                self.stdout.write(f"saved survey question, label={row['label']}")
+
+                    object_map.object_id = survey_form_field.id
+                    object_map.save(update_fields=["object_id"])
+                    skip_logic_next_actions = [logic['value']['skip_logic'] for logic in json.loads(row['skip_logic'])]
+                    if not survey.multi_step and (
+                            'end' in skip_logic_next_actions or 'question' in skip_logic_next_actions):
+                        self.post_migration_report_messages['survey_multistep'].append(
+                            f'skip logic without multi step'
+                        )
+                    self.stdout.write(f"saved survey question, label={row['label']}")
+            except:
+                self.stdout.write(f"Survey form field doesn't exist, title={survey.title}, id={survey.id}, form_field_id={row['smsffid']}")
+
 
     def print_post_migration_report(self):
         self.stdout.write(self.style.ERROR('====================='))
