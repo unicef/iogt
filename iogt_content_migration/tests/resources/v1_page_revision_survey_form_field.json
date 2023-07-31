@@ -1,0 +1,14 @@
+{
+    "admin_label": "Learn anything?",
+    "choices": "All of this information is new to me, Most of this information is new to me, A little bit of this information is new to me, None of of this information is new to me",
+    "default_value": "",
+    "field_type": "radio",
+    "help_text": "Please choose one answer only",
+    "label": "Have you learnt anything new from this All In information?",
+    "page": 188,
+    "page_break": false,
+    "pk": 38,
+    "required": true,
+    "skip_logic": "[{\"type\": \"skip_logic\", \"value\": {\"choice\": \"Yes\", \"skip_logic\": \"next\", \"survey\": null, \"question\": null}, \"id\": \"70666059-b8d3-493c-8259-5c58208978d9\"}, {\"type\": \"skip_logic\", \"value\": {\"choice\": \"No\", \"skip_logic\": \"next\", \"survey\": null, \"question\": null}, \"id\": \"5a719c49-1b22-40c9-ae2e-5c6440c1d0f9\"}]",
+    "sort_order": 0
+}
