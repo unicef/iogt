@@ -5,143 +5,68 @@ Internet of Good Things ([IoGT][2]) is developed as a public good under a [BSD-2
 The development uses the Python programming language, building on the [Django][4] server-side web framework combined with the [Wagtail][5] content management system.
 
 In line with the latest Wagtail [Long Term Support release][6], IoGT 2.x supports:
-- Wagtail 2.11.x
-- Django 2.2.x, 3.0.x and 3.1.x
-- Python 3.8 and 3.9
+- Wagtail 2.15.x
+- Django 3.0.x, 3.1.x and 3.2.x
+- Python 3.8, 3.9 and 3.10
 - PostgreSQL, MySQL and SQLite as database backends
 
 ## Getting started
 
-If you'd like to contribute to IoGT development, the best way to get started is to clone a copy of this repository and run the code on your machine.
+The easiest way to get started is to run IoGT using Docker. Make sure you have Docker Desktop installed, or at the very least the Docker Engine and Docker Compose (which are included in Docker Desktop).
+
+Check out the code.
 ```
 git clone https://github.com/unicef/iogt.git
 cd iogt
 ```
 
-Create an [isolated Python environment][1], into which we will install the project's dependencies. This is highly recommended so that the requirements of this project don't interfere with any other Python environments you may have in your system, including the global Python environment. We also recommend that you create a new environment outside of the project directory.
+Create the database. By default, an SQLite database will be created. This will take a few minutes on the first run because the IoGT container image needs to be created from scratch.
 ```
-python3 -m venv <path_to_venv_dir>
-source <path_to_venv_dir>/bin/activate
-pip install -r requirements.txt
-```
-
-Create the database. By default, an SQLite database will be created.
-```
-./manage.py migrate
+docker compose run --rm django python manage.py migrate
 ```
 
 Create a superuser account for administration purposes.
 ```
-./manage.py createsuperuser
+docker compose run --rm django python manage.py createsuperuser
 ```
 
 Compile .po language files stored in locale/
 ```
-./manage.py compilemessages
+docker compose run --rm django python manage.py compilemessages
 ```
 
-Finally, start the server.
+Start the server.
 ```
-./manage.py runserver
-```
-
-Once running, navigate to http://localhost:8000 in your browser.
-
-
-### Running ElasticSearch (Optional)
-
-1. Set up an elastic search cluster
-2. Update local.py to use Elasticsearch as the backend. More details [here](https://docs.wagtail.io/en/stable/topics/search/backends.html#elasticsearch-backend)
-   ```
-   WAGTAILSEARCH_BACKENDS = {
-    'default': {
-        'BACKEND': 'wagtail.search.backends.elasticsearch7',
-        'URLS': ['http://localhost:9200'],
-        'INDEX': 'iogt',
-        'TIMEOUT': 5,
-        'OPTIONS': {},
-        'INDEX_SETTINGS': {},
-        'AUTO_UPDATE': True,
-        'ATOMIC_REBUILD': True
-        }
-   }
-   ```
-
-3. Run `./manage.py update_index` to update the ElasticSearch Index
-
-### Setting up test data
-
-It is possible to automatically populate the database with example data for a basic test site.
-```
-./manage.py create_initial_data
+docker compose up -d
 ```
 
-Optionally, create the main menu automatically as well.
+Check the logs.
 ```
-./manage.py autopopulate_main_menus
-```
-
-
-### Running Tests
-```
-./manage.py test --settings=iogt.settings.production
+docker compose logs -f
 ```
 
-## Setup with Docker Compose
+Once running, navigate to http://localhost:8000/ in your browser. Log in to the admin UI at http://localhost:8000/admin/ - use the superuser name and password you created earlier.
 
-You can choose to set up the project locally using Docker Compose. This setup is recommended if you want to replicate the production environment.
-
-### Steps
-
-Clone the repository
-
+Shut everything down.
 ```
-git clone https://github.com/unicef/iogt.git
-```
-Run setup command. This will set up the database and also update the ElasticSearch Index.
-```
-cd iogt
-make setup
+docker compose down
 ```
 
-Create a super user account for administration purposes.
-```
-docker-compose run django python manage.py createsuperuser
-```
-
-Run the compose file
-```
-make up
-```
-You're all set now. See the `Makefile` for other commands related to docker-compose
+# Optional
 
 ## Setting up test data
 
 It is possible to automatically populate the database with example data for a basic test site.
-```
-docker-compose run django python manage.py create_initial_data
+
+```sh
+docker compose run --rm django python manage.py create_initial_data
 ```
 
 Optionally, create the main menu automatically as well.
-```
-docker-compose run django python manage.py autopopulate_main_menus
-```
 
-## Running Tests
-
-Run the following commands:
+```sh
+docker compose run --rm django python manage.py autopopulate_main_menus
 ```
-make tests
-make selenium-test
-```
-
-In parallel, for example, with 4 processes:
-```
-IOGT_TEST_PARALLEL=4 make test
-IOGT_TEST_PARALLEL=4 make selenium-test
-```
-
-More details of the Selenium tests can be found in the [Selenium test README][9].
 
 ## Configuring the Chatbot
 
@@ -182,11 +107,31 @@ Even though it has a column "is in use", its data is currently not updated autom
 
 Page caching is provided by Wagtail Cache and is deactivated by default. To start caching pages, follow the [activation intructions][7].
 
+## Elasticsearch
+
+To use Elasticsearch as a search backend instead of the relational database see the [setup instructions][11].
+
 ## Migrating content from IoGT v1
 Follow instructions [here](iogt_content_migration/README.md)
 
 ## Add/Update Package
 Follow instructions [here][10]
+
+# Running Tests
+
+Run the following commands:
+```
+make tests
+make selenium-test
+```
+
+In parallel, for example, with 4 processes:
+```
+IOGT_TEST_PARALLEL=4 make test
+IOGT_TEST_PARALLEL=4 make selenium-test
+```
+
+More details of the Selenium tests can be found in the [Selenium test README][9].
 
 
 [1]: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment
@@ -199,3 +144,4 @@ Follow instructions [here][10]
 [8]: ./docs/troubleshooting.md
 [9]: ./selenium_tests/README.md
 [10]: ./docs/dependency-management.md
+[11]: ./docs/elasticsearch.md

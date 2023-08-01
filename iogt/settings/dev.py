@@ -1,15 +1,10 @@
 from .base import *
 
-# SECURITY WARNING: don't run with debug turned on in production!
+BASE_URL = 'http://localhost:8000'
 DEBUG = True
 DEBUG_TOOLBAR_ENABLE = False
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'jjfayj6d=90@@@(rop$98ryt36vuyf3!chtneyoku3_f)*z^h_'
-
-# SECURITY WARNING: define the correct hosts in production!
+SECRET_KEY = '!#secret_key_for_development_only#!'
 ALLOWED_HOSTS = ['*']
-
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 if DEBUG and DEBUG_TOOLBAR_ENABLE:

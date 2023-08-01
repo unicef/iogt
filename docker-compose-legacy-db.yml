@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   legacy-db:
-    image: postgres:alpine
+    image: postgres:9.6-alpine
     restart: unless-stopped
     environment:
       POSTGRES_PASSWORD: iogt
