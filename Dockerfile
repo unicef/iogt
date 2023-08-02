@@ -1,5 +1,5 @@
 # Use an official Python runtime based on Debian 10 "buster" as a parent image.
-FROM python:3.8.1-slim-buster
+FROM python:3.8.1-slim-buster AS prod
 
 # Add user that will be used in the container.
 RUN useradd wagtail
@@ -54,3 +54,14 @@ RUN python manage.py compilemessages
 
 # Start the application server.
 CMD gunicorn iogt.wsgi:application
+
+FROM prod as dev
+USER root
+RUN apt-get update --yes --quiet \
+ && apt-get install --yes --quiet --no-install-recommends tini \
+ && rm -rf /var/lib/apt/lists/*
+COPY requirements.dev.txt /
+RUN pip install --no-cache-dir -r /requirements.dev.txt
+USER wagtail
+ENTRYPOINT ["tini", "--"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

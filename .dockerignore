@@ -15,12 +15,12 @@
 /Vagrantfile.local
 /npm-debug.log
 /tmp/
+/.venv/
 /venv/
 __pycache__
 coverage
 node_modules/
 pytest.ini
-requirements-gae.txt
 
 # Distribution / packaging
 *.egg
@@ -41,10 +41,9 @@ sdist/
 var/
 wheels/
 
-.gcloudignore
 .git
+.github/
 .gitignore
 /*initdb.d/
 Makefile
-app.yml
 docker-compose*.yml
