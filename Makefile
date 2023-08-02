@@ -24,8 +24,7 @@ compile-requirements:
 test:
 	docker-compose -f docker-compose.test.yml up -d db
 	docker-compose -f docker-compose.test.yml build django
-	docker-compose -f docker-compose.test.yml run --rm -T django coverage run --source='.' manage.py test --noinput --parallel $(IOGT_TEST_PARALLEL)
-	docker-compose -f docker-compose.test.yml run --rm -T django coverage html
+	docker-compose -f docker-compose.test.yml run --rm -T django python manage.py test --noinput --parallel $(IOGT_TEST_PARALLEL)
 	docker-compose -f docker-compose.test.yml down --remove-orphans
 selenium-test: selenium-up selenium-local selenium-down
 selenium-up:
