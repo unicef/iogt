@@ -1,67 +1,48 @@
-# Use an official Python runtime based on Debian 10 "buster" as a parent image.
-FROM python:3.8.1-slim-buster AS prod
-
-# Add user that will be used in the container.
-RUN useradd wagtail
-
-# Port used by this container to serve HTTP.
+FROM python:3.8.1-slim-buster AS base
 EXPOSE 8000
-
-# Set environment variables.
-# 1. Force Python stdout and stderr streams to be unbuffered.
-# 2. Set PORT variable that is used by Gunicorn. This should match "EXPOSE"
-#    command.
-ENV PYTHONUNBUFFERED=1 \
-    PORT=8000
-
-COPY requirements.txt /
-
-# Install system packages required by Wagtail and Django.
+ENV PIP_NO_CACHE=1 \
+    PYTHONUNBUFFERED=1
+RUN useradd wagtail
 RUN apt-get update --yes --quiet \
-  && apt-get install --yes --quiet --no-install-recommends \
-    build-essential \
+ && apt-get install --yes --quiet --no-install-recommends \
     gettext \
-    git \
-    libpq5 \
-    libpq-dev \
     libpango1.0-0 \
- && pip install --no-cache-dir --upgrade pip \
- && pip install --no-cache-dir "gunicorn==20.0.4" \
- && pip install --no-cache-dir -r /requirements.txt \
- && apt remove --yes --quiet git build-essential libpq-dev \
- && apt autoremove --yes --quiet \
+    libpq5 \
+ && pip install --upgrade pip \
  && rm -rf /var/lib/apt/lists/*
-
-# Use /app folder as a directory where the source code is stored.
 WORKDIR /app
-
-# Set this directory to be owned by the "wagtail" user. This Wagtail project
-# uses SQLite, the folder needs to be owned by the user that
-# will be writing to the database file.
 RUN chown wagtail:wagtail /app
 
-# Copy the source code of the project into the container.
-COPY --chown=wagtail:wagtail . .
-
-# Use user "wagtail" to run the build commands below and the server itself.
-USER wagtail
-
-# Collect static files.
-RUN python manage.py collectstatic --noinput --clear
-
-# Compile files for localization
-RUN python manage.py compilemessages
-
-# Start the application server.
-CMD gunicorn iogt.wsgi:application
-
-FROM prod as dev
-USER root
+FROM base AS dev
+COPY requirements*.txt /tmp
 RUN apt-get update --yes --quiet \
- && apt-get install --yes --quiet --no-install-recommends tini \
+ && apt-get install --yes --quiet --no-install-recommends \
+    build-essential \
+    git \
+    libpq-dev \
+    tini \
+ && pip install pip-tools \
+ && pip install -r /tmp/requirements.txt \
+ && pip install -r /tmp/requirements.dev.txt \
  && rm -rf /var/lib/apt/lists/*
-COPY requirements.dev.txt /
-RUN pip install --no-cache-dir -r /requirements.dev.txt
 USER wagtail
 ENTRYPOINT ["tini", "--"]
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+FROM dev AS builder
+USER root
+WORKDIR /iogt
+RUN pip wheel --no-deps --wheel-dir wheels -r /tmp/requirements.txt
+
+FROM base AS prod
+# PORT variable is used by Gunicorn. Should match "EXPOSE" command.
+ENV PORT=8000
+USER root
+COPY --from=builder /iogt/wheels /tmp/wheels
+RUN pip install "gunicorn==20.0.4" /tmp/wheels/* \
+ && rm -rf /tmp/requirements*.txt /tmp/wheels
+COPY --chown=wagtail:wagtail . .
+USER wagtail
+RUN python manage.py collectstatic --noinput --clear
+RUN python manage.py compilemessages
+CMD gunicorn iogt.wsgi:application

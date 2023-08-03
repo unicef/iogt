@@ -1,4 +1,4 @@
-version: '3.5'
+version: "3"
 
 services:
   django:
@@ -8,6 +8,8 @@ services:
     environment:
       DJANGO_SETTINGS_MODULE: iogt.settings.test
     command: ["tini", "--", "sleep", "infinity"]
+    volumes:
+      - ./:/app/
     depends_on:
       - database
       - selenium-hub
