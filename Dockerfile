@@ -14,7 +14,7 @@ WORKDIR /app
 RUN chown wagtail:wagtail /app
 
 FROM base AS dev
-COPY requirements*.txt /tmp
+COPY requirements*.txt /tmp/
 RUN apt-get update --yes --quiet \
  && apt-get install --yes --quiet --no-install-recommends \
     build-essential \
