@@ -43,8 +43,8 @@ Add or update the package and its version specifier according to your needs in a
 make compile-requirements
 ```
 
-Alternatively, you could run `pip-compile` directly on the dev container.
+Alternatively, you could run `pip-compile` directly in the _builder_ container.
 
 ```
-docker compose run --rm django pip-compile ...
+docker compose -f docker-compose.builder.yml run --rm builder pip-compile ...
 ```
