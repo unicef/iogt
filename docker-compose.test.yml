@@ -12,8 +12,6 @@ services:
       DB_PORT: '5432'
       DB_USER: iogt
       DJANGO_SETTINGS_MODULE: iogt.settings.test
-    volumes:
-      - ./:/app/
     depends_on:
       - db
   db:

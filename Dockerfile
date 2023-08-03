@@ -25,6 +25,7 @@ RUN apt-get update --yes --quiet \
  && pip install -r /tmp/requirements.txt \
  && pip install -r /tmp/requirements.dev.txt \
  && rm -rf /var/lib/apt/lists/*
+COPY --chown=wagtail:wagtail . .
 USER wagtail
 ENTRYPOINT ["tini", "--"]
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
