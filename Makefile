@@ -17,7 +17,7 @@ up:
 update_elasticsearch_index:
 	docker-compose run django python manage.py update_index
 compile-requirements:
-	docker-compose run --rm django /app/scripts/compile-requirements.sh
+	docker-compose -f docker-compose.builder.yml run --rm builder
 test:
 	docker-compose -f docker-compose.test.yml up --build -d
 	docker-compose -f docker-compose.test.yml exec -T django python manage.py collectstatic --noinput

@@ -5,6 +5,8 @@ services:
     build:
       context: ./
       target: dev
+      args:
+        requirements: requirements.dev.txt
     environment:
       DJANGO_SETTINGS_MODULE: iogt.settings.test
     command: ["tini", "--", "sleep", "infinity"]

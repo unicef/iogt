@@ -1,3 +1,4 @@
+-r requirements.txt
 coverage
 django-test-plus>=1.4.0
 factory-boy==3.2.*
