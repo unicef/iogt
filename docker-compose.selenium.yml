@@ -1,15 +1,15 @@
-version: '3.5'
+version: "3"
 
 services:
   django:
     build:
       context: ./
-      dockerfile: Dockerfile.dev
+      target: dev
+      args:
+        requirements: requirements.dev.txt
     environment:
       DJANGO_SETTINGS_MODULE: iogt.settings.test
     command: ["tini", "--", "sleep", "infinity"]
-    volumes:
-      - ./:/app/
     depends_on:
       - database
       - selenium-hub

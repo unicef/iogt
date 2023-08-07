@@ -4,10 +4,11 @@ services:
   django:
     build:
       context: ./
-      dockerfile: Dockerfile.dev
+      target: dev
+      args:
+        requirements: requirements.dev.txt
     environment:
       DJANGO_SETTINGS_MODULE: iogt.settings.dev
-    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./:/app/
     ports:

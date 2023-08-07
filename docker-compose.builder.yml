@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  builder:
+    build:
+      context: .
+      target: builder
+    command:
+      - /app/scripts/compile-requirements.sh
+    volumes:
+      - ./:/app/

@@ -1,10 +1,12 @@
-version: '3.5'
+version: "3"
 
 services:
   django:
     build:
       context: ./
-      dockerfile: Dockerfile.dev
+      target: dev
+      args:
+        requirements: requirements.dev.txt
     environment:
       DB_HOST: db
       DB_NAME: iogt
@@ -12,13 +14,10 @@ services:
       DB_PORT: '5432'
       DB_USER: iogt
       DJANGO_SETTINGS_MODULE: iogt.settings.test
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - ./:/app/
     depends_on:
       - db
   db:
-    image: postgres:alpine
+    image: postgres:14-alpine
     environment:
       POSTGRES_USER: iogt
       POSTGRES_PASSWORD: iogt

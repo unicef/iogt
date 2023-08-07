@@ -6,5 +6,10 @@ REQ_FILES=(
 )
 
 for f in "${REQ_FILES[@]}"; do
-  pip-compile --generate-hashes --resolver=backtracking -o ${f}.txt ${f}.in || exit 1;
+  pip-compile --cache-dir=/tmp/pip-tools \
+              --generate-hashes \
+              --resolver=backtracking \
+              --output-file ${f}.txt \
+              ${f}.in \
+      || exit 1;
 done
