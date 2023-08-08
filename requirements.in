@@ -20,7 +20,7 @@ drf-yasg~=1.21.3
 elasticsearch~=7.16
 https://github.com/IDEMSInternational/wagtail-transfer/archive/408edb5d432ac72dc2727a1847e0f294b8d6efa6.zip#egg=wagtail-transfer
 libsass==0.21.*
-lxml==4.8.*
+lxml~=4.9.1
 psycopg2==2.8.*
 PyJWT~=2.8.0
 redis~=3.0
