@@ -1,13 +1,15 @@
 #!/bin/bash
 
+WORKDIR=/app
 REQ_FILES=(
-  "/app/requirements"
-  "/app/requirements.dev"
+  "requirements"
+  "requirements.dev"
 )
 
+cd $WORKDIR
+
 for f in "${REQ_FILES[@]}"; do
-  pip-compile --cache-dir=/tmp/pip-tools \
-              --generate-hashes \
+  pip-compile --generate-hashes \
               --resolver=backtracking \
               --output-file ${f}.txt \
               ${f}.in \
