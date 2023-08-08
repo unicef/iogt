@@ -1,7 +1,7 @@
 from django.contrib.admin import SimpleListFilter
 from django.db.models import Count
 
-from comments.choices import comment_moderation_choices
+from comments.models import CommentModerationState
 
 
 class FlaggedFilter(SimpleListFilter):
@@ -41,7 +41,7 @@ class ModerationFilter(SimpleListFilter):
     parameter_name = "status"
 
     def lookups(self, request, model_admin):
-        return comment_moderation_choices()[1:]
+        return CommentModerationState.choices
 
     def queryset(self, request, queryset):
         if self.value():

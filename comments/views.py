@@ -1,24 +1,25 @@
-from urllib.parse import urlparse, urlunparse, urlencode, parse_qsl
+from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.core.exceptions import PermissionDenied
-from django.db.models import Q, Count
 from django.contrib import messages
-from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import (LoginRequiredMixin,
+                                        PermissionRequiredMixin)
+from django.core.exceptions import PermissionDenied
+from django.db.models import Q
+from django.shortcuts import get_object_or_404, redirect
 from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext as _
 from django.views import View
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_POST
-from django.views.generic import TemplateView, ListView
+from django.views.generic import ListView, TemplateView
 from django_comments.views.comments import post_comment
 from django_comments_xtd.models import XtdComment
-from django.utils.translation import ugettext as _
 
 from comments.forms import AdminCommentForm, CommentFilterForm
-from comments.models import CannedResponse, CommunityCommentModeration
-from comments.choices import CommentModerationState
+from comments.models import (CannedResponse, CommentModerationState,
+                             CommunityCommentModeration)
 
 
 class BaseCommentView(LoginRequiredMixin, PermissionRequiredMixin, View):
@@ -207,7 +208,9 @@ class CommentsCommunityModerationView(ListView):
         return super().dispatch(request, *args, **kwargs)
 
     def _get_form(self):
-        return CommentFilterForm(self.request.GET or {'state': CommentModerationState.UNMODERATED})
+        return CommentFilterForm(
+            self.request.GET or {'state': CommentModerationState.UNMODERATED}
+        )
 
     def get_queryset(self):
         queryset = super().get_queryset().filter(comment_moderation__isnull=False).order_by('-submit_date')

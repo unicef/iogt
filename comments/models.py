@@ -9,7 +9,6 @@ from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.core.models import Page
 
 from comments import get_comments_moderation_class
-from comments.choices import CommentModerationState
 
 User = get_user_model()
 Moderator = get_comments_moderation_class()
@@ -29,6 +28,13 @@ class CommentStatus:
         (TIMESTAMPED, 'Timestamped'),
         (INHERITED, 'Inherited'),
     )
+
+
+class CommentModerationState(models.TextChoices):
+    UNMODERATED = "UNMODERATED", "Unmoderated"
+    APPROVED = "APPROVED", "Approved"
+    REJECTED = "REJECTED", "Rejected"
+    UNSURE = "UNSURE", "Unsure"
 
 
 class CommentableMixin(models.Model):
@@ -60,8 +66,6 @@ class CommentableMixin(models.Model):
                 return ancestor
 
     def should_show_comments_list(self):
-        from home.models import Section
-
         commenting_status = self.commenting_status
         if commenting_status == CommentStatus.INHERITED:
             ancestor = self._get_valid_ancestor_for_commenting()
@@ -70,8 +74,6 @@ class CommentableMixin(models.Model):
         return commenting_status in [CommentStatus.OPEN, CommentStatus.CLOSED, CommentStatus.TIMESTAMPED]
 
     def should_show_new_comment_box(self):
-        from home.models import Section
-
         commenting_still_valid = True
         commenting_status = self.commenting_status
         commenting_starts_at = self.commenting_starts_at
@@ -114,7 +116,11 @@ class CannedResponse(models.Model):
 
 
 class CommunityCommentModeration(models.Model):
-    state = models.CharField(max_length=255, choices=CommentModerationState.choices, default=CommentModerationState.UNMODERATED)
+    state = models.CharField(
+        choices=CommentModerationState.choices,
+        default=CommentModerationState.UNMODERATED,
+        max_length=255,
+    )
     comment = models.OneToOneField(
         to='django_comments_xtd.XtdComment', related_name='comment_moderation', on_delete=models.CASCADE)
 
