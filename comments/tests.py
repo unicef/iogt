@@ -1,101 +1,114 @@
-from django.contrib.messages.storage.fallback import FallbackStorage
-from django.core.exceptions import PermissionDenied
-from django.test import TestCase, RequestFactory
+from django.test import TestCase
 from django.urls import reverse
-
-from comments.factories import XtdCommentFactory, CommunityCommentModeratorFactory, AdminCommentModeratorFactory
-from comments.views import ApproveCommentView, RejectCommentView, UnSureCommentView, HideCommentView, \
-    PublishCommentView, UnPublishCommentView, ClearFlagsCommentView
 from iogt_users.factories import UserFactory
+
+from comments.models import CommentModerationState as State
+from comments.factories import (
+    AdminModeratorFactory,
+    CommunityModeratorFactory,
+    FlagFactory,
+    CommentFactory,
+)
 
 
 class CommentModerationTest(TestCase):
     def setUp(self):
-        self.user = UserFactory()
-        self.admin_comment_moderator = AdminCommentModeratorFactory()
-        self.community_comment_moderator = CommunityCommentModeratorFactory()
-        self.comment = XtdCommentFactory()
-        self.request = RequestFactory()
+        self.user = UserFactory(first_name="Unprivileged", last_name="User")
+        self.admin_moderator = AdminModeratorFactory()
+        self.community_moderator = CommunityModeratorFactory()
 
-    def set_up_request(self, view, user, comment_action_url):
-        request = self.request.get(reverse(comment_action_url, args=[self.comment.id]))
-        request.user = user
-        request.session = 'session'
-        request._messages = FallbackStorage(request)
-        request.META['HTTP_REFERER'] = request.path
+    def test_community_moderator_can_approve(self):
+        self.comment = CommentFactory(is_public=False)
+        FlagFactory(user=self.user, comment=self.comment)
+        self.assertGreater(self.comment.flags.count(), 0)
+        self.assertAuthorized(self.community_moderator, "approve")
+        self.assertTrue(self.comment.is_public)
+        self.assertEqual(self.comment.flags.count(), 0)
+        self.assertEqual(self.comment.comment_moderation.state, State.APPROVED)
 
-        response = view(request, comment_pk=self.comment.id)
+    def test_community_moderator_can_reject(self):
+        self.comment = CommentFactory(is_public=True)
+        self.assertAuthorized(self.community_moderator, "reject")
+        self.assertFalse(self.comment.is_public)
+        self.assertEqual(self.comment.comment_moderation.state, State.REJECTED)
 
-        return response
+    def test_community_moderator_can_mark_unsure(self):
+        self.comment = CommentFactory()
+        self.assertAuthorized(self.community_moderator, "unsure")
+        self.assertEqual(self.comment.comment_moderation.state, State.UNSURE)
 
-    def test_approve_comment_view_as_admin_comment_moderator(self):
-        view = ApproveCommentView.as_view()
-
-        request = self.request.get(reverse('comment_approve', args=[self.comment.id]))
-        request.user = self.admin_comment_moderator
-
-        with self.assertRaises(PermissionDenied):
-            view(request, comment_pk=self.comment.id)
-
-    def test_approve_comment_view_as_user(self):
-        view = ApproveCommentView.as_view()
-
-        request = self.request.get(reverse('comment_approve', args=[self.comment.id]))
-        request.user = self.user
-
-        with self.assertRaises(PermissionDenied):
-            view(request, comment_pk=self.comment.id)
-
-    def test_approve_comment_view_as_community_comment_moderator(self):
-        view = ApproveCommentView.as_view()
-        response = self.set_up_request(view, self.community_comment_moderator, 'comment_approve')
-
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(self.comment.comment_moderation.state, 'APPROVED')
-
-    def test_reject_comment_view_as_community_comment_moderator(self):
-        view = RejectCommentView.as_view()
-        response = self.set_up_request(view, self.community_comment_moderator, 'comment_reject')
-
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(self.comment.comment_moderation.state, 'REJECTED')
-
-    def test_unsure_comment_view_as_community_comment_moderator(self):
-        view = UnSureCommentView.as_view()
-        response = self.set_up_request(view, self.community_comment_moderator, 'comment_unsure')
-
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(self.comment.comment_moderation.state, 'UNSURE')
-
-    def test_hide_comment_view_as_community_comment_moderator(self):
-        view = HideCommentView.as_view()
-        response = self.set_up_request(view, self.community_comment_moderator, 'comment_hide')
-        self.comment.refresh_from_db()
-
-        self.assertEqual(response.status_code, 302)
+    def test_community_moderator_can_hide(self):
+        self.comment = CommentFactory(is_removed=False)
+        self.assertAuthorized(self.community_moderator, "hide")
         self.assertTrue(self.comment.is_removed)
 
-    def test_publish_comment_view_as_admin_comment_moderator(self):
-        view = PublishCommentView.as_view()
-
-        self.comment.is_public = False
-        response = self.set_up_request(view, self.admin_comment_moderator, 'comment_publish')
-        self.comment.refresh_from_db()
-
-        self.assertEqual(response.status_code, 302)
+    def test_admin_moderator_can_publish(self):
+        self.comment = CommentFactory(is_public=False)
+        self.assertAuthorized(self.admin_moderator, "publish")
         self.assertTrue(self.comment.is_public)
 
-    def test_unpublish_comment_view_as_admin_comment_moderator(self):
-        view = UnPublishCommentView.as_view()
-        response = self.set_up_request(view, self.admin_comment_moderator, 'comment_unpublish')
-        self.comment.refresh_from_db()
-
-        self.assertEqual(response.status_code, 302)
+    def test_admin_moderator_can_unpublish_comment(self):
+        self.comment = CommentFactory(is_public=True)
+        self.assertAuthorized(self.admin_moderator, "unpublish")
         self.assertFalse(self.comment.is_public)
 
-    def test_clear_flags_comment_view_as_admin_comment_moderator(self):
-        view = ClearFlagsCommentView.as_view()
-        response = self.set_up_request(view, self.admin_comment_moderator, 'comment_clear_flags')
-
-        self.assertEqual(response.status_code, 302)
+    def test_admin_moderator_can_clear_flags_from_comment(self):
+        self.comment = CommentFactory()
+        FlagFactory(user=self.user, comment=self.comment)
+        self.assertGreater(self.comment.flags.count(), 0)
+        self.assertAuthorized(self.admin_moderator, "clear_flags")
         self.assertEqual(self.comment.flags.count(), 0)
+
+    def test_community_moderator_cannot_perform_admin_moderator_actions(self):
+        self.comment = CommentFactory()
+        for action in ["publish", "unpublish", "clear_flags"]:
+            self.assertUnauthorized(self.community_moderator, action)
+
+    def test_admin_moderator_cannot_perform_community_moderator_actions(self):
+        self.comment = CommentFactory()
+        for action in ["approve", "reject", "unsure", "hide"]:
+            self.assertUnauthorized(self.admin_moderator, action)
+
+    def test_unprivileged_user_cannot_perform_any_action(self):
+        self.comment = CommentFactory()
+        for action in [
+            "approve",
+            "reject",
+            "unsure",
+            "hide",
+            "publish",
+            "unpublish",
+            "clear_flags",
+        ]:
+            self.assertUnauthorized(self.user, action)
+
+    def assertUnauthorized(self, user, action):
+        self.assertEqual(
+            self.performAction(user, action).status_code,
+            403,
+            f"'{user.first_name} {user.last_name}' should not be authorized to perform "
+            f"'{action}' action",
+        )
+
+    def assertAuthorized(self, user, action):
+        response = self.performAction(user, action)
+        self.assertEqual(
+            response.status_code,
+            302,
+            f"'{user.first_name} {user.last_name}' should be authorized to perform "
+            f"'{action}' action",
+        )
+        self.assertEqual(
+            response.url,
+            "/referer/",
+            "User should be redirected to referer URL",
+        )
+        self.comment.refresh_from_db()
+
+    def performAction(self, user, action):
+        self.client.force_login(user)
+        return self.client.get(
+            reverse(f"comment_{action}", args=[self.comment.id]),
+            HTTP_REFERER="/referer/",
+        )
+        self.client.logout()

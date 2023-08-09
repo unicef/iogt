@@ -122,7 +122,10 @@ class CommunityCommentModeration(models.Model):
         max_length=255,
     )
     comment = models.OneToOneField(
-        to='django_comments_xtd.XtdComment', related_name='comment_moderation', on_delete=models.CASCADE)
+        to='django_comments_xtd.XtdComment',
+        related_name='comment_moderation',
+        on_delete=models.CASCADE,
+    )
 
     def __str__(self):
         return f'{self.comment.id} | {self.state}'
