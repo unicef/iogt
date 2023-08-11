@@ -5,10 +5,17 @@ from django.utils import timezone
 from django.utils.html import format_html
 from django_comments_xtd.models import XtdComment
 from wagtail.contrib.modeladmin.options import ModelAdminGroup, ModelAdmin, modeladmin_register
+from wagtail.contrib.modeladmin.helpers.permission import PermissionHelper
 
 from .button_helpers import XtdCommentAdminButtonHelper
 from .filters import FlaggedFilter, ModerationFilter, PublishedFilter
 from .models import CannedResponse, CommunityCommentModeration
+
+
+class CommentPermissionHelper(PermissionHelper):
+    def user_can_create(self, user):
+        """To remove the 'Create comment' button from the admin list page"""
+        return False
 
 
 class XtdCommentAdmin(ModelAdmin):
@@ -26,15 +33,16 @@ class XtdCommentAdmin(ModelAdmin):
     )
     button_helper_class = XtdCommentAdminButtonHelper
     menu_order = 601
-    CAN_MODERATE_LABEL = 'Can moderate comments via admin panel'
+    permission_helper_class = CommentPermissionHelper
 
     def get_permissions_for_registration(self):
+        label = "Can moderate comments via admin panel"
         permission = Permission.objects.get(
             codename='can_moderate',
             content_type=ContentType.objects.get_for_model(self.model),
         )
-        if permission.name != self.CAN_MODERATE_LABEL:
-            permission.name = self.CAN_MODERATE_LABEL
+        if permission.name != label:
+            permission.name = label
             permission.save()
 
         return super().get_permissions_for_registration()
