@@ -56,7 +56,6 @@ class ApproveCommentView(BaseCommentView):
 
     def handle(self, comment):
         comment.is_public = True
-        comment.flags.all().delete()
         comment.comment_moderation.state = CommentModerationState.APPROVED
         return comment
 

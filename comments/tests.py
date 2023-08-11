@@ -2,13 +2,13 @@ from django.test import TestCase
 from django.urls import reverse
 from iogt_users.factories import UserFactory
 
-from comments.models import CommentModerationState as State
 from comments.factories import (
     AdminModeratorFactory,
+    CommentFactory,
     CommunityModeratorFactory,
     FlagFactory,
-    CommentFactory,
 )
+from comments.models import CommentModerationState as State
 
 
 class CommentModerationTest(TestCase):
@@ -19,11 +19,11 @@ class CommentModerationTest(TestCase):
 
     def test_community_moderator_can_approve(self):
         self.comment = CommentFactory(is_public=False)
-        FlagFactory(user=self.user, comment=self.comment)
-        self.assertGreater(self.comment.flags.count(), 0)
+        FlagFactory(comment=self.comment, user=self.user)
+        self.assertEqual(self.comment.flags.count(), 1)
         self.assertAuthorized(self.community_moderator, "approve")
         self.assertTrue(self.comment.is_public)
-        self.assertEqual(self.comment.flags.count(), 0)
+        self.assertEqual(self.comment.flags.count(), 1, "Flags should remain")
         self.assertEqual(self.comment.comment_moderation.state, State.APPROVED)
 
     def test_community_moderator_can_reject(self):
