@@ -18,6 +18,7 @@ def matomo_tracking_tags(context):
             "matomo_site_id": site_id,
             "matomo_server_url": server_url,
             "matomo_image_tracker_url": image_tracker(server_url, site_id, uid),
+            "matomo_user_id": uid,
         }
     )
 
