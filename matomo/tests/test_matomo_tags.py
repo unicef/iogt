@@ -10,26 +10,35 @@ from matomo.templatetags.matomo_tags import matomo_tracking_tags
 )
 class MatomoTagsTests(TestCase):
     def test_only_enabled_when_required_settings_are_set(self):
-        self.assertTrue(matomo_tracking_tags(dict()).get("tracking_enabled"))
+        self.assertTrue(matomo_tracking_tags(create_context()).get("tracking_enabled"))
 
     def test_additional_site_id_must_be_positive_integer(self):
         with override_settings(MATOMO_ADDITIONAL_SITE_ID=567):
             self.assertEqual(
-                matomo_tracking_tags(dict()).get("matomo_additional_site_id"),
+                matomo_tracking_tags(create_context()).get("matomo_additional_site_id"),
                 567,
             )
 
         with override_settings(MATOMO_ADDITIONAL_SITE_ID=0):
             self.assertFalse(
-                "matomo_additional_site_id" in matomo_tracking_tags(dict())
+                "matomo_additional_site_id" in matomo_tracking_tags(create_context())
             )
 
         with override_settings(MATOMO_ADDITIONAL_SITE_ID=None):
             self.assertFalse(
-                "matomo_additional_site_id" in matomo_tracking_tags(dict())
+                "matomo_additional_site_id" in matomo_tracking_tags(create_context())
             )
 
-        with override_settings(MATOMO_ADDITIONAL_SITE_ID='123'):
+        with override_settings(MATOMO_ADDITIONAL_SITE_ID="123"):
             self.assertFalse(
-                "matomo_additional_site_id" in matomo_tracking_tags(dict())
+                "matomo_additional_site_id" in matomo_tracking_tags(create_context())
             )
+
+
+class MockRequest:
+    def __init__(self):
+        self.session = dict()
+
+
+def create_context():
+    return {"request": MockRequest()}
