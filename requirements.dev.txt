@@ -51,6 +51,7 @@ backports-zoneinfo[tzdata]==0.2.1 \
     --hash=sha256:fadbfe37f74051d024037f223b8e001611eac868b5c5b06144ef4d8b799862f2
     # via
     #   -r requirements.txt
+    #   backports-zoneinfo
     #   celery
     #   kombu
 beautifulsoup4==4.9.3 \
@@ -390,9 +391,9 @@ defusedxml==0.7.1 \
     #   -r requirements.txt
     #   cairosvg
     #   python3-openid
-django==3.2.20 \
-    --hash=sha256:a477ab326ae7d8807dc25c186b951ab8c7648a3a23f9497763c37307a2b5ef87 \
-    --hash=sha256:dec2a116787b8e14962014bf78e120bba454135108e1af9e9b91ade7b2964c40
+django==3.2.23 \
+    --hash=sha256:82968f3640e29ef4a773af2c28448f5f7a08d001c6ac05b32d02aeee6509508b \
+    --hash=sha256:d48608d5f62f2c1e260986835db089fa3b79d6f58510881d316b8d88345ae6e1
     # via
     #   -r requirements.txt
     #   django-allauth
@@ -944,6 +945,7 @@ pyjwt[crypto]==2.8.0 \
     #   -r requirements.txt
     #   django-allauth
     #   djangorestframework-simplejwt
+    #   pyjwt
 pysocks==1.7.1 \
     --hash=sha256:08e69f092cc6dbe92a0fdd16eeb9b9ffbc13cadfe5ca4c7bd92ffb078b293299 \
     --hash=sha256:2725bd0a9925919b9b51739eea5f9e2bae91e83288108a9ad338b2e3a4435ee5 \
@@ -1139,6 +1141,7 @@ tablib[xls,xlsx]==3.4.0 \
     --hash=sha256:77ea97faf6f92a7e198c05bd0c690f3cba57b83ea45a636b72f967cb6fe6f160
     # via
     #   -r requirements.txt
+    #   tablib
     #   wagtail
 telepath==0.3 \
     --hash=sha256:54f4b57232461bc67c54f63f437cb6d26843c189bae6b7ba8e4457f98d78e515 \
