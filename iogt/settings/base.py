@@ -560,6 +560,7 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = int(os.getenv('DATA_UPLOAD_MAX_NUMBER_FIELDS', '
 # Matomo tracking server and site information
 
 MATOMO_ADDITIONAL_SITE_ID = int(os.getenv('MATOMO_ADDITIONAL_SITE_ID', '0'))
+MATOMO_CREATE_VISITOR_ID = os.getenv('MATOMO_CREATE_VISITOR_ID', 'disable') == 'enable'
 MATOMO_SERVER_URL = os.getenv('MATOMO_SERVER_URL', '')
 MATOMO_SITE_ID = int(os.getenv('MATOMO_SITE_ID', '') or '0')
 MATOMO_TRACKING = os.getenv('MATOMO_TRACKING', 'disable') == 'enable'
