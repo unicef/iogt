@@ -14,24 +14,33 @@ class MatomoTagsTests(TestCase):
 
     def test_additional_site_id_must_be_positive_integer(self):
         with override_settings(MATOMO_ADDITIONAL_SITE_ID=567):
+            context = matomo_tracking_tags(create_context())
+            self.assertEqual(context.get("matomo_additional_site_id"), 567)
             self.assertEqual(
-                matomo_tracking_tags(create_context()).get("matomo_additional_site_id"),
-                567,
+                context.get("matomo_additional_image_tracker_url"),
+                "https://example.com/matomo.php?idsite=567&rec=1",
             )
 
         with override_settings(MATOMO_ADDITIONAL_SITE_ID=0):
-            self.assertFalse(
-                "matomo_additional_site_id" in matomo_tracking_tags(create_context())
-            )
+            context = matomo_tracking_tags(create_context())
+            self.assertFalse("matomo_additional_site_id" in context)
+            self.assertFalse("matomo_additional_image_tracker_url" in context)
 
         with override_settings(MATOMO_ADDITIONAL_SITE_ID=None):
-            self.assertFalse(
-                "matomo_additional_site_id" in matomo_tracking_tags(create_context())
-            )
+            context = matomo_tracking_tags(create_context())
+            self.assertFalse("matomo_additional_site_id" in context)
+            self.assertFalse("matomo_additional_image_tracker_url" in context)
 
         with override_settings(MATOMO_ADDITIONAL_SITE_ID="123"):
-            self.assertFalse(
-                "matomo_additional_site_id" in matomo_tracking_tags(create_context())
+            context = matomo_tracking_tags(create_context())
+            self.assertFalse("matomo_additional_site_id" in context)
+            self.assertFalse("matomo_additional_image_tracker_url" in context)
+
+    def test_visitor_id_is_created_for_clients_without_javascript(self):
+        with override_settings(MATOMO_CREATE_VISITOR_ID=True):
+            self.assertRegexpMatches(
+                matomo_tracking_tags(create_context()).get("matomo_image_tracker_url"),
+                r"_id=[a-f0-9]{16}",
             )
 
 
