@@ -681,6 +681,16 @@ class SiteSettings(BaseSetting):
                                             blank=True,
                                             on_delete=models.SET_NULL)
     opt_in_to_google_web_light = models.BooleanField(default=False)
+    mtm_container_id = models.CharField(
+        verbose_name=_("Matomo Tag Manager container ID"),
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text=_(
+            "Currently this feature only works on devices using JavaScript (e.g. basic"
+            " feature phones are not supported), and does not work with MNO zero-rating"
+            " or Meta Free Basics.")
+    )
 
     panels = [
         ImageChooserPanel('logo'),
@@ -753,6 +763,15 @@ class SiteSettings(BaseSetting):
                 FieldPanel('opt_in_to_google_web_light'),
             ],
             heading="Opt in to Google web light",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel(
+                    "mtm_container_id",
+                    heading="Tag Manager container ID",
+                ),
+            ],
+            heading="Matomo",
         ),
     ]
 

@@ -45,6 +45,7 @@
         {# Override this in templates to add extra stylesheets #}
     {% endblock %}
     {% matomo_tracking_tags %}
+    {% matomo_tag_manager settings.home.SiteSettings.mtm_container_id %}
 </head>
 
 {% get_current_language_bidi as LANGUAGE_BIDI %}
