@@ -2,7 +2,6 @@
 {% if tracking_enabled %}
     <script type="text/javascript">
       var _paq = window._paq = window._paq || [];
-      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
       _paq.push(['trackPageView']);
       _paq.push(['enableLinkTracking']);
       (function() {
@@ -17,10 +16,10 @@
       })();
     </script>
     <noscript>
-      <img src="{{ matomo_server_url }}matomo.php?idsite={{ matomo_site_id }}&rec=1" style="border:0" alt="" />
-      {% if matomo_additional_site_id %}
-      <img src="{{ matomo_server_url }}matomo.php?idsite={{ matomo_additional_site_id }}&rec=1" style="border:0" alt="" />
-      {% endif %}
+        <img src="{{ matomo_image_tracker_url }}" style="border:0" alt="" />
+        {% if matomo_additional_image_tracker_url %}
+        <img src="{{ matomo_additional_image_tracker_url }}" style="border:0" alt="" />
+        {% endif %}
     </noscript>
 {% endif %}
 <!-- End Matomo Code -->
