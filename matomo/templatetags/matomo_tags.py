@@ -10,6 +10,19 @@ VISITOR_ID_KEY = "vid"
 register = template.Library()
 
 
+@register.inclusion_tag("matomo_tag_manager.html", takes_context=True)
+def matomo_tag_manager(context, container_id=None):
+    try:
+        server_url = settings.MATOMO_SERVER_URL
+    except AttributeError:
+        server_url = None
+
+    if server_url and container_id:
+        context.update({"mtm_src": f"{server_url}js/container_{container_id}.js"})
+
+    return context
+
+
 @register.inclusion_tag("matomo_tracking_tags.html", takes_context=True)
 def matomo_tracking_tags(context):
     enabled = is_enabled()

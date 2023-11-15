@@ -1,6 +1,6 @@
 from django.test import TestCase, override_settings
 
-from matomo.templatetags.matomo_tags import matomo_tracking_tags
+from matomo.templatetags.matomo_tags import matomo_tag_manager, matomo_tracking_tags
 
 
 @override_settings(
@@ -8,7 +8,7 @@ from matomo.templatetags.matomo_tags import matomo_tracking_tags
     MATOMO_SERVER_URL="https://example.com/",
     MATOMO_SITE_ID=456,
 )
-class MatomoTagsTests(TestCase):
+class MatomoTrackingTagsTests(TestCase):
     def test_only_enabled_when_required_settings_are_set(self):
         self.assertTrue(matomo_tracking_tags(create_context()).get("tracking_enabled"))
 
@@ -41,6 +41,41 @@ class MatomoTagsTests(TestCase):
             self.assertRegexpMatches(
                 matomo_tracking_tags(create_context()).get("matomo_image_tracker_url"),
                 r"_id=[a-f0-9]{16}",
+            )
+
+
+class MatomoTagManagerTests(TestCase):
+    def test_enable_only_when_container_id_and_server_url(self):
+        with override_settings(MATOMO_SERVER_URL=None):
+            self.assertIsNone(
+                matomo_tag_manager(
+                    create_context(),
+                    container_id="ID",
+                ).get("mtm_src")
+            )
+
+        with override_settings(MATOMO_SERVER_URL="https://example.com/"):
+            self.assertIsNone(
+                matomo_tag_manager(
+                    create_context(),
+                    container_id=None,
+                ).get("mtm_src")
+            )
+            self.assertIsNotNone(
+                matomo_tag_manager(
+                    create_context(),
+                    container_id="ID",
+                ).get("mtm_src")
+            )
+
+    def test_generate_correct_tag_manager_url(self):
+        with override_settings(MATOMO_SERVER_URL="https://example.com/"):
+            self.assertEqual(
+                matomo_tag_manager(
+                    create_context(),
+                    container_id="ID",
+                ).get("mtm_src"),
+                "https://example.com/js/container_ID.js",
             )
 
 
