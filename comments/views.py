@@ -17,9 +17,15 @@ from django.utils.translation import ugettext as _
 
 from comments.forms import AdminCommentForm, CommentFilterForm
 from comments.models import CannedResponse, CommentModeration
+from moyapay.payments import MoyaPayModeratorPayout
 
 
 def update(request, comment_pk, action):
+    if CommentModeration.objects.get(id=comment_pk).state == CommentModeration.CommentModerationState.REJECTED:
+        user = request.user
+        comment = XtdComment.objects.get(pk=comment_pk)
+        MoyaPayModeratorPayout(user=user, comment=comment).process_payment()
+
     get_comment_with_children_filter = Q(parent_id=comment_pk) | Q(pk=comment_pk)
     comments = XtdComment.objects.filter(get_comment_with_children_filter)
     comment_moderations = []
