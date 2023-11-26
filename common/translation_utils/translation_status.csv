@@ -236,7 +236,6 @@ It seems we can’t find any results based on your search.,,remove,,unused,,No s
 See results,FE,translate,,unused,good,Search the site...,"(appears when no results found) - v1 has: Search (missing: mg, ru, zu, ti, tg, uz, kaa)"
 "The password reset link was invalid, possibly because it has already been used. <a href=""%(passwd_reset_url)s"">Please request a new password reset</a>.",FE,remove,,TODO,,,
 Your password is now changed.,FE,translate,,unused,good,Your PIN has been changed successfully.,
-Set Password,,not needed,,not needed,,Create 4 digit pin,
 BACK,FE,translate,,has partial translation,,,
 © The Internet of Good Things,FE,translate,,has partial translation,,,
 This appears to be your first visit here. Our website is also available as a downloadable app.,FE,translate,,unused,,,
@@ -248,11 +247,7 @@ You are leaving the <b>Internet of Good Things</b> to visit an external website 
 Continue to external site,FE,translate,,has partial translation,,,
 Go back to previous page,FE,translate,,unused,good,Back,
 I accept the terms & conditions,FE,translate,,unused,good,I accept the Terms and Conditions.,
-4-digit PIN,FE,translate,,has partial translation,,,"Create 4 digit pin|v1 has: 4-digit PIN (missing: mg, ru, zu, ti, tg, uz, kaa)"
 Enter Your Name,,remove,,unused,,,relic?
-Old 4-digit PIN,FE,translate,,has partial translation,,,Old Password
-New 4-digit PIN,FE,translate,,has partial translation,,,Create 4 digit pin|New PIN
-Confirm new 4-digit PIN,FE,translate,,has partial translation,,,Confirm PIN
 Page %(current_page)s of %(num_pages)s.,FE,remove,,TODO,,,future for comment pagination
 Post Registration Survey,,remove,,unused,,,
 Please fill this survey to keep using Internet of Good Things,,remove,,unused,,,relic?
@@ -407,7 +402,7 @@ Anonymous,,translate,,has partial translation,,,
 More,,translate,,has partial translation,,,
 Report this comment?,,translate,,has partial translation,,,
 It will be reviewed by the team and may be removed if it breaks our Platform Rules,,translate,,has partial translation,,,
-Display name,,translate,,has partial translation,,,
+Display name,,translate,,unused,,,
 Add Canned Response,,not needed,,not needed,,,
 Reported by %(comment_report_count)s user,Moderator,translate,,has partial translation,,,
 Reported by %(comment_report_count)s users,Moderator,translate,,has partial translation,,,
@@ -714,4 +709,12 @@ Change ordering of child pages of '%(title)s',,,,needs translation,,,
 Turkish,,not needed,not needed,not needed,,,
 Custom permissions,,,,needs translation,,,
 Submit,,translate,,has partial translation,,,
+Choose a username that you will use to login to IoGT,,translate,,has partial translation,,,
+"Choose a display name that will be shown publicly if you post to the IoGT site, e.g, next to comments you post",,translate,,has partial translation,,,
+Enter a 4-digit PIN or a longer password,,translate,,has partial translation,,,
+Repeat your 4-digit PIN or longer password,,translate,,has partial translation,,,
+Repeat your new 4-digit PIN or longer password,,translate,,has partial translation,,,
+Set Password,,not needed,,not needed,,Create 4 digit pin or a longer password,
 Farsi,,not needed,,not needed,,,
+Enter your old 4-digit PIN or longer password,,translate,,has partial translation,,,
+Enter your new 4-digit PIN or longer password,,translate,,has partial translation,,,

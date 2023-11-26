@@ -827,9 +827,6 @@ msgstr ""
 msgid "Your password is now changed."
 msgstr "([unused]-Your password is now changed.)"
 
-msgid "Set Password"
-msgstr "([not-needed]-Set Password)"
-
 msgid "BACK"
 msgstr "([has-partial-translation]-BACK)"
 
@@ -872,20 +869,8 @@ msgstr "([unused]-Go back to previous page)"
 msgid "I accept the terms & conditions"
 msgstr "([unused]-I accept the terms & conditions)"
 
-msgid "4-digit PIN"
-msgstr "([has-partial-translation]-4-digit PIN)"
-
 msgid "Enter Your Name"
 msgstr "([unused]-Enter Your Name)"
-
-msgid "Old 4-digit PIN"
-msgstr "([has-partial-translation]-Old 4-digit PIN)"
-
-msgid "New 4-digit PIN"
-msgstr "([has-partial-translation]-New 4-digit PIN)"
-
-msgid "Confirm new 4-digit PIN"
-msgstr "([has-partial-translation]-Confirm new 4-digit PIN)"
 
 msgid "Page %(current_page)s of %(num_pages)s."
 msgstr "([TODO]-Page %(current_page)s of %(num_pages)s.)"
@@ -1503,7 +1488,7 @@ msgstr ""
 "removed if it breaks our Platform Rules)"
 
 msgid "Display name"
-msgstr "([has-partial-translation]-Display name)"
+msgstr "([unused]-Display name)"
 
 msgid "Add Canned Response"
 msgstr "([not-needed]-Add Canned Response)"
@@ -1746,5 +1731,39 @@ msgstr "([needs-translation]-Custom permissions)"
 msgid "Submit"
 msgstr "([has-partial-translation]-Submit)"
 
+msgid "Choose a username that you will use to login to IoGT"
+msgstr ""
+"([has-partial-translation]-Choose a username that you will use to login to "
+"IoGT)"
+
+msgid ""
+"Choose a display name that will be shown publicly if you post to the IoGT "
+"site, e.g, next to comments you post"
+msgstr ""
+"([has-partial-translation]-Choose a display name that will be shown publicly"
+" if you post to the IoGT site, e.g, next to comments you post)"
+
+msgid "Enter a 4-digit PIN or a longer password"
+msgstr "([has-partial-translation]-Enter a 4-digit PIN or a longer password)"
+
+msgid "Repeat your 4-digit PIN or longer password"
+msgstr ""
+"([has-partial-translation]-Repeat your 4-digit PIN or longer password)"
+
+msgid "Repeat your new 4-digit PIN or longer password"
+msgstr ""
+"([has-partial-translation]-Repeat your new 4-digit PIN or longer password)"
+
+msgid "Set Password"
+msgstr "([not-needed]-Set Password)"
+
 msgid "Farsi"
 msgstr "([not-needed]-Farsi)"
+
+msgid "Enter your old 4-digit PIN or longer password"
+msgstr ""
+"([has-partial-translation]-Enter your old 4-digit PIN or longer password)"
+
+msgid "Enter your new 4-digit PIN or longer password"
+msgstr ""
+"([has-partial-translation]-Enter your new 4-digit PIN or longer password)"
