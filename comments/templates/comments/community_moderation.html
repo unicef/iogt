@@ -31,11 +31,10 @@
                 <tr>
                     <td class="comment-moderation-comment">
                         {{ comment.comment }}
-                        <br>
-                        <a href="{{ comment.content_object.get_absolute_url }}" style="color: blue; text-decoration: underline;" target="_blank">Link to Comment</a>
                     </td>
                     <td class="width-32">
                         <div class="action-btn">
+                            <a href="{{ comment.content_object.get_absolute_url }}#c{{ comment.id }}">Show</a>
                             {% if comment.comment_moderation.state == 'UNMODERATED' %}
                                 <a href={% url 'comment_approve' comment_pk=comment.id %}>{% translate 'Approve' %}</a>
                                 <a href={% url 'comment_reject' comment_pk=comment.id %}>{% translate 'Reject' %}</a>
