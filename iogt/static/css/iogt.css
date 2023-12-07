@@ -2497,7 +2497,6 @@ input[type=checkbox], input[type=radio] {
 .comment-moderation-comment {
     position: relative;
     display: inline-block;
-    width: 300px;
     white-space: normal;
     overflow: visible;
     text-overflow: unset;
@@ -2533,14 +2532,22 @@ input[type=checkbox], input[type=radio] {
     display: flex;
     justify-content: space-between;
 }
+
 .action-btn {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
 .action-btn a {
-  margin: 0;
+  border-radius: 8px;
+  border: 1px solid #303030;
+  margin: 0.25rem;
+  padding: 4px 18px;
+  text-align: center;
+  width: 100%;
 }
+
 .comments__submit {
     padding: 12px;
 }
@@ -2549,6 +2556,7 @@ input[type=checkbox], input[type=radio] {
   .comment-moderation-table thead {
     display: none;
   }
+
   .comment-moderation-table td {
     display: flex;
     align-items: center;
@@ -2556,31 +2564,25 @@ input[type=checkbox], input[type=radio] {
     width: 100% !important;
     padding: 16px;
   }
+
   .comment-moderation-table td .action-btn {
     flex-direction: row;
     flex-wrap: wrap;
   }
+
   .comment-moderation-table td .action-btn a {
-    border: 1px solid #303030;
-    padding: 4px 18px;
-    border-radius: 8px;
+    width: unset;
   }
-  .comment-moderation-table td .action-btn a:not(:last-child) {
-    margin-right: 16px;
-  }
+
   .comment-moderation-comment {
     white-space: unset;
     text-overflow: unset;
   }
 }
 
-@media screen and (max-width: 420px) {
+@media screen and (max-width: 500px) {
   .comment-moderation-table td .action-btn a {
     width: 100%;
     text-align: center;
-  }
-  .comment-moderation-table td .action-btn a:not(:last-child) {
-    margin-right: 0;
-    margin-bottom: 12px
   }
 }
