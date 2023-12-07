@@ -35,18 +35,18 @@
                     <td class="width-32">
                         <div class="action-btn">
                             {% if comment.comment_moderation.state == 'UNMODERATED' %}
-                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='approve' %}>{% translate 'Approve' %}</a>
-                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='reject' %}>{% translate 'Reject' %}</a>
-                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='unsure' %}>{% translate 'Unsure' %}</a>
+                                <a href={% url 'comment_approve' comment_pk=comment.id %}>{% translate 'Approve' %}</a>
+                                <a href={% url 'comment_reject' comment_pk=comment.id %}>{% translate 'Reject' %}</a>
+                                <a href={% url 'comment_unsure' comment_pk=comment.id %}>{% translate 'Unsure' %}</a>
                             {% elif comment.comment_moderation.state == 'APPROVED' %}
-                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='reject' %}>{% translate 'Reject' %}</a>
-                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='unsure' %}>{% translate 'Unsure' %}</a>
+                                <a href={% url 'comment_reject' comment_pk=comment.id %}>{% translate 'Reject' %}</a>
+                                <a href={% url 'comment_unsure' comment_pk=comment.id %}>{% translate 'Unsure' %}</a>
                             {% elif comment.comment_moderation.state == 'REJECTED' %}
-                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='approve' %}>{% translate 'Approve' %}</a>
-                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='unsure' %}>{% translate 'Unsure' %}</a>
+                                <a href={% url 'comment_approve' comment_pk=comment.id %}>{% translate 'Approve' %}</a>
+                                <a href={% url 'comment_unsure' comment_pk=comment.id %}>{% translate 'Unsure' %}</a>
                             {% elif comment.comment_moderation.state == 'UNSURE' %}
-                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='approve' %}>{% translate 'Approve' %}</a>
-                                <a href={% url 'wagtail_comments_xtd_publication' comment_pk=comment.id action='reject' %}>{% translate 'Reject' %}</a>
+                                <a href={% url 'comment_approve' comment_pk=comment.id %}>{% translate 'Approve' %}</a>
+                                <a href={% url 'comment_reject' comment_pk=comment.id %}>{% translate 'Reject' %}</a>
                             {% endif %}
                         </div>
                     </td>

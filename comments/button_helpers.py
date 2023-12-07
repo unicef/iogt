@@ -3,38 +3,18 @@ from wagtail.contrib.modeladmin.helpers import ButtonHelper
 
 
 class XtdCommentAdminButtonHelper(ButtonHelper):
-    def hide_show_toggle_button(self, comment):
-
-        if comment.is_removed:
-            action = 'show'
-            label = 'Show'
-        else:
-            action = 'hide'
-            label = 'Hide'
-
-        return {
-            'url': reverse('wagtail_comments_xtd_publication', kwargs={
-                'comment_pk': comment.pk,
-                'action': action
-            }),
-            'label': label,
-            'classname': 'button button-small button-secondary',
-            'title': f'{label} this {self.verbose_name}'
-        }
-
     def publish_unpublish_toggle_button(self, comment):
         if comment.is_public:
-            action = 'unpublish'
+            action = 'comment_unpublish'
             label = 'Unpublish'
             cn = 'button no button-small button-secondary'
         else:
-            action = 'publish'
+            action = 'comment_publish'
             label = 'Publish'
             cn = 'button button-small button-secondary'
         return {
-            'url': reverse('wagtail_comments_xtd_publication', kwargs={
+            'url': reverse(action, kwargs={
                 'comment_pk': comment.pk,
-                'action': action
             }),
             'label': label,
             'classname': cn,
@@ -44,9 +24,8 @@ class XtdCommentAdminButtonHelper(ButtonHelper):
     def clear_flags_button(self, comment):
         if comment.flags.count():
             return {
-                'url': reverse('wagtail_comments_xtd_publication', kwargs={
+                'url': reverse('comment_clear_flags', kwargs={
                     'comment_pk': comment.pk,
-                    'action': 'clear_flags'
                 }),
                 'label': 'Clear Flags',
                 'classname': 'button button-small button-secondary',
@@ -65,7 +44,8 @@ class XtdCommentAdminButtonHelper(ButtonHelper):
 
     def get_buttons_for_obj(self, obj, *args, **kwargs):
         buttons = super().get_buttons_for_obj(obj, exclude='delete', *args, **kwargs)
-        buttons.append(self.publish_unpublish_toggle_button(comment=obj))
-        buttons.append(self.clear_flags_button(comment=obj))
-        buttons.append(self.comment_reply_button(comment=obj))
+        if self.request.user.has_perm('django_comments_xtd.can_moderate'):
+            buttons.append(self.publish_unpublish_toggle_button(comment=obj))
+            buttons.append(self.clear_flags_button(comment=obj))
+            buttons.append(self.comment_reply_button(comment=obj))
         return buttons

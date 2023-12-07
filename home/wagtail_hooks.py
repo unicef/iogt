@@ -42,12 +42,14 @@ def sort_page_listing_by_path(parent_page, pages, request):
 
 
 @hooks.register('construct_main_menu')
-def rename_forms_menu_item(request, menu_items):
+def update_menu_items(request, menu_items):
     for item in menu_items:
         if item.name == "forms":
             item.label = _("Form Data")
         if item.name == 'translations':
             item.url = f'{TranslationEntryAdmin().url_helper.get_action_url("index")}?limited=yes'
+        if item.name == 'community-comment-moderations':
+            menu_items.remove(item)
 
 
 @hooks.register('construct_page_chooser_queryset')

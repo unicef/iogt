@@ -47,6 +47,6 @@ def get_comment_report_count(comment):
 def comments_moderation_button(context):
     request = context['request']
     context.update({
-        'show_comments_community_moderation_button': settings.COMMENTS_COMMUNITY_MODERATION and request.user.has_perm('django_comments_xtd.can_moderate')
+        'show_comments_community_moderation_button': settings.COMMENTS_COMMUNITY_MODERATION and request.user.has_perm('comments.can_community_moderate')
     })
     return context

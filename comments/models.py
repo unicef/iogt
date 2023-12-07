@@ -30,6 +30,13 @@ class CommentStatus:
     )
 
 
+class CommentModerationState(models.TextChoices):
+    UNMODERATED = "UNMODERATED", "Unmoderated"
+    APPROVED = "APPROVED", "Approved"
+    REJECTED = "REJECTED", "Rejected"
+    UNSURE = "UNSURE", "Unsure"
+
+
 class CommentableMixin(models.Model):
     """
     Add this mixin to any Model which wants to allow/disallow comments.
@@ -59,8 +66,6 @@ class CommentableMixin(models.Model):
                 return ancestor
 
     def should_show_comments_list(self):
-        from home.models import Section
-
         commenting_status = self.commenting_status
         if commenting_status == CommentStatus.INHERITED:
             ancestor = self._get_valid_ancestor_for_commenting()
@@ -69,8 +74,6 @@ class CommentableMixin(models.Model):
         return commenting_status in [CommentStatus.OPEN, CommentStatus.CLOSED, CommentStatus.TIMESTAMPED]
 
     def should_show_new_comment_box(self):
-        from home.models import Section
-
         commenting_still_valid = True
         commenting_status = self.commenting_status
         commenting_starts_at = self.commenting_starts_at
@@ -112,19 +115,25 @@ class CannedResponse(models.Model):
         return self.text
 
 
-class CommentModeration(models.Model):
-    class CommentModerationState(models.TextChoices):
-        UNMODERATED = "UNMODERATED", "Unmoderated"
-        APPROVED = "APPROVED", "Approved"
-        REJECTED = "REJECTED", "Rejected"
-        UNSURE = "UNSURE", "Unsure"
-
-    state = models.CharField(max_length=255, choices=CommentModerationState.choices, default=CommentModerationState.UNMODERATED)
+class CommunityCommentModeration(models.Model):
+    state = models.CharField(
+        choices=CommentModerationState.choices,
+        default=CommentModerationState.UNMODERATED,
+        max_length=255,
+    )
     comment = models.OneToOneField(
-        to='django_comments_xtd.XtdComment', related_name='comment_moderation', on_delete=models.CASCADE)
+        to='django_comments_xtd.XtdComment',
+        related_name='comment_moderation',
+        on_delete=models.CASCADE,
+    )
 
     def __str__(self):
         return f'{self.comment.id} | {self.state}'
+
+    class Meta:
+        permissions = (
+            ("can_community_moderate", "Can moderate comments on public site"),
+        )
 
 
 @receiver(post_save, sender=XtdComment)
@@ -133,12 +142,12 @@ def comment_moderation_handler(sender, instance, created, **kwargs):
         moderator = Moderator()
         instance.is_public = moderator.moderate(instance)
         instance.save(update_fields=['is_public'])
-        CommentModeration.objects.create(comment_id=instance.id)
+        CommunityCommentModeration.objects.create(comment_id=instance.id)
 
 
 @receiver(comment_was_flagged, sender=XtdComment)
 def comment_flagged(sender, comment, **kwargs):
     if hasattr(comment, 'comment_moderation'):
         comment_moderation = comment.comment_moderation
-        comment_moderation.state = CommentModeration.CommentModerationState.UNMODERATED
+        comment_moderation.state = CommentModerationState.UNMODERATED
         comment_moderation.save(update_fields=['state'])
