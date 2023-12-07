@@ -5,8 +5,6 @@ from django.urls import include, path, re_path
 from django.views.i18n import JavaScriptCatalog
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
-from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated
 from wagtail.images.views.serve import ServeView
 from webpush.views import save_info
 
