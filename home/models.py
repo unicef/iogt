@@ -1088,11 +1088,21 @@ class ThemeSettings(BaseSetting):
         default='#f0f0f0')
 
     navbar_background_color = models.CharField(
-        null=True, blank=True, help_text='The background color of the navbar as a HEX code', max_length=8,
-        default='#0094F4')
+        null=True,
+        blank=True,
+        help_text='The background color of the navbar as a HEX code',
+        max_length=8,
+        default='#0094F4',
+        verbose_name="Flat menu background color",
+    )
     navbar_font_color = models.CharField(
-        null=True, blank=True, help_text='The font color of the navbar as a HEX code', max_length=8,
-        default='#FFFFFF')
+        null=True,
+        blank=True,
+        help_text='The font color of the navbar as a HEX code',
+        max_length=8,
+        default='#FFFFFF',
+        verbose_name="Flat menu font color"
+    )
 
 
 class V1ToV2ObjectMap(models.Model):
