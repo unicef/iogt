@@ -31,6 +31,8 @@
                 <tr>
                     <td class="comment-moderation-comment">
                         {{ comment.comment }}
+                        <br>
+                        <a href="{{ comment.content_object.get_absolute_url }}" style="color: blue; text-decoration: underline;" target="_blank">Link to Comment</a>
                     </td>
                     <td class="width-32">
                         <div class="action-btn">

@@ -2498,9 +2498,10 @@ input[type=checkbox], input[type=radio] {
     position: relative;
     display: inline-block;
     width: 300px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    word-wrap: break-word;
 }
 
 .comment-moderation {
