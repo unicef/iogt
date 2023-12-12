@@ -10,7 +10,6 @@ from wagtail.core.models import Page
 
 from comments import get_comments_moderation_class
 
-User = get_user_model()
 Moderator = get_comments_moderation_class()
 
 
@@ -154,6 +153,23 @@ class CommunityCommentModeration(models.Model):
         permissions = (
             ("can_community_moderate", "Can moderate comments on public site"),
         )
+
+
+class CommunityCommentModerationLogEntry(models.Model):
+    action = models.CharField(max_length=255)
+    comment = models.ForeignKey(
+        to="django_comments_xtd.XtdComment",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+    )
+    moderator = models.ForeignKey(
+        to=get_user_model(),
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+    )
+    created = models.DateTimeField(default=timezone.now)
 
 
 @receiver(post_save, sender=XtdComment)
