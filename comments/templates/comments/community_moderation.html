@@ -20,40 +20,40 @@
         </div>
     </form>
     {% if comments %}
-        <table class="comment-moderation-table">
-            <thead>
-                <tr>
-                    <th>{% translate 'Comments' %}</th>
-                    <th class="width-32">{% translate 'Actions' %}</th>
-                </tr>
-            </thead>
+        <div class="cm-table">
+            <div class="cm-header">
+                <div class="cm-content">{% translate 'Comments' %}</div>
+                <div class="cm-actions">{% translate 'Actions' %}</div>
+            </div>
             {% for comment in comments %}
-                <tr>
-                    <td class="comment-moderation-comment">
-                        {{ comment.comment }}
-                    </td>
-                    <td class="width-32">
-                        <div class="action-btn">
-                            <a href="{{ comment.content_object.get_absolute_url }}#c{{ comment.id }}">Show</a>
-                            {% if comment.comment_moderation.state == 'UNMODERATED' %}
-                                <a href={% url 'comment_approve' comment_pk=comment.id %}>{% translate 'Approve' %}</a>
-                                <a href={% url 'comment_reject' comment_pk=comment.id %}>{% translate 'Reject' %}</a>
-                                <a href={% url 'comment_unsure' comment_pk=comment.id %}>{% translate 'Unsure' %}</a>
-                            {% elif comment.comment_moderation.state == 'APPROVED' %}
-                                <a href={% url 'comment_reject' comment_pk=comment.id %}>{% translate 'Reject' %}</a>
-                                <a href={% url 'comment_unsure' comment_pk=comment.id %}>{% translate 'Unsure' %}</a>
-                            {% elif comment.comment_moderation.state == 'REJECTED' %}
-                                <a href={% url 'comment_approve' comment_pk=comment.id %}>{% translate 'Approve' %}</a>
-                                <a href={% url 'comment_unsure' comment_pk=comment.id %}>{% translate 'Unsure' %}</a>
-                            {% elif comment.comment_moderation.state == 'UNSURE' %}
-                                <a href={% url 'comment_approve' comment_pk=comment.id %}>{% translate 'Approve' %}</a>
-                                <a href={% url 'comment_reject' comment_pk=comment.id %}>{% translate 'Reject' %}</a>
-                            {% endif %}
-                        </div>
-                    </td>
-                </tr>
+            <div class="cm-comment">
+                <div class="cm-content">
+                    <div>{{ comment.comment }}</div>
+                    <div class="cm-links">
+                        <a href="{{ comment.content_object.get_absolute_url }}#c{{ comment.id }}">View comment</a>
+                    </div>
+                </div>
+                <div class="cm-actions">
+                    <div class="action-btn">
+                        {% if comment.comment_moderation.state == 'UNMODERATED' %}
+                            <a href={% url 'comment_approve' comment_pk=comment.id %}>{% translate 'Approve' %}</a>
+                            <a href={% url 'comment_reject' comment_pk=comment.id %}>{% translate 'Reject' %}</a>
+                            <a href={% url 'comment_unsure' comment_pk=comment.id %}>{% translate 'Unsure' %}</a>
+                        {% elif comment.comment_moderation.state == 'APPROVED' %}
+                            <a href={% url 'comment_reject' comment_pk=comment.id %}>{% translate 'Reject' %}</a>
+                            <a href={% url 'comment_unsure' comment_pk=comment.id %}>{% translate 'Unsure' %}</a>
+                        {% elif comment.comment_moderation.state == 'REJECTED' %}
+                            <a href={% url 'comment_approve' comment_pk=comment.id %}>{% translate 'Approve' %}</a>
+                            <a href={% url 'comment_unsure' comment_pk=comment.id %}>{% translate 'Unsure' %}</a>
+                        {% elif comment.comment_moderation.state == 'UNSURE' %}
+                            <a href={% url 'comment_approve' comment_pk=comment.id %}>{% translate 'Approve' %}</a>
+                            <a href={% url 'comment_reject' comment_pk=comment.id %}>{% translate 'Reject' %}</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
             {% endfor %}
-        </table>
+        </div>
         {% if is_paginated %}
             <div class="pagination comment-moderator-pagination">
                 <span class="page-links">
