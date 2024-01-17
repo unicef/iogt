@@ -21,20 +21,19 @@ from comments.models import (
     CannedResponse,
     CommentModerationState,
     CommunityCommentModeration,
+    CommunityCommentModerationLogEntry,
 )
 
 
 class BaseCommentView(LoginRequiredMixin, PermissionRequiredMixin, View):
     action_verb = ""
+    is_action_logger = False
 
     def get_queryset(self, comment_pk):
         return XtdComment.objects.filter(Q(parent_id=comment_pk) | Q(pk=comment_pk))
 
     def get(self, request, comment_pk):
-        comments = [
-            self.handle(comment)
-            for comment in self.get_queryset(comment_pk)
-        ]
+        comments = [self.handle(comment) for comment in self.get_queryset(comment_pk)]
         comment_moderations = [comment.comment_moderation for comment in comments]
 
         XtdComment.objects.bulk_update(comments, ["is_public", "is_removed"])
@@ -43,16 +42,26 @@ class BaseCommentView(LoginRequiredMixin, PermissionRequiredMixin, View):
         messages.success(
             request, _(f"The comment has been {self.action_verb} successfully!")
         )
+        self.log_action(request.user, next(c for c in comments if c.id == comment_pk))
 
         return redirect(request.META.get("HTTP_REFERER"))
 
     def handle(self, comment):
         return comment
 
+    def log_action(self, moderator, comment):
+        if self.is_action_logger:
+            CommunityCommentModerationLogEntry.objects.create(
+                action=self.action_verb,
+                comment=comment,
+                moderator=moderator,
+            )
+
 
 class ApproveCommentView(BaseCommentView):
     permission_required = "comments.can_community_moderate"
     action_verb = "approved"
+    is_action_logger = True
 
     def handle(self, comment):
         comment.is_public = True
@@ -63,6 +72,7 @@ class ApproveCommentView(BaseCommentView):
 class RejectCommentView(BaseCommentView):
     permission_required = "comments.can_community_moderate"
     action_verb = "rejected"
+    is_action_logger = True
 
     def handle(self, comment):
         comment.is_public = False
@@ -73,6 +83,7 @@ class RejectCommentView(BaseCommentView):
 class UnsureCommentView(BaseCommentView):
     permission_required = "comments.can_community_moderate"
     action_verb = "unsure"
+    is_action_logger = True
 
     def handle(self, comment):
         comment.comment_moderation.state = CommentModerationState.UNSURE
@@ -82,6 +93,7 @@ class UnsureCommentView(BaseCommentView):
 class HideCommentView(BaseCommentView):
     permission_required = "comments.can_community_moderate"
     action_verb = "removed"
+    is_action_logger = True
 
     def handle(self, comment):
         comment.is_removed = True
