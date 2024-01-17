@@ -2455,52 +2455,68 @@ input[type=checkbox], input[type=radio] {
     width: auto;
 }
 
-.comment-moderation-table {
-    width: 100%;
-    border-collapse: collapse;
+.cm-table {
+    display: flex;
+    flex-flow: column;
     margin-top: 26px;
     border: 1px solid rgba(0, 0, 0, 0.2);
 }
-.comment-moderation-table td, th {
-    text-align: left;
-    padding: 8px 16px;
-}
-.comment-moderation-table .width-32 {
-    width: 32%;
-}
-.comment-moderation-table thead tr {
-    background: #F0F0F0;
-}
-.comment-moderation-table thead tr th {
-    font-size: 16px;
-    color: #000000;
-    font-weight: 500;
-}
-.comment-moderation-table thead td:last-child, th:last-child {
-    text-align: right;
-    padding-right: 55px;
-}
-.comment-moderation-table tbody tr {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-}
-.comment-moderation-table tbody td {
-    padding:16px;
-}
 
-.comment-moderation-table tbody a {
+.cm-table a {
     text-decoration: none;
     font-size: 16px;
     font-weight: 500;
     color: #000000;
 }
 
-.comment-moderation-comment {
-    position: relative;
-    display: inline-block;
-    white-space: normal;
-    overflow: visible;
-    text-overflow: unset;
-    word-wrap: break-word;
+.cm-table > .cm-comment,
+.cm-table > .cm-header {
+    display: flex;
+    flex-flow: row wrap;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.cm-table .cm-header {
+    background: #F0F0F0;
+    color: black;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.cm-table .cm-header > div,
+.cm-table .cm-comment > div {
+    padding: 0.5rem 1rem;
+}
+
+.cm-table .cm-header .cm-content,
+.cm-table .cm-comment .cm-content {
+    flex: 2;
+}
+
+.cm-table .cm-header .cm-actions,
+.cm-table .cm-comment .cm-actions {
+    flex: 1;
+}
+
+.cm-table .cm-comment .cm-actions {
+    display: flex;
+    align-items: center;
+    justify-content: stretch;
+}
+
+.cm-table .cm-comment:last-child {
+    border-bottom: none;
+}
+
+.cm-table .cm-comment .cm-content {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    justify-content: space-between;
+}
+
+.cm-table .cm-comment .cm-links {
+    margin-top: 0.5rem;
 }
 
 .comment-moderation {
@@ -2535,6 +2551,7 @@ input[type=checkbox], input[type=radio] {
 
 .action-btn {
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: center;
 }
@@ -2543,7 +2560,7 @@ input[type=checkbox], input[type=radio] {
   border-radius: 8px;
   border: 1px solid #303030;
   margin: 0.25rem;
-  padding: 4px 18px;
+  padding: 0.25rem 1rem;
   text-align: center;
   width: 100%;
 }
@@ -2553,36 +2570,21 @@ input[type=checkbox], input[type=radio] {
 }
 
 @media screen and (max-width: 767px) {
-  .comment-moderation-table thead {
-    display: none;
+  .cm-table .cm-header {
+      display: none;
   }
 
-  .comment-moderation-table td {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100% !important;
-    padding: 16px;
+  .cm-table .cm-actions .action-btn {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
   }
 
-  .comment-moderation-table td .action-btn {
-    flex-direction: row;
-    flex-wrap: wrap;
+  .cm-table .cm-actions .action-btn a {
+      flex: 1
   }
 
-  .comment-moderation-table td .action-btn a {
-    width: unset;
-  }
-
-  .comment-moderation-comment {
-    white-space: unset;
-    text-overflow: unset;
-  }
-}
-
-@media screen and (max-width: 500px) {
-  .comment-moderation-table td .action-btn a {
-    width: 100%;
-    text-align: center;
+  .cm-table .cm-comment {
+      flex-direction: column;
   }
 }
