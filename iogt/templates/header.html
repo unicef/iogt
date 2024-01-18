@@ -1,9 +1,10 @@
-{% load static menu_tags i18n wagtailimages_tags home_tags image_tags generic_components %}
+{% load static menu_tags i18n wagtailimages_tags wagtailsettings_tags home_tags image_tags generic_components %}
 
 {% get_current_language as LANGUAGE_CODE %}
 {% get_language_info for LANGUAGE_CODE as lang %}
 {% get_available_languages as LANGUAGES %}
 {% get_language_info_list for LANGUAGES as languages %}
+{% get_settings %}
 
 <header id="header" style="background: {{ settings.home.ThemeSettings.header_background_color }}">
     <div class="header-holder">
@@ -33,11 +34,13 @@
         <div class="btn-holder">
             <div class="nav-bar__item">
                 {% url 'account_login' as login_url %}
+                {% if settings.home.SiteSettings.show_login_signup_button %}
                 {% if request.user.is_anonymous %}
                     {% primary_button title="Log in / Create account" href=login_url icon_path='icons/login.svg' extra_classnames='login-create-account-btn' %}
                 {% else %}
                     {% url 'user_profile' as profile_url %}
                 {% primary_button title="Profile" href=profile_url icon_path='icons/profile.svg' %}
+                {% endif %}
                 {% endif %}
             </div>
         </div>

@@ -677,6 +677,7 @@ class SiteSettings(BaseSetting):
         default=9437184,
         help_text=_('Show warning if uploaded media file size is greater than this in bytes. Default is 9 MB'))
     allow_anonymous_comment = models.BooleanField(default=False)
+    show_login_signup_button = models.BooleanField(default=True)
     registration_survey = models.ForeignKey('questionnaires.Survey', null=True,
                                             blank=True,
                                             on_delete=models.SET_NULL)
@@ -751,6 +752,12 @@ class SiteSettings(BaseSetting):
                 FieldPanel('allow_anonymous_comment'),
             ],
             heading="Allow Anonymous Comment",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('show_login_signup_button'),
+            ],
+            heading="Show Login / Signup Button",
         ),
         MultiFieldPanel(
             [
