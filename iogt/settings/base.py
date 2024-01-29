@@ -97,6 +97,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+
+    'cranky_uncle',
 ]
 
 MIDDLEWARE = [
