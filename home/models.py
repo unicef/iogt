@@ -43,6 +43,7 @@ from wagtailsvg.models import Svg
 from wagtailsvg.edit_handlers import SvgChooserPanel
 
 from messaging.blocks import ChatBotButtonBlock
+from cranky_uncle.blocks import CrankyUncleButtonBlock
 from comments.models import CommentableMixin
 from home.blocks import (
     MediaBlock, SocialMediaLinkBlock, SocialMediaShareButtonBlock, EmbeddedPollBlock, EmbeddedSurveyBlock,
@@ -462,6 +463,28 @@ class Article(AbstractArticle):
         if response.status_code == status.HTTP_200_OK:
             User.record_article_read(request=request, article=self)
         return response
+
+
+class CrankyUncle(Page):
+    lead_image = models.ForeignKey(
+        'wagtailimages.Image',
+        on_delete=models.PROTECT,
+        related_name='+',
+        blank=True,
+        null=True,
+    )
+    body = StreamField(
+        [
+            ('cranky_uncle_bot', CrankyUncleButtonBlock()),
+        ],
+        null=True,
+        blank=True,
+    )
+
+    content_panels = Page.content_panels + [
+        ImageChooserPanel('lead_image'),
+        StreamFieldPanel('body'),
+    ]
 
 
 class MiscellaneousIndexPage(Page):
