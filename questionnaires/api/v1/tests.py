@@ -887,14 +887,37 @@ class FormDataPerUserAdminTests(TestCase):
         byte_response = b''
         for stream in response.streaming_content:
             byte_response += stream
-        expected_response = \
-            f'ID,Name,Submission Date,Field,Value\r\n' \
-            f'{self.user_submission_01.id},{self.poll.title},{self.user_submission_01.submit_time},User,{self.user_01.username}\r\n' \
-            f'{self.user_submission_01.id},{self.poll.title},{self.user_submission_01.submit_time},URL,{self.poll.full_url}\r\n' \
-            f'{self.user_submission_01.id},{self.poll.title},{self.user_submission_01.submit_time},{self.poll_question.clean_name},c1\r\n' \
-            f'{self.user_submission_03.id},{self.quiz.title},{self.user_submission_03.submit_time},User,{self.user_01.username}\r\n' \
-            f'{self.user_submission_03.id},{self.quiz.title},{self.user_submission_03.submit_time},URL,{self.quiz.full_url}\r\n' \
+        expected_response = (
+            f'ID,Name,Submission Date,Field,Value\r\n'
+            f'{self.user_submission_01.id},{self.poll.title},{self.user_submission_01.submit_time},User,{self.user_01.username}\r\n'
+            f'{self.user_submission_01.id},{self.poll.title},{self.user_submission_01.submit_time},URL,{self.poll.full_url}\r\n'
+            f'{self.user_submission_01.id},{self.poll.title},{self.user_submission_01.submit_time},{self.poll_question.clean_name},c1\r\n'
+            f'{self.user_submission_03.id},{self.quiz.title},{self.user_submission_03.submit_time},User,{self.user_01.username}\r\n'
+            f'{self.user_submission_03.id},{self.quiz.title},{self.user_submission_03.submit_time},URL,{self.quiz.full_url}\r\n'
             f'{self.user_submission_03.id},{self.quiz.title},{self.user_submission_03.submit_time},{self.quiz_question.clean_name},c3\r\n'
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(byte_response.decode(), expected_response)
+
+    def test_export_experimental_page_ids_filter(self):
+        url = reverse('experimental_form_data_per_user')
+        response = self.client.get(f'{url}?user_id={self.user_01.id}&export=csv&page_ids={self.poll.id},{self.quiz.id}')
+
+        byte_response = b''
+        for stream in response.streaming_content:
+            byte_response += stream
+        expected_response = (
+            f'Page ID,Page Title,Submission ID,Submission Date,Field,Value\r\n'
+            f'{self.poll.id},{self.poll.title},{self.user_submission_01.id},{self.user_submission_01.submit_time},User,{self.user_01.username}\r\n'
+            f'{self.poll.id},{self.poll.title},{self.user_submission_01.id},{self.user_submission_01.submit_time},URL,{self.poll.full_url}\r\n'
+            f'{self.poll.id},{self.poll.title},{self.user_submission_01.id},{self.user_submission_01.submit_time},{self.poll_question.clean_name},c1\r\n'
+            f'{self.quiz.id},{self.quiz.title},{self.user_submission_03.id},{self.user_submission_03.submit_time},User,{self.user_01.username}\r\n'
+            f'{self.quiz.id},{self.quiz.title},{self.user_submission_03.id},{self.user_submission_03.submit_time},URL,{self.quiz.full_url}\r\n'
+            f'{self.quiz.id},{self.quiz.title},{self.user_submission_03.id},{self.user_submission_03.submit_time},{self.quiz_question.clean_name},c3\r\n'
+        )
+
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(byte_response.decode(), expected_response)
 

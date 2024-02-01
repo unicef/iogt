@@ -14,3 +14,26 @@
     background-color: #e6e6e6;
     color: #4d4d4d;
 }
+
+.warning {
+    color: #EE404C;
+    font-size: 14px;
+    background-color: white;
+    margin-top: 16px;
+    border-radius: 3px;
+    display: flex;
+    max-width: max-content;
+    align-items: flex-start;
+    padding: 8px 20px;
+}
+
+.warning .svg-wrapper {
+    min-width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.warning .svg-wrapper img {
+    height: 100%;
+    width: 100%;
+}

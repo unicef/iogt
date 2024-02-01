@@ -25,9 +25,19 @@ class UserButtonHelper(ButtonHelper):
             "title": text,
         }
 
+    def experimental_form_data_button(self, obj):
+        text = "Experimental Form Data"
+        return {
+            "url": f'{reverse("experimental_form_data_per_user")}?user_id={obj.id}',
+            "label": text,
+            "classname": self.finalise_classname(self.view_button_classnames),
+            "title": text,
+        }
+
     def get_buttons_for_obj(self, obj, exclude=None, classnames_add=None, classnames_exclude=None):
         btns = super().get_buttons_for_obj(obj, exclude, classnames_add, classnames_exclude)
         btns.append(self.form_data_button(obj))
+        btns.append(self.experimental_form_data_button(obj))
         return btns
 
 
