@@ -465,7 +465,7 @@ class Article(AbstractArticle):
         return response
 
 
-class CrankyUncle(Page):
+class CrankyUncle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     lead_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
@@ -480,6 +480,8 @@ class CrankyUncle(Page):
         null=True,
         blank=True,
     )
+
+    show_in_menus_default = True
 
     content_panels = Page.content_panels + [
         ImageChooserPanel('lead_image'),

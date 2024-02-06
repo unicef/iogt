@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailuserbar menu_tags  home_tags questionnaires_tags sass_tags i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_language_info for LANGUAGE_CODE as lang %}
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as languages %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block content %}
+    <article class='cranky_uncle'>
+        {% render_image page.lead_image img_class='lead-img' %}
+        {% if user_progress %}
+            {% render_user_progress user_progress False %}
+        {% endif %}
+        <section class='cranky_uncle__content'>
+            <h1>{{ page.title }}</h1>
+            {% include_block page.body %}
+            {% render_previous_next_buttons page %}
+    </article>
+
+{% endblock content %}
