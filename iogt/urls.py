@@ -68,6 +68,7 @@ urlpatterns = api_url_patterns + [
     path('page-tree/<int:page_id>/', PageTreeAPIView.as_view(), name='page_tree'),
     path('api/docs/', schema_view.with_ui('swagger'), name='swagger'),
     path('webpush/subscribe/', save_info, name='save_webpush_info'),
+    path('cranky-uncle/', include('cranky_uncle.urls', namespace='cranky')),
 ]
 
 if settings.DEBUG:

@@ -6,6 +6,7 @@
 {% block content %}
     <section class='child-pages'>
         {% for child in children %}
+
             {% with child=child.get_page is_first_content=child.is_first_content %}
                 {% if child.get_type == 'section' %}
                     {% render_section_card child is_first_content %}
@@ -13,6 +14,12 @@
                     {% render_article_card child is_first_content %}
                 {% elif child.get_type == 'poll' or child.get_type == 'survey' or child.get_type == 'quiz' %}
                     {% render_questionnaire_wrapper child child.direct_display %}
+                {% else %}
+                    <div class="section-card">
+                        <a href="{% pageurl child %}" class="sub-section " style="color:#444; background:#ffffff;">
+                            <div class="section-header"><p class="section-title">{{ child.title }}</p></div>
+                        </a>
+                    </div>
                 {% endif %}
             {% endwith %}
         {% endfor %}

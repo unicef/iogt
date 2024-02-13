@@ -1,10 +1,10 @@
 from django import forms
 from wagtail.core import blocks
 
-from .models import CrankyUncleChannel
-
 
 class CrankyUncleChannelChooserBlock(blocks.ChooserBlock):
+    from .models import CrankyUncleChannel
+
     target_model = CrankyUncleChannel
     widget = forms.Select
 

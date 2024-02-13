@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailuserbar menu_tags  home_tags questionnaires_tags sass_tags i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_language_info for LANGUAGE_CODE as lang %}
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as languages %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block content %}
+    <article class='cranky_uncle'>
+        {% render_image page.lead_image img_class='lead-img' %}
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 col-sm-12">
+                    <div class="card-header">
+                        <span class="text-danger">Cranky Points: {{ crankyPoint }}</span>
+                        {# Uncomment and adjust as needed #}
+                        {# <span style="margin-left: 20px">Level: {{ level.levelNumber }} - {{ level.levelName }}</span> #}
+                    </div>
+                    <h1>Cranky Uncle</h1>
+                    <p>What's the best way to understand the science denial arguments from your cranky uncle? From a Cranky
+                        Uncle, of course!</p>
+                    <form method="post" action="#">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-success">TAKE A QUIZ!</button>
+                    </form>
+                </div>
+                <div class="col-md-8 col-sm-12">
+                    {# Uncomment and adjust as needed #}
+                    {# <img class="img img-fluid uncle" src="{% static 'img/uncle.7747b6ca.svg' %}" alt="blinking uncle"> #}
+                </div>
+            </div>
+        </div>
+
+        <section class='cranky_uncle__content'>
+            <h1>{{ page.title }}</h1>
+            {% include_block page.body %}
+            {% render_previous_next_buttons page %}
+    </article>
+
+{% endblock content %}
