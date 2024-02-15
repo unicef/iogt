@@ -28,7 +28,7 @@ class RapidProApiService(object):
         return response.json().get('results')[0] if response.json().get('results') else None
 
     def send_message(self, data=None):
-        url = f'{self.RAPID_URL}/c/ex/e22f30ce-8a14-46da-b8b7-478966c4ba1c/receive'
+        url = f'{self.RAPID_URL}/c/ex/7db731d2-dadd-49b6-98a5-63a635b180e8/receive'
         headers = {'Authorization': self.ACCESS_TOKEN}
 
         try:

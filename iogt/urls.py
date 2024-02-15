@@ -69,6 +69,7 @@ urlpatterns = api_url_patterns + [
     path('api/docs/', schema_view.with_ui('swagger'), name='swagger'),
     path('webpush/subscribe/', save_info, name='save_webpush_info'),
     *i18n_patterns(path('cranky-uncle/', include('cranky_uncle.urls', namespace='cranky'))),
+    # *i18n_patterns(path('cranky-uncle/', include('cranky_uncle.urls'))),
 ]
 
 if settings.DEBUG:

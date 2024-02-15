@@ -8,25 +8,29 @@
 
 {% block content %}
     <article class='cranky_uncle'>
-        {% render_image page.lead_image img_class='lead-img' %}
 
         <div class="container">
             <div class="row">
                 <div class="col-md-4 col-sm-12">
                     <div class="card-header">
-                        <span class="text-danger">Cranky Points: {{ crankyPoint }}</span>
+                        <span class="text-danger">Cranky Points: {{ db_data.point }}</span>
                         {# Uncomment and adjust as needed #}
                         {# <span style="margin-left: 20px">Level: {{ level.levelNumber }} - {{ level.levelName }}</span> #}
                     </div>
-                    <h1>Cranky Uncle</h1>
-                    <p>What's the best way to understand the science denial arguments from your cranky uncle? From a Cranky
-                        Uncle, of course!</p>
-                    <form method="post" action="{% url 'cranky:cranky-quiz' slug=self.slug %}">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <input type="hidden" name="text" value="{{ page.trigger_string }}">
-                        <button type="submit" class="btn btn-success">{{ page.button_text }}</button>
-                    </form>
+                    <div class="card-body">
+                        <div class="pb-5">
+                            <h1>{{ db_data.message }}</h1>
+                        </div>
+
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <form action="{% url 'cranky:cranky-quiz' slug=slug %}" method="POST">
+                                {% csrf_token %}
+                                {% for reply in db_data.buttons %}
+                                    <input type="submit" class="cust-btn btn-success" name="text" value="{{ reply }}">
+                                {% endfor %}
+                            </form>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-8 col-sm-12">
                     {# Uncomment and adjust as needed #}
@@ -35,10 +39,6 @@
             </div>
         </div>
 
-        <section class='cranky_uncle__content'>
-<!--            <h1>{{ page.title }}</h1>-->
-<!--            {#% include_block page.body %#}-->
-            {% render_previous_next_buttons page %}
     </article>
 
 {% endblock content %}

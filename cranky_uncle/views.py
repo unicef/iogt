@@ -3,7 +3,8 @@ from datetime import datetime
 from time import sleep
 
 from django.contrib.auth import get_user_model
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse, JsonResponse
 
 from django.views.generic import TemplateView
 from django.urls import reverse
@@ -12,6 +13,8 @@ from rest_framework.views import APIView
 from rest_framework import permissions, status
 from rest_framework.response import Response
 
+from wagtail.core.models import Page
+
 from .services import RapidProApiService
 from .models import RapidPro
 from .forms import CrankySendMessageForm
@@ -19,12 +22,13 @@ from .serializers import RapidProSerializer
 
 
 class CrankyUncleQuizView(TemplateView):
-    template_name = 'cranky_uncle/quiz.html'
+    template_name = 'cranky_uncle/cranky_uncle_quiz.html'
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, slug, **kwargs):
         # return HttpResponse('hello')
         context = super().get_context_data()
-        context = self.get_message_from_db(self.request)
+        context['db_data'] = self.get_message_from_db(self.request)
+        context['slug'] = slug
         return context
 
     def get_message_from_db(self, request):
@@ -63,9 +67,13 @@ class CrankyUncleQuizView(TemplateView):
             'buttons': chat.quick_replies
         }
 
-    def post(self, request):
+    def post(self, request, slug):
+        # return HttpResponse(6)
         form = CrankySendMessageForm(request.POST)
-        # return HttpResponse(form.is_valid())
+        page = get_object_or_404(Page, slug=slug)
+        # cranky_page_url = Page.objects.filter(slug=slug).first().url
+        cranky_page_url = page.url
+        # return HttpResponse(form)
         if form.is_valid():
             user = request.user
             data = {
@@ -75,10 +83,13 @@ class CrankyUncleQuizView(TemplateView):
             rapidpro_service = RapidProApiService()
             response = rapidpro_service.send_message(data=data)
             # form.save()
-            return redirect(reverse('cranky:cranky-quiz'))
+            # return redirect(reverse('cranky:cranky-quiz'))
+            return redirect('cranky:cranky-quiz', slug=slug)
+            # return redirect(reverse('cranky:cranky-quiz', kwargs={'slug': slug}))
         else:
             # Handle invalid form
-            return redirect(reverse('cranky:cranky-home'))
+            # return redirect(reverse('cranky:cranky-home'))
+            return redirect(cranky_page_url)
 
 
 class RapidProMessageHook(APIView):
@@ -134,8 +145,14 @@ class RapidProMessageHook(APIView):
                 updated_at=datetime.now(),
             )
 
-        serializer = self.serializer_class(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response('ok', status=status.HTTP_201_CREATED)
-        return Response('Error', status=status.HTTP_400_BAD_REQUEST)
+        # return JsonResponse(data)
+
+        return Response('ok', status=status.HTTP_201_CREATED)
+
+
+# TODO: add the serializers:
+#         serializer = self.serializer_class(data=data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response('ok', status=status.HTTP_201_CREATED)
+#         return Response('Error', status=status.HTTP_400_BAD_REQUEST)

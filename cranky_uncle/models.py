@@ -30,32 +30,64 @@ class CrankyUncleChannel(models.Model):
         return f"{self.display_name}, {self.request_url}"
 
 
+# class CrankyUncle(Page, PageUtilsMixin, TitleIconMixin):
+#     from .blocks import CrankyUncleButtonBlock
+#
+#     lead_image = models.ForeignKey(
+#         'wagtailimages.Image',
+#         on_delete=models.PROTECT,
+#         related_name='+',
+#         blank=True,
+#         null=True,
+#     )
+#     body = StreamField(
+#         [
+#             ('cranky_uncle_bot', CrankyUncleButtonBlock()),
+#         ],
+#         null=True,
+#         blank=True,
+#     )
+#
+#     show_in_menus_default = True
+#
+#     parent_page_types = ['home.HomePage', 'home.Section', 'home.FooterIndexPage']
+#     subpage_types = []
+#
+#     content_panels = Page.content_panels + [
+#         ImageChooserPanel('lead_image'),
+#         StreamFieldPanel('body'),
+#     ]
+#
+#     def __str__(self):
+#         return self.title
+#
+#     class Meta:
+#         verbose_name = _("Cranky")
+#         verbose_name_plural = _("Cranky Uncle")
+
+
 class CrankyUncle(Page, PageUtilsMixin, TitleIconMixin):
-    from .blocks import CrankyUncleButtonBlock
-
-    lead_image = models.ForeignKey(
-        'wagtailimages.Image',
-        on_delete=models.PROTECT,
-        related_name='+',
-        blank=True,
-        null=True,
-    )
-    body = StreamField(
-        [
-            ('cranky_uncle_bot', CrankyUncleButtonBlock()),
-        ],
-        null=True,
-        blank=True,
-    )
-
-    show_in_menus_default = True
-
-    parent_page_types = ['home.HomePage', 'home.Section', 'home.FooterIndexPage']
+    parent_page_types = [
+        "home.HomePage", "home.Section", 'home.FooterIndexPage'
+    ]
     subpage_types = []
+    # template = 'cranky/cranky_index_page.html'
+    # show_in_menus_default = True
+
+    button_text = models.CharField(max_length=255, null=True, blank=True)
+    trigger_string = models.CharField(max_length=255, null=True, blank=True)
+    channel = models.ForeignKey(
+        CrankyUncleChannel,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+    )
 
     content_panels = Page.content_panels + [
-        ImageChooserPanel('lead_image'),
-        StreamFieldPanel('body'),
+        FieldPanel('button_text'),
+        FieldPanel('trigger_string'),
+
+        FieldPanel('channel'),
     ]
 
     def __str__(self):
