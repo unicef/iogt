@@ -147,12 +147,10 @@ class RapidProMessageHook(APIView):
 
         # return JsonResponse(data)
 
-        return Response('ok', status=status.HTTP_201_CREATED)
+        # return Response('ok', status=status.HTTP_201_CREATED)
 
-
-# TODO: add the serializers:
-#         serializer = self.serializer_class(data=data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response('ok', status=status.HTTP_201_CREATED)
-#         return Response('Error', status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.serializer_class(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response('ok', status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
