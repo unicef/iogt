@@ -67,13 +67,19 @@ class CrankyUncleQuizView(TemplateView):
             'buttons': chat.quick_replies
         }
 
+    # def get_url_parts(self, request, *args, **kwargs):
+    #     page_url = super().get_urls_parts(request=request)
+    #     page_url['cranky_page'] = Page.get_url(request)
+    #     return page_url
+    
     def post(self, request, slug):
         # return HttpResponse(6)
         form = CrankySendMessageForm(request.POST)
-        page = get_object_or_404(Page, slug=slug)
+        # page = get_object_or_404(Page, slug=slug)
         # cranky_page_url = Page.objects.filter(slug=slug).first().url
-        cranky_page_url = page.url
-        # return HttpResponse(form)
+        cranky_page_url = request.META.get('HTTP_REFERER')
+        # cranky_page_url = self.get_url_parts(request=request)
+        # return HttpResponse(cranky_page_url)
         if form.is_valid():
             user = request.user
             data = {
@@ -81,7 +87,7 @@ class CrankyUncleQuizView(TemplateView):
                 'text': form.cleaned_data['text']
             }
             rapidpro_service = RapidProApiService()
-            response = rapidpro_service.send_message(data=data)
+            response = rapidpro_service.send_message(data=data, slug=slug)
             # form.save()
             # return redirect(reverse('cranky:cranky-quiz'))
             return redirect('cranky:cranky-quiz', slug=slug)
