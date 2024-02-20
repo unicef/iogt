@@ -37,7 +37,9 @@ class CrankyUncleQuizView(TemplateView):
         sleep(1)
 
         # Get the current user or session ID
-        user = request.user.email  # if request.user.is_authenticated else request.session.session_key
+        if not request.session.session_key:
+            request.session.save()
+        user = request.user.username if request.user.is_authenticated else request.session.session_key
 
         # Retrieve the latest chat for the user
         chat = RapidPro.objects.filter(to=user).order_by('-created_at').first()
@@ -75,9 +77,11 @@ class CrankyUncleQuizView(TemplateView):
         cranky_page_url = page.url
         # return HttpResponse(form)
         if form.is_valid():
-            user = request.user
+            if not request.session.session_key:
+                request.session.save()
+            user = request.user.username if request.user.is_authenticated else request.session.session_key
             data = {
-                'from': user.email,
+                'from': user,
                 'text': form.cleaned_data['text']
             }
             rapidpro_service = RapidProApiService()
