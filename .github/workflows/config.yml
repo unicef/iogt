@@ -16,7 +16,7 @@ jobs:
     env:
       IOGT_TEST_PARALLEL: "2"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: make test
 
   selenium-tests:
@@ -24,5 +24,5 @@ jobs:
     env:
       IOGT_TEST_PARALLEL: "1"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: make selenium-test
