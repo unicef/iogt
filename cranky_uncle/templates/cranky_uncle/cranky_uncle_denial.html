@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags wagtailuserbar menu_tags home_tags %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_language_info for LANGUAGE_CODE as lang %}
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as languages %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block content %}
+    <section class="child-pages">
+        
+        {% for data in denial_data %}
+            {% comment %} {% if not data.ParentFallacyId %} {% endcomment %}
+                
+                <div class="article-card">
+                    <a href="{% url 'cranky:denial_send_message' slug=slug trigger_string=data.trigger_string %}" style="background:#ffffff;" class="">
+                        <div class="article-header">
+                            <p class="article-title">
+                            {{ data.Name }}
+                            
+                            {% if data.id in user_completed_denial %}
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-check" width="30" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                                <path d="M9 12l2 2l4 -4" />
+                            </svg>
+                            {% endif %}
+                            </p>
+                            
+                        </div>
+                        <div class="img-holder">
+                            <img alt="A toddler is learning how to walk, cheered on by an adult" height="135" src="{{data.IconUrl}}" style="width:30% !important; float:right">
+                        </div>
+                    </a>
+                </div>
+            {% comment %} {% endif %} {% endcomment %}
+        {% endfor %}
+
+
+        {% for data in denial_data %}
+            {% if data.childs %}
+                <h2 style="color:#E24256; margin-top:30px">{{ data.Name }}</h2>
+                {% for child in data.childs %}
+                    <div class="article-card" style="{% if not is_all_parent_denial_completed %}opacity: 0.5; pointer-events: none;{% endif %}">
+                    <a href="{% url 'cranky:denial_send_message' slug=slug trigger_string=data.trigger_string %}" style="background:#ffffff;" class="">
+                        <div class="article-header">
+                            <p class="article-title">
+                            {{ child.Name }}
+                            
+                            {% if child.id in user_completed_denial %}
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-check" width="30" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                                <path d="M9 12l2 2l4 -4" />
+                            </svg>
+                            {% elif not is_all_parent_denial_completed %}
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-lock-square-rounded" width="30" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
+                                <path d="M8 11m0 1a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-6a1 1 0 0 1 -1 -1z" />
+                                <path d="M10 11v-2a2 2 0 1 1 4 0v2" />
+                            </svg>
+                            {% endif %}
+                            </p>
+                            
+                        </div>
+                        <div class="img-holder">
+                            <img alt="A toddler is learning how to walk, cheered on by an adult" height="135" src="{{child.IconUrl}}" style="width:30% !important; float:right">
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+
+    </section>
+{% endblock content %}

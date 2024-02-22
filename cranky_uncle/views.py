@@ -8,6 +8,7 @@ from django.http import HttpResponse, JsonResponse
 
 from django.views.generic import TemplateView
 from django.urls import reverse
+import requests
 
 from rest_framework.views import APIView
 from rest_framework import permissions, status
@@ -16,7 +17,7 @@ from rest_framework.response import Response
 from wagtail.core.models import Page
 
 from .services import RapidProApiService
-from .models import RapidPro
+from .models import RapidPro, CrankyUncle
 from .forms import CrankySendMessageForm
 from .serializers import RapidProSerializer
 
@@ -67,13 +68,19 @@ class CrankyUncleQuizView(TemplateView):
             'buttons': chat.quick_replies
         }
 
+    # def get_url_parts(self, request, *args, **kwargs):
+    #     page_url = super().get_urls_parts(request=request)
+    #     page_url['cranky_page'] = Page.get_url(request)
+    #     return page_url
+    
     def post(self, request, slug):
         # return HttpResponse(6)
         form = CrankySendMessageForm(request.POST)
-        page = get_object_or_404(Page, slug=slug)
+        # page = get_object_or_404(Page, slug=slug)
         # cranky_page_url = Page.objects.filter(slug=slug).first().url
-        cranky_page_url = page.url
-        # return HttpResponse(form)
+        cranky_page_url = request.META.get('HTTP_REFERER')
+        # cranky_page_url = self.get_url_parts(request=request)
+        # return HttpResponse(cranky_page_url)
         if form.is_valid():
             user = request.user
             data = {
@@ -81,7 +88,7 @@ class CrankyUncleQuizView(TemplateView):
                 'text': form.cleaned_data['text']
             }
             rapidpro_service = RapidProApiService()
-            response = rapidpro_service.send_message(data=data)
+            response = rapidpro_service.send_message(data=data, slug=slug)
             # form.save()
             # return redirect(reverse('cranky:cranky-quiz'))
             return redirect('cranky:cranky-quiz', slug=slug)
@@ -154,3 +161,94 @@ class RapidProMessageHook(APIView):
             serializer.save()
             return Response('ok', status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DenialQuizView(TemplateView):
+    template_name = 'cranky_uncle/cranky_uncle_denial.html'
+    
+    def get_context_data(self, slug, **kwargs):
+        # return HttpResponse('hello')
+        
+        denial_data = [
+            {
+                "id": 1,
+                "Name": "Fake experts",
+                "trigger_string": "fake_experts",
+                "fallacyOrder": 1,
+                "IconUrl": "https://assets.crankyuncle.info/uploads/99cc36b4d488429bbe76aea48bb9d604.svg",
+                "ParentFallacyId": False,
+                "childs": []
+            },
+            {
+                "id": 2,
+                "Name": "Logical fallacies",
+                "trigger_string": "logical_fallacies",
+                "fallacyOrder": 2,
+                "IconUrl": "https://assets.crankyuncle.info/uploads/2d5f676e64bd4d91855065e06fdf3630.svg",
+                "ParentFallacyId": False,
+                "childs": [
+                    {
+                        "id": 10,
+                        "Name": "Ad Hominem",
+                        "trigger_string": "fake_experts",
+                        "fallacyOrder": 1,
+                        "IconUrl": "https://assets.crankyuncle.info/uploads/cc23f9e75be1477cb9ad68a66e6dc6b4.svg",
+                    },
+                    {
+                        "id": 11,
+                        "Name": "Ambiguity",
+                        "trigger_string": "fake_experts",
+                        "fallacyOrder": 1,
+                        "IconUrl": "https://assets.crankyuncle.info/uploads/f59577d9dd2e49de9646841dc8bb7ab6.svg",
+                    }
+                ]
+            },
+            {
+            "id": 3,
+            "Name": "Impossible expectations",
+            "trigger_string": "impossible_expectations",
+            "fallacyOrder": 3,
+            "IconUrl": "https://assets.crankyuncle.info/uploads/8861fb3ee4634007affd479d0dcbc96c.svg",
+            "ParentFallacyId": False
+        },
+        ]
+        
+        id_list = [data['id'] for data in denial_data]
+        user_completed_denial_list = [1, 3]
+        all_exist = all(id_value in user_completed_denial_list for id_value in id_list)
+        
+        context = {
+            'denial_data': denial_data, 
+            'slug': slug,
+            'user_completed_denial': user_completed_denial_list,
+            'is_all_parent_denial_completed': all_exist,
+        }
+        
+        
+        return context
+
+class DenialQuizSendMessageView(TemplateView):
+    
+    def get(self, request, slug, trigger_string):
+        # return HttpResponse(slug)
+        core_page_id = Page.objects.filter(slug=slug).first().id
+        uncle_page = CrankyUncle.objects.filter(page_ptr_id=core_page_id).first()
+        url = uncle_page.channel.request_url
+        # return HttpResponse(url)
+        if not request.session.session_key:
+            request.session.save()
+        session_id = request.session.session_key
+        
+        user = request.user.username if request.user.is_authenticated else session_id
+        
+        data = {
+            'from': user,
+            'text': trigger_string
+        }
+        
+        # return HttpResponse(slug)
+
+        # rapidapi = RapidAPI()  # Initialize your RapidAPI class
+        requests.post(url, data=data)
+
+        return redirect('cranky:cranky-quiz', slug=slug)
