@@ -1,5 +1,9 @@
 import logging, requests
 
+from cranky_uncle.models import CrankyUncle
+from wagtail.core.models import Page
+
+
 
 class RapidProApiService(object):
     ACCESS_TOKEN = 'Token 3599dfede6caf725712581703f8ff5928f3fd1c9'
@@ -27,9 +31,14 @@ class RapidProApiService(object):
             )
         return response.json().get('results')[0] if response.json().get('results') else None
 
-    def send_message(self, data=None):
-        url = f'{self.RAPID_URL}/c/ex/7db731d2-dadd-49b6-98a5-63a635b180e8/receive'
+    def send_message(self, data=None, slug=None):
+        # url = f'{self.RAPID_URL}/c/ex/7db731d2-dadd-49b6-98a5-63a635b180e8/receive'
         headers = {'Authorization': self.ACCESS_TOKEN}
+        
+        # TODO: optimize dynamic url allocation............
+        core_page_id = Page.objects.filter(slug=slug).first().id
+        uncle_page = CrankyUncle.objects.filter(page_ptr_id=core_page_id).first()
+        url = uncle_page.channel.request_url
 
         try:
             response = requests.post(url=url, headers=headers, data=data)

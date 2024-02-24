@@ -89,6 +89,13 @@ class CrankyUncle(Page, PageUtilsMixin, TitleIconMixin):
 
         FieldPanel('channel'),
     ]
+    
+    def get_context(self, request):
+        context = super().get_context(request)
+        # send_msg_url = self.trigger_string
+        context['test'] = 'hello'
+
+        return context
 
     def __str__(self):
         return self.title
