@@ -1,24 +1,26 @@
 import re
+import uuid
 from datetime import datetime
 from time import sleep
 
-from django.contrib.auth import get_user_model
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, JsonResponse
-
+from django.shortcuts import redirect, get_object_or_404
 from django.views.generic import TemplateView
+
 from django.urls import reverse
 import requests
 
 from rest_framework.views import APIView
+
 from rest_framework import permissions, status
 from rest_framework.response import Response
-
+from rest_framework.views import APIView
 from wagtail.core.models import Page
+
 
 from .services import RapidProApiService
 from .models import RapidPro, CrankyUncle
 from .forms import CrankySendMessageForm
+from .models import RapidPro
 from .serializers import RapidProSerializer
 
 
@@ -31,6 +33,16 @@ class CrankyUncleQuizView(TemplateView):
         context['db_data'] = self.get_message_from_db(self.request)
         context['slug'] = slug
         return context
+
+    def get_user_identifier(self, request):
+        if not request.session.session_key:
+            request.session.save()
+
+        session = request.session
+        session_uid = session.setdefault('session-uid', str(uuid.uuid4()))
+        user = request.user.username if request.user.is_authenticated else session_uid
+
+        return user
 
     def get_message_from_db(self, request):
         # Log the message
@@ -84,6 +96,7 @@ class CrankyUncleQuizView(TemplateView):
 
         if form.is_valid():
             user = RapidProApiService().get_user_identifier(request)
+
             data = {
                 'from': user,
                 'text': form.cleaned_data['text']
@@ -101,7 +114,6 @@ class CrankyUncleQuizView(TemplateView):
 
 
 class RapidProMessageHook(APIView):
-
     queryset = RapidPro.objects.all()
     serializer_class = RapidProSerializer
     permission_classes = [permissions.AllowAny]
@@ -157,11 +169,12 @@ class RapidProMessageHook(APIView):
 
         return Response('ok', status=status.HTTP_201_CREATED)
 
-        serializer = self.serializer_class(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response('ok', status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        #TODO: add serializer check
+        # serializer = self.serializer_class(data=data)
+        # if serializer.is_valid():
+        #     serializer.save()
+        #     return Response('ok', status=status.HTTP_201_CREATED)
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class DenialQuizView(TemplateView):
