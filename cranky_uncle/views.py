@@ -38,7 +38,7 @@ class CrankyUncleQuizView(TemplateView):
         sleep(1)
 
         # Get the current user or session ID
-        user = request.user.email  # if request.user.is_authenticated else request.session.session_key
+        user = RapidProApiService().get_user_identifier(request)
 
         # Retrieve the latest chat for the user
         chat = RapidPro.objects.filter(to=user).order_by('-created_at').first()
@@ -63,7 +63,7 @@ class CrankyUncleQuizView(TemplateView):
         point_content = point_match.group(1) if point_match else ''
 
         return {
-            'message': message_content,
+            'message': text,
             'point': point_content,
             'buttons': chat.quick_replies
         }
@@ -81,14 +81,15 @@ class CrankyUncleQuizView(TemplateView):
         cranky_page_url = request.META.get('HTTP_REFERER')
         # cranky_page_url = self.get_url_parts(request=request)
         # return HttpResponse(cranky_page_url)
+
         if form.is_valid():
-            user = request.user
+            user = RapidProApiService().get_user_identifier(request)
             data = {
-                'from': user.email,
+                'from': user,
                 'text': form.cleaned_data['text']
             }
-            rapidpro_service = RapidProApiService()
-            response = rapidpro_service.send_message(data=data, slug=slug)
+            
+            response = RapidProApiService().send_message(data=data, slug=slug)
             # form.save()
             # return redirect(reverse('cranky:cranky-quiz'))
             return redirect('cranky:cranky-quiz', slug=slug)
@@ -154,7 +155,7 @@ class RapidProMessageHook(APIView):
 
         # return JsonResponse(data)
 
-        # return Response('ok', status=status.HTTP_201_CREATED)
+        return Response('ok', status=status.HTTP_201_CREATED)
 
         serializer = self.serializer_class(data=data)
         if serializer.is_valid():

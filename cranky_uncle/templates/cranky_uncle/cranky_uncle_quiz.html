@@ -7,35 +7,32 @@
 {% get_current_language as LANGUAGE_CODE %}
 
 {% block content %}
+    <style>
+        .cranky-btn {
+            margin-bottom: 4px
+        }
+        .cranky-btn:hover {
+            color: white
+        },
+        .cranky-img {
+            display: inline !important
+        }
+    </style>
+    
     <article class='cranky_uncle'>
 
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 col-sm-12">
-                    <div class="card-header">
-                        <span class="text-danger">Cranky Points: {{ db_data.point }}</span>
-                        {# Uncomment and adjust as needed #}
-                        {# <span style="margin-left: 20px">Level: {{ level.levelNumber }} - {{ level.levelName }}</span> #}
-                    </div>
-                    <div class="card-body">
-                        <div class="pb-5">
-                            <h1>{{ db_data.message }}</h1>
-                        </div>
+        <div class="container" style="text-align:center;">
+            <div style="padding-bottom:4rem">
+                <h1>{{ db_data.message|safe }}</h1>
+            </div>
 
-                        <div class="d-grid gap-2 col-6 mx-auto">
-                            <form action="{% url 'cranky:cranky-quiz' slug=slug %}" method="POST">
-                                {% csrf_token %}
-                                {% for reply in db_data.buttons %}
-                                    <input type="submit" class="cust-btn btn-success" name="text" value="{{ reply }}">
-                                {% endfor %}
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-8 col-sm-12">
-                    {# Uncomment and adjust as needed #}
-                    {# <img class="img img-fluid uncle" src="{% static 'img/uncle.7747b6ca.svg' %}" alt="blinking uncle"> #}
-                </div>
+            <div class="d-grid gap-2 col-6 mx-auto">
+                <form action="{% url 'cranky:cranky-quiz' slug=slug %}" method="POST">
+                    {% csrf_token %}
+                    {% for reply in db_data.buttons %}
+                        <input type="submit" class="cust-btn btn-secondary cranky-btn" name="text" value="{{ reply }}">
+                    {% endfor %}
+                </form>
             </div>
         </div>
 

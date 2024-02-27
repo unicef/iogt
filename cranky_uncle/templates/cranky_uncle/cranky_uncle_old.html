@@ -13,11 +13,14 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4 col-sm-12">
-                    <h1>Cranky Uncle Game</h1>
-                    <form method="post" action="{% url 'cranky:cranky-quiz' slug=self.slug %}">
+                    <h1>Cranky Uncle</h1>
+                    <p>What's the best way to understand the science denial arguments from your cranky uncle? From a Cranky
+                        Uncle, of course!</p>
+                    {% comment %} <form method="post" action="{% url 'cranky:cranky-quiz' slug=self.slug %}"> {% endcomment %}
+                    <form method="post" action="#">
                         {% csrf_token %}
                         {{ form.as_p }}
-                        <input type="hidden" name="text" value="{{ cranky_trigger_string }}">
+                        <input type="hidden" name="text" value="{{ page.trigger_string }}">
                         <button type="submit" class="btn btn-success">{{ page.button_text }}</button>
                     </form>
                 </div>

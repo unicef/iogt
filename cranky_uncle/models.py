@@ -1,15 +1,14 @@
-import requests
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 from wagtail.admin.edit_handlers import (
     FieldPanel,
-    StreamFieldPanel,
 )
-from wagtail.images.edit_handlers import ImageChooserPanel
+
 from home.mixins import PageUtilsMixin, TitleIconMixin
+
+from django.utils.translation import get_language
 
 
 class CrankyUncleChannel(models.Model):
@@ -28,42 +27,6 @@ class CrankyUncleChannel(models.Model):
 
     def __str__(self):
         return f"{self.display_name}, {self.request_url}"
-
-
-# class CrankyUncle(Page, PageUtilsMixin, TitleIconMixin):
-#     from .blocks import CrankyUncleButtonBlock
-#
-#     lead_image = models.ForeignKey(
-#         'wagtailimages.Image',
-#         on_delete=models.PROTECT,
-#         related_name='+',
-#         blank=True,
-#         null=True,
-#     )
-#     body = StreamField(
-#         [
-#             ('cranky_uncle_bot', CrankyUncleButtonBlock()),
-#         ],
-#         null=True,
-#         blank=True,
-#     )
-#
-#     show_in_menus_default = True
-#
-#     parent_page_types = ['home.HomePage', 'home.Section', 'home.FooterIndexPage']
-#     subpage_types = []
-#
-#     content_panels = Page.content_panels + [
-#         ImageChooserPanel('lead_image'),
-#         StreamFieldPanel('body'),
-#     ]
-#
-#     def __str__(self):
-#         return self.title
-#
-#     class Meta:
-#         verbose_name = _("Cranky")
-#         verbose_name_plural = _("Cranky Uncle")
 
 
 class CrankyUncle(Page, PageUtilsMixin, TitleIconMixin):
@@ -92,8 +55,8 @@ class CrankyUncle(Page, PageUtilsMixin, TitleIconMixin):
     
     def get_context(self, request):
         context = super().get_context(request)
-        # send_msg_url = self.trigger_string
-        context['test'] = 'hello'
+        # context['cranky_trigger_string'] = self.trigger_string + '_' + get_language()
+        context['cranky_trigger_string'] = 'cranky_' + get_language()
 
         return context
 
