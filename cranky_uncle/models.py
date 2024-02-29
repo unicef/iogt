@@ -38,7 +38,12 @@ class CrankyUncle(Page, PageUtilsMixin, TitleIconMixin):
     # show_in_menus_default = True
 
     button_text = models.CharField(max_length=255, null=True, blank=True)
-    trigger_string = models.CharField(max_length=255, null=True, blank=True)
+    trigger_string = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text=_("Language short code will postfix after trigger string e.g string_en")
+        )
     channel = models.ForeignKey(
         CrankyUncleChannel,
         on_delete=models.PROTECT,
@@ -55,8 +60,8 @@ class CrankyUncle(Page, PageUtilsMixin, TitleIconMixin):
     
     def get_context(self, request):
         context = super().get_context(request)
-        # context['cranky_trigger_string'] = self.trigger_string + '_' + get_language()
-        context['cranky_trigger_string'] = 'cranky_' + get_language()
+        context['cranky_trigger_string'] = self.trigger_string + '_' + get_language()
+        # context['cranky_trigger_string'] = 'cranky_' + get_language()
 
         return context
 
