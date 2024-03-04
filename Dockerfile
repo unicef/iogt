@@ -1,4 +1,4 @@
-FROM python:3.8.17-slim-bookworm AS builder
+FROM python:3.11.8-bookworm AS builder
 ENV PIP_NO_CACHE_DIR=1 \
     PYTHONUNBUFFERED=1
 RUN apt-get update --yes --quiet \
@@ -20,7 +20,7 @@ ARG requirements=requirements.txt
 COPY ${requirements} .
 RUN pip install -r $requirements
 
-FROM python:3.8.17-slim-bookworm AS base
+FROM python:3.11.8-slim-bookworm AS base
 EXPOSE 8000
 ENV PATH="/opt/venv/bin:$PATH" \
     PIP_NO_CACHE_DIR=1 \
