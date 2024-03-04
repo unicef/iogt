@@ -354,9 +354,9 @@ django-sass-processor==1.0.1 \
     --hash=sha256:1f043180c47754018e803a77da003377f5ea6558de57cd6946eb27a32e9c16a2 \
     --hash=sha256:dcaad47c591a2d52689c1bd209259e922e902d886293f0d5c9e0d1a4eb85eda2
     # via -r requirements.in
-django-taggit==1.5.1 \
-    --hash=sha256:dfe9e9c10b5929132041de0c00093ef0072c73c2a97d0f74a818ae50fa77149a \
-    --hash=sha256:e5bb62891f458d55332e36a32e19c08d20142c43f74bc5656c803f8af25c084a
+django-taggit==2.1.0 \
+    --hash=sha256:61547a23fc99967c9304107414a09e662b459f4163dbbae32e60b8ba40c34d05 \
+    --hash=sha256:a9f41e4ad58efe4b28d86f274728ee87eb98eeae90c9eb4b4efad39e5068184e
     # via wagtail
 django-translation-manager==1.3.0 \
     --hash=sha256:1e3143f48f9ba4d5452d72f55195142c434ea63786546251ae694508df4eb7b1 \
@@ -850,9 +850,9 @@ vine==5.1.0 \
     #   amqp
     #   celery
     #   kombu
-wagtail==2.15.6 \
-    --hash=sha256:7334197ff04f9bfe1eeae2038365ea957a691644cd3464ab07b117c81bc83a1e \
-    --hash=sha256:bf334b5aa521beca230b3d426f5abc19e7f8df88492b07c1e2ca90e267c6e28f
+wagtail==2.16.3 \
+    --hash=sha256:3b52f0e1a4bcad66e57eaa341025e90a6dcd40170f7adb132e9e9df9efa978c9 \
+    --hash=sha256:a1f04513f06c760208698578367f03b3af5400f05d36b94e4a8ce07ee30d42fc
     # via
     #   -r requirements.in
     #   wagtail-cache

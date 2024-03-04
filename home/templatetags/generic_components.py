@@ -85,11 +85,6 @@ def language_picker_style():
            f"{theme_settings.language_picker_background_color}"
 
 
-@register.simple_tag
-def site_version():
-    return settings.SITE_VERSION
-
-
 @register.simple_tag(takes_context=True)
 def google_analytics(context, tracking_code=None, debug=False):
     if not tracking_code:
