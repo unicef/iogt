@@ -1,26 +1,36 @@
 function customizeUI() {
-    $('#id_handle').parent().siblings('p[class=help]').text(
-        'The handle must be written in the format "[language_code]_menu_live", e.g. "en_menu_live", for the menu to ' +
-        'be live on the website. You can use other handles, e.g. "en_oldmenu", to store other draft menus without ' +
-        'them getting displayed.'
-    ).css({'color': 'red'});
+    $('#id_handle')
+        .parent()
+        .siblings('p[class=help]')
+        .text(
+            'The handle must be written in the format "[language_code]_menu_live", e.g. "en_menu_live", for the menu to ' +
+            'be live on the website. You can use other handles, e.g. "en_oldmenu", to store other draft menus without ' +
+            'them getting displayed.'
+        )
+        .css({'color': 'red'});
 
     $('#tab-content:contains("Download PO file and input translations offline")')
         .find('>:first-child')
-        .prepend('<p style="margin-left: 50px; color: red; font-weight: bold;">' +
+        .prepend(
+            '<p style="margin-left: 50px; color: red; font-weight: bold;">' +
             'Use the "STOP TRANSLATION" option if you want to translate additional fields ' +
             'such as: survey/poll/quiz answers, index page description, recommended content, ' +
             'search engine friendly title, search description, lead image, icon.' +
-            '</p>')
+            '</p>'
+        );
 
     $('.transfer.list-container:last + div')
-        .prepend('<h4 style="color: #FF0000; font-weight: bold; margin: 5px;">We strongly recommend choosing a ' +
+        .prepend(
+            '<h4 style="color: #FF0000; font-weight: bold; margin: 5px;">We strongly recommend choosing a ' +
             'destination within the sandbox, to allow checking the transferred content for errors before going ' +
-            'live. You can then move the content to the desired final destination.</h4>')
+            'live. You can then move the content to the desired final destination.</h4>'
+        );
 
-    $('#id_page_permissions-ADD').parent().prepend('<h4 style="color: #FF0000; font-weight: bold; margin: 5px;">' +
+    $('#id_page_permissions-ADD').parent().prepend(
+        '<h4 style="color: #FF0000; font-weight: bold; margin: 5px;">' +
         'Giving a Group the EDIT permission will also allow them to download data for Polls, Surveys, and Quizzes ' +
-        'for the Pages they can access.</h4>')
+        'for the Pages they can access.</h4>'
+    );
 
     $('#id_seo_title').parent().siblings('p[class=help]').text(
         'The name of the page displayed on search engine results as the clickable headline, and automatically loaded ' +
@@ -54,7 +64,7 @@ function validateFreeBasicsFileUpload(fileInput, file_size_threshold) {
     else {
         var file = fileInput.files[0];
         if (file.size >= file_size_threshold)
-            alert(`File size exceeds facebook free basics limit (${file_size_threshold / 1024}KB).`);
+            alert(`File size exceeds Meta Free Basics limit (${file_size_threshold / 1024}KB).`);
     }
 
     return true;
