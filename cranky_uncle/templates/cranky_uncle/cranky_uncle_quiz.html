@@ -7,6 +7,7 @@
 {% get_current_language as LANGUAGE_CODE %}
 
 {% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <style>
         .cranky-btn {
             margin-bottom: 4px
@@ -18,6 +19,10 @@
             display: inline !important
         }
         button:disabled {
+            cursor: default;
+            opacity: 50%;
+        }
+        .locked {
             cursor: default;
             opacity: 50%;
         }
@@ -37,6 +42,33 @@
             background: white;
             color: #444;
         }
+        .cranky_navigation {
+            display: flex;
+            padding: 12px 0px;
+        }
+        .cranky_navigation > button {
+            
+        }
+
+        .locked .section-title:after {
+            padding-left: 7px;
+            content: "\f023";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+        }
+        .unlocked .section-title:after {
+            padding-left: 7px;
+            content: "\f09c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+        }
+        .completed .section-title:after {
+            padding-left: 7px;
+            content: "\f058";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+        }
+
     </style>
     
     <article class='cranky_uncle'>
