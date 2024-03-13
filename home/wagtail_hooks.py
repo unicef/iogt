@@ -1,23 +1,25 @@
 from urllib.parse import urlparse
 
+from django.conf import settings
 from django.contrib.admin import SimpleListFilter
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
-from django.urls import resolve
-from django.utils.translation import gettext_lazy as _
-from translation_manager.models import TranslationEntry
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from django.templatetags.static import static
+from django.urls import resolve
 from django.utils.html import format_html
-from wagtail.core import hooks
-from wagtail.core.models import Page
-from wagtail.core.models import PageViewRestriction
+from django.utils.translation import gettext_lazy as _
+from wagtail import __version__
 from wagtail.admin import widgets as wagtailadmin_widgets
+from wagtail.admin.menu import MenuItem, SubmenuMenuItem
+from wagtail.contrib.modeladmin.menus import SubMenu
+from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
+from wagtail.core import hooks
+from wagtail.core.models import Page, PageViewRestriction
 
-
-from home.models import FooterIndexPage, BannerIndexPage, Section, \
-    SectionIndexPage, LocaleDetail
+from home.models import (BannerIndexPage, FooterIndexPage, LocaleDetail,
+                         Section, SectionIndexPage)
 from home.translatable_strings import translatable_strings
+from translation_manager.models import TranslationEntry
 
 
 @hooks.register('before_serve_page', order=-1)
@@ -101,6 +103,27 @@ def page_listing_buttons(page, page_perms, is_parent=False, next_url=None):
             attrs={'title': _("Change ordering of child pages of '%(title)s'") % {'title': page.get_admin_display_title()}},
             priority=60
         )
+
+
+@hooks.register("register_admin_menu_item")
+def about():
+    items = [
+        MenuItem(
+            label=f"IoGT {settings.SITE_VERSION}",
+            url=f"http://github.com/unicef/iogt/releases/tag/{settings.SITE_VERSION}",
+        ),
+        MenuItem(
+            label=f"Wagtail {__version__}",
+            url=f"http://github.com/wagtail/wagtail/releases/tag/v{__version__}"
+        )
+    ]
+
+    return SubmenuMenuItem(
+        label="About",
+        menu=SubMenu(items),
+        icon_name="info-circle",
+        order=999999,
+    )
 
 
 class LimitedTranslatableStringsFilter(SimpleListFilter):
