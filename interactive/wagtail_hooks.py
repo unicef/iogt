@@ -8,6 +8,7 @@ class InteractiveChannelAdmin(ModelAdmin):
     model = InteractiveChannel
     menu_label = 'Interactive RapidPro Channels'
     menu_icon = 'tag'
+    index_template_name='interactive/interactivechannel/index.html'
 
 
 class InteractiveGroup(ModelAdminGroup):
