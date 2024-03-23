@@ -17,3 +17,16 @@ class InteractiveChannel(models.Model):
 
     def __str__(self):
         return f"{self.display_name}, {self.request_url}"
+
+class Message(models.Model):
+    rapidpro_message_id = models.AutoField(primary_key=True)
+    text = models.TextField()
+    quick_replies = models.JSONField(null=True, blank=True)
+    to = models.CharField(max_length=255)
+    from_field = models.CharField(max_length=255)
+    channel = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'RapidPro {self.rapidpro_id}'
