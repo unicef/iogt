@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailuserbar menu_tags  home_tags questionnaires_tags sass_tags i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_language_info for LANGUAGE_CODE as lang %}
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as languages %}
+{% get_current_language as LANGUAGE_CODE %}
+{% load wagtailadmin_tags %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/game.css' %}">
+{% endblock %}
+
+{% block content %}
+    <article class='cranky_uncle'>
+        <div class="container" style="text-align:center;">
+            <div class="d-grid gap-2 col-6 mx-auto">
+                <form action="{% url 'interactive:interactive_game' slug=slug %}" method="POST">
+                    {% csrf_token %}
+
+                    <div style="padding-bottom:4rem">
+                        {{ db_data.message|safe }}
+                    </div>
+                    
+                    {% for reply in db_data.buttons %}
+                        <input type="submit" class="cust-btn btn-secondary cranky-btn" name="text" value="{{ reply }}">
+                    {% endfor %}
+                </form>
+            </div>
+        </div>
+    </article>
+{% endblock content %}

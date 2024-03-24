@@ -12,7 +12,7 @@
 
         <div class="container">
             <h1>Interactive Game</h1>
-            <form method="post" action="#">
+            <form method="post" action="{% url 'interactive:interactive_game' slug=self.slug %}">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <input type="hidden" name="text" value="{{ trigger_string_with_lang }}">

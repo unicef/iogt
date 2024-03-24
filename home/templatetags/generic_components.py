@@ -78,6 +78,17 @@ def render_questionnaire_card(context, page, background_color=None, font_color=N
     return context
 
 
+@register.inclusion_tag('generic_components/interactive_card.html', takes_context=True)
+def render_interactive_card(context, page=None, background_color=None, font_color=None):
+
+    context.update({
+        'interactive': page,
+        'background_color': background_color,
+        'font_color': font_color,
+    })
+    return context
+
+
 @register.simple_tag
 def language_picker_style():
     theme_settings = globals_.theme_settings

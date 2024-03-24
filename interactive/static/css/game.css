@@ -1,0 +1,69 @@
+.cranky-btn {
+    margin-bottom: 4px
+}
+.cranky-btn:hover {
+    color: white
+}
+.cranky-img {
+    display: inline !important
+}
+button:disabled {
+    cursor: default;
+    opacity: 50%;
+}
+.locked {
+    cursor: default;
+    opacity: 50%;
+    pointer-events: none;
+    user-select: none;
+}
+.denial-btn {
+    color:#444;
+    background: transparent;
+    border: none;
+    outline: none;
+    border-radius: 0;
+    border-bottom: 1px solid #EFEFEF;
+}
+.denial-btn:hover {
+    background: white;
+    color: #444;
+}
+.denial-btn:focus {
+    background: white;
+    color: #444;
+}
+.cranky_navigation {
+    display: flex;
+    padding: 12px 0px;
+}
+.cranky_navigation > button {
+    
+}
+
+.locked .section-title:after {
+    padding-left: 7px;
+    content: "\f023";
+    font: normal normal normal 14px / 1 FontAwesome;
+}
+.unlocked .section-title:after {
+    padding-left: 7px;
+    content: "\f09c";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+}
+.completed .section-title:after {
+    padding-left: 7px;
+    content: "\f058";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+}
+
+form input[type=text] {
+    background-color: #f7f7f9;
+    border: 1px solid #efefef;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin: 10px 0;
+    width: 100%;
+}
