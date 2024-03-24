@@ -20,6 +20,8 @@ class User(AbstractUser):
 
     has_filled_registration_survey = models.BooleanField(default=False)
     has_viewed_registration_survey = models.BooleanField(default=False)
+    
+    interactive_uuid = models.CharField(max_length=255, null=True, blank=True)
 
     @property
     def is_rapidpro_bot_user(self):
