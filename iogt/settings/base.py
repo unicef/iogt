@@ -570,5 +570,6 @@ IMAGE_SIZE_PRESET = int(os.getenv('IMAGE_SIZE_PRESET', '') or '360')
 
 # Default primary key field type introduced in Django 3.2 or later versions
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+WAGTAILREDIRECTS_AUTO_CREATE = os.getenv('WAGTAILREDIRECTS_AUTO_CREATE', 'enable') == 'enable'
