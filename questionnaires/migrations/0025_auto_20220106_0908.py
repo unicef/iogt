@@ -2,8 +2,8 @@
 
 from django.db import migrations
 import home.blocks
-import wagtail.core.blocks
-import wagtail.core.fields
+import wagtail.blocks
+import wagtail.fields
 import wagtail.images.blocks
 import wagtailmarkdown.blocks
 
@@ -18,16 +18,16 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='poll',
             name='description',
-            field=wagtail.core.fields.StreamField([('heading', wagtail.core.blocks.CharBlock(form_classname='full title', template='blocks/heading.html')), ('paragraph', wagtail.core.blocks.RichTextBlock(features=['h2', 'h3', 'h4', 'bold', 'italic', 'ol', 'ul', 'hr', 'link', 'document-link', 'image'])), ('paragraph_v1_legacy', home.blocks.RawHTMLBlock(icon='code')), ('image', wagtail.images.blocks.ImageChooserBlock()), ('list', wagtailmarkdown.blocks.MarkdownBlock(icon='code')), ('numbered_list', home.blocks.NumberedListBlock(wagtailmarkdown.blocks.MarkdownBlock(icon='code'))), ('page_button', wagtail.core.blocks.StructBlock([('page', wagtail.core.blocks.PageChooserBlock()), ('text', wagtail.core.blocks.CharBlock(max_length=255, required=False))]))], blank=True, null=True),
+            field=wagtail.fields.StreamField([('heading', wagtail.blocks.CharBlock(form_classname='full title', template='blocks/heading.html')), ('paragraph', wagtail.blocks.RichTextBlock(features=['h2', 'h3', 'h4', 'bold', 'italic', 'ol', 'ul', 'hr', 'link', 'document-link', 'image'])), ('paragraph_v1_legacy', home.blocks.RawHTMLBlock(icon='code')), ('image', wagtail.images.blocks.ImageChooserBlock()), ('list', wagtailmarkdown.blocks.MarkdownBlock(icon='code')), ('numbered_list', home.blocks.NumberedListBlock(wagtailmarkdown.blocks.MarkdownBlock(icon='code'))), ('page_button', wagtail.blocks.StructBlock([('page', wagtail.blocks.PageChooserBlock()), ('text', wagtail.blocks.CharBlock(max_length=255, required=False))]))], blank=True, null=True),
         ),
         migrations.AlterField(
             model_name='quiz',
             name='description',
-            field=wagtail.core.fields.StreamField([('heading', wagtail.core.blocks.CharBlock(form_classname='full title', template='blocks/heading.html')), ('paragraph', wagtail.core.blocks.RichTextBlock(features=['h2', 'h3', 'h4', 'bold', 'italic', 'ol', 'ul', 'hr', 'link', 'document-link', 'image'])), ('paragraph_v1_legacy', home.blocks.RawHTMLBlock(icon='code')), ('image', wagtail.images.blocks.ImageChooserBlock()), ('list', wagtailmarkdown.blocks.MarkdownBlock(icon='code')), ('numbered_list', home.blocks.NumberedListBlock(wagtailmarkdown.blocks.MarkdownBlock(icon='code'))), ('page_button', wagtail.core.blocks.StructBlock([('page', wagtail.core.blocks.PageChooserBlock()), ('text', wagtail.core.blocks.CharBlock(max_length=255, required=False))]))], blank=True, null=True),
+            field=wagtail.fields.StreamField([('heading', wagtail.blocks.CharBlock(form_classname='full title', template='blocks/heading.html')), ('paragraph', wagtail.blocks.RichTextBlock(features=['h2', 'h3', 'h4', 'bold', 'italic', 'ol', 'ul', 'hr', 'link', 'document-link', 'image'])), ('paragraph_v1_legacy', home.blocks.RawHTMLBlock(icon='code')), ('image', wagtail.images.blocks.ImageChooserBlock()), ('list', wagtailmarkdown.blocks.MarkdownBlock(icon='code')), ('numbered_list', home.blocks.NumberedListBlock(wagtailmarkdown.blocks.MarkdownBlock(icon='code'))), ('page_button', wagtail.blocks.StructBlock([('page', wagtail.blocks.PageChooserBlock()), ('text', wagtail.blocks.CharBlock(max_length=255, required=False))]))], blank=True, null=True),
         ),
         migrations.AlterField(
             model_name='survey',
             name='description',
-            field=wagtail.core.fields.StreamField([('heading', wagtail.core.blocks.CharBlock(form_classname='full title', template='blocks/heading.html')), ('paragraph', wagtail.core.blocks.RichTextBlock(features=['h2', 'h3', 'h4', 'bold', 'italic', 'ol', 'ul', 'hr', 'link', 'document-link', 'image'])), ('paragraph_v1_legacy', home.blocks.RawHTMLBlock(icon='code')), ('image', wagtail.images.blocks.ImageChooserBlock()), ('list', wagtailmarkdown.blocks.MarkdownBlock(icon='code')), ('numbered_list', home.blocks.NumberedListBlock(wagtailmarkdown.blocks.MarkdownBlock(icon='code'))), ('page_button', wagtail.core.blocks.StructBlock([('page', wagtail.core.blocks.PageChooserBlock()), ('text', wagtail.core.blocks.CharBlock(max_length=255, required=False))]))], blank=True, null=True),
+            field=wagtail.fields.StreamField([('heading', wagtail.blocks.CharBlock(form_classname='full title', template='blocks/heading.html')), ('paragraph', wagtail.blocks.RichTextBlock(features=['h2', 'h3', 'h4', 'bold', 'italic', 'ol', 'ul', 'hr', 'link', 'document-link', 'image'])), ('paragraph_v1_legacy', home.blocks.RawHTMLBlock(icon='code')), ('image', wagtail.images.blocks.ImageChooserBlock()), ('list', wagtailmarkdown.blocks.MarkdownBlock(icon='code')), ('numbered_list', home.blocks.NumberedListBlock(wagtailmarkdown.blocks.MarkdownBlock(icon='code'))), ('page_button', wagtail.blocks.StructBlock([('page', wagtail.blocks.PageChooserBlock()), ('text', wagtail.blocks.CharBlock(max_length=255, required=False))]))], blank=True, null=True),
         ),
     ]

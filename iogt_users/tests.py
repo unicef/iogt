@@ -1,6 +1,6 @@
 from django.test import TestCase
 from rest_framework import status
-from wagtail.core.models import Site
+from wagtail.models import Site
 
 from home.factories import SiteSettingsFactory, HomePageFactory
 from iogt_users.factories import UserFactory, AdminUserFactory, GroupFactory

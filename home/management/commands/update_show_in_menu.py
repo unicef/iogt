@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from wagtail.core.models import Page
+from wagtail.models import Page
 
 from home.models import HomePage, Section, Article, PageLinkPage
 from questionnaires.models import Poll, Quiz, Survey

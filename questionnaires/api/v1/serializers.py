@@ -2,7 +2,7 @@ import json
 
 from rest_framework import serializers
 from wagtail.contrib.forms.models import AbstractFormField
-from wagtail.core.models import Page
+from wagtail.models import Page
 
 from questionnaires.models import (
     Survey,

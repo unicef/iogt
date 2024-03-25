@@ -1,5 +1,5 @@
 from django import forms
-from wagtail.core.telepath import register
+from wagtail.telepath import register
 
 from questionnaires.adapters import SelectAndHiddenWidgetAdapter
 

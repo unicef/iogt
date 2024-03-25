@@ -4,7 +4,7 @@ from django.utils.functional import cached_property
 class PageUtilsMixin:
     """
     This mixin contains the common properties/utilities shared across most children
-    of wagtail.core.models.Page
+    of wagtail.models.Page
     """
 
     @cached_property

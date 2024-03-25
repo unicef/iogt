@@ -11,7 +11,7 @@ from django.utils import translation
 from django.views.generic import TemplateView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from wagtail.core.models import Page, Locale
+from wagtail.models import Page, Locale
 from wagtail.images.models import Rendition
 from wagtailmedia.models import Media
 

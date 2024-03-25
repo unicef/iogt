@@ -18,23 +18,20 @@ from iogt.settings.base import WAGTAIL_CONTENT_LANGUAGES
 from modelcluster.fields import ParentalKey
 from rest_framework import status
 from taggit.models import TaggedItemBase
-from wagtail.admin.edit_handlers import (
+from wagtail.admin.panels import (
     FieldPanel,
     InlinePanel,
     MultiFieldPanel,
     ObjectList,
-    PageChooserPanel,
-    StreamFieldPanel,
-    TabbedInterface
+    TabbedInterface,
 )
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
-from wagtail.core import blocks
-from wagtail.core.fields import StreamField
-from wagtail.core.models import Orderable, Page, Site, Locale
-from wagtail.core.rich_text import get_text_for_indexing
+from wagtail import blocks
+from wagtail.fields import StreamField
+from wagtail.models import Orderable, Page, Site, Locale
+from wagtail.rich_text import get_text_for_indexing
 from wagtail.images.blocks import ImageChooserBlock
-from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.models import Image
 from wagtail.search import index
 from wagtailmarkdown.blocks import MarkdownBlock
@@ -67,20 +64,25 @@ class HomePage(Page, PageUtilsMixin, TitleIconMixin):
     template = 'home/home_page.html'
     show_in_menus_default = True
 
-    home_featured_content = StreamField([
-        ('page_button', PageButtonBlock()),
-        ('embedded_poll', EmbeddedPollBlock()),
-        ('embedded_survey', EmbeddedSurveyBlock()),
-        ('embedded_quiz', EmbeddedQuizBlock()),
-        ('article', ArticleBlock()),
-        ('download', DownloadButtonBlock()),
-    ], null=True, blank=True)
+    home_featured_content = StreamField(
+        [
+            ('page_button', PageButtonBlock()),
+            ('embedded_poll', EmbeddedPollBlock()),
+            ('embedded_survey', EmbeddedSurveyBlock()),
+            ('embedded_quiz', EmbeddedQuizBlock()),
+            ('article', ArticleBlock()),
+            ('download', DownloadButtonBlock()),
+        ],
+        null=True,
+        blank=True,
+        use_json_field=True,
+    )
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
             InlinePanel('home_page_banners', label=_("Home Page Banner")),
         ], heading=_('Home Page Banners')),
-        StreamFieldPanel('home_featured_content')
+        FieldPanel('home_featured_content')
     ]
 
     def get_context(self, request):
@@ -105,7 +107,7 @@ class FeaturedContent(Orderable):
     content = models.ForeignKey(Page, on_delete=models.CASCADE)
 
     panels = [
-        PageChooserPanel('content'),
+        FieldPanel('content'),
     ]
 
 
@@ -115,7 +117,7 @@ class HomePageBanner(Orderable):
     banner_page = models.ForeignKey('home.BannerPage', on_delete=models.CASCADE)
 
     panels = [
-        PageChooserPanel('banner_page'),
+        FieldPanel('banner_page'),
     ]
 
 
@@ -175,9 +177,12 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         blank=True,
         null=True,
     )
-    body = StreamField([
-        ('download', DownloadButtonBlock()),
-    ], null=True, blank=True)
+    body = StreamField(
+        [('download', DownloadButtonBlock())],
+        null=True,
+        blank=True,
+        use_json_field=True,
+    )
 
     tags = ClusterTaggableManager(through='SectionTaggedItem', blank=True)
     show_progress_bar = models.BooleanField(default=False)
@@ -190,9 +195,9 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     ]
 
     content_panels = Page.content_panels + [
-        ImageChooserPanel('lead_image'),
+        FieldPanel('lead_image'),
         SvgChooserPanel('icon'),
-        ImageChooserPanel('image_icon'),
+        FieldPanel('image_icon'),
         FieldPanel('background_color'),
         FieldPanel('font_color'),
         FieldPanel('larger_image_for_top_page_in_list_as_in_v1'),
@@ -200,7 +205,7 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
             InlinePanel('featured_content', max_num=1,
                         label=_("Featured Content")),
         ], heading=_('Featured Content')),
-        StreamFieldPanel('body'),
+        FieldPanel('body'),
     ]
 
     settings_panels = Page.settings_panels + [
@@ -288,7 +293,7 @@ class ArticleRecommendation(Orderable):
     article = models.ForeignKey('Article', on_delete=models.CASCADE)
 
     panels = [
-        PageChooserPanel('article')
+        FieldPanel('article')
     ]
 
 
@@ -316,29 +321,32 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     )
     index_page_description = models.TextField(null=True, blank=True)
 
-    body = StreamField([
-        ('heading', blocks.CharBlock(form_classname="full title", template='blocks/heading.html')),
-        ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
-        ('markdown', MarkdownBlock(icon='code')),
-        ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
-        ('image', ImageChooserBlock(template='blocks/image.html')),
-        ('list', blocks.ListBlock(MarkdownBlock(icon='code'))),
-        ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
-        ('page_button', PageButtonBlock()),
-        ('embedded_poll', EmbeddedPollBlock()),
-        ('embedded_survey', EmbeddedSurveyBlock()),
-        ('embedded_quiz', EmbeddedQuizBlock()),
-        ('media', MediaBlock(icon='media')),
-        ('chat_bot', ChatBotButtonBlock()),
-        ('download', DownloadButtonBlock()),
-    ])
+    body = StreamField(
+        [
+            ('heading', blocks.CharBlock(form_classname="full title", template='blocks/heading.html')),
+            ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
+            ('markdown', MarkdownBlock(icon='code')),
+            ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
+            ('image', ImageChooserBlock(template='blocks/image.html')),
+            ('list', blocks.ListBlock(MarkdownBlock(icon='code'))),
+            ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
+            ('page_button', PageButtonBlock()),
+            ('embedded_poll', EmbeddedPollBlock()),
+            ('embedded_survey', EmbeddedSurveyBlock()),
+            ('embedded_quiz', EmbeddedQuizBlock()),
+            ('media', MediaBlock(icon='media')),
+            ('chat_bot', ChatBotButtonBlock()),
+            ('download', DownloadButtonBlock()),
+        ],
+        use_json_field=True,
+    )
     show_in_menus_default = True
 
     content_panels = Page.content_panels + [
-        ImageChooserPanel('lead_image'),
+        FieldPanel('lead_image'),
         SvgChooserPanel('icon'),
-        ImageChooserPanel('image_icon'),
-        StreamFieldPanel('body'),
+        FieldPanel('image_icon'),
+        FieldPanel('body'),
         FieldPanel('index_page_description'),
     ]
 
@@ -500,8 +508,8 @@ class BannerPage(Page, PageUtilsMixin):
         help_text=_('Optional page to which the banner will link to'))
 
     content_panels = Page.content_panels + [
-        ImageChooserPanel('banner_image'),
-        PageChooserPanel('banner_link_page'),
+        FieldPanel('banner_image'),
+        FieldPanel('banner_link_page'),
     ]
 
     @property
@@ -563,8 +571,8 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
 
     content_panels = Page.content_panels + [
         SvgChooserPanel('icon'),
-        ImageChooserPanel('image_icon'),
-        PageChooserPanel('page'),
+        FieldPanel('image_icon'),
+        FieldPanel('page'),
         FieldPanel('external_link'),
     ]
 
@@ -667,9 +675,12 @@ class SiteSettings(BaseSetting):
             "Global GA tracking code to be used"
             " to view analytics on more than one site globally")
     )
-    social_media_link = StreamField([
-        ('social_media_link', SocialMediaLinkBlock()),
-    ], null=True, blank=True)
+    social_media_link = StreamField(
+        [('social_media_link', SocialMediaLinkBlock())],
+        null=True,
+        blank=True,
+        use_json_field=True,
+    )
     social_media_content_sharing_button = StreamField([
         ('social_media_content_sharing_button', SocialMediaShareButtonBlock()),
     ], null=True, blank=True)
@@ -693,9 +704,9 @@ class SiteSettings(BaseSetting):
     )
 
     panels = [
-        ImageChooserPanel('logo'),
-        ImageChooserPanel('favicon'),
-        ImageChooserPanel('apple_touch_icon'),
+        FieldPanel('logo'),
+        FieldPanel('favicon'),
+        FieldPanel('apple_touch_icon'),
         MultiFieldPanel(
             [
                 FieldPanel('show_only_translated_pages'),
@@ -726,7 +737,7 @@ class SiteSettings(BaseSetting):
             [
                 MultiFieldPanel(
                     [
-                        StreamFieldPanel('social_media_link'),
+                        FieldPanel('social_media_link'),
                     ],
                     heading="Social Media Footer Page", ),
             ],
@@ -735,7 +746,7 @@ class SiteSettings(BaseSetting):
             [
                 MultiFieldPanel(
                     [
-                        StreamFieldPanel('social_media_content_sharing_button'),
+                        FieldPanel('social_media_content_sharing_button'),
                     ],
                     heading="Social Media Content Sharing Buttons", ),
             ],
@@ -754,7 +765,7 @@ class SiteSettings(BaseSetting):
         ),
         MultiFieldPanel(
             [
-                PageChooserPanel('registration_survey'),
+                FieldPanel('registration_survey'),
             ],
             heading="Registration Settings",
         ),
@@ -837,14 +848,14 @@ class IogtFlatMenuItem(AbstractFlatMenuItem, TitleIconMixin):
     display_only_in_single_column_view = models.BooleanField(default=False)
 
     panels = [
-        PageChooserPanel('link_page'),
+        FieldPanel('link_page'),
         FieldPanel('link_url', classname='red-help-text'),
         FieldPanel('url_append'),
         FieldPanel('link_text'),
         FieldPanel('handle'),
         FieldPanel('allow_subnav'),
         SvgChooserPanel('icon'),
-        ImageChooserPanel('image_icon'),
+        FieldPanel('image_icon'),
         FieldPanel('background_color'),
         FieldPanel('font_color'),
         FieldPanel('display_only_in_single_column_view'),
@@ -1022,9 +1033,9 @@ class ManifestSettings(models.Model):
         ),
         MultiFieldPanel(
             [
-                ImageChooserPanel("icon_96_96"),
-                ImageChooserPanel("icon_512_512"),
-                ImageChooserPanel("icon_192_192"),
+                FieldPanel("icon_96_96"),
+                FieldPanel("icon_512_512"),
+                FieldPanel("icon_192_192"),
             ],
             heading="Icons",
         ),

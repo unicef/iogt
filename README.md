@@ -4,11 +4,11 @@ Internet of Good Things ([IoGT][2]) is developed as a public good under a [BSD-2
 
 The development uses the Python programming language, building on the [Django][4] server-side web framework combined with the [Wagtail][5] content management system.
 
-In line with the latest Wagtail [Long Term Support release][6], IoGT 2.x supports:
-- Wagtail 2.15.x
-- Django 3.0.x, 3.1.x and 3.2.x
-- Python 3.8, 3.9 and 3.10
-- PostgreSQL, MySQL and SQLite as database backends
+IoGT 2.x requires:
+- Wagtail 3.0.3
+- Django 3.2
+- Python 3.9+
+- PostgreSQL (14+), MySQL and SQLite (3.38+) as database backends
 
 ## Getting started
 

@@ -1,5 +1,5 @@
 from django_filters import rest_framework as filters
-from wagtail.core.models import Page
+from wagtail.models import Page
 
 from questionnaires.models import UserSubmission
 
