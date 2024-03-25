@@ -1,6 +1,6 @@
 from django.core.paginator import EmptyPage, Paginator
 from django.template.response import TemplateResponse
-from wagtail.core.models import Locale
+from wagtail.models import Locale
 
 from home.models import Article, Section
 from iogt.settings.base import SEARCH_RESULTS_PER_PAGE

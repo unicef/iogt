@@ -8,8 +8,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.core import management
 from django.core.files.images import ImageFile
 from django.core.management.base import BaseCommand
-from wagtail.core.models import Site, Page
-from wagtail.core.rich_text import RichText
+from wagtail.models import Site, Page
+from wagtail.rich_text import RichText
 from wagtail.images.models import Image
 
 import home.models as models

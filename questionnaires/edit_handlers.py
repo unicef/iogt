@@ -1,4 +1,4 @@
-from wagtail.contrib.forms.edit_handlers import FormSubmissionsPanel as WagtailFormSubmissionsPanel
+from wagtail.contrib.forms.panels import FormSubmissionsPanel as WagtailFormSubmissionsPanel
 
 
 class FormSubmissionsPanel(WagtailFormSubmissionsPanel):

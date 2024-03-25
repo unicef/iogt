@@ -12,7 +12,7 @@ from home.views import get_manifest, LogoutRedirectHackView
 from iogt_users import urls as users_urls
 from search import views as search_views
 from wagtail.admin import urls as wagtailadmin_urls
-from wagtail.core import urls as wagtail_urls
+from wagtail import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 from home import views as pwa_views
 from wagtail_transfer import urls as wagtailtransfer_urls
@@ -35,7 +35,7 @@ schema_view = get_schema_view(
         default_version='v1',
         description="IoGT APIs",
     ),
-    url=settings.BASE_URL,
+    url=settings.WAGTAILADMIN_BASE_URL,
     public=True,
     patterns=api_url_patterns
 )

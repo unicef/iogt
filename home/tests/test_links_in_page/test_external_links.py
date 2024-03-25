@@ -2,8 +2,8 @@ from bs4 import BeautifulSoup
 from django.test import TestCase
 
 from rest_framework import status
-from wagtail.core.models import Site
-from wagtail.core.rich_text import RichText
+from wagtail.models import Site
+from wagtail.rich_text import RichText
 
 from home.factories import ArticleFactory, HomePageFactory
 from wagtail_factories import SiteFactory

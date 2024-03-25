@@ -2,7 +2,7 @@ import json
 
 from django.core.management.base import BaseCommand
 from questionnaires.models import Survey, SurveyFormField
-from wagtail.core.models import PageRevision
+from wagtail.models import PageRevision
 
 
 class Command(BaseCommand):

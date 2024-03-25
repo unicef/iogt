@@ -6,7 +6,7 @@ from django.template import Context
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
 from rest_framework import status
-from wagtail.core.models import PageViewRestriction, Site
+from wagtail.models import PageViewRestriction, Site
 from unittest.mock import patch
 
 from home.models import SVGToPNGMap

@@ -2,9 +2,9 @@ from functools import cached_property
 
 from django import forms
 from wagtail.admin.staticfiles import versioned_static
-from wagtail.core.blocks.stream_block import StreamBlockAdapter
-from wagtail.core.blocks.struct_block import StructBlockAdapter
-from wagtail.core.widget_adapters import WidgetAdapter
+from wagtail.blocks.stream_block import StreamBlockAdapter
+from wagtail.blocks.struct_block import StructBlockAdapter
+from wagtail.widget_adapters import WidgetAdapter
 
 
 class SkipLogicStreamBlockAdapter(StreamBlockAdapter):

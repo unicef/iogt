@@ -3,7 +3,7 @@ from pathlib import Path
 from django.conf import settings
 from django.core.files import File
 from django.core.management.base import BaseCommand
-from wagtail.core.models import Site, Locale
+from wagtail.models import Site, Locale
 from wagtailmenus.models import FlatMenu
 from wagtailsvg.models import Svg
 

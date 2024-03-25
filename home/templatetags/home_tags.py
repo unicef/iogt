@@ -4,7 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 from django.urls import translate_url, reverse, resolve, Resolver404
 from django.conf import settings
-from wagtail.core.models import Locale, Site, Page
+from wagtail.models import Locale, Site, Page
 
 from home.models import SectionIndexPage, Section, Article, FooterIndexPage, PageLinkPage, LocaleDetail, HomePage, SiteSettings
 from iogt.settings.base import LANGUAGES

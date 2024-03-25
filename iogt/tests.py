@@ -3,8 +3,8 @@ import unittest
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
-from wagtail.core.models import Site
-from wagtail.core.rich_text import RichText
+from wagtail.models import Site
+from wagtail.rich_text import RichText
 from wagtail_factories import ImageFactory, SiteFactory
 
 from home.factories import (

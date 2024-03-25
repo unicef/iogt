@@ -1,7 +1,7 @@
 import factory
 from django.core.files.base import ContentFile
 from factory.django import DjangoModelFactory, ImageField
-from wagtail.core.models import Locale
+from wagtail.models import Locale
 from wagtail_factories import (
     ImageChooserBlockFactory,
     ImageFactory,

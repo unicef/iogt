@@ -1,5 +1,5 @@
 from selenium_tests.base import BaseSeleniumTests
-from wagtail.core.models import Site
+from wagtail.models import Site
 from iogt_users.factories import AdminUserFactory
 from home.factories import SectionFactory, ArticleFactory
 from questionnaires.factories import SurveyFactory, SurveyFormFieldFactory

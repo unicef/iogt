@@ -5,8 +5,8 @@ from django.dispatch import receiver
 from django.utils import timezone
 from django_comments.signals import comment_was_flagged
 from django_comments_xtd.models import XtdComment
-from wagtail.admin.edit_handlers import FieldPanel
-from wagtail.core.models import Page
+from wagtail.admin.panels import FieldPanel
+from wagtail.models import Page
 
 from comments import get_comments_moderation_class
 
