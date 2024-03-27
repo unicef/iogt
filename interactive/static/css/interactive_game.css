@@ -1,0 +1,117 @@
+.interactive-game button {
+    margin-bottom: 4px
+}
+.interactive-game button:hover {
+    color: white
+}
+.interactive-game .interactive-img {
+    display: inline !important
+}
+.interactive-game button:disabled {
+    cursor: default;
+    opacity: 100%;
+}
+.interactive-game .locked {
+    cursor: default;
+    opacity: 50%;
+    pointer-events: none;
+    user-select: none;
+}
+.interactive-game .denial-btn {
+    color:#444;
+    background: transparent;
+    border: none;
+    outline: none;
+    border-radius: 0;
+    border-bottom: 1px solid #EFEFEF;
+}
+.interactive-game .denial-btn:hover {
+    background: white;
+    color: #444;
+}
+.interactive-game .denial-btn:focus {
+    background: white;
+    color: #444;
+}
+
+.interactive-game .locked .img-holder:after {
+    content: "\f023";
+    font: normal normal normal 14px / 1 FontAwesome;
+}
+
+.interactive-game .unlocked .img-holder:after {
+    content: "\f09c";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+}
+
+.interactive-game .completed .img-holder:after {
+    content: "\f058";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+}
+
+.interactive-game .denial-btn .section-header {
+    display:flex;
+    align-content:center;
+}
+
+.interactive-game .denial-btn .section-header p {
+    align-content:center;
+    margin-left: 10px;
+}
+
+.interactive-game input[type=text] {
+    background-color: #f7f7f9;
+    border: 1px solid #efefef;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin: 10px 0;
+    width: 100%;
+}
+
+.interactive-game .top-navbar {
+    background-color:#f0f0f0;
+    padding: 2px 10px;
+}
+
+.interactive-game .top-navbar {
+    margin-bottom: 10px;
+    background-color: #f0f0f0;
+    padding: 10px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.interactive-game .top-navbar button {
+    background-color: #f0f0f0;
+    width: 0%;
+    border: none;
+    padding: 10px 20px;
+    line-height: 1px;
+}
+
+.interactive-game .top-navbar button:hover {
+    color: black;
+}
+
+
+.interactive-game .interactive_navigation {
+    margin-top: 25px;
+    background-color: #ccc;
+    padding: 10px;
+    display: flex;
+}
+  
+.interactive-game .interactive_navigation > button {
+    background-color: #ccc;
+    border: none;
+    margin: 0 10px;
+    padding: 0;
+}
+
+.interactive-game .interactive_navigation > button > div {
+    display:flex;
+    flex-direction: column;
+}

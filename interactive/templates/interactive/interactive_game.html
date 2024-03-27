@@ -8,22 +8,23 @@
 {% load wagtailadmin_tags %}
 
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/game.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/interactive_game.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 {% endblock %}
 
 {% block content %}
-    <article class='cranky_uncle'>
+    <article class='interactive-game'>
         <div class="container" style="text-align:center;">
             <div class="d-grid gap-2 col-6 mx-auto">
-                <form action="{% url 'interactive:interactive_game' slug=slug %}" method="POST">
+                <form action="{% url 'interactive:interactive_game' slug=slug %}" class="interactive-game-form" method="POST">
                     {% csrf_token %}
 
-                    <div style="padding-bottom:4rem">
+                    <div>
                         {{ db_data.message|safe }}
                     </div>
                     
                     {% for reply in db_data.buttons %}
-                        <input type="submit" class="cust-btn btn-secondary cranky-btn" name="text" value="{{ reply }}">
+                        <input type="submit" class="cust-btn btn-secondary interactive-btn" name="text" value="{{ reply }}">
                     {% endfor %}
                 </form>
             </div>
