@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 from django.test import TestCase, override_settings
 from django.http import HttpRequest
 from translation_manager.models import TranslationEntry
-from wagtail.core.models import Site
+from wagtail.models import Site
 from wagtail_factories import SiteFactory, PageFactory
 from wagtail_localize.operations import TranslationCreator
 

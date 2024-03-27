@@ -1,9 +1,9 @@
 -r requirements.txt
 coverage
 django-test-plus>=1.4.0
-factory-boy==3.2.*
+factory-boy
 Faker
 pytest
 pytest-django
 selenium==4.9.1
-wagtail-factories==4.0.*
+wagtail-factories

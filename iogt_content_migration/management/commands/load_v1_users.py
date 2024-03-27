@@ -17,7 +17,7 @@ from pip._vendor.distlib.compat import raw_input
 from wagtail.contrib.forms.utils import get_field_clean_name
 
 from tqdm import tqdm
-from wagtail.core.models import Page, PageViewRestriction, PageRevision
+from wagtail.models import Page, PageViewRestriction, PageRevision
 
 from comments.models import CannedResponse
 from home.models import Article, V1ToV2ObjectMap, SiteSettings

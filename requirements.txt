@@ -283,6 +283,8 @@ django==3.2.24 \
     #   django-filter
     #   django-google-analytics-app
     #   django-health-check
+    #   django-modelcluster
+    #   django-permissionedforms
     #   django-redis
     #   django-rq
     #   django-taggit
@@ -293,6 +295,7 @@ django==3.2.24 \
     #   drf-yasg
     #   wagtail
     #   wagtail-localize
+    #   wagtailmedia
 django-allauth==0.54.0 \
     --hash=sha256:120e265f802b65738899c6cb627b827fde46a4d03067034c633f516c2adf3e3e
     # via -r requirements.in
@@ -338,9 +341,13 @@ django-health-check==3.16.5 \
     --hash=sha256:1edfd49293ccebbce29f9da609c407f307aee240ab799ab4201031341ae78c0f \
     --hash=sha256:8d66781a0ea82b1a8b44878187b38a27370e94f18287312e39be0593e72d8983
     # via -r requirements.in
-django-modelcluster==5.3 \
-    --hash=sha256:0347cdcacb19a1078ee56cc3e6d5413ba27b8a5900710c53bb92b5d8ff3819cd \
-    --hash=sha256:f9f4250e706ee5e57503a30fbf37058b73e9fdc3190d75031338b81913cc9b4e
+django-modelcluster==6.3 \
+    --hash=sha256:0caed8a0e889f3abb92f144670878a466ef954ffa6c4c7b9c80e6426b720a49d \
+    --hash=sha256:a8783d6565a0663f41cd6003ea361c3a5711e8a2a326160f1ec1eceb3e973d4f
+    # via wagtail
+django-permissionedforms==0.1 \
+    --hash=sha256:4340bb20c4477fffb13b4cc5cccf9f1b1010b64f79956c291c72d2ad2ed243f8 \
+    --hash=sha256:d341a961a27cc77fde8cc42141c6ab55cc1f0cb886963cc2d6967b9674fa47d6
     # via wagtail
 django-redis==5.2.0 \
     --hash=sha256:1d037dc02b11ad7aa11f655d26dac3fb1af32630f61ef4428860a2e29ff92026 \
@@ -850,44 +857,44 @@ vine==5.1.0 \
     #   amqp
     #   celery
     #   kombu
-wagtail==2.16.3 \
-    --hash=sha256:3b52f0e1a4bcad66e57eaa341025e90a6dcd40170f7adb132e9e9df9efa978c9 \
-    --hash=sha256:a1f04513f06c760208698578367f03b3af5400f05d36b94e4a8ce07ee30d42fc
+wagtail==3.0.3 \
+    --hash=sha256:111ed9a0a6ff26d5d881d52deb4bf52b627d79a53c43829611752dbb68a9192f \
+    --hash=sha256:23b3e541401355ea183372582050ea52b049c956dd5b506197f957bb68423ab3
     # via
     #   -r requirements.in
     #   wagtail-cache
     #   wagtail-localize
     #   wagtail-markdown
     #   wagtailmedia
-wagtail-cache==1.2.1 \
-    --hash=sha256:14a8e013eaa4fbe128a966c20571c21bed22621f886e81907514f6e3ba4f3f40 \
-    --hash=sha256:4bfe60757c5038efd58e583d2f9d2ea0aa6f67c9c158ca9b34f7ba04e6b394e9
+wagtail-cache==2.1.1 \
+    --hash=sha256:1fe3ca20a3cdf23f31fc9df662a52f743084cd7f60bd870950094d63a87f695a \
+    --hash=sha256:2ac16921d022a58240a009a19220554e41963c5172e7dfe4ef741ddd887e991f
     # via -r requirements.in
-wagtail-generic-chooser==0.1.1 \
-    --hash=sha256:4182e4fa853966173dcb5b1605fc2ea4f8e5914ff7d15e43afe63e21d3b554fb \
-    --hash=sha256:9ef62f0b8d371491aed38e2e971771e9ef0e9fcf7b768e758d87964badf659d2
+wagtail-generic-chooser==0.5.1 \
+    --hash=sha256:135f8cc413d83b82bb8956f625f4b9572aa7139ab3835e2ba2d7e19f2171b354 \
+    --hash=sha256:280ae7293641d1b121450e17a6d424305e31c832f1af5bd991bc3e49703bf79e
     # via wagtailsvg
-wagtail-localize==1.3.3 \
-    --hash=sha256:7b0a2b13fbd458788cb9cea1db64256d7695a2e018eb804d5a2d98afb4f95f46 \
-    --hash=sha256:d73a17f09394d4ada369ae1110d923728e03e1e8d81dc72e1ac41fca28f196a7
+wagtail-localize==1.4 \
+    --hash=sha256:40f974809509de54dcc18ee6aa98908bffd9dfaba53150e214f4046b2286920e \
+    --hash=sha256:fd1195de3c23e3a061576f1b947fe7498676ff5678fe008d4cd388125a20a54a
     # via -r requirements.in
-wagtail-markdown==0.7.0 \
-    --hash=sha256:e1002dfc14514c89002c475789ae4cf4e7fd88439eef47ba60328f49cd69ebe1 \
-    --hash=sha256:ea6aaea5ee84a66d25cb66854720fe8d4306730f4edce19afbe57655c5ba9621
+wagtail-markdown==0.10.0 \
+    --hash=sha256:b16be4b6e3518cc6dd15ab335cbc6d6a9122b5d7e3a61fa11c83597e2660044e \
+    --hash=sha256:e4a97eee0211eebaab9c850669e647bc1c8ceb70df38b4db5a2c3d8b02ebaf69
     # via -r requirements.in
 wagtail-transfer @ https://github.com/IDEMSInternational/wagtail-transfer/archive/408edb5d432ac72dc2727a1847e0f294b8d6efa6.zip \
     --hash=sha256:cac600baa5572bc328194b5ee6c7e2e57b333da23a6a4d63b8f4b38694d9c6a1
     # via -r requirements.in
-wagtailmedia==0.10.1 \
-    --hash=sha256:94dab3ce33d79d316e7d82b7e5d71ab64ae6cf09e33226d9a7338d188a0dba10 \
-    --hash=sha256:ed61a995d61d879c5c851b7df046accbc85b58288781e2cfec2bb2916e1ae5c7
+wagtailmedia==0.12.0 \
+    --hash=sha256:0807515c5d89782666b613de2e4aedab19e9dd358097fad2cb79633c0b5416d3 \
+    --hash=sha256:1d39622c3d7d0191e58ffedf45d05fbef851e3905955513012a72ae4d46a12b0
     # via -r requirements.in
 wagtailmenus==3.1.3 \
     --hash=sha256:0f5669f160d788b1ab8c2b412cb95411e9c07f83e4b52dddc92991752c6fa397
     # via -r requirements.in
-wagtailsvg==0.0.14 \
-    --hash=sha256:587f64b8560ca212e64fa28ab79d76bb4864141da9bac497d5ab9c7ee9630165 \
-    --hash=sha256:74061fc780a1568d4a2d0c3d81e38b2fb7f4ca687d8858af7e2e89b1e28c9d82
+wagtailsvg==0.0.37 \
+    --hash=sha256:4b30433809614fbac09f9088b4aed42a1bfe56f9fb581b858606187cb177ca6b \
+    --hash=sha256:dc4d698748bde32034b1eac2275cf159597ca8e399d3830e96391f761aa0cacf
     # via -r requirements.in
 wcwidth==0.2.10 \
     --hash=sha256:390c7454101092a6a5e43baad8f83de615463af459201709556b6e4b1c861f97 \

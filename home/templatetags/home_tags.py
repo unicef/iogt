@@ -1,12 +1,18 @@
 from django import template
 import django.utils.translation as translation
-from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 from django.urls import translate_url, reverse, resolve, Resolver404
 from django.conf import settings
-from wagtail.core.models import Locale, Site, Page
+from wagtail.models import Locale, Site, Page
 
-from home.models import SectionIndexPage, Section, Article, FooterIndexPage, PageLinkPage, LocaleDetail, HomePage, SiteSettings
+from home.models import (
+    Article,
+    FooterIndexPage,
+    LocaleDetail,
+    PageLinkPage,
+    Section,
+    SectionIndexPage,
+)
 from iogt.settings.base import LANGUAGES
 
 register = template.Library()
@@ -26,7 +32,11 @@ def language_switcher(context, page):
 
     try:
         if resolve(context.request.path_info).url_name == 'translation-not-found':
-            page = get_object_or_404(Page, pk=context.request.GET.get('page'), live=True)
+            page = get_object_or_404(
+                Page,
+                pk=context.request.GET.get('page'),
+                live=True,
+            )
     except Resolver404:
         pass
 
@@ -50,7 +60,10 @@ def language_switcher(context, page):
                 if translated_page and translated_page.live:
                     url = translated_page.url
                 else:
-                    translated_url = translate_url(reverse('translation-not-found'), locale.language_code)
+                    translated_url = translate_url(
+                        reverse('translation-not-found'),
+                        locale.language_code,
+                    )
                     url = f'{translated_url}?page={page.id}'
             else:  # If the current URL belongs to a django view
                 url = translate_url(context.request.path_info, locale.language_code)
@@ -70,7 +83,9 @@ def language_switcher(context, page):
 def render_previous_next_buttons(page):
     return {
         'next_sibling': page.get_next_siblings().not_type(PageLinkPage).live().first(),
-        'previous_sibling': page.get_prev_siblings().not_type(PageLinkPage).live().first()
+        'previous_sibling': (
+            page.get_prev_siblings().not_type(PageLinkPage).live().first()
+        )
     }
 
 
@@ -128,22 +143,6 @@ def translated_home_page_url(language_code):
 def change_lang(context, lang=None, *args, **kwargs):
     path = context['request'].path
     return translate_url(path, lang)
-
-
-@register.inclusion_tag('wagtailadmin/shared/field_as_li.html')
-def render_external_link_with_help_text(field):
-    field.help_text = f'If you are linking back to a URL on your own IoGT site, be sure to remove the domain and ' \
-                      f'everything before it. For example "http://sd.goodinternet.org/url/" should instead be "/url/".'
-
-    return {'field': field, 'red_help_text': True}
-
-
-@register.inclusion_tag('wagtailadmin/shared/field_as_li.html')
-def render_redirect_from_with_help_text(field):
-    field.help_text = f'A relative path to redirect from e.g. /en/youth. ' \
-                      f'See "https://docs.wagtail.io/en/stable/editor_manual/managing_redirects.html" for more details.'
-
-    return {'field': field, 'red_help_text': True}
 
 
 @register.inclusion_tag('home/tags/image.html', takes_context=True)

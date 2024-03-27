@@ -5,8 +5,8 @@ import django.db.models.deletion
 import home.blocks
 import home.mixins
 import messaging.blocks
-import wagtail.core.blocks
-import wagtail.core.fields
+import wagtail.blocks
+import wagtail.fields
 import wagtail.images.blocks
 import wagtailmarkdown.blocks
 import wagtailmenus.models.menuitems
@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
                 ('allow_comments', models.BooleanField(default=False)),
-                ('body', wagtail.core.fields.StreamField([('heading', wagtail.core.blocks.CharBlock(form_classname='full title')), ('paragraph', wagtail.core.blocks.RichTextBlock(features=['h2', 'h3', 'h4', 'bold', 'italic', 'ol', 'ul', 'hr', 'link', 'document-link', 'image'])), ('markdown', wagtailmarkdown.blocks.MarkdownBlock(icon='code')), ('image', wagtail.images.blocks.ImageChooserBlock()), ('list', wagtail.core.blocks.ListBlock(wagtail.core.blocks.CharBlock(label='Item'))), ('numbered_list', wagtail.core.blocks.ListBlock(wagtail.core.blocks.CharBlock(label='Item'))), ('page_button', wagtail.core.blocks.StructBlock([('page', wagtail.core.blocks.PageChooserBlock()), ('text', wagtail.core.blocks.CharBlock(max_length=255, required=False))])), ('embedded_poll', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Poll'])), ('embedded_survey', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Survey'])), ('embedded_quiz', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Quiz'])), ('media', home.blocks.MediaBlock(icon='media')), ('chat_bot', wagtail.core.blocks.StructBlock([('subject', wagtail.core.blocks.CharBlock()), ('button_text', wagtail.core.blocks.CharBlock()), ('trigger_string', wagtail.core.blocks.CharBlock()), ('channel', messaging.blocks.ChatBotChannelChooserBlock())]))])),
+                ('body', wagtail.fields.StreamField([('heading', wagtail.blocks.CharBlock(form_classname='full title')), ('paragraph', wagtail.blocks.RichTextBlock(features=['h2', 'h3', 'h4', 'bold', 'italic', 'ol', 'ul', 'hr', 'link', 'document-link', 'image'])), ('markdown', wagtailmarkdown.blocks.MarkdownBlock(icon='code')), ('image', wagtail.images.blocks.ImageChooserBlock()), ('list', wagtail.blocks.ListBlock(wagtail.blocks.CharBlock(label='Item'))), ('numbered_list', wagtail.blocks.ListBlock(wagtail.blocks.CharBlock(label='Item'))), ('page_button', wagtail.blocks.StructBlock([('page', wagtail.blocks.PageChooserBlock()), ('text', wagtail.blocks.CharBlock(max_length=255, required=False))])), ('embedded_poll', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Poll'])), ('embedded_survey', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Survey'])), ('embedded_quiz', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Quiz'])), ('media', home.blocks.MediaBlock(icon='media')), ('chat_bot', wagtail.blocks.StructBlock([('subject', wagtail.blocks.CharBlock()), ('button_text', wagtail.blocks.CharBlock()), ('trigger_string', wagtail.blocks.CharBlock()), ('channel', messaging.blocks.ChatBotChannelChooserBlock())]))])),
             ],
             options={
                 'abstract': False,
@@ -67,7 +67,7 @@ class Migration(migrations.Migration):
             name='BannerPage',
             fields=[
                 ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
-                ('banner_description', wagtail.core.fields.RichTextField(blank=True, null=True)),
+                ('banner_description', wagtail.fields.RichTextField(blank=True, null=True)),
                 ('banner_button_text', models.CharField(blank=True, help_text='The title for a button', max_length=35, null=True)),
                 ('align_center', models.BooleanField(default=False)),
             ],
@@ -111,7 +111,7 @@ class Migration(migrations.Migration):
             name='HomePage',
             fields=[
                 ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
-                ('home_featured_content', wagtail.core.fields.StreamField([('page_button', wagtail.core.blocks.StructBlock([('page', wagtail.core.blocks.PageChooserBlock()), ('text', wagtail.core.blocks.CharBlock(max_length=255, required=False))])), ('embedded_poll', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Poll'])), ('embedded_survey', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Survey'])), ('embedded_quiz', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Quiz']))], null=True)),
+                ('home_featured_content', wagtail.fields.StreamField([('page_button', wagtail.blocks.StructBlock([('page', wagtail.blocks.PageChooserBlock()), ('text', wagtail.blocks.CharBlock(max_length=255, required=False))])), ('embedded_poll', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Poll'])), ('embedded_survey', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Survey'])), ('embedded_quiz', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Quiz']))], null=True)),
             ],
             options={
                 'abstract': False,
@@ -202,8 +202,8 @@ class Migration(migrations.Migration):
                 ('global_ga_tag_manager', models.CharField(blank=True, help_text='Global GA Tag Manager tracking code (e.g GTM-XXX) to be used to view analytics on more than one site globally', max_length=255, null=True, verbose_name='Global GA Tag Manager')),
                 ('local_ga_tracking_code', models.CharField(blank=True, help_text='Local GA tracking code to be used to view analytics on this site only', max_length=255, null=True, verbose_name='Local GA Tracking Code')),
                 ('global_ga_tracking_code', models.CharField(blank=True, help_text='Global GA tracking code to be used to view analytics on more than one site globally', max_length=255, null=True, verbose_name='Global GA Tracking Code')),
-                ('social_media_link', wagtail.core.fields.StreamField([('social_media_link', wagtail.core.blocks.StructBlock([('title', wagtail.core.blocks.CharBlock(max_length=255)), ('link', wagtail.core.blocks.URLBlock()), ('image', wagtail.images.blocks.ImageChooserBlock())]))], blank=True, null=True)),
-                ('social_media_content_sharing_button', wagtail.core.fields.StreamField([('social_media_content_sharing_button', wagtail.core.blocks.StructBlock([('platform', wagtail.core.blocks.CharBlock(max_length=255)), ('is_active', wagtail.core.blocks.BooleanBlock(required=False)), ('image', wagtail.images.blocks.ImageChooserBlock(required=False))]))], blank=True, null=True)),
+                ('social_media_link', wagtail.fields.StreamField([('social_media_link', wagtail.blocks.StructBlock([('title', wagtail.blocks.CharBlock(max_length=255)), ('link', wagtail.blocks.URLBlock()), ('image', wagtail.images.blocks.ImageChooserBlock())]))], blank=True, null=True)),
+                ('social_media_content_sharing_button', wagtail.fields.StreamField([('social_media_content_sharing_button', wagtail.blocks.StructBlock([('platform', wagtail.blocks.CharBlock(max_length=255)), ('is_active', wagtail.blocks.BooleanBlock(required=False)), ('image', wagtail.images.blocks.ImageChooserBlock(required=False))]))], blank=True, null=True)),
                 ('media_file_size_threshold', models.IntegerField(default=9437184, help_text='Show warning if uploaded media file size is greater than this in bytes. Default is 9 MB')),
                 ('allow_anonymous_comment', models.BooleanField(default=False)),
                 ('logo', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.image')),

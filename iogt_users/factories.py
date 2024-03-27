@@ -3,7 +3,7 @@ import factory
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import Group
 from factory.django import DjangoModelFactory
-from wagtail.core.models import GroupPagePermission
+from wagtail.models import GroupPagePermission
 
 
 class UserFactory(DjangoModelFactory):

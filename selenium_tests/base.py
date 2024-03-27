@@ -4,7 +4,7 @@ from django.core.management import call_command
 from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from wagtail.core.models import Page, Site
+from wagtail.models import Page, Site
 from wagtail_factories import SiteFactory
 
 from home.factories import HomePageFactory

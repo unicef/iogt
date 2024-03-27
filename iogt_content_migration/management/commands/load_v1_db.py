@@ -7,7 +7,7 @@ from django.conf import settings
 from django.core.files import File
 from django.core.management.base import BaseCommand
 from django.urls import reverse
-from wagtail.core.models import Page, Site, Locale, Collection, PageRevision
+from wagtail.models import Page, Site, Locale, Collection, PageRevision
 from django.core.files.images import ImageFile
 from wagtail.documents.models import Document
 from wagtail.images.models import Image

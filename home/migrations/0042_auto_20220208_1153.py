@@ -2,8 +2,8 @@
 
 from django.db import migrations
 import home.blocks
-import wagtail.core.blocks
-import wagtail.core.fields
+import wagtail.blocks
+import wagtail.fields
 
 
 class Migration(migrations.Migration):
@@ -16,6 +16,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='homepage',
             name='home_featured_content',
-            field=wagtail.core.fields.StreamField([('page_button', wagtail.core.blocks.StructBlock([('page', wagtail.core.blocks.PageChooserBlock()), ('text', wagtail.core.blocks.CharBlock(max_length=255, required=False))])), ('embedded_poll', wagtail.core.blocks.StructBlock([('direct_display', wagtail.core.blocks.BooleanBlock(required=False)), ('poll', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Poll']))])), ('embedded_survey', wagtail.core.blocks.StructBlock([('direct_display', wagtail.core.blocks.BooleanBlock(required=False)), ('survey', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Survey']))])), ('embedded_quiz', wagtail.core.blocks.StructBlock([('direct_display', wagtail.core.blocks.BooleanBlock(required=False)), ('quiz', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Quiz']))])), ('article', wagtail.core.blocks.StructBlock([('display_section_title', wagtail.core.blocks.BooleanBlock(required=False)), ('article', wagtail.core.blocks.PageChooserBlock(page_type=['home.Article']))]))], blank=True, null=True),
+            field=wagtail.fields.StreamField([('page_button', wagtail.blocks.StructBlock([('page', wagtail.blocks.PageChooserBlock()), ('text', wagtail.blocks.CharBlock(max_length=255, required=False))])), ('embedded_poll', wagtail.blocks.StructBlock([('direct_display', wagtail.blocks.BooleanBlock(required=False)), ('poll', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Poll']))])), ('embedded_survey', wagtail.blocks.StructBlock([('direct_display', wagtail.blocks.BooleanBlock(required=False)), ('survey', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Survey']))])), ('embedded_quiz', wagtail.blocks.StructBlock([('direct_display', wagtail.blocks.BooleanBlock(required=False)), ('quiz', home.blocks.EmbeddedQuestionnaireChooserBlock(page_type=['questionnaires.Quiz']))])), ('article', wagtail.blocks.StructBlock([('display_section_title', wagtail.blocks.BooleanBlock(required=False)), ('article', wagtail.blocks.PageChooserBlock(page_type=['home.Article']))]))], blank=True, null=True),
         ),
     ]

@@ -17,7 +17,7 @@ from wagtail.contrib.forms.views import (
     FormPagesListView as WagtailFormPagesListView,
     SafePaginateListView,
 )
-from wagtail.core.models import Page
+from wagtail.models import Page
 from xlsxwriter.workbook import Workbook
 
 from questionnaires.forms import GenerateDashboardForm

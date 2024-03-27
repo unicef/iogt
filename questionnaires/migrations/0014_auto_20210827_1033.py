@@ -2,7 +2,7 @@
 
 from django.db import migrations
 import questionnaires.blocks
-import wagtail.core.blocks
+import wagtail.blocks
 
 
 class Migration(migrations.Migration):
@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='surveyformfield',
             name='skip_logic',
-            field=questionnaires.blocks.SkipLogicField([('skip_logic', wagtail.core.blocks.StructBlock([('choice', wagtail.core.blocks.CharBlock(required=False)), ('skip_logic', wagtail.core.blocks.ChoiceBlock(choices=[('next', 'Next default question'), ('end', 'End of survey'), ('question', 'Another question')], required=False)), ('question', questionnaires.blocks.QuestionSelectBlock(help_text='Please save the survey as a draft to populate or update the list of questions.', required=False))]))], blank=True, help_text='<strong>Checkbox must include only 2 Answer Options. true and false in that order.</strong>', null=True, verbose_name='Answer options'),
+            field=questionnaires.blocks.SkipLogicField([('skip_logic', wagtail.blocks.StructBlock([('choice', wagtail.blocks.CharBlock(required=False)), ('skip_logic', wagtail.blocks.ChoiceBlock(choices=[('next', 'Next default question'), ('end', 'End of survey'), ('question', 'Another question')], required=False)), ('question', questionnaires.blocks.QuestionSelectBlock(help_text='Please save the survey as a draft to populate or update the list of questions.', required=False))]))], blank=True, help_text='<strong>Checkbox must include only 2 Answer Options. true and false in that order.</strong>', null=True, verbose_name='Answer options'),
         ),
     ]

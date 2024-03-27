@@ -2,9 +2,9 @@ from django.core.exceptions import ValidationError
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
-from wagtail.core import blocks
-from wagtail.core.fields import StreamField
-from wagtail.core.telepath import register
+from wagtail import blocks
+from wagtail.fields import StreamField
+from wagtail.telepath import register
 
 from questionnaires.adapters import SkipLogicStreamBlockAdapter, SkipLogicBlockAdapter
 from questionnaires.widgets import SelectAndHiddenWidget
