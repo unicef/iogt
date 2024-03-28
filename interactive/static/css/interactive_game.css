@@ -1,7 +1,11 @@
-.interactive-game button {
+.interactive-game {
+    padding-top: 12px
+}
+
+.interactive-game button, input {
     margin-bottom: 4px
 }
-.interactive-game button:hover {
+.interactive-game button:hover, input:hover {
     color: white
 }
 .interactive-game .interactive-img {
