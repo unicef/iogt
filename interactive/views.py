@@ -19,8 +19,13 @@ class InteractiveView(TemplateView):
         if not user:
             return redirect('/')
         
-        referer_lang = request.META.get('HTTP_REFERER').split('/')[3]
         current_lang = self.request.build_absolute_uri().split('/')[3]
+        
+        if request.META.get('HTTP_REFERER'):
+            referer_lang = request.META.get('HTTP_REFERER').split('/')[3]
+        else:
+            referer_lang = current_lang
+        
         
         if(referer_lang != current_lang):
             core_page_id = Page.objects.filter(slug=slug).first().id
@@ -33,8 +38,10 @@ class InteractiveView(TemplateView):
             
             RapidProApiService().send_message(data=data, slug=slug)
         
-        context['db_data'] = self.get_message_from_db(user=user)
         context['slug'] = slug
+        context['db_data'] = self.get_message_from_db(user=user)
+        if not context['db_data']:
+            return redirect('/')
         
         
         return render(request, self.template_name, context)
