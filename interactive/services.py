@@ -17,10 +17,13 @@ class RapidProApiService(object):
         user = request.user
 
         # If the user is authenticated and has no 'interactive_uuid' set, update it
-        if user.is_authenticated and not user.interactive_uuid:
-            user_model = get_user_model()
-            user.interactive_uuid = user_uuid
-            user_model.objects.filter(pk=user.pk).update(interactive_uuid=user_uuid)
+        if user.is_authenticated:
+            if user.interactive_uuid:
+                user_uuid = user.interactive_uuid
+            else:
+                user_model = get_user_model()
+                user.interactive_uuid = user_uuid
+                user_model.objects.filter(pk=user.pk).update(interactive_uuid=user_uuid)
 
         return user_uuid
     
