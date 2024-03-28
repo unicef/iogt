@@ -5,6 +5,7 @@ from wagtail.admin.edit_handlers import FieldPanel
 from home.mixins import PageUtilsMixin, TitleIconMixin
 from django.utils.translation import get_language
 
+
 class InteractiveChannel(models.Model):
     display_name = models.CharField(
         max_length=80,
@@ -42,18 +43,14 @@ class InteractivePage(Page, PageUtilsMixin, TitleIconMixin):
     subpage_types = []
     template = 'interactive/interactive_home.html'
 
-    button_text = models.CharField(max_length=255, null=True, blank=True)
+    button_text = models.CharField(max_length=255)
     trigger_string = models.CharField(
         max_length=255,
-        null=True,
-        blank=True,
         help_text=_("Language short code will postfix after trigger string e.g string_en")
         )
     channel = models.ForeignKey(
         InteractiveChannel,
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True,
+        on_delete=models.PROTECT
     )
 
     content_panels = Page.content_panels + [
