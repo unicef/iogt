@@ -1,11 +1,15 @@
 from time import sleep
+import time
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView
 from wagtail.core.models import Page
 from interactive.forms import MessageSendForm
 from interactive.models import InteractivePage, Message
-from interactive.services import RapidProApiService
+from interactive.services import RapidProApiService, ShortCodeService
 import re
+
+from interactive.shortcode import Shortcode
 
 class InteractiveView(TemplateView):
     template_name = 'interactive/interactive_game.html'
@@ -15,6 +19,8 @@ class InteractiveView(TemplateView):
         slug = self.kwargs['slug']
         
         user = RapidProApiService().get_user_identifier(request)
+        
+        # return HttpResponse("hello")
         
         if not user:
             return redirect('/')
@@ -40,6 +46,9 @@ class InteractiveView(TemplateView):
         
         context['slug'] = slug
         context['db_data'] = self.get_message_from_db(user=user)
+        
+        
+        # breakpoint()
         if not context['db_data']:
             return redirect('/')
         
@@ -49,32 +58,34 @@ class InteractiveView(TemplateView):
     def get_message_from_db(self, user):
         # wait a second to receive new message from rapidpro
         sleep(1)
+        
+        start_time = time.time()
 
-        # Retrieve the latest chat for the user
-        chat = Message.objects.filter(to=user).order_by('-created_at').first()
+        while True:
+            # Calculate the elapsed time
+            elapsed_time = time.time() - start_time
 
-        if not chat:
-            return None
-
-        text = chat.text.strip()
-
-        # Check if the message has a next message indicator, then sleep for 3 seconds
-        if text.endswith('[CONTINUE]'):
-            sleep(3)
+            # Break the loop if 5 seconds have elapsed
+            if elapsed_time >= 5:
+                break
+            
             chat = Message.objects.filter(to=user).order_by('-created_at').first()
             text = chat.text.strip()
 
-        # Extract content between [MESSAGE] and [/MESSAGE]
-        message_match = re.search(r'\[MESSAGE](.*?)\[\/MESSAGE]', text)
-        message_content = message_match.group(1) if message_match else ''
-
-        # Extract content between [POINT] and [/POINT]
-        point_match = re.search(r'\[POINT](.*?)\[\/POINT]', text)
-        point_content = point_match.group(1) if point_match else ''
+            # Check if the message has a next message indicator
+            if text.endswith('[CONTINUE]'):
+                sleep(1)
+            else:
+                break  # Exit the loop if the message does not end with '[CONTINUE]'
+            
+        if not chat:
+            return None
+        
+        shortcode_service = ShortCodeService()
+        text = shortcode_service.apply_shortcode(text)
 
         return {
             'message': text,
-            'point': point_content,
             'buttons': chat.quick_replies
         }
     
