@@ -1,15 +1,11 @@
 from time import sleep
 import time
-from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView
 from wagtail.core.models import Page
 from interactive.forms import MessageSendForm
 from interactive.models import InteractivePage, Message
 from interactive.services import RapidProApiService, ShortCodeService
-import re
-
-from interactive.shortcode import Shortcode
 
 class InteractiveView(TemplateView):
     template_name = 'interactive/interactive_game.html'
@@ -20,38 +16,16 @@ class InteractiveView(TemplateView):
         
         user = RapidProApiService().get_user_identifier(request)
         
-        # return HttpResponse("hello")
-        
         if not user:
             return redirect('/')
         
-        current_lang = self.request.build_absolute_uri().split('/')[3]
-        
-        if request.META.get('HTTP_REFERER'):
-            referer_lang = request.META.get('HTTP_REFERER').split('/')[3]
-        else:
-            referer_lang = current_lang
-        
-        
-        if(referer_lang != current_lang):
-            core_page_id = Page.objects.filter(slug=slug).first().id
-            interactive_page = InteractivePage.objects.filter(page_ptr_id=core_page_id).first()
-
-            data = {
-                'from': user,
-                'text': interactive_page.trigger_string + '_' + current_lang
-            }
-            
-            RapidProApiService().send_message(data=data, slug=slug)
+        self.send_message_on_language_switch(request, user, slug)
         
         context['slug'] = slug
         context['db_data'] = self.get_message_from_db(user=user)
         
-        
-        # breakpoint()
         if not context['db_data']:
             return redirect('/')
-        
         
         return render(request, self.template_name, context)
 
@@ -70,6 +44,9 @@ class InteractiveView(TemplateView):
                 break
             
             chat = Message.objects.filter(to=user).order_by('-created_at').first()
+            if not chat:
+                return None
+            
             text = chat.text.strip()
 
             # Check if the message has a next message indicator
@@ -77,9 +54,7 @@ class InteractiveView(TemplateView):
                 sleep(1)
             else:
                 break  # Exit the loop if the message does not end with '[CONTINUE]'
-            
-        if not chat:
-            return None
+        
         
         shortcode_service = ShortCodeService()
         text = shortcode_service.apply_shortcode(text)
@@ -88,6 +63,26 @@ class InteractiveView(TemplateView):
             'message': text,
             'buttons': chat.quick_replies
         }
+        
+    def send_message_on_language_switch(self, request, user, slug):
+        current_lang = self.request.build_absolute_uri().split('/')[3]
+        
+        if request.META.get('HTTP_REFERER'):
+            referer_lang = request.META.get('HTTP_REFERER').split('/')[3]
+        else:
+            referer_lang = current_lang
+        
+        
+        if(referer_lang != current_lang):
+            core_page_id = Page.objects.filter(slug=slug).first().id
+            interactive_page = InteractivePage.objects.filter(page_ptr_id=core_page_id).first()
+
+            data = {
+                'from': user,
+                'text': interactive_page.trigger_string + '_' + current_lang
+            }
+            
+            RapidProApiService().send_message(data=data, slug=slug)
     
     def post(self, request, slug):
         form = MessageSendForm(request.POST)
