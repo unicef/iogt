@@ -13,8 +13,8 @@ from wagtail.admin import widgets as wagtailadmin_widgets
 from wagtail.admin.menu import MenuItem, SubmenuMenuItem
 from wagtail.contrib.modeladmin.menus import SubMenu
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
-from wagtail.core import hooks
-from wagtail.core.models import Page, PageViewRestriction
+from wagtail import hooks
+from wagtail.models import Page, PageViewRestriction
 
 from home.models import (BannerIndexPage, FooterIndexPage, LocaleDetail,
                          Section, SectionIndexPage)

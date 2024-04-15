@@ -7,8 +7,8 @@ import home.blocks
 import home.mixins
 import modelcluster.fields
 import questionnaires.blocks
-import wagtail.core.blocks
-import wagtail.core.fields
+import wagtail.blocks
+import wagtail.fields
 import wagtail.images.blocks
 
 
@@ -26,8 +26,8 @@ class Migration(migrations.Migration):
             name='Poll',
             fields=[
                 ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
-                ('description', wagtail.core.fields.StreamField([('paragraph', wagtail.core.blocks.RichTextBlock()), ('image', wagtail.images.blocks.ImageChooserBlock())], blank=True, null=True)),
-                ('thank_you_text', wagtail.core.fields.StreamField([('paragraph', wagtail.core.blocks.RichTextBlock()), ('media', home.blocks.MediaBlock(icon='media')), ('image', wagtail.images.blocks.ImageChooserBlock())], blank=True, null=True)),
+                ('description', wagtail.fields.StreamField([('paragraph', wagtail.blocks.RichTextBlock()), ('image', wagtail.images.blocks.ImageChooserBlock())], blank=True, null=True)),
+                ('thank_you_text', wagtail.fields.StreamField([('paragraph', wagtail.blocks.RichTextBlock()), ('media', home.blocks.MediaBlock(icon='media')), ('image', wagtail.images.blocks.ImageChooserBlock())], blank=True, null=True)),
                 ('allow_anonymous_submissions', models.BooleanField(default=True, help_text='Check this to allow users who are NOT logged in to complete surveys.')),
                 ('allow_multiple_submissions', models.BooleanField(default=True, help_text='Check this to allow multiple form submissions for users')),
                 ('submit_button_text', models.CharField(default='Submit', help_text='Submit button text', max_length=40, null=True)),
@@ -45,8 +45,8 @@ class Migration(migrations.Migration):
             name='Quiz',
             fields=[
                 ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
-                ('description', wagtail.core.fields.StreamField([('paragraph', wagtail.core.blocks.RichTextBlock()), ('image', wagtail.images.blocks.ImageChooserBlock())], blank=True, null=True)),
-                ('thank_you_text', wagtail.core.fields.StreamField([('paragraph', wagtail.core.blocks.RichTextBlock()), ('media', home.blocks.MediaBlock(icon='media')), ('image', wagtail.images.blocks.ImageChooserBlock())], blank=True, null=True)),
+                ('description', wagtail.fields.StreamField([('paragraph', wagtail.blocks.RichTextBlock()), ('image', wagtail.images.blocks.ImageChooserBlock())], blank=True, null=True)),
+                ('thank_you_text', wagtail.fields.StreamField([('paragraph', wagtail.blocks.RichTextBlock()), ('media', home.blocks.MediaBlock(icon='media')), ('image', wagtail.images.blocks.ImageChooserBlock())], blank=True, null=True)),
                 ('allow_anonymous_submissions', models.BooleanField(default=True, help_text='Check this to allow users who are NOT logged in to complete surveys.')),
                 ('allow_multiple_submissions', models.BooleanField(default=True, help_text='Check this to allow multiple form submissions for users')),
                 ('submit_button_text', models.CharField(default='Submit', help_text='Submit button text', max_length=40, null=True)),
@@ -63,8 +63,8 @@ class Migration(migrations.Migration):
             name='Survey',
             fields=[
                 ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
-                ('description', wagtail.core.fields.StreamField([('paragraph', wagtail.core.blocks.RichTextBlock()), ('image', wagtail.images.blocks.ImageChooserBlock())], blank=True, null=True)),
-                ('thank_you_text', wagtail.core.fields.StreamField([('paragraph', wagtail.core.blocks.RichTextBlock()), ('media', home.blocks.MediaBlock(icon='media')), ('image', wagtail.images.blocks.ImageChooserBlock())], blank=True, null=True)),
+                ('description', wagtail.fields.StreamField([('paragraph', wagtail.blocks.RichTextBlock()), ('image', wagtail.images.blocks.ImageChooserBlock())], blank=True, null=True)),
+                ('thank_you_text', wagtail.fields.StreamField([('paragraph', wagtail.blocks.RichTextBlock()), ('media', home.blocks.MediaBlock(icon='media')), ('image', wagtail.images.blocks.ImageChooserBlock())], blank=True, null=True)),
                 ('allow_anonymous_submissions', models.BooleanField(default=True, help_text='Check this to allow users who are NOT logged in to complete surveys.')),
                 ('allow_multiple_submissions', models.BooleanField(default=True, help_text='Check this to allow multiple form submissions for users')),
                 ('submit_button_text', models.CharField(default='Submit', help_text='Submit button text', max_length=40, null=True)),
@@ -105,7 +105,7 @@ class Migration(migrations.Migration):
                 ('help_text', models.CharField(blank=True, max_length=255, verbose_name='help text')),
                 ('required', models.BooleanField(default=False, verbose_name='required')),
                 ('admin_label', models.CharField(help_text='Column header used during CSV export of survey responses.', max_length=256, verbose_name='admin_label')),
-                ('skip_logic', questionnaires.blocks.SkipLogicField([('skip_logic', wagtail.core.blocks.StructBlock([('choice', wagtail.core.blocks.CharBlock(required=False)), ('skip_logic', wagtail.core.blocks.ChoiceBlock(choices=[('next', 'Next default question'), ('end', 'End of survey'), ('question', 'Another question')], required=False)), ('question', wagtail.core.blocks.IntegerBlock(required=False))]))], blank=True, verbose_name='Answer options')),
+                ('skip_logic', questionnaires.blocks.SkipLogicField([('skip_logic', wagtail.blocks.StructBlock([('choice', wagtail.blocks.CharBlock(required=False)), ('skip_logic', wagtail.blocks.ChoiceBlock(choices=[('next', 'Next default question'), ('end', 'End of survey'), ('question', 'Another question')], required=False)), ('question', wagtail.blocks.IntegerBlock(required=False))]))], blank=True, verbose_name='Answer options')),
                 ('page_break', models.BooleanField(default=False, help_text='Inserts a page break which puts the next question onto a new page')),
                 ('page', modelcluster.fields.ParentalKey(on_delete=django.db.models.deletion.CASCADE, related_name='survey_form_fields', to='questionnaires.survey')),
             ],
@@ -127,7 +127,7 @@ class Migration(migrations.Migration):
                 ('help_text', models.CharField(blank=True, max_length=255, verbose_name='help text')),
                 ('required', models.BooleanField(default=True, verbose_name='required')),
                 ('admin_label', models.CharField(help_text='Column header used during CSV export of survey responses.', max_length=256, verbose_name='admin_label')),
-                ('skip_logic', questionnaires.blocks.SkipLogicField([('skip_logic', wagtail.core.blocks.StructBlock([('choice', wagtail.core.blocks.CharBlock(required=False)), ('skip_logic', wagtail.core.blocks.ChoiceBlock(choices=[('next', 'Next default question'), ('end', 'End of survey'), ('question', 'Another question')], required=False)), ('question', wagtail.core.blocks.IntegerBlock(required=False))]))], blank=True, verbose_name='Answer options')),
+                ('skip_logic', questionnaires.blocks.SkipLogicField([('skip_logic', wagtail.blocks.StructBlock([('choice', wagtail.blocks.CharBlock(required=False)), ('skip_logic', wagtail.blocks.ChoiceBlock(choices=[('next', 'Next default question'), ('end', 'End of survey'), ('question', 'Another question')], required=False)), ('question', wagtail.blocks.IntegerBlock(required=False))]))], blank=True, verbose_name='Answer options')),
                 ('page_break', models.BooleanField(default=False, help_text='Inserts a page break which puts the next question onto a new page')),
                 ('correct_answer', models.CharField(help_text='Please provide correct answer for this question', max_length=256, verbose_name='correct_answer')),
                 ('feedback', models.CharField(blank=True, help_text='Feedback message for user answer.', max_length=255, null=True, verbose_name='Feedback')),

@@ -3,7 +3,7 @@ import json
 
 from selenium_tests.base import BaseSeleniumTests
 from selenium.webdriver.support.ui import Select
-from wagtail.core.models import Site
+from wagtail.models import Site
 from iogt_users.factories import AdminUserFactory
 from home.factories import SectionFactory
 from questionnaires.factories import SurveyFactory, SurveyFormFieldFactory

@@ -5,15 +5,15 @@
 <div class="nice-padding">
     {% include 'wagtailadmin/chooser/_link_types.html' with current='external' %}
 
+    <div>
+        <p style="color: red">If you are linking back to a URL on your own IoGT site, be sure to remove the domain and everything before it. For example, "http://sd.goodinternet.org/url/" should instead be "/url/".</p>
+    </div>
+
     <form action="{% url 'wagtailadmin_choose_page_external_link' %}{% querystring %}" method="post" novalidate>
         {% csrf_token %}
         <ul class="fields">
             {% for field in form %}
-                {% if forloop.counter0 == 1 %}
-                    {% render_external_link_with_help_text field %}
-                {% else %}
-                    {% include "wagtailadmin/shared/field_as_li.html" %}
-                {% endif %}
+                {% include "wagtailadmin/shared/field_as_li.html" %}
             {% endfor %}
             <li><input type="submit" value="{% trans 'Insert link' %}" class="button"/></li>
         </ul>
