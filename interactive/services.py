@@ -70,6 +70,7 @@ class ShortCodeService:
         shortcode_service.add_shortcode('insert_html', self.html_callback)
         shortcode_service.add_shortcode('insert_bg_color', self.header_callback)
         shortcode_service.add_shortcode('CONTINUE', lambda attrs, content=None: '')
+        shortcode_service.add_shortcode('insert_trick_button', self.trick_button_callback)
         
         
         return shortcode_service.do_shortcode(content)
@@ -115,3 +116,20 @@ class ShortCodeService:
             button_group += button.format(y, x.capitalize())
         
         return f'<section class="interactive_navigation">{button_group}</section>'
+    
+    def trick_button_callback(self, attrs, content=None):
+        image = attrs.get("img", "")
+        hint = attrs.get("hint", "")
+        
+        button = f'''<button class="sub-section denial-btn" type="submit" name="text" value="{content}">
+                <div class="section-header">
+                    <img height="64" src="{image}">
+                    <p class="section-title">{content}</p></div><div class="img-holder">
+                </div>
+            </button>'''
+        
+        if hint:
+            hint = f'<p class="trick_hint"><b>Hint:</b> {hint}</p>'
+        
+        
+        return button + hint

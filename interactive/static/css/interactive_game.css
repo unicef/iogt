@@ -23,11 +23,12 @@
 }
 .interactive-game .denial-btn {
     color:#444;
-    background: transparent;
+    background: #f0f0f0;
     border: none;
     outline: none;
-    border-radius: 0;
-    border-bottom: 1px solid #EFEFEF;
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin: 15px 0;
 }
 .interactive-game .denial-btn:hover {
     background: white;
@@ -124,3 +125,9 @@
     width:20%;
     margin: 20px 0 20px 40%;
 }
+
+.interactive-game .trick_hint {
+    text-align: left;
+    margin: 0 0 0 10px;
+}
+
