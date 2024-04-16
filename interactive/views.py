@@ -2,7 +2,7 @@ from time import sleep
 import time
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView
-from wagtail.core.models import Page
+from wagtail.models import Page
 from interactive.forms import MessageSendForm
 from interactive.models import InteractivePage, Message
 from interactive.services import RapidProApiService, ShortCodeService

@@ -1,7 +1,7 @@
 import uuid
 from django.contrib.auth import get_user_model
 import requests
-from wagtail.core.models import Page
+from wagtail.models import Page
 
 from interactive.models import InteractivePage
 from interactive.shortcode import Shortcode

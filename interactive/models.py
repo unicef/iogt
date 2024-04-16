@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from wagtail.core.models import Page
-from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.models import Page
+from wagtail.admin.panels import FieldPanel
 from home.mixins import PageUtilsMixin, TitleIconMixin
 from django.utils.translation import get_language
 
