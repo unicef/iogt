@@ -122,17 +122,20 @@ class UserSubmissionSerializer(serializers.ModelSerializer):
     page_url = serializers.CharField(source='page.full_url')
 
     def get_submission(self, instance):
-        form_data = json.loads(instance.form_data)
-        form_data_ = []
-        for clean_name, answer in form_data.items():
-            question = instance.page.specific.get_form_fields().filter(clean_name=clean_name).first()
-            if question:
-                form_data_.append({
-                    "admin_label": question.admin_label,
-                    "clean_name": clean_name,
-                    "user_answer": answer,
-                })
-        return form_data_
+        return [
+            {
+                "admin_label": question.admin_label,
+                "clean_name": clean_name,
+                "user_answer": answer,
+            }
+            for clean_name, answer in instance.form_data.items()
+            if (
+                    question := instance.page.specific
+                    .get_form_fields()
+                    .filter(clean_name=clean_name)
+                    .first()
+            )
+        ]
 
     class Meta:
         model = UserSubmission

@@ -428,32 +428,32 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         poll_question = PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3', default_value='c2')
 
         user_01 = UserFactory()
-        form_data_01 = json.dumps({
+        form_data_01 = {
             poll_question.clean_name: [
                 'c1',
             ],
-        })
+        }
         user_submission_01 = UserSubmissionFactory(page=poll, user=user_01, form_data=form_data_01)
         user_submission_01.submit_time = current_datetime
         user_submission_01.save()
 
         user_02 = UserFactory()
-        form_data_02 = json.dumps({
+        form_data_02 = {
             poll_question.clean_name: [
                 'c2',
                 'c3',
             ],
-        })
+        }
         user_submission_02 = UserSubmissionFactory(page=poll, user=user_02, form_data=form_data_02)
         user_submission_02.submit_time = current_datetime - timedelta(days=1)
         user_submission_02.save()
 
         user_03 = UserFactory()
-        form_data_03 = json.dumps({
+        form_data_03 = {
             poll_question.clean_name: [
                 'c3',
             ],
-        })
+        }
         user_submission_03 = UserSubmissionFactory(page=poll, user=user_03, form_data=form_data_03)
         user_submission_03.submit_time = current_datetime - timedelta(days=2)
         user_submission_03.save()
@@ -494,32 +494,32 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         poll_question = PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3', default_value='c2')
 
         user_01 = UserFactory()
-        form_data_01 = json.dumps({
+        form_data_01 = {
             poll_question.clean_name: [
                 'c1',
             ],
-        })
+        }
         user_submission_01 = UserSubmissionFactory(page=poll, user=user_01, form_data=form_data_01)
         user_submission_01.submit_time = current_datetime
         user_submission_01.save()
 
         user_02 = UserFactory()
-        form_data_02 = json.dumps({
+        form_data_02 = {
             poll_question.clean_name: [
                 'c2',
                 'c3',
             ],
-        })
+        }
         user_submission_02 = UserSubmissionFactory(page=poll, user=user_02, form_data=form_data_02)
         user_submission_02.submit_time = current_datetime - timedelta(days=1)
         user_submission_02.save()
 
         user_03 = UserFactory()
-        form_data_03 = json.dumps({
+        form_data_03 = {
             poll_question.clean_name: [
                 'c3',
             ],
-        })
+        }
         user_submission_03 = UserSubmissionFactory(page=poll, user=user_03, form_data=form_data_03)
         user_submission_03.submit_time = current_datetime - timedelta(days=2)
         user_submission_03.save()
@@ -576,32 +576,32 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
             page=poll, field_type='checkboxes', choices='c1|c2|c3', default_value='c2', admin_label='Q1')
 
         user_01 = UserFactory()
-        form_data_01 = json.dumps({
+        form_data_01 = {
             poll_question.clean_name: [
                 'c1',
             ],
-        })
+        }
         user_submission_01 = UserSubmissionFactory(page=poll, user=user_01, form_data=form_data_01)
         user_submission_01.submit_time = current_datetime
         user_submission_01.save()
 
         user_02 = UserFactory()
-        form_data_02 = json.dumps({
+        form_data_02 = {
             poll_question.clean_name: [
                 'c2',
                 'c3',
             ],
-        })
+        }
         user_submission_02 = UserSubmissionFactory(page=poll, user=user_02, form_data=form_data_02)
         user_submission_02.submit_time = current_datetime - timedelta(days=1)
         user_submission_02.save()
 
         user_03 = UserFactory()
-        form_data_03 = json.dumps({
+        form_data_03 = {
             poll_question.clean_name: [
                 'c3',
             ],
-        })
+        }
         user_submission_03 = UserSubmissionFactory(page=poll, user=user_03, form_data=form_data_03)
         user_submission_03.submit_time = current_datetime - timedelta(days=2)
         user_submission_03.save()
@@ -648,32 +648,32 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         poll_question = PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3', default_value='c2')
 
         user_01 = UserFactory()
-        form_data_01 = json.dumps({
+        form_data_01 = {
             poll_question.clean_name: [
                 'c1',
             ],
-        })
+        }
         user_submission_01 = UserSubmissionFactory(page=poll, user=user_01, form_data=form_data_01)
         user_submission_01.submit_time = current_datetime
         user_submission_01.save()
 
         user_02 = UserFactory()
-        form_data_02 = json.dumps({
+        form_data_02 = {
             poll_question.clean_name: [
                 'c2',
                 'c3',
             ],
-        })
+        }
         user_submission_02 = UserSubmissionFactory(page=poll, user=user_02, form_data=form_data_02)
         user_submission_02.submit_time = current_datetime - timedelta(days=1)
         user_submission_02.save()
 
         user_03 = UserFactory()
-        form_data_03 = json.dumps({
+        form_data_03 = {
             poll_question.clean_name: [
                 'c3',
             ],
-        })
+        }
         user_submission_03 = UserSubmissionFactory(page=poll, user=user_03, form_data=form_data_03)
         user_submission_03.submit_time = current_datetime - timedelta(days=2)
         user_submission_03.save()
@@ -730,11 +730,11 @@ class QuestionnaireSubmissionsAPIViewTests(TestCase):
         poll_question = PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3', default_value='c2')
 
         user_01 = UserFactory()
-        form_data_01 = json.dumps({
+        form_data_01 = {
             poll_question.clean_name: [
                 'c1',
             ],
-        })
+        }
         user_submission_01 = UserSubmissionFactory(page=poll, user=user_01, form_data=form_data_01)
         user_submission_01.submit_time = current_datetime
         user_submission_01.save()
@@ -808,39 +808,39 @@ class FormDataPerUserAdminTests(TestCase):
             page=self.quiz, field_type='checkboxes', choices='c1|c2|c3', default_value='c2', correct_answer='c3')
 
         self.user_01 = UserFactory(username='test')
-        form_data_01 = json.dumps({
+        form_data_01 = {
             self.poll_question.clean_name: [
                 'c1',
             ],
-        })
+        }
         self.user_submission_01 = UserSubmissionFactory(page=self.poll, user=self.user_01, form_data=form_data_01)
         self.user_submission_01.submit_time = self.current_datetime
         self.user_submission_01.save()
 
-        form_data_02 = json.dumps({
+        form_data_02 = {
             self.survey_question.clean_name: [
                 'c2',
             ],
-        })
+        }
         self.user_submission_02 = UserSubmissionFactory(page=self.survey, user=self.user_01, form_data=form_data_02)
         self.user_submission_02.submit_time = self.current_datetime - timedelta(days=1)
         self.user_submission_02.save()
 
-        form_data_03 = json.dumps({
+        form_data_03 = {
             self.quiz_question.clean_name: [
                 'c3',
             ],
-        })
+        }
         self.user_submission_03 = UserSubmissionFactory(page=self.quiz, user=self.user_01, form_data=form_data_03)
         self.user_submission_03.submit_time = self.current_datetime - timedelta(days=2)
         self.user_submission_03.save()
 
         self.user_02 = UserFactory()
-        form_data_04 = json.dumps({
+        form_data_04 = {
             self.quiz_question.clean_name: [
                 'c3',
             ],
-        })
+        }
         self.user_submission_04 = UserSubmissionFactory(page=self.quiz, user=self.user_02, form_data=form_data_04)
         self.user_submission_04.submit_time = self.current_datetime - timedelta(days=2)
         self.user_submission_04.save()
@@ -998,11 +998,11 @@ class FormDataPerUserAdminTests(TestCase):
         quiz_question = QuizFormFieldFactory(
             page=quiz, field_type='checkboxes', choices='c1|c2|c3', default_value='c2', correct_answer='c3')
 
-        form_data_04 = json.dumps({
+        form_data_04 = {
             quiz_question.clean_name: [
                 'c3',
             ],
-        })
+        }
         UserSubmissionFactory(page=quiz, user=self.user_01, form_data=form_data_04)
 
         response = self.client.get(f'{self.url}?user_id={self.user_01.id}')
@@ -1018,11 +1018,11 @@ class FormDataPerUserAdminTests(TestCase):
         survey_question = SurveyFormFieldFactory(
             page=self.survey, label='Question 02', admin_label='Q 02', field_type='checkboxes',
             skip_logic=self.skip_logic, default_value='c3')
-        form_data = json.dumps({
+        form_data = {
             survey_question.clean_name: [
                 'c3',
             ],
-        })
+        }
         user_submission = UserSubmissionFactory(page=self.survey, user=self.user_01, form_data=form_data)
         user_submission.submit_time = self.current_datetime
         user_submission.save()
