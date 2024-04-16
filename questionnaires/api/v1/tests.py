@@ -11,7 +11,7 @@ from django.utils import timezone
 from openpyxl import load_workbook
 from rest_framework import status
 from rest_framework.test import APIClient
-from wagtail.core.models import Site
+from wagtail.models import Site
 from wagtail_factories import SiteFactory, PageFactory
 
 from home.factories import HomePageFactory

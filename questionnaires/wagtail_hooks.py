@@ -2,8 +2,8 @@ from django.urls import path
 from django.utils.html import format_html_join
 from django.templatetags.static import static
 
-from wagtail.core import hooks
-from wagtail.core.models import Locale
+from wagtail import hooks
+from wagtail.models import Locale
 
 from questionnaires.views import FormPagesListView, FormDataPerUserView, generate_dashboard
 

@@ -1,6 +1,6 @@
 from .base import *
 
-BASE_URL = 'http://localhost:8000'
+WAGTAILADMIN_BASE_URL = 'http://localhost:8000'
 DEBUG = True
 DEBUG_TOOLBAR_ENABLE = False
 SECRET_KEY = '!#secret_key_for_development_only#!'

@@ -4,8 +4,8 @@ from django.utils.html import format_html, format_html_join
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
 
-from wagtail.core import blocks
-from wagtail.core.blocks import PageChooserBlock
+from wagtail import blocks
+from wagtail.blocks import PageChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtailmarkdown.utils import render_markdown
 from wagtailmedia.blocks import AbstractMediaChooserBlock

@@ -8,8 +8,8 @@ from django.utils.translation import gettext_lazy as _
 
 from wagtail.admin.forms import WagtailAdminPageForm
 from wagtail.contrib.forms.forms import FormBuilder
-from wagtail.core.blocks import StreamBlockValidationError
-from wagtail.core.blocks.struct_block import StructBlockValidationError
+from wagtail.blocks import StreamBlockValidationError
+from wagtail.blocks.struct_block import StructBlockValidationError
 
 from questionnaires.blocks import VALID_SKIP_SELECTORS, SkipState, VALID_SKIP_LOGIC
 

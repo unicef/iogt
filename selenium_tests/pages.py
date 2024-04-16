@@ -7,7 +7,7 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import WebDriverException
-from wagtail.core.models import Page
+from wagtail.models import Page
 
 
 def safe_click(driver, button):

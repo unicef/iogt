@@ -11,7 +11,7 @@ from django.utils.translation import get_language_from_path, check_for_language,
 from django.utils.translation.trans_real import get_languages, parse_accept_lang_header, language_code_re
 from translation_manager.models import TranslationEntry
 from wagtail.contrib.redirects.middleware import RedirectMiddleware
-from wagtail.core.models import Locale, Site
+from wagtail.models import Locale, Site
 
 from home.models import SiteSettings, V1PageURLToV2PageMap, ThemeSettings, SVGToPNGMap
 import iogt.iogt_globals as globals_

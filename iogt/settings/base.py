@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     'wagtail.images',
     'wagtail.search',
     'wagtail.admin',
-    'wagtail.core',
+    'wagtail',
     'wagtail.contrib.modeladmin',
     'wagtailcache',
     'wagtailmenus',
@@ -89,6 +89,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'webpush',
     'matomo',
+    'generic_chooser',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -252,7 +253,7 @@ WAGTAIL_USER_CUSTOM_FIELDS = ['display_name', 'first_name', 'last_name', 'email'
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-BASE_URL = os.getenv('BASE_URL', '')
+WAGTAILADMIN_BASE_URL = os.getenv('BASE_URL', '')
 
 # SITE ID
 SITE_ID = 1
@@ -572,5 +573,6 @@ IMAGE_SIZE_PRESET = int(os.getenv('IMAGE_SIZE_PRESET', '') or '360')
 
 # Default primary key field type introduced in Django 3.2 or later versions
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+WAGTAILREDIRECTS_AUTO_CREATE = os.getenv('WAGTAILREDIRECTS_AUTO_CREATE', 'enable') == 'enable'

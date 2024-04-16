@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.sites.models import Site as DjangoSite
 from django.core.management.base import BaseCommand
 from home.models import HomePage
-from wagtail.core.models import Site as WagtailSite
+from wagtail.models import Site as WagtailSite
 
 
 class Command(BaseCommand):
