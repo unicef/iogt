@@ -134,7 +134,7 @@ class FormDataPerUserView(SpreadsheetExportMixin, SafePaginateListView):
             'User': item.user.username,
             'URL': item.page.full_url,
         }
-        for clean_name, answer in json.loads(item.form_data).items():
+        for clean_name, answer in item.form_data.items():
             data.update({
                 form_fields_dict.get(item.page_id, {}).get(clean_name, clean_name): answer,
             })
