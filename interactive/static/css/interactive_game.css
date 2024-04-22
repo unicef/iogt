@@ -1,133 +1,438 @@
-.interactive-game {
-    padding-top: 12px
+/**
+ * description :- global style for interactive-game
+ * created_at:- 17/04/2024 11:20:35
+ */
+ @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+ .interactive-game * {
+     font-family: "Roboto", sans-serif;
+ }
+ .interactive-game *::after {
+     display: table;
+     clear: both;
+     content: "";
+ }
+ .interactive-game img {
+     max-width: 94%;
+     width: auto;
+     display: inline-block;
+     margin: auto;
+ }
+ 
+ /**
+  * description :- for home page
+  * created_at:- 17/04/2024 11:21:05
+  */
+ .interactive-game .container {
+     padding: 0;
+ }
+ 
+ .interactive-game {
+     background-color: #a0d7c9;
+     border-radius: 6px;
+     overflow: hidden;
+     position: relative;
+ }
+ 
+ .interactive-game .top-navbar {
+     display: block;
+     width: 100%;
+     background-color: #08b89d;
+     padding: 16px;
+     text-align: center;
+ }
+ 
+ .interactive-game .top-navbar div {
+     display: inline-block;
+     color: #fff;
+     font-size: 18px;
+     font-weight: 400;
+ }
+ 
+ .interactive-game .top-navbar > button {
+     display: inline-block;
+     width: 20px;
+     height: 20px;
+     border: 1px solid #fff;
+     padding: 0;
+     color: #fff;
+     font-size: 10px;
+     background-color: transparent;
+ }
+ 
+ @media (min-width: 320px) {
+     .interactive-game .top-navbar {
+         text-align: center;
+     }
+     .interactive-game .top-navbar div {
+         float: left;
+         display: block;
+     }
+     .interactive-game .top-navbar > button {
+         float: right;
+         display: block;
+     }
+ }
+ 
+ .interactive-game .interactive-vaccine-img {
+     display: block;
+     margin: auto;
+     margin-top: 20px;
+     width: 364px !important;
+     height: auto !important;
+ }
+ 
+ .interactive-game .interactive-vaccine-text {
+     font-size: 18px;
+     color: #000;
+     font-weight: 500;
+     max-width: 380px;
+     padding-left: 10px;
+     padding-right: 10px;
+     margin: auto;
+     margin-top: 45px;
+ }
+ 
+ .interactive-game .interactive-vaccine-img + .interactive-vaccine-text,
+ .interactive-game .interactive-vaccine-img ~ .interactive-vaccine-text {
+     margin-top: 15px !important;
+     font-weight: normal;
+     font-size: 14px;
+ }
+ 
+ .interactive-game .home_img {
+     max-width: 75% !important;
+     width: auto !important;
+     max-height: 348px !important;
+     height: auto !important;
+     margin: auto;
+     margin-top: 20px;
+     margin-bottom: 30px;
+ }
+ 
+ .interactive-game .interactive-btn {
+     padding: 14px;
+     text-transform: uppercase;
+     color: #000;
+     border-radius: 26px;
+     background-color: #fff;
+     border: 0;
+     filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25));
+     width: 94%;
+     margin: auto;
+     margin-bottom: 10px;
+     font-weight: normal;
+     padding: 12px;
+ }
+ .interactive-game .interactive-btn:last-child,
+ .interactive-game .interactive-btn:last-of-type {
+     margin-bottom: 30px !important;
+ }
+ 
+ .interactive-game .interactive_navigation {
+     background-color: #08b89d;
+ }
+ 
+ .interactive-game .interactive_navigation button {
+     display: inline-block !important;
+     width: auto;
+     padding: 10px 25px;
+     color: #fff;
+     border: 0;
+     border-radius: 0;
+     font-size: 12px;
+     background-color: transparent;
+     margin: 0 !important;
+     outline: 0;
+     font-weight: 600;
+     text-align: center;
+ }
+ @media (max-width: 576px) {
+     .interactive-game .interactive_navigation button {
+         padding: 10px;
+     }
+ }
+ 
+ .interactive-game .interactive_navigation button img,
+ .interactive-game .interactive_navigation button span {
+     display: block;
+ }
+ .interactive-game .interactive_navigation button img {
+     width: 18px;
+     max-height: 18px;
+     -webkit-filter: grayscale(100%) brightness(300%);
+     filter: grayscale(100%) brightness(300%);
+     margin: auto;
+ }
+ 
+ /**
+  * description :- hints page
+  * created_at:- 17/04/2024 14:44:59
+  */
+ 
+ .interactive-game .locked,
+ .interactive-game .denial-btn.locked {
+     -webkit-user-select: none;
+     user-select: none;
+     pointer-events: none;
+     cursor: no-drop;
+ }
+ 
+ .interactive-game .denial-btn {
+     border: 0;
+     height: 62px;
+     padding: 0;
+     padding-left: 10px;
+     border-radius: 6px;
+     background-color: #fff;
+     display: table;
+     width: 94%;
+     margin: auto;
+     color: #000;
+     margin-bottom: 10px;
+     font-weight: normal !important;
+     overflow: hidden;
+     vertical-align: middle;
+     display: flex !important;
+     align-items: center;
+ }
+ .interactive-game .denial-btn *,
+ .interactive-game .denial-btn .section-header * {
+     display: inline-block;
+     vertical-align: middle;
+     padding: 0;
+     margin: 0;
+ }
+ .interactive-game .denial-btn .section-header img {
+     margin-right: 10px;
+     width: 40px;
+     height: 40px;
+     object-fit: contain;
+     object-position: center;
+ }
+ 
+ .interactive-game .denial-btn .img-holder {
+     width: 30px;
+     height: 30px;
+     margin-left: auto;
+     margin-right: 10px;
+ }
+ 
+ @media (max-width: 400px) {
+     .interactive-game .denial-btn .img-holder {
+         margin-right: 10px;
+         width: 20px;
+     }
+     .interactive-game .denial-btn {
+         height: 45px;
+     }
+     .interactive-game .denial-btn .section-header img {
+         width: 30px;
+         height: 30px;
+     }
+ }
+ 
+ @media (max-width: 300px) {
+     .interactive-game .denial-btn {
+         min-height: 40px;
+         height: auto;
+     }
+     .interactive-game .denial-btn .img-holder {
+         width: 15px;
+     }
+     .interactive-game .denial-btn .section-header img {
+         width: 20px;
+         height: 20px;
+         margin-top: 6px;
+         margin-right: 5px;
+     }
+     .interactive-game .denial-btn .section-header .section-title {
+         margin-top: 6px;
+         width: 80px;
+         line-height: 1.1;
+     }
+ }
+ 
+ .interactive-game .denial-btn + .trick_hint {
+     font-size: 12px;
+     color: #fff;
+     font-weight: normal;
+     text-align: left;
+     width: 94%;
+     margin-bottom: 10px;
+     line-height: 1.4;
+     position: relative;
+     padding-left: 30px;
+ }
+ 
+ .interactive-game .denial-btn + .trick_hint b {
+     display: inline-block;
+     position: absolute;
+     left: 0;
+     top: 0;
+     width: 25px;
+ }
+ 
+ .interactive-game .interactive-title {
+     font-size: 18px;
+     font-weight: bold;
+     margin-left: 3% !important;
+     margin-bottom: 8px !important;
+     color: #000;
+ }
+ 
+ .interactive-game .interactive-title ~ .interactive-title,
+ .interactive-game .interactive-title:nth-of-type(2) {
+     margin-top: 30px !important;
+ }
+ 
+ /**
+  * description :- onboard , game-label-img
+  * created_at:- 17/04/2024 17:32:40
+  */
+ 
+ .interactive-game .game-label-img {
+     width: 400px;
+     height: 400px;
+     object-fit: contain;
+     object-position: center;
+     aspect-ratio: 1;
+ }
+ 
+ @media (max-width: 480px) {
+     .interactive-game .game-label-img {
+         max-width: 90%;
+         width: 100%;
+         height: auto;
+         aspect-ratio: 1;
+     }
+ }
+ 
+ .interactive-game .progress ~ p {
+     color: #000 !important;
+     font-size: 14px;
+     font-weight: 600;
+ }
+ 
+ .interactive-game .progress + p {
+     padding-top: 12px;
+ }
+ 
+ .interactive-game .progress + p + p,
+ .interactive-game .progress + p ~ p {
+     margin-bottom: 50px;
+ }
+ 
+ .interactive-game .text-input {
+     display: block;
+     width: 80%;
+     margin: auto;
+     margin-top: 30px;
+     margin-bottom: 30px;
+     height: 40px;
+     border-radius: 20px;
+     border: 1px solid #000;
+     background-color: transparent;
+     padding: 20px;
+     color: #000;
+ }
+ 
+ .interactive-game progress[value] {
+     /* Reset the default appearance */
+     -webkit-appearance: none;
+     appearance: none;
+     max-width: 350px;
+     width: 90%;
+     height: 16px;
+     margin-right: auto;
+     border-radius: 10px;
+     text-align: left;
+     margin: initial;
+ }
+ 
+ progress[value]::-webkit-progress-value {
+     background-color: #fff;
+     border-radius: 10px;
+ }
+ 
+ progress[value]::-moz-progress-value {
+     /* Styles for the progress bar in Firefox */
+     background-color: #fff;
+     border-radius: 10px;
+   }
+ 
+ progress[value]::-webkit-progress-bar {
+     background-color: #d8d8d8;
+     border-radius: 10px;
+ }
+ progress[value]::-moz-progress-bar {
+     background-color: #fff;
+     border-radius: 10px;
+ }
+ 
+
+
+center + button ,
+center ~ button:nth-child(1) ,
+center > .top-navbar + p + button {
+    margin-top: 40px !important;
 }
 
-.interactive-game button, input {
-    margin-bottom: 4px
-}
-.interactive-game button:hover, input:hover {
-    color: white
-}
-.interactive-game .interactive-img {
-    display: inline !important
-}
-.interactive-game button:disabled {
-    cursor: default;
-    opacity: 100%;
-}
-.interactive-game .locked {
-    cursor: default;
-    opacity: 50%;
-    pointer-events: none;
-    user-select: none;
-}
-.interactive-game .denial-btn {
-    color:#444;
-    background: #f0f0f0;
-    border: none;
-    outline: none;
-    border-radius: 10px;
-    padding: 8px 12px;
-    margin: 15px 0;
-}
-.interactive-game .denial-btn:hover {
-    background: white;
-    color: #444;
-}
-.interactive-game .denial-btn:focus {
-    background: white;
-    color: #444;
-}
 
-.interactive-game .locked .img-holder:after {
-    content: "\f023";
-    font: normal normal normal 14px / 1 FontAwesome;
-}
-
-.interactive-game .unlocked .img-holder:after {
-    content: "\f09c";
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-}
-
-.interactive-game .completed .img-holder:after {
-    content: "\f058";
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-}
-
-.interactive-game .denial-btn .section-header {
-    display:flex;
-    align-content:center;
-}
-
-.interactive-game .denial-btn .section-header p {
-    align-content:center;
-    margin-left: 10px;
-}
-
-.interactive-game input[type=text] {
-    background-color: #f7f7f9;
-    border: 1px solid #efefef;
-    border-radius: 8px;
-    padding: 8px 12px;
-    margin: 10px 0;
-    width: 100%;
-}
-
-.interactive-game .top-navbar {
-    background-color:#f0f0f0;
-    padding: 2px 10px;
-}
-
-.interactive-game .top-navbar {
-    margin-bottom: 10px;
-    background-color: #f0f0f0;
-    padding: 10px 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.interactive-game .top-navbar button {
-    background-color: #f0f0f0;
-    width: 0%;
-    border: none;
-    padding: 10px 20px;
-    line-height: 1px;
-}
-
-.interactive-game .top-navbar button:hover {
-    color: black;
-}
-
-
-.interactive-game .interactive_navigation {
-    margin-top: 25px;
-    background-color: #ccc;
-    padding: 10px;
-    display: flex;
-}
-  
-.interactive-game .interactive_navigation > button {
-    background-color: #ccc;
-    border: none;
-    margin: 0 10px;
-    padding: 0;
-}
-
-.interactive-game .interactive_navigation > button > div {
-    display:flex;
-    flex-direction: column;
-}
-
-.interactive-game .home_img {
-    width:20%;
-    margin: 20px 0 20px 40%;
-}
-
-.interactive-game .trick_hint {
-    text-align: left;
-    margin: 0 0 0 10px;
-}
-
+ 
+ /**
+  * description :- color palate for interactive-bg
+  * created_at:- 21/04/2024 09:31:25
+  */
+ 
+ .interactive-bg-green {
+     background-color: #b4d187;
+ }
+ .interactive-bg-green .top-navbar,
+ .interactive-bg-green .interactive_navigation {
+     background-color: #86bc57;
+ }
+ 
+ .interactive-bg-orange {
+     background-color: #faa61c;
+ }
+ .interactive-bg-orange .top-navbar,
+ .interactive-bg-orange .interactive_navigation {
+     background-color: #f37021;
+ }
+ 
+ .interactive-bg-blue {
+     background-color: #94c4e6;
+ }
+ 
+ .interactive-bg-blue .top-navbar,
+ .interactive-bg-blue .interactive_navigation {
+     background-color: #4296d0;
+ }
+ 
+ .interactive-bg-pink {
+     background-color: #f6a2af;
+ }
+ 
+ .interactive-bg-pink .top-navbar,
+ .interactive-bg-pink .interactive_navigation {
+     background-color: #ee3f75;
+ }
+ 
+ .interactive-bg-purple {
+     background-color: #a09ec9;
+ }
+ 
+ .interactive-bg-purple .top-navbar,
+ .interactive-bg-purple .interactive_navigation {
+     background-color: #6262a4;
+ }
+ 
+ .interactive-bg-teal {
+     background-color: #a0d7c9;
+ }
+ 
+ .interactive-bg-teal .top-navbar,
+ .interactive-bg-teal .interactive_navigation {
+     background-color: #08b89d;
+ }
+ 

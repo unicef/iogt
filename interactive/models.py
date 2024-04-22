@@ -46,7 +46,7 @@ class InteractivePage(Page, PageUtilsMixin, TitleIconMixin):
     button_text = models.CharField(max_length=255)
     trigger_string = models.CharField(
         max_length=255,
-        help_text=_("Language short code will postfix after trigger string e.g string_en")
+        help_text=_("Language short code will postfix after trigger string e.g string_en, string_es etc.")
         )
     channel = models.ForeignKey(
         InteractiveChannel,

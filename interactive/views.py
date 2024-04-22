@@ -1,3 +1,4 @@
+import re
 from time import sleep
 import time
 from django.shortcuts import redirect, render
@@ -58,10 +59,26 @@ class InteractiveView(TemplateView):
         
         shortcode_service = ShortCodeService()
         text = shortcode_service.apply_shortcode(text)
+        
+        # Define the regular expression pattern
+        pattern = r'\[color_scheme\s+bg-color="(?P<bg_color>[^"]+)"(\])?'
+        
+        # Search for matches in the input string
+        match = re.search(pattern, text)
+
+        bg_color = ''
+        # Check if a match is found
+        if match:
+            # Extract the bg_color attributes
+            bg_color = match.group('bg_color')
+        
+        # Remove the [bg_color] tag from the input string
+        text = re.sub(pattern, '', text)
 
         return {
             'message': text,
-            'buttons': chat.quick_replies
+            'buttons': chat.quick_replies,
+            'bg_color': bg_color,
         }
         
     def send_message_on_language_switch(self, request, user, slug):

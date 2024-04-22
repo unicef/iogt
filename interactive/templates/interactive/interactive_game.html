@@ -13,18 +13,19 @@
 {% endblock %}
 
 {% block content %}
-    <article class='interactive-game'>
+    <article class="interactive-game interactive-bg-{{db_data.bg_color}}">
         <div class="container" style="text-align:center;">
             <div class="d-grid gap-2 col-6 mx-auto">
                 <form action="{% url 'interactive:interactive_game' slug=slug %}" class="interactive-game-form" method="POST">
                     {% csrf_token %}
 
-                    <div>
+                    <center>
                         {{ db_data.message|safe }}
-                    </div>
+                    </center>
                     
                     {% for reply in db_data.buttons %}
-                        <input type="submit" class="cust-btn btn-secondary interactive-btn" name="text" value="{{ reply }}">
+                    <button type="submit" class="cust-btn btn-secondary interactive-btn" name="text" value="{{ reply }}">{{ reply }}</button>
+                        {% comment %} <input type="submit" class="cust-btn btn-secondary interactive-btn" name="text" value="{{ reply }}"> {% endcomment %}
                     {% endfor %}
                 </form>
             </div>
