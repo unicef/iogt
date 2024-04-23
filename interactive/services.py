@@ -92,7 +92,9 @@ class ShortCodeService:
 
     def image_callback(self, attrs, content):
         class_value = attrs.get('class', '')
-        return f'<img src="{content}" class="{class_value}">'
+        width_value = attrs.get('width', '')
+        height_value = attrs.get('height', '')
+        return f'<img src="{content}" class="{class_value}" width="{width_value}" height="{height_value}">'
 
     def header_callback(self, attrs, content=None):
         button_html = ''

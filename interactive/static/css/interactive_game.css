@@ -18,6 +18,17 @@
      margin: auto;
  }
  
+ .cranky-mode-img {
+     max-width: 40%;
+     width: auto;
+     display: inline-block;
+     margin: auto;
+     margin-top: 20px;
+     margin-bottom: 20px;
+ }
+ 
+ 
+ 
  /**
   * description :- for home page
   * created_at:- 17/04/2024 11:21:05
@@ -31,6 +42,10 @@
      border-radius: 6px;
      overflow: hidden;
      position: relative;
+     padding-top: 25px;
+ }
+ .interactive-game:has(.top-navbar) {
+     padding-top: 0;
  }
  
  .interactive-game .top-navbar {
@@ -39,6 +54,7 @@
      background-color: #08b89d;
      padding: 16px;
      text-align: center;
+     margin-bottom: 25px;
  }
  
  .interactive-game .top-navbar div {
@@ -76,25 +92,27 @@
  .interactive-game .interactive-vaccine-img {
      display: block;
      margin: auto;
-     margin-top: 20px;
      width: 364px !important;
      height: auto !important;
+     margin-top: 15px;
+     margin-bottom: 15px;
  }
  
  .interactive-game .interactive-vaccine-text {
      font-size: 18px;
      color: #000;
      font-weight: 500;
-     max-width: 380px;
+     max-width: 90%;
      padding-left: 10px;
      padding-right: 10px;
      margin: auto;
-     margin-top: 45px;
+     margin-top: 15px;
+     margin-bottom: 15px;
  }
  
  .interactive-game .interactive-vaccine-img + .interactive-vaccine-text,
  .interactive-game .interactive-vaccine-img ~ .interactive-vaccine-text {
-     margin-top: 15px !important;
+     max-width: 380px;
      font-weight: normal;
      font-size: 14px;
  }
@@ -106,7 +124,7 @@
      height: auto !important;
      margin: auto;
      margin-top: 20px;
-     margin-bottom: 30px;
+     margin-bottom: 20px;
  }
  
  .interactive-game .interactive-btn {
@@ -118,17 +136,25 @@
      filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25));
      width: 94%;
      margin: auto;
-     margin-bottom: 10px;
      font-weight: normal;
      padding: 12px;
- }
- .interactive-game .interactive-btn:last-child,
- .interactive-game .interactive-btn:last-of-type {
-     margin-bottom: 30px !important;
+     margin-top: 10px;
+     margin-bottom: 10px;
  }
  
  .interactive-game .interactive_navigation {
      background-color: #08b89d;
+ }
+ .interactive-game {
+     padding-bottom: 25px;
+ }
+ 
+ .interactive-game:has(.interactive_navigation) {
+     padding-bottom: 0px;
+ }
+ 
+ .interactive-game:has(.interactive_navigation) .interactive_navigation {
+     margin-top: 25px;
  }
  
  .interactive-game .interactive_navigation button {
@@ -305,21 +331,19 @@
          aspect-ratio: 1;
      }
  }
- 
+ .interactive-game .progress {
+     margin-bottom: 20px;
+ }
  .interactive-game .progress ~ p {
      color: #000 !important;
      font-size: 14px;
      font-weight: 600;
  }
  
- .interactive-game .progress + p {
-     padding-top: 12px;
- }
- 
  .interactive-game .progress + p + p,
  .interactive-game .progress + p ~ p {
      margin-bottom: 50px;
- }
+ } 
  
  .interactive-game .text-input {
      display: block;
@@ -357,7 +381,7 @@
      /* Styles for the progress bar in Firefox */
      background-color: #fff;
      border-radius: 10px;
-   }
+ }
  
  progress[value]::-webkit-progress-bar {
      background-color: #d8d8d8;
@@ -368,15 +392,6 @@
      border-radius: 10px;
  }
  
-
-
-center + button ,
-center ~ button:nth-child(1) ,
-center > .top-navbar + p + button {
-    margin-top: 40px !important;
-}
-
-
  
  /**
   * description :- color palate for interactive-bg
