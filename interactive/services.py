@@ -92,7 +92,7 @@ class ShortCodeService:
 
     def image_callback(self, attrs, content):
         class_value = attrs.get('class', '')
-        width_value = attrs.get('width', '')
+        width_value = attrs.get('width', '150')
         height_value = attrs.get('height', '')
         return f'<img src="{content}" class="{class_value}" width="{width_value}" height="{height_value}">'
 
@@ -123,18 +123,21 @@ class ShortCodeService:
         return f'<section class="interactive_navigation">{button_group}</section>'
     
     def trick_button_callback(self, attrs, content=None):
-        lock_img_html = ''
         image = attrs.get("img", "")
         hint = attrs.get("hint", "")
         status = attrs.get("status", "unlocked")
         lock_img = attrs.get('lock_img', '')
         
         if status == 'locked':
+            lock_btn_html = f'<button class="sub-section denial-btn {status}" type="submit" name="text" value="">'
             lock_img_html = f'<img src="{lock_img}" alt="locked">'
+        else:
+            lock_btn_html = f'<button class="sub-section denial-btn {status}" type="submit" name="text" value="{content}">'
+            lock_img_html = ''
         
-        button = f'''<button class="sub-section denial-btn {status}" type="submit" name="text" value="{content}">
+        button = f'''{lock_btn_html}
                 <div class="section-header">
-                    <img height="64" src="{image}">
+                    <img height="30" src="{image}" width="30">
                     <p class="section-title">{content}</p>
                 </div>
                 <div class="img-holder">

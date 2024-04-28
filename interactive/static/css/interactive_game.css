@@ -14,11 +14,11 @@
  .interactive-game img {
      max-width: 94%;
      width: auto;
-     display: inline-block;
+     display: block;
      margin: auto;
  }
  
- .cranky-mode-img {
+ .interactive-game .cranky-mode-img {
      max-width: 40%;
      width: auto;
      display: inline-block;
