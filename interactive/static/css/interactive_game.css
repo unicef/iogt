@@ -21,7 +21,7 @@
  .interactive-game .cranky-mode-img {
      max-width: 40%;
      width: auto;
-     display: inline-block;
+     display: block;
      margin: auto;
      margin-top: 20px;
      margin-bottom: 20px;
