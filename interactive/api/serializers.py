@@ -8,7 +8,7 @@ class RapidProMessageSerializer(serializers.Serializer):
     quick_replies = serializers.JSONField()
     text = serializers.CharField()
     to = serializers.UUIDField()
-    
+
     def get_fields(self):
         fields = super().get_fields()
         fields['from'] = fields.pop('from_')

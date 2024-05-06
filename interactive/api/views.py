@@ -7,6 +7,7 @@ from .serializers import RapidProMessageSerializer
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsRapidProGroupUser
 
+
 class RapidProWebhook(APIView):
     permission_classes = [IsAuthenticated, IsRapidProGroupUser]
 
@@ -23,7 +24,7 @@ class RapidProWebhook(APIView):
         channel = serializer.validated_data.get('channel')
 
         # Get the latest message for the 'to' recipient
-        prev_msg = Message.objects.filter(to=to).order_by('-created_at').first()
+        prev_msg = Message.objects.filter(to=to, channel=channel).order_by('-created_at').first()
 
         # Update or create a new message
         if prev_msg:
@@ -33,7 +34,7 @@ class RapidProWebhook(APIView):
                 text = prev_msg_text + text
             else:
                 text = text
-                
+
             fields_to_update = {
                 'rapidpro_message_id': rapidpro_message_id,
                 'text': text,

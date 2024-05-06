@@ -1,5 +1,6 @@
 import re
 
+
 class Shortcode:
     def __init__(self):
         self.shortcode_tags = {}

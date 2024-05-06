@@ -15,7 +15,7 @@
             <form method="post" action="{% url 'interactive:interactive_game' slug=self.slug %}">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <input type="hidden" name="text" value="{{ trigger_string_with_lang }}">
+                <input type="hidden" name="text" value="{{ page.trigger_string }}">
                 <button type="submit" class="btn btn-success">{{ page.button_text }}</button>
             </form>
         </div>

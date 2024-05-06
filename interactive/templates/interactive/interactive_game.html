@@ -9,14 +9,13 @@
 
 {% block extra_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/interactive_game.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 {% endblock %}
 
 {% block content %}
     <article class="interactive-game interactive-bg-{{db_data.bg_color}}">
         <div class="container" style="text-align:center;">
             <div class="d-grid gap-2 col-6 mx-auto">
-                <form action="{% url 'interactive:interactive_game' slug=slug %}" class="interactive-game-form" method="POST">
+                <form action="#" class="interactive-game-form" method="POST">
                     {% csrf_token %}
 
                     <center>
