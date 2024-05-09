@@ -460,7 +460,8 @@ COMMIT_HASH = os.getenv('COMMIT_HASH')
 EXPORT_FILENAME_TIMESTAMP_FORMAT = '%Y-%m-%dT%H%M%S'
 
 WAGTAILMARKDOWN = {
-    'allowed_tags': ['i', 'b'],
+    "allowed_tags": ["i", "b"],
+    "autodownload_fontawesome": False,
 }
 
 TRANSLATIONS_PROJECT_BASE_DIR = BASE_DIR
