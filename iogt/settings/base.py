@@ -440,10 +440,6 @@ TRANSLATIONS_BASE_DIR = BASE_DIR
 # ========= Rapid Pro =================
 RAPIDPRO_BOT_GROUP_NAME = os.getenv('RAPIDPRO_BOT_GROUP_NAME', 'rapidpro_chatbot')
 
-# Wagtail transfer default values. Override these in local.py
-WAGTAILTRANSFER_SECRET_KEY = os.getenv('WAGTAILTRANSFER_SECRET_KEY')
-WAGTAILTRANSFER_SOURCES = {}
-
 WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME = 'iogt_flat_menu_items'
 
 WAGTAIL_RICH_TEXT_FIELD_FEATURES = [
@@ -471,13 +467,20 @@ TRANSLATIONS_PROJECT_BASE_DIR = BASE_DIR
 
 from iogt.patch import *
 
-WAGTAILTRANSFER_UPDATE_RELATED_MODELS = ['wagtailimages.image', 'wagtailsvg.svg',]
-WAGTAILTRANSFER_SHOW_ERROR_FOR_REFERENCED_PAGES = True
 WAGTAILTRANSFER_LOOKUP_FIELDS = {
     'taggit.tag': ['slug'],
     'wagtailcore.locale': ['language_code'],
     'iogt_users.user': ['username'],
 }
+WAGTAILTRANSFER_SECRET_KEY = os.getenv('WAGTAILTRANSFER_SECRET_KEY')
+WAGTAILTRANSFER_SHOW_ERROR_FOR_REFERENCED_PAGES = True
+WAGTAILTRANSFER_SOURCES = {
+   os.getenv('WAGTAILTRANSFER_SOURCE_NAME', 'default'): {
+      'BASE_URL': os.getenv('WAGTAILTRANSFER_SOURCE_BASE_URL'),
+      'SECRET_KEY': os.getenv('WAGTAILTRANSFER_SOURCE_SECRET_KEY'),
+   },
+}
+WAGTAILTRANSFER_UPDATE_RELATED_MODELS = ['wagtailimages.image', 'wagtailsvg.svg',]
 
 REST_FRAMEWORK = {
     'DATETIME_FORMAT': '%Y-%m-%dT%H:%M:%S.%fZ',

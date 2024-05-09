@@ -882,8 +882,8 @@ wagtail-markdown==0.10.0 \
     --hash=sha256:b16be4b6e3518cc6dd15ab335cbc6d6a9122b5d7e3a61fa11c83597e2660044e \
     --hash=sha256:e4a97eee0211eebaab9c850669e647bc1c8ceb70df38b4db5a2c3d8b02ebaf69
     # via -r requirements.in
-wagtail-transfer @ https://github.com/IDEMSInternational/wagtail-transfer/archive/408edb5d432ac72dc2727a1847e0f294b8d6efa6.zip \
-    --hash=sha256:cac600baa5572bc328194b5ee6c7e2e57b333da23a6a4d63b8f4b38694d9c6a1
+wagtail-transfer @ https://github.com/IDEMSInternational/wagtail-transfer/archive/52b57b364ebc9acddd412ee708f829b45763c9ab.zip \
+    --hash=sha256:049c23e1406564d3b7e8c385e72051f34e707add4f8109d874da670711709548
     # via -r requirements.in
 wagtailmedia==0.12.0 \
     --hash=sha256:0807515c5d89782666b613de2e4aedab19e9dd358097fad2cb79633c0b5416d3 \

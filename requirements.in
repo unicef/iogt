@@ -20,7 +20,6 @@ djangorestframework-simplejwt==5.0.0
 djangorestframework~=3.13.1
 drf-yasg~=1.21.3
 elasticsearch~=7.16
-https://github.com/IDEMSInternational/wagtail-transfer/archive/408edb5d432ac72dc2727a1847e0f294b8d6efa6.zip#egg=wagtail-transfer
 libsass==0.21.*
 lxml~=4.9.1
 psycopg2~=2.9.9
@@ -34,4 +33,6 @@ wagtail~=3.0.3
 wagtailmedia~=0.12.0
 wagtailmenus==3.1.3
 wagtailsvg==0.0.37
+# branch: iogt, tag: v0.8.5-iogt.1
+wagtail-transfer @ https://github.com/IDEMSInternational/wagtail-transfer/archive/52b57b364ebc9acddd412ee708f829b45763c9ab.zip
 whitenoise==5.2.*
