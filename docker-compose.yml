@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   django:
     build:
@@ -9,7 +7,8 @@ services:
         requirements: requirements.dev.txt
     environment:
       DJANGO_SETTINGS_MODULE: iogt.settings.dev
-    volumes:
-      - ./:/app/
+    image: iogt:latest
     ports:
       - "8000:8000"
+    volumes:
+      - ./:/app/
