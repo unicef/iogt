@@ -88,17 +88,19 @@ def global_admin_css():
     )
 
 @hooks.register("insert_global_admin_css")
-def import_fontawesome_stylesheet():
-    return "\n".join([
-        format_html(
-            '<link rel="stylesheet" href="{}">',
-            static("css/fontawesome/css/fontawesome.min.css"),
-        ),
-        format_html(
-            '<link rel="stylesheet" href="{}">',
-            static("css/fontawesome/css/regular.min.css"),
-        ),
-    ])
+def import_fontawesome_stylesheets():
+    return "\n".join(
+        [
+            format_html(
+                '<link rel="stylesheet" href="{}">',
+                static("css/fontawesome/css/fontawesome.min.css"),
+            ),
+            format_html(
+                '<link rel="stylesheet" href="{}">',
+                static("css/fontawesome/css/solid.min.css"),
+            ),
+        ]
+    )
 
 
 @hooks.register('insert_global_admin_js', order=100)

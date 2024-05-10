@@ -41,6 +41,8 @@ function customizeUI() {
         'The descriptive text displayed underneath a headline in search engine results, and automatically loaded ' +
         'as a description into shares on social media eg Facebook Posts or shared links in WhatsApp.'
     );
+
+    configureEasyMDE();
 }
 
 function validateFileUpload(fileInput, file_size_threshold) {
@@ -68,6 +70,12 @@ function validateFreeBasicsFileUpload(fileInput, file_size_threshold) {
     }
 
     return true;
+}
+
+function configureEasyMDE() {
+    window.wagtailMarkdown = window.wagtailMarkdown || {};
+    window.wagtailMarkdown.options = window.wagtailMarkdown.options || {};
+    window.wagtailMarkdown.options.spellChecker = false;
 }
 
 $(document).ready(customizeUI);
