@@ -72,21 +72,9 @@ docker compose run --rm django python manage.py autopopulate_main_menus
 
 Follow instructions [here](messaging/README.md)
 
-## Configuring wagtail-transfer
+## Content transfer between sites
 
-It is possible to pull articles from other deployments assuming we know the secret key for that deployment.
-
-In `iogt/settings/local.py`, define [parameters from wagtail-transfer](https://github.com/wagtail/wagtail-transfer/blob/master/docs/settings.md) as appropriate, e.g.:
-```
-WAGTAILTRANSFER_SECRET_KEY = 'fake_secret_key'
-WAGTAILTRANSFER_SOURCES = {
-   'iogt_global': {
-      'BASE_URL': 'http://fake-iogt-url.org/wagtail-transfer/',
-      'SECRET_KEY': 'fake_secret_key_2',
-   },
-}
-```
-Note: the names of transfer sources may only contain letters, numbers and underscores.
+Articles can be transferred from other IoGT sites - [details][12].
 
 ## Adding new localizable strings to the code base
 
@@ -145,3 +133,4 @@ More details of the Selenium tests can be found in the [Selenium test README][9]
 [9]: ./selenium_tests/README.md
 [10]: ./docs/dependency-management.md
 [11]: ./docs/elasticsearch.md
+[12]: docs/content-transfer.md
