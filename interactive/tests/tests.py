@@ -45,8 +45,7 @@ class RapidProWebhookTest(APITestCase):
         ]
 
         for data in rapidpro_data_list:
-            # response = self.client.post('http://localhost:8000/api/interactive/rapidpro-webhook/', data=data, format='json')
-            response = self.client.post(path=reverse('interactive:interactive_api:rapidpro_message_webhook'), data=data, format='json')
+            response = self.client.post(path=reverse('interactive_api:rapidpro_message_webhook'), data=data, format='json')
 
         message = Message.objects.first()
 
