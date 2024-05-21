@@ -630,7 +630,6 @@ class SiteSettings(BaseSetting):
         help_text=_('When selecting this option, untranslated pages'
                     ' will not be visible to the front end user'
                     ' when viewing a child language of the site'))
-    # TODO: GA, FB analytics should be global.
     fb_analytics_app_id = models.CharField(
         verbose_name=_('Facebook Analytics App ID'),
         max_length=25,
@@ -639,6 +638,10 @@ class SiteSettings(BaseSetting):
         help_text=_(
             "The tracking ID to be used to view Facebook Analytics")
     )
+
+    # Begin GA settings
+    # These are now obsolete and should be removed once it is deemed safe for these
+    # fields to be removed.
     local_ga_tag_manager = models.CharField(
         verbose_name=_('Local GA Tag Manager'),
         max_length=255,
@@ -675,6 +678,8 @@ class SiteSettings(BaseSetting):
             "Global GA tracking code to be used"
             " to view analytics on more than one site globally")
     )
+    # End GA settings
+
     social_media_link = StreamField(
         [('social_media_link', SocialMediaLinkBlock())],
         null=True,
@@ -691,7 +696,10 @@ class SiteSettings(BaseSetting):
     registration_survey = models.ForeignKey('questionnaires.Survey', null=True,
                                             blank=True,
                                             on_delete=models.SET_NULL)
+
+    # Obsolete - Web Light service discontinued Dec 2022
     opt_in_to_google_web_light = models.BooleanField(default=False)
+
     mtm_container_id = models.CharField(
         verbose_name=_("Matomo Tag Manager container ID"),
         max_length=255,
@@ -718,20 +726,6 @@ class SiteSettings(BaseSetting):
                 FieldPanel('fb_analytics_app_id'),
             ],
             heading="Facebook Analytics Settings",
-        ),
-        MultiFieldPanel(
-            [
-                FieldPanel('local_ga_tag_manager'),
-                FieldPanel('global_ga_tag_manager'),
-            ],
-            heading="GA Tag Manager Settings",
-        ),
-        MultiFieldPanel(
-            [
-                FieldPanel('local_ga_tracking_code'),
-                FieldPanel('global_ga_tracking_code'),
-            ],
-            heading="GA Tracking Code Settings",
         ),
         MultiFieldPanel(
             [
@@ -768,12 +762,6 @@ class SiteSettings(BaseSetting):
                 FieldPanel('registration_survey'),
             ],
             heading="Registration Settings",
-        ),
-        MultiFieldPanel(
-            [
-                FieldPanel('opt_in_to_google_web_light'),
-            ],
-            heading="Opt in to Google web light",
         ),
         MultiFieldPanel(
             [

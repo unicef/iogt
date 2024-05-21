@@ -4,12 +4,6 @@
 #
 #    pip-compile --generate-hashes --output-file=requirements.dev.txt requirements.dev.in
 #
-amqp==5.2.0 \
-    --hash=sha256:827cb12fb0baa892aad844fd95258143bce4027fdac4fccddbc43330fd281637 \
-    --hash=sha256:a1ecff425ad063ad42a486c902807d1482311481c8ad95a72694b2975e75f7fd
-    # via
-    #   -r requirements.txt
-    #   kombu
 anyascii==0.3.2 \
     --hash=sha256:3b3beef6fc43d9036d3b0529050b0c48bfad8bc960e9e562d7223cfb94fe45d4 \
     --hash=sha256:9d5d32ef844fe225b8bc7cba7f950534fae4da27a9bf3a6bea2cb0ea46ce4730
@@ -34,14 +28,7 @@ beautifulsoup4==4.9.3 \
     --hash=sha256:fff47e031e34ec82bf17e00da8f592fe7de69aeea38be00523c04623c04fb666
     # via
     #   -r requirements.txt
-    #   django-google-analytics-app
     #   wagtail
-billiard==4.2.0 \
-    --hash=sha256:07aa978b308f334ff8282bd4a746e681b3513db5c9a514cbdd810cbbdc19714d \
-    --hash=sha256:9a3c3184cb275aa17a732f93f65b20c525d3d9f253722d26a82194803ade5a2c
-    # via
-    #   -r requirements.txt
-    #   celery
 bleach==3.3.1 \
     --hash=sha256:306483a5a9795474160ad57fce3ddd1b50551e981eed8e15a582d34cef28aafa \
     --hash=sha256:ae976d7174bba988c0b632def82fdc94235756edfb14e6558a9c5be555c9fb78
@@ -58,12 +45,6 @@ cairosvg==2.7.0 \
     --hash=sha256:17cb96423a896258848322a95c80160e714a58f1af3dd73b8e1750994519b9f9 \
     --hash=sha256:ac4dc7c1d38b3a15717db2633a3a383012e0be664c727c911637e6af6a49293c
     # via -r requirements.txt
-celery==5.3.5 \
-    --hash=sha256:30b75ac60fb081c2d9f8881382c148ed7c9052031a75a1e8743ff4b4b071f184 \
-    --hash=sha256:6b65d8dd5db499dd6190c45aa6398e171b99592f2af62c312f7391587feb5458
-    # via
-    #   -r requirements.txt
-    #   django-google-analytics-app
 certifi==2023.7.22 \
     --hash=sha256:539cc1d13202e33ca466e88b2807e29f4c13049d6d87031a3c110744495cb082 \
     --hash=sha256:92d6037539857d8206b8f6ae472e8b77db8058fec5937a1ef3f54304089edbb9
@@ -228,29 +209,7 @@ click==8.1.7 \
     --hash=sha256:ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de
     # via
     #   -r requirements.txt
-    #   celery
-    #   click-didyoumean
-    #   click-plugins
-    #   click-repl
     #   rq
-click-didyoumean==0.3.0 \
-    --hash=sha256:a0713dc7a1de3f06bc0df5a9567ad19ead2d3d5689b434768a6145bff77c0667 \
-    --hash=sha256:f184f0d851d96b6d29297354ed981b7dd71df7ff500d82fa6d11f0856bee8035
-    # via
-    #   -r requirements.txt
-    #   celery
-click-plugins==1.1.1 \
-    --hash=sha256:46ab999744a9d831159c3411bb0c79346d94a444df9a3a3742e9ed63645f264b \
-    --hash=sha256:5d262006d3222f5057fd81e1623d4443e41dcda5dc815c06b442aa3c02889fc8
-    # via
-    #   -r requirements.txt
-    #   celery
-click-repl==0.3.0 \
-    --hash=sha256:17849c23dba3d667247dc4defe1757fff98694e90fe37474f3feebb69ced26a9 \
-    --hash=sha256:fb7e06deb8da8de86180a33a9da97ac316751c094c6899382da7feeeeb51b812
-    # via
-    #   -r requirements.txt
-    #   celery
 coverage==7.3.2 \
     --hash=sha256:0cbf38419fb1a347aaf63481c00f0bdc86889d9fbf3f25109cf96c26b403fda1 \
     --hash=sha256:12d15ab5833a997716d76f2ac1e4b4d536814fc213c85ca72756c19e5a6b3d63 \
@@ -369,7 +328,6 @@ django==3.2.24 \
     #   django-debug-toolbar
     #   django-extensions
     #   django-filter
-    #   django-google-analytics-app
     #   django-health-check
     #   django-modelcluster
     #   django-permissionedforms
@@ -427,10 +385,6 @@ django-filter==2.4.0 \
     # via
     #   -r requirements.txt
     #   wagtail
-django-google-analytics-app==5.0.5 \
-    --hash=sha256:63dfd6a9700ac91b7994ade300018b12321b958949c3f63ccbffd2732354b62b \
-    --hash=sha256:ef1d565b7f22c856c646892b871bb5a399762d1ba7eb9041c977340d531f766a
-    # via -r requirements.txt
 django-health-check==3.16.5 \
     --hash=sha256:1edfd49293ccebbce29f9da609c407f307aee240ab799ab4201031341ae78c0f \
     --hash=sha256:8d66781a0ea82b1a8b44878187b38a27370e94f18287312e39be0593e72d8983
@@ -570,12 +524,6 @@ iniconfig==2.0.0 \
     --hash=sha256:2d91e135bf72d31a410b17c16da610a82cb55f6b0477d1a902134b24a455b8b3 \
     --hash=sha256:b6a85871a79d2e3b22d2d1b94ac2824226a63c6b741c88f7ae975f18b6778374
     # via pytest
-kombu==5.3.3 \
-    --hash=sha256:1491df826cfc5178c80f3e89dd6dfba68e484ef334db81070eb5cb8094b31167 \
-    --hash=sha256:6cd5c5d5ef77538434b8f81f3e265c414269418645dbb47dbf130a8a05c3e357
-    # via
-    #   -r requirements.txt
-    #   celery
 l18n==2021.3 \
     --hash=sha256:1956e890d673d17135cc20913253c154f6bc1c00266c22b7d503cc1a5a42d848 \
     --hash=sha256:78495d1df95b6f7dcc694d1ba8994df709c463a1cbac1bf016e1b9a5ce7280b9
@@ -800,12 +748,6 @@ polib==1.2.0 \
     #   -r requirements.txt
     #   django-translation-manager
     #   wagtail-localize
-prompt-toolkit==3.0.41 \
-    --hash=sha256:941367d97fc815548822aa26c2a269fdc4eb21e9ec05fc5d447cf09bad5d75f0 \
-    --hash=sha256:f36fe301fafb7470e86aaf90f036eef600a3210be4decf461a5b1ca8403d3cb2
-    # via
-    #   -r requirements.txt
-    #   click-repl
 psycopg2==2.9.9 \
     --hash=sha256:121081ea2e76729acfb0673ff33755e8703d45e926e416cb59bae3a86c6a4981 \
     --hash=sha256:38a8dcc6856f569068b47de286b472b7c473ac7977243593a288ebce0dc89516 \
@@ -857,10 +799,7 @@ pytest-django==4.7.0 \
 python-dateutil==2.8.2 \
     --hash=sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86 \
     --hash=sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9
-    # via
-    #   -r requirements.txt
-    #   celery
-    #   faker
+    # via faker
 python3-openid==3.2.0 \
     --hash=sha256:33fbf6928f401e0b790151ed2b5290b02545e8775f982485205a066f874aaeaf \
     --hash=sha256:6626f771e0417486701e0b4daff762e7212e820ca5b29fcc0d05f6f8736dfa6b
@@ -956,7 +895,6 @@ requests==2.31.0 \
     # via
     #   -r requirements.txt
     #   django-allauth
-    #   django-google-analytics-app
     #   django-translation-manager
     #   pywebpush
     #   requests-oauthlib
@@ -1003,7 +941,6 @@ six==1.16.0 \
     #   bleach
     #   django-comments-xtd
     #   django-compressor
-    #   django-google-analytics-app
     #   html5lib
     #   l18n
     #   libsass
@@ -1029,12 +966,6 @@ sqlparse==0.4.4 \
     #   -r requirements.txt
     #   django
     #   django-debug-toolbar
-structlog==23.2.0 \
-    --hash=sha256:16a167e87b9fa7fae9a972d5d12805ef90e04857a93eba479d4be3801a6a1482 \
-    --hash=sha256:334666b94707f89dbc4c81a22a8ccd34449f0201d5b1ee097a030b577fa8c858
-    # via
-    #   -r requirements.txt
-    #   django-google-analytics-app
 tablib[xls,xlsx]==3.5.0 \
     --hash=sha256:9821caa9eca6062ff7299fa645e737aecff982e6b2b42046928a6413c8dabfd9 \
     --hash=sha256:f6661dfc45e1d4f51fa8a6239f9c8349380859a5bfaa73280645f046d6c96e33
@@ -1074,12 +1005,6 @@ typing-extensions==4.8.0 \
     # via
     #   -r requirements.txt
     #   wagtail-localize
-tzdata==2023.3 \
-    --hash=sha256:11ef1e08e54acb0d4f95bdb1be05da659673de4acbd21bf9c69e94cc5e907a3a \
-    --hash=sha256:7e65763eef3120314099b6939b5546db7adce1e7d6f2e179e3df563c70511eda
-    # via
-    #   -r requirements.txt
-    #   celery
 uritemplate==4.1.1 \
     --hash=sha256:4346edfc5c3b79f694bccd6d6099a322bbeb628dbf2cd86eea55a456ce5124f0 \
     --hash=sha256:830c08b8d99bdd312ea4ead05994a38e8936266f84b9a7878232db50b044e02e
@@ -1094,14 +1019,6 @@ urllib3[socks]==1.26.18 \
     #   elasticsearch
     #   requests
     #   selenium
-vine==5.1.0 \
-    --hash=sha256:40fdf3c48b2cfe1c38a49e9ae2da6fda88e4794c810050a728bd7413811fb1dc \
-    --hash=sha256:8b62e981d35c41049211cf62a0a1242d8c1ee9bd15bb196ce38aefd6799e61e0
-    # via
-    #   -r requirements.txt
-    #   amqp
-    #   celery
-    #   kombu
 wagtail==3.0.3 \
     --hash=sha256:111ed9a0a6ff26d5d881d52deb4bf52b627d79a53c43829611752dbb68a9192f \
     --hash=sha256:23b3e541401355ea183372582050ea52b049c956dd5b506197f957bb68423ab3
@@ -1148,12 +1065,6 @@ wagtailsvg==0.0.37 \
     --hash=sha256:4b30433809614fbac09f9088b4aed42a1bfe56f9fb581b858606187cb177ca6b \
     --hash=sha256:dc4d698748bde32034b1eac2275cf159597ca8e399d3830e96391f761aa0cacf
     # via -r requirements.txt
-wcwidth==0.2.10 \
-    --hash=sha256:390c7454101092a6a5e43baad8f83de615463af459201709556b6e4b1c861f97 \
-    --hash=sha256:aec5179002dd0f0d40c456026e74a729661c9d468e1ed64405e3a6c2176ca36f
-    # via
-    #   -r requirements.txt
-    #   prompt-toolkit
 webencodings==0.5.1 \
     --hash=sha256:a0af1213f3c2226497a97e2b3aa01a7e4bee4f403f95be16fc9acd2947514a78 \
     --hash=sha256:b36a1c245f2d304965eb4e0a82848379241dc04b865afcc4aab16748587e1923
