@@ -17,19 +17,6 @@ from home.models import SiteSettings, V1PageURLToV2PageMap, ThemeSettings, SVGTo
 import iogt.iogt_globals as globals_
 
 
-class CacheControlMiddleware:
-    def __init__(self, get_response):
-        self.get_response = get_response
-
-    def __call__(self, request):
-        response = self.get_response(request)
-
-        if SiteSettings.for_request(request).opt_in_to_google_web_light:
-            response['Cache-Control'] = 'no-transform'
-
-        return response
-
-
 class LocaleMiddleware(DjangoLocaleMiddleware):
     def _get_language_from_request(self, request, check_path=False):
         if check_path:

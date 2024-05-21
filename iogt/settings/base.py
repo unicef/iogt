@@ -84,7 +84,6 @@ INSTALLED_APPS = [
     'health_check.storage',
     'health_check.contrib.migrations',
     'rest_framework_simplejwt',
-    'google_analytics',
     'django_filters',
     'drf_yasg',
     'webpush',
@@ -115,7 +114,6 @@ MIDDLEWARE = [
     'iogt.middleware.CustomRedirectMiddleware',
     'iogt_users.middlewares.RegistrationSurveyRedirectMiddleware',
     'external_links.middleware.RewriteExternalLinksMiddleware',
-    'iogt.middleware.CacheControlMiddleware',
     'iogt.middleware.GlobalDataMiddleware',
     'wagtailcache.cache.FetchFromCacheMiddleware',
 ]
