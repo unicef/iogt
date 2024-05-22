@@ -1,6 +1,17 @@
+from wagtail import hooks
 from wagtail.contrib.modeladmin.options import (
-    ModelAdminGroup, ModelAdmin, modeladmin_register)
-from .models import ChatbotChannel
+    ModelAdminGroup,
+    ModelAdmin,
+    modeladmin_register,
+)
+
+from messaging.models import ChatbotChannel
+from messaging.views import chatbot_channel_viewset
+
+
+@hooks.register("register_admin_viewset")
+def register_chatbot_channel_viewset():
+    return chatbot_channel_viewset
 
 
 class ChatbotChannelAdmin(ModelAdmin):

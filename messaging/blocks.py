@@ -1,12 +1,12 @@
-from django import forms
 from wagtail import blocks
 
-from .models import ChatbotChannel
+from messaging.views import chatbot_channel_viewset
 
 
-class ChatBotChannelChooserBlock(blocks.ChooserBlock):
-    target_model = ChatbotChannel
-    widget = forms.Select
+ChatBotChannelChooserBlock = chatbot_channel_viewset.get_block_class(
+    name="ChatBotChannelChooserBlock",
+    module_path="messaging.blocks",
+)
 
 
 class ChatBotButtonBlock(blocks.StructBlock):
@@ -16,5 +16,5 @@ class ChatBotButtonBlock(blocks.StructBlock):
     channel = ChatBotChannelChooserBlock()
 
     class Meta:
-        icon = 'code'
-        template = 'messaging/blocks/chatbot_button.html'
+        icon = "mail"
+        template = "messaging/blocks/chatbot_button.html"

@@ -1,17 +1,18 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.generic import (DeleteView, TemplateView, )
+from django.views.generic import DeleteView, TemplateView
+from wagtail.admin.viewsets.chooser import ChooserViewSet
 
 from .chat import ChatManager
 from .forms import MessageReplyForm, NewMessageForm
 from .models import Thread, UserThread
 
-from django.contrib.auth.decorators import login_required
 
 User = get_user_model()
 
@@ -103,3 +104,15 @@ class ThreadDeleteView(DeleteView):
     def delete(self, request, *args, **kwargs):
         self.get_object().user_threads.filter(user=request.user).update(is_active=False)
         return HttpResponseRedirect(reverse("messaging:inbox"))
+
+
+class ChatbotChannelChooserViewSet(ChooserViewSet):
+    model = "messaging.ChatbotChannel"
+    icon = "code"
+    choose_one_text = "Choose a channel"
+    choose_another_text = "Choose another channel"
+    edit_item_text = "Edit this channel"
+    form_fields = ["display_name", "request_url"]
+
+
+chatbot_channel_viewset = ChatbotChannelChooserViewSet("chatbot_channel_chooser")
