@@ -686,16 +686,28 @@ class SiteSettings(BaseSetting):
         blank=True,
         use_json_field=True,
     )
-    social_media_content_sharing_button = StreamField([
-        ('social_media_content_sharing_button', SocialMediaShareButtonBlock()),
-    ], null=True, blank=True)
+    social_media_content_sharing_button = StreamField(
+        [
+            ("social_media_content_sharing_button", SocialMediaShareButtonBlock()),
+        ],
+        null=True,
+        blank=True,
+        use_json_field=True,
+    )
     media_file_size_threshold = models.IntegerField(
         default=9437184,
-        help_text=_('Show warning if uploaded media file size is greater than this in bytes. Default is 9 MB'))
+        help_text=_(
+            "Show warning if uploaded media file size is greater than this in bytes."
+            " Default is 9 MB (9,437,184 bytes)."
+        )
+    )
     allow_anonymous_comment = models.BooleanField(default=False)
-    registration_survey = models.ForeignKey('questionnaires.Survey', null=True,
-                                            blank=True,
-                                            on_delete=models.SET_NULL)
+    registration_survey = models.ForeignKey(
+        "questionnaires.Survey",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
 
     # Obsolete - Web Light service discontinued Dec 2022
     opt_in_to_google_web_light = models.BooleanField(default=False)

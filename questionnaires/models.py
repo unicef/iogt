@@ -322,7 +322,7 @@ class SurveyFormField(AbstractFormField):
         help_text=_('Column header used during CSV export of survey '
                     'responses.'),
     )
-    skip_logic = SkipLogicField(null=True, blank=True)
+    skip_logic = SkipLogicField(null=True, blank=True, use_json_field=True)
     default_value = models.TextField(
         verbose_name=_('default value'),
         blank=True,
