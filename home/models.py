@@ -14,7 +14,6 @@ from django.utils.deconstruct import deconstructible
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 from modelcluster.contrib.taggit import ClusterTaggableManager
-from iogt.settings.base import WAGTAIL_CONTENT_LANGUAGES
 from modelcluster.fields import ParentalKey
 from rest_framework import status
 from taggit.models import TaggedItemBase
@@ -42,8 +41,18 @@ from wagtailsvg.edit_handlers import SvgChooserPanel
 from messaging.blocks import ChatBotButtonBlock
 from comments.models import CommentableMixin
 from home.blocks import (
-    MediaBlock, SocialMediaLinkBlock, SocialMediaShareButtonBlock, EmbeddedPollBlock, EmbeddedSurveyBlock,
-    EmbeddedQuizBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock, ArticleBlock, DownloadButtonBlock,
+    ArticleBlock,
+    DownloadButtonBlock,
+    EmbeddedPollBlock,
+    EmbeddedSurveyBlock,
+    EmbeddedQuizBlock,
+    heading_block,
+    MediaBlock,
+    PageButtonBlock,
+    NumberedListBlock,
+    RawHTMLBlock,
+    SocialMediaLinkBlock,
+    SocialMediaShareButtonBlock,
 )
 from .forms import SectionPageForm
 from .mixins import PageUtilsMixin, TitleIconMixin
@@ -323,26 +332,20 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
 
     body = StreamField(
         [
-            (
-                'heading',
-                blocks.CharBlock(
-                    form_classname="full title",
-                    template="blocks/heading.html",
-                ),
-            ),
-            ('paragraph', blocks.RichTextBlock()),
-            ('markdown', MarkdownBlock(icon='code')),
-            ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
-            ('image', ImageChooserBlock(template='blocks/image.html')),
-            ('list', blocks.ListBlock(MarkdownBlock(icon='code'))),
-            ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
-            ('page_button', PageButtonBlock()),
-            ('embedded_poll', EmbeddedPollBlock()),
-            ('embedded_survey', EmbeddedSurveyBlock()),
-            ('embedded_quiz', EmbeddedQuizBlock()),
-            ('media', MediaBlock(icon='media')),
-            ('chat_bot', ChatBotButtonBlock()),
-            ('download', DownloadButtonBlock()),
+            ("heading", heading_block()),
+            ("paragraph", blocks.RichTextBlock()),
+            ("markdown", MarkdownBlock()),
+            ("paragraph_v1_legacy", RawHTMLBlock(icon='code')),
+            ("image", ImageChooserBlock(template='blocks/image.html')),
+            ("list", blocks.ListBlock(MarkdownBlock(), icon="list-ul")),
+            ("numbered_list", NumberedListBlock(MarkdownBlock())),
+            ("page_button", PageButtonBlock()),
+            ("embedded_poll", EmbeddedPollBlock()),
+            ("embedded_survey", EmbeddedSurveyBlock()),
+            ("embedded_quiz", EmbeddedQuizBlock()),
+            ("media", MediaBlock()),
+            ("chat_bot", ChatBotButtonBlock()),
+            ("download", DownloadButtonBlock()),
         ],
         use_json_field=True,
     )
@@ -977,7 +980,7 @@ class ManifestSettings(models.Model):
     )
     language = models.CharField(
         max_length=3,
-        choices=WAGTAIL_CONTENT_LANGUAGES,
+        choices=settings.WAGTAIL_CONTENT_LANGUAGES,
         default="en",
         verbose_name=_("Language"),
         help_text=_("Choose language"),

@@ -14,6 +14,7 @@ from wagtailsvg.edit_handlers import SvgChooserPanel
 from wagtailsvg.models import Svg
 
 from home.blocks import (
+    heading_block,
     MediaBlock,
     NumberedListBlock,
     PageButtonBlock,
@@ -63,13 +64,13 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
 
     description = StreamField(
         [
-            ('heading', blocks.CharBlock(form_classname="full title", template='blocks/heading.html')),
-            ('paragraph', blocks.RichTextBlock()),
-            ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
-            ("image", ImageChooserBlock(template='blocks/image.html')),
-            ('list', MarkdownBlock(icon='code')),
-            ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
-            ('page_button', PageButtonBlock()),
+            ("heading", heading_block()),
+            ("paragraph", blocks.RichTextBlock()),
+            ("paragraph_v1_legacy", RawHTMLBlock(icon='code')),
+            ("image", ImageChooserBlock(template="blocks/image.html")),
+            ("list", MarkdownBlock()),
+            ("numbered_list", NumberedListBlock(MarkdownBlock())),
+            ("page_button", PageButtonBlock()),
         ],
         null=True,
         blank=True,
@@ -78,8 +79,8 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
     thank_you_text = StreamField(
         [
             ("paragraph", blocks.RichTextBlock()),
-            ("media", MediaBlock(icon="media")),
-            ("image", ImageChooserBlock(template='blocks/image.html')),
+            ("media", MediaBlock()),
+            ("image", ImageChooserBlock(template="blocks/image.html")),
         ],
         null=True,
         blank=True,
