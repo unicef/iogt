@@ -6,8 +6,9 @@ from django.core.validators import URLValidator
 from django.utils import timezone
 from webpush import send_user_notification
 
-from .models import Message, Thread, UserThread
+from messaging.models import Message, Thread, UserThread
 from messaging.rapidpro_client import RapidProClient
+from messaging.utils import is_chatbot
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -81,7 +82,7 @@ class ChatManager:
     def record_reply(self, text, sender, rapidpro_message_id=None, quick_replies=None, mark_unread=True):
         if quick_replies is None:
             quick_replies = []
-        if not sender.is_rapidpro_bot_user:
+        if not is_chatbot(sender):
             client = RapidProClient(self.thread)
             client.send_reply(text)
 

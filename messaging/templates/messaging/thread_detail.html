@@ -10,7 +10,7 @@
         </div>
         <div class="messages">
             {% for message in thread_messages %}
-                {% if message.sender.is_rapidpro_bot_user %}
+                {% if message.sender|is_chatbot %}
                     <div class="message">
                 {% else %}
                     <div class="message reply">

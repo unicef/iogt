@@ -1,42 +1,34 @@
-import base64
-
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class User(AbstractUser):
-    first_name = models.CharField('first name', max_length=150, null=True,
-                                  blank=True)
-    last_name = models.CharField('last name', max_length=150, null=True,
-                                 blank=True)
-    display_name = models.CharField('display name', max_length=255, null=True, blank=True)
+    first_name = models.CharField(
+        "first name",
+        max_length=150,
+        null=True,
+        blank=True,
+    )
+    last_name = models.CharField(
+        "last name",
+        max_length=150,
+        null=True,
+        blank=True,
+    )
+    display_name = models.CharField(
+        "display name",
+        max_length=255,
+        null=True,
+        blank=True,
+    )
     email = models.EmailField('email address', null=True, blank=True)
     terms_accepted = models.BooleanField(default=False)
-
     has_filled_registration_survey = models.BooleanField(default=False)
     has_viewed_registration_survey = models.BooleanField(default=False)
-    
     interactive_uuid = models.CharField(max_length=255, null=True, blank=True)
-
-    @property
-    def is_rapidpro_bot_user(self):
-        return self.groups.filter(name=settings.RAPIDPRO_BOT_GROUP_NAME).exists()
-
-    @classmethod
-    def get_rapidpro_bot_auth_tokens(cls):
-        users = cls.objects.filter(groups__name=settings.RAPIDPRO_BOT_GROUP_NAME)
-
-        tokens = {}
-        for user in users:
-            tokens[user.username] = f'Bearer {RefreshToken.for_user(user).access_token}'
-
-        return tokens
-
     read_articles = models.ManyToManyField(to='home.Article')
 
     @classmethod
