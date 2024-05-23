@@ -410,15 +410,26 @@ RAPIDPRO_BOT_GROUP_NAME = os.getenv('RAPIDPRO_BOT_GROUP_NAME', 'rapidpro_chatbot
 
 WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME = 'iogt_flat_menu_items'
 
-WAGTAIL_RICH_TEXT_FIELD_FEATURES = [
-    'h2', 'h3', 'h4',
-    'bold', 'italic',
-    'ol', 'ul',
-    'hr',
-    'link',
-    'document-link',
-    'image',
-]
+WAGTAILADMIN_RICH_TEXT_EDITORS = {
+    "default": {
+        "WIDGET": "wagtail.admin.rich_text.DraftailRichTextArea",
+        "OPTIONS": {
+            "features": [
+                "h2",
+                "h3",
+                "h4",
+                "bold",
+                "italic",
+                "ol",
+                "ul",
+                "hr",
+                "link",
+                "document-link",
+                "image",
+            ],
+        }
+    },
+}
 
 # Search results
 SEARCH_RESULTS_PER_PAGE = 10

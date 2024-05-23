@@ -323,8 +323,14 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
 
     body = StreamField(
         [
-            ('heading', blocks.CharBlock(form_classname="full title", template='blocks/heading.html')),
-            ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
+            (
+                'heading',
+                blocks.CharBlock(
+                    form_classname="full title",
+                    template="blocks/heading.html",
+                ),
+            ),
+            ('paragraph', blocks.RichTextBlock()),
             ('markdown', MarkdownBlock(icon='code')),
             ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
             ('image', ImageChooserBlock(template='blocks/image.html')),

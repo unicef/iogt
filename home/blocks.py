@@ -162,20 +162,30 @@ class RawHTMLBlock(blocks.RawHTMLBlock):
 
 class DownloadButtonBlock(blocks.StructBlock):
     available_text = blocks.CharBlock(
-        help_text=_('This text appears when it is possible for the user to install the app on their phone.'))
+        help_text=_(
+            "This text appears when it is possible for the user to install the app on"
+            " their phone"
+        )
+    )
     unavailable_text = blocks.CharBlock(
         required=False,
         help_text=_(
-            'This text appears when the user is using a feature phone and thus cannot install the app '
-            '(the button will be disabled in this case). [Currently not implemented]'),
-        form_classname='red-help-text')
+            "This text appears when the user is using a feature phone and thus cannot"
+            " install the app (the button will be disabled in this case)."
+            " [Currently not implemented]"
+        ),
+        form_classname="red-help-text",
+    )
     offline_text = blocks.CharBlock(
-        required=False, help_text=_(
-            'This text appears when the user is navigating the site via the offline app and '
-            'thus it doesn\'t make sense to install the offline app again '
-            '(the button will be disabled in this case).'))
-    page = PageChooserBlock(target_model='wagtailcore.Page')
-    description = blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)
+        required=False,
+        help_text=_(
+            "This text appears when the user is navigating the site via the offline app"
+            " and thus it does not make sense to install the offline app again (the"
+            " button will be disabled in this case)."
+        ),
+    )
+    page = PageChooserBlock(target_model="wagtailcore.Page")
+    description = blocks.RichTextBlock()
 
     class Meta:
-        template = 'blocks/download_button.html'
+        template = "blocks/download_button.html"
