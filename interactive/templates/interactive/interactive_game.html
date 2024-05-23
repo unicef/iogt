@@ -18,14 +18,15 @@
                 <form action="#" class="interactive-game-form" method="POST">
                     {% csrf_token %}
 
+
                     <center>
                         {{ db_data.message|safe }}
+
+                        {% for reply in db_data.buttons %}
+                            <button type="submit" class="interactive-btn" name="text" value="{{ reply }}">{{ reply }}</button>
+                        {% endfor %}
                     </center>
                     
-                    {% for reply in db_data.buttons %}
-                    <button type="submit" class="cust-btn btn-secondary interactive-btn" name="text" value="{{ reply }}">{{ reply }}</button>
-                        {% comment %} <input type="submit" class="cust-btn btn-secondary interactive-btn" name="text" value="{{ reply }}"> {% endcomment %}
-                    {% endfor %}
                 </form>
             </div>
         </div>
