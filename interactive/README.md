@@ -1,5 +1,21 @@
 Users can communicate with RapidPro by creating an Interactive chatbots in IoGT.
 
+## Create a service account in IoGT
+
+RapidPro needs a service account within IoGT to be able to authenticate itself to IoGT and establish communication. The service account is set up within IoGT as an unprivileged user account within a specific user group. Any Wagtail Admin should be able to set up the service account manually.
+
+- Create a new group (_Settings_ > _Groups_, _Add a group_)
+  - The name must be exactly 'rapidpro_chatbot'
+  - No permissions are required
+- Create the service account (_Settings_ > _Users_, _Add a user_)
+  - The username just has to be unique
+  - Use a long and varied password (no need to remember it)
+  - It is recommended to give the user a descriptive first and last name, e.g. 'RapidPro Bot'
+  - Add the user to the 'rapidpro_chatbot' group (in the _Roles_ section)
+- Verify everything is set up correctly, by checking that the authorization header to be used by RapidPro when authenticating to IoGT now appears in _Chatbot_ > _Chatbot Channels_.
+
+You can now set up a channel in RapidPro, and add this channel to IoGT so you can start communicating with it.
+
 ## Setting up an Interactive Chatbot channel
 1. Find the _Chatbot Authentication Header_ for the chatbot in the IoGT admin panel at _Interactive_ > _Interactive RapidPro Channels_ - displayed at the top of the page.
 2. In your workspace in RapidPro, go to _Settings_ > _Add Channel_.
@@ -37,3 +53,18 @@ As part of an Interactive page content, you can now add an _Interactive RapidPro
 
 Upon clicking the page title, the user will be directed to the interactive page (showing the first message from RapidPro).
 
+## Create a service account in IoGT with the management command
+
+This is only an option for those who are operating an instance of IoGT (system administrator, ops team). The management commmand performs the manual steps for creating a service account in IoGT (detailed above) and is provided to automate the process (e.g. when an IoGT site is first created).
+
+The setup command.
+```
+python manage.py sync_rapidpro_bot_user
+```
+
+There is another command that will print the authorization header to be used by RapidPro when authenticating to IoGT.
+```
+python manage.py get_rapidpro_authentication_header_value
+```
+
+This is the same value that appears in the IoGT admin panel under _Chatbot_ > _Chatbot channels_.
