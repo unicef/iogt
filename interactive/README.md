@@ -12,7 +12,7 @@ RapidPro needs a service account within IoGT to be able to authenticate itself t
   - Use a long and varied password (no need to remember it)
   - It is recommended to give the user a descriptive first and last name, e.g. 'RapidPro Bot'
   - Add the user to the 'rapidpro_chatbot' group (in the _Roles_ section)
-- Verify everything is set up correctly, by checking that the authorization header to be used by RapidPro when authenticating to IoGT now appears in _Chatbot_ > _Chatbot Channels_.
+- Verify everything is set up correctly, by checking that the authorization header to be used by RapidPro when authenticating to IoGT now appears in _Interactive_ > _Interactive RapidPro Channels_.
 
 You can now set up a channel in RapidPro, and add this channel to IoGT so you can start communicating with it.
 
