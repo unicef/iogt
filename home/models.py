@@ -24,7 +24,7 @@ from wagtail.admin.panels import (
     ObjectList,
     TabbedInterface,
 )
-from wagtail.contrib.settings.models import BaseSetting
+from wagtail.contrib.settings.models import BaseSiteSetting
 from wagtail.contrib.settings.registry import register_setting
 from wagtail import blocks
 from wagtail.fields import StreamField
@@ -608,7 +608,7 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
 
 
 @register_setting
-class SiteSettings(BaseSetting):
+class SiteSettings(BaseSiteSetting):
     logo = models.ForeignKey(
         'wagtailimages.Image',
         null=True,
@@ -1063,7 +1063,7 @@ class ManifestSettings(models.Model):
 
 
 @register_setting
-class ThemeSettings(BaseSetting):
+class ThemeSettings(BaseSiteSetting):
     global_background_color = models.CharField(
         null=True, blank=True, help_text='The background color of the website',
         max_length=8, default='#FFFFFF')
