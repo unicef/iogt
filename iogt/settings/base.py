@@ -576,3 +576,4 @@ IMAGE_SIZE_PRESET = int(os.getenv('IMAGE_SIZE_PRESET', '') or '360')
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 WAGTAILREDIRECTS_AUTO_CREATE = os.getenv('WAGTAILREDIRECTS_AUTO_CREATE', 'enable') == 'enable'
+WAGTAILSVG_UPLOAD_FOLDER = "media"
