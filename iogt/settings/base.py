@@ -578,6 +578,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 WAGTAILREDIRECTS_AUTO_CREATE = os.getenv('WAGTAILREDIRECTS_AUTO_CREATE', 'enable') == 'enable'
 WAGTAILSVG_UPLOAD_FOLDER = "media"
 
+DEFAULT_FROM_EMAIL = os.getenv("EMAIL_FROM", "IoGT <iogt@localhost>")
 EMAIL_HOST = os.getenv("EMAIL_HOST")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
