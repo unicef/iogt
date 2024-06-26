@@ -72,12 +72,13 @@ class ShortCodeService:
         hint = attrs.get("hint", "")
         status = attrs.get("status", "unlocked")
         lock_img = attrs.get('lock_img', '')
+        message = attrs.get("message", content)
 
         if status == 'locked':
             lock_btn_html = f'<button class="sub-section denial-btn {status}" type="submit" name="text" value="">'
             lock_img_html = f'<img src="{lock_img}" alt="locked">'
         else:
-            lock_btn_html = f'<button class="sub-section denial-btn {status}" type="submit" name="text" value="{content}">'
+            lock_btn_html = f'<button class="sub-section denial-btn {status}" type="submit" name="text" value="{message}">'
             lock_img_html = ''
 
         button = f'''{lock_btn_html}
