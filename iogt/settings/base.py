@@ -518,7 +518,7 @@ if CACHE:
             'TIMEOUT': CACHE_TIMEOUT,
             'KEY_PREFIX': f'{KEY_PREFIX}_default',
         },
-        # https://docs.wagtail.org/en/v2.15.6/advanced_topics/performance.html#caching-image-renditions
+        # https://docs.wagtail.org/en/v3.0.3/advanced_topics/performance.html#caching-image-renditions
         'renditions': {
             'BACKEND': CACHE_BACKEND,
             'LOCATION': CACHE_LOCATION,
