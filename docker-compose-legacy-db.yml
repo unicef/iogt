@@ -1,5 +1,3 @@
-version: '3.5'
-
 services:
   legacy-db:
     image: postgres:9.6-alpine

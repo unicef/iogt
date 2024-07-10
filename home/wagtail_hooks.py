@@ -80,9 +80,27 @@ def limit_page_chooser(pages, request):
     return pages
 
 
-@hooks.register('insert_global_admin_css', order=100)
+@hooks.register("insert_global_admin_css", order=100)
 def global_admin_css():
-    return format_html('<link rel="stylesheet" href="{}">', static('css/global/admin.css'))
+    return format_html(
+        '<link rel="stylesheet" href="{}">',
+        static("css/global/admin.css"),
+    )
+
+@hooks.register("insert_global_admin_css")
+def import_fontawesome_stylesheets():
+    return "\n".join(
+        [
+            format_html(
+                '<link rel="stylesheet" href="{}">',
+                static("css/fontawesome/css/fontawesome.min.css"),
+            ),
+            format_html(
+                '<link rel="stylesheet" href="{}">',
+                static("css/fontawesome/css/solid.min.css"),
+            ),
+        ]
+    )
 
 
 @hooks.register('insert_global_admin_js', order=100)

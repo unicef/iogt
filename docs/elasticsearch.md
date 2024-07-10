@@ -1,6 +1,8 @@
 # Overview
 
-Wagtail supports the use of Elasticsearch as a search backend, to speed up searches and remove the burden of searching from the relational database.
+Wagtail supports the use of a relational database or Elasticsearch as a search backend. A relational database is sufficient for simple search queries and sites that do not require high performance. Elasticsearch allows the search capability to be scaled up and removes the burden of searching from the relational database.
+
+By default, the relational database backend is used and there is no need for further configuration. The rest of this guide will explain how to set up Elasticsearch as a search backend.
 
 # Setup
 
@@ -15,7 +17,6 @@ The outline of the setup process is as follows.
 Create the file `docker-compose.override.yml`. Add the following to the file.
 
 ```yaml
-version: '3'
 services:
   search:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.12.1
@@ -29,7 +30,7 @@ volumes:
   search:
 ```
 
-If you already have a `docker-compose.override.yml`, you will need to merge the snippet above into it, in which case, you will probably not need the first two lines.
+If you already have a `docker-compose.override.yml`, you will need to merge the snippet above into it.
 
 ## Configure Wagtail to use Elasticsearch
 
@@ -60,5 +61,7 @@ To create and subsequently update the ElasticSearch index.
 docker compose run --rm django python manage.py update_index
 ```
 
+If the search function does not return any results for any search, it may be necessary to update the index. This applies whether or not Elasticsearch is used.
 
-[search backends]: https://docs.wagtail.org/en/v2.15.6/topics/search/backends.html
+
+[search backends]: https://docs.wagtail.org/en/v3.0.3/topics/search/backends.html

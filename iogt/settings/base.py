@@ -84,7 +84,6 @@ INSTALLED_APPS = [
     'health_check.storage',
     'health_check.contrib.migrations',
     'rest_framework_simplejwt',
-    'google_analytics',
     'django_filters',
     'drf_yasg',
     'webpush',
@@ -117,7 +116,6 @@ MIDDLEWARE = [
     'iogt.middleware.CustomRedirectMiddleware',
     'iogt_users.middlewares.RegistrationSurveyRedirectMiddleware',
     'external_links.middleware.RewriteExternalLinksMiddleware',
-    'iogt.middleware.CacheControlMiddleware',
     'iogt.middleware.GlobalDataMiddleware',
     'wagtailcache.cache.FetchFromCacheMiddleware',
 ]
@@ -442,10 +440,6 @@ TRANSLATIONS_BASE_DIR = BASE_DIR
 # ========= Rapid Pro =================
 RAPIDPRO_BOT_GROUP_NAME = os.getenv('RAPIDPRO_BOT_GROUP_NAME', 'rapidpro_chatbot')
 
-# Wagtail transfer default values. Override these in local.py
-WAGTAILTRANSFER_SECRET_KEY = os.getenv('WAGTAILTRANSFER_SECRET_KEY')
-WAGTAILTRANSFER_SOURCES = {}
-
 WAGTAILMENUS_FLAT_MENU_ITEMS_RELATED_NAME = 'iogt_flat_menu_items'
 
 WAGTAIL_RICH_TEXT_FIELD_FEATURES = [
@@ -466,20 +460,28 @@ COMMIT_HASH = os.getenv('COMMIT_HASH')
 EXPORT_FILENAME_TIMESTAMP_FORMAT = '%Y-%m-%dT%H%M%S'
 
 WAGTAILMARKDOWN = {
-    'allowed_tags': ['i', 'b'],
+    "allowed_tags": ["i", "b"],
+    "autodownload_fontawesome": False,
 }
 
 TRANSLATIONS_PROJECT_BASE_DIR = BASE_DIR
 
 from iogt.patch import *
 
-WAGTAILTRANSFER_UPDATE_RELATED_MODELS = ['wagtailimages.image', 'wagtailsvg.svg',]
-WAGTAILTRANSFER_SHOW_ERROR_FOR_REFERENCED_PAGES = True
 WAGTAILTRANSFER_LOOKUP_FIELDS = {
     'taggit.tag': ['slug'],
     'wagtailcore.locale': ['language_code'],
     'iogt_users.user': ['username'],
 }
+WAGTAILTRANSFER_SECRET_KEY = os.getenv('WAGTAILTRANSFER_SECRET_KEY')
+WAGTAILTRANSFER_SHOW_ERROR_FOR_REFERENCED_PAGES = True
+WAGTAILTRANSFER_SOURCES = {
+   os.getenv('WAGTAILTRANSFER_SOURCE_NAME', 'default'): {
+      'BASE_URL': os.getenv('WAGTAILTRANSFER_SOURCE_BASE_URL'),
+      'SECRET_KEY': os.getenv('WAGTAILTRANSFER_SOURCE_SECRET_KEY'),
+   },
+}
+WAGTAILTRANSFER_UPDATE_RELATED_MODELS = ['wagtailimages.image', 'wagtailsvg.svg',]
 
 REST_FRAMEWORK = {
     'DATETIME_FORMAT': '%Y-%m-%dT%H:%M:%S.%fZ',
@@ -518,7 +520,7 @@ if CACHE:
             'TIMEOUT': CACHE_TIMEOUT,
             'KEY_PREFIX': f'{KEY_PREFIX}_default',
         },
-        # https://docs.wagtail.org/en/v2.15.6/advanced_topics/performance.html#caching-image-renditions
+        # https://docs.wagtail.org/en/v3.0.3/advanced_topics/performance.html#caching-image-renditions
         'renditions': {
             'BACKEND': CACHE_BACKEND,
             'LOCATION': CACHE_LOCATION,
@@ -576,3 +578,11 @@ IMAGE_SIZE_PRESET = int(os.getenv('IMAGE_SIZE_PRESET', '') or '360')
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 WAGTAILREDIRECTS_AUTO_CREATE = os.getenv('WAGTAILREDIRECTS_AUTO_CREATE', 'enable') == 'enable'
+WAGTAILSVG_UPLOAD_FOLDER = "media"
+
+DEFAULT_FROM_EMAIL = os.getenv("EMAIL_FROM", "IoGT <iogt@localhost>")
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_PORT = os.getenv("EMAIL_PORT")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "disable") == "enable"
