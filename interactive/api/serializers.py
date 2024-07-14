@@ -11,5 +11,5 @@ class RapidProMessageSerializer(serializers.Serializer):
 
     def get_fields(self):
         fields = super().get_fields()
-        fields['from'] = fields.pop('from_')
+        fields["from"] = fields.pop("from_")
         return fields
