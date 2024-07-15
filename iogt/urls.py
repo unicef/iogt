@@ -27,6 +27,8 @@ from iogt.views import (
 
 api_url_patterns = [
     path('api/v1/questionnaires/', include('questionnaires.api.v1.urls')),
+    path('api/interactive/', include('interactive.api.urls')),
+    
 ]
 
 schema_view = get_schema_view(
