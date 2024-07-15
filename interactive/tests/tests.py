@@ -9,15 +9,15 @@ from home.models import User
 from interactive.models import Message
 
 
-# Create your tests here.
 class RapidProWebhookTest(APITestCase):
     def setUp(self) -> None:
         username = uuid4()
         management.call_command("sync_rapidpro_bot_user", username=username)
         self.bot_user = User.objects.get(username=username)
         self.client = APIClient()
+        token = RefreshToken.for_user(self.bot_user).access_token
         self.client.credentials(
-            HTTP_AUTHORIZATION=f"Bearer {RefreshToken.for_user(self.bot_user).access_token}"
+            HTTP_AUTHORIZATION=f"Bearer {token}"
         )
 
     def test_webhook_stitches_messages(self):
@@ -25,7 +25,10 @@ class RapidProWebhookTest(APITestCase):
         rapidpro_data_list = [
             {
                 "id": "1",
-                "text": "Some message with the first part of text. First part ends at the exclamation mark!",
+                "text": (
+                    "Some message with the first part of text. First part ends at the"
+                    " exclamation mark!"
+                ),
                 "to": "bd3577c6-65b1-4bb7-9611-306c11b1dcc5",
                 "from": "abcd",
                 "channel": "bd3577c6-65b1-4bb7-9611-306c11b1dcc5",

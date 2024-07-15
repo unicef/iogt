@@ -83,7 +83,7 @@ class InteractivePage(Page, PageUtilsMixin, TitleIconMixin):
                 try:
                     response = requests.post(url=channel_url, data=data)
                     response.raise_for_status()
-                except requests.exceptions.RequestException as e:
+                except requests.exceptions.RequestException:
                     return redirect("/")
 
                 return redirect(self.get_url(request))
@@ -105,11 +105,8 @@ class InteractivePage(Page, PageUtilsMixin, TitleIconMixin):
             request.session.save()
 
         user_uuid = request.session.setdefault("interactive_uuid", str(uuid.uuid4()))
-
-        # Get the authenticated user
         user = request.user
 
-        # If the user is authenticated and has no 'interactive_uuid' set, update it
         if user.is_authenticated:
             if user.interactive_uuid:
                 user_uuid = user.interactive_uuid
@@ -121,16 +118,15 @@ class InteractivePage(Page, PageUtilsMixin, TitleIconMixin):
         return user_uuid
 
     def get_message_from_db(self, user):
-        # wait a second to receive new message from rapidpro
+        # Wait to receive new message from rapidpro
         time.sleep(1)
 
         start_time = time.time()
 
         while True:
-            # Calculate the elapsed time
+            # Elapsed time in seconds
             elapsed_time = time.time() - start_time
 
-            # Break the loop if 5 seconds have elapsed
             if elapsed_time >= 5:
                 break
 
@@ -140,26 +136,16 @@ class InteractivePage(Page, PageUtilsMixin, TitleIconMixin):
 
             text = chat.text.strip()
 
-            # Check if the message has a next message indicator
             if text.endswith("[CONTINUE]"):
                 time.sleep(1)
             else:
-                break  # Exit the loop if the message does not end with '[CONTINUE]'
+                break
 
         shortcode_service = ShortCodeService()
         text = shortcode_service.apply_shortcode(text)
-
-        # Define the regular expression pattern
         pattern = r'\[color_scheme\s+bg-color="(?P<bg_color>[^"]+)"(\])?'
-
-        # Search for matches in the input string
         match = re.search(pattern, text)
-
-        bg_color = ""
-        # Check if a match is found
-        if match:
-            # Extract the bg_color attributes
-            bg_color = match.group("bg_color")
+        bg_color = match.group("bg_color") if match else ""
 
         # Remove the [bg_color] tag from the input string
         text = re.sub(pattern, "", text)
@@ -180,5 +166,4 @@ class InteractivePage(Page, PageUtilsMixin, TitleIconMixin):
 
         if referer_lang != current_lang:
             data = {"from": user, "text": self.trigger_string}
-
-            response = requests.post(url=self.channel.request_url, data=data)
+            requests.post(url=self.channel.request_url, data=data)

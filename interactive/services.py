@@ -32,7 +32,7 @@ class ShortCodeService:
 
     def form_callback(self, attrs, content):
         if attrs["type"] == "input":
-            return f'<input class="text-input" type="text" name="text">'
+            return '<input class="text-input" type="text" name="text">'
 
         return ""
 
