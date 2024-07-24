@@ -14,7 +14,6 @@ from django.utils.deconstruct import deconstructible
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 from modelcluster.contrib.taggit import ClusterTaggableManager
-from iogt.settings.base import WAGTAIL_CONTENT_LANGUAGES
 from modelcluster.fields import ParentalKey
 from rest_framework import status
 from taggit.models import TaggedItemBase
@@ -25,7 +24,7 @@ from wagtail.admin.panels import (
     ObjectList,
     TabbedInterface,
 )
-from wagtail.contrib.settings.models import BaseSetting
+from wagtail.contrib.settings.models import BaseSiteSetting
 from wagtail.contrib.settings.registry import register_setting
 from wagtail import blocks
 from wagtail.fields import StreamField
@@ -42,8 +41,18 @@ from wagtailsvg.edit_handlers import SvgChooserPanel
 from messaging.blocks import ChatBotButtonBlock
 from comments.models import CommentableMixin
 from home.blocks import (
-    MediaBlock, SocialMediaLinkBlock, SocialMediaShareButtonBlock, EmbeddedPollBlock, EmbeddedSurveyBlock,
-    EmbeddedQuizBlock, PageButtonBlock, NumberedListBlock, RawHTMLBlock, ArticleBlock, DownloadButtonBlock,
+    ArticleBlock,
+    DownloadButtonBlock,
+    EmbeddedPollBlock,
+    EmbeddedSurveyBlock,
+    EmbeddedQuizBlock,
+    heading_block,
+    MediaBlock,
+    PageButtonBlock,
+    NumberedListBlock,
+    RawHTMLBlock,
+    SocialMediaLinkBlock,
+    SocialMediaShareButtonBlock,
 )
 from .forms import SectionPageForm
 from .mixins import PageUtilsMixin, TitleIconMixin
@@ -323,20 +332,20 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
 
     body = StreamField(
         [
-            ('heading', blocks.CharBlock(form_classname="full title", template='blocks/heading.html')),
-            ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
-            ('markdown', MarkdownBlock(icon='code')),
-            ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
-            ('image', ImageChooserBlock(template='blocks/image.html')),
-            ('list', blocks.ListBlock(MarkdownBlock(icon='code'))),
-            ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
-            ('page_button', PageButtonBlock()),
-            ('embedded_poll', EmbeddedPollBlock()),
-            ('embedded_survey', EmbeddedSurveyBlock()),
-            ('embedded_quiz', EmbeddedQuizBlock()),
-            ('media', MediaBlock(icon='media')),
-            ('chat_bot', ChatBotButtonBlock()),
-            ('download', DownloadButtonBlock()),
+            ("heading", heading_block()),
+            ("paragraph", blocks.RichTextBlock()),
+            ("markdown", MarkdownBlock()),
+            ("paragraph_v1_legacy", RawHTMLBlock(icon='code')),
+            ("image", ImageChooserBlock(template='blocks/image.html')),
+            ("list", blocks.ListBlock(MarkdownBlock(), icon="list-ul")),
+            ("numbered_list", NumberedListBlock(MarkdownBlock())),
+            ("page_button", PageButtonBlock()),
+            ("embedded_poll", EmbeddedPollBlock()),
+            ("embedded_survey", EmbeddedSurveyBlock()),
+            ("embedded_quiz", EmbeddedQuizBlock()),
+            ("media", MediaBlock()),
+            ("chat_bot", ChatBotButtonBlock()),
+            ("download", DownloadButtonBlock()),
         ],
         use_json_field=True,
     )
@@ -599,7 +608,7 @@ class PageLinkPage(Page, PageUtilsMixin, TitleIconMixin):
 
 
 @register_setting
-class SiteSettings(BaseSetting):
+class SiteSettings(BaseSiteSetting):
     logo = models.ForeignKey(
         'wagtailimages.Image',
         null=True,
@@ -686,16 +695,28 @@ class SiteSettings(BaseSetting):
         blank=True,
         use_json_field=True,
     )
-    social_media_content_sharing_button = StreamField([
-        ('social_media_content_sharing_button', SocialMediaShareButtonBlock()),
-    ], null=True, blank=True)
+    social_media_content_sharing_button = StreamField(
+        [
+            ("social_media_content_sharing_button", SocialMediaShareButtonBlock()),
+        ],
+        null=True,
+        blank=True,
+        use_json_field=True,
+    )
     media_file_size_threshold = models.IntegerField(
         default=9437184,
-        help_text=_('Show warning if uploaded media file size is greater than this in bytes. Default is 9 MB'))
+        help_text=_(
+            "Show warning if uploaded media file size is greater than this in bytes."
+            " Default is 9 MB (9,437,184 bytes)."
+        )
+    )
     allow_anonymous_comment = models.BooleanField(default=False)
-    registration_survey = models.ForeignKey('questionnaires.Survey', null=True,
-                                            blank=True,
-                                            on_delete=models.SET_NULL)
+    registration_survey = models.ForeignKey(
+        "questionnaires.Survey",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
 
     # Obsolete - Web Light service discontinued Dec 2022
     opt_in_to_google_web_light = models.BooleanField(default=False)
@@ -959,7 +980,7 @@ class ManifestSettings(models.Model):
     )
     language = models.CharField(
         max_length=3,
-        choices=WAGTAIL_CONTENT_LANGUAGES,
+        choices=settings.WAGTAIL_CONTENT_LANGUAGES,
         default="en",
         verbose_name=_("Language"),
         help_text=_("Choose language"),
@@ -1042,7 +1063,7 @@ class ManifestSettings(models.Model):
 
 
 @register_setting
-class ThemeSettings(BaseSetting):
+class ThemeSettings(BaseSiteSetting):
     global_background_color = models.CharField(
         null=True, blank=True, help_text='The background color of the website',
         max_length=8, default='#FFFFFF')

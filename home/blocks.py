@@ -1,5 +1,3 @@
-from django.conf import settings
-from django.forms.utils import flatatt
 from django.utils.html import format_html, format_html_join
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
@@ -23,7 +21,8 @@ class MediaBlock(AbstractMediaChooserBlock):
         return context
 
     class Meta:
-        template = 'blocks/media.html'
+        icon = "media"
+        template = "blocks/media.html"
 
 
 class SocialMediaLinkBlock(blocks.StructBlock):
@@ -51,6 +50,9 @@ class EmbeddedQuestionnaireChooserBlock(blocks.PageChooserBlock):
 
 class EmbeddedQuestionnaireBlock(blocks.StructBlock):
     direct_display = blocks.BooleanBlock(required=False)
+
+    class Meta:
+        icon = "form"
 
 
 class EmbeddedPollBlock(EmbeddedQuestionnaireBlock):
@@ -119,6 +121,7 @@ class PageButtonBlock(blocks.StructBlock):
         return context
 
     class Meta:
+        icon = "link"
         template = 'blocks/page_button.html'
 
 
@@ -137,7 +140,8 @@ class ArticleBlock(blocks.StructBlock):
         return context
 
     class Meta:
-        template = 'blocks/article.html'
+        icon = "pick"
+        template = "blocks/article.html"
 
 
 class NumberedListBlock(blocks.ListBlock):
@@ -152,6 +156,9 @@ class NumberedListBlock(blocks.ListBlock):
         )
         return format_html("<ol>{0}</ol>", children)
 
+    class Meta:
+        icon = "list-ol"
+
 
 class RawHTMLBlock(blocks.RawHTMLBlock):
     def render_basic(self, value, context=None):
@@ -162,20 +169,39 @@ class RawHTMLBlock(blocks.RawHTMLBlock):
 
 class DownloadButtonBlock(blocks.StructBlock):
     available_text = blocks.CharBlock(
-        help_text=_('This text appears when it is possible for the user to install the app on their phone.'))
+        help_text=_(
+            "This text appears when it is possible for the user to install the app on"
+            " their phone"
+        )
+    )
     unavailable_text = blocks.CharBlock(
         required=False,
         help_text=_(
-            'This text appears when the user is using a feature phone and thus cannot install the app '
-            '(the button will be disabled in this case). [Currently not implemented]'),
-        form_classname='red-help-text')
+            "This text appears when the user is using a feature phone and thus cannot"
+            " install the app (the button will be disabled in this case)."
+            " [Currently not implemented]"
+        ),
+        form_classname="red-help-text",
+    )
     offline_text = blocks.CharBlock(
-        required=False, help_text=_(
-            'This text appears when the user is navigating the site via the offline app and '
-            'thus it doesn\'t make sense to install the offline app again '
-            '(the button will be disabled in this case).'))
-    page = PageChooserBlock(target_model='wagtailcore.Page')
-    description = blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)
+        required=False,
+        help_text=_(
+            "This text appears when the user is navigating the site via the offline app"
+            " and thus it does not make sense to install the offline app again (the"
+            " button will be disabled in this case)."
+        ),
+    )
+    page = PageChooserBlock(target_model="wagtailcore.Page")
+    description = blocks.RichTextBlock()
 
     class Meta:
-        template = 'blocks/download_button.html'
+        icon = "download"
+        template = "blocks/download_button.html"
+
+
+def heading_block():
+    return blocks.CharBlock(
+        icon="h1",
+        form_classname="full title",
+        template="blocks/heading.html",
+    )

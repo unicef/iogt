@@ -10,8 +10,7 @@ from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from wagtail import __version__
 from wagtail.admin import widgets as wagtailadmin_widgets
-from wagtail.admin.menu import MenuItem, SubmenuMenuItem
-from wagtail.contrib.modeladmin.menus import SubMenu
+from wagtail.admin.menu import Menu, MenuItem, SubmenuMenuItem
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from wagtail import hooks
 from wagtail.models import Page, PageViewRestriction
@@ -49,7 +48,10 @@ def update_menu_items(request, menu_items):
         if item.name == "forms":
             item.label = _("Form Data")
         if item.name == 'translations':
-            item.url = f'{TranslationEntryAdmin().url_helper.get_action_url("index")}?limited=yes'
+            item.url = (
+                TranslationEntryAdmin().url_helper.get_action_url("index") +
+                "?limited=yes"
+            )
         if item.name == 'community-comment-moderations':
             menu_items.remove(item)
 
@@ -87,6 +89,7 @@ def global_admin_css():
         static("css/global/admin.css"),
     )
 
+
 @hooks.register("insert_global_admin_css")
 def import_fontawesome_stylesheets():
     return "\n".join(
@@ -118,7 +121,7 @@ def page_listing_buttons(page, page_perms, is_parent=False, next_url=None):
         yield wagtailadmin_widgets.PageListingButton(
             _('Sort child pages'),
             '?ordering=ord',
-            attrs={'title': _("Change ordering of child pages of '%(title)s'") % {'title': page.get_admin_display_title()}},
+            attrs={"title": _("Change ordering of child pages of '%(title)s'") % {'title': page.get_admin_display_title()}},
             priority=60
         )
 
@@ -138,7 +141,7 @@ def about():
 
     return SubmenuMenuItem(
         label="About",
-        menu=SubMenu(items),
+        menu=Menu(items=items),
         icon_name="info-circle",
         order=999999,
     )
@@ -188,7 +191,11 @@ class TranslationEntryAdmin(ModelAdmin):
     menu_label = 'Translations'
     menu_icon = 'edit'
     list_display = ('original', 'language', 'translation',)
-    list_filter = ('language', LimitedTranslatableStringsFilter, MissingTranslationsFilter)
+    list_filter = (
+        'language',
+        LimitedTranslatableStringsFilter,
+        MissingTranslationsFilter
+    )
     search_fields = ('original', 'translation',)
     index_template_name = 'modeladmin/translation_manager/translationentry/index.html'
     menu_order = 601

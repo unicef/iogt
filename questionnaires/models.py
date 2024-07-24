@@ -14,6 +14,7 @@ from wagtailsvg.edit_handlers import SvgChooserPanel
 from wagtailsvg.models import Svg
 
 from home.blocks import (
+    heading_block,
     MediaBlock,
     NumberedListBlock,
     PageButtonBlock,
@@ -63,13 +64,13 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
 
     description = StreamField(
         [
-            ('heading', blocks.CharBlock(form_classname="full title", template='blocks/heading.html')),
-            ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
-            ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
-            ("image", ImageChooserBlock(template='blocks/image.html')),
-            ('list', MarkdownBlock(icon='code')),
-            ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
-            ('page_button', PageButtonBlock()),
+            ("heading", heading_block()),
+            ("paragraph", blocks.RichTextBlock()),
+            ("paragraph_v1_legacy", RawHTMLBlock(icon='code')),
+            ("image", ImageChooserBlock(template="blocks/image.html")),
+            ("list", MarkdownBlock()),
+            ("numbered_list", NumberedListBlock(MarkdownBlock())),
+            ("page_button", PageButtonBlock()),
         ],
         null=True,
         blank=True,
@@ -77,9 +78,9 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
     )
     thank_you_text = StreamField(
         [
-            ("paragraph", blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
-            ("media", MediaBlock(icon="media")),
-            ("image", ImageChooserBlock(template='blocks/image.html')),
+            ("paragraph", blocks.RichTextBlock()),
+            ("media", MediaBlock()),
+            ("image", ImageChooserBlock(template="blocks/image.html")),
         ],
         null=True,
         blank=True,
@@ -107,7 +108,7 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
 
     terms_and_conditions = StreamField(
         [
-            ("paragraph", blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
+            ("paragraph", blocks.RichTextBlock()),
             ('page_button', PageButtonBlock()),
         ],
         null=True,
@@ -322,7 +323,7 @@ class SurveyFormField(AbstractFormField):
         help_text=_('Column header used during CSV export of survey '
                     'responses.'),
     )
-    skip_logic = SkipLogicField(null=True, blank=True)
+    skip_logic = SkipLogicField(null=True, blank=True, use_json_field=True)
     default_value = models.TextField(
         verbose_name=_('default value'),
         blank=True,

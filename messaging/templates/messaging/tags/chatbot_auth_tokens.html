@@ -1,18 +1,24 @@
-<span style="font-weight: bold">Chatbot Authentication Headers</span>
-<p style="text-transform: none; display: inline-block">
-  {% for username, token in tokens.items %}
-    <div style="word-wrap: break-word; width: 80%">
-      <strong>{{ username }}:</strong> 
-      <span class="hidden" style="display: none;">{{ token }}</span>
-      <button onclick="toggleVisibility(this)" style="display: inline-block;">Reveal Token</button>
+<div class="row">
+    <div class="left">
+        <div class="col">
+            <h2>Authentication headers</h2>
+            <dl>
+            {% for username, token in tokens.items %}
+                <dt>{{ username }}</dt>
+                <dd>
+                    <span style="display: none">{{ token }}</span>
+                    <button onclick="toggleVisibility(this)">Reveal Token</button>
+                </dd>
+            {% endfor %}
+            </dl>
+        </div>
     </div>
-  {% endfor %}
-</p>
+</div>
 
 <script>
 function toggleVisibility(button) {
-  var tokenSpan = button.previousElementSibling;
-  tokenSpan.style.display = (tokenSpan.style.display === "none") ? "inline-block" : "none";
+  const tokenSpan = button.previousElementSibling;
+  tokenSpan.style.display = (tokenSpan.style.display === "none") ? "block" : "none";
   button.textContent = (tokenSpan.style.display === "none") ? "Reveal Token" : "Hide Token";
 }
 </script>
