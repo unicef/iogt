@@ -71,20 +71,17 @@ class InteractivePage(Page, PageUtilsMixin, TitleIconMixin):
 
         if not user:
             return redirect("/")
+        
+        if request.method == "GET":
+            chat = Message.objects.filter(to=user).order_by("-created_at").first()
+            if not chat:
+                self.send_message_to_rapidpro(user=user, text=self.trigger_string)
 
         if request.method == "POST":
             form = MessageSendForm(request.POST)
 
             if form.is_valid():
-                channel_url = self.channel.request_url
-
-                data = {"from": user, "text": form.cleaned_data["text"]}
-
-                try:
-                    response = requests.post(url=channel_url, data=data)
-                    response.raise_for_status()
-                except requests.exceptions.RequestException:
-                    return redirect("/")
+                self.send_message_to_rapidpro(user=user, text=form.cleaned_data["text"])
 
                 return redirect(self.get_url(request))
 
@@ -165,5 +162,13 @@ class InteractivePage(Page, PageUtilsMixin, TitleIconMixin):
             referer_lang = current_lang
 
         if referer_lang != current_lang:
-            data = {"from": user, "text": self.trigger_string}
-            requests.post(url=self.channel.request_url, data=data)
+            self.send_message_to_rapidpro(user=user, text=self.trigger_string)
+
+    def send_message_to_rapidpro(self, user, text):
+        data = {"from": user, "text": text}
+
+        try:
+            response = requests.post(url=self.channel.request_url, data=data)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            return redirect("/")
