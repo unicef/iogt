@@ -435,10 +435,15 @@ WAGTAILMARKDOWN = {
 TRANSLATIONS_PROJECT_BASE_DIR = BASE_DIR
 
 WAGTAILTRANSFER_LOOKUP_FIELDS = {
+    'contenttypes.contenttype': ['app_label', 'model'],
+    'iogt_users.user': ['username'],
     'taggit.tag': ['slug'],
     'wagtailcore.locale': ['language_code'],
-    'iogt_users.user': ['username'],
 }
+WAGTAILTRANSFER_NO_FOLLOW_MODELS = [
+    'contenttypes.contenttype',
+    'wagtailcore.page',
+]
 WAGTAILTRANSFER_SECRET_KEY = os.getenv('WAGTAILTRANSFER_SECRET_KEY')
 WAGTAILTRANSFER_SHOW_ERROR_FOR_REFERENCED_PAGES = True
 WAGTAILTRANSFER_SOURCES = {
