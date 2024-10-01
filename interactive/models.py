@@ -36,12 +36,12 @@ class InteractiveChannel(models.Model):
 
 
 class Message(models.Model):
-    rapidpro_message_id = models.AutoField(primary_key=True)
+    rapidpro_message_id = models.BigIntegerField(primary_key=True)
     text = models.TextField()
     quick_replies = models.JSONField(null=True, blank=True)
     to = models.CharField(max_length=255)
     from_field = models.CharField(max_length=255)
-    channel = models.CharField(max_length=255)
+    channel = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
