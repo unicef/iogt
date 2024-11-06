@@ -7,13 +7,13 @@
 
     {% include "wagtailadmin/shared/header.html" with subtitle=group.name title=users_str action_url=add_link action_text="Add a user" icon="user" search_url="wagtailusers_users:index" %}
 
-    <div class="nice-padding">
-        <div class="action-buttons">
-            <button id="invite-admin-button" class="button button--icon" style="margin-left: 10px;">
-                {% icon name="plus" wrapped=1 %} Invite Admin User
-            </button>
-        </div>
-    </div>
+{#    <div class="nice-padding">#}
+{#        <div class="action-buttons">#}
+{#            <button id="invite-admin-button" class="button button--icon" style="margin-left: 10px;">#}
+{#                {% icon name="plus" wrapped=1 %} Invite Admin User#}
+{#            </button>#}
+{#        </div>#}
+{#    </div>#}
 
     <!-- Modal for Inviting Admin User -->
     <div id="invite-admin-modal" class="modal">
