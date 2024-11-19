@@ -80,6 +80,7 @@ INSTALLED_APPS = [
     'wagtailsvg',
     'webpush',
     'admin_login',
+    'email_service'
 ]
 
 # The order of middleware is very important. Take care when modifying this list.
@@ -145,7 +146,6 @@ DATABASES = {
 
 # Authentication
 AUTHENTICATION_BACKENDS = (
-    # 'allauth.account.auth_backends.AuthenticationBackend',  # Enables allauth for authentication
     'django.contrib.auth.backends.ModelBackend',
     'admin_login.azure_backend.AzureADBackend',# Default Django backend
 )
@@ -566,70 +566,31 @@ EMAIL_PORT = os.getenv("EMAIL_PORT")
 EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "disable") == "enable"
 
 
-# SOCIALACCOUNT_PROVIDERS = {
-#     'microsoft': {
-#         'APP': {
-#             'client_id': 'your-azure-client-id',
-#             'secret': 'your-azure-client-secret',
-#             'key': ''
-#         },
-#         'tenant': 'your-tenant-id',
-#         'auth_params': {'scope': 'openid email profile'}
-#     },
-#     'openid_connect': {
-#         'APP': {
-#             'client_id': 'your-unicef-client-id',
-#             'secret': 'your-unicef-client-secret',
-#             'key': ''
-#         },
-#         'SERVER_URL': 'https://unicef-auth-url.com',  # UNICEF's auth URL
-#         'auth_params': {'scope': 'openid email profile'}
-#     }
-# }
-
-
-
-AZURE_AD_TENANT_ID = 'iogt'
-AZURE_AD_SIGNUP_SIGNIN_POLICY = 'B2C_1_signup_signin'
+AZURE_AD_TENANT_ID = os.getenv('AZURE_AD_TENANT_ID')
+AZURE_AD_SIGNUP_SIGNIN_POLICY = os.getenv('AZURE_AD_SIGNUP_SIGNIN_POLICY')
 
 SOCIALACCOUNT_PROVIDERS = {
         'azure': {  # Use 'azure' as the key here
             'APP': {
-                'client_id': '',
-                'secret': '',
+                'client_id': os.getenv('AZURE_AD_CLIENT_ID'),
+                'secret': os.getenv('AZURE_AD_SECRET_ID'),
             },
-            'AZURE_AD_TENANT_ID': 'iogt',
-            'AZURE_AD_SIGNUP_SIGNIN_POLICY': 'B2C_1_signup_signin',
-            'SERVER_URL': f"https://{AZURE_AD_TENANT_ID}.b2clogin.com/{AZURE_AD_TENANT_ID}.onmicrosoft.com/v2.0/.well-known/openid-configuration?p={AZURE_AD_SIGNUP_SIGNIN_POLICY}",
+            'AZURE_AD_TENANT_ID': os.getenv('AZURE_AD_TENANT_ID'),
+            'AZURE_AD_SIGNUP_SIGNIN_POLICY': os.getenv('AZURE_AD_SIGNUP_SIGNIN_POLICY'),
+            'SERVER_URL': f"https://{os.getenv('AZURE_AD_TENANT_ID')}.b2clogin.com/{os.getenv('AZURE_AD_TENANT_ID')}.onmicrosoft.com/v2.0/.well-known/openid-configuration?p={os.getenv('AZURE_AD_SIGNUP_SIGNIN_POLICY')}",
             'REDIRECT_URI': 'http://localhost:8000/en/admin-login/signup-as-admin/callback/',
-            'SCOPES': ['openid', 'email', 'profile', 'https://graph.microsoft.com/.default'],
+            'SCOPES': ['openid', 'email', 'profile'],
             'VERIFY_SSL': True,  # SSL verification
             'KEY': 'azure',  # Set 'azure' as the key
         },
 }
 
-# Additional Django Allauth settings
-LOGIN_REDIRECT_URL = '/admin/'
-LOGOUT_REDIRECT_URL = '/'
 
-# SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+MAILJET_API_KEY = os.getenv('MAILJET_API_KEY')
+MAILJET_API_SECRET = os.getenv('MAILJET_API_SECRET')
+MAILJET_FROM_EMAIL = os.getenv('MAILJET_FROM_EMAIL')
+MAILJET_FROM_NAME = os.getenv('MAILJET_FROM_NAME')
 
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_AUTHENTICATED_REDIRECT_URL = '/'
 
-ANYMAIL = {
-    "MAILJET_API_KEY": "",
-    "MAILJET_API_SECRET": "",
-}
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "in-v3.mailjet.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'iogt@unicef.org'
-EMAIL_HOST_USER = ""
-EMAIL_HOST_PASSWORD = ""
-# Configure the default email backend to use Anymail
-EMAIL_BACKEND = "anymail.backends.mailjet.EmailBackend"
+
