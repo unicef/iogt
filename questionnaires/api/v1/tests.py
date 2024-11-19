@@ -405,7 +405,7 @@ class QuestionnaireDetailAPIViewTests(TestCase):
         poll_question = PollFormFieldFactory(page=poll, field_type='checkboxes', choices='c1|c2|c3', default_value='c2')
 
         response = self.client.get(reverse(self.url, kwargs={'pk': poll.id}))
-        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
 class QuestionnaireSubmissionsAPIViewTests(TestCase):
