@@ -4,10 +4,12 @@ from pathlib import Path, PurePosixPath
 
 from django.conf import settings
 from django.contrib.admin.utils import flatten
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.templatetags.static import static
 from django.urls import reverse
 from django.utils import translation
+from django.contrib.auth import logout
+from django.views import View
 from django.views.generic import TemplateView
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -18,6 +20,8 @@ from wagtailmedia.models import Media
 from home.models import HomePage, Section, Article, SVGToPNGMap, FooterPage, OfflineContentIndexPage
 from iogt.utils import has_md5_hash
 from questionnaires.models import Poll, Survey, Quiz
+
+from admin_login.azure_utility import get_azure_auth_details
 
 logger = logging.getLogger(__name__)
 
@@ -173,3 +177,38 @@ class OfflineContentNotFoundPageView(TemplateView):
         page = OfflineContentIndexPage.objects.filter(locale=Locale.get_active()).first()
         context["offline_content_index_page_url"] = (page and page.url) or ''
         return context
+
+
+class CustomLogoutView(View):
+    """
+    This view handles user logout from both Django and Azure AD B2C.
+    After logging out the user from Django, it also logs out from Azure AD B2C.
+    """
+
+    def get(self, request, *args, **kwargs):
+        """
+        Log the user out of Django and redirect them to Azure AD B2C's logout page.
+        """
+        # Log the user out of the Django session
+        logout(request)
+
+        # Azure AD B2C logout URL
+        azure_logout_url = self.get_azure_ad_b2c_logout_url(request)
+
+        # Redirect to Azure AD B2C logout
+        return redirect(azure_logout_url)
+
+    def get_azure_ad_b2c_logout_url(self, request):
+        """
+        Generate the Azure AD B2C logout URL.
+        This URL will redirect the user to the Azure AD B2C logout endpoint.
+        """
+        # Get the tenant and policy (e.g., B2C_1_signup_signin) from settings or your configuration
+        azure_details = get_azure_auth_details()
+        tenant = azure_details['tenant_id']
+        policy = azure_details['policy']
+        redirect_uri = azure_details['redirect_uri']
+        # Azure AD B2C logout URL (This URL will log the user out of Azure AD and redirect them back to your app)
+        logout_url = f"https://{tenant}.b2clogin.com/{tenant}.onmicrosoft.com/{policy}/oauth2/v2.0/logout?p={policy}&post_logout_redirect_uri={redirect_uri}"
+
+        return logout_url

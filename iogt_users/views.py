@@ -6,9 +6,8 @@ from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView, TemplateView
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
 from django.views import View
-from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model
 
 
 @method_decorator(login_required, name='dispatch')
@@ -31,13 +30,12 @@ class UserDetailEditView(UpdateView):
     def get_object(self, queryset=None):
         return self.request.user
 
+
 @method_decorator(csrf_exempt, name='dispatch')  # To allow AJAX requests without CSRF token
 @method_decorator(login_required, name='dispatch')
 class InviteAdminUserView(View):
     def post(self, request, *args, **kwargs):
         # Retrieve form data
-        from django.contrib.auth import get_user_model
-
         User = get_user_model()
 
         first_name = request.POST.get('first_name', '').strip()
@@ -64,20 +62,25 @@ class InviteAdminUserView(View):
         if errors:
             return JsonResponse({'success': False, 'errors': errors}, status=400)
 
+        from django.core.mail import send_mail
+
         # If no errors, proceed with sending the invitation email
         # Assume `User` is your user model and email is unique
         user, created = User.objects.get_or_create(
             email=email,
-            defaults={'first_name': first_name, 'last_name': last_name}
+            defaults={'first_name': first_name, 'last_name': last_name},
+            username=email
         )
 
-        subject = "You are invited as an Admin"
-        context = {
-            'user_name': f"{first_name} {last_name}"
-        }
+        from django.conf import settings
+        subject = "You are Invited as Admin"
+        message = 'hiiiii'
+        from_email = settings.DEFAULT_FROM_EMAIL
 
-        # Send email using the email service function
-        send_standard_email(user, subject, context)
-
+        try:
+            send_mail(subject, message, from_email, [email])
+            return
         # Return a success response
-        return JsonResponse({'success': True})
+        except Exception as e:
+            print(e, "))))))))))))))")
+            return
