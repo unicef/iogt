@@ -10,7 +10,13 @@
           action="{% url 'account_signup' %}">
         {% csrf_token %}
         <div class="profile-form__inputs">
-            {{ form.as_p }}
+            {% for field in form %}
+                <div class="fieldWrapper">
+                    {% translate field.label %}
+                    {{ field }}
+                </div>
+                <br>
+            {% endfor %}
         </div>
         {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}"

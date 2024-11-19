@@ -51,10 +51,6 @@ translatable_strings = [
     'Log in / Create account',
     'You are leaving the <b>Internet of Good Things</b> to visit an external website and standard data charges by your network provider might apply',
     'Continue to external site',
-    '4-digit PIN',
-    'Old 4-digit PIN',
-    'New 4-digit PIN',
-    'Confirm new 4-digit PIN',
     'Hey, %(username)s',
     'Change Digital Pin',
     'Log out',
@@ -95,7 +91,6 @@ translatable_strings = [
     'More',
     'Report this comment?',
     'It will be reviewed by the team and may be removed if it breaks our Platform Rules',
-    'Display name',
     'Reported by %(comment_report_count)s user',
     'Reported by %(comment_report_count)s users',
     'Sorry, %(page_title)s is not available in %(language)s. If you want to keep browsing in %(language)s you can click below to return to the homepage.',
@@ -113,5 +108,12 @@ translatable_strings = [
     'Date must be in this (YYYY-MM-DD) format',
     'Datetime must be in this YYYY-MM-DDTHH:SS format',
     'The content you are trying to reach is not available. To see offline content click <a href="%(offline_content_index_page_url)s">here</a>',
-    'Submit'
+    'Submit',
+    'Choose a username that you will use to login to IoGT',
+    'Choose a display name that will be shown publicly if you post to the IoGT site, e.g, next to comments you post',
+    'Enter a 4-digit PIN or a longer password',
+    'Repeat your 4-digit PIN or longer password',
+    'Repeat your new 4-digit PIN or longer password',
+    'Enter your old 4-digit PIN or longer password',
+    'Enter your new 4-digit PIN or longer password'
 ]
