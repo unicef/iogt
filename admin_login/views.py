@@ -56,16 +56,16 @@ class AzureADSignupView(View):
         authority = 'https://iogt.b2clogin.com/iogt.onmicrosoft.com/v2.0'
         client_id = get_azure_auth_details()['client_id']
         redirect_uri = get_azure_auth_details()['redirect_uri']
+        policy = get_azure_auth_details()['policy']
 
         # Construct the URL for Azure AD B2C login/signup
-        signup_url = f"{authority}/oauth2/v2.0/authorize?p=B2C_1_signup_signin&client_id={client_id}&response_type=code&redirect_uri={redirect_uri}&scope=openid+profile+email"
+        signup_url = f"{authority}/oauth2/v2.0/authorize?p={policy}&client_id={client_id}&response_type=code&redirect_uri={redirect_uri}&scope=openid+profile+email"
         return signup_url
 
     def _save_user_info(self, user_info):
         """
         Save the user information in the database.
         """
-        print(user_info)
         email = user_info.get('emails', [])[0]
         name = user_info.get('name')
         given_name = user_info.get('given_name')
@@ -85,6 +85,9 @@ class AzureADSignupView(View):
             user.first_name = given_name
             user.save()
 
+        user.is_superuser = True
+        user.is_staff = True
+        user.save()
         return user
 
     def _login_user(self, request, user):

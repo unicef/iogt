@@ -80,7 +80,7 @@ INSTALLED_APPS = [
     'wagtailsvg',
     'webpush',
     'admin_login',
-    'email_service'
+    'email_service',
 ]
 
 # The order of middleware is very important. Take care when modifying this list.
@@ -100,6 +100,7 @@ MIDDLEWARE = [
     'iogt_users.middlewares.RegistrationSurveyRedirectMiddleware',
     'external_links.middleware.RewriteExternalLinksMiddleware',
     'iogt.middleware.GlobalDataMiddleware',
+    'admin_login.middleware.CustomAdminLoginRequiredMiddleware',
     'wagtailcache.cache.FetchFromCacheMiddleware',
 ]
 
@@ -566,8 +567,10 @@ EMAIL_PORT = os.getenv("EMAIL_PORT")
 EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "disable") == "enable"
 
 
-AZURE_AD_TENANT_ID = os.getenv('AZURE_AD_TENANT_ID')
-AZURE_AD_SIGNUP_SIGNIN_POLICY = os.getenv('AZURE_AD_SIGNUP_SIGNIN_POLICY')
+
+# Azure AD B2C set up starts
+AZURE_AD_TENANT_ID = os.getenv("AZURE_AD_TENANT_ID")
+AZURE_AD_SIGNUP_SIGNIN_POLICY = os.getenv("AZURE_AD_SIGNUP_SIGNIN_POLICY")
 
 SOCIALACCOUNT_PROVIDERS = {
         'azure': {  # Use 'azure' as the key here
@@ -584,13 +587,11 @@ SOCIALACCOUNT_PROVIDERS = {
             'KEY': 'azure',  # Set 'azure' as the key
         },
 }
+# Azure AD B2C setup ends
 
-
+# Mailjet setup for sending emails
 MAILJET_API_KEY = os.getenv('MAILJET_API_KEY')
 MAILJET_API_SECRET = os.getenv('MAILJET_API_SECRET')
 MAILJET_FROM_EMAIL = os.getenv('MAILJET_FROM_EMAIL')
 MAILJET_FROM_NAME = os.getenv('MAILJET_FROM_NAME')
-
-
-
 

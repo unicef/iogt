@@ -1,13 +1,19 @@
+from http.client import HTTPResponse
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView, TemplateView
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views import View
 from django.contrib.auth import get_user_model
+from django.http import JsonResponse
+
+from iogt import settings
+
+from email_service.mailjet_email_sender import send_email_via_mailjet
 
 
 @method_decorator(login_required, name='dispatch')
@@ -62,8 +68,6 @@ class InviteAdminUserView(View):
         if errors:
             return JsonResponse({'success': False, 'errors': errors}, status=400)
 
-        from django.core.mail import send_mail
-
         # If no errors, proceed with sending the invitation email
         # Assume `User` is your user model and email is unique
         user, created = User.objects.get_or_create(
@@ -72,15 +76,31 @@ class InviteAdminUserView(View):
             username=email
         )
 
+        template_name = "email_service/invite_admin.html"  # Your template name
+        invitation_link = request.build_absolute_uri('/admin-login/signup-as-admin/')
+
+        context = {
+            'first_name': first_name,
+            'invitation_link': invitation_link,  # Example link
+        }
+
         from django.conf import settings
-        subject = "You are Invited as Admin"
-        message = 'hiiiii'
-        from_email = settings.DEFAULT_FROM_EMAIL
 
         try:
-            send_mail(subject, message, from_email, [email])
-            return
-        # Return a success response
+            send_email_via_mailjet(api_key=settings.MAILJET_API_KEY,
+                               api_secret=settings.MAILJET_API_SECRET,
+                               from_email=settings.MAILJET_FROM_EMAIL,
+                               from_name=settings.MAILJET_FROM_NAME,
+                               to_email=email,
+                               to_name=first_name,
+                               subject='Invitation to join IOGT as an admin',
+                               template_name=template_name,
+                               context=context,
+                               )
         except Exception as e:
-            print(e, "))))))))))))))")
-            return
+            # Handle any email sending errors
+            return JsonResponse({'success': False, 'message': 'Failed to send invitation.', 'error': str(e)},
+                                status=500)
+
+            # If email is sent successfully
+        return JsonResponse({'success': True, 'message': 'Invitation sent successfully!'})
