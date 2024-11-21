@@ -140,3 +140,58 @@
       background-color: $pearl;
     }
   }
+
+  .social-login {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 16px;
+    text-decoration: none;
+    border-radius: 5px;
+    background-color: #f4f4f4;
+    transition: background-color 0.3s ease;
+}
+
+.social-btn:hover {
+    background-color: #dcdcdc;
+}
+
+.social-btn img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.social-btn.google {
+    background-color: #db4437;
+    color: white;
+}
+
+.social-btn.google:hover {
+    background-color: #c1351d;
+}
+
+.social-btn.microsoft {
+    background-color: #0078d4;
+    color: white;
+}
+
+.social-btn.microsoft:hover {
+    background-color: #005a8e;
+}
+
+.social-btn.unicef {
+    background-color: #2f6ba9;
+    color: white;
+}
+
+.social-btn.unicef:hover {
+    background-color: #1f4e7b;
+}

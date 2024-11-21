@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags wagtailuserbar menu_tags home_tags %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_language_info for LANGUAGE_CODE as lang %}
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as languages %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block extra_js %}
+  <script>
+        function openLoginPopup() {
+            // Code to open your custom modal pop-up
+            document.getElementById('loginModal').style.display = 'block';
+        }
+
+        window.onload = function() {
+            {% if show_popup %}
+                openLoginPopup();  // Open the modal if show_popup is True
+            {% endif %}
+        };
+    </script>
+{% endblock %}
+
+{% block content %}
+{% load socialaccount %}
+{% if request.user.is_anonymous %}
+
+    <div id="loginModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeLoginModal()">&times;</span>
+        <p style="font-size: 30px;">Sign In</p>
+
+        <!-- Email/Password Form -->
+        <form action="{% url 'login_as_admin' %}" method="post">
+            {% csrf_token %}
+            <p class="sign-in-heading">Sign in with your email address</p>
+
+            <div class="input-group">
+                <input type="email" id="email" name="email" placeholder="Enter Address" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" name="password" placeholder="Password" required>
+            </div>
+
+            <div class="forgot-password">
+                <a href="#" class="forgot-password-link">Forgot your password?</a>
+            </div>
+
+            {% if error %}
+                    <div class="error-message">{{ error }}</div>
+                {% endif %}
+
+            <button type="submit" class="btn-signin">Sign In</button>
+            <div class="signup-link">
+                <span style="font-size: 12px;">Don't have an account? </span>
+                <a href="{% url 'account_signup' %}" class="signup-link-text">Sign up now</a>
+            </div>
+        </form>
+
+        <!-- Social Login (Azure AD) -->
+        <div class="social-login">
+            <h3 class="social-login-heading">Sign in with your social account</h3>
+            <a href="{% provider_login_url 'azure' %}">
+                <button type="button" class="ms-login-btn">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/1024px-Microsoft_logo.svg.png" alt="MSA Logo" class="ms-logo">
+                    <span>Sign in with Microsoft</span>
+                </button>
+            </a>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
+<style>
+    .ms-login-btn{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        width: 100%;
+    }
+    .ms-login-btn img{
+        margin-right: auto;
+    }
+
+    .ms-login-btn span{
+        margin-right: auto;
+    }
+
+    .btn-signin {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 60%;
+        margin: 12px 0;
+    }
+
+    .btn-signin:hover {
+        background-color: #0056b3;
+    }
+
+    .signup-link {
+        text-align: left;
+        margin-top: 12px;
+    }
+
+    .signup-link .signup-link-text {
+        font-size: 12px;
+        text-decoration: underline;
+        color: #007bff;
+        cursor: pointer;
+    }
+
+    .signup-link .signup-link-text:hover {
+        color: #0056b3;
+    }
+
+    .social-login-heading {
+        text-align: left;
+        margin-bottom: 12px;
+    }
+
+    .sign-in-heading {
+        font-weight: 500;
+        text-align: left;
+        margin-bottom: 12px;
+    }
+
+    .forgot-password {
+        text-align: left;
+        margin-bottom: 12px;
+    }
+
+    .forgot-password .forgot-password-link {
+        font-size: 12px;
+        text-decoration: underline;
+        color: #007bff;
+        cursor: pointer;
+    }
+
+    .forgot-password .forgot-password-link:hover {
+        color: #0056b3;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+        padding-top: 115px;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: 5% auto;
+        padding: 30px;
+        border-radius: 8px;
+        width: 400px;
+        text-align: center;
+    }
+
+    .close-btn {
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+    }
+
+    .close-btn:hover,
+    .close-btn:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .input-group {
+        margin-bottom: 12px;
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .social-login {
+        margin-top: 20px;
+    }
+
+    .social-login h3 {
+        margin-bottom: 12px;
+    }
+
+    .ms-login-btn:hover {
+        background-color: #979899;
+    }
+
+    .ms-logo {
+        width: 20px;
+        height: 20px;
+    }
+</style>

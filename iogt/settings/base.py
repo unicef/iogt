@@ -19,7 +19,7 @@ from iogt.settings.profanity_settings import (  # noqa: F401
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 INSTALLED_APPS = [
-    'allauth',
+     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'comments',
@@ -79,6 +79,8 @@ INSTALLED_APPS = [
     'wagtailmenus',
     'wagtailsvg',
     'webpush',
+    'admin_login',
+    'email_service',
 ]
 
 # The order of middleware is very important. Take care when modifying this list.
@@ -98,6 +100,7 @@ MIDDLEWARE = [
     'iogt_users.middlewares.RegistrationSurveyRedirectMiddleware',
     'external_links.middleware.RewriteExternalLinksMiddleware',
     'iogt.middleware.GlobalDataMiddleware',
+    # 'admin_login.middleware.CustomAdminLoginRequiredMiddleware',
     'wagtailcache.cache.FetchFromCacheMiddleware',
 ]
 
@@ -143,10 +146,11 @@ DATABASES = {
 }
 
 # Authentication
-AUTHENTICATION_BACKENDS = [
+AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend'
-]
+    'admin_login.azure_backend.AzureADBackend',# Default Django backend
+)
+
 AUTH_USER_MODEL = 'iogt_users.User'
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -561,3 +565,33 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_PORT = os.getenv("EMAIL_PORT")
 EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "disable") == "enable"
+
+
+
+# Azure AD B2C set up starts
+AZURE_AD_TENANT_ID = os.getenv("AZURE_AD_TENANT_ID")
+AZURE_AD_SIGNUP_SIGNIN_POLICY = os.getenv("AZURE_AD_SIGNUP_SIGNIN_POLICY")
+
+SOCIALACCOUNT_PROVIDERS = {
+        'azure': {  # Use 'azure' as the key here
+            'APP': {
+                'client_id': os.getenv('AZURE_AD_CLIENT_ID'),
+                'secret': os.getenv('AZURE_AD_SECRET_ID'),
+            },
+            'AZURE_AD_TENANT_ID': os.getenv('AZURE_AD_TENANT_ID'),
+            'AZURE_AD_SIGNUP_SIGNIN_POLICY': os.getenv('AZURE_AD_SIGNUP_SIGNIN_POLICY'),
+            'SERVER_URL': f"https://{os.getenv('AZURE_AD_TENANT_ID')}.b2clogin.com/{os.getenv('AZURE_AD_TENANT_ID')}.onmicrosoft.com/v2.0/.well-known/openid-configuration?p={os.getenv('AZURE_AD_SIGNUP_SIGNIN_POLICY')}",
+            'REDIRECT_URI': 'http://localhost:8000/en/admin-login/signup-as-admin/callback/',
+            'SCOPES': ['openid', 'email', 'profile'],
+            'VERIFY_SSL': True,  # SSL verification
+            'KEY': 'azure',  # Set 'azure' as the key
+        },
+}
+# Azure AD B2C setup ends
+
+# Mailjet setup for sending emails
+MAILJET_API_KEY = os.getenv('MAILJET_API_KEY')
+MAILJET_API_SECRET = os.getenv('MAILJET_API_SECRET')
+MAILJET_FROM_EMAIL = os.getenv('MAILJET_FROM_EMAIL')
+MAILJET_FROM_NAME = os.getenv('MAILJET_FROM_NAME')
+

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags wagtailuserbar menu_tags home_tags %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_language_info for LANGUAGE_CODE as lang %}
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as languages %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block content %}
+{% load socialaccount %}
+<form method="POST">
+    {% csrf_token %}
+    <h2>{{ form_title }}</h2>
+
+    <!-- Email and Password fields are common for both -->
+    <input type="text" name="first_name" placeholder="First Name" required>
+    <input type="text" name="last_name" placeholder="Last Name" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Password" required>
+    <button type="submit">{{ button_text }}</button>
+
+    <div class="link">
+        {% if is_signup %}
+            <p>Already have an account? <a href="{% url 'account_login' %}">Log in here</a></p>
+        {% else %}
+            <p>Don't have an account? <a href="{% url 'account_signup' %}">Sign up here</a></p>
+        {% endif %}
+    </div>
+</form>
+{% endblock %}

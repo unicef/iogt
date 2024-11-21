@@ -1108,3 +1108,13 @@ xlwt==1.3.0 \
     # via
     #   -r requirements.txt
     #   tablib
+msal==1.31.0 \
+    --hash=sha256:96bc37cff82ebe4b160d5fc0f1196f6ca8b50e274ecd0ec5bf69c438514086e7
+    # via
+    # -r requirements.txt
+    # msal
+django-anymail==10.3 \
+    --hash=sha256:35d8ec20b06000af3c1638492e32f416fd1a584f0a572cded03f1bc570169ed0
+    # via
+    # -r requirements.txt
+    # django-anymail
