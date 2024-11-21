@@ -17,6 +17,9 @@ from wagtail.documents import urls as wagtaildocs_urls
 from home import views as pwa_views
 from wagtail_transfer import urls as wagtailtransfer_urls
 from admin_login import urls as admin_login_urls
+from admin_login.views import AzureADSignupView
+
+
 from iogt.views import (
     TransitionPageView,
     SitemapAPIView,
@@ -47,6 +50,7 @@ schema_view = get_schema_view(
 urlpatterns = api_url_patterns + [
     path('django-admin/', admin.site.urls),
     path('admin/logout/', CustomLogoutView.as_view(), name='admin_logout'),
+    path('admin/login/', AzureADSignupView.as_view(), name='azure_signup_view'),  # Override Wagtail admin login
     path('admin/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),
     *i18n_patterns(path('logout_hack_view', LogoutRedirectHackView.as_view(), name='logout_redirect')),

@@ -25,6 +25,8 @@ class AzureADSignupView(View):
         """
         # Check if we have an authorization code (callback)
         code = request.GET.get('code')
+        next_url = request.GET.get('next', '/admin/')
+
         if code:
             # Handle the callback and complete signup
             signup_service = AzureADSignupService()
@@ -32,7 +34,7 @@ class AzureADSignupView(View):
                 user_info = signup_service.handle_signup_callback(request)
                 user = self._save_user_info(user_info)
                 self._login_user(request, user)
-                return redirect('/admin/')
+                return redirect(next_url)
             except ValidationError as e:
                 return JsonResponse({"error": str(e)}, status=400)
 
