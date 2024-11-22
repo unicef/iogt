@@ -77,7 +77,7 @@ class InviteAdminUserView(View):
         )
 
         template_name = "email_service/invite_admin.html"  # Your template name
-        invitation_link = request.build_absolute_uri('/admin-login/signup-as-admin/')
+        invitation_link = request.build_absolute_uri('/admin/login/')
 
         context = {
             'first_name': first_name,
