@@ -70,11 +70,11 @@ class InviteAdminUserView(View):
 
         # If no errors, proceed with sending the invitation email
         # Assume `User` is your user model and email is unique
-        user, created = User.objects.get_or_create(
-            email=email,
-            defaults={'first_name': first_name, 'last_name': last_name},
-            username=email
-        )
+        # user, created = User.objects.get_or_create(
+        #     email=email,
+        #     defaults={'first_name': first_name, 'last_name': last_name},
+        #     username=email
+        # )
 
         template_name = "email_service/invite_admin.html"  # Your template name
         invitation_link = request.build_absolute_uri('/admin/login/')

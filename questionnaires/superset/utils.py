@@ -76,14 +76,20 @@ class DashboardGenerator:
         return dashboard_id, f'{settings.SUPERSET_BASE_URL}{dashboard_url}', owner_id
 
     def _create_dataset(self, database_id, owner_id):
-        dataset_name = f'{SiteSettings.get_for_default_site()}_autodashboard_' \
-                       f'{self.questionnaire.__class__.__name__.lower()}_{self.questionnaire.id}_' \
-                       f'{self.questionnaire.title}_{self.current_datetime}'
-        dataset = Dataset(
-            database_id=database_id, owner_id=owner_id, table_name=self.table_name, dataset_name=dataset_name,
-            page_id=self.questionnaire.id)
-        resp = self.admin_client.create_dataset(data=dataset.post_body())
-        dataset_id = resp.get('id')
+        existing_dataset = self.admin_client.get_dataset_by_name(table_name=self.table_name, database_id=database_id)
+        if existing_dataset:
+            dataset_id = existing_dataset.get("id")
+            print(f"Dataset already exists with ID: {dataset_id}")
+        else:
+            print("heloooooooooooooooooooooooooooooooooooooooooooooooooooo")
+            dataset_name = f'{SiteSettings.get_for_default_site()}_autodashboard_' \
+                           f'{self.questionnaire.__class__.__name__.lower()}_{self.questionnaire.id}_' \
+                           f'{self.questionnaire.title}_{self.current_datetime}'
+            dataset = Dataset(
+                database_id=database_id, owner_id=owner_id, table_name=self.table_name, dataset_name=dataset_name,
+                page_id=self.questionnaire.id)
+            resp = self.admin_client.create_dataset(data=dataset.post_body())
+            dataset_id = resp.get('id')
 
         dataset_detail = self.client.get_dataset(dataset_id)
 
@@ -113,6 +119,19 @@ class DashboardGenerator:
             "metric_type": "count",
             "verbose_name": "Responses",
         })
+
+        dataset_name = f'{SiteSettings.get_for_default_site()}_autodashboard_' \
+                       f'{self.questionnaire.__class__.__name__.lower()}_{self.questionnaire.id}_' \
+                       f'{self.questionnaire.title}_{self.current_datetime}'
+
+        dataset = Dataset(
+            database_id=database_id,
+            owner_id=owner_id,
+            table_name=self.table_name,
+            dataset_name=dataset_name,
+            page_id=self.questionnaire.id
+        )
+
         self.admin_client.update_dataset(id=dataset_id, data=dataset.put_body(columns, metrics))
 
         return dataset_id
