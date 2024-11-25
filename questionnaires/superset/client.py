@@ -47,7 +47,19 @@ class SupersetClient:
 
     def _api_caller(self, request):
         request = self.session.prepare_request(request)
+        print("Sending Request:")
+        print(f"URL: {request.url}")
+        print(f"Method: {request.method}")
+        print(f"Headers: {request.headers}")
+        if request.body:
+            print(f"Body: {request.body}")
         response = self.session.send(request)
+
+        print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55")
+        print("Received Response:")
+        print(f"Status Code: {response.status_code}")
+        print(f"Headers: {response.headers}")
+        print(f"Body: {response.text}")
         return self._get_validated_response(response)
 
     def authenticate(self, username, password):
@@ -93,3 +105,26 @@ class SupersetClient:
     def create_chart(self, data):
         request = Request(method='POST', url=f'{self.chart_url}', headers=self._get_headers(), json=data)
         return self._api_caller(request)
+
+    def get_dataset_by_name(self, table_name, database_id):
+        """Fetch a dataset by table_name and manually filter by database_id."""
+        query = {
+            "filters": [
+                {"col": "table_name", "opr": "eq", "value": table_name}
+            ]
+        }
+        import json
+        url = f"{self.dataset_url}?q={json.dumps(query)}"
+        request = Request(method='GET', url=url, headers=self._get_headers())
+        response = self._api_caller(request)
+
+        datasets = response.get("result", [])
+        if not datasets:
+            return None  # No matching dataset found
+
+        # Manually filter datasets by database_id
+        filtered_datasets = [dataset for dataset in datasets if dataset.get('database').get('id') == database_id]
+        if not filtered_datasets:
+            return None  # No dataset matches the table_name and database_id
+
+        return filtered_datasets[0]  # Return the first matching dataset

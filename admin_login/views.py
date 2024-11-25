@@ -24,6 +24,9 @@ class AzureADSignupView(View):
         Render the signup form or redirect to Azure AD B2C for authorization.
         """
         # Check if we have an authorization code (callback)
+        if request.user.is_authenticated:
+            return redirect('/admin/')  # Replace with the appropriate URL for logged-in users
+
         code = request.GET.get('code')
         next_url = request.GET.get('next', '/admin/')
 
