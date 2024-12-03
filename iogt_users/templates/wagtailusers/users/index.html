@@ -148,101 +148,135 @@
 {% block extra_js %}
     {{ block.super }}
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const inviteAdminButton = document.getElementById('invite-admin-button');
-        const modal = document.getElementById('invite-admin-modal');
-        const closeButton = document.getElementById('close-modal');
-        const form = document.getElementById('invite-admin-form');
-        const inputs = form.querySelectorAll('input');
-        inviteAdminButton.onclick = function() {
-            modal.style.display = 'block';
-            form.reset();
-            resetErrorMessages();
-        };
-        closeButton.onclick = function() {
-            modal.style.display = 'none';
-        };
-        form.onsubmit = function(event) {
-            event.preventDefault();
-            resetErrorMessages();
+        document.addEventListener('DOMContentLoaded', function() {
+            const inviteAdminButton = document.getElementById('invite-admin-button');
+            const modal = document.getElementById('invite-admin-modal');
+            const closeButton = document.getElementById('close-modal');
+            const form = document.getElementById('invite-admin-form');
+            const inputs = form.querySelectorAll('input');
+            const body = document.querySelector('body');
 
-            const firstName = document.getElementById('first_name').value;
-            const lastName = document.getElementById('last_name').value;
-            const email = document.getElementById('email').value;
+            inviteAdminButton.onclick = function() {
+                modal.style.display = 'block';
+                form.reset();
+                resetErrorMessages();
+            };
 
-            let isValid = true;
+            closeButton.onclick = function() {
+                modal.style.display = 'none';
+            };
 
-            if (firstName.trim() === "") {
-                document.getElementById('first_name_error').textContent = "First Name is required.";
-                document.getElementById('first_name_error').style.display = 'block';
-                document.getElementById('first_name').classList.add('invalid');
-                isValid = false;
-            }
-            if (lastName.trim() === "") {
-                document.getElementById('last_name_error').textContent = "Last Name is required.";
-                document.getElementById('last_name_error').style.display = 'block';
-                document.getElementById('last_name').classList.add('invalid');
-                isValid = false;
-            }
-            if (!validateEmail(email)) {
-                document.getElementById('email_error').textContent = "Please Enter A Valid Email Address.";
-                document.getElementById('email_error').style.display = 'block';
-                document.getElementById('email').classList.add('invalid');
-                isValid = false;
-            }
+            form.onsubmit = function(event) {
+                event.preventDefault();
+                resetErrorMessages();
 
-            if (isValid) {
-                const formData = new FormData(form);
+                const firstName = document.getElementById('first_name').value;
+                const lastName = document.getElementById('last_name').value;
+                const email = document.getElementById('email').value;
 
-                fetch("{% url 'invite_admin_user' %}", {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        modal.style.display = 'none';
-                        form.reset();
-                    } else {
-                        for (const [key, value] of Object.entries(data.errors)) {
-                            document.getElementById(key + '_error').textContent = value;
-                            document.getElementById(key + '_error').style.display = 'block';
-                        }
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            }
-        };
+                let isValid = true;
 
-        function validateEmail(email) {
-            const re = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
-            return re.test(String(email).toLowerCase());
-        }
-
-        function resetErrorMessages() {
-            const errorMessages = document.querySelectorAll('.error-message');
-            errorMessages.forEach(function(errorMessage) {
-                errorMessage.textContent = '';
-                errorMessage.style.display = 'none';
-            });
-
-            const invalidInputs = document.querySelectorAll('input.invalid');
-            invalidInputs.forEach(function(input) {
-                input.classList.remove('invalid');
-            });
-        }
-        inputs.forEach(input => {
-            input.addEventListener('input', function() {
-                const errorMessage = document.getElementById(input.id + '_error');
-                if (errorMessage) {
-                    errorMessage.style.display = 'none';
+                if (firstName.trim() === "") {
+                    showError('first_name', "First Name is required.");
+                    isValid = false;
                 }
-                input.classList.remove('invalid');
+                if (lastName.trim() === "") {
+                    showError('last_name', "Last Name is required.");
+                    isValid = false;
+                }
+                if (!validateEmail(email)) {
+                    showError('email', "Please enter a valid email address.");
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    const formData = new FormData(form);
+
+                    fetch("{% url 'invite_admin_user' %}", {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            modal.style.display = 'none';
+                            form.reset();
+                            displaySuccessMessage("Invite sent successfully!");
+
+                            setTimeout(() => {
+                                modal.style.display = 'none';
+                            }, 1000);
+                        } else {
+                            for (const [key, value] of Object.entries(data.errors)) {
+                                showError(key, value);
+                            }
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                }
+            };
+
+            function validateEmail(email) {
+                const re = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+                return re.test(String(email).toLowerCase());
+            }
+
+            function resetErrorMessages() {
+                const errorMessages = document.querySelectorAll('.error-message');
+                errorMessages.forEach(function(errorMessage) {
+                    errorMessage.textContent = '';
+                    errorMessage.style.display = 'none';
+                });
+
+                const invalidInputs = document.querySelectorAll('input.invalid');
+                invalidInputs.forEach(function(input) {
+                    input.classList.remove('invalid');
+                });
+            }
+
+            function showError(inputId, message) {
+                const errorElement = document.getElementById(inputId + '_error');
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+                document.getElementById(inputId).classList.add('invalid');
+            }
+
+            function displaySuccessMessage(message){
+                const successMessage = document.createElement('div');
+                successMessage.textContent = message;
+                successMessage.style.cssText = `
+                    position: fixed;
+                    bottom: 10px;
+                    right: 10px;
+                    background-color: #134f5c;
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 5px;
+                    z-index: 1001;
+                    font-size: 14px;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    font-weight: bold;
+                `;
+
+                body.appendChild(successMessage);
+
+                setTimeout(() => {
+                    successMessage.remove();
+                }, 1000);
+            }
+
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    const errorMessage = document.getElementById(input.id + '_error');
+                    if (errorMessage) {
+                        errorMessage.style.display = 'none';
+                    }
+                    input.classList.remove('invalid');
+                });
             });
         });
-    });
-    </script>
+        </script>
 {% endblock %}
