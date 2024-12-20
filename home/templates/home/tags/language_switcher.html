@@ -1,16 +1,100 @@
 {% load generic_components %}
 <div class="language_drop">
-    <a href="#" style="{% language_picker_style %}">
-        {{ current_language.name_local }}
-        <span class="arrow"></span>
-    </a>
-    <ul class="drop">
+  <a
+    href="#"
+    id="language-toggle"
+    role="button"
+    aria-haspopup="true"
+    aria-expanded="false"
+    aria-controls="language-options"
+    style="{{ language_picker_style }}"
+    tabindex="0"
+  >
+    {{ current_language.name_local }}
+    <span class="arrow"></span>
+  </a>
+
+  <ul
+    id="language-options"
+    class="drop"
+    role="menu"
+    aria-labelledby="language-toggle"
+    tabindex="-1"
+  >
     {% for option in language_options %}
-        <li class="{% if option.selected %}selected{% endif %}">
-            <a href="{{ option.url }}" rel="alternate" hreflang="{{ option.language.code }}">
-                {{ option.language.name_local }}
-            </a>
-        </li>
+    <li class="{% if option.selected %}selected{% endif %}" role="menuitem">
+      <a
+        href="{{ option.url }}"
+        rel="alternate"
+        hreflang="{{ option.language.code }}"
+        tabindex="0"
+      >
+        {{ option.language.name_local }}
+      </a>
+    </li>
     {% endfor %}
-    </ul>
+  </ul>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const languageToggle = document.getElementById("language-toggle");
+    const languageOptions = document.getElementById("language-options");
+    let isOpen = false;
+
+    languageToggle.addEventListener("click", function (e) {
+      e.preventDefault();
+      toggleDropdown();
+    });
+
+    // languageToggle.addEventListener("keydown", function (e) {
+    //   if (e.key === "Enter" || e.key === " ") {
+    //     e.preventDefault();
+    //     toggleDropdown();
+    //   }
+    // });
+
+    document.addEventListener("click", function (e) {
+      if (
+        !languageToggle.contains(e.target) &&
+        !languageOptions.contains(e.target)
+      ) {
+        closeDropdown();
+      }
+    });
+
+    languageOptions.addEventListener("keydown", function (e) {
+        console.log("Key pressed: " + e.key);
+        // const options = languageOptions.querySelectorAll("a");
+        // const focusedElement = document.activeElement;
+        // let index = Array.from(options).indexOf(focusedElement);
+
+        if(e.key === "Escape"){
+            console.log("Escape1");
+            e.preventDefault();
+            e.stopPropagation();
+            closeDropdown();
+            return;
+        }
+    });
+
+    function toggleDropdown() {
+      isOpen = !isOpen;
+      languageOptions.style.display = isOpen ? "block" : "none";
+      languageToggle.setAttribute("aria-expanded", isOpen.toString());
+
+      if (isOpen) {
+        const options = languageOptions.querySelectorAll("a");
+        if (options.length > 0) {
+          options[0].focus();
+        }
+      }
+    }
+
+    function closeDropdown() {
+      isOpen = false;
+      languageOptions.style.display = "none";
+      languageToggle.setAttribute("aria-expanded", "false");
+    }
+  });
+</script>
