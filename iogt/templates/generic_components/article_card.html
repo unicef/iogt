@@ -7,7 +7,7 @@
            class="{% if is_first_content %}first-content{% endif %}">
             <div class="article-header">
                 {% if display_section_title %}
-                    <p class="sm-paragraph" style="color:{{ font_color }};">
+                    <p class="sm-paragraph" style="color:{{ font_color }}; font-weight: bold !important;">
                         {{ article.top_level_section.title|upper }}
                     </p>
                 {% endif %}

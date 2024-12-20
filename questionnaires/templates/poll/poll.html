@@ -18,7 +18,7 @@
                     {% endif %}
                     {% if user.is_authenticated or request.is_preview or page.allow_anonymous_submissions %}
                         {% if form %}
-                            <form class="polls-widget__form"
+                            <form id="survey-form" class="polls-widget__form"
                                   action="{% pageurl page %}?back_url={{ request.path }}"
                                   method="POST">
                                 {% csrf_token %}

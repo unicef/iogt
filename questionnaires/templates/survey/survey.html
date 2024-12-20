@@ -19,7 +19,7 @@
             {% if user.is_authenticated or request.is_preview or page.allow_anonymous_submissions %}
                 {% if form %}
                     <form action="{% get_action_url page self fields_step request form %}"
-                          method="POST" class="survey-page__content">
+                          method="POST" class="survey-page__content" id="survey-form">
                         {% csrf_token %}
                         <div class="survey-page__content">
                             {% for field in form %}

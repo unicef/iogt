@@ -1,7 +1,21 @@
 {% load i18n %}
 
-<button type="submit" class="cust-btn cust-btn--dark survey-page__btn questionnaire-submit-btn">
-    <span>
-        {% translate submit_button_text %}
-    </span>
-</button>
+<form id="survey-form" method="POST">
+    {% csrf_token %}
+
+    <button type="submit" class="cust-btn cust-btn--dark survey-page__btn questionnaire-submit-btn" id="submit-btn">
+        <span>
+            {% translate submit_button_text %}ss
+        </span>
+    </button>
+</form>
+
+<script>
+    const form = document.getElementById('survey-form');
+    const submitButton = document.getElementById('submit-btn');
+
+    form.addEventListener('submit', function(event) {
+        submitButton.setAttribute('disabled', true)
+        submitButton.innerHTML = '<span>{% translate submit_button_text %}...</span>';
+    });
+</script>
