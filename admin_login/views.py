@@ -58,7 +58,8 @@ class AzureADSignupView(View):
         """
         Generate the URL for Azure AD B2C authorization.
         """
-        authority = 'https://iogt.b2clogin.com/iogt.onmicrosoft.com/v2.0'
+        tenant_id = get_azure_auth_details()['tenant_id']
+        authority = f'https://{tenant_id}.b2clogin.com/{tenant_id}.onmicrosoft.com/v2.0'
         client_id = get_azure_auth_details()['client_id']
         redirect_uri = get_azure_auth_details()['redirect_uri']
         policy = get_azure_auth_details()['policy']
