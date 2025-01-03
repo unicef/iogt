@@ -19,7 +19,7 @@ from iogt.settings.profanity_settings import (  # noqa: F401
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 INSTALLED_APPS = [
-     'allauth',
+    'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'comments',
@@ -566,11 +566,6 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_PORT = os.getenv("EMAIL_PORT")
 EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "disable") == "enable"
 
-
-
-# Azure AD B2C set up starts
-AZURE_AD_TENANT_ID = os.getenv("AZURE_AD_TENANT_ID")
-AZURE_AD_SIGNUP_SIGNIN_POLICY = os.getenv("AZURE_AD_SIGNUP_SIGNIN_POLICY")
 
 CURRENT_DOMAIN = os.getenv('CURRENT_DOMAIN')
 
