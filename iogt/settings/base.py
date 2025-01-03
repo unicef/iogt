@@ -568,6 +568,8 @@ EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "disable") == "enable"
 
 
 CURRENT_DOMAIN = os.getenv('CURRENT_DOMAIN')
+AZURE_AD_TENANT_ID = os.getenv("AZURE_AD_TENANT_ID")
+AZURE_AD_SIGNUP_SIGNIN_POLICY = os.getenv("AZURE_AD_SIGNUP_SIGNIN_POLICY")
 
 SOCIALACCOUNT_PROVIDERS = {
         'azure': {  # Use 'azure' as the key here
