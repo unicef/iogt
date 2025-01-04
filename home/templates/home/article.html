@@ -13,8 +13,42 @@
             {% render_user_progress user_progress False %}
         {% endif %}
         <section class='article__content'>
-            <h1>{{ page.title }}</h1>
-            {% include_block page.body %}
+            <h1 tabindex="0">{{ page.title }}</h1>
+            <!-- {% include_block page.body %} -->
+
+            <div tabindex="0" style="color:white;font-size: 1em;background-color:Crimson;text-align: left;">
+                <div style="margin: 20px">
+                    <br><span style="color:white;font-weight:bold;font-size: 1.2em;">Emergency Numbers in Ukraine&nbsp;</span>
+                    <br>
+                    <br>
+                </div>
+            </div>
+            <div>
+                <p tabindex="0">If your infant or child has symptoms requiring emergency care use these telephone numbers:</p>
+                <ul>
+                    <li tabindex="0"><span>The contact center operates under a single number <span style="text-decoration:underline; cursor:pointer; color: blue;">0 800 60 20 19</span>, and calls are free.</span></li>
+                    <li tabindex="0"><span>In Ukraine, call <span style="text-decoration:underline; cursor:pointer; color: blue;">103</span>.</span></li>
+                </ul>
+            </div>
+
+            <div tabindex="0" style="color:white;font-size: 1em;background-color:Crimson;text-align: left;">
+                <div style="margin: 20px">
+                    <br><span style="color:white;font-weight:bold;font-size: 1.2em;">Emergency Numbers in EU&nbsp;</span>
+                    <br>
+                    <br>
+                </div>
+            </div>
+            <div>
+                <h4 tabindex="0">Emergency Numbers - Lost Children</h4>
+                <ul>
+                    <li tabindex="0">European Hotline for missing children <span style="text-decoration:underline; cursor:pointer; color: blue;">116 000</span></li>
+                    <li tabindex="0"><span style="text-decoration:underline; cursor:pointer; color: blue;">EU Child Helpline International 116 111</span></li>
+                </ul>
+                <h4 tabindex="0">Emergency Numbers - Medical Care</h4>
+                <p tabindex="0">If your infant or child has symptoms requiring emergency care use these telephone numbers:</p>
+                <p tabindex="0">In the EU, call <span style="text-decoration:underline; cursor:pointer; color: blue;">112</span></p>
+            </div>
+
             {% render_previous_next_buttons page %}
     </article>
 
@@ -57,4 +91,13 @@
             {% include 'home/tags/articles_list.html' with recommended_articles=recommended_articles %}
         {% endif %}
     </section>
+
+    <style>
+        h1:focus{
+            outline: 2px solid black;
+        }
+        h4:focus{
+            outline: 2px solid black;
+        }
+    </style>
 {% endblock content %}
