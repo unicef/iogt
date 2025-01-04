@@ -42,34 +42,26 @@
     </style>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      var skipLink = document.getElementById('skip-to-content');
-      var isTabbing = false;
-      var isMouseActive = false;
-
-      window.addEventListener('mousedown', function() {
-        isMouseActive = true;
-        skipLink.classList.remove('show');
-      });
-
-      window.addEventListener('keydown', function(event) {
-        if (isMouseActive) {
-          return;
-        }
-
-        if (event.key === 'Tab') {
-          skipLink.classList.add('show');
-          isTabbing = true;
-        } else {
-          skipLink.classList.remove('show');
-        }
-      });
-
-      skipLink.addEventListener('click', function(event) {
-        console.log("hii")
-        event.preventDefault();
-        document.getElementById('main-content').scrollIntoView({ behavior: 'smooth' });
-      });
+  document.addEventListener("DOMContentLoaded", function() {
+    var skipLink = document.getElementById('skip-to-content');
+    var isTabbing = false;
+ 
+    window.addEventListener('keydown', function(event) {
+      if (event.key === 'Tab') {
+        skipLink.classList.add('show');
+      }
     });
-  </script>
+ 
+    window.addEventListener('keydown', function(event) {
+      if (event.key !== 'Tab') {
+        skipLink.classList.remove('show');
+      }
+    });
+ 
+    skipLink.addEventListener('click', function(event) {
+      event.preventDefault();
+      document.getElementById('main-content').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
 {% endblock content %}
