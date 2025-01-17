@@ -1,6 +1,8 @@
 {% load static wagtailcore_tags wagtailimages_tags i18n generic_components image_tags %}
 {% load static menu_tags i18n wagtailimages_tags home_tags image_tags generic_components %}
 
+{% get_current_language as LANGUAGE_CODE %}
+
 <section class="top-level" id="top-level-sections">
     <nav>
         <a href="{% translated_home_page_url LANGUAGE_CODE %}" class="btn-primary " style="color:#444; background:#f0f0f0;">
