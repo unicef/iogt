@@ -10,10 +10,11 @@
 {% block content %}
     <div class="home-page">
         {% include 'home/tags/banners_list.html' with banners=banners %}
-        {% if page.home_featured_content %}
-          {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
-          {% include_block page.home_featured_content %}
-        {% endif %}
-
+        <div>
+          {% if page.home_featured_content %}
+            {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
+            {% include_block page.home_featured_content %}
+          {% endif %}
+        </div>
     </div>
 {% endblock content %}
