@@ -1,7 +1,19 @@
 {% load static wagtailcore_tags wagtailimages_tags i18n generic_components image_tags %}
+{% load static menu_tags i18n wagtailimages_tags home_tags image_tags generic_components %}
+
+{% get_current_language as LANGUAGE_CODE %}
+{% get_language_info for LANGUAGE_CODE as lang %}
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as languages %}
 
 <section class="top-level" id="top-level-sections">
     <nav>
+        <a href="{% translated_home_page_url LANGUAGE_CODE %}" class="btn-primary " style="color:#444; background:#f0f0f0;">
+            <span class="icon-holder">
+                <img src="">
+            </span>
+            Home
+        </a>
         {% for top_level_section in top_level_sections %}
             {% primary_button title=top_level_section.title href=top_level_section.url font_color=top_level_section.font_color background_color=top_level_section.background_color icon=top_level_section.get_icon %}
         {% endfor %}
