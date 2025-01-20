@@ -13,9 +13,9 @@
             {% render_user_progress user_progress False %}
         {% endif %}
         <section class='article__content'>
-            <h1 tabindex="0">{{ page.title }}</h1>
+            <h1>{{ page.title }}</h1>
             {% include_block page.body %}
-            <div>
+            <!-- <div>
                 <p tabindex="0">If your infant or child has symptoms requiring emergency care use these telephone numbers:</p>
                 <ul>
                     <li tabindex="0"><span>The contact center operates under a single number <span style="text-decoration:underline; cursor:pointer; color: blue;">0 800 60 20 19</span>, and calls are free.</span></li>
@@ -39,7 +39,7 @@
                 <h4 tabindex="0">Emergency Numbers - Medical Care</h4>
                 <p tabindex="0">If your infant or child has symptoms requiring emergency care use these telephone numbers:</p>
                 <p tabindex="0">In the EU, call <span style="text-decoration:underline; cursor:pointer; color: blue;">112</span></p>
-            </div>
+            </div> -->
 
             {% render_previous_next_buttons page %}
     </article>
@@ -84,12 +84,12 @@
         {% endif %}
     </section>
 
-    <style>
+    <!-- <style>
         h1:focus{
             outline: 2px solid black;
         }
         h4:focus{
             outline: 2px solid black;
         }
-    </style>
+    </style> -->
 {% endblock content %}
