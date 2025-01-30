@@ -91,11 +91,7 @@ class AzureADSignupView(View):
                 'is_superuser': True,  # Grant superuser permissions
             },
         )
-        if not created:
-            # Update user details if necessary
-            user.first_name = given_name
-            user.save()
-
+        
         user.is_superuser = True
         user.is_staff = True
         user.save()
