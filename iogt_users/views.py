@@ -68,14 +68,6 @@ class InviteAdminUserView(View):
         if errors:
             return JsonResponse({'success': False, 'errors': errors}, status=400)
 
-        # If no errors, proceed with sending the invitation email
-        # Assume `User` is your user model and email is unique
-        # user, created = User.objects.get_or_create(
-        #     email=email,
-        #     defaults={'first_name': first_name, 'last_name': last_name},
-        #     username=email
-        # )
-
         template_name = "email_service/invite_admin.html"  # Your template name
         invitation_link = request.build_absolute_uri('/admin/login/')
 
@@ -97,6 +89,14 @@ class InviteAdminUserView(View):
                                template_name=template_name,
                                context=context,
                                )
+            User.objects.get_or_create(
+                email=email,
+                defaults={
+                    'username': email,
+                    'first_name': first_name,
+                    'last_name': last_name
+                },
+            )
         except Exception as e:
             # Handle any email sending errors
             return JsonResponse({'success': False, 'message': 'Failed to send invitation.', 'error': str(e)},

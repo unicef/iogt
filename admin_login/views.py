@@ -9,11 +9,13 @@ from django.http import JsonResponse
 from django.views import View
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 
 from admin_login.azure_backend import AzureADSignupService, get_azure_auth_details
 
 User = get_user_model()
 # Create your views here.
+
 
 
 class AzureADSignupView(View):
@@ -77,11 +79,13 @@ class AzureADSignupView(View):
         name = user_info.get('name')
         given_name = user_info.get('given_name')
 
+        if not User.objects.filter(email=email).exists():
+            raise PermissionDenied("Access Denied: You are not allowed to sign up.")
         # Check if the user already exists
         user, created = User.objects.get_or_create(
             email=email,
             defaults={
-                'username': name,
+                'username': email,
                 'first_name': given_name,
                 'is_staff': True,  # Make the user an admin
                 'is_superuser': True,  # Grant superuser permissions
