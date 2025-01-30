@@ -41,6 +41,46 @@
                 <p tabindex="0">In the EU, call <span style="text-decoration:underline; cursor:pointer; color: blue;">112</span></p>
             </div> -->
 
+            <!-- Share Button -->
+            <button id="share-btn" class="share-button">
+                <i class="fa-solid fa-share-nodes"></i>Share
+            </button>
+ 
+            <!-- Share Modal -->
+            <div id="share-popup" class="popup-overlay">
+                <div class="popup-content">
+                    <button class="close-btn">&times;</button>
+                    <h2>Share</h2>
+                    <div class="social-media-grid">
+                        <a href="#" id="facebook-share" target="_blank" class="share-option facebook">
+                            <img src="https://img.icons8.com/color/48/facebook.png" alt="Facebook">
+                            Facebook
+                        </a>
+                        <a href="#" id="twitter-share" target="_blank" class="share-option twitter">
+                            <img src="https://img.icons8.com/?size=100&id=YfCbGWCWcuar&format=png&color=000000" alt="Twitter">
+                            X
+                        </a>
+                        <a href="#" id="linkedin-share" target="_blank" class="share-option linkedin">
+                            <img src="https://img.icons8.com/color/48/linkedin.png" alt="LinkedIn">
+                            LinkedIn
+                        </a>
+                        <a href="#" id="whatsapp-share" target="_blank" class="share-option whatsapp">
+                            <img src="https://img.icons8.com/color/48/whatsapp.png" alt="WhatsApp">
+                            WhatsApp
+                        </a>
+                        <a href="#" id="email-share" target="_blank" class="share-option email">
+                            <img src="https://img.icons8.com/color/48/email.png" alt="Email">
+                            Email
+                        </a>
+                        <a href="#" id="copy-link" class="share-option copy">
+                            <img src="https://img.icons8.com/color/48/link.png" alt="Copy Link">
+                            Copy Link
+                        </a>
+                    </div>
+                    <div id="copied-message" class="copied-message" style="display: none;">Copied!</div>
+                </div>
+            </div>
+
             {% render_previous_next_buttons page %}
     </article>
 
@@ -92,4 +132,50 @@
             outline: 2px solid black;
         }
     </style> -->
+
+    <script>
+        document.getElementById("share-btn").addEventListener("click", function () {
+            const popup = document.getElementById("share-popup");
+            popup.style.display = "flex";
+
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent(document.title);
+
+            // Set share URLs
+            document.getElementById("facebook-share").href = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+            document.getElementById("twitter-share").href = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
+            document.getElementById("linkedin-share").href = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+            document.getElementById("whatsapp-share").href = `https://wa.me/?text=${title} ${url}`;
+            document.getElementById("email-share").href = `mailto:?subject=${title}&body=${title} ${url}`;
+
+            // Copy to clipboard
+            document.getElementById("copy-link").addEventListener("click", function (e) {
+                e.preventDefault();
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    // Show the copied message above the Share heading
+                    const copiedMessage = document.getElementById("copied-message");
+                    copiedMessage.style.display = "block";
+
+                    // Hide the message after 2 seconds
+                    setTimeout(function() {
+                        copiedMessage.style.display = "none";
+                    }, 2000);
+                });
+            });
+        });
+
+        // Close popup
+        document.querySelector(".close-btn").addEventListener("click", function () {
+            document.getElementById("share-popup").style.display = "none";
+        });
+
+        // Close popup when clicking outside
+        window.addEventListener("click", function (e) {
+            const popup = document.getElementById("share-popup");
+            if (e.target === popup) {
+                popup.style.display = "none";
+            }
+        });
+
+        </script>
 {% endblock content %}
