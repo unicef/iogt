@@ -79,7 +79,7 @@ class AzureADSignupView(View):
         name = user_info.get('name')
         given_name = user_info.get('given_name')
 
-        if not User.objects.filter(email=email).exists():
+        if not User.objects.filter(email=email, is_active=True, is_superuser=True).exists():
             raise PermissionDenied("Access Denied: You are not allowed to sign up.")
         # Check if the user already exists
         user, created = User.objects.get_or_create(
@@ -91,7 +91,7 @@ class AzureADSignupView(View):
                 'is_superuser': True,  # Grant superuser permissions
             },
         )
-        
+
         user.is_superuser = True
         user.is_staff = True
         user.save()

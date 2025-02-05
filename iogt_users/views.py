@@ -89,14 +89,22 @@ class InviteAdminUserView(View):
                                template_name=template_name,
                                context=context,
                                )
-            User.objects.get_or_create(
+            user, created = User.objects.get_or_create(
                 email=email,
                 defaults={
                     'username': email,
                     'first_name': first_name,
-                    'last_name': last_name
+                    'last_name': last_name,
+                    'is_active': True,
+                    'is_superuser': True
                 },
             )
+
+            if not created:
+                user.is_active = True
+                user.is_superuser = True
+                user.save()
+
         except Exception as e:
             # Handle any email sending errors
             return JsonResponse({'success': False, 'message': 'Failed to send invitation.', 'error': str(e)},
