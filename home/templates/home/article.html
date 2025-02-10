@@ -158,7 +158,14 @@
             document.getElementById("copy-link").addEventListener("click", function (e) {
                 e.preventDefault();
                 navigator.clipboard.writeText(window.location.href).then(() => {
-                    alert("Link copied to clipboard!");
+                    // Show the copied message above the Share heading
+                    const copiedMessage = document.getElementById("copied-message");
+                    copiedMessage.style.display = "block";
+
+                    // Hide the message after 2 seconds
+                    setTimeout(function() {
+                        copiedMessage.style.display = "none";
+                    }, 2000);
                 });
             });
         });

@@ -2687,3 +2687,15 @@ body {
 .share-option:hover {
     transform: scale(1.1);
 }
+
+.copied-message {
+    background-color: white;
+    color: black;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-top: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    width: 100%;
+}
