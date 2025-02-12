@@ -1,7 +1,10 @@
 from django.contrib import admin
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
+from django.db.models import Avg
+from django.utils.html import format_html
+from django.urls import reverse
 
-from home.models import ManifestSettings, SVGToPNGMap
+from home.models import ManifestSettings, SVGToPNGMap, Article, ArticleFeedback
 
 
 class ManifestSettingsAdmin(ModelAdmin):
@@ -21,3 +24,39 @@ class SVGToPNGMapAdmin(admin.ModelAdmin):
     list_display = ('id', 'svg_path', 'fill_color', 'stroke_color', 'png_image_file')
 
 
+# class ArticleFeedbackAdmin(ModelAdmin):
+#     model = Article
+#     menu_label = "Article Ratings"
+#     menu_icon = "form"
+#     list_display = ("title", "average_rating")
+#     search_fields = ("title",)
+
+# modeladmin_register(ArticleFeedbackAdmin)
+
+class ArticleAdmin(ModelAdmin):
+    model = Article
+    menu_label = "Article Ratings"
+    menu_icon = "form"
+    list_display = ("title", "average_rating", "view_feedback_button")
+    search_fields = ("title",)
+
+    def average_rating(self, obj):
+        avg_rating = obj.feedbacks.aggregate(avg_rating=Avg('rating'))['avg_rating'] or 0
+        return round(avg_rating, 1)
+    average_rating.short_description = "Average Rating"
+
+    def view_feedback_button(self, obj):
+        url = reverse("admin_article_feedback", args=[obj.id])  # Corrected URL
+        return format_html('<a class="button button-small" href="{}">View Feedback</a>', url)
+    view_feedback_button.short_description = "Feedback"
+
+modeladmin_register(ArticleAdmin)
+
+# class FeedbackAdmin(ModelAdmin):
+#     model = ArticleFeedback
+#     menu_label = "Feedbacks"
+#     menu_icon = "list-ul"
+#     list_display = ("article", "user", "rating", "created_at")
+#     search_fields = ("article__title", "user__username")
+
+# modeladmin_register(FeedbackAdmin)

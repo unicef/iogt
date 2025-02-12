@@ -471,6 +471,24 @@ class Article(AbstractArticle):
             User.record_article_read(request=request, article=self)
         return response
 
+    def average_rating(self):
+        feedbacks = self.feedbacks.all()
+        if feedbacks.exists():
+            return round(feedbacks.aggregate(models.Avg('rating'))['rating__avg'], 1)
+        return 0
+
+
+class ArticleFeedback(models.Model):
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='feedbacks')
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
+    session_id = models.CharField(max_length=255, null=True, blank=True)
+    rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)])
+    feedback = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('article', 'user')
+
 
 class MiscellaneousIndexPage(Page):
     parent_page_types = ['home.HomePage']

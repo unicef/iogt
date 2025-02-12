@@ -1,9 +1,12 @@
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import TemplateView
+from home.models import Article, ArticleFeedback
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.sessions.models import Session
 
 from .models import ManifestSettings
 
@@ -55,3 +58,42 @@ def get_manifest(request):
 class LogoutRedirectHackView(View):
     def get(self, request):
         return redirect(f'/{request.LANGUAGE_CODE}/')
+
+
+@csrf_exempt
+def submit_feedback(request, article_id):
+    article = get_object_or_404(Article, id=article_id)
+
+    if request.user.is_authenticated:
+        if ArticleFeedback.objects.filter(article=article, user=request.user).exists():
+            return JsonResponse({"error": "You have already submitted feedback."}, status=400)
+
+        feedback = ArticleFeedback.objects.create(
+            article=article,
+            user=request.user,
+            rating=int(request.POST.get('rating')),
+            feedback=request.POST.get('feedback', '')
+        )
+    else:
+        session_id = request.session.session_key
+        if not session_id:
+            request.session.create()
+            session_id = request.session.session_key
+
+        if ArticleFeedback.objects.filter(article=article, session_id=session_id).exists():
+            return JsonResponse({"error": "You have already submitted feedback in this session."}, status=400)
+
+        feedback = ArticleFeedback.objects.create(
+            article=article,
+            session_id=session_id,
+            rating=int(request.POST.get('rating')),
+            feedback=request.POST.get('feedback', '')
+        )
+
+    return JsonResponse({"message": "Feedback submitted successfully!"})
+
+def AdminArticleFeedbackView(request, article_id):
+    article = get_object_or_404(Article, id=article_id)
+    feedbacks = ArticleFeedback.objects.filter(article=article)
+
+    return render(request, "home/article_feedback_list.html", {"article": article, "feedbacks": feedbacks})
