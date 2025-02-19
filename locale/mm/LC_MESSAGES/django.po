@@ -378,5 +378,6 @@ msgstr "မှတ်ချက်မတွေ့ပါ။"
 msgid ""
 "The content you are trying to reach is not available. To see offline content"
 " click <a href=\"%(offline_content_index_page_url)s\">here</a>"
-msgstr "သင်ရောက်ရှိရန်ကြိုးစားနေသည့် အကြောင်းအရာကို မရနိုင်ပါ။ အော့ဖ်လိုင်းအကြောင်းအရာကို ကြည့်ရှုရန်"
-" <a href=\"%(offline_content_index_page_url)s\">ဒီမှာ</a>" ကိုနှိပ်ပါ
+msgstr ""
+"သင်ရောက်ရှိရန်ကြိုးစားနေသည့် အကြောင်းအရာကို မရနိုင်ပါ။ အော့ဖ်လိုင်းအကြောင်းအရာကို ကြည့်ရှုရန်"
+" <a href=\"%(offline_content_index_page_url)s\">ဒီမှာ</a> ကိုနှိပ်ပါ"
