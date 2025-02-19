@@ -3,8 +3,8 @@ msgid ""
 
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-31 09:38+0000\n"
-"PO-Revision-Date: 2021-07-31 09:38+0000\n"
+"POT-Creation-Date: 2025-02-19 09:38+0000\n"
+"PO-Revision-Date: 2025-02-19 09:38+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -22,7 +22,7 @@ msgstr "ပါဝင်ရန် အကောင့်ဝင်ပါ"
 msgid "Log in / Create account"
 msgstr "အကောင့်ဝင်/အကောင့်ဖန်တီးပါ"
 
-msgstr " The Internet of Good Things"
+msgid " The Internet of Good Things"
 msgstr " The Internet of Good Things"
 
 msgid "Profile"
@@ -195,7 +195,7 @@ msgid "Send"
 msgstr "ပို့ရန်"
 
 msgid "Remove this comment?"
-msgstr "ဤမှတ်ချက်ကို ဖယ်ရှားမလား။
+msgstr "ဤမှတ်ချက်ကို ဖယ်ရှားမလား။"
 
 msgid "Remove"
 msgstr "ဖယ်ရှားရန်"
@@ -260,7 +260,7 @@ msgstr "သင်သည် အကောင့်မှ ထွက်ပါသည�
 msgid ""
 "Enter a valid username. This value may contain only letters, numbers, and "
 "@/./+/-/_ characters."
-mststr "တရားဝင်သော အသုံးပြုသူအမည် ထည့်ပါ။ ဤတန်ဖိုးတွင် အက္ခရာများ၊ နံပါတ်များနှင့် @/./+/-/_ စာလုံးများသာ ပါဝင်နိုင်ပါသည်။"
+msgstr "တရားဝင်သော အသုံးပြုသူအမည် ထည့်ပါ။ ဤတန်ဖိုးတွင် အက္ခရာများ၊ နံပါတ်များနှင့် @/./+/-/_ စာလုံးများသာ ပါဝင်နိုင်ပါသည်။"
 
 msgid "You must type the same password each time."
 msgstr "သင်သည် စကားဝှက်တူညီသောကို ပြန်လည်ရိုက်ထည့်ရမည်ဖြစ်သည်။"
@@ -324,7 +324,7 @@ msgstr[1] "ဤမှတ်ချက်ကို %(comment_report_count)s အသ�
 msgid ""
 "Sorry, %(page_title)s is not available in %(language)s. If you want to keep "
 "browsing in %(language)s you can click below to return to the homepage."
-"စောင့်ဆိုင်းမှုအတွက် တောင်းပန်ပါသည်၊ %(page_title)s ကို %(language)s တွင် မရရှိနိုင်ပါ။ "
+msgstr "စောင့်ဆိုင်းမှုအတွက် တောင်းပန်ပါသည်၊ %(page_title)s ကို %(language)s တွင် မရရှိနိုင်ပါ။ "
 "%(language)s တွင် ဆက်လက်အသုံးပြုရန် ပင်မစာမျက်နှာသို့ ပြန်သွားပါ။"
 
 msgid "Username not available."
