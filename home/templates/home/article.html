@@ -17,6 +17,53 @@
             <h1>{{ page.title }}</h1>
             {% include_block page.body %}
 
+            <!-- Share Button -->
+            <button id="share-btn" class="share-button">
+                <i class="fa-solid fa-share-nodes"></i>Share
+            </button>
+ 
+            <!-- Share Modal -->
+            <div id="share-popup" class="popup-overlay">
+                <div class="popup-content">
+                    <button class="close-btn">&times;</button>
+                    <h2>Share</h2>
+                    <div class="social-media-grid">
+                        <a href="#" id="facebook-share" target="_blank" class="share-option facebook">
+                            {% static "icons/facebook.png" as share_facebook %}
+                            <img src="{{share_facebook}}" alt="Facebook">
+                            Facebook
+                        </a>
+                        <a href="#" id="twitter-share" target="_blank" class="share-option twitter">
+                            {% static "icons/x.png" as share_x %}
+                            <img src="{{share_x}}" alt="X">
+                            X
+                        </a>
+                        <a href="#" id="linkedin-share" target="_blank" class="share-option linkedin">
+                            {% static "icons/linkedin.png" as share_linkedin %}
+                            <img src="{{share_linkedin}}" alt="LinkedIn">
+                            LinkedIn
+                        </a>
+                        <a href="#" id="whatsapp-share" target="_blank" class="share-option whatsapp">
+                            {% static "icons/whatsapp.png" as share_whatsapp %}
+                            <img src="{{share_whatsapp}}" alt="WhatsApp">
+                            WhatsApp
+                        </a>
+                        <a href="#" id="email-share" target="_blank" class="share-option email">
+                            {% static "icons/email.png" as share_email %}
+                            <img src="{{share_email}}" alt="Email">
+                            Email
+                        </a>
+                        <a href="#" id="copy-link" class="share-option copy">
+                            {% static "icons/link.png" as link_copy %}
+                            <img src="{{link_copy}}" alt="Copy Link">
+                            Copy Link
+                        </a>
+                    </div>
+                    <div id="copied-message" class="copied-message" style="display: none;">Copied!</div>
+                </div>
+            </div>
+
+
             {% if settings.home.FeedbackSettings.enable_feedback %}
                 <!-- Average Rating Display -->
                 <div class="mb-4">
@@ -469,4 +516,42 @@
         });
     </script>
 
+    <script>
+        document.getElementById("share-btn").addEventListener("click", function () {
+            const popup = document.getElementById("share-popup");
+            popup.style.display = "flex";
+
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent(document.title);
+
+            // Set share URLs
+            document.getElementById("facebook-share").href = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+            document.getElementById("twitter-share").href = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
+            document.getElementById("linkedin-share").href = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+            document.getElementById("whatsapp-share").href = `https://wa.me/?text=${title} ${url}`;
+            document.getElementById("email-share").href = `mailto:?subject=${title}&body=${title} ${url}`;
+
+            // Copy to clipboard
+            document.getElementById("copy-link").addEventListener("click", function (e) {
+                e.preventDefault();
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    alert("Link copied to clipboard!");
+                });
+            });
+        });
+
+        // Close popup
+        document.querySelector(".close-btn").addEventListener("click", function () {
+            document.getElementById("share-popup").style.display = "none";
+        });
+
+        // Close popup when clicking outside
+        window.addEventListener("click", function (e) {
+            const popup = document.getElementById("share-popup");
+            if (e.target === popup) {
+                popup.style.display = "none";
+            }
+        });
+
+    </script>
 {% endblock content %}
