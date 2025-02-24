@@ -1748,3 +1748,6 @@ msgstr "([has-partial-translation]-Submit)"
 
 msgid "Farsi"
 msgstr "([not-needed]-Farsi)"
+
+msgid "Burmese"
+msgstr "([not-needed]-Burmese)"
