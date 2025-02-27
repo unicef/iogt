@@ -1,0 +1,74 @@
+{% extends "wagtailadmin/base.html" %}
+{% load wagtailimages_tags wagtailadmin_tags i18n l10n %}
+{% block titletag %}{% blocktrans trimmed with title=image.title %}Article Feedback {{ title }}{% endblocktrans %}{% endblock %}
+ 
+{% block extra_css %}
+    {{ block.super }}
+ 
+    {{ form.media.css }}
+ 
+    <!-- Focal point chooser -->
+    <link rel="stylesheet" href="{% versioned_static 'wagtailimages/css/vendor/jquery.Jcrop.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% versioned_static 'wagtailimages/css/focal-point-chooser.css' %}" type="text/css">
+{% endblock %}
+ 
+{% block extra_js %}
+    {{ block.super }}
+ 
+    {{ form.media.js }}
+ 
+    {% url 'wagtailadmin_tag_autocomplete' as autocomplete_url %}
+    <script>
+        $(function() {
+            $('#id_tags').tagit({
+                autocomplete: {source: "{{ autocomplete_url|addslashes }}"}
+            });
+        });
+    </script>
+ 
+    <!-- Focal point chooser -->
+    <script src="{% versioned_static 'wagtailadmin/js/vendor/jquery.ba-throttle-debounce.min.js' %}"></script>
+    <script src="{% versioned_static 'wagtailimages/js/vendor/jquery.Jcrop.min.js' %}"></script>
+    <script src="{% versioned_static 'wagtailimages/js/focal-point-chooser.js' %}"></script>
+{% endblock %}
+ 
+{% block content %}
+    {% trans "Editing" as editing_str %}
+    {% include "wagtailadmin/shared/header.html" with title=editing_str subtitle=image.title icon="image" %}
+    {% include "wagtailadmin/shared/non_field_errors.html" %}
+ 
+    <div class="container">
+        <h1 class="title">Feedback for "{{ article.title }}"</h1>
+ 
+        <table class="listing">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Rating</th>
+                    <th>Feedback</th>
+                    <th>Submitted On</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for feedback in feedbacks %}
+                <tr>
+                    <td>{{ feedback.user.username|default:"Unknown User" }}</td>
+                    <td>{{ feedback.rating }} ★</td>
+                    <td>{{ feedback.feedback|default:"No feedback given" }}</td>
+                    <td>{{ feedback.created_at }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No feedback yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+ 
+    <style>
+        .title{
+            margin-left: 45px;
+        }
+    </style>
+{% endblock content %}
