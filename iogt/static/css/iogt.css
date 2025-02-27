@@ -2589,7 +2589,6 @@ input[type=checkbox], input[type=radio] {
   }
 }
 
-/* General Reset --------------------------------------------------------------*/
 /* General Reset */
 body {
     font-family: Arial, sans-serif;
@@ -2648,6 +2647,12 @@ body {
     color: #888;
     transition: color 0.3s ease;
 }
+
+.article-heading{
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 0
+}
  
 .close-btn:hover {
     color: #888;
@@ -2686,4 +2691,73 @@ body {
  
 .share-option:hover {
     transform: scale(1.1);
+}
+
+@media screen and (max-width: 480px) {
+    .close-btn {
+        top: 3px;
+        right: -159px;
+        font-size: 28px;
+    }
+}
+ 
+@media screen and (max-width: 361px) {
+    .close-btn {
+        top: 3px;
+        right: -150px;
+        font-size: 28px;
+    }
+}
+ 
+@media screen and (max-width: 345px) {
+    .close-btn {
+        top: 3px;
+        right: -140px;
+        font-size: 28px;
+    }
+}
+ 
+.share-icon{
+    display: inline-block;
+    width: 20px;
+    height: 16px;
+    background-image: url('https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/instagram-share-icon.png');
+    background-size: cover;
+}
+
+/* Button to Trigger Popup */
+.share-button {
+    width: 20%;
+    color: black;
+    border-radius: 20px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+ 
+@media screen and (max-width: 1024px){
+    .share-button {
+        width: 30%;
+        font-size: 14px;
+    }
+}
+ 
+@media screen and (max-width: 768px) {
+    .share-button {
+        width: 25%; /* Increase width on smaller screens */
+        font-size: 14px; /* Adjust font size for readability */
+    }
+}
+ 
+@media screen and (max-width: 480px) {
+    .share-button {
+        width: 35%;
+        font-size: 14px;
+    }
+}
+ 
+@media screen and (max-width: 320px){
+    .share-button {
+        width: 30%;
+        font-size: 14px;
+    }
 }
