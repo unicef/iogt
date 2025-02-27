@@ -15,6 +15,58 @@
         <section class='article__content'>
             <h1>{{ page.title }}</h1>
             {% include_block page.body %}
+
+            <!-- Average Rating Display -->
+            <div class="mb-4">
+                <p class="text-lg font-semibold">Average Rating:
+                    <span class="text-yellow-500 text-2xl">
+                        {% with avg=page.average_rating %}
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= avg %}
+                                    <span class="text-yellow-500">★</span>  {# Fully filled star #}
+                                {% elif forloop.counter == avg|add:1 and avg|floatformat:1|slice:"-1" == "5" %}
+                                    <span class="text-yellow-300">★</span>  {# Half-filled star #}
+                                {% else %}
+                                    <span class="text-gray-400">☆</span>  {# Empty star #}
+                                {% endif %}
+                            {% endfor %}
+                        {% endwith %}
+                    </span>
+                    ({{ page.feedbacks.count }} reviews)
+                </p>
+            </div>
+
+            <!-- Rating & Feedback Form -->
+            <div class="bg-white shadow-lg rounded-lg p-6">
+                <h2 class="text-xl font-semibold mb-3 article-heading">Leave Your Feedback</h2>
+
+                <!-- Star Rating -->
+                <div class="stars" id="star-rating">
+                    {% for star in "12345" %}
+                        <span class="star" data-value="{{ forloop.counter }}">&#9733;</span>
+                    {% endfor %}
+                </div>
+
+                <input type="hidden" id="rating" value="0">
+
+                <!-- Feedback Box -->
+                <textarea id="feedback-text" class="w-full p-2 border rounded mb-4 feedback-box" rows="4"
+                          placeholder="Write your feedback..."></textarea>
+
+                <!-- Submit Button -->
+                <button id="submit-feedback" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 submit-btn">
+                    Submit
+                </button>
+            </div>
+
+            <!-- feedback-popup -->
+            <div id="feedback-popup" class="feedback-popup">
+                <div class="feedback-popup-content">
+                    <p id="popup-message"></p>
+                    <button id="close-popup" class="close-popup">OK</button>
+                </div>
+            </div>
+
             <!-- <div>
                 <p tabindex="0">If your infant or child has symptoms requiring emergency care use these telephone numbers:</p>
                 <ul>
@@ -84,12 +136,209 @@
         {% endif %}
     </section>
 
-    <!-- <style>
-        h1:focus{
-            outline: 2px solid black;
+    <!-- Star Rating Styles -->
+    <style>
+        .stars {
+            display: flex;
+            gap: 5px;
+            cursor: pointer;
+            font-size: 30px;
         }
-        h4:focus{
-            outline: 2px solid black;
+
+        .star {
+            color: #d3d3d3; /* Default gray */
+            transition: color 0.3s, transform 0.2s;
         }
-    </style> -->
+
+        /* Selected stars remain highlighted */
+        .star.selected {
+            color: #ffcc00;
+        }
+
+        /* Hover effect changes stars progressively */
+        .star:hover ~ .star {
+            color: #d3d3d3 !important;
+        }
+
+        .star:hover,
+        .star:hover ~ .star:hover {
+            color: #ffcc00;
+            transform: scale(1.2);
+        }
+
+        /* Feedback box */
+        .feedback-box {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: vertical;
+        }
+
+        /* Submit button */
+        .submit-btn {
+            width: 20%;
+            border-radius: 10px;
+            background-color: #04AA6D;
+            border: none;
+            color: white;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+
+        .submit-btn:hover {
+            background-color: #289463;
+        }
+
+        /* Fancy Feedback Popup */
+        .feedback-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: rgba(0, 0, 0, 0.6); /* Dark overlay */
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 9999;
+            width: 320px;
+            display: none;  /* Initially hidden */
+            opacity: 0;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+
+        .feedback-popup-content {
+            background: white;
+            color: black;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .feedback-popup.show {
+            display: block;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .close-popup {
+            background-color: #04AA6D;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .close-popup:hover {
+            background-color: #289463;
+        }
+
+    </style>
+
+    <!-- JavaScript -->
+    <script>
+        function closePopup() {
+            let popup = document.getElementById("feedback-popup");
+            popup.classList.remove("show");
+
+            setTimeout(() => {
+                popup.style.display = "none";
+            }, 300); // Smooth fade-out delay
+
+            // Reset feedback text and rating input
+            document.getElementById("feedback-text").value = "";
+            document.getElementById("rating").value = "0";
+
+            // Reset stars appearance
+            let stars = document.querySelectorAll(".star");
+            stars.forEach(star => star.classList.remove("selected"));
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let stars = document.querySelectorAll(".star");
+            let ratingInput = document.getElementById("rating");
+            let feedbackPopup = document.getElementById("feedback-popup");
+            let popupMessage = document.getElementById("popup-message");
+            let closePopupBtn = document.getElementById("close-popup"); // Close button
+
+            function highlightStars(index) {
+                stars.forEach((s, i) => {
+                    s.style.color = i <= index ? "#ffcc00" : "#d3d3d3";
+                });
+            }
+
+            function showPopup(message) {
+                let popup = document.getElementById("feedback-popup");
+                let messageElement = document.getElementById("popup-message");
+
+                messageElement.textContent = message;
+                popup.classList.add("show");
+                popup.style.display = "flex"; // Ensure it's visible
+
+                // Auto-close after 3 seconds
+                setTimeout(() => closePopup(), 3000);
+            }
+
+            stars.forEach((star, index) => {
+                star.addEventListener("mouseover", function () {
+                    highlightStars(index);
+                });
+
+                star.addEventListener("mouseout", function () {
+                    let selectedRating = ratingInput.value;
+                    highlightStars(selectedRating - 1);
+                });
+
+                star.addEventListener("click", function () {
+                    let selectedRating = index + 1;
+                    ratingInput.value = selectedRating;
+                    stars.forEach((s, i) => {
+                        s.classList.toggle("selected", i < selectedRating);
+                    });
+                });
+            });
+
+            document.getElementById("submit-feedback").addEventListener("click", function () {
+                let rating = ratingInput.value;
+                let feedback = document.getElementById("feedback-text").value;
+
+                if (!rating) {
+                    showPopup("Please select a rating.");
+                    return;
+                }
+
+                fetch("/home/submit-feedback/{{ page.id }}/", {
+                    method: "POST",
+                    headers: { "X-CSRFToken": "{{ csrf_token }}", "Content-Type": "application/x-www-form-urlencoded" },
+                    body: new URLSearchParams({ rating: rating, feedback: feedback })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    showPopup(data.message || data.error);
+                    if (!data.error) {
+                        // Reset feedback and rating after submission
+                        document.getElementById("feedback-text").value = "";
+                        ratingInput.value = "0";
+                        highlightStars(-1);
+                        stars.forEach(star => star.classList.remove("selected"));
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+            });
+
+            // Attach close function to button
+            closePopupBtn.addEventListener("click", closePopup);
+        });
+    </script>
+
 {% endblock content %}
