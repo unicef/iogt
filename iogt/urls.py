@@ -69,6 +69,7 @@ urlpatterns = api_url_patterns + [
     *i18n_patterns(path("offline-content-not-found/", OfflineContentNotFoundPageView.as_view(), name="offline_content_not_found")),
 
     path('messaging/', include('messaging.urls'), name='messaging-urls'),
+    path('home/', include('home.urls'), name='home-urls'),
     path('wagtail-transfer/', include(wagtailtransfer_urls)),
     path('sitemap/', SitemapAPIView.as_view(), name='sitemap'),
     path("manifest.webmanifest", get_manifest, name="manifest"),
