@@ -479,6 +479,9 @@ class Article(AbstractArticle):
         # Fetch feedback setting correctly
         feedback_settings = FeedbackSettings.for_request(request)
         context["feedback_enabled"] = feedback_settings.enable_feedback
+
+        # Get the latest 5 feedbacks
+        context["feedbacks"] = self.feedbacks.order_by('-created_at')[:3]
         return context
 
     def serve(self, request):

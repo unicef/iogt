@@ -7,6 +7,7 @@ from django.views.generic import TemplateView
 from home.models import Article, ArticleFeedback, FeedbackSettings
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.sessions.models import Session
+from django.core.paginator import Paginator
 
 from .models import ManifestSettings
 
@@ -102,3 +103,27 @@ def AdminArticleFeedbackView(request, article_id):
     feedbacks = ArticleFeedback.objects.filter(article=article)
 
     return render(request, "home/article_feedback_list.html", {"article": article, "feedbacks": feedbacks})
+
+
+def load_more_reviews(request, article_id):
+    article = Article.objects.get(id=article_id)
+    page = int(request.GET.get("page", 1))  # Get current page from AJAX
+    feedbacks = article.feedbacks.order_by('-created_at')  # All feedbacks
+    
+    paginator = Paginator(feedbacks, 3)  # Show 5 per page
+
+    if page > paginator.num_pages:
+        return JsonResponse({"reviews": [], "has_more": False})
+
+    feedback_page = paginator.get_page(page)
+    reviews_data = [
+        {
+            "rating": feedback.rating,
+            "feedback": feedback.feedback,
+            "user": feedback.user.username if feedback.user else "Anonymous",
+            "created_at": feedback.created_at.strftime("%B %d, %Y at %I:%M %p"),
+        }
+        for feedback in feedback_page
+    ]
+
+    return JsonResponse({"reviews": reviews_data, "has_more": feedback_page.has_next()})
