@@ -68,6 +68,25 @@
                         <button id="close-popup" class="close-popup">OK</button>
                     </div>
                 </div>
+
+                <div id="reviews-section">
+                    <h3>Recent Reviews</h3>
+
+                    <div id="reviews-list">
+                        {% for review in feedbacks %}
+                            <div class="review">
+                                <div class="review-text">
+                                    <strong>{{ review.user|default:"Anonymous" }}</strong>
+                                    <p>{{ review.feedback }}</p>
+                                    <small>{{ review.created_at }}</small>
+                                </div>
+                                <div class="rating-stars">⭐ {{ review.rating }}/5</div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <button id="load-more-btn" data-page="2" data-article="{{ page.id }}">Show More Reviews</button>
+                </div>
             {% endif %}
 
             <!-- <div>
@@ -247,6 +266,63 @@
         }
 
     </style>
+    <style>
+        /* Review Section */
+        #reviews-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+
+        #reviews-list .review {
+            background: #fff;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .review .review-text {
+            flex: 1;
+        }
+
+        .review strong {
+            color: #333;
+            font-size: 14px;
+        }
+
+        .review small {
+            color: gray;
+            font-size: 12px;
+        }
+
+        .review .rating-stars {
+            color: #ffcc00; /* Yellow stars */
+            font-size: 18px;
+        }
+
+        #load-more-btn {
+            display: block;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            margin: 15px auto 0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        #load-more-btn:hover {
+            background: #0056b3;
+        }
+    </style>
 
     <!-- JavaScript -->
     <script>
@@ -341,6 +417,55 @@
 
             // Attach close function to button
             closePopupBtn.addEventListener("click", closePopup);
+        });
+
+        document.getElementById("load-more-btn").addEventListener("click", function () {
+            let button = this;
+            let page = button.getAttribute("data-page");
+            let articleId = button.getAttribute("data-article");
+
+            fetch(`/home/load-more-reviews/${articleId}/?page=${page}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.reviews.length > 0) {
+                        let reviewList = document.getElementById("reviews-list");
+
+                        data.reviews.forEach(review => {
+                            let reviewDiv = document.createElement("div");
+                            reviewDiv.classList.add("review");
+
+                            // Creating review-text div
+                            let reviewTextDiv = document.createElement("div");
+                            reviewTextDiv.classList.add("review-text");
+                            reviewTextDiv.innerHTML = `
+                                <strong>${review.user || "Anonymous"}</strong>
+                                <p>${review.feedback}</p>
+                                <small>${review.created_at}</small>
+                            `;
+
+                            // Creating rating-stars div
+                            let ratingDiv = document.createElement("div");
+                            ratingDiv.classList.add("rating-stars");
+                            ratingDiv.textContent = `⭐ ${review.rating}/5`;
+
+                            // Append children to review div
+                            reviewDiv.appendChild(reviewTextDiv);
+                            reviewDiv.appendChild(ratingDiv);
+
+                            // Append to review list
+                            reviewList.appendChild(reviewDiv);
+                        });
+
+                        // Update next page number
+                        button.setAttribute("data-page", parseInt(page) + 1);
+                    }
+
+                    // Hide button if no more reviews
+                    if (!data.has_more) {
+                        button.style.display = "none";
+                    }
+                })
+                .catch(error => console.error("Error loading reviews:", error));
         });
     </script>
 
