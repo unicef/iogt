@@ -1,10 +1,11 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags comments comments_xtd  wagtailuserbar menu_tags  home_tags questionnaires_tags sass_tags i18n %}
+{% load static wagtailcore_tags comments comments_xtd  wagtailuserbar menu_tags  home_tags questionnaires_tags sass_tags i18n wagtailsettings_tags %}
 {% get_current_language as LANGUAGE_CODE %}
 {% get_language_info for LANGUAGE_CODE as lang %}
 {% get_available_languages as LANGUAGES %}
 {% get_language_info_list for LANGUAGES as languages %}
 {% get_current_language as LANGUAGE_CODE %}
+{% get_settings as settings %}
 
 {% block content %}
     <article class='article'>
@@ -16,56 +17,58 @@
             <h1>{{ page.title }}</h1>
             {% include_block page.body %}
 
-            <!-- Average Rating Display -->
-            <div class="mb-4">
-                <p class="text-lg font-semibold">Average Rating:
-                    <span class="text-yellow-500 text-2xl">
-                        {% with avg=page.average_rating %}
-                            {% for i in "12345" %}
-                                {% if forloop.counter <= avg %}
-                                    <span class="text-yellow-500">★</span>  {# Fully filled star #}
-                                {% elif forloop.counter == avg|add:1 and avg|floatformat:1|slice:"-1" == "5" %}
-                                    <span class="text-yellow-300">★</span>  {# Half-filled star #}
-                                {% else %}
-                                    <span class="text-gray-400">☆</span>  {# Empty star #}
-                                {% endif %}
-                            {% endfor %}
-                        {% endwith %}
-                    </span>
-                    ({{ page.feedbacks.count }} reviews)
-                </p>
-            </div>
-
-            <!-- Rating & Feedback Form -->
-            <div class="bg-white shadow-lg rounded-lg p-6">
-                <h2 class="text-xl font-semibold mb-3 article-heading">Leave Your Feedback</h2>
-
-                <!-- Star Rating -->
-                <div class="stars" id="star-rating">
-                    {% for star in "12345" %}
-                        <span class="star" data-value="{{ forloop.counter }}">&#9733;</span>
-                    {% endfor %}
+            {% if settings.home.FeedbackSettings.enable_feedback %}
+                <!-- Average Rating Display -->
+                <div class="mb-4">
+                    <p class="text-lg font-semibold">Average Rating:
+                        <span class="text-yellow-500 text-2xl">
+                            {% with avg=page.average_rating %}
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= avg %}
+                                        <span class="text-yellow-500">★</span>  {# Fully filled star #}
+                                    {% elif forloop.counter == avg|add:1 and avg|floatformat:1|slice:"-1" == "5" %}
+                                        <span class="text-yellow-300">★</span>  {# Half-filled star #}
+                                    {% else %}
+                                        <span class="text-gray-400">☆</span>  {# Empty star #}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endwith %}
+                        </span>
+                        ({{ page.feedbacks.count }} reviews)
+                    </p>
                 </div>
 
-                <input type="hidden" id="rating" value="0">
+                <!-- Rating & Feedback Form -->
+                <div class="bg-white shadow-lg rounded-lg p-6">
+                    <h2 class="text-xl font-semibold mb-3 article-heading">Leave Your Feedback</h2>
 
-                <!-- Feedback Box -->
-                <textarea id="feedback-text" class="w-full p-2 border rounded mb-4 feedback-box" rows="4"
-                          placeholder="Write your feedback..."></textarea>
+                    <!-- Star Rating -->
+                    <div class="stars" id="star-rating">
+                        {% for star in "12345" %}
+                            <span class="star" data-value="{{ forloop.counter }}">&#9733;</span>
+                        {% endfor %}
+                    </div>
 
-                <!-- Submit Button -->
-                <button id="submit-feedback" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 submit-btn">
-                    Submit
-                </button>
-            </div>
+                    <input type="hidden" id="rating" value="0">
 
-            <!-- feedback-popup -->
-            <div id="feedback-popup" class="feedback-popup">
-                <div class="feedback-popup-content">
-                    <p id="popup-message"></p>
-                    <button id="close-popup" class="close-popup">OK</button>
+                    <!-- Feedback Box -->
+                    <textarea id="feedback-text" class="w-full p-2 border rounded mb-4 feedback-box" rows="4"
+                            placeholder="Write your feedback..."></textarea>
+
+                    <!-- Submit Button -->
+                    <button id="submit-feedback" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 submit-btn">
+                        Submit
+                    </button>
                 </div>
-            </div>
+
+                <!-- feedback-popup -->
+                <div id="feedback-popup" class="feedback-popup">
+                    <div class="feedback-popup-content">
+                        <p id="popup-message"></p>
+                        <button id="close-popup" class="close-popup">OK</button>
+                    </div>
+                </div>
+            {% endif %}
 
             <!-- <div>
                 <p tabindex="0">If your infant or child has symptoms requiring emergency care use these telephone numbers:</p>

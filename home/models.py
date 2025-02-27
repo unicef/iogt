@@ -432,6 +432,19 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         verbose_name_plural = _("articles")
 
 
+@register_setting
+class FeedbackSettings(BaseSetting):
+    """Global setting to enable or disable feedback submission for all articles."""
+    enable_feedback = models.BooleanField(default=True, verbose_name="Enable Feedback")
+
+    panels = [
+        FieldPanel("enable_feedback"),
+    ]
+
+    class Meta:
+        verbose_name = "Rating Settings"
+
+
 class Article(AbstractArticle):
     tags = ClusterTaggableManager(through='ArticleTaggedItem', blank=True)
 
@@ -463,6 +476,9 @@ class Article(AbstractArticle):
             for recommended_article in self.recommended_articles.all() if recommended_article.article.live
         ]
 
+        # Fetch feedback setting correctly
+        feedback_settings = FeedbackSettings.for_request(request)
+        context["feedback_enabled"] = feedback_settings.enable_feedback
         return context
 
     def serve(self, request):

@@ -4,7 +4,7 @@ from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import TemplateView
-from home.models import Article, ArticleFeedback
+from home.models import Article, ArticleFeedback, FeedbackSettings
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.sessions.models import Session
 
@@ -63,6 +63,11 @@ class LogoutRedirectHackView(View):
 @csrf_exempt
 def submit_feedback(request, article_id):
     article = get_object_or_404(Article, id=article_id)
+
+    # Get feedback settings
+    feedback_settings = FeedbackSettings.for_request(request)
+    if not feedback_settings.enable_feedback:
+        return JsonResponse({"error": "Feedback is disabled globally."}, status=403)
 
     if request.user.is_authenticated:
         if ArticleFeedback.objects.filter(article=article, user=request.user).exists():
