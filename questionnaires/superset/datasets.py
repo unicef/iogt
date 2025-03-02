@@ -1,4 +1,4 @@
-from questionnaires.superset import ALLOWED_COLUMNS
+from questionnaires.superset import ALLOWED_COLUMNS, ALLOWED_COLUMNS_REG_SURVEY
 
 
 class Dataset:
@@ -19,9 +19,14 @@ class Dataset:
         }
 
     def put_body(self, columns, metrics):
-        sql = f"SELECT {', '.join(ALLOWED_COLUMNS)} " \
-              f"FROM {self.table_name} " \
-              f"WHERE page_id = {self.page_id}"
+        if self.table_name != "registration_survey":
+            sql = f"SELECT {', '.join(ALLOWED_COLUMNS)} FROM {self.table_name}"
+        else:
+            sql = f"SELECT {', '.join(ALLOWED_COLUMNS_REG_SURVEY)} FROM {self.table_name}"
+
+        # Only apply page_id filter if table_name is not 'registration_survey'
+        if self.table_name != "registration_survey":
+            sql += f" WHERE page_id = {self.page_id}"
 
         return {
             'sql': sql,
