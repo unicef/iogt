@@ -939,3 +939,37 @@ class SurveyIndexPage(Page):
 class QuizIndexPage(Page):
     parent_page_types = ['home.HomePage']
     subpage_types = ['questionnaires.Quiz']
+
+
+class RegistrationSurvey(models.Model):
+    """
+    Model to store user registration survey data for Superset visualization.
+    """
+
+    age_category = models.CharField(
+        max_length=50,
+        choices=[
+            ("Child", "Child"),
+            ("Youth", "Youth"),
+            ("Adult", "Adult"),
+            ("Senior", "Senior"),
+        ],
+    )
+    gender = models.CharField(
+        max_length=20,
+        choices=[
+            ("Male", "Male"),
+            ("Female", "Female"),
+            ("Other", "Other"),
+            ("Prefer not to say", "Prefer not to say"),
+        ],
+    )
+    count = models.PositiveIntegerField(default=0)
+    page = ParentalKey("Survey", on_delete=models.CASCADE, related_name="poll_form_fields")
+
+    class Meta:
+        db_table = "registration_survey"
+
+    def __str__(self):
+        return f"{self.age_category} - {self.gender} ({self.count})"
+
