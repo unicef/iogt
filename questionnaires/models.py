@@ -965,7 +965,6 @@ class RegistrationSurvey(models.Model):
         ],
     )
     count = models.PositiveIntegerField(default=0)
-    page = ParentalKey("Survey", on_delete=models.CASCADE, related_name="poll_form_fields")
 
     class Meta:
         db_table = "registration_survey"
