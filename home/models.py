@@ -54,6 +54,7 @@ from home.utils import (
     get_all_renditions_urls,
 )
 import iogt.iogt_globals as globals_
+from django.db.models import Avg, Count
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -448,6 +449,10 @@ class FeedbackSettings(BaseSetting):
 class Article(AbstractArticle):
     tags = ClusterTaggableManager(through='ArticleTaggedItem', blank=True)
 
+    # New fields for precomputed values
+    average_rating = models.FloatField(default=0.0, null=True)
+    number_of_reviews = models.PositiveIntegerField(default=0, null=True)
+
     content_panels = AbstractArticle.content_panels + [
         MultiFieldPanel([
             InlinePanel('recommended_articles',
@@ -490,11 +495,22 @@ class Article(AbstractArticle):
             User.record_article_read(request=request, article=self)
         return response
     
-    def average_rating(self):
-        feedbacks = self.feedbacks.all()
-        if feedbacks.exists():
-            return round(feedbacks.aggregate(models.Avg('rating'))['rating__avg'], 1)
-        return 0
+    def update_feedback_metrics(self):
+        """
+        Updates the average rating and number of reviews for this article.
+        """
+        feedback_stats = self.feedbacks.aggregate(
+            avg_rating=Avg("rating"), review_count=Count("id")
+        )
+        self.average_rating = feedback_stats["avg_rating"] or 0.0
+        self.number_of_reviews = feedback_stats["review_count"] or 0
+        self.save(update_fields=["average_rating", "number_of_reviews"])
+
+    def compute_average_rating(self):
+        return self.average_rating if self.average_rating else 0
+
+    def compute_number_of_reviews(self):
+        return self.number_of_reviews if self.number_of_reviews else 0
 
 
 class ArticleFeedback(models.Model):
