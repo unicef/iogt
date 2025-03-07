@@ -1,6 +1,6 @@
 from django.contrib import admin
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
-from django.db.models import Avg
+from django.db.models import Avg, Count
 from django.utils.html import format_html
 from django.urls import reverse
 
@@ -28,17 +28,22 @@ class ArticleAdmin(ModelAdmin):
     model = Article
     menu_label = "Article Ratings"
     menu_icon = "form"
-    list_display = ("title", "average_rating", "view_feedback_button")
+    list_display = ("title", "average_rating", "number_of_reviews", "view_feedback_button")
     search_fields = ("title",)
-
-    def average_rating(self, obj):
-        avg_rating = obj.feedbacks.aggregate(avg_rating=Avg('rating'))['avg_rating'] or 0
-        return round(avg_rating, 1)
-    average_rating.short_description = "Average Rating"
+    ordering = ("-average_rating", "-number_of_reviews")  # Sort by rating & reviews in descending order
 
     def view_feedback_button(self, obj):
-        url = reverse("admin_article_feedback", args=[obj.id])  # Corrected URL
+        """
+        Creates a button to view feedback for an article.
+        """
+        url = reverse("admin_article_feedback", args=[obj.id])
         return format_html('<a class="button button-small" href="{}">View Feedback</a>', url)
     view_feedback_button.short_description = "Feedback"
+
+    def has_add_permission(self, request):
+        """
+        Hide the 'Add Article' button in the Wagtail admin panel.
+        """
+        return False  # Prevents adding new articles from this page
 
 modeladmin_register(ArticleAdmin)
