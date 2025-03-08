@@ -1944,3 +1944,9 @@ body.rtl {
   height: auto;
 }
 /* questionnaires end */
+
+.disabled-language {
+    pointer-events: none;
+    opacity: 0.6 !important;
+    user-select: none !important;
+}

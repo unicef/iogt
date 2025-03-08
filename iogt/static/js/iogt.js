@@ -21,9 +21,11 @@ $(document).ready(() => {
     const changeDigitalPinBtn = $('.change-digital-pin');
     const loginCreateAccountBtns = $('.login-create-account-btn');
     const logoutBtn = $('.logout-btn');
-    const externalLinks = $('a[href*="/external-link/?next="]')
+    const externalLinks = $('a[href*="/external-link/?next="]');
+    const disabledLanguages = $('a[href*="/translation-not-found/?page="]');
 
     const disableForOfflineAccess = () => {
+        disabledLanguages.addClass('disabled-language');
         searchFormHolder.hide();
         readContent.removeClass('complete');
         commentForm.hide();
@@ -57,6 +59,7 @@ $(document).ready(() => {
     };
 
     const enableForOnlineAccess = () => {
+        disabledLanguages.removeClass('disabled-language');
         searchFormHolder.show();
         readContent.addClass('complete');
         commentForm.show();
