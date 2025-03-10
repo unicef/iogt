@@ -166,7 +166,7 @@ class DashboardGenerator:
 
     def generate(self):
         if self.questionnaire.slug == "registration-survey":
-            SurveyDataProcessor.generate_aggregated_data(4)
+            SurveyDataProcessor.generate_aggregated_data(self.questionnaire.id)
 
         database_id = self._get_database_id()
         dashboard_id, dashboard_url, owner_id = self._create_dashboard()
@@ -208,7 +208,6 @@ class SurveyDataProcessor:
 
         for submission in submissions:
             form_data = submission.form_data
-            print("%%%%%%%%%%%%%%%%%5", form_data)
             date_of_birth = form_data.get("date_of_birth", "")
             gender = form_data.get("gender", "Unknown")
             age = SurveyDataProcessor.calculate_age(date_of_birth)
@@ -216,17 +215,15 @@ class SurveyDataProcessor:
             data_list.append((age_category, gender))
 
         data_counter = Counter(data_list)
-        print(data_list, "++++++++++++++++++++++++++++++++++++")
         return [{"age_category": age, "gender": gender, "count": count} for (age, gender), count in data_counter.items()]
 
     @staticmethod
     def generate_aggregated_data(page_id: int):
-        if page_id == 4:
-            aggregated_data = SurveyDataProcessor.aggregate_submission_data(page_id)
-            with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM registration_survey")
-                for row in aggregated_data:
-                    cursor.execute(
-                        "INSERT INTO registration_survey (age_category, gender, count) VALUES (%s, %s, %s)",
-                        [row['age_category'], row['gender'], row['count']]
-                    )
+        aggregated_data = SurveyDataProcessor.aggregate_submission_data(page_id)
+        with connection.cursor() as cursor:
+            cursor.execute("DELETE FROM registration_survey")
+            for row in aggregated_data:
+                cursor.execute(
+                    "INSERT INTO registration_survey (age_category, gender, count) VALUES (%s, %s, %s)",
+                    [row['age_category'], row['gender'], row['count']]
+                )
