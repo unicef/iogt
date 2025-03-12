@@ -8,15 +8,48 @@
         {% endfor %}
         {% if request.user.is_anonymous %}
             {% url 'account_login' as login_url %}
-            <!-- {% primary_button title='Log in / Create account' href=login_url icon_path='icons/login.svg' extra_classnames='login-create-account-btn' %} -->
+            <div class="mobile-only">
+                {% primary_button title='Log in / Create account' href=login_url icon_path='icons/login.svg' extra_classnames='login-create-account-btn' %}
+            </div>
         {% else %}
             {% comments_moderation_button %}
-
-            {% url 'user_profile' as profile_url %}
-            <!-- {% primary_button title='Profile' href=profile_url icon_path='icons/profile.svg' %} -->
+            <div class="mobile-only">
+                {% url 'user_profile' as profile_url %}
+                {% primary_button title='Profile' href=profile_url icon_path='icons/profile.svg' %}
+            </div>
 
             {% url 'account_logout' as logout_url %}
             {% primary_button title='Log out' href=logout_url icon_path='icons/arrow_icon_left.svg' extra_classnames='logout-btn' %}
         {% endif %}
     </nav>
 </footer>
+
+<style>
+    .mobile-only {
+        display: none;
+    }
+
+    @media (max-width: 768px) and (max-width: 1225px) {
+        .mobile-only {
+            display: block;
+        }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .mobile-only {
+            display: block;
+        }
+    }
+
+    @media (min-width: 1025px) and (max-width: 1225px) {
+        .mobile-only {
+            display: block;
+        }
+    }
+
+    @media (min-width: 1386px) {
+        .mobile-only {
+            display: none;
+        }
+    }
+</style>
