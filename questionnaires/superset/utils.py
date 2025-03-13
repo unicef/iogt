@@ -57,7 +57,11 @@ class DashboardGenerator:
         self.client.authenticate(superset_username, superset_password)
         self.admin_client = SupersetClient()
         self.admin_client.authenticate(settings.SUPERSET_USERNAME, settings.SUPERSET_PASSWORD)
-        self.table_name = "registration_survey" if questionnaire.slug == "registration-survey" else UserSubmission._meta.db_table
+        self.table_name = (
+            "registration_survey"
+            if questionnaire.slug in ["registration-survey", "wagtail-editing-survey-registration-survey"]
+            else UserSubmission._meta.db_table
+        )
         self.current_datetime = timezone.now().strftime("%Y-%m-%d %H:%M:%S")
 
     def _get_database_id(self):
@@ -93,7 +97,7 @@ class DashboardGenerator:
 
         dataset_detail = self.client.get_dataset(dataset_id)
 
-        if self.questionnaire.slug == "registration-survey":
+        if self.questionnaire.slug == "registration-survey" or self.questionnaire.slug == "wagtail-editing-survey-registration-survey":
             columns = [{'column_name': column.get('column_name')} for column in
                        dataset_detail.get('result', {}).get('columns') if column.get('column_name') in ALLOWED_COLUMNS_REG_SURVEY]
         else:
@@ -115,7 +119,7 @@ class DashboardGenerator:
             metric.pop('created_on', None)
             metric.pop('uuid', None)
 
-        if self.questionnaire.slug == "registration-survey":
+        if self.questionnaire.slug == "registration-survey" or self.questionnaire.slug == "wagtail-editing-survey-registration-survey":
             metrics.append({
                 "expression": "SUM(count)",
                 "metric_name": "response_count",
@@ -145,7 +149,7 @@ class DashboardGenerator:
         chart = BigNumberTotalChart(dashboard_id=dashboard_id, dataset_id=dataset_id, name='Total Submissions')
         self.client.create_chart(data=chart.post_body())
 
-        if self.questionnaire.slug == "registration-survey":
+        if self.questionnaire.slug == "registration-survey" or self.questionnaire.slug == "wagtail-editing-survey-registration-survey":
             bar_chart = BarChart(
                 dashboard_id=dashboard_id,
                 dataset_id=dataset_id,
@@ -165,7 +169,7 @@ class DashboardGenerator:
                     self.client.create_chart(data=chart.post_body())
 
     def generate(self):
-        if self.questionnaire.slug == "registration-survey":
+        if self.questionnaire.slug == "registration-survey" or self.questionnaire.slug == "wagtail-editing-survey-registration-survey":
             SurveyDataProcessor.generate_aggregated_data(self.questionnaire.id)
 
         database_id = self._get_database_id()
