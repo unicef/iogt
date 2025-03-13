@@ -590,6 +590,8 @@ SOCIALACCOUNT_PROVIDERS = {
         },
 }
 # Azure AD B2C setup ends
+print("CURRENT_DOMAIN", CURRENT_DOMAIN)
+print("AZURE_AD_TENANT_ID", AZURE_AD_TENANT_ID)
 
 # Mailjet setup for sending emails
 MAILJET_API_KEY = os.getenv('MAILJET_API_KEY')
