@@ -17,14 +17,14 @@ from questionnaires.blocks import VALID_SKIP_SELECTORS, SkipState, VALID_SKIP_LO
 class CustomFormBuilder(FormBuilder):
     def create_date_field(self, field, options):
         options.update({
-            'widget': forms.DateInput(attrs={'type': 'date'}),
+            'widget': forms.DateInput(attrs={'type': 'date', 'max': '9999-12-31'}),
         })
 
         return forms.DateField(**options)
 
     def create_datetime_field(self, field, options):
         options.update({
-            'widget': forms.DateInput(attrs={'type': 'datetime-local'}),
+            'widget': forms.DateInput(attrs={'type': 'datetime-local', 'max': '9999-12-31T23:59:59'}),
         })
 
         return forms.DateTimeField(**options)
