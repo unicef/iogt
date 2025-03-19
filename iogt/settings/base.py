@@ -583,7 +583,7 @@ SOCIALACCOUNT_PROVIDERS = {
             'AZURE_AD_TENANT_ID': os.getenv('AZURE_AD_TENANT_ID'),
             'AZURE_AD_SIGNUP_SIGNIN_POLICY': os.getenv('AZURE_AD_SIGNUP_SIGNIN_POLICY'),
             'SERVER_URL': f"https://{os.getenv('AZURE_AD_TENANT_ID')}.b2clogin.com/{os.getenv('AZURE_AD_TENANT_ID')}.onmicrosoft.com/v2.0/.well-known/openid-configuration?p={os.getenv('AZURE_AD_SIGNUP_SIGNIN_POLICY')}",
-            'REDIRECT_URI': f"{CURRENT_DOMAIN}/admin-login/signup-as-admin/callback/",
+            'REDIRECT_URI': f"{CURRENT_DOMAIN}/en/admin-login/signup-as-admin/callback/",
             'SCOPES': ['openid', 'email', 'profile'],
             'VERIFY_SSL': True,  # SSL verification
             'KEY': 'azure',  # Set 'azure' as the key
