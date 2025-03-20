@@ -8,60 +8,13 @@
 {% get_current_language as LANGUAGE_CODE %}
 
 {% block content %}
-    <div class="home-page">
-        <a href="#main-content" class="skip-link" id="skip-to-content">Skip to main content</a>
-        {% include 'home/tags/banners_list.html' with banners=banners %}
-        <div id="main-content">
-            {% if page.home_featured_content %}
-                {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
-                {% include_block page.home_featured_content %}
-            {% endif %}
-        </div>
-
+  <div class="home-page">
+    {% include 'home/tags/banners_list.html' with banners=banners %}
+    <div>
+        {% if page.home_featured_content %}
+            {% flat_menu LANGUAGE_CODE|add:'_menu_live' template="nav_bar.html" %}
+            {% include_block page.home_featured_content %}
+        {% endif %}
     </div>
-
-    <style>
-        .skip-link {
-            position: absolute;
-            top: -45px;
-            left: 0;
-            padding: 10px;
-            background-color: red;
-            color: white;
-            z-index: 1000;
-            transition: top 0.3s ease;
-        }
-
-        .skip-link.show {
-            top: 5px;
-        }
-
-        .skip-link:focus {
-            outline: none;
-        }
-    </style>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    var skipLink = document.getElementById('skip-to-content');
-    var isTabbing = false;
- 
-    window.addEventListener('keydown', function(event) {
-      if (event.key === 'Tab') {
-        skipLink.classList.add('show');
-      }
-    });
- 
-    window.addEventListener('keydown', function(event) {
-      if (event.key !== 'Tab') {
-        skipLink.classList.remove('show');
-      }
-    });
- 
-    skipLink.addEventListener('click', function(event) {
-      event.preventDefault();
-      document.getElementById('main-content').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  });
-</script>
+  </div>
 {% endblock content %}

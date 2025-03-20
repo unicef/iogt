@@ -22,43 +22,6 @@ class AzureADBackend(BaseBackend):
         Authenticate user via Azure AD using username (email) and password.
         """
         pass
-    #     azure_details = get_azure_auth_details()
-    #
-    #     # Initialize MSAL client
-    #     msal_client = PublicClientApplication(
-    #         client_id=azure_details['client_id'],
-    #         authority=azure_details['authority'],
-    #     )
-    #
-    #     # Acquire token using username and password
-    #     try:
-    #         token_data = msal_client.acquire_token_by_username_password(
-    #             username=username,
-    #             password=password,
-    #             scopes=azure_details['scope']
-    #         )
-    #
-    #         if 'access_token' in token_data:
-    #             # Token is valid, retrieve or create the user
-    #             user, created = User.objects.get_or_create(
-    #                 email=username, defaults={'username': username}
-    #             )
-    #             return user
-    #         else:
-    #             return None
-    #     except Exception as e:
-    #         # Log or handle error appropriately
-    #         print(f"Error during Azure AD authentication: {e}")
-    #         return None
-    #
-    # def get_user(self, user_id):
-    #     """
-    #     Retrieve user by their ID.
-    #     """
-    #     try:
-    #         return User.objects.get(pk=user_id)
-    #     except User.DoesNotExist:
-    #         return None
 
 
 class AzureADSignupService:

@@ -1118,3 +1118,18 @@ django-anymail==10.3 \
     # via
     # -r requirements.txt
     # django-anymail
+pandas==2.2.3 \
+    --hash=sha256:c124333816c3a9b03fbeef3a9f230ba9a737e9e5bb4060aa2107a86cc0a497fc
+    # via
+    # -r requirements.txt
+    # pandas
+numpy==1.23.2 \
+    --hash=sha256:ac987b35df8c2a2eab495ee206658117e9ce867acf3ccb376a19e83070e69418
+    # via
+    # -r requirements.txt
+    # numpy
+tzdata==2025.1 \
+    --hash=sha256:7e127113816800496f027041c570f50bcd464a020098a3b6b199517772303639
+    # via
+    # -r requirements.txt
+    # numpy

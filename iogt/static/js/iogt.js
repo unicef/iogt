@@ -97,14 +97,37 @@ $(document).ready(() => {
 });
 
 const download = pageId => {
+    console.log("Starting download for page:", pageId);
+
     fetch(`/page-tree/${pageId}/`)
-        .then(resp => resp.json())
-        .then(urls => {
-            caches.open('iogt')
-                .then(cache => {
-                    cache.addAll(urls);
-                });
+        .then(resp => {
+            if (!resp.ok) {
+                throw new Error(`Failed to fetch URLs for caching. Status: ${resp.status}`);
+            }
+            return resp.json();
         })
+        .then(urls => {
+            if (!urls.length) {
+                throw new Error("No URLs received for caching.");
+            }
+
+            return caches.open('iogt').then(cache => {
+            console.log(urls)
+                return cache.addAll(urls)
+                    .then(() => {
+                        console.log("Content cached successfully!");
+                        alert("Content is now available offline!");
+                    })
+                    .catch(error => {
+                        console.error("Caching failed:", error);
+                        alert("Failed to cache content.");
+                    });
+            });
+        })
+        .catch(error => {
+            console.error("Download error:", error);
+            alert("Download failed. Please try again.");
+        });
 };
 
 const getItem = (key, defaultValue) => {
