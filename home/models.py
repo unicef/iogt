@@ -565,6 +565,18 @@ class BannerPage(Page, PageUtilsMixin):
         FieldPanel('banner_link_page'),
     ]
 
+    def save(self, *args, **kwargs):
+        """
+        Override save method to ensure that a HomePageBanner entry is created
+        when a BannerPage is saved.
+        """
+        super().save(*args, **kwargs)
+
+        # Ensure the HomePageBanner is created if it doesn’t exist
+        home_page = HomePage.objects.first()  # Modify this to select the correct home page
+        if home_page:
+            HomePageBanner.objects.get_or_create(source=home_page, banner_page=self)
+
     @property
     def offline_urls(self):
         return get_all_renditions_urls(self.banner_image)
