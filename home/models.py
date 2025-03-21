@@ -566,7 +566,10 @@ class BannerPage(Page, PageUtilsMixin):
     ]
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)  # Save the BannerPage first
+        if self.pk and BannerPage.objects.filter(pk=self.pk).exists():
+            pass
+        else:
+            super().save(*args, **kwargs)  # Save the BannerPage first
 
         home_page = HomePage.objects.first()  # Modify this to select the correct HomePage
         if home_page:
