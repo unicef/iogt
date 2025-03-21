@@ -566,16 +566,16 @@ class BannerPage(Page, PageUtilsMixin):
     ]
 
     def save(self, *args, **kwargs):
-        """
-        Override save method to ensure that a HomePageBanner entry is created
-        when a BannerPage is saved.
-        """
-        super().save(*args, **kwargs)
+        super().save(*args, **kwargs)  # Save the BannerPage first
 
-        # Ensure the HomePageBanner is created if it doesn’t exist
-        home_page = HomePage.objects.first()  # Modify this to select the correct home page
+        home_page = HomePage.objects.first()  # Modify this to select the correct HomePage
         if home_page:
-            HomePageBanner.objects.get_or_create(source=home_page, banner_page=self)
+            # Check if an entry already exists
+            existing_entry = HomePageBanner.objects.filter(source=home_page, banner_page=self).first()
+
+            if not existing_entry:
+                # Create only if it doesn’t already exist
+                HomePageBanner.objects.create(source=home_page, banner_page=self)
 
     @property
     def offline_urls(self):
