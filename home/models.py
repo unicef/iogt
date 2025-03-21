@@ -566,20 +566,19 @@ class BannerPage(Page, PageUtilsMixin):
     ]
 
     def save(self, *args, **kwargs):
-        pass
-        # if self.pk and BannerPage.objects.filter(pk=self.pk).exists():
-        #     pass
-        # else:
-        #     super().save(*args, **kwargs)  # Save the BannerPage first
+        if self.pk and BannerPage.objects.filter(pk=self.pk).exists():
+            pass
+        else:
+            super().save(*args, **kwargs)  # Save the BannerPage first
 
-        # home_page = HomePage.objects.first()  # Modify this to select the correct HomePage
-        # if home_page:
-        #     # Check if an entry already exists
-        #     existing_entry = HomePageBanner.objects.filter(source=home_page, banner_page=self).first()
+        home_page = HomePage.objects.first()  # Modify this to select the correct HomePage
+        if home_page:
+            # Check if an entry already exists
+            existing_entry = HomePageBanner.objects.filter(source=home_page, banner_page=self).first()
 
-        #     if not existing_entry:
-        #         # Create only if it doesn’t already exist
-        #         HomePageBanner.objects.create(source=home_page, banner_page=self)
+            if not existing_entry:
+                # Create only if it doesn’t already exist
+                HomePageBanner.objects.create(source=home_page, banner_page=self)
 
     @property
     def offline_urls(self):
