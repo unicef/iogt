@@ -17,9 +17,11 @@ from wagtail import hooks
 from wagtail.models import Page, PageViewRestriction
 
 from home.models import (BannerIndexPage, FooterIndexPage, LocaleDetail,
-                         Section, SectionIndexPage)
+                         Section, SectionIndexPage, BannerPage, HomePageBanner, HomePage)
 from home.translatable_strings import translatable_strings
 from translation_manager.models import TranslationEntry
+from wagtail.core.signals import page_published
+from django.dispatch import receiver
 
 
 @hooks.register('before_serve_page', order=-1)
@@ -214,3 +216,11 @@ def hide_add_article_button():
     Inject custom CSS to hide the "Add Article" button in the Wagtail admin.
     """
     return format_html('<link rel="stylesheet" href="/static/css/custom_admin.css">')
+
+
+@receiver(page_published, sender=BannerPage)
+def create_home_page_banner(sender, instance, **kwargs):
+    """Ensure a HomePageBanner entry is created after a BannerPage is published."""
+    home_page = HomePage.objects.first()
+    if home_page:
+        HomePageBanner.objects.get_or_create(source=home_page, banner_page=instance)

@@ -565,21 +565,6 @@ class BannerPage(Page, PageUtilsMixin):
         FieldPanel('banner_link_page'),
     ]
 
-    def save(self, *args, **kwargs):
-        if self.pk and BannerPage.objects.filter(pk=self.pk).exists():
-            pass
-        else:
-            super().save(*args, **kwargs)  # Save the BannerPage first
-
-        home_page = HomePage.objects.first()  # Modify this to select the correct HomePage
-        if home_page:
-            # Check if an entry already exists
-            existing_entry = HomePageBanner.objects.filter(source=home_page, banner_page=self).first()
-
-            if not existing_entry:
-                # Create only if it doesn’t already exist
-                HomePageBanner.objects.create(source=home_page, banner_page=self)
-
     @property
     def offline_urls(self):
         return get_all_renditions_urls(self.banner_image)
