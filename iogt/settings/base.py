@@ -279,6 +279,7 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('rn', _('Kirundi')),
     ('ku', _('Kurdish')),
     ('mg', _('Malagasy')),
+    ('my', _('Burmese')),
     ('ne', _('Nepali')),
     ('nr', _('Ndebele')),
     ('ps', _('Pashto')),
