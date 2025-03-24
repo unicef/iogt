@@ -39,13 +39,30 @@ class PieChart(Chart):
 class BarChart(Chart):
     viz_type = 'dist_bar'
 
+    def __init__(self, dashboard_id, dataset_id, name, x_axis=None, y_axis=None, series=None, clean_name=None):
+        super().__init__(dashboard_id, dataset_id, name, clean_name)
+        self.x_axis = x_axis
+        self.y_axis = y_axis
+        self.series = series
+
     def params(self):
-        return json.dumps({
-            "groupby": [self.name],
-            "metrics": ["response_count"],
-            "show_legend": False,
-            "y_axis_label": "Responses",
-        })
+        if self.x_axis and self.y_axis and self.series:
+            # New implementation if specific axes are provided
+            return json.dumps({
+                "groupby": [self.x_axis, self.y_axis],
+                "metrics": [self.series],
+                "show_legend": True,
+                "y_axis_label": self.y_axis,
+                "x_axis_label": self.x_axis,
+            })
+        else:
+            # Existing implementation
+            return json.dumps({
+                "groupby": [self.name],
+                "metrics": ["response_count"],
+                "show_legend": False,
+                "y_axis_label": "Responses",
+            })
 
 
 class TableChart(Chart):

@@ -1,0 +1,26 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-02-19 09:38+0000\n"
+"PO-Revision-Date: 2025-02-19 09:38+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: Burmese\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "Sorry, there seems to be an error. Please try again soon."
+msgstr "စိတ်မသန်စွမ်းပါ၊ အမှားတစ်ခု ဖြစ်ပေါ်နေသလို တွေ့ရသည်။ ကျေးဇူးပြု၍ နောက်မှ ထပ်စမ်းကြည့်ပါ။"
+
+msgid "You cannot submit when offline"
+msgstr "အော့ဖ်လိုင်းဖြစ်နေသည့်အခါ၊ သင် မပေးပို့နိုင်ပါ။"
+
+msgid "Date must be in this (YYYY-MM-DD) format"
+msgstr "ရက်စွဲကို (YYYY-MM-DD) ဖော်မတ်အတိုင်း ရိုက်ထည့်ရန် လိုအပ်ပါသည်။"
+
+msgid "Datetime must be in this YYYY-MM-DDTHH:SS format"
+msgstr "ရက်စွဲနှင့် အချိန်ကို YYYY-MM-DDTHH:SS ဖော်မတ်အတိုင်း ရိုက်ထည့်ရန် လိုအပ်ပါသည်။"

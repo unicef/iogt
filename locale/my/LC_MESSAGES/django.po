@@ -1,0 +1,383 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-02-19 09:38+0000\n"
+"PO-Revision-Date: 2025-02-19 09:38+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "quizzes"
+msgstr "ပဟေဋ္ဌိများ"
+
+msgid "Log in to participate"
+msgstr "ပါဝင်ရန် အကောင့်ဝင်ပါ"
+
+msgid "Log in / Create account"
+msgstr "အကောင့်ဝင်/အကောင့်ဖန်တီးပါ"
+
+msgid " The Internet of Good Things"
+msgstr " The Internet of Good Things"
+
+msgid "Profile"
+msgstr "ကိုယ်ရေးအချက်အလက်"
+
+msgid "Chat"
+msgstr "စကားပြော"
+
+msgid "More"
+msgstr "နောက်စာမျက်နှာသို့ သွားရန်"
+
+msgid "Log in"
+msgstr "အကောင့်၀င်ခြင်း"
+
+msgid "Back"
+msgstr "ပြန်သွားရန်"
+
+msgid "BACK"
+msgstr "ပြန်သွားရန်"
+
+msgid "Previous"
+msgstr "ပြန်သွားရန်"
+
+msgid "Next"
+msgstr "နောက်စာမျက်နှာသို့ သွားရန်"
+
+msgid "Comments"
+msgstr "မှတ်ချက်များ"
+
+msgid "Please log in or create your account"
+msgstr "ကျေးဇူးပြု၍ လော့ဂ်အင် သို့မဟုတ် သင့်အကောင့်ကို ဖန်တီးပါ"
+
+msgid "Report"
+msgstr "အစီရင်ခံစာ"
+
+msgid "Related Articles"
+msgstr "ဆက်စပ်ဆောင်းပါးများ"
+
+msgid "This comment has been reported."
+msgstr "ဤမှတ်ချက်ကို အစီရင်ခံထားပါသည်။"
+
+msgid ""
+"It will be reviewed by the team and may be removed if it breaks our Platform"
+" Rules"
+msgstr "၎င်းကိုအဖွဲ့မှပြန်လည်သုံးသပ်မည်ဖြစ်ပြီး၎င်းသည်မသင့်တော်ပါကခွင့်ပြုမည်မဟုတ်ပါ"
+"စည်းကမ်းများ"
+""
+""
+
+msgid "articles"
+msgstr "ဆောင်းပါးများ"
+
+msgid "Search the site..."
+msgstr " ရှာပါ..."
+
+msgid "Search results for:"
+msgstr "ရှာဖွေမှုရလဒ်များ-"
+
+msgid "No search results were found for"
+msgstr "ရှာဖွေမှုရလဒ်များကို မတွေ့ပါ"
+
+msgid "Username"
+msgstr "အသုံးပြုသူအမည်"
+
+msgid "Create your account"
+msgstr "သင့်အကောင့်ကို ဖန်တီးပါ"
+
+msgid "Forgot PIN"
+msgstr "ပင်နံပါတ် မေ့သွားသည်"
+
+msgid "Cancel"
+msgstr "ပယ်ဖျက်ရန်"
+
+msgid "Hey, %(username)s"
+msgstr "ဟေး %(username)s"
+
+msgid "Change Digital Pin"
+msgstr "ဒစ်ဂျစ်တယ်ပင်နံပါတ်ကို ပြောင်းရန်"
+
+msgid "Personal Details"
+msgstr "ကိုယ်ရေးကိုယ်တာအသေးစိတ်များ"
+
+msgid "Save changes"
+msgstr "အပြောင်းအလဲများကို သိမ်းဆည်းပါ"
+
+msgid "Reset PIN"
+msgstr "ပင်နံပါတ်ကို ပြန်လည်သတ်မှတ်ပါ"
+
+msgid "Your PIN has been changed successfully."
+msgstr "သင်၏ PIN ကို အောင်မြင်စွာ ပြောင်းလဲလိုက်ပါပြီ။"
+
+msgid "I accept the Terms and Conditions."
+msgstr "စည်းမျဥ်းစည်းကမ်းများကို ကျွန်ုပ်လက်ခံပါသည်။"
+
+msgid "You have read %(read)s out of %(total)s"
+msgstr "သင် %(read)s ကို ဖတ်ပြီးပြီ %(စုစုပေါင်း)"
+
+msgid "%(counter)s of %(total)s questions"
+msgstr "%(counter)မေးခွန်းများ၏ %(total)များ"
+
+msgid "Select one"
+msgstr "တစ်ခုကို ရွေးပါ"
+
+msgid "Optional"
+msgstr "ရွေးချယ်ခွင့်"
+
+msgid "No limit"
+msgstr "အကန့်အသတ်မရှိ"
+
+msgid "Submit"
+msgstr "တင်သွင်းရန်"
+
+msgid "Go to homepage"
+msgstr "ပင်မစာမျက်နှာသို့ သွားပါ"
+
+msgid "You have already completed this survey."
+msgstr "သင် ဤစစ်တမ်းကို ပြီးမြောက်ပြီးဖြစ်သည်။"
+
+msgid "Check all that apply"
+msgstr "သက်ဆိုင်သမျှကို စစ်ဆေးပါ"
+
+msgid "Your results!"
+msgstr "သင့်ရလဒ်များ!"
+
+msgid "Replay Quiz"
+msgstr "ပဟေဠိကို ပြန်ဖွင့်ပါ"
+
+msgid "Incorrect"
+msgstr "မမှန်ပါ"
+
+msgid "Correct"
+msgstr "မှန်သည်"
+
+msgid "Your answer"
+msgstr "သင့်အဖြေ"
+
+msgid "Leave comment"
+msgstr "မှတ်ချက်ရေးပါ"
+
+msgid "Reply"
+msgstr "ပြန်ကြားရန်"
+
+msgid "Page not found"
+msgstr "စာမျက်နှာ မတွေ့ပါ"
+
+msgid "Sorry, this page could not be found."
+msgstr "တောင်းပန်ပါတယ်၊ ဒီစာမျက်နှာကို ရှာမတွေ့ပါ။"
+
+msgid "Internal server error"
+msgstr "အတွင်းပိုင်း ဆာဗာ အမှား"
+
+msgid "1 result"
+msgid_plural "%(counter)s results"
+msgstr[0] "1 ရလဒ်"
+msgstr[1] "%(counter)s ရလဒ်များ"
+
+msgid "poll"
+msgstr "စစ်တမ်း"
+
+msgid "survey"
+msgstr "စစ်တမ်း"
+
+msgid "quiz"
+msgstr "ပဟေဋ္ဌိ"
+
+msgid "This field is required."
+msgstr " လိုအပ်သည်။"
+
+msgid "Send"
+msgstr "ပို့ရန်"
+
+msgid "Remove this comment?"
+msgstr "ဤမှတ်ချက်ကို ဖယ်ရှားမလား။"
+
+msgid "Remove"
+msgstr "ဖယ်ရှားရန်"
+
+msgid "This comment has been removed."
+msgstr "ဤမှတ်ချက်ကို ဖယ်ရှားလိုက်ပါပြီ။"
+
+msgid "moderator"
+msgstr "ထိန်းကျောင်းသူ"
+
+msgid "sections"
+msgstr "ကဏ္ဍများ"
+
+msgid "Check if applies"
+msgstr "သက်ဆိုင်မှုရှိမရှိ စစ်ဆေးပါ"
+
+msgid "New comments have been disabled for this page."
+msgstr "ဤစာမျက်နှာအတွက် မှတ်ချက်အသစ်များကို ပိတ်ထားသည်။"
+
+msgid "Correct answer"
+msgstr "အဖြေမှန်"
+
+msgid "Download"
+msgstr "ဒေါင်းလုဒ်လုပ်ရန်"
+
+msgid ""
+"You are leaving the <b>Internet of Good Things</b> to visit an external "
+"website and standard data charges by your network provider might apply"
+msgstr "သင်သည်  <b>Internet of Good Things</b> မှ ထွက်ပြီး အပြင်ဘက်ဝက်ဘ်ဆိုဒ်ကို သွားရောက်ကြည့်ရှုမည်"
+" ဝဘ်ဆိုက်နှင့် စံဒေတာကောက်ခံမှုများ အကျုံးဝင်မည်"
+
+msgid "Continue to external site"
+msgstr "ပြင်ပဆိုက်သို့ ဆက်သွားရန်"
+
+msgid "4-digit PIN"
+msgstr "ဂဏန်း 4 လုံး PIN"
+
+msgid "Old 4-digit PIN"
+msgstr "ဂဏန်း 4 လုံး PIN အဟောင်း"
+
+msgid "New 4-digit PIN"
+msgstr "ဂဏန်း 4 လုံး PIN အသစ်"
+
+msgid "Confirm new 4-digit PIN"
+msgstr "ဂဏန်း 4 လုံး PIN အသစ်ကို အတည်ပြုပါ"
+
+msgid "Log out"
+msgstr "ထွက်ပါ"
+
+msgid "section"
+msgstr "ကဏ္ဍ"
+
+msgid "article"
+msgstr "ဆောင်းပါး"
+
+msgid "Remember me"
+msgstr "ငါ့ကို သတိရပါ"
+
+msgid "You have signed out."
+msgstr "သင်သည် အကောင့်မှ ထွက်ပါသည်။"
+
+msgid ""
+"Enter a valid username. This value may contain only letters, numbers, and "
+"@/./+/-/_ characters."
+msgstr "တရားဝင်သော အသုံးပြုသူအမည် ထည့်ပါ။ ဤတန်ဖိုးတွင် အက္ခရာများ၊ နံပါတ်များနှင့် @/./+/-/_ စာလုံးများသာ ပါဝင်နိုင်ပါသည်။"
+
+msgid "You must type the same password each time."
+msgstr "သင်သည် စကားဝှက်တူညီသောကို ပြန်လည်ရိုက်ထည့်ရမည်ဖြစ်သည်။"
+
+msgid "This password is too short. It must contain at least 4 characters."
+msgstr "ဤစကားဝှက်သည် ရှည်လျားလုံခြုံမှုမရှိပါ။ အနည်းဆုံး ၄ လုံးပါဝင်ရပါမည်။"
+
+msgid "Please type your current password."
+msgstr "ကျေးဇူးပြု၍ သင်၏ လက်ရှိ စကားဝှက်ကို ရိုက်ထည့်ပါ။"
+
+msgid "Password successfully changed."
+msgstr "စကားဝှက်ကို အောင်မြင်စွာ ပြောင်းလဲပြီးပါပြီ။"
+
+msgid "Enter a valid date/time."
+msgstr "တရားဝင်သော နေ့စွဲ/အချိန်ကို ထည့်ပါ။"
+
+msgid "Enter a valid date."
+msgstr "တရားဝင်သော နေ့စွဲကို ထည့်ပါ။"
+
+msgid "Enter a valid URL."
+msgstr "မှန်ကန်သော URL ကိုထည့်ပါ။"
+
+msgid "Enter a valid email address."
+msgstr "မှန်ကန်သော အီးမေးလ်လိပ်စာကို ထည့်ပါ။"
+
+msgid "Enter a valid integer."
+msgstr "မှန်ကန်သော ကိန်းပြည့်ကို ထည့်ပါ။"
+
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr "ဤတန်ဖိုးသည် %(limit_value)s ထက် ပို၍ သို့မဟုတ် ညီမျှရမည်ဖြစ်သည်။"
+
+msgid "Your comment"
+msgstr "သင်၏မှတ်ချက်"
+
+msgid "Are you sure you want to log out?"
+msgstr "သင်သည် ထွက်မည်ဆိုတာ သေချာပါသလား?"
+
+msgid "Your browser does not support video playback."
+msgstr "သင့်ဘရောက်ဆာသည် ဗီဒီယိုပြန်ဖွင့်ခြင်းကို မပံ့ပိုးပါ။"
+
+msgid "Your browser does not support audio playback."
+msgstr "သင့်ဘရောင်ဇာသည် အသံပြန်ဖွင့်ခြင်းကို မပံ့ပိုးပါ။"
+
+msgid "Don't display my username next to my comment"
+msgstr "မှတ်ချက်ဘေးတွင် ကျွန်ုပ်၏အမည်ကို မဖော်ပြပါနှင့်။"
+
+msgid "Anonymous"
+msgstr "အမည်မသိ"
+
+msgid "Report this comment?"
+msgstr "ဤမှတ်ချက်ကို အစီရင်ခံမလား။"
+
+msgid "Display name"
+msgstr "ပြသမည့်အမည်"
+
+msgid "Reported by %(comment_report_count)s user"
+msgid_plural "Reported by %(comment_report_count)s users"
+msgstr[0] "ဤမှတ်ချက်ကို %(comment_report_count)s အသုံးပြုသူမှ အတည်ပြုသည်"
+msgstr[1] "ဤမှတ်ချက်ကို %(comment_report_count)s အသုံးပြုသူမှ အတည်ပြုသည်"
+
+msgid ""
+"Sorry, %(page_title)s is not available in %(language)s. If you want to keep "
+"browsing in %(language)s you can click below to return to the homepage."
+msgstr "စောင့်ဆိုင်းမှုအတွက် တောင်းပန်ပါသည်၊ %(page_title)s ကို %(language)s တွင် မရရှိနိုင်ပါ။ "
+"%(language)s တွင် ဆက်လက်အသုံးပြုရန် ပင်မစာမျက်နှာသို့ ပြန်သွားပါ။"
+
+msgid "Username not available."
+msgstr "အသုံးပြုသူအမည် မရနိုင်ပါ။"
+
+msgid "Display name not available."
+msgstr "ပြရန်အမည် မရနိုင်ပါ။"
+
+msgid "You have already completed this quiz."
+msgstr "သင် ဤပဟေဋ္ဌိကို ပြီးမြောက်ပြီးဖြစ်သည်။"
+
+msgid "You have already completed this poll."
+msgstr "သင် ဤစစ်တမ်းကို အပြီးသတ်ပြီးဖြစ်သည်။"
+
+msgid ""
+"If you cannot view the above video, you can instead %(start_link)sdownload "
+"it%(end_link)s."
+msgstr "အထက်ပါဗီဒီယိုကို မကြည့်နိုင်ပါက %(start_link)sdownload အစား သင်လုပ်နိုင်သည်"
+"it%(end_link)s"
+
+msgid ""
+"If you cannot listen to the above audio, you can instead "
+"%(start_link)sdownload it%(end_link)s."
+msgstr "အထက်ပါအသံကို နားမထောင်နိုင်ရင် အစားပေးနိုင်ပါတယ်"
+"%(start_link)s ဒေါင်းလုဒ်လုပ်ပါ%(end_link)s"
+
+msgid "Please complete the questions marked as required to continue"
+msgstr "ဆက်လုပ်ရန် လိုအပ်သည့်အတိုင်း အမှတ်အသားပြုထားသော မေးခွန်းများကို ဖြည့်ပါ"
+
+msgid "Need internet access to visit external site."
+msgstr "ပြင်ပဆိုက်သို့ ဝင်ကြည့်ရန် အင်တာနက် အသုံးပြုခွင့် လိုအပ်ပါသည်။"
+
+msgid "Comment Moderation"
+msgstr "မှတ်ချက် စိစစ်မှု"
+
+msgid "Filters"
+msgstr "စစ်ထုတ်မှုများ"
+
+msgid "Apply"
+msgstr "အသုံးပြုရန်"
+
+msgid "Actions"
+msgstr "လုပ်ဆောင်ချက်များ"
+
+msgid "Unsure"
+msgstr "မသေချာပါ"
+
+msgid "No comment found."
+msgstr "မှတ်ချက်မတွေ့ပါ။"
+
+msgid ""
+"The content you are trying to reach is not available. To see offline content"
+" click <a href=\"%(offline_content_index_page_url)s\">here</a>"
+msgstr ""
+"သင်ရောက်ရှိရန်ကြိုးစားနေသည့် အကြောင်းအရာကို မရနိုင်ပါ။ အော့ဖ်လိုင်းအကြောင်းအရာကို ကြည့်ရှုရန်"
+" <a href=\"%(offline_content_index_page_url)s\">ဒီမှာ</a> ကိုနှိပ်ပါ"
