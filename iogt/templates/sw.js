@@ -34,7 +34,16 @@ self.addEventListener('fetch', event => {
                         .then(() => console.log("🔄 Sync registered successfully!"))
                         .catch(err => console.error("❌ Sync registration failed:", err));
 
-                    return new Response(JSON.stringify({ success: false, offline: true }), {
+                    self.clients.matchAll().then(clients => {
+                        clients.forEach(client => {
+                            client.postMessage({
+                                type: 'ALERT_MESSAGE',
+                                message: "📡 You're offline! Your response is saved and will sync when online."
+                            });
+                        });
+                    });
+
+                    return new Response(JSON.stringify({ success: false, offline: true, message: "Your survey will be submitted automatically, when you come in network" }), {
                         headers: { "Content-Type": "application/json" }
                     });
                 } catch (err) {

@@ -23,3 +23,9 @@ const registerSW = async () => {
 };
 
 registerSW();
+
+navigator.serviceWorker.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'ALERT_MESSAGE') {
+        alert(event.data.message); // ✅ Show alert when offline
+    }
+});
