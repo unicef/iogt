@@ -19,7 +19,7 @@ class ChatManager:
             raise Exception('No thread found.')
         self.thread = thread
 
-    def _record_message_in_database(self, sender, rapidpro_message_id, text, quick_replies):
+    def _record_message_in_database(self, sender, rapidpro_message_id, text, quick_replies, is_chatbot_message):
         # Messages sent from User to RapidPro server don't have rapidpro_message_id
         from_rapidpro_server = bool(rapidpro_message_id)
 
@@ -29,6 +29,7 @@ class ChatManager:
                 'text': text,
                 'quick_replies': quick_replies,
                 'thread': self.thread,
+                "is_chatbot_message": is_chatbot_message,
             })
 
             if not created:
@@ -78,15 +79,15 @@ class ChatManager:
                 cleaned_message = f'{message}{cleaned_message}'
         return cleaned_message, attachments
 
-    def record_reply(self, text, sender, rapidpro_message_id=None, quick_replies=None, mark_unread=True):
+    def record_reply(self, text, sender, rapidpro_message_id=None, quick_replies=None, mark_unread=True, is_chatbot_message=False):
         if quick_replies is None:
             quick_replies = []
-        if not sender.is_rapidpro_bot_user:
+        if sender.is_rapidpro_bot_user and not rapidpro_message_id:
             client = RapidProClient(self.thread)
             client.send_reply(text)
 
         self._record_message_in_database(
-            sender=sender, rapidpro_message_id=rapidpro_message_id, text=text, quick_replies=quick_replies)
+            sender=sender, rapidpro_message_id=rapidpro_message_id, text=text, quick_replies=quick_replies, is_chatbot_message=is_chatbot_message)
 
         if mark_unread:
             self.thread.mark_unread(sender)
