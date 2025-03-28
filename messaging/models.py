@@ -99,6 +99,7 @@ class Message(models.Model):
     sender = models.ForeignKey(get_user_model(), null=True, related_name="sent_messages", on_delete=models.CASCADE)
 
     is_post_processed = models.BooleanField(default=False)
+    is_chatbot_message = models.BooleanField(default=False)
 
     attachments = models.ManyToManyField('Attachment', blank=True)
 
