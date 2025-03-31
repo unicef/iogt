@@ -107,26 +107,39 @@ const download = pageId => {
             return resp.json();
         })
         .then(urls => {
-            if (!urls.length) {
+            if (!Array.isArray(urls) || urls.length === 0) {
                 throw new Error("No URLs received for caching.");
             }
 
             return caches.open('iogt').then(cache => {
-            console.log(urls)
-                return cache.addAll(urls)
-                    .then(() => {
-                        console.log("Content cached successfully!");
-                        alert("Content is now available offline!");
-                    })
-                    .catch(error => {
-                        console.error("Caching failed:", error);
-                        alert("Failed to cache content.");
-                    });
+                console.log("URLs to cache:", urls);
+
+                return Promise.all(urls.map(url =>
+                    fetch(url, { method: 'HEAD' }) // Check if URL exists
+                        .then(response => {
+                            if (response.ok) {
+                                return cache.add(url).catch(error => {
+                                    if (error.name === 'QuotaExceededError') {
+                                        alert("⚠️ Your storage limit has been reached! Please free up space.");
+                                        throw new Error("Storage full! Cannot cache more content.");
+                                    }
+                                    throw error; // Rethrow other errors
+                                });
+                            } else {
+                                console.warn(`Skipping invalid URL: ${url} (Status: ${response.status})`);
+                            }
+                        })
+                        .catch(err => console.warn(`Skipping ${url} due to error:`, err))
+                ));
             });
         })
+        .then(() => {
+            console.log("✅ Content cached successfully!");
+            alert("✅ Content is now available offline!");
+        })
         .catch(error => {
-            console.error("Download error:", error);
-            alert("Download failed. Please try again.");
+            console.error("❌ Download error:", error);
+            alert("⚠️ Download failed. Please try again.");
         });
 };
 
