@@ -183,17 +183,30 @@ from django.db import connection
 
 
 class SurveyDataProcessor:
+    # Mapping common gender variations to standardized categories
+    GENDER_MAPPING = {
+        "male": "Male", "man": "Male", "men": "Male", "masculine": "Male",
+        "female": "Female", "woman": "Female", "women": "Female", "feminine": "Female",
+        "non-binary": "Non-Binary", "Other": "Non-Binary", "Third": "Non-Binary"
+    }
+
     @staticmethod
     def calculate_age(date_of_birth: str) -> int:
+        if not date_of_birth:  # Handle None or empty date_of_birth
+            return None  # Return None explicitly to handle in get_age_category
+
         try:
             dob = datetime.strptime(date_of_birth, "%Y-%m-%d")
             today = datetime.today()
             return today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
-        except ValueError:
-            return -1  # Invalid date
+        except (ValueError, TypeError):
+            return None  # Return None for invalid dates
 
     @staticmethod
     def get_age_category(age: int) -> str:
+        if age is None:  # Handle missing DOB case
+            return "No Age Category Data"
+
         AGE_CATEGORIES = [
             ("Youth", 0, 19),
             ("Adult", 20, 39),
@@ -206,28 +219,44 @@ class SurveyDataProcessor:
         return "Unknown"
 
     @staticmethod
+    def normalize_gender(gender: str) -> str:
+        if not gender:  # Handle None or empty gender cases
+            return "No Gender Data"
+
+        gender = gender.strip().lower()  # Standardize case and remove spaces
+        return SurveyDataProcessor.GENDER_MAPPING.get(gender, "Unknown")  # Default to "Other" if not mapped
+
+    @staticmethod
     def aggregate_submission_data(page_id: int):
         submissions = UserSubmission.objects.filter(page_id=page_id)
+        if not submissions.exists():
+            return []  # Return an empty list if no data
+
         data_list = []
 
         for submission in submissions:
             form_data = submission.form_data
             date_of_birth = form_data.get("date_of_birth", "")
-            gender = form_data.get("gender", "Unknown")
+            gender = form_data.get("gender", "")
+
+            normalized_gender = SurveyDataProcessor.normalize_gender(gender)  # Normalize gender input
             age = SurveyDataProcessor.calculate_age(date_of_birth)
             age_category = SurveyDataProcessor.get_age_category(age)
-            data_list.append((age_category, gender))
+
+            data_list.append((age_category, normalized_gender))
 
         data_counter = Counter(data_list)
-        return [{"age_category": age, "gender": gender, "count": count} for (age, gender), count in data_counter.items()]
+        return [{"age_category": age, "gender": gender, "count": count} for (age, gender), count in
+                data_counter.items()]
 
     @staticmethod
     def generate_aggregated_data(page_id: int):
         aggregated_data = SurveyDataProcessor.aggregate_submission_data(page_id)
         with connection.cursor() as cursor:
             cursor.execute("DELETE FROM registration_survey")
-            for row in aggregated_data:
-                cursor.execute(
-                    "INSERT INTO registration_survey (age_category, gender, count) VALUES (%s, %s, %s)",
-                    [row['age_category'], row['gender'], row['count']]
-                )
+            if aggregated_data:  # Avoid inserting empty data
+                for row in aggregated_data:
+                    cursor.execute(
+                        "INSERT INTO registration_survey (age_category, gender, count) VALUES (%s, %s, %s)",
+                        [row['age_category'], row['gender'], row['count']]
+                    )
