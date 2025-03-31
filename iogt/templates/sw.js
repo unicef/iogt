@@ -34,8 +34,8 @@ self.addEventListener('fetch', event => {
                         .then(() => console.log("🔄 Sync registered successfully!"))
                         .catch(err => console.error("❌ Sync registration failed:", err));
 
-                    return new Response(JSON.stringify({ success: false, offline: true }), {
-                        headers: { "Content-Type": "application/json" }
+                    return new Response("Your survey will be submitted automatically when you come online.", {
+                        headers: { "Content-Type": "text/plain" }
                     });
                 } catch (err) {
                     console.error("❌ Failed to save request:", err);

@@ -53,7 +53,7 @@ urlpatterns = api_url_patterns + [
     path('admin/login/', AzureADSignupView.as_view(), name='azure_signup_view'),  # Override Wagtail admin login
     path('admin/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),
-    # path('admin-login/', include(admin_login_urls), name='admin_login_urls'),
+    #path('admin-login/', include(admin_login_urls), name='admin_login_urls'),
     *i18n_patterns(path('logout_hack_view', LogoutRedirectHackView.as_view(), name='logout_redirect')),
     *i18n_patterns(path('search/', search_views.search, name='search')),
     *i18n_patterns(path('users/', include(users_urls), name='users_urls')),
