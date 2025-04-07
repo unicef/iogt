@@ -60,6 +60,7 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
     parent_page_types = []
     subpage_types = []
     show_in_menus_default = True
+    preview_modes = []
 
     description = StreamField(
         [
