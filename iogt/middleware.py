@@ -3,7 +3,7 @@ from urllib.parse import unquote
 from django.conf import settings
 from django.conf.urls.i18n import is_language_prefix_patterns_used
 from django.core.cache import cache
-from django.http.response import HttpResponsePermanentRedirect
+from django.http.response import HttpResponsePermanentRedirect, HttpResponseNotFound
 from django.middleware.locale import LocaleMiddleware as DjangoLocaleMiddleware
 from django.utils import translation
 from django.utils.deprecation import MiddlewareMixin
@@ -59,6 +59,17 @@ class LocaleMiddleware(DjangoLocaleMiddleware):
         translation.activate(language)
         request.LANGUAGE_CODE = translation.get_language()
 
+    def process_response(self, request, response):
+        """
+        The purpose of this condition is to prevent the middleware from interfering with API endpoints (/api) that
+        return a 404 error. This can happen if the middleware tries to set the language for a request to an API endpoint
+        (/api) that does not have a translated version, which can result in unexpected behavior or errors.
+        """
+        if request.path.startswith('/api') and response.status_code == 404:
+            return response
+
+        return super().process_response(request, response)
+
 
 class AdminLocaleMiddleware(MiddlewareMixin):
     """Ensures that the admin locale doesn't change with user selection"""
@@ -74,14 +85,24 @@ class CustomRedirectMiddleware(RedirectMiddleware):
         This custom middleware is written to mitigate broken links from IOGT v1.
         See https://github.com/unicef/iogt/issues/850 for more details.
         """
+
         return_value = super().process_response(request, response)
 
         # If the page is not found by wagtail RedirectMiddleware, look for the page in V1PageURLToV2PageMap.
         # If you find the page, redirect the user to the new page.
         if return_value.status_code == 404:
             url = unquote(request.get_full_path())
-            page = V1PageURLToV2PageMap.get_page_or_none(url)
+            """
+            This is used as a safeguard to prevent broken links from causing problems in the API. If a user tries to 
+            access a URL that starts with '/api' and the page is not found, the middleware will return a custom message 
+            with a link to the API documentation instead of raising an exception or showing a default 404 error page.
+            """
+            if url.startswith('/api'):
+                return HttpResponseNotFound(
+                    f"Sorry, the requested resource was not found. Please refer to the <a href='/api/docs/'>API documentation</a>."
+                )
 
+            page = V1PageURLToV2PageMap.get_page_or_none(url)
             if page:
                 return HttpResponsePermanentRedirect(page.url)
 
