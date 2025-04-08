@@ -221,6 +221,7 @@ def hide_add_article_button():
 @receiver(page_published, sender=BannerPage)
 def create_home_page_banner(sender, instance, **kwargs):
     """Ensure a HomePageBanner entry is created after a BannerPage is published."""
-    home_page = HomePage.objects.first()
-    if home_page:
-        HomePageBanner.objects.get_or_create(source=home_page, banner_page=instance)
+    parent = instance.get_parent().specific
+    parent = parent.get_parent().specific
+    if parent:
+        HomePageBanner.objects.get_or_create(source=parent, banner_page=instance)
