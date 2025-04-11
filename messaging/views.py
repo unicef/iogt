@@ -68,7 +68,7 @@ class ThreadDetailView(View):
 
             chat_manager = ChatManager(thread)
             chat_manager.record_reply(text=text, sender=request.user, mark_unread=False)
-            time.sleep(1)
+            time.sleep(2)
             
             return redirect(reverse('messaging:thread', kwargs={'thread_id': thread.pk}))
         else:
