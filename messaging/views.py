@@ -58,6 +58,7 @@ class ThreadDetailView(View):
     def get(self, request, thread_id):
         thread = get_object_or_404(Thread, pk=thread_id, users__in=[request.user])
         thread.mark_read(request.user)
+        time.sleep(1)
         return render(request, 'messaging/thread_detail.html', context=self.get_context(thread))
 
     def post(self, request, thread_id):
@@ -68,7 +69,7 @@ class ThreadDetailView(View):
 
             chat_manager = ChatManager(thread)
             chat_manager.record_reply(text=text, sender=request.user, mark_unread=False)
-            time.sleep(1)
+            time.sleep(2)
             
             return redirect(reverse('messaging:thread', kwargs={'thread_id': thread.pk}))
         else:
@@ -88,7 +89,7 @@ class MessageCreateView(View):
             data = form.cleaned_data
             thread = ChatManager.initiate_thread(
                 sender=user, recipients=[], chatbot=data['chatbot'], subject=data['subject'], text=data['text'])
-
+            time.sleep(2)
             return redirect(reverse('messaging:thread', kwargs={'thread_id': thread.pk}))
 
         messages.add_message(request, messages.ERROR, 'Can\'t connect with bot.')
