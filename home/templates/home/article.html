@@ -17,6 +17,7 @@
             <h1>{{ page.title }}</h1>
             {% include_block page.body %}
 
+            {% render_previous_next_buttons page %}
             <!-- Share Button -->
             <button id="share-btn" class="share-button">
                 <i class="fa-solid fa-share-nodes"></i>Share
@@ -162,7 +163,6 @@
                 <p tabindex="0">In the EU, call <span style="text-decoration:underline; cursor:pointer; color: blue;">112</span></p>
             </div> -->
 
-            {% render_previous_next_buttons page %}
     </article>
 
     {% get_comment_count for page as comment_count %}
