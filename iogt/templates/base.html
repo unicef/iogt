@@ -84,6 +84,38 @@
 
 {# Global javascript #}
 <script>
+    if ('serviceWorker' in navigator && 'SyncManager' in window) {
+        navigator.serviceWorker.register('/sw.js')
+            .then(reg => {
+                console.log('SW registered:', reg);
+
+                // Save data when offline
+                window.saveOfflineForm = async function (formData) {
+                    const db = await new Promise((resolve, reject) => {
+                        const request = indexedDB.open('offline-submissions', 1);
+                        request.onupgradeneeded = event => {
+                            const db = event.target.result;
+                            if (!db.objectStoreNames.contains('forms')) {
+                                db.createObjectStore('forms', { keyPath: 'id', autoIncrement: true });
+                            }
+                        };
+                        request.onsuccess = () => resolve(request.result);
+                        request.onerror = () => reject(request.error);
+                    });
+
+                    const tx = db.transaction('forms', 'readwrite');
+                    tx.objectStore('forms').add({ data: formData });
+
+                    const reg = await navigator.serviceWorker.ready;
+                    await reg.sync.register('sync-offline-data');
+
+                    alert('📥 Saved offline. Will sync when online.');
+                };
+            })
+            .catch(err => console.error('SW registration failed:', err));
+    }
+</script>
+<script>
     var serviceWorkerURL = '{% url "sw.js" %}';
     {% if request.user.is_authenticated %}
         var isAuthenticated = true;
