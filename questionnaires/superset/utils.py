@@ -226,7 +226,8 @@ class SurveyDataProcessor:
             #gender = form_data.get("gender", "Unknown")
             raw_gender = form_data.get("gender", "")
             gender = SurveyDataProcessor.clean_gender(raw_gender)
-            age = SurveyDataProcessor.calculate_age(date_of_birth)
+            #age = SurveyDataProcessor.calculate_age(date_of_birth)
+            age = SurveyDataProcessor.calculate_age(date_of_birth) if date_of_birth else -1
             age_category = SurveyDataProcessor.get_age_category(age)
             data_list.append((age_category, gender))
 
