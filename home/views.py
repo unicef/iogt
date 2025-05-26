@@ -34,17 +34,17 @@ def get_manifest(request):
         "icons": [
             {
                 "src": f"{manifest.icon_96_96.file.url}",
-                "type": f"image/{manifest.icon_96_96.title.split('.')[1]}",
+                "type": f"image/{manifest.icon_96_96.file.name.split('.')[-1]}",
                 "sizes": f"{manifest.icon_96_96.height}x{manifest.icon_96_96.width}",
             },
             {
                 "src": f"{manifest.icon_512_512.file.url}",
-                "type": f"image/{manifest.icon_512_512.title.split('.')[1]}",
+                "type": f"image/{manifest.icon_512_512.file.name.split('.')[-1]}",
                 "sizes": f"{manifest.icon_512_512.height}x{manifest.icon_512_512.width}",
             },
             {
                 "src": f"{manifest.icon_192_192.file.url}",
-                "type": f"image/{manifest.icon_192_192.title.split('.')[1]}",
+                "type": f"image/{manifest.icon_192_192.file.name.split('.')[-1]}",
                 "sizes": f"{manifest.icon_192_192.height}x{manifest.icon_192_192.width}",
                 "purpose": "any maskable",
             },
