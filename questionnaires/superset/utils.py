@@ -206,6 +206,16 @@ class SurveyDataProcessor:
         return "Unknown"
 
     @staticmethod
+    def clean_gender(value: str) -> str:
+        value = (value or "").strip().lower()
+        if value in ["male", "MALE", "Male" "m"]:
+            return "Male"
+        elif value in ["female", "FEMALE", "Female" "f"]:
+            return "Female"
+        else:
+            return "Other"
+
+    @staticmethod
     def aggregate_submission_data(page_id: int):
         submissions = UserSubmission.objects.filter(page_id=page_id)
         data_list = []
@@ -213,7 +223,9 @@ class SurveyDataProcessor:
         for submission in submissions:
             form_data = submission.form_data
             date_of_birth = form_data.get("date_of_birth", "")
-            gender = form_data.get("gender", "Unknown")
+            #gender = form_data.get("gender", "Unknown")
+            raw_gender = form_data.get("gender", "")
+            gender = SurveyDataProcessor.clean_gender(raw_gender)
             age = SurveyDataProcessor.calculate_age(date_of_birth)
             age_category = SurveyDataProcessor.get_age_category(age)
             data_list.append((age_category, gender))
