@@ -18,6 +18,7 @@ from home.blocks import (
     NumberedListBlock,
     PageButtonBlock,
     RawHTMLBlock,
+    DownloadButtonBlock,
 )
 from home.mixins import PageUtilsMixin, TitleIconMixin
 from home.utils import (
@@ -70,6 +71,7 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
             ('list', MarkdownBlock(icon='code')),
             ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
             ('page_button', PageButtonBlock()),
+            ('download', DownloadButtonBlock()),
         ],
         null=True,
         blank=True,
