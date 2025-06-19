@@ -122,6 +122,7 @@ const init = () => {
 };
 
 const download = pageId => {
+    alert("📥 Download starting…");
     console.log("Starting download for page:", pageId);
 
     fetch(`/page-tree/${pageId}/`)
