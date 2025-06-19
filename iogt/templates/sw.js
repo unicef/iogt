@@ -34,9 +34,9 @@ self.addEventListener('fetch', event => {
                         .then(() => console.log("🔄 Sync registered successfully!"))
                         .catch(err => console.error("❌ Sync registration failed:", err));
 
-                    //return new Response("Your survey will be submitted automatically when you come online.", {
-                    //    headers: { "Content-Type": "text/plain" }
-                    //});
+                    // ✅ Dynamically use referrer or fallback to home page
+                    const redirectUrl = request.referrer || '/';
+                    
                     return new Response(`
                         <!DOCTYPE html>
                         <html>
@@ -50,7 +50,7 @@ self.addEventListener('fetch', event => {
                             </head>
                             <body>
                                 <h2>Your survey will be submitted automatically when you come online.</h2>
-                                <button onclick="window.location.href='http://localhost:8000/en/surveys/test/'">Back to Survey</button>
+                                <button onclick="window.location.href='${redirectUrl}'">Back to Survey</button>
                             </body>
                         </html>
                     `, {
@@ -78,7 +78,9 @@ self.addEventListener('fetch', event => {
             return fetch(request)
                 .then(networkResponse => {
                     return caches.open('iogt').then(cache => {
-                        cache.put(request, networkResponse.clone());
+                        if (request.method === 'GET') {
+                            cache.put(request, networkResponse.clone());
+                        }
                         return networkResponse;
                     });
                 })

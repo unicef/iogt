@@ -1,14 +1,11 @@
 $(document).ready(() => {
-    const externalLinkOverlay = $('#external-link-overlay')
-
-    externalLinkOverlay.click(() => {
-        externalLinkOverlay.css('display', 'none');
-    });
+    const externalLinkOverlay = $('#external-link-overlay');
+    externalLinkOverlay.click(() => externalLinkOverlay.css('display', 'none'));
 
     const submitWhenOffline = gettext('You cannot submit when offline');
 
     const searchFormHolder = $('.search-form-holder');
-    const readContent = $('.complete')
+    const readContent = $('.complete');
     const commentForm = $('.comments__form');
     const commentLikeHolders = $('.like-holder');
     const reportComment = $('.report-comment');
@@ -21,7 +18,15 @@ $(document).ready(() => {
     const changeDigitalPinBtn = $('.change-digital-pin');
     const loginCreateAccountBtns = $('.login-create-account-btn');
     const logoutBtn = $('.logout-btn');
-    const externalLinks = $('a[href*="/external-link/?next="]')
+    const externalLinks = $('a[href*="/external-link/?next="]');
+
+    questionnaireSubmitBtns.each((index, btn) => {
+        const $btn = $(btn);
+        const span = $btn.find('span');
+        if (!span.attr('data-original-label')) {
+            span.attr('data-original-label', span.text().trim());
+        }
+    });
 
     const disableForOfflineAccess = () => {
         searchFormHolder.hide();
@@ -33,26 +38,32 @@ $(document).ready(() => {
         downloadAppBtns.hide();
         offlineAppBtns.show();
         chatbotBtns.each((index, btn) => {
-            btn = $(btn);
-            btn.css('pointer-events', 'none');
-            btn.css('background', '#808080');
+            const $btn = $(btn);
+            $btn.css('pointer-events', 'none');
+            $btn.css('background', '#808080');
         });
         questionnaireSubmitBtns.each((index, btn) => {
-            btn = $(btn);
-            btn.css('pointer-events', 'none');
-            const span = btn.find('span')
-            span.html(`${span.html()} (${submitWhenOffline})`);
+            const $btn = $(btn);
+            $btn.css('pointer-events', 'none');
+            const span = $btn.find('span');
+            const original = span.attr('data-original-label') || span.text().trim();
+            if (!span.text().includes(submitWhenOffline)) {
+                span.text(`${original} (${submitWhenOffline})`);
+            }
         });
         progressHolder.hide();
         changeDigitalPinBtn.hide();
         loginCreateAccountBtns.hide();
         logoutBtn.hide();
         externalLinks.each((index, link) => {
-            link = $(link);
-            link.click(e => {
-                e.preventDefault();
-                externalLinkOverlay.css('display', 'block');
-            });
+            const $link = $(link);
+            if (!$link.data('offline-bound')) {
+                $link.on('click.offline', e => {
+                    e.preventDefault();
+                    externalLinkOverlay.css('display', 'block');
+                });
+                $link.data('offline-bound', true);
+            }
         });
     };
 
@@ -66,15 +77,16 @@ $(document).ready(() => {
         downloadAppBtns.show();
         offlineAppBtns.hide();
         chatbotBtns.each((index, btn) => {
-            btn = $(btn);
-            btn.css('pointer-events', 'all');
-            btn.css('background', '#F7F7F9');
+            const $btn = $(btn);
+            $btn.css('pointer-events', 'all');
+            $btn.css('background', '#F7F7F9');
         });
         questionnaireSubmitBtns.each((index, btn) => {
-            btn = $(btn);
-            btn.css('pointer-events', 'all');
-            const span = btn.find('span')
-            span.html(`${span.html().split(`(${submitWhenOffline})`)[0]}`);
+            const $btn = $(btn);
+            $btn.css('pointer-events', 'all');
+            const span = $btn.find('span');
+            const original = span.attr('data-original-label') || span.text().split(`(${submitWhenOffline})`)[0].trim();
+            span.text(original);
         });
         progressHolder.show();
         changeDigitalPinBtn.show();
@@ -82,17 +94,35 @@ $(document).ready(() => {
         logoutBtn.show();
         externalLinks.show();
         externalLinks.each((index, link) => {
-            link = $(link);
-            link.off('click');
+            $(link).off('click.offline');
         });
     };
 
-    $(window).on('offline', () => disableForOfflineAccess());
-    $(window).on('online', () => enableForOnlineAccess());
+    $(window).on('offline', () => {
+        console.warn("🔌 Offline detected.");
+        disableForOfflineAccess();
+        if (getItem('offlineReady') === true) {
+            console.log("📦 Page cached. Reloading offline view...");
+            setTimeout(() => location.reload(), 500);
+        }
+    });
+
+    $(window).on('online', () => {
+        enableForOnlineAccess();
+    });
 
     window.navigator.onLine ? enableForOnlineAccess() : disableForOfflineAccess();
 
-    // for JS enabled devices hide double menu
+    fetch(window.location.href, { method: 'HEAD', cache: 'no-cache' })
+        .then(() => {
+            console.log("✅ Verified online via HEAD request");
+            enableForOnlineAccess();
+        })
+        .catch(() => {
+            console.warn("⚠️ Verified offline via HEAD request");
+            disableForOfflineAccess();
+        });
+
     $('.footer-head').hide();
 });
 
@@ -116,7 +146,7 @@ const download = pageId => {
                 console.log("URLs to cache:", urls);
 
                 return Promise.all(urls.map(url =>
-                    fetch(url, { method: 'HEAD' }) // Check if URL exists
+                    fetch(url, { method: 'HEAD' })
                         .then(response => {
                             if (response.ok) {
                                 return cache.add(url).catch(error => {
@@ -124,7 +154,7 @@ const download = pageId => {
                                         alert("⚠️ Your storage limit has been reached! Please free up space.");
                                         throw new Error("Storage full! Cannot cache more content.");
                                     }
-                                    throw error; // Rethrow other errors
+                                    throw error;
                                 });
                             } else {
                                 console.warn(`Skipping invalid URL: ${url} (Status: ${response.status})`);
@@ -135,8 +165,10 @@ const download = pageId => {
             });
         })
         .then(() => {
+            setItem('offlineReady', true); // ✅ Set offline-ready flag
             console.log("✅ Content cached successfully!");
             alert("✅ Content is now available offline!");
+            location.reload(); // ✅ Reload after caching
         })
         .catch(error => {
             console.error("❌ Download error:", error);
@@ -144,8 +176,12 @@ const download = pageId => {
         });
 };
 
-const getItem = (key, defaultValue) => {
-    return JSON.parse(localStorage.getItem(key, defaultValue));
+const getItem = (key, defaultValue = null) => {
+    try {
+        return JSON.parse(localStorage.getItem(key)) ?? defaultValue;
+    } catch {
+        return defaultValue;
+    }
 };
 
 const setItem = (key, value) => {
@@ -153,13 +189,7 @@ const setItem = (key, value) => {
 };
 
 const registerPushNotification = registration => {
-    if (!registration.showNotification) {
-        return;
-    }
-    if (Notification.permission === 'denied') {
-        return;
-    }
-    if (!'PushManager' in window) {
+    if (!registration.showNotification || Notification.permission === 'denied' || !('PushManager' in window)) {
         return;
     }
     subscribe(registration);
@@ -167,16 +197,10 @@ const registerPushNotification = registration => {
 
 const urlB64ToUint8Array = base64String => {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
-    const base64 = (base64String + padding)
-        .replace(/\-/g, '+')
-        .replace(/_/g, '/');
-
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
     const rawData = window.atob(base64);
-    const outputArray = new Uint8Array(rawData.length);
-    const outputData = outputArray.map((output, index) => rawData.charCodeAt(index));
-
-    return outputData;
-}
+    return Uint8Array.from([...rawData].map(char => char.charCodeAt(0)));
+};
 
 const subscribe = registration => {
     registration.pushManager.getSubscription()
@@ -185,25 +209,20 @@ const subscribe = registration => {
                 sendSubscriptionToServer(subscription, 'subscribe');
                 return;
             }
-            const vapidKeyMeta = document.querySelector('meta[name="vapid-key"]');
-            const vapidKey = vapidKeyMeta.content;
+
+            const vapidKey = $('meta[name="vapid-key"]').attr('content');
             const options = {
                 userVisibleOnly: true,
-                // if key exists, create applicationServerKey property
-                ...(vapidKey && {applicationServerKey: urlB64ToUint8Array(vapidKey)})
+                ...(vapidKey && { applicationServerKey: urlB64ToUint8Array(vapidKey) })
             };
 
             registration.pushManager.subscribe(options)
                 .then(subscription => {
                     sendSubscriptionToServer(subscription, 'subscribe');
                 })
-                .catch(error => {
-                    console.log("Error during subscribe()", error);
-                });
+                .catch(error => console.log("Error during subscribe()", error));
         })
-        .catch(error => {
-            console.log("Error during getSubscription()", error);
-        });
+        .catch(error => console.log("Error during getSubscription()", error));
 };
 
 const sendSubscriptionToServer = (subscription, statusType) => {
@@ -221,18 +240,19 @@ const sendSubscriptionToServer = (subscription, statusType) => {
             'content-type': 'application/json'
         },
         credentials: "include"
-    }).then(resp => {
+    }).then(() => {
         setItem('isPushNotificationRegistered', statusType === 'subscribe');
     });
 };
-
 
 const unSubscribePushNotifications = () => {
     const isPushNotificationRegistered = getItem('isPushNotificationRegistered', false);
     if (isPushNotificationRegistered && isAuthenticated && 'serviceWorker' in navigator) {
         navigator.serviceWorker.ready.then(registration => {
             registration.pushManager.getSubscription().then(subscription => {
-                subscription && sendSubscriptionToServer(subscription, 'unsubscribe');
+                if (subscription) {
+                    sendSubscriptionToServer(subscription, 'unsubscribe');
+                }
             });
         });
     }

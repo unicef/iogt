@@ -1,14 +1,14 @@
 const ready = (callback) => {
-    if (document.readyState != "loading") callback();
+    if (document.readyState !== "loading") callback();
     else document.addEventListener("DOMContentLoaded", callback);
 };
 
-const init = (event) => {
+const init = () => {
     const show = (el) => el.style.display = '';
     const hide = (el) => el.style.display = 'none';
 
     const externalLinkOverlay = document.querySelector('#external-link-overlay');
-    externalLinkOverlay.addEventListener('click', (event) => hide(event.target));
+    externalLinkOverlay?.addEventListener('click', (event) => hide(event.target));
 
     const submitWhenOffline = gettext('You cannot submit when offline');
 
@@ -18,6 +18,15 @@ const init = (event) => {
     const offlineAppBtns = document.querySelectorAll('.offline-app-btn');
     const chatbotBtns = document.querySelectorAll('.chatbot-btn');
     const questionnaireSubmitBtns = document.querySelectorAll('.questionnaire-submit-btn');
+
+    // Save original button label
+    questionnaireSubmitBtns.forEach(btn => {
+        const span = btn.querySelector('span');
+        if (span && !span.dataset.originalLabel) {
+            span.dataset.originalLabel = span.textContent.trim();
+        }
+    });
+
     const externalLinks = document.querySelectorAll('a[href*="/external-link/?next="]');
     const elementsToToggle = [
         '.download-app-btn',
@@ -28,67 +37,88 @@ const init = (event) => {
         '.progress-holder',
         '.report-comment',
         '.search-form-holder',
-    ].flatMap(
-        (selector) => Array.from(document.querySelectorAll(selector))
-    );
+    ].flatMap(selector => Array.from(document.querySelectorAll(selector)));
 
     const blockExternalLinks = (event) => {
         event.preventDefault();
         show(externalLinkOverlay);
     };
 
-    // for JS enabled devices hide double menu
     const hideFooterMenu = () => {
         hide(document.querySelector('.footer-head'));
     };
 
-    const disableForOfflineAccess = (event) => {
+    const disableForOfflineAccess = () => {
         elementsToToggle.forEach(hide);
-        replyLinks.forEach(hide)
-        readContent.forEach((el) => el.classList.remove('complete'));
-        commentLikeHolders.forEach((el) => el.setAttribute('style', 'display:none !important'));
+        replyLinks.forEach(hide);
+        readContent.forEach(el => el.classList.remove('complete'));
+        commentLikeHolders.forEach(el => el.setAttribute('style', 'display:none !important'));
         offlineAppBtns.forEach(show);
-        chatbotBtns.forEach((btn) => {
-            btn.style['pointer-events'] = 'none';
+        chatbotBtns.forEach(btn => {
+            btn.style.pointerEvents = 'none';
             btn.style.background = '#808080';
         });
-        questionnaireSubmitBtns.forEach((btn) => {
-            btn.style['pointer-events'] = 'none';
+        questionnaireSubmitBtns.forEach(btn => {
+            btn.style.pointerEvents = 'none';
             const span = btn.querySelector('span');
-            span.innerHTML = `${span.innerHTML} (${submitWhenOffline})`;
+            if (span) {
+                const original = span.dataset.originalLabel || span.textContent.trim();
+                if (!span.textContent.includes(submitWhenOffline)) {
+                    span.textContent = `${original} (${submitWhenOffline})`;
+                }
+            }
         });
-        externalLinks.forEach((link) => {
-            link.addEventListener('click', blockExternalLinks);
-        });
+        externalLinks.forEach(link => link.addEventListener('click', blockExternalLinks));
     };
 
-    const enableForOnlineAccess = (event) => {
+    const enableForOnlineAccess = () => {
         elementsToToggle.forEach(show);
-        readContent.forEach((el) => el.classList.add('complete'));
-        commentLikeHolders.forEach((el) => el.setAttribute('style', 'display:inline-block !important'));
-        replyLinks.forEach((el) => el.setAttribute('style', 'display:inline-block'));
+        readContent.forEach(el => el.classList.add('complete'));
+        commentLikeHolders.forEach(el => el.setAttribute('style', 'display:inline-block !important'));
+        replyLinks.forEach(el => el.setAttribute('style', 'display:inline-block'));
         offlineAppBtns.forEach(hide);
-        chatbotBtns.forEach((btn) => {
-            btn.style['pointer-events'] = 'all';
+        chatbotBtns.forEach(btn => {
+            btn.style.pointerEvents = 'all';
             btn.style.background = '#F7F7F9';
         });
-        questionnaireSubmitBtns.forEach((btn) => {
-            btn.style['pointer-events'] = 'all';
+        questionnaireSubmitBtns.forEach(btn => {
+            btn.style.pointerEvents = 'all';
             const span = btn.querySelector('span');
-            span.innerHTML = span.innerHTML.split(`(${submitWhenOffline})`)[0];
+            if (span) {
+                span.textContent = span.dataset.originalLabel || span.textContent.split('(')[0].trim();
+            }
         });
-        externalLinks.forEach((link) => {
+        externalLinks.forEach(link => {
             show(link);
             link.removeEventListener('click', blockExternalLinks);
         });
     };
 
-    window.addEventListener('offline', disableForOfflineAccess);
-    window.addEventListener('online',  enableForOnlineAccess);
+    window.addEventListener('offline', () => {
+        console.warn("🔌 Offline detected.");
+        disableForOfflineAccess();
+        if (getItem('offlineReady') === true) {
+            console.log("📦 Page cached. Reloading offline view...");
+            setTimeout(() => location.reload(), 3000);
+        }
+    });
+
+    window.addEventListener('online', enableForOnlineAccess);
 
     window.navigator.onLine ? enableForOnlineAccess() : disableForOfflineAccess();
+
     hideFooterMenu();
 
+    // Force re-check of online status
+    fetch(window.location.href, { method: 'HEAD', cache: 'no-cache' })
+        .then(() => {
+            console.log("✅ Verified online via HEAD request");
+            enableForOnlineAccess();
+        })
+        .catch(() => {
+            console.warn("⚠️ Verified offline via HEAD request");
+            disableForOfflineAccess();
+        });
 };
 
 const download = pageId => {
@@ -108,9 +138,8 @@ const download = pageId => {
 
             return caches.open('iogt').then(cache => {
                 console.log("URLs to cache:", urls);
-
                 return Promise.all(urls.map(url =>
-                    fetch(url, { method: 'HEAD' }) // Check if URL exists
+                    fetch(url, { method: 'HEAD' })
                         .then(response => {
                             if (response.ok) {
                                 return cache.add(url).catch(error => {
@@ -118,7 +147,7 @@ const download = pageId => {
                                         alert("⚠️ Your storage limit has been reached! Please free up space.");
                                         throw new Error("Storage full! Cannot cache more content.");
                                     }
-                                    throw error; // Rethrow other errors
+                                    throw error;
                                 });
                             } else {
                                 console.warn(`Skipping invalid URL: ${url} (Status: ${response.status})`);
@@ -129,8 +158,10 @@ const download = pageId => {
             });
         })
         .then(() => {
+            setItem('offlineReady', true); // ✅ Mark ready for offline
             console.log("✅ Content cached successfully!");
             alert("✅ Content is now available offline!");
+            location.reload();
         })
         .catch(error => {
             console.error("❌ Download error:", error);
@@ -138,8 +169,12 @@ const download = pageId => {
         });
 };
 
-const getItem = (key, defaultValue) => {
-    return JSON.parse(localStorage.getItem(key, defaultValue));
+const getItem = (key, defaultValue = null) => {
+    try {
+        return JSON.parse(localStorage.getItem(key)) ?? defaultValue;
+    } catch {
+        return defaultValue;
+    }
 };
 
 const setItem = (key, value) => {
@@ -147,29 +182,17 @@ const setItem = (key, value) => {
 };
 
 const registerPushNotification = registration => {
-    if (!registration.showNotification) {
-        return;
-    }
-    if (Notification.permission === 'denied') {
-        return;
-    }
-    if (!'PushManager' in window) {
-        return;
-    }
+    if (!registration.showNotification) return;
+    if (Notification.permission === 'denied') return;
+    if (!'PushManager' in window) return;
     subscribe(registration);
 };
 
 const urlB64ToUint8Array = base64String => {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
-    const base64 = (base64String + padding)
-        .replace(/\-/g, '+')
-        .replace(/_/g, '/');
-
+    const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
     const rawData = window.atob(base64);
-    const outputArray = new Uint8Array(rawData.length);
-    const outputData = outputArray.map((output, index) => rawData.charCodeAt(index));
-
-    return outputData;
+    return Uint8Array.from([...rawData].map(char => char.charCodeAt(0)));
 };
 
 const subscribe = registration => {
@@ -179,25 +202,15 @@ const subscribe = registration => {
                 sendSubscriptionToServer(subscription, 'subscribe');
                 return;
             }
-            const vapidKeyMeta = document.querySelector('meta[name="vapid-key"]');
-            const vapidKey = vapidKeyMeta.content;
-            const options = {
-                userVisibleOnly: true,
-                // if key exists, create applicationServerKey property
-                ...(vapidKey && {applicationServerKey: urlB64ToUint8Array(vapidKey)})
-            };
+            const vapidKey = document.querySelector('meta[name="vapid-key"]')?.content;
+            const options = { userVisibleOnly: true };
+            if (vapidKey) options.applicationServerKey = urlB64ToUint8Array(vapidKey);
 
             registration.pushManager.subscribe(options)
-                .then(subscription => {
-                    sendSubscriptionToServer(subscription, 'subscribe');
-                })
-                .catch(error => {
-                    console.log("Error during subscribe()", error);
-                });
+                .then(subscription => sendSubscriptionToServer(subscription, 'subscribe'))
+                .catch(error => console.log("Error during subscribe()", error));
         })
-        .catch(error => {
-            console.log("Error during getSubscription()", error);
-        });
+        .catch(error => console.log("Error during getSubscription()", error));
 };
 
 const sendSubscriptionToServer = (subscription, statusType) => {
@@ -211,22 +224,19 @@ const sendSubscriptionToServer = (subscription, statusType) => {
     fetch('/webpush/subscribe/', {
         method: 'POST',
         body: JSON.stringify(data),
-        headers: {
-            'content-type': 'application/json'
-        },
+        headers: { 'content-type': 'application/json' },
         credentials: "include"
-    }).then(resp => {
+    }).then(() => {
         setItem('isPushNotificationRegistered', statusType === 'subscribe');
     });
 };
-
 
 const unSubscribePushNotifications = () => {
     const isPushNotificationRegistered = getItem('isPushNotificationRegistered', false);
     if (isPushNotificationRegistered && isAuthenticated && 'serviceWorker' in navigator) {
         navigator.serviceWorker.ready.then(registration => {
             registration.pushManager.getSubscription().then(subscription => {
-                subscription && sendSubscriptionToServer(subscription, 'unsubscribe');
+                if (subscription) sendSubscriptionToServer(subscription, 'unsubscribe');
             });
         });
     }

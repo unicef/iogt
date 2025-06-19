@@ -15,6 +15,7 @@ from wagtail.contrib.modeladmin.menus import SubMenu
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from wagtail import hooks
 from wagtail.models import Page, PageViewRestriction
+from wagtailcache.cache import clear_cache
 
 from home.models import (BannerIndexPage, FooterIndexPage, LocaleDetail,
                          Section, SectionIndexPage, BannerPage, HomePageBanner, HomePage)
@@ -22,6 +23,18 @@ from home.translatable_strings import translatable_strings
 from translation_manager.models import TranslationEntry
 from wagtail.core.signals import page_published
 from django.dispatch import receiver
+
+
+@hooks.register('after_publish_page')
+def clear_cache_on_publish(request, page):
+    # Clear only the updated page from cache
+    clear_cache(page.url)  # or clear_cache(page) in newer wagtailcache
+    
+
+@hooks.register('after_unpublish_page')
+@hooks.register('after_delete_page')
+def clear_cache_on_unpublish_or_delete(request, page):
+    clear_cache(page.url)
 
 
 @hooks.register('before_serve_page', order=-1)
