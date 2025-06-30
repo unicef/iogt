@@ -86,14 +86,28 @@ class HomePage(Page, PageUtilsMixin, TitleIconMixin):
         FieldPanel('home_featured_content')
     ]
 
+    # def get_context(self, request):
+    #     context = super().get_context(request)
+    #     banners = []
+    #     for home_page_banner in self.home_page_banners.select_related('banner_page', 'banner_page__banner_link_page').all():
+    #         banner_page = home_page_banner.banner_page
+    #         if banner_page.live and ((banner_page.banner_link_page and banner_page.banner_link_page.live) or
+    #                                  banner_page.banner_link_page == None):
+    #             banners.append(banner_page.specific)
+    #     context['banners'] = banners
+    #     return context
     def get_context(self, request):
         context = super().get_context(request)
+        banner_index = BannerIndexPage.objects.live().first()
         banners = []
-        for home_page_banner in self.home_page_banners.select_related('banner_page', 'banner_page__banner_link_page').all():
-            banner_page = home_page_banner.banner_page
-            if banner_page.live and ((banner_page.banner_link_page and banner_page.banner_link_page.live) or
-                                     banner_page.banner_link_page == None):
-                banners.append(banner_page.specific)
+        if banner_index:
+            for banner in banner_index.get_children().live().order_by('path'):
+                if (
+                        not hasattr(banner, 'banner_link_page')
+                        or banner.banner_link_page is None
+                        or (banner.banner_link_page and banner.banner_link_page.live)
+                ):
+                    banners.append(banner.specific)
         context['banners'] = banners
         return context
 

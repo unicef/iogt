@@ -34,8 +34,27 @@ self.addEventListener('fetch', event => {
                         .then(() => console.log("🔄 Sync registered successfully!"))
                         .catch(err => console.error("❌ Sync registration failed:", err));
 
-                    return new Response("Your survey will be submitted automatically when you come online.", {
-                        headers: { "Content-Type": "text/plain" }
+                    // ✅ Dynamically use referrer or fallback to home page
+                    const redirectUrl = request.referrer || '/';
+                    
+                    return new Response(`
+                        <!DOCTYPE html>
+                        <html>
+                            <head>
+                                <meta charset="UTF-8">
+                                <title>Offline Submission</title>
+                                <style>
+                                    body { font-family: sans-serif; text-align: center; padding: 50px; }
+                                    button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+                                </style>
+                            </head>
+                            <body>
+                                <h2>Your survey will be submitted automatically when you come online.</h2>
+                                <button onclick="window.location.href='${redirectUrl}'">Back to Survey</button>
+                            </body>
+                        </html>
+                    `, {
+                        headers: { "Content-Type": "text/html" }
                     });
                 } catch (err) {
                     console.error("❌ Failed to save request:", err);
@@ -59,7 +78,9 @@ self.addEventListener('fetch', event => {
             return fetch(request)
                 .then(networkResponse => {
                     return caches.open('iogt').then(cache => {
-                        cache.put(request, networkResponse.clone());
+                        if (request.method === 'GET') {
+                            cache.put(request, networkResponse.clone());
+                        }
                         return networkResponse;
                     });
                 })
