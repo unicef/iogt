@@ -4,7 +4,7 @@
 {% get_language_info for LANGUAGE_CODE as lang %}
 {% get_available_languages as LANGUAGES %}
 {% get_language_info_list for LANGUAGES as languages %}
-
+{% load notifications_tags %}
 <header id="header" style="background: {{ settings.home.ThemeSettings.header_background_color }}">
     <div class="header-holder">
         <div class="header-content">
@@ -16,6 +16,14 @@
             <div class="language__select">
                 {% language_switcher page %}
             </div>
+            {% if request.user.is_authenticated %}
+              <div class="notification-bell">
+                <a href="{% url 'notifications:all' %}">
+                  🔔 {% live_notify_badge %}
+                </a>
+              </div>
+            {% endif %}
+
         </div>
         <div class="form-holder search-form-holder">
             <a class="js-search-btn" href="{% url "search" %}">

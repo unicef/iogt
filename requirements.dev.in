@@ -8,3 +8,4 @@ pytest
 pytest-django
 selenium==4.9.1
 wagtail-factories
+django-notifications-hq==1.8.3

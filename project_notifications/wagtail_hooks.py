@@ -1,8 +1,8 @@
 from django.conf import settings
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 
-from notifications.models import Notification
-from notifications.views import CreateNotificationView
+from project_notifications.models import Notification
+from project_notifications.views import CreateNotificationView
 
 
 class NotificationModelAdmin(ModelAdmin):

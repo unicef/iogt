@@ -10,6 +10,7 @@ from wagtail.users.forms import UserEditForm as WagtailUserEditForm, \
 from .fields import IogtPasswordField
 from .models import User
 
+from notifications.signals import notify
 
 class AccountSignupForm(SignupForm):
     display_name = forms.CharField(
@@ -44,6 +45,18 @@ class AccountSignupForm(SignupForm):
         if hasattr(self, "field_order"):
             set_form_field_order(self, self.field_order)
 
+    def save(self, request):
+        user = super().save(request)
+
+        # Send notification to all staff/admin users
+        for admin in User.objects.filter(is_staff=True):
+            notify.send(
+                sender=user,
+                recipient=admin,
+                verb="signed up!"
+            )
+
+
     def clean_username(self):
         username = self.cleaned_data.get('username')
         if User.objects.filter(username__iexact=username):
@@ -55,6 +68,7 @@ class AccountSignupForm(SignupForm):
         if User.objects.filter(display_name__iexact=display_name):
             raise ValidationError(_('Display name not available.'))
         return display_name
+
 
 
 class ChangePasswordForm(BaseChangePasswordForm):
