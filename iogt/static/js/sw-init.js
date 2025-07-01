@@ -1,14 +1,30 @@
+const syncStoredRequests = async () => {
+  const requests = await getAllRequests();  // IndexedDB fetch
+
+  for (const req of requests) {
+    try {
+      const headers = new Headers(req.headers);
+      const response = await fetch(req.url, {
+        method: req.method,
+        headers,
+        body: req.body,
+        credentials: 'include'
+      });
+
+      if (response.ok) {
+        await deleteRequest(req.id);
+        console.log("✅ Synced:", req.url);
+      }
+    } catch (err) {
+      console.warn("❌ Failed to sync request:", req.url, err);
+    }
+  }
+}
+
 const registerSW = async () => {
-    if ('serviceWorker' in navigator && 'SyncManager' in window) {
+    if ('serviceWorker' in navigator) {
         try {
             const registration = await navigator.serviceWorker.register(serviceWorkerURL, {scope: '/'});
-
-            // Register background sync event
-            const syncTags = await registration.sync.getTags();
-            if (!syncTags.includes('sync-forms')) {
-                await registration.sync.register('sync-forms');
-                console.log("✅ Background sync registered for offline forms!");
-            }
 
             const isPushNotificationRegistered = getItem('isPushNotificationRegistered', false);
             if (!isPushNotificationRegistered) {
@@ -23,3 +39,8 @@ const registerSW = async () => {
 };
 
 registerSW();
+
+window.addEventListener('online', () => {
+    console.log("🌐 Back online. Trying to sync stored requests...");
+    syncStoredRequests();
+  });

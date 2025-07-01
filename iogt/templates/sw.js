@@ -9,7 +9,7 @@ self.addEventListener('install', event => {
 
 // ✅ Activate Service Worker
 self.addEventListener('activate', event => {
-    console.log("🚀 Service Workr Activated!");
+    console.log("🚀 Service Worker Activated!");
     event.waitUntil(self.clients.claim());
 });
 
@@ -19,7 +19,31 @@ self.addEventListener('fetch', event => {
 
     console.log("🔎 Fetch event triggered:", request.url, request.method);
 
-    // ✅ Handle POST Requests (Store in IndexedDB if Offline)
+    // ✅ Handle navigation (full page loads like form pages)
+    if (request.mode === 'navigate') {
+        event.respondWith(
+          fetch(request)
+            .then(networkResponse => {
+                return caches.open('iogt').then(cache => {
+                    if (request.method === 'GET') {
+                        cache.put(request, networkResponse.clone());
+                    }
+                    return networkResponse;
+                });
+            })
+            .catch(async () => {
+                console.warn("⚠️ Fetch failed, trying cache:", request.url);
+                const cachedResponse = await caches.match(request);
+                if (cachedResponse) {
+                    return cachedResponse;
+                }
+
+                return new Response('Offline - No cached content available', { status: 503 });
+            })
+      );
+    }
+
+    // ✅ Handle POST Requests (Save to IndexedDB if offline)
     if (request.method === 'POST') {
         event.respondWith(
             fetch(request.clone()).catch(async () => {
@@ -29,10 +53,11 @@ self.addEventListener('fetch', event => {
                     await saveRequest(request);
                     console.log("💾 Request saved successfully:", request.url);
 
-                    // ✅ Register background sync safely
-                    self.registration.sync.register('sync-forms')
-                        .then(() => console.log("🔄 Sync registered successfully!"))
-                        .catch(err => console.error("❌ Sync registration failed:", err));
+                    if ('sync' in self.registration) {
+                        self.registration.sync.register('sync-forms')
+                            .then(() => console.log("🔄 Sync registered successfully!"))
+                            .catch(err => console.error("❌ Sync registration failed:", err));
+                    }
 
                     // ✅ Dynamically use referrer or fallback to home page
                     const redirectUrl = request.referrer || '/';
@@ -108,19 +133,23 @@ async function syncRequests() {
         console.log("📤 Syncing request:", req);
 
         const fetchOptions = {
-           method: req.method,
-           headers: req.headers,
-           body: req.body,
+            method: req.method,
+            headers: req.headers,
+            body: req.body,
            credentials: 'include'  // Important for authentication
         };
 
-        const response = await fetch(req.url, fetchOptions);
+        try {
+            const response = await fetch(req.url, fetchOptions);
 
-        if (response.ok) {
-            console.log("✅ Sync successful, deleting request from IndexedDB...");
-            await deleteRequest(req.id);
-        } else {
-            console.warn("⚠️ Sync failed with status:", response.status);
+            if (response.ok) {
+                console.log("✅ Sync successful, deleting request from IndexedDB...");
+                await deleteRequest(req.id);
+            } else {
+                console.warn("⚠️ Sync failed with status:", response.status);
+            }
+        } catch (err) {
+            console.error("❌ Sync error:", err);
         }
     }
 }
