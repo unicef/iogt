@@ -14,9 +14,11 @@ const syncStoredRequests = async () => {
       if (response.ok) {
         await deleteRequest(req.id);
         console.log("✅ Synced:", req.url);
+        showToast(`✅ Synced back offline filled form.`);
       }
     } catch (err) {
       console.warn("❌ Failed to sync request:", req.url, err);
+      showToast(`⚠️ Offline form sync failed for: ${req.url}`, true);
     }
   }
 }
@@ -40,7 +42,16 @@ const registerSW = async () => {
 
 registerSW();
 
+function getItem (key, defaultValue = null) {
+    try {
+        return JSON.parse(localStorage.getItem(key)) ?? defaultValue;
+    } catch {
+        return defaultValue;
+    }
+};
+
 window.addEventListener('online', () => {
     console.log("🌐 Back online. Trying to sync stored requests...");
     syncStoredRequests();
+    enableForOnlineAccess();
   });

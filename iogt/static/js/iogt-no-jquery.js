@@ -48,6 +48,52 @@ const init = () => {
         hide(document.querySelector('.footer-head'));
     };
 
+        if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.addEventListener('message', event => {
+            const data = event.data;
+            if (!data) return;
+
+            switch (data.type) {
+                case 'sync-success':
+                    showToast(`✅ Synced back offline filled form.`);
+                    break;
+                case 'sync-failed':
+                    showToast(`⚠️ Offline form sync failed for: ${data.url}`, true);
+                    break;
+                case 'sync-error':
+                    showToast(`❌ Sync error: ${data.error}`, true);
+                    break;
+            }
+        });
+    }
+
+    // Basic toast implementation
+    function showToast(message, isError = false) {
+        const toast = document.createElement('div');
+        toast.textContent = message;
+        toast.style = `
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: ${isError ? '#e74c3c' : '#2ecc71'};
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            font-size: 14px;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.style.opacity = 1, 10);
+        setTimeout(() => {
+            toast.style.opacity = 0;
+            setTimeout(() => document.body.removeChild(toast), 600);
+        }, 4000);
+    }
+
     const disableForOfflineAccess = () => {
         elementsToToggle.forEach(hide);
         replyLinks.forEach(hide);
@@ -59,13 +105,10 @@ const init = () => {
             btn.style.background = '#808080';
         });
         questionnaireSubmitBtns.forEach(btn => {
-            btn.style.pointerEvents = 'none';
+            btn.style.pointerEvents = 'all';  // ensure it's still clickable
             const span = btn.querySelector('span');
             if (span) {
-                const original = span.dataset.originalLabel || span.textContent.trim();
-                if (!span.textContent.includes(submitWhenOffline)) {
-                    span.textContent = `${original} (${submitWhenOffline})`;
-                }
+                span.textContent = span.dataset.originalLabel || span.textContent.trim();
             }
         });
         externalLinks.forEach(link => link.addEventListener('click', blockExternalLinks));
@@ -111,14 +154,14 @@ const init = () => {
 
     // Force re-check of online status
     fetch(window.location.href, { method: 'HEAD', cache: 'no-cache' })
-        .then(() => {
+    .then(() => {
             console.log("✅ Verified online via HEAD request");
-            enableForOnlineAccess();
-        })
-        .catch(() => {
+        enableForOnlineAccess();
+    })
+    .catch(() => {
             console.warn("⚠️ Verified offline via HEAD request");
-            disableForOfflineAccess();
-        });
+        disableForOfflineAccess();
+    });
 };
 
 const download = pageId => {
@@ -170,7 +213,7 @@ const download = pageId => {
         });
 };
 
-const getItem = (key, defaultValue = null) => {
+function getItem (key, defaultValue = null) {
     try {
         return JSON.parse(localStorage.getItem(key)) ?? defaultValue;
     } catch {

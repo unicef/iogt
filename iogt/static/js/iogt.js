@@ -44,12 +44,8 @@ $(document).ready(() => {
         });
         questionnaireSubmitBtns.each((index, btn) => {
             const $btn = $(btn);
-            $btn.css('pointer-events', 'none');
             const span = $btn.find('span');
-            const original = span.attr('data-original-label') || span.text().trim();
-            if (!span.text().includes(submitWhenOffline)) {
-                span.text(`${original} (${submitWhenOffline})`);
-            }
+            span.text(span.attr('data-original-label'));  // reset label (no "submit when offline")
         });
         progressHolder.hide();
         changeDigitalPinBtn.hide();
@@ -85,7 +81,7 @@ $(document).ready(() => {
             const $btn = $(btn);
             $btn.css('pointer-events', 'all');
             const span = $btn.find('span');
-            const original = span.attr('data-original-label') || span.text().split(`(${submitWhenOffline})`)[0].trim();
+            const original = span.attr('data-original-label') || span.text().trim();
             span.text(original);
         });
         progressHolder.show();
@@ -97,6 +93,51 @@ $(document).ready(() => {
             $(link).off('click.offline');
         });
     };
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.addEventListener('message', event => {
+            const data = event.data;
+            if (!data) return;
+
+            switch (data.type) {
+                case 'sync-success':
+                    showToast(`✅ Synced back offline filled form.`);
+                    break;
+                case 'sync-failed':
+                    showToast(`⚠️ Offline form sync failed for: ${data.url}`, true);
+                    break;
+                case 'sync-error':
+                    showToast(`❌ Sync error: ${data.error}`, true);
+                    break;
+            }
+        });
+    }
+
+    // Basic toast implementation
+    function showToast(message, isError = false) {
+        const toast = document.createElement('div');
+        toast.textContent = message;
+        toast.style = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${isError ? '#e74c3c' : '#2ecc71'};
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+                font-size: 14px;
+                z-index: 9999;
+                opacity: 0;
+                transition: opacity 0.5s ease-in-out;
+            `;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.style.opacity = 1, 10);
+        setTimeout(() => {
+            toast.style.opacity = 0;
+            setTimeout(() => document.body.removeChild(toast), 600);
+        }, 4000);
+    }
 
     $(window).on('offline', () => {
         console.warn("🔌 Offline detected.");
@@ -114,14 +155,14 @@ $(document).ready(() => {
     window.navigator.onLine ? enableForOnlineAccess() : disableForOfflineAccess();
 
     fetch(window.location.href, { method: 'HEAD', cache: 'no-cache' })
-        .then(() => {
+    .then(() => {
             console.log("✅ Verified online via HEAD request");
-            enableForOnlineAccess();
-        })
-        .catch(() => {
+        enableForOnlineAccess();
+    })
+    .catch(() => {
             console.warn("⚠️ Verified offline via HEAD request");
-            disableForOfflineAccess();
-        });
+        disableForOfflineAccess();
+    });
 
     $('.footer-head').hide();
 });
@@ -176,7 +217,7 @@ const download = pageId => {
         });
 };
 
-const getItem = (key, defaultValue = null) => {
+function getItem (key, defaultValue = null) {
     try {
         return JSON.parse(localStorage.getItem(key)) ?? defaultValue;
     } catch {

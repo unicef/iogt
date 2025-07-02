@@ -1,10 +1,32 @@
 importScripts('../../static/js/workbox/workbox-v6.1.5/workbox-sw.js');
 importScripts('../../static/js/idb.js');  // Import IndexedDB helper
+const PRECACHE_ASSETS = [
+  '/',  // your home page
+  '/static/js/iogt.js',
+  '/static/js/iogt-no-jquery.js',
+  '/static/js/idb.js',
+];
 
 // ✅ Install Service Worker
 self.addEventListener('install', event => {
     console.log("🛠 Service Worker Installing...");
-    event.waitUntil(self.skipWaiting());
+    event.waitUntil(
+    caches.open('iogt').then(async cache => {
+      for (const asset of PRECACHE_ASSETS) {
+        try {
+          const response = await fetch(asset, { method: 'GET' });
+          if (response.ok) {
+            await cache.put(asset, response.clone());
+            console.log(`✅ Cached: ${asset}`);
+          } else {
+            console.warn(`⚠️ Skipped (not OK): ${asset}`);
+          }
+        } catch (err) {
+          console.warn(`⚠️ Skipped (fetch failed): ${asset}`, err);
+        }
+      }
+    }).then(() => self.skipWaiting())
+  );
 });
 
 // ✅ Activate Service Worker
@@ -18,30 +40,6 @@ self.addEventListener('fetch', event => {
     const { request } = event;
 
     console.log("🔎 Fetch event triggered:", request.url, request.method);
-
-    // ✅ Handle navigation (full page loads like form pages)
-    if (request.mode === 'navigate') {
-        event.respondWith(
-          fetch(request)
-            .then(networkResponse => {
-                return caches.open('iogt').then(cache => {
-                    if (request.method === 'GET') {
-                        cache.put(request, networkResponse.clone());
-                    }
-                    return networkResponse;
-                });
-            })
-            .catch(async () => {
-                console.warn("⚠️ Fetch failed, trying cache:", request.url);
-                const cachedResponse = await caches.match(request);
-                if (cachedResponse) {
-                    return cachedResponse;
-                }
-
-                return new Response('Offline - No cached content available', { status: 503 });
-            })
-      );
-    }
 
     // ✅ Handle POST Requests (Save to IndexedDB if offline)
     if (request.method === 'POST') {
@@ -93,27 +91,32 @@ self.addEventListener('fetch', event => {
     }
 
     // ✅ Handle GET Requests (Serve from Cache when Offline)
-    event.respondWith(
-        caches.match(request).then(cachedResponse => {
-            if (cachedResponse) {
-                console.log("✅ Serving from cache:", request.url);
-                return cachedResponse;
-            }
+    if (request.method === 'GET') {
+        const reqClone = request.clone();
+        event.respondWith(
+            caches.match(request).then(cachedResponse => {
+                if (cachedResponse) {
+                    console.log("✅ Serving from cache:", request.url);
+                    return cachedResponse;
+                }
 
-            return fetch(request)
-                .then(networkResponse => {
-                    return caches.open('iogt').then(cache => {
-                        if (request.method === 'GET') {
-                            cache.put(request, networkResponse.clone());
-                        }
-                        return networkResponse;
+                return fetch(request)
+                    .then(networkResponse => {
+                        return caches.open('iogt').then(cache => {
+                            cache.put(reqClone, networkResponse.clone());
+                            return networkResponse;
+                        });
+                    })
+                    .catch(err => {
+                        console.error("❌ Network fetch failed:", request.url, err);
+                        return new Response('Offline - No cached content available', {
+                            status: 503,
+                            headers: { 'Content-Type': 'text/plain' }
+                        });
                     });
-                })
-                .catch(() => {
-                    return new Response('Offline - No cached content available', { status: 503 });
-                });
-        })
-    );
+            })
+        );
+    }
 });
 
 // ✅ Background Sync for Form Submissions
@@ -145,11 +148,23 @@ async function syncRequests() {
             if (response.ok) {
                 console.log("✅ Sync successful, deleting request from IndexedDB...");
                 await deleteRequest(req.id);
+                // ✅ Notify client about successful sync
+                sendMessageToClients({ type: 'sync-success', url: req.url });
             } else {
                 console.warn("⚠️ Sync failed with status:", response.status);
+                sendMessageToClients({ type: 'sync-failed', url: req.url, status: response.status });
             }
         } catch (err) {
             console.error("❌ Sync error:", err);
+            sendMessageToClients({ type: 'sync-error', url: req.url, error: err.message });
         }
     }
+}
+
+function sendMessageToClients(message) {
+    self.clients.matchAll({ includeUncontrolled: true, type: 'window' }).then(clients => {
+        clients.forEach(client => {
+            client.postMessage(message);
+        });
+    });
 }

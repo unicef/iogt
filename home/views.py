@@ -52,7 +52,6 @@ def get_manifest(request):
     }
 
     http_response = JsonResponse(response)
-    http_response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     http_response['Content-Disposition'] = 'attachment; filename="manifest.json"'
     return http_response
 
