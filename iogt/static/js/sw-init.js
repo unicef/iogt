@@ -14,11 +14,11 @@ const syncStoredRequests = async () => {
       if (response.ok) {
         await deleteRequest(req.id);
         console.log("✅ Synced:", req.url);
-        showToast(`✅ Synced back offline filled form.`);
+        showToast(`✅ Synced back offline filled form.`, "success");
       }
     } catch (err) {
       console.warn("❌ Failed to sync request:", req.url, err);
-      showToast(`⚠️ Offline form sync failed for: ${req.url}`, true);
+      showToast(`⚠️ Offline form sync failed for: ${req.url}`, "error");
     }
   }
 }

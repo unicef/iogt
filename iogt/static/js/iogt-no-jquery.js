@@ -3,6 +3,47 @@ const ready = (callback) => {
     else document.addEventListener("DOMContentLoaded", callback);
 };
 
+
+function showToast(message, type = 'info') {
+        const toast = document.getElementById('toast-notification');
+
+        if (!toast) return;
+
+        toast.textContent = message;
+
+        // Set color
+        switch (type) {
+            case 'success':
+                toast.style.backgroundColor = '#4caf50';
+                break;
+            case 'error':
+                toast.style.backgroundColor = '#f44336';
+                break;
+            case 'warning':
+                toast.style.backgroundColor = '#ff9800';
+                break;
+            default:
+                toast.style.backgroundColor = '#333';
+        }
+
+        toast.style.display = 'block';
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateY(0)';
+        
+        // Force reflow for iOS animation
+        void toast.offsetHeight;
+
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(-20px)';
+        }, 3000);
+
+        // Hide after transition
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 3500);
+    }
+
 const init = () => {
     const show = (el) => el.style.display = '';
     const hide = (el) => el.style.display = 'none';
@@ -55,43 +96,16 @@ const init = () => {
 
             switch (data.type) {
                 case 'sync-success':
-                    showToast(`✅ Synced back offline filled form.`);
+                    showToast(`✅ Synced back offline filled form.`, 'success');
                     break;
                 case 'sync-failed':
-                    showToast(`⚠️ Offline form sync failed for: ${data.url}`, true);
+                    showToast(`⚠️ Offline form sync failed for: ${data.url}`, 'error');
                     break;
                 case 'sync-error':
-                    showToast(`❌ Sync error: ${data.error}`, true);
+                    showToast(`❌ Sync error: ${data.error}`, 'error');
                     break;
             }
         });
-    }
-
-    // Basic toast implementation
-    function showToast(message, isError = false) {
-        const toast = document.createElement('div');
-        toast.textContent = message;
-        toast.style = `
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: ${isError ? '#e74c3c' : '#2ecc71'};
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            font-size: 14px;
-            z-index: 9999;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-        `;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.style.opacity = 1, 10);
-        setTimeout(() => {
-            toast.style.opacity = 0;
-            setTimeout(() => document.body.removeChild(toast), 600);
-        }, 4000);
     }
 
     const disableForOfflineAccess = () => {
@@ -165,7 +179,7 @@ const init = () => {
 };
 
 const download = pageId => {
-    alert("📥 Download starting…");
+    showToast("📥 Downloading…");
     console.log("Starting download for page:", pageId);
 
     fetch(`/page-tree/${pageId}/`)
@@ -204,7 +218,7 @@ const download = pageId => {
         .then(() => {
             setItem('offlineReady', true); // ✅ Mark ready for offline
             console.log("✅ Content cached successfully!");
-            alert("✅ Content is now available offline!");
+            showToast("✅ Content is now available offline!", "success");
             location.reload();
         })
         .catch(error => {

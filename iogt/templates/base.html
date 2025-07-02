@@ -64,6 +64,22 @@
         {% include "header.html" %}
         <div class="main-wrapper" style="background: {{ settings.home.ThemeSettings.global_background_color }}">
             <div class="content-holder">
+                <div id="toast-notification" style="
+                    display: none;
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    max-width: 90vw;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    background-color: #333;
+                    color: #fff;
+                    font-size: 14px;
+                    z-index: 9999;
+                    opacity: 0;
+                    transition: opacity 0.4s ease, transform 0.4s ease;
+                    transform: translateY(-20px);
+                "></div>
                 <div class="other-links">
                     {% if show_footers %}
                         {% render_footer %}
