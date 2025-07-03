@@ -107,22 +107,28 @@ class HomePage(Page, PageUtilsMixin, TitleIconMixin):
             current_locale = Locale.get_default()
         # Get the true root of the Wagtail tree (depth=1)
         true_root = Page.get_first_root_node()
-        # Find the localized "home" page (like EnglishMainPage, ArabicMainPage)
-        localized_home = None
-        for page in true_root.get_children().live():
-            if (
-                    page.locale == current_locale
-                    and page.slug != "home"  # or page.title != "Home"
-            ):
-                localized_home = page
-                break
-        # Optional fallback to default locale
+        default_site_root = (
+            Page.objects.filter(depth=2, slug='home', locale=Locale.get_default()).first()
+        )
+        # Get localized home, excluding the default site root (if needed)
+        localized_home = (
+            true_root.get_children()
+            .live()
+            .filter(locale=current_locale)
+            .exclude(id=default_site_root.id if default_site_root else -1)
+            .first()
+        )
+        # Fallback if localized home not found
         if not localized_home:
             fallback_locale = Locale.get_default()
-            for page in true_root.get_children().live():
-                if hasattr(page, 'locale') and page.locale == fallback_locale and page.slug != "home":
-                    localized_home = page
-                    break
+            localized_home = (
+                true_root.get_children()
+                .live()
+                .filter(locale=fallback_locale)
+                .exclude(id=default_site_root.id if default_site_root else -1)
+                .first()
+            )
+
         # Find the localized BannerIndexPage (Banner Folder)
         banner_index = None
         if localized_home:
