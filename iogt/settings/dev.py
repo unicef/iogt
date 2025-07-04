@@ -1,4 +1,5 @@
 from .base import *
+from os import getenv
 
 WAGTAILADMIN_BASE_URL = 'http://localhost:8000'
 DEBUG = True
@@ -18,6 +19,16 @@ if DEBUG and DEBUG_TOOLBAR_ENABLE:
     }
 
 INSTALLED_APPS += ("django_extensions",)
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': getenv('DB_NAME', 'postgres'),
+        'USER': getenv('DB_USER', 'postgres'),
+        'PASSWORD': getenv('DB_PASSWORD', 'iogt'),
+        'HOST': getenv('DB_HOST', 'database'),
+        'PORT': getenv('DB_PORT', '5432'),
+    }
+}
 
 try:
     from .local import *

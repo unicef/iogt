@@ -6,9 +6,23 @@ services:
       args:
         requirements: requirements.dev.txt
     environment:
+      DB_HOST: db
+      DB_NAME: iogt
+      DB_PASSWORD: postgresiogt
+      DB_PORT: '5432'
+      DB_USER: postgres
       DJANGO_SETTINGS_MODULE: iogt.settings.dev
     image: iogt:latest
+
     ports:
       - "8000:8000"
+    depends_on:
+      - db
     volumes:
       - ./:/app/
+  db:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgresiogt
+      POSTGRES_DB: iogt

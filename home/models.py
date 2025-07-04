@@ -3,6 +3,7 @@ import os
 
 from django.conf import settings
 from django.contrib.admin.utils import flatten
+
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -86,17 +87,95 @@ class HomePage(Page, PageUtilsMixin, TitleIconMixin):
         FieldPanel('home_featured_content')
     ]
 
+    # def get_context(self, request):
+    #     context = super().get_context(request)
+    #     banners = []
+    #     for home_page_banner in self.home_page_banners.select_related('banner_page', 'banner_page__banner_link_page').all():
+    #         banner_page = home_page_banner.banner_page
+    #         if banner_page.live and ((banner_page.banner_link_page and banner_page.banner_link_page.live) or
+    #                                  banner_page.banner_link_page == None):
+    #             banners.append(banner_page.specific)
+    #     context['banners'] = banners
+    #     return context
+
+    # def get_context(self, request):
+    #     context = super().get_context(request)
+    #
+    #     # banner_index = BannerIndexPage.objects.live().first()
+    #     site = Site.find_for_request(request)
+    #     root = site.root_page if site else None
+    #
+    #     banner_index = None
+    #     if root:
+    #         banner_index = BannerIndexPage.objects.descendant_of(root).live().first()
+    #
+    #     banners = []
+    #     # if banner_index:
+    #     # banners = []
+    #     if banner_index:
+    #         for banner in banner_index.get_children().live().order_by('path'):
+    #             if (
+    #                     not hasattr(banner, 'banner_link_page')
+    #                     or banner.banner_link_page is None
+    #                     or (banner.banner_link_page and banner.banner_link_page.live)
+    #             ):
+    #                 banners.append(banner.specific)
+    #
+    #     context['banners'] = banners
+    #     return context
+
     def get_context(self, request):
         context = super().get_context(request)
+
+        # Get current language code from request
+        language_code = request.LANGUAGE_CODE
+
+        try:
+            current_locale = Locale.objects.get(language_code=language_code)
+        except Locale.DoesNotExist:
+            current_locale = Locale.get_default()
+        # Get the true root of the Wagtail tree (depth=1)
+        true_root = Page.get_first_root_node()
+        print('true_root', true_root)
+        # Find the localized "home" page (like EnglishMainPage, ArabicMainPage)
+        localized_home = None
+        for page in true_root.get_children().live():
+            if (
+                    page.locale == current_locale
+                    and page.slug != "home"  # or page.title != "Home"
+            ):
+                localized_home = page
+                break
+        print('localized_home', localized_home)
+        # Optional fallback to default locale
+        if not localized_home:
+            fallback_locale = Locale.get_default()
+            print('fallback_locale', fallback_locale)
+            for page in true_root.get_children().live():
+                if hasattr(page, 'locale') and page.locale == fallback_locale and page.slug != "home":
+                    localized_home = page
+                    break
+        print('default_localized_home', localized_home)
+
+        # Find the localized BannerIndexPage (Banner Folder)
+        banner_index = None
+        if localized_home:
+            banner_index = BannerIndexPage.objects.descendant_of(localized_home).live().first()
+
+        # Collect live banners under the localized banner index
         banners = []
-        for home_page_banner in self.home_page_banners.select_related('banner_page', 'banner_page__banner_link_page').all():
-            banner_page = home_page_banner.banner_page
-            if banner_page.live and ((banner_page.banner_link_page and banner_page.banner_link_page.live) or
-                                     banner_page.banner_link_page == None):
-                banners.append(banner_page.specific)
+        if banner_index:
+            for banner in banner_index.get_children().live().order_by('path'):
+                banner_specific = banner.specific
+                if (
+                        not hasattr(banner_specific, 'banner_link_page') or
+                        banner_specific.banner_link_page is None or
+                        (banner_specific.banner_link_page and banner_specific.banner_link_page.live)
+                ):
+                    banners.append(banner_specific)
+
         context['banners'] = banners
         return context
-
     @property
     def offline_urls(self):
         return [self.url] + collect_urls_from_streamfield(self.home_featured_content)
@@ -543,6 +622,13 @@ class BannerIndexPage(Page):
     parent_page_types = ['home.HomePage']
     subpage_types = ['home.BannerPage']
 
+    # def get_context(self, request):
+    #     print('testing........................')
+    #     context = super().get_context(request)
+    #     context['banners'] = self.get_children().live().order_by('path')  # important!
+    #     print('context', context)
+    #     return context
+    #
 
 class BannerPage(Page, PageUtilsMixin):
     parent_page_types = ['home.BannerIndexPage']

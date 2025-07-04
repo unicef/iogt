@@ -18,6 +18,7 @@ from home import views as pwa_views
 from wagtail_transfer import urls as wagtailtransfer_urls
 from admin_login import urls as admin_login_urls
 from admin_login.views import AzureADSignupView
+from project_notifications.views import save_notification_preference
 
 
 from iogt.views import (
@@ -33,6 +34,7 @@ from iogt.views import (
 api_url_patterns = [
     path('api/v1/questionnaires/', include('questionnaires.api.v1.urls')),
     path('api/interactive/', include('interactive.api.urls')),
+    path("notifications/save-preference/", save_notification_preference, name="save_notification_preference"),
     
 ]
 

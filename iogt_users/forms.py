@@ -6,11 +6,13 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from wagtail.users.forms import UserEditForm as WagtailUserEditForm, \
     UserCreationForm as WagtailUserCreationForm
+from project_notifications.models import SignupNotificationTemplate
 
 from .fields import IogtPasswordField
 from .models import User
 
 from notifications.signals import notify
+
 
 class AccountSignupForm(SignupForm):
     display_name = forms.CharField(
@@ -49,11 +51,15 @@ class AccountSignupForm(SignupForm):
         user = super().save(request)
 
         # Send notification to all staff/admin users
+        # for admin in User.objects.filter(is_staff=True):
+        template = SignupNotificationTemplate.objects.filter(active=True).latest("updated_at")
+        print('template-data', template)
         for admin in User.objects.filter(is_staff=True):
             notify.send(
                 sender=user,
                 recipient=admin,
-                verb="signed up!"
+                verb=template.title,
+                description=template.message
             )
 
 

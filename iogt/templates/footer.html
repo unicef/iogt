@@ -20,6 +20,42 @@
                 {% endif %}
                 <p class='footer__copyright'>{% translate "© The Internet of Good Things" %}</p>
             </div>
+
         </div>
+
     </div>
+         {% if request.user.is_authenticated and notification_preference.receive_notifications == None  %}
+                <div id="notif-banner"  style="
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: #f1f1f1;
+  padding: 15px 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 9999;">
+                  <p>Would you like to enable desktop notifications?</p>
+                  <button onclick="setNotificationPref('yes')">Yes</button>
+                  <button onclick="setNotificationPref('no')">No</button>
+                </div>
+            {% endif %}
 </footer>
+<script>
+function setNotificationPref(choice) {
+    alert(choice)
+  fetch("{% url 'save_notification_preference' %}", {
+    method: "POST",
+    headers: {
+      "X-CSRFToken": "{{ csrf_token }}",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ choice: choice }),
+  }).then((res) => {
+    if (res.ok) {
+        console.log('response', res)
+      document.getElementById("notif-banner").style.display = "none";
+    }
+  });
+}
+</script>

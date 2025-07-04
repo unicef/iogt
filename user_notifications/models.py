@@ -3,6 +3,7 @@ from wagtail.snippets.models import register_snippet
 from wagtail.admin.panels import FieldPanel
 from django.utils.timezone import now
 from wagtail.fields import RichTextField
+from iogt.settings.base import AUTH_USER_MODEL
 
 @register_snippet
 class UserNotificationTemplate(models.Model):
@@ -24,3 +25,10 @@ class UserNotificationTemplate(models.Model):
         verbose_name = "User Notification Template"
         verbose_name_plural = "User Notification Templates"
 
+
+class NotificationPreference(models.Model):
+    user = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.CASCADE)
+    receive_notifications = models.BooleanField(null=True, blank=True)  # NULL = not chosen yet
+
+    def __str__(self):
+        return f"{self.user.username} preferences"

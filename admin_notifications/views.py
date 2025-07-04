@@ -10,3 +10,5 @@ class CreateNotificationView(CreateView):
             for user in group.user_set.all():
                 send_user_notification(user=user, payload=payload, ttl=1000)
         return super().form_valid(form)
+
+
