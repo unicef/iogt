@@ -18,7 +18,7 @@ from home import views as pwa_views
 from wagtail_transfer import urls as wagtailtransfer_urls
 from admin_login import urls as admin_login_urls
 from admin_login.views import AzureADSignupView
-from project_notifications.views import save_notification_preference
+from user_notifications.views import save_notification_preference
 
 
 from iogt.views import (
