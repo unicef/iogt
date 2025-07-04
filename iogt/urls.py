@@ -82,6 +82,7 @@ urlpatterns = api_url_patterns + [
     path('api/docs/', schema_view.with_ui('swagger'), name='swagger'),
     path('webpush/subscribe/', save_info, name='save_webpush_info'),
     path('inbox/notifications/', include('notifications.urls', namespace='notifications')),
+    path('notifications/', include('user_notifications.urls')),
 ]
 
 if settings.DEBUG:

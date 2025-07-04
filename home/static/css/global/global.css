@@ -1255,6 +1255,24 @@ body.rtl {
           justify-content: flex-end;
 }
 
+    .dropdown-menu {
+        position: absolute;
+        right: 10px;
+        top: 40px;
+        background: white;
+        border: 1px solid #ccc;
+        z-index: 1000;
+        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+        padding: 10px;
+        border-radius: 6px;
+    }
+
+    .notification-holder {
+        display: flex;
+        align-items: center;
+        margin-left: 12px;
+    }
+
 .language__select select {
   -webkit-appearance: none;
      -moz-appearance: none;

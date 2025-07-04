@@ -1,13 +1,13 @@
 from django.conf import settings
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 
-from project_notifications.models import Notification
-from project_notifications.views import CreateNotificationView
+from admin_notifications.models import AdminNotification
+from admin_notifications.views import CreateNotificationView
 
 
 class NotificationModelAdmin(ModelAdmin):
-    model = Notification
-    menu_label = 'Notifications'
+    model = AdminNotification
+    menu_label = 'Admin Notifications'
     menu_icon = 'mail'
     list_display = ('head', 'body', 'url',)
     list_filter = ('groups',)

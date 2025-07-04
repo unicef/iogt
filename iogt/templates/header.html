@@ -17,16 +17,19 @@
                 {% language_switcher page %}
             </div>
             {% if request.user.is_authenticated %}
-              <div class="notification-bell">
-
-                  🔔 {% live_notify_badge %}
-
-              </div>
+            <div class="notification-holder">
+                <div class="notification-bell" onclick="toggleNotifDropdown()" style="cursor:pointer;">
+                    🔔 <span id="notif-count">{{ request.user.notifications.unread.count }}</span>
+                </div>
+                <div id="notif-dropdown" class="dropdown-menu dropdown-menu-end"
+                    style="min-width: 300px; display: none;">
+                    {% include 'user_notifications/notification_dropdown.html' %}
+                </div>
+            </div>
             {% endif %}
-
-
+        </div>
         <div class="form-holder search-form-holder">
-            <a class="js-search-btn" href="{% url "search" %}">
+            <a class="js-search-btn" href="{% url 'search' %}">
                 {% render_icon icon_path='icons/search.svg' attrs="alt='Search' class='xs-home-header__search'" %}
             </a>
             <form class='search__form' action="{% url 'search' %}">
@@ -34,7 +37,8 @@
                     <span>
                         {% render_icon icon_path='icons/search.svg' width=18 height=18 stroke_color='#9A9A9A' %}
                     </span>
-                    <input type="text" name="query" placeholder="{% translate 'Search the site...' %}" pattern="\S+.*"/>
+                    <input type="text" name="query" placeholder="{% translate 'Search the site...' %}"
+                        pattern="\S+.*" />
                 </label>
             </form>
         </div>
@@ -45,9 +49,41 @@
                     {% primary_button title="Log in / Create account" href=login_url icon_path='icons/login.svg' extra_classnames='login-create-account-btn' %}
                 {% else %}
                     {% url 'user_profile' as profile_url %}
-                {% primary_button title="Profile" href=profile_url icon_path='icons/profile.svg' %}
+                    {% primary_button title="Profile" href=profile_url icon_path='icons/profile.svg' %}
                 {% endif %}
             </div>
         </div>
     </div>
-</header>  
+</header>
+{% if user.is_authenticated %}
+<script>
+    function refreshUnreadCount() {
+        fetch("{% url 'user_notifications:unread_count' %}")
+            .then(res => res.json())
+            .then(data => {
+                const countEl = document.getElementById("notif-count");
+                if (data.unread_count > 0) {
+                    countEl.textContent = data.unread_count;
+                    countEl.style.display = "inline";
+                } else {
+                    countEl.textContent = '';
+                    countEl.style.display = "none";
+                }
+            })
+            .catch(err => console.warn("⚠️ Failed to fetch unread count", err));
+    }
+
+    // Poll every 15 seconds
+    setInterval(refreshUnreadCount, 15000);
+    document.addEventListener("DOMContentLoaded", refreshUnreadCount);
+
+    function toggleNotifDropdown() {
+        const dropdown = document.getElementById("notif-dropdown");
+        if (dropdown.style.display === "none" || dropdown.style.display === "") {
+            dropdown.style.display = "block";
+        } else {
+            dropdown.style.display = "none";
+        }
+    }
+</script>
+{% endif %}

@@ -1,0 +1,9 @@
+{% for n in notifications %}
+    <a href="{{ n.data.url|default:'#' }}" class="dropdown-item{% if n.unread %} fw-bold{% endif %}">
+        {{ n.verb }} - {{ n.timestamp|timesince }} ago
+    </a>
+{% empty %}
+    <span class="dropdown-item text-muted">No notifications</span>
+{% endfor %}
+<hr class="dropdown-divider">
+<a class="dropdown-item text-center" href="{% url 'user_notifications:all' %}">See all</a>

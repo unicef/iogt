@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>All Notifications</h2>
+<a href="{% url 'user_notifications:mark_all_read' %}">Mark all as read</a>
+
+<ul class="list-group mt-3">
+  {% for n in notifications %}
+    <li class="list-group-item d-flex justify-content-between align-items-center {% if n.unread %}fw-bold{% endif %}">
+      {{ n.verb }} - {{ n.timestamp|timesince }} ago
+      {% if n.unread %}
+        <a href="{% url 'user_notifications:toggle_read' n.pk %}">Mark as read</a>
+      {% else %}
+        <a href="{% url 'user_notifications:toggle_read' n.pk %}">Mark as unread</a>
+      {% endif %}
+    </li>
+  {% empty %}
+    <li class="list-group-item text-muted">No notifications yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}
