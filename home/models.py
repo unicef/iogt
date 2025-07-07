@@ -107,7 +107,7 @@ class HomePage(Page, PageUtilsMixin, TitleIconMixin):
             current_locale = Locale.get_default()
         # Get the true root of the Wagtail tree (depth=1)
         true_root = Page.get_first_root_node()
-        localized_home = Page.objects.filter(locale=current_locale).exclude(id=true_root.id).live().first()
+        localized_home = Page.objects.filter(locale=current_locale, depth=2).exclude(id=true_root.id).live().first()
 
         # Find the localized BannerIndexPage (Banner Folder)
         banner_index = None
