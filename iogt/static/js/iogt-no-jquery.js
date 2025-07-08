@@ -3,6 +3,47 @@ const ready = (callback) => {
     else document.addEventListener("DOMContentLoaded", callback);
 };
 
+
+function showToast(message, type = 'info') {
+        const toast = document.getElementById('toast-notification');
+
+        if (!toast) return;
+
+        toast.textContent = message;
+
+        // Set color
+        switch (type) {
+            case 'success':
+                toast.style.backgroundColor = '#4caf50';
+                break;
+            case 'error':
+                toast.style.backgroundColor = '#f44336';
+                break;
+            case 'warning':
+                toast.style.backgroundColor = '#ff9800';
+                break;
+            default:
+                toast.style.backgroundColor = '#333';
+        }
+
+        toast.style.display = 'block';
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateY(0)';
+        
+        // Force reflow for iOS animation
+        void toast.offsetHeight;
+
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(-20px)';
+        }, 3000);
+
+        // Hide after transition
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 3500);
+    }
+
 const init = () => {
     const show = (el) => el.style.display = '';
     const hide = (el) => el.style.display = 'none';
@@ -48,6 +89,25 @@ const init = () => {
         hide(document.querySelector('.footer-head'));
     };
 
+        if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.addEventListener('message', event => {
+            const data = event.data;
+            if (!data) return;
+
+            switch (data.type) {
+                case 'sync-success':
+                    showToast(`✅ Synced back offline filled form.`, 'success');
+                    break;
+                case 'sync-failed':
+                    showToast(`⚠️ Offline form sync failed for: ${data.url}`, 'error');
+                    break;
+                case 'sync-error':
+                    showToast(`❌ Sync error: ${data.error}`, 'error');
+                    break;
+            }
+        });
+    }
+
     const disableForOfflineAccess = () => {
         elementsToToggle.forEach(hide);
         replyLinks.forEach(hide);
@@ -59,13 +119,10 @@ const init = () => {
             btn.style.background = '#808080';
         });
         questionnaireSubmitBtns.forEach(btn => {
-            btn.style.pointerEvents = 'none';
+            btn.style.pointerEvents = 'all';  // ensure it's still clickable
             const span = btn.querySelector('span');
             if (span) {
-                const original = span.dataset.originalLabel || span.textContent.trim();
-                if (!span.textContent.includes(submitWhenOffline)) {
-                    span.textContent = `${original} (${submitWhenOffline})`;
-                }
+                span.textContent = span.dataset.originalLabel || span.textContent.trim();
             }
         });
         externalLinks.forEach(link => link.addEventListener('click', blockExternalLinks));
@@ -111,18 +168,18 @@ const init = () => {
 
     // Force re-check of online status
     fetch(window.location.href, { method: 'HEAD', cache: 'no-cache' })
-        .then(() => {
+    .then(() => {
             console.log("✅ Verified online via HEAD request");
-            enableForOnlineAccess();
-        })
-        .catch(() => {
+        enableForOnlineAccess();
+    })
+    .catch(() => {
             console.warn("⚠️ Verified offline via HEAD request");
-            disableForOfflineAccess();
-        });
+        disableForOfflineAccess();
+    });
 };
 
 const download = pageId => {
-    alert("📥 Download starting…");
+    showToast("📥 Downloading…");
     console.log("Starting download for page:", pageId);
 
     fetch(`/page-tree/${pageId}/`)
@@ -161,7 +218,7 @@ const download = pageId => {
         .then(() => {
             setItem('offlineReady', true); // ✅ Mark ready for offline
             console.log("✅ Content cached successfully!");
-            alert("✅ Content is now available offline!");
+            showToast("✅ Content is now available offline!", "success");
             location.reload();
         })
         .catch(error => {
@@ -170,7 +227,7 @@ const download = pageId => {
         });
 };
 
-const getItem = (key, defaultValue = null) => {
+function getItem (key, defaultValue = null) {
     try {
         return JSON.parse(localStorage.getItem(key)) ?? defaultValue;
     } catch {

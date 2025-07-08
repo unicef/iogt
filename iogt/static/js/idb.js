@@ -31,45 +31,55 @@ async function saveRequest(request) {
     console.log("💾 Saving request to IndexedDB:", request.url);
 
     const db = await openDB();
+    const clonedRequest = request.clone();
 
-    // ✅ Extract body properly
-    let body;
-    try {
-        body = await request.clone().json();
-    } catch {
-        body = await request.clone().text();
-    }
-
+    // ✅ Get headers as object
     const headersObj = {};
-    for (let [key, value] of request.headers.entries()) {
+    for (let [key, value] of clonedRequest.headers.entries()) {
         headersObj[key] = value;
     }
+
+    let body = null;
+    const contentType = clonedRequest.headers.get("Content-Type") || "";
+
+    try {
+        if (contentType.includes("application/json")) {
+            body = await clonedRequest.json();
+        } else if (contentType.includes("application/x-www-form-urlencoded")) {
+            body = await clonedRequest.text(); // Store raw URL-encoded body
+        } else if (contentType.includes("multipart/form-data")) {
+            // Optionally warn or skip: FormData can't be serialized directly
+            console.warn("❗ Cannot store multipart/form-data offline safely");
+        } else {
+            body = await clonedRequest.text();
+        }
+    } catch (err) {
+        console.error("❌ Failed to parse body:", err);
+    }
+
+    const requestData = {
+        url: clonedRequest.url,
+        method: clonedRequest.method,
+        body: body,
+        headers: headersObj,
+        credentials: 'include', // ✅ Important for replaying with cookies
+        timestamp: new Date().toISOString(), // optional
+    };
 
     return new Promise((resolve, reject) => {
         const tx = db.transaction(STORE_NAME, "readwrite");
         const store = tx.objectStore(STORE_NAME);
-
-        const requestData = {
-            url: request.url,
-            method: request.method,
-            body: body,
-            headers: headersObj,
-        };
-
         const addRequest = store.add(requestData);
 
         addRequest.onsuccess = () => {
-            console.log("✅ Request successfully stored in IndexedDB!");
+            console.log("✅ Request stored in IndexedDB!", requestData);
             resolve();
         };
 
         addRequest.onerror = (event) => {
-            console.error("❌ Error storing request:", event.target.error);
+            console.error("❌ Error saving request:", event.target.error);
             reject(event.target.error);
         };
-
-        tx.oncomplete = () => console.log("✅ Transaction completed successfully!");
-        tx.onerror = (event) => console.error("❌ Transaction failed:", event.target.error);
     });
 }
 

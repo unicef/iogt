@@ -96,18 +96,34 @@ class HomePage(Page, PageUtilsMixin, TitleIconMixin):
     #             banners.append(banner_page.specific)
     #     context['banners'] = banners
     #     return context
+
     def get_context(self, request):
         context = super().get_context(request)
-        banner_index = BannerIndexPage.objects.live().first()
+        # Get current language code from request
+        language_code = request.LANGUAGE_CODE
+        try:
+            current_locale = Locale.objects.get(language_code=language_code)
+        except Locale.DoesNotExist:
+            current_locale = Locale.get_default()
+        # Get the true root of the Wagtail tree (depth=1)
+        true_root = Page.get_first_root_node()
+        localized_home = Page.objects.filter(locale=current_locale, depth=2).exclude(id=true_root.id).live().first()
+
+        # Find the localized BannerIndexPage (Banner Folder)
+        banner_index = None
+        if localized_home:
+            banner_index = BannerIndexPage.objects.descendant_of(localized_home).live().first()
+        # Collect live banners under the localized banner index
         banners = []
         if banner_index:
             for banner in banner_index.get_children().live().order_by('path'):
+                banner_specific = banner.specific
                 if (
-                        not hasattr(banner, 'banner_link_page')
-                        or banner.banner_link_page is None
-                        or (banner.banner_link_page and banner.banner_link_page.live)
+                        not hasattr(banner_specific, 'banner_link_page') or
+                        banner_specific.banner_link_page is None or
+                        (banner_specific.banner_link_page and banner_specific.banner_link_page.live)
                 ):
-                    banners.append(banner.specific)
+                    banners.append(banner_specific)
         context['banners'] = banners
         return context
 
