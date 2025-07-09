@@ -18,12 +18,8 @@
             </div>
             {% if request.user.is_authenticated %}
             <div class="notification-holder">
-                <div class="notification-bell" onclick="toggleNotifDropdown()" style="cursor:pointer;">
+                <div class="notification-bell" onclick="openNotifPanel()" style="cursor:pointer;">
                     🔔 <span id="notif-count">{{ request.user.notifications.unread.count }}</span>
-                </div>
-                <div id="notif-dropdown" class="dropdown-menu dropdown-menu-end"
-                    style="min-width: 300px; display: none;">
-                    {% include 'user_notifications/notification_dropdown.html' %}
                 </div>
             </div>
             {% endif %}
@@ -46,10 +42,10 @@
             <div class="nav-bar__item">
                 {% url 'account_login' as login_url %}
                 {% if request.user.is_anonymous %}
-                    {% primary_button title="Log in / Create account" href=login_url icon_path='icons/login.svg' extra_classnames='login-create-account-btn' %}
+                {% primary_button title="Log in / Create account" href=login_url icon_path='icons/login.svg' extra_classnames='login-create-account-btn' %}
                 {% else %}
-                    {% url 'user_profile' as profile_url %}
-                    {% primary_button title="Profile" href=profile_url icon_path='icons/profile.svg' %}
+                {% url 'user_profile' as profile_url %}
+                {% primary_button title="Profile" href=profile_url icon_path='icons/profile.svg' %}
                 {% endif %}
             </div>
         </div>
@@ -77,13 +73,32 @@
     setInterval(refreshUnreadCount, 15000);
     document.addEventListener("DOMContentLoaded", refreshUnreadCount);
 
-    function toggleNotifDropdown() {
-        const dropdown = document.getElementById("notif-dropdown");
-        if (dropdown.style.display === "none" || dropdown.style.display === "") {
-            dropdown.style.display = "block";
-        } else {
-            dropdown.style.display = "none";
-        }
+    function openNotifPanel() {
+        document.getElementById('notif-overlay').classList.add('show');
+        const panel = document.getElementById('notif-panel');
+        panel.classList.add('show');
+        panel.style.display = 'block';
+        document.body.classList.add('no-scroll');
+
+        // Fetch notifications
+        fetch('{% url "user_notifications:latest_notifications" %}')
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('notif-content').innerHTML = html;
+            });
     }
+
+    function closeNotifPanel() {
+        document.getElementById('notif-overlay').classList.remove('show');
+        const panel = document.getElementById('notif-panel');
+        panel.classList.remove('show');
+        document.body.classList.remove('no-scroll');
+
+        setTimeout(() => {
+            panel.style.display = 'none';
+        }, 300); // wait for animation to complete
+    }
+
+    document.querySelector(".notification-bell").addEventListener("click", openNotifPanel);
 </script>
 {% endif %}

@@ -13,7 +13,7 @@ from .models import NotificationPreference
 @login_required
 def latest_notifications(request):
     notifications = Notification.objects.filter(recipient=request.user).order_by('-timestamp')[:5]
-    return render(request, 'notification_dropdown.html', {'notifications': notifications})
+    return render(request, 'user_notifications/notification_dropdown.html', {'notifications': notifications})
 
 @login_required
 def all_notifications(request):

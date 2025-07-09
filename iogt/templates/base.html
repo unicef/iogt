@@ -80,16 +80,17 @@
                     {% include "footer.html" with page=page_ %}
                     {% endwith %}
                 </div>
+
             </div>
         </div>
         <!-- Overlay -->
-        <div id="notif-overlay" class="notif-overlay"></div>
+        <div id="notif-overlay" class="notif-overlay" onclick="closeNotifPanel()"></div>
 
         <!-- Slide-in Notification Panel -->
-        <div id="notif-panel" class="notif-panel" style="display: none;">
+        <div id="notif-panel" class="notif-panel">
             <div class="notif-header">
                 <h3>Notifications</h3>
-                <button id="notif-close-btn">&times;</button>
+                <button id="notif-close-btn" onclick="closeNotifPanel()">&times;</button>
             </div>
             <div id="notif-content">
                 <!-- Load your notifications here -->
@@ -123,30 +124,6 @@
     <script src="{% static 'js/idb.js' %}"></script>
     <script src="{% static 'js/sw-init.js' %}"></script>
     <script src="{% static 'js/enable_notification.js' %}"></script>
-    <script>
-        function openNotifPanel() {
-            document.body.classList.add('no-scroll');
-            document.getElementById("notif-panel").classList.add("open");
-            document.getElementById("notif-overlay").style.display = "block";
-
-            // Optionally: fetch notifications via AJAX
-            fetch("{% url 'user_notifications:latest_notifications' %}")
-                .then(res => res.text())
-                .then(html => {
-                    document.getElementById("notif-content").innerHTML = html;
-                });
-        }
-
-        function closeNotifPanel() {
-            document.body.classList.remove('no-scroll');
-            document.getElementById("notif-panel").classList.remove("open");
-            document.getElementById("notif-overlay").style.display = "none";
-        }
-
-        document.getElementById("notif-overlay").addEventListener("click", closeNotifPanel);
-        document.getElementById("notif-close-btn").addEventListener("click", closeNotifPanel);
-        document.querySelector(".notification-bell").addEventListener("click", openNotifPanel);
-    </script>
     <noscript>
         <style type="text/css">
             #hideOnNonJSDevice,
@@ -160,60 +137,6 @@
 
             .cache-banner {
                 display: none;
-            }
-
-            #notif-overlay {
-                right: 0;
-                width: 33%;
-                height: 100%;
-                background: white;
-                box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-                z-index: 9999;
-                overflow-y: auto;
-                transition: transform 0.3s ease;
-            }
-
-            .notif-panel {
-                position: fixed;
-                top: 0;
-                right: -100%;
-                width: 33.333%;
-                height: 100%;
-                background: #fff;
-                box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
-                z-index: 1001;
-                transition: right 0.3s ease;
-                display: flex;
-                flex-direction: column;
-            }
-
-            .notif-panel.open {
-                right: 0;
-            }
-
-            .notif-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 1rem;
-                border-bottom: 1px solid #ccc;
-                background: #f7f7f7;
-            }
-
-            #notif-content {
-                padding: 1rem;
-                overflow-y: auto;
-                flex-grow: 1;
-            }
-
-            body.no-scroll {
-                overflow: hidden;
-            }
-
-            @media (max-width: 768px) {
-                #notif-overlay {
-                    width: 100%;
-                }
             }
         </style>
     </noscript>
