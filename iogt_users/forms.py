@@ -52,8 +52,11 @@ class AccountSignupForm(SignupForm):
 
         # Send notification to all staff/admin users
         # for admin in User.objects.filter(is_staff=True):
-        template = UserNotificationTemplate.objects.filter(active=True).latest("updated_at")
-        print('template-data', template)
+        template = UserNotificationTemplate.objects.filter(active=True)
+        if not template:
+            template = UserNotificationTemplate(title="Thank you for registering.", message="Thank you for registering.")
+        else:
+            template = template.latest("updated_at")
         for admin in User.objects.filter(is_staff=True):
             notify.send(
                 sender=user,

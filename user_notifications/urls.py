@@ -5,7 +5,7 @@ from . import views
 app_name = 'user_notifications'
 
 urlpatterns = [
-    path('dropdown/', views.latest_notifications, name='dropdown'),
+    path('latest_notifications/', views.latest_notifications, name='latest_notifications'),
     path('all/', views.all_notifications, name='all'),
     path('mark-all-read/', views.mark_all_read, name='mark_all_read'),
     path('toggle-read/<int:pk>/', views.toggle_read, name='toggle_read'),
