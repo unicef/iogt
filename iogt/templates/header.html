@@ -18,7 +18,7 @@
             </div>
             {% if request.user.is_authenticated %}
             <div class="notification-holder">
-                <div class="notification-bell" onclick="openNotifPanel()" style="cursor:pointer;">
+                <div class="notification-bell" onclick="openNotificationsPanel()" style="cursor:pointer;">
                     🔔 <span id="notif-count">{{ request.user.notifications.unread.count }}</span>
                 </div>
             </div>
@@ -73,32 +73,31 @@
     setInterval(refreshUnreadCount, 15000);
     document.addEventListener("DOMContentLoaded", refreshUnreadCount);
 
-    function openNotifPanel() {
-        document.getElementById('notif-overlay').classList.add('show');
-        const panel = document.getElementById('notif-panel');
-        panel.classList.add('show');
-        panel.style.display = 'block';
-        document.body.classList.add('no-scroll');
-
-        // Fetch notifications
-        fetch('{% url "user_notifications:latest_notifications" %}')
-            .then(res => res.text())
-            .then(html => {
-                document.getElementById('notif-content').innerHTML = html;
-            });
+    function openNotificationsPanel() {
+        document.querySelector('.notification-panel').style.display = 'block';
+        document.getElementById('notification-overlay').style.display = 'block';
+        fetch('{% url "user_notifications:latest_notifications" %}').then(
+            res => res.text()
+        ).then(html => {
+            document.getElementById('notification-list').innerHTML = html;
+            markNotificationsAsRead();
+        });
     }
 
-    function closeNotifPanel() {
-        document.getElementById('notif-overlay').classList.remove('show');
-        const panel = document.getElementById('notif-panel');
-        panel.classList.remove('show');
-        document.body.classList.remove('no-scroll');
-
-        setTimeout(() => {
-            panel.style.display = 'none';
-        }, 300); // wait for animation to complete
+    function closeNotificationsPanel() {
+        document.querySelector('.notification-panel').style.display = 'none';
+        document.getElementById('notification-overlay').style.display = 'none';
     }
 
-    document.querySelector(".notification-bell").addEventListener("click", openNotifPanel);
+    function markNotificationsAsRead() {
+        const ids = Array.from(document.querySelectorAll('.notification-item.unread')).map(el => el.dataset.id);
+        if (ids.length === 0) return;
+        const query = new URLSearchParams();
+        ids.forEach(id => query.append('ids[]', id));
+        const url = `{% url 'user_notifications:mark_selected_read' %}?${query.toString()}`;
+
+        fetch(url).then(response => response.json()).then(data => {});
+    }
+
 </script>
 {% endif %}

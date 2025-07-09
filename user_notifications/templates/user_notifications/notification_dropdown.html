@@ -1,9 +1,13 @@
 {% for n in notifications %}
-    <a href="{{ n.data.url|default:'#' }}" class="dropdown-item{% if n.unread %} fw-bold{% endif %}">
-        {{ n.verb }} - {{ n.timestamp|timesince }} ago
-    </a>
+<a href="{{ n.data.url|default:'#' }}" class="notification-item {% if n.unread %}unread{% else %}read{% endif %}" data-id="{{ n.id }}">
+    <div class="notification-body">
+    <p class="notification-text mb-1">
+        {{ n.verb }}
+        {% if n.unread %}<span class="unread-dot"></span>{% endif %}
+    </p>
+    <small style="color: #6c757d;">{{ n.timestamp|timesince }} ago</small>
+    </div>
+</a>
 {% empty %}
-    <span class="dropdown-item text-muted">No notifications</span>
+<div class="text-muted text-center p-3">No notifications yet!</div>
 {% endfor %}
-<hr class="dropdown-divider">
-<a class="dropdown-item text-center" href="{% url 'user_notifications:all' %}">See all</a>

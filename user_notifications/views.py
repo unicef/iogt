@@ -25,6 +25,15 @@ def mark_all_read(request):
     Notification.objects.filter(recipient=request.user, unread=True).update(unread=False)
     return redirect('user_notifications:all')
 
+
+@login_required
+def mark_selected_read(request):
+    ids = request.GET.getlist('ids[]')
+    if not ids:
+        return JsonResponse({'status': 'error', 'message': 'No IDs provided'}, status=400)
+    Notification.objects.filter(recipient=request.user, id__in=ids, unread=True).update(unread=False)
+    return JsonResponse({'status': 'success', 'message': f'{len(ids)} notifications marked as read'})
+
 @login_required
 def toggle_read(request, pk):
     notif = Notification.objects.get(id=pk, recipient=request.user)

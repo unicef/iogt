@@ -1,21 +1,28 @@
 {% extends "base.html" %}
-
 {% block content %}
-<h2>All Notifications</h2>
-<a href="{% url 'user_notifications:mark_all_read' %}">Mark all as read</a>
 
-<ul class="list-group mt-3">
+<div class="notification-header">
+    <h2>All Notifications</h2>
+</div>
+<div id="notifications-list">
   {% for n in notifications %}
-    <li class="list-group-item d-flex justify-content-between align-items-center {% if n.unread %}fw-bold{% endif %}">
-      {{ n.verb }} - {{ n.timestamp|timesince }} ago
-      {% if n.unread %}
-        <a href="{% url 'user_notifications:toggle_read' n.pk %}">Mark as read</a>
-      {% else %}
-        <a href="{% url 'user_notifications:toggle_read' n.pk %}">Mark as unread</a>
-      {% endif %}
-    </li>
+  <a href="{{ n.data.url|default:'#' }}" class="notification-item {% if n.unread %}unread{% else %}read{% endif %}" data-id="{{ n.id }}">
+    <div class="notification-body">
+    <p class="notification-text mb-1">
+        {{ n.verb }}
+        {% if n.unread %}<span class="unread-dot"></span>{% endif %}
+    </p>
+    <small style="color: #6c757d;">{{ n.timestamp|timesince }} ago</small>
+    </div>
+  </a>
   {% empty %}
-    <li class="list-group-item text-muted">No notifications yet.</li>
+  <div class="text-center p-3" style="color: #6c757d;">No notifications yet.</div>
   {% endfor %}
-</ul>
+</div>
+
+{% endblock %}
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', markNotificationsAsRead);
+</script>
 {% endblock %}

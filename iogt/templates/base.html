@@ -82,21 +82,23 @@
                 </div>
 
             </div>
-        </div>
-        <!-- Overlay -->
-        <div id="notif-overlay" class="notif-overlay" onclick="closeNotifPanel()"></div>
 
-        <!-- Slide-in Notification Panel -->
-        <div id="notif-panel" class="notif-panel">
-            <div class="notif-header">
-                <h3>Notifications</h3>
-                <button id="notif-close-btn" onclick="closeNotifPanel()">&times;</button>
+            <!-- Notification overlay -->
+            <div class="notification-overlay" id="notification-overlay"></div>
+
+            <!-- Notification panel -->
+            <div class="notification-panel">
+                <div class="notification-header">
+                    <h3>Notifications</h3>
+                    <button class="close-btn" onclick="closeNotificationsPanel()">×</button>
+                </div>
+                <div class="notification-list" id="notification-list">
+                </div>
+                <div class="notification-footer">
+                    <a href="{% url 'user_notifications:all' %}">See all notifications</a>
+                </div>
             </div>
-            <div id="notif-content">
-                <!-- Load your notifications here -->
-                <p>Loading...</p>
-            </div>
-        </div>
+
 
     </main>
 
