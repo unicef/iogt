@@ -11,8 +11,10 @@ const registerSW = async () => {
             }
 
             const isPushNotificationRegistered = getItem('isPushNotificationRegistered', false);
+            console.log('isPushNotificationRegistered', isPushNotificationRegistered)
             if (!isPushNotificationRegistered) {
                 if (isAuthenticated && pushNotification) {
+                    console.log('sending push not')
                     registerPushNotification(registration);
                 }
             }

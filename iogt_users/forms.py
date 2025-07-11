@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from wagtail.users.forms import UserEditForm as WagtailUserEditForm, \
     UserCreationForm as WagtailUserCreationForm
 from user_notifications.models import UserNotificationTemplate
+from user_notifications.tasks import send_signup_notifications
 
 from .fields import IogtPasswordField
 from .models import User
@@ -49,22 +50,11 @@ class AccountSignupForm(SignupForm):
 
     def save(self, request):
         user = super().save(request)
-
-        # Send notification to all staff/admin users
-        # for admin in User.objects.filter(is_staff=True):
-        template = UserNotificationTemplate.objects.filter(active=True)
-        if not template:
-            template = UserNotificationTemplate(title="Thank you for registering.", message="Thank you for registering.")
-        else:
-            template = template.latest("updated_at")
-        for admin in User.objects.filter(is_staff=True):
-            notify.send(
-                sender=user,
-                recipient=admin,
-                verb=template.title,
-                description=template.message
-            )
-
+        # 🔁 Run this logic in background
+        print('user', user)
+        print("Sending task to Celery...")
+        send_signup_notifications.delay(user.id, 'signup')
+        return user
 
     def clean_username(self):
         username = self.cleaned_data.get('username')

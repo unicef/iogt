@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 
-from .models import NotificationPreference
+from .models import NotificationPreference, NotificationTag
 
 @login_required
 def latest_notifications(request):
@@ -51,16 +51,37 @@ def unread_count(request):
 @login_required
 def save_notification_preference(request):
     print('request', request)
-    data = json.loads(request.body)
-    choice = data.get("choice")  # "yes" or "no"
+    if request.method == "POST" and request.user.is_authenticated:
+        data = json.loads(request.body)
+        print('data', data)
+        choice = data.get("choice")  # "yes" or "no"
+        language = data.get('language', 'en')
+        tag_ids = data.get('tags', [])
 
-    if choice not in ["yes", "no"]:
-        return JsonResponse({"error": "Invalid choice"}, status=400)
+        if choice not in [True, False]:
+            return JsonResponse({"error": "Invalid choice"}, status=400)
 
-    receive = (choice == "yes")
-    pref, _ = NotificationPreference.objects.get_or_create(user=request.user)
-    pref.receive_notifications = receive
-    pref.save()
+        # receive = (choice == "yes")
+        # pref, _ = NotificationPreference.objects.get_or_create(user=request.user)
+        # pref.receive_notifications = receive
+        # pref.save()
+        # choice = 'yes' if choice else 'No'
+        print('choice', choice)
+        if isinstance(choice, str):
+            choice = choice.lower() in ['yes', 'true', '1']
+        print('choice-changes', choice)
+        preference, created = NotificationPreference.objects.update_or_create(
+            user=request.user,
+            defaults={
+                'receive_notifications': choice,
+                'preferred_language': language,
+            }
+        )
 
-    return JsonResponse({"status": "saved"})
+        if tag_ids:
+            tags = NotificationTag.objects.filter(id__in=tag_ids)
+            preference.content_tags.set(tags)
+
+        return JsonResponse({'status': 'ok'})
+    return JsonResponse({'error': 'unauthorized'}, status=403)
 

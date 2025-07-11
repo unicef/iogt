@@ -7,6 +7,29 @@ self.addEventListener('install', event => {
     event.waitUntil(self.skipWaiting());
 });
 
+self.addEventListener('push', function(event) {
+    console.log('📩 Push received', event);
+
+    const title = "IoGT Notification";
+    const options = {
+        body:  "You have a new message.",
+        icon: "https://cdn-icons-png.flaticon.com/512/3119/3119338.png",
+//        badge: '/static/img/badge.png', // ✅ Optional
+
+//        data: data.url || '/', // ✅ Click redirection
+        requireInteraction: true // ✅ Keeps it until dismissed
+
+    };
+
+    event.waitUntil(
+        self.registration.showNotification('New Notification', options)
+    );
+
+});
+
+
+
+
 // ✅ Activate Service Worker
 self.addEventListener('activate', event => {
     console.log("🚀 Service Workr Activated!");

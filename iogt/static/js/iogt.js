@@ -152,12 +152,15 @@ const setItem = (key, value) => {
 };
 
 const registerPushNotification = registration => {
+    console.log('registration', registration)
     if (!registration.showNotification) {
+         console.log('registration-show', registration.showNotification)
         return;
     }
-    if (Notification.permission === 'denied') {
-        return;
-    }
+//    if (Notification.permission === 'denied') {
+//        console.log('registration-denied', Notification.permission)
+//        return;
+//    }
     if (!'PushManager' in window) {
         return;
     }
