@@ -96,8 +96,26 @@
         ids.forEach(id => query.append('ids[]', id));
         const url = `{% url 'user_notifications:mark_selected_read' %}?${query.toString()}`;
 
-        fetch(url).then(response => response.json()).then(data => {});
+        fetch(url).then(response => response.json()).then(data => { });
     }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const notifLinks = document.querySelectorAll('.notification-item');
+        notifLinks.forEach(el => {
+            el.addEventListener('click', function (e) {
+                const notifId = this.getAttribute("data-id");
+                const notifUrl = this.getAttribute("href");
+
+                if (notifUrl && notifUrl !== "#") {
+                    // Call click-marking endpoint only for notifications with a valid URL
+                    fetch(`/notifications/mark-clicked/${notifId}/`, {
+                        method: "POST"
+                    }).then(res => res.json()).then(console.log);
+                }
+            });
+        });
+    });
+
 
 </script>
 {% endif %}

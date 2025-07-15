@@ -2,22 +2,42 @@
 from notifications.models import Notification
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import json
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 
-from .models import NotificationPreference, NotificationTag
+from .models import NotificationMeta, NotificationPreference, NotificationTag
 
 @login_required
 def latest_notifications(request):
     notifications = Notification.objects.filter(recipient=request.user).order_by('-timestamp')[:5]
-    return render(request, 'user_notifications/notification_dropdown.html', {'notifications': notifications})
+    
+    meta_map = {
+        meta.notification_id: meta.is_clicked
+        for meta in NotificationMeta.objects.filter(notification__in=notifications)
+    }
+
+    for notif in notifications:
+        notif.is_clicked = meta_map.get(notif.id, False)
+
+    return render(request, 'user_notifications/notification_dropdown.html', {
+        'notifications': notifications
+    })
 
 @login_required
 def all_notifications(request):
     notifications = Notification.objects.filter(recipient=request.user).order_by('-timestamp')
+    
+    # Annotate each notification with is_clicked
+    for n in notifications:
+        try:
+            n.is_clicked = n.meta.is_clicked
+        except NotificationMeta.DoesNotExist:
+            n.is_clicked = False  # default
+
     return render(request, 'user_notifications/notification_list.html', {'notifications': notifications})
 
 @login_required
@@ -50,10 +70,8 @@ def unread_count(request):
 @require_POST
 @login_required
 def save_notification_preference(request):
-    print('request', request)
     if request.method == "POST" and request.user.is_authenticated:
         data = json.loads(request.body)
-        print('data', data)
         choice = data.get("choice")  # "yes" or "no"
         language = data.get('language', 'en')
         tag_ids = data.get('tags', [])
@@ -61,15 +79,8 @@ def save_notification_preference(request):
         if choice not in [True, False]:
             return JsonResponse({"error": "Invalid choice"}, status=400)
 
-        # receive = (choice == "yes")
-        # pref, _ = NotificationPreference.objects.get_or_create(user=request.user)
-        # pref.receive_notifications = receive
-        # pref.save()
-        # choice = 'yes' if choice else 'No'
-        print('choice', choice)
         if isinstance(choice, str):
             choice = choice.lower() in ['yes', 'true', '1']
-        print('choice-changes', choice)
         preference, created = NotificationPreference.objects.update_or_create(
             user=request.user,
             defaults={
@@ -85,3 +96,14 @@ def save_notification_preference(request):
         return JsonResponse({'status': 'ok'})
     return JsonResponse({'error': 'unauthorized'}, status=403)
 
+@require_POST
+@login_required
+def mark_notification_clicked(request, notification_id):
+    try:
+        notif = Notification.objects.get(id=notification_id)
+        meta, _ = NotificationMeta.objects.get_or_create(notification=notif)
+        meta.is_clicked = True
+        meta.save()
+        return JsonResponse({"status": "success"})
+    except Notification.DoesNotExist:
+        return JsonResponse({"error": "Notification not found"}, status=404)

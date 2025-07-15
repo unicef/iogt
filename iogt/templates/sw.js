@@ -10,23 +10,37 @@ self.addEventListener('install', event => {
 self.addEventListener('push', function(event) {
     console.log('📩 Push received', event);
 
-    const title = "IoGT Notification";
+    let data = {};
+
+    try {
+        if (event.data && event.data.json) {
+            // Try to parse JSON
+            data = event.data.json();
+        } else if (event.data && event.data.text) {
+            // Fallback to text and wrap in object
+            const text = event.data.text();
+            data = { body: text };
+        }
+    } catch (e) {
+        console.warn("❌ Failed to parse push data", e);
+        data = { body: "You have a new message." };
+    }
+
+    const title = data.title || "New Notification";
     const options = {
-        body:  "You have a new message.",
-        icon: "https://cdn-icons-png.flaticon.com/512/3119/3119338.png",
-//        badge: '/static/img/badge.png', // ✅ Optional
-
-//        data: data.url || '/', // ✅ Click redirection
-        requireInteraction: true // ✅ Keeps it until dismissed
-
+        body: data.body || "You have a new message.",
+        icon: data.icon || "https://cdn-icons-png.flaticon.com/512/3119/3119338.png",
+        data: {
+            url: data.url || '/',
+            notification_id: data.notification_id || null,
+        },
+        requireInteraction: true
     };
 
     event.waitUntil(
-        self.registration.showNotification('New Notification', options)
+        self.registration.showNotification(title, options)
     );
-
 });
-
 
 
 
@@ -34,6 +48,39 @@ self.addEventListener('push', function(event) {
 self.addEventListener('activate', event => {
     console.log("🚀 Service Workr Activated!");
     event.waitUntil(self.clients.claim());
+});
+
+self.addEventListener('notificationclick', function(event) {
+    console.log('🔔 Notification clicked:', event);
+
+    // Optional: close the notification
+    event.notification.close();
+
+    const notificationData = event.notification.data || {};
+    const targetUrl = notificationData.url || '/';
+
+    // Track click via fetch to server
+    if (notificationData.notification_id) {
+        fetch(`/notifications/mark-clicked/${notificationData.notification_id}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        }).catch(err => console.warn('❌ Failed to log notification click:', err));
+    }
+
+    // Focus tab or open new one
+    event.waitUntil(
+        clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
+            for (let client of clientList) {
+                if (client.url === targetUrl && 'focus' in client) {
+                    return client.focus();
+                }
+            }
+            return clients.openWindow(targetUrl);
+        })
+    );
 });
 
 // ✅ Handle Fetch Requests

@@ -162,15 +162,19 @@ const registerPushNotification = registration => {
 const urlB64ToUint8Array = base64String => {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
     const base64 = (base64String + padding)
-        .replace(/\-/g, '+')
+        .replace(/-/g, '+')
         .replace(/_/g, '/');
 
     const rawData = window.atob(base64);
     const outputArray = new Uint8Array(rawData.length);
-    const outputData = outputArray.map((output, index) => rawData.charCodeAt(index));
 
-    return outputData;
+    for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+    }
+
+    return outputArray;
 };
+
 
 const subscribe = registration => {
     registration.pushManager.getSubscription()

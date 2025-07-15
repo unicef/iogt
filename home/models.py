@@ -136,7 +136,6 @@ class HomePage(Page, PageUtilsMixin, TitleIconMixin):
             current_locale = Locale.get_default()
         # Get the true root of the Wagtail tree (depth=1)
         true_root = Page.get_first_root_node()
-        print('true_root', true_root)
         # Find the localized "home" page (like EnglishMainPage, ArabicMainPage)
         localized_home = None
         for page in true_root.get_children().live():
@@ -146,16 +145,13 @@ class HomePage(Page, PageUtilsMixin, TitleIconMixin):
             ):
                 localized_home = page
                 break
-        print('localized_home', localized_home)
         # Optional fallback to default locale
         if not localized_home:
             fallback_locale = Locale.get_default()
-            print('fallback_locale', fallback_locale)
             for page in true_root.get_children().live():
                 if hasattr(page, 'locale') and page.locale == fallback_locale and page.slug != "home":
                     localized_home = page
                     break
-        print('default_localized_home', localized_home)
 
         # Find the localized BannerIndexPage (Banner Folder)
         banner_index = None
@@ -593,7 +589,6 @@ class Article(AbstractArticle):
 
     def publish(self, *args, **kwargs):
         was_published = super().publish(*args, **kwargs)
-        print('in-publish-fn', was_published)
         # Trigger Celery notification task
         send_signup_notifications.delay(self.id, "article")
 
@@ -629,14 +624,6 @@ class OfflineContentIndexPage(AbstractArticle):
 class BannerIndexPage(Page):
     parent_page_types = ['home.HomePage']
     subpage_types = ['home.BannerPage']
-
-    # def get_context(self, request):
-    #     print('testing........................')
-    #     context = super().get_context(request)
-    #     context['banners'] = self.get_children().live().order_by('path')  # important!
-    #     print('context', context)
-    #     return context
-    #
 
 class BannerPage(Page, PageUtilsMixin):
     parent_page_types = ['home.BannerIndexPage']

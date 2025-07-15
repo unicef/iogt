@@ -5,6 +5,7 @@ from django.utils.timezone import now
 from wagtail.fields import RichTextField
 from iogt.settings.base import AUTH_USER_MODEL
 from django.contrib.auth import get_user_model
+from notifications.models import Notification
 @register_snippet
 class UserNotificationTemplate(models.Model):
     NOTIFICATION_TYPES = [
@@ -79,3 +80,8 @@ class NotificationLog(models.Model):
 
     def __str__(self):
         return f"{self.notification_key} → {self.user.username} [{self.state}]"
+
+class NotificationMeta(models.Model):
+    notification = models.OneToOneField(Notification, on_delete=models.CASCADE, related_name='meta')
+    is_clicked = models.BooleanField(default=False)
+

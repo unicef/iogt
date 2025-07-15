@@ -14,35 +14,22 @@ def send_signup_notifications(id, notification_type):
         try:
             if notification_type == 'signup':
                 sender = User.objects.get(id=id)
-                print('sender', sender)
             elif notification_type == 'article':
-                print('notification_type-article-id', id)
                 sender = Article.objects.get(id=id)
-                print('sender', sender)
             elif notification_type == 'survey':
-                print('notification_type-survey-id', id)
                 sender = Survey.objects.get(id=id)
-                print('sender', sender)
         except User.DoesNotExist:
-            print(f"User with ID {id} not found")
             return
         template = UserNotificationTemplate.objects.filter(active=True, type=notification_type).latest("updated_at")
-        print('template', template)
-        print('preferences', NotificationPreference.objects.filter(receive_notifications=True))
         for notification_preference in NotificationPreference.objects.filter(receive_notifications=True):
             try:
-                print('notification_preference record:-', notification_preference)
-                print('tags-name from notification_preference record:-', list(notification_preference.content_tags.values_list("name", flat=True)))
-                print('notification_type value', notification_type.capitalize())
                 if (notification_type.capitalize()) not in list(notification_preference.content_tags.values_list("name", flat=True)):
-                    print('if block', notification_preference.user)
                     NotificationLog.objects.create(
                         user=notification_preference.user,
                         notification_key=template.title,
                         state="type"
                     )
                 else:
-                    print('sending notification to user:-', notification_preference.user)
                     notify.send(
                         sender=sender,
                         url='www.google.com',

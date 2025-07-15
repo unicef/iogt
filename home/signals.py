@@ -19,5 +19,4 @@ def update_article_feedback_metrics(sender, instance, **kwargs):
 @receiver(page_published)
 def trigger_article_notification(sender, instance, **kwargs):
     if isinstance(instance, Article):
-        print("Article published:", instance.title)
         send_signup_notifications.delay(instance.id, 'article')

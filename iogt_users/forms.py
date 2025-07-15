@@ -50,9 +50,6 @@ class AccountSignupForm(SignupForm):
 
     def save(self, request):
         user = super().save(request)
-        # 🔁 Run this logic in background
-        print('user', user)
-        print("Sending task to Celery...")
         send_signup_notifications.delay(user.id, 'signup')
         return user
 

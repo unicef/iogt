@@ -2,21 +2,32 @@
 {% block content %}
 
 <div class="notification-header">
-    <h2>All Notifications</h2>
+  <h2>All Notifications</h2>
 </div>
 <div id="notifications-list">
   {% for n in notifications %}
-  <a href="{{ n.data.url|default:'#' }}" class="notification-item {% if n.unread %}unread{% else %}read{% endif %}" data-id="{{ n.id }}">
-    <div class="notification-body">
-    <p class="notification-text mb-1">
-        {{ n.verb }}
-        {% if n.unread %}<span class="unread-dot"></span>{% endif %}
-    </p>
-    <small style="color: #6c757d;">{{ n.timestamp|timesince }} ago</small>
-    </div>
-  </a>
+    {% if n.data.url %}
+      <a href="{{ n.data.url }}" class="notification-item {% if n.is_clicked %}read{% else %}unread{% endif %}" data-id="{{ n.id }}">
+        <div class="notification-body">
+          <p class="notification-text mb-1">
+            {{ n.verb }}
+            {% if not n.is_clicked %}<span class="unread-dot"></span>{% endif %}
+          </p>
+          <small style="color: #6c757d;">{{ n.timestamp|timesince }} ago</small>
+        </div>
+      </a>
+    {% else %}
+      <div class="notification-item read" data-id="{{ n.id }}">
+        <div class="notification-body">
+          <p class="notification-text mb-1">
+            {{ n.verb }}
+          </p>
+          <small style="color: #6c757d;">{{ n.timestamp|timesince }} ago</small>
+        </div>
+      </div>
+    {% endif %}
   {% empty %}
-  <div class="text-center p-3" style="color: #6c757d;">No notifications yet.</div>
+    <div class="text-center p-3" style="color: #6c757d;">No notifications yet.</div>
   {% endfor %}
 </div>
 
