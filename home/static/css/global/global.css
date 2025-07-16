@@ -2174,8 +2174,15 @@ body.rtl {
 
 .notification-text {
   margin: 0;
-  font-size: 14px;
+  font-size: 0.8rem;
   line-height: 1.4;
+}
+
+.notification-title {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #000;
+  margin-bottom: 4px;
 }
 
 .notification-empty {
