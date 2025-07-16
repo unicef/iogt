@@ -4,6 +4,8 @@ from wagtail.contrib.modeladmin.views import CreateView
 from webpush import send_user_notification
 from notifications.signals import notify
 from notifications.models import Notification
+
+
 class CreateNotificationView(CreateView):
     def form_valid(self, form):
         payload = form.cleaned_data.copy()
@@ -37,5 +39,4 @@ class CreateNotificationView(CreateView):
                         "notification_id": notif_instance.id
                     },
                     ttl=1000)
-
         return super().form_valid(form)

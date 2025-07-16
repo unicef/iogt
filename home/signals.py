@@ -3,7 +3,7 @@ from django.dispatch import receiver
 from .models import ArticleFeedback
 from wagtail.signals import page_published
 from .models import Article
-from user_notifications.tasks import send_signup_notifications
+from user_notifications.tasks import send_app_notifications
 
 
 @receiver(post_save, sender=ArticleFeedback)
@@ -19,4 +19,5 @@ def update_article_feedback_metrics(sender, instance, **kwargs):
 @receiver(page_published)
 def trigger_article_notification(sender, instance, **kwargs):
     if isinstance(instance, Article):
-        send_signup_notifications.delay(instance.id, 'article')
+        send_app_notifications.delay(instance.id, 'article')
+

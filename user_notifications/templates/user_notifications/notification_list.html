@@ -16,7 +16,7 @@
         {% if not n.is_clicked %}<span class="unread-dot"></span>{% endif %}
       </p>
       <p class="notification-text mb-1">
-        {{ n.description }}
+        {{ n.description | safe }}
       </p>
       <small style="color: #6c757d; font-size: 0.8rem;">{{ n.timestamp|timesince }} ago</small>
     </div>
@@ -29,7 +29,7 @@
         {{ n.verb }}
       </p>
       <p class="notification-text mb-1">
-        {{ n.description }}
+        {{ n.description | safe }}
       </p>
       <small style="color: #6c757d; font-size: 0.8rem;">{{ n.timestamp|timesince }} ago</small>
     </div>

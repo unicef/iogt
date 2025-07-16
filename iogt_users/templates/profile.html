@@ -10,83 +10,25 @@
 {% endblock %}
 
 {% block allauth_content %}
+
     {% if user.username %}
         <h1 class="title profile__title">
             {% blocktranslate trimmed with username=user.username %}
                 Hey, {{ username }}
             {% endblocktranslate %}
             <span class="profile__icon">{{ user.username | first | upper }}</span>
-            {% if request.user.is_authenticated  %}
-                <div id="notif-banner" style="
-                    position: fixed;
-                    bottom: 20px;
-                    left: 20px;
-                    background: #f9f9f9;
-                    padding: 20px;
-                    border: 1px solid #ccc;
-                    border-radius: 10px;
-                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                    max-width: 320px;
-                    z-index: 1000;
-                    font-family: sans-serif;
-                    font-size: 14px;
-                ">
-                <p style="margin-bottom: 10px;"><strong>Wouldss you like to enable desktop notifications?</strong></p>
 
-                <label for="language-select" style="display: block; margin-top: 10px;">Preferred Language:</label>
-                <select id="language-select" style="width: 100%; padding: 5px; margin-bottom: 10px;">
-                    {% for locale in available_languages %}
-                        <option value="{{ locale.language_code }}">{{ locale.get_display_name }}</option>
-                    {% endfor %}
-                </select>
-
-            <label for="tag-select" style="display: block; margin-top: 10px;">Topics You're Interested In:</label>
-            <select id="tag-select" multiple size="4" style="width: 100%; padding: 5px; margin-bottom: 10px;">
-                {% for tag in notification_tags %}
-                    <option value="{{ tag.id }}">{{ tag.name }}</option>
-                {% endfor %}
-            </select>
-
-            <div style="text-align: right;">
-                <button onclick="setNotificationPref(true)" style="padding: 5px 10px; margin-right: 8px;">Yes</button>
-                <button onclick="setNotificationPref(false)"  style="padding: 5px 10px;">No</button>
-            </div>
-        </div>
-            {% endif %}
         </h1>
  {% endif %}
      {# Show notification banner only if preference is not yet set #}
     <div class="profile__btns">
+        {% url 'notification_settings' as notify_url %}
+        {% primary_button title='Notification Preference' href=notify_url icon_path='icons/arrow_icon_left.svg' extra_classnames='logout-btn' %}
         {% url 'account_change_password' as change_password_url %}
         {% primary_button title='Change Digital Pin' href=change_password_url icon_path='icons/lock.svg' extra_classnames='change-digital-pin' %}
 
         {% url 'account_logout' as logout_url %}
         {% primary_button title='Log out' href=logout_url icon_path='icons/arrow_icon_left.svg' extra_classnames='logout-btn' %}
     </div>
-
-<script>
-function setNotificationPref(choice) {
-    const language = document.getElementById('language-select').value;
-    const selectedTags = Array.from(document.getElementById('tag-select').selectedOptions).map(o => o.value);
-    alert(choice)
-    console.log('language', language, selectedTags)
-  fetch("{% url 'save_notification_preference' %}", {
-    method: "POST",
-    headers: {
-      "X-CSRFToken": "{{ csrf_token }}",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ choice: choice,
-      language: language,
-      tags: selectedTags
-     }),
-  }).then((res) => {
-    if (res.ok) {
-        console.log('response', res)
-      document.getElementById("notif-banner").style.display = "none";
-    }
-  });
-}
-</script>
 
 {% endblock %}

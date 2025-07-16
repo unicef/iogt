@@ -77,6 +77,7 @@ class NotificationLog(models.Model):
     state = models.CharField(max_length=20, choices=STATE_CHOICES, default='sent')
     received_at = models.DateTimeField(auto_now_add=True)
     error_message = models.TextField(blank=True, null=True)
+    tags = models.CharField(max_length=255)
 
     def __str__(self):
         return f"{self.notification_key} → {self.user.username} [{self.state}]"

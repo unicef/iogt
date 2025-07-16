@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from wagtail.users.forms import UserEditForm as WagtailUserEditForm, \
     UserCreationForm as WagtailUserCreationForm
 from user_notifications.models import UserNotificationTemplate
-from user_notifications.tasks import send_signup_notifications
+from user_notifications.tasks import send_app_notifications
 
 from .fields import IogtPasswordField
 from .models import User
@@ -50,7 +50,10 @@ class AccountSignupForm(SignupForm):
 
     def save(self, request):
         user = super().save(request)
-        send_signup_notifications.delay(user.id, 'signup')
+        # 🔁 Run this logic in background
+        print('user', user)
+        print("Sending task to Celery...")
+        send_app_notifications.delay(user.id, 'signup')
         return user
 
     def clean_username(self):

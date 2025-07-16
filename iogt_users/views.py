@@ -17,20 +17,41 @@ from iogt import settings
 from email_service.mailjet_email_sender import send_email_via_mailjet
 from user_notifications.models import NotificationPreference, NotificationTag
 
-@method_decorator(login_required, name='dispatch')
-class UserDetailView(TemplateView):
-    template_name = 'profile.html'
+
+class UserNotificationView(TemplateView):
+    template_name = 'user_notification.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        print('authenticated_user',  self.request.user.is_authenticated)
         if self.request.user.is_authenticated:
-            context['notification_preference'] = NotificationPreference.objects.filter(user=self.request.user).first()
+            notification_pref = NotificationPreference.objects.filter(user=self.request.user).first()
+            context['notification_preference'] = notification_pref
+            context['selected_tag_ids'] = list(
+                notification_pref.content_tags.values_list('id', flat=True)
+            ) if notification_pref else []
+            context['selected_language_code'] = (
+                notification_pref.preferred_language
+                if notification_pref and notification_pref.preferred_language else 'en')
         else:
             context['notification_preference'] = None
         context['notification_tags'] = NotificationTag.objects.all()
         context['available_languages'] = Locale.objects.all()
         context['user'] = self.request.user
+        print('tags', context['notification_tags'])
+        print('languages', context['selected_language_code'])
+        print('available_languages', context['available_languages'])
         return context
+
+
+@method_decorator(login_required, name='dispatch')
+class UserDetailView(TemplateView):
+    template_name = 'profile.html'
+
+    def get_context_data(self, **kwargs):
+        return {'user': self.request.user}
+
+
 
 
 @method_decorator(login_required, name='dispatch')

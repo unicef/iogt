@@ -1,0 +1,120 @@
+{% extends 'account/base.html' %}
+{% load i18n static image_tags generic_components %}
+
+{% block title %}{% translate "Profile" %}{% endblock %}
+
+
+{% block content %}
+{% if request.user.is_authenticated  %}
+    <h1>{% translate "Notification Preference" %}</h1>
+    <div class="notification-confirmation"><strong>{% translate "Would you like to enable notifications?" %}</strong>
+        <button id="yes_button" onclick="setNotificationPref(true)" >Yes
+        </button>
+        <button id="no_button" onclick="setNotificationPref(false)">No</button>
+    </div>
+    <label for="language-select" style="display: block; margin-top: 10px;">{% translate "Preferred Language:" %}</label>
+    <select id="language-select" style="width: 100%; padding: 5px; margin-bottom: 10px;">
+        {% for locale in available_languages %}
+        <option value="{{ locale.language_code }}" {% if locale.language_code == selected_language_code %} selected
+                {% endif %}>{{ locale.get_display_name }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <label for="tag-select" style="display: block; margin-top: 10px;">Topics You're Interested In:</label>
+    <select id="tag-select" multiple size="4" style="width: 100%; padding: 5px; margin-bottom: 10px;">
+        {% for tag in notification_tags %}
+        <option value="{{ tag.id }}"
+                {% if tag.id in selected_tag_ids %}selected{% endif %}>
+            {{ tag.name }}
+        </option>
+        {% endfor %}
+    </select>
+
+{% endif %}
+
+
+
+{% if request.user.is_authenticated  %}
+<!--<div id="notif-banner" style="-->
+<!--                    position: fixed;-->
+<!--                    bottom: 200px;-->
+<!--                    center: 20px;-->
+<!--                    background: #f9f9f9;-->
+<!--                    padding: 20px;-->
+<!--                    border: 1px solid #ccc;-->
+<!--                    border-radius: 10px;-->
+<!--                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);-->
+<!--                    max-width: 520px;-->
+<!--                    z-index: 1000;-->
+<!--                    font-family: sans-serif;-->
+<!--                    font-size: 14px;-->
+<!--                ">-->
+<!--</div>-->
+
+{% endif %}
+
+
+<script>
+function setNotificationPref(choice) {
+    const yesBtn = document.getElementById('yes_button');
+    const noBtn = document.getElementById('no_button');
+    yesBtn.classList.remove('highlight-yes', 'highlight-no');
+    noBtn.classList.remove('highlight-yes', 'highlight-no');
+    // Apply correct highlight
+    if (choice) {
+        yesBtn.classList.add('highlight-yes');
+    } else {
+        noBtn.classList.add('highlight-no');
+    }
+    if (choice == false)
+    {
+        const tagSelect = document.getElementById('tag-select');
+        const languageSelect = document.getElementById('language-select');
+        Array.from(tagSelect.options).forEach(option => {
+            option.selected = false;
+        });
+        languageSelect.value = 'en';
+    }
+   const selectedTags = Array.from(document.getElementById('tag-select').selectedOptions).map(o => o.value);
+   const language = document.getElementById('language-select').value;
+   console.log('language', language, selectedTags)
+  fetch("{% url 'save_notification_preference' %}", {
+    method: "POST",
+    headers: {
+      "X-CSRFToken": "{{ csrf_token }}",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ choice: choice,
+      language: language,
+      tags: selectedTags
+     }),
+  }).then((res) => {
+    if (res.ok) {
+        console.log('response', res)
+<!--      document.getElementById("notif-banner").style.display = "none";-->
+    }
+  });
+}
+
+  window.onload = function () {
+    const currentPref = {{ notification_preference.receive_notifications|yesno:"true,false" }};  // assuming context has this
+    console.log('currentPref', currentPref)
+    if (currentPref === true) {
+      document.getElementById('yes_button').classList.add('highlight-yes');
+    } else if (currentPref === false) {
+      document.getElementById('no_button').classList.add('highlight-no');
+    }
+  };
+
+
+
+
+
+
+
+
+
+
+</script>
+{% endblock %}

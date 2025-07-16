@@ -56,7 +56,7 @@ from home.utils import (
 )
 import iogt.iogt_globals as globals_
 from django.db.models import Avg, Count
-from user_notifications.tasks import send_signup_notifications
+# from user_notifications.tasks import send_signup_notifications
 User = get_user_model()
 logger = logging.getLogger(__name__)
 
@@ -587,12 +587,15 @@ class Article(AbstractArticle):
     def compute_number_of_reviews(self):
         return self.number_of_reviews if self.number_of_reviews else 0
 
-    def publish(self, *args, **kwargs):
-        was_published = super().publish(*args, **kwargs)
-        # Trigger Celery notification task
-        send_signup_notifications.delay(self.id, "article")
 
-        return was_published
+    # def publish(self, *args, **kwargs):
+    #     was_published = super().publish(*args, **kwargs)
+    #     print('in-publish-fn', was_published)
+    #     # Trigger Celery notification task
+    #     send_signup_notifications.delay(self.id, "article")
+    #
+    #     return was_published
+
 
 
 class ArticleFeedback(models.Model):

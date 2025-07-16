@@ -2228,3 +2228,27 @@ body.rtl {
     width: 100%;
   }
 }
+
+.highlight-yes {
+background-color: #4caf50 !important;
+color: white !important;
+}
+.highlight-no {
+background-color: #f44336 !important;
+color: white !important;
+}
+#yes_button, #no_button {
+    background-color: #e0e0e0;
+    color: black;
+    border: none;
+    cursor: pointer;
+    width: 92px;
+    height: 40 px;
+    height: 40px;
+	margin-left: 10px;
+}
+div.notification-confirmation{
+	margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}

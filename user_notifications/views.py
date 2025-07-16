@@ -92,6 +92,8 @@ def save_notification_preference(request):
         if tag_ids:
             tags = NotificationTag.objects.filter(id__in=tag_ids)
             preference.content_tags.set(tags)
+        else:
+            preference.content_tags.set(tag_ids)
 
         return JsonResponse({'status': 'ok'})
     return JsonResponse({'error': 'unauthorized'}, status=403)
