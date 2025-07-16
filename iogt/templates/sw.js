@@ -120,24 +120,44 @@ self.addEventListener('fetch', event => {
 
     // ✅ Handle GET Requests (Serve from Cache when Offline)
     event.respondWith(
-        caches.match(request).then(cachedResponse => {
-            if (cachedResponse) {
-                console.log("✅ Serving from cache:", request.url);
-                return cachedResponse;
-            }
-
-            return fetch(request)
-                .then(networkResponse => {
-                    return caches.open('iogt').then(cache => {
-                        cache.put(request, networkResponse.clone());
-                        return networkResponse;
-                    });
-                })
-                .catch(() => {
-                    return new Response('Offline - No cached content available', { status: 503 });
-                });
-        })
+        fetch(request.clone(), { cache: 'no-store' })      // 1️⃣ Try the network first
+            .then(networkResponse => {
+                // 2️⃣ Optionally save a copy for offline use
+                //    Only cache successful, basic (same‑origin) responses
+                if (networkResponse.ok && networkResponse.type === 'basic') {
+                    caches.open('iogt')
+                          .then(cache => cache.put(request, networkResponse.clone()))
+                          .catch(err => console.warn('❌ Cache put failed', err));
+                }
+                return networkResponse;                     // 3️⃣ Always return the live response
+            })
+            .catch(() => {                                  // 4️⃣ Network failed → offline fallback
+                return caches.match(request)                //    • Serve from cache if we have it
+                       .then(cached => cached ||            //    • …otherwise show a 503
+                             new Response('Offline', { status: 503 }));
+            })
     );
+
+    // ✅ Handle GET Requests (Serve from Cache when Offline)
+    // event.respondWith(
+    //     caches.match(request).then(cachedResponse => {
+    //         if (cachedResponse) {
+    //             console.log("✅ Serving from cache:", request.url);
+    //             return cachedResponse;
+    //         }
+
+    //         return fetch(request)
+    //             .then(networkResponse => {
+    //                 return caches.open('iogt').then(cache => {
+    //                     cache.put(request, networkResponse.clone());
+    //                     return networkResponse;
+    //                 });
+    //             })
+    //             .catch(() => {
+    //                 return new Response('Offline - No cached content available', { status: 503 });
+    //             });
+    //     })
+    // );
 });
 
 // ✅ Background Sync for Form Submissions

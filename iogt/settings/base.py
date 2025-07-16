@@ -228,6 +228,9 @@ WAGTAILADMIN_BASE_URL = os.getenv('BASE_URL', '')
 
 SITE_ID = 1
 
+#Notifications
+DJANGO_NOTIFICATIONS_CONFIG = { 'USE_JSONFIELD': True}
+
 # Comments
 COMMENTS_APP = 'django_comments_xtd'
 COMMENTS_XTD_MAX_THREAD_LEVEL = 1

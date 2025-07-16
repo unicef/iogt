@@ -99,22 +99,31 @@
         fetch(url).then(response => response.json()).then(data => { });
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-        const notifLinks = document.querySelectorAll('.notification-item');
-        notifLinks.forEach(el => {
-            el.addEventListener('click', function (e) {
-                const notifId = this.getAttribute("data-id");
-                const notifUrl = this.getAttribute("href");
+    function handleNotificationClick(event, element) {
+        if (element.classList.contains('clicked')) {
+            return;      // no fetch, no preventDefault
+        }
+        const notifId = element.getAttribute("data-id");
+        const notifUrl = element.getAttribute("href");
+        const clickUrlTemplate = "{% url 'user_notifications:mark_notification_clicked' 0 %}";
+        const clickUrl = clickUrlTemplate.replace("0", notifId);
 
-                if (notifUrl && notifUrl !== "#") {
-                    // Call click-marking endpoint only for notifications with a valid URL
-                    fetch(`/notifications/mark-clicked/${notifId}/`, {
-                        method: "POST"
-                    }).then(res => res.json()).then(console.log);
-                }
+        if (notifUrl && notifUrl !== "#") {
+            event.preventDefault();
+
+            fetch(clickUrl, {
+                method: "POST",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+            }).then(() => {
+                window.location.href = notifUrl;
+            }).catch(err => {
+                console.warn("Error marking notification clicked:", err);
+                window.location.href = notifUrl;
             });
-        });
-    });
+        }
+    }
 
 
 </script>

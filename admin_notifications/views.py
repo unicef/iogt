@@ -16,7 +16,7 @@ class CreateNotificationView(CreateView):
                     recipient=user,
                     verb=payload.get('head', 'New Notification'),
                     description=payload.get('body', ''),
-                    data=payload
+                    url=payload.get("url", "/")
                 )
 
                 # 2. Get latest Notification for user (created just now)

@@ -2157,9 +2157,9 @@ body.rtl {
   background-color: #f1f5fa;
 }
 
-.notification-item.unread {
-  background-color: #e9f3ff; /* Light blue for unread */
-  font-weight: 600;
+.notification-item.unread, .notification-item.not_clicked {
+  background-color: #e9f3ff !important; /* Light blue for unread */
+  font-weight: 600 !important;
 }
 
 .notification-item.read {
