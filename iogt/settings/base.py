@@ -15,11 +15,19 @@ from iogt.settings.profanity_settings import (  # noqa: F401
     PROFANITIES_LIST
 )
 
+# Monkey patch for deprecated ugettext_lazy used in third-party packages
+import django.utils.translation
+from django.utils.translation import gettext_lazy
+
+# Patch only if missing (for Django 4+ compatibility with old packages)
+if not hasattr(django.utils.translation, 'ugettext_lazy'):
+    django.utils.translation.ugettext_lazy = gettext_lazy
+
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 INSTALLED_APPS = [
-     'allauth',
+    'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'comments',
@@ -60,7 +68,7 @@ INSTALLED_APPS = [
     'wagtail',
     'wagtail.admin',
     'wagtail.contrib.forms',
-    'wagtail.contrib.modeladmin',
+    
     'wagtail.contrib.redirects',
     'wagtail.contrib.settings',
     'wagtail.documents',
@@ -70,10 +78,8 @@ INSTALLED_APPS = [
     'wagtail.sites',
     'wagtail.snippets',
     'wagtail.users',
-    'wagtail_localize',
     'wagtail_localize.locales',
     'wagtail_transfer',
-    'wagtailcache',
     'wagtailmarkdown',
     'wagtailmedia',
     'wagtailmenus',
@@ -82,10 +88,12 @@ INSTALLED_APPS = [
     'admin_login',
     'email_service',
 ]
+#'wagtail-modeladmin',
+#'wagtail_localize',
 
 # The order of middleware is very important. Take care when modifying this list.
 MIDDLEWARE = [
-    'wagtailcache.cache.UpdateCacheMiddleware',
+    #'wagtailcache.cache.UpdateCacheMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -101,7 +109,10 @@ MIDDLEWARE = [
     'external_links.middleware.RewriteExternalLinksMiddleware',
     'iogt.middleware.GlobalDataMiddleware',
     # 'admin_login.middleware.CustomAdminLoginRequiredMiddleware',
-    'wagtailcache.cache.FetchFromCacheMiddleware',
+    #'wagtailcache.cache.FetchFromCacheMiddleware',
+    'wagtail.contrib.statcache.middleware.StatCacheMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',  # Must be first
+    'django.middleware.cache.FetchFromCacheMiddleware',  
 ]
 
 # Prevent Wagtail's built in menu from showing in Admin > Settings

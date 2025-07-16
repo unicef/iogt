@@ -25,7 +25,8 @@ from wagtail.admin.panels import (
     ObjectList,
     TabbedInterface,
 )
-from wagtail.contrib.settings.models import BaseSetting
+# from wagtail.contrib.settings.models import BaseSetting
+from wagtail.contrib.settings.models import BaseSiteSetting as BaseSetting
 from wagtail.contrib.settings.registry import register_setting
 from wagtail import blocks
 from wagtail.fields import StreamField
