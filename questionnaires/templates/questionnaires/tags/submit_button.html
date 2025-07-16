@@ -13,8 +13,9 @@
 <script>
     const form = document.getElementById('survey-form');
     const submitButton = document.getElementById('submit-btn');
-
+    
     form.addEventListener('submit', function(event) {
+        showToast("Submitting...");
         submitButton.setAttribute('disabled', true)
         submitButton.innerHTML = '<span>{% translate submit_button_text %}...</span>';
     });
