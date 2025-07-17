@@ -78,6 +78,7 @@ INSTALLED_APPS = [
     'wagtail.sites',
     'wagtail.snippets',
     'wagtail.users',
+    'wagtail_localize',
     'wagtail_localize.locales',
     'wagtail_transfer',
     'wagtailmarkdown',
@@ -110,9 +111,10 @@ MIDDLEWARE = [
     'iogt.middleware.GlobalDataMiddleware',
     # 'admin_login.middleware.CustomAdminLoginRequiredMiddleware',
     #'wagtailcache.cache.FetchFromCacheMiddleware',
-    'wagtail.contrib.statcache.middleware.StatCacheMiddleware',
+    # 'wagtail.contrib.statcache.middleware.StatCacheMiddleware',
     'django.middleware.cache.UpdateCacheMiddleware',  # Must be first
-    'django.middleware.cache.FetchFromCacheMiddleware',  
+    'django.middleware.cache.FetchFromCacheMiddleware',
+    "allauth.account.middleware.AccountMiddleware",  # 👈 Add this here
 ]
 
 # Prevent Wagtail's built in menu from showing in Admin > Settings

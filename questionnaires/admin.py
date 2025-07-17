@@ -1,5 +1,5 @@
-from wagtail.contrib.modeladmin.helpers import ButtonHelper
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
+from wagtail_modeladmin.helpers import ButtonHelper
+from wagtail_modeladmin.options import ModelAdmin, modeladmin_register
 
 from .models import Survey, Poll, Quiz
 

@@ -15,7 +15,6 @@ from wagtail.contrib.forms.utils import get_forms_for_user
 from wagtail.contrib.forms.views import (
     SubmissionsListView,
     FormPagesListView as WagtailFormPagesListView,
-    SafePaginateListView,
 )
 from wagtail.models import Page
 from xlsxwriter.workbook import Workbook
@@ -23,6 +22,9 @@ from xlsxwriter.workbook import Workbook
 from questionnaires.forms import GenerateDashboardForm
 from questionnaires.models import UserSubmission, SurveyFormField, PollFormField, QuizFormField
 from questionnaires.superset.utils import DashboardGenerator
+# SafePaginateListView was an internal class removed in Wagtail 5+
+# Replacing it with ListView for compatibility
+from django.views.generic import ListView
 
 User = get_user_model()
 
@@ -48,7 +50,7 @@ class CustomSubmissionsListView(SubmissionsListView):
         return super().get_queryset().select_related('page', 'user')
 
 
-class FormDataPerUserView(SpreadsheetExportMixin, SafePaginateListView):
+class FormDataPerUserView(SpreadsheetExportMixin, ListView):
     """
     This view is taking inspiration from `wagtail.contrib.forms.views.FormPagesListView` and
     `wagtail.contrib.forms.views.SubmissionsListView`

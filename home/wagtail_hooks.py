@@ -11,8 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from wagtail import __version__
 from wagtail.admin import widgets as wagtailadmin_widgets
 from wagtail.admin.menu import MenuItem, SubmenuMenuItem
-from wagtail.contrib.modeladmin.menus import SubMenu
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
+from wagtail_modeladmin.options import ModelAdmin, modeladmin_register
 from wagtail import hooks
 from wagtail.models import Page, PageViewRestriction
 from wagtailcache.cache import clear_cache
@@ -21,8 +20,9 @@ from home.models import (BannerIndexPage, FooterIndexPage, LocaleDetail,
                          Section, SectionIndexPage, BannerPage, HomePageBanner, HomePage)
 from home.translatable_strings import translatable_strings
 from translation_manager.models import TranslationEntry
-from wagtail.core.signals import page_published
+from wagtail.signals import page_published
 from django.dispatch import receiver
+from wagtail.admin.menu import Menu
 
 
 @hooks.register('after_publish_page')
@@ -138,6 +138,31 @@ def page_listing_buttons(page, page_perms, is_parent=False, next_url=None):
         )
 
 
+# @hooks.register("register_admin_menu_item")
+# def about():
+#     items = [
+#         MenuItem(
+#             label=f"IoGT {settings.SITE_VERSION}",
+#             url=f"http://github.com/unicef/iogt/releases/tag/{settings.SITE_VERSION}",
+#         ),
+#         MenuItem(
+#             label=f"Wagtail {__version__}",
+#             url=f"http://github.com/wagtail/wagtail/releases/tag/v{__version__}"
+#         )
+#     ]
+
+#     # NOTE:
+#     # Removed `from wagtail_modeladmin.menus import SubMenu` as `SubMenu` is no longer available in the latest wagtail-modeladmin.
+#     # Used a direct list of MenuItems in SubmenuMenuItem instead.
+#     # This preserves the "About" submenu with IoGT and Wagtail version links.
+#     # If future updates break this, consider defining a lightweight `SubMenu` wrapper or refactor to top-level items.
+#     return SubmenuMenuItem(
+#         label="About",
+#         menu=items,
+#         icon_name="info-circle",
+#         order=999999,
+#     )
+
 @hooks.register("register_admin_menu_item")
 def about():
     items = [
@@ -150,10 +175,9 @@ def about():
             url=f"http://github.com/wagtail/wagtail/releases/tag/v{__version__}"
         )
     ]
-
     return SubmenuMenuItem(
         label="About",
-        menu=SubMenu(items),
+        menu=Menu(register_hook_name=None, items=items),
         icon_name="info-circle",
         order=999999,
     )

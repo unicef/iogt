@@ -1,4 +1,4 @@
-from wagtail.contrib.modeladmin.views import CreateView
+from wagtail_modeladmin.views import CreateView
 from webpush import send_user_notification
 
 

@@ -6,14 +6,15 @@ django-contrib-comments
 django-comments-xtd==2.10.7
 django-extensions
 django-filter~=25.1
-django-health-check
+django-health-check==3.20.0
 django-redis
-django-sass-processor
+django-sass-processor==1.4.2
 django-translation-manager
 django-webpush
 django~=5.2.4
 djangorestframework-simplejwt
 djangorestframework>=3.12,<3.16
+django-debug-toolbar==5.2.0
 drf-yasg
 elasticsearch
 libsass
@@ -24,12 +25,12 @@ redis
 tqdm
 wagtail-markdown==0.12.1
 wagtail-modeladmin
-wagtail-localize
+wagtail-localize==1.12.2
 wagtail~=7.0
 wagtail-cache==3.0.0
-wagtailmedia
-wagtailmenus
-git+https://github.com/jmrichardson/wagtail-svg.git@main#egg=wagtailsvg
-# branch: iogt, tag: v0.8.5-iogt.1
-wagtail-transfer @ https://github.com/IDEMSInternational/wagtail-transfer/archive/52b57b364ebc9acddd412ee708f829b45763c9ab.zip
+wagtailmedia==0.16
+wagtailmenus==4.0.4
+wagtailsvg @ https://github.com/sachin-mehta/wagtailsvg/archive/905663a5dd6fd9a0ccbe5d5f30080867dc9a8665.zip
+wagtail-transfer
 whitenoise
+xlsxwriter==3.2.5

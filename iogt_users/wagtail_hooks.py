@@ -5,8 +5,8 @@ from django.contrib.auth import get_user_model
 from django.db.models import Prefetch
 from django.urls import reverse
 from django.utils import timezone
-from wagtail.contrib.modeladmin.helpers import ButtonHelper
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
+from wagtail_modeladmin.helpers import ButtonHelper
+from wagtail_modeladmin.options import ModelAdmin, modeladmin_register
 
 from home.models import SiteSettings
 from iogt_users.filters import GroupsFilter

@@ -4,7 +4,7 @@ from wagtail.models import Locale
 
 from home.models import Article, Section
 from iogt.settings.base import SEARCH_RESULTS_PER_PAGE
-from wagtail.search.models import Query
+# from wagtail.search.models import Query
 from questionnaires.models import Poll, Quiz, Survey
 
 
@@ -28,10 +28,15 @@ def search(request):
             search_results = search_group.objects.exclude(id__in=sandbox_page_ids).live().\
                 filter(locale=Locale.objects.get(language_code=request.LANGUAGE_CODE)).specific().search(search_query)
             search_results_count = search_results.count()
-            query = Query.get(search_query)
+            # Removed in Wagtail 6+: Query.add_hit() was used to log search query usage statistics in the admin.
+            # As of Wagtail 6 and later, this feature has been deprecated and the model `wagtail.search.models.Query` is no longer available.
+            # If analytics are still desired, consider implementing a custom `SearchAnalytics` model to log queries,
+            # or integrate with a third-party analytics platform like Google Analytics or Matomo.
+            # Example: log query, timestamp, and whether results were found for later analysis.
+            # query = Query.get(search_query)
 
-            # Record hit
-            query.add_hit()
+            # # Record hit
+            # query.add_hit()
         else:
             search_results = search_group.objects.none()
 
