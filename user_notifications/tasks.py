@@ -11,7 +11,7 @@ User = get_user_model()
 
 
 @shared_task
-def send_app_notifications(id, notification_type):
+def send_app_notifications(id, notification_type, url=None):
     from home.models import Article
     from questionnaires.models import Survey
     try:
@@ -52,13 +52,11 @@ def send_app_notifications(id, notification_type):
                     else:
                         notify.send(
                             sender=sender,
-                            url='www.google.com',
+                            url=url,
                             recipient=notification_preference.user,
                             verb=template.title,
                             description=template.message
                         )
-                        # send_user_notification(user=user, payload=json.dumps(template), ttl=1000)
-                        # raise Exception
                         NotificationLog.objects.create(
                             user=notification_preference.user,
                             notification_key=template.title,

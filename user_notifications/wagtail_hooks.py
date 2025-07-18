@@ -41,8 +41,9 @@ class NotificationLogAdmin(ModelAdmin):
     list_display = ("notification_key", "user", "state", "tags", "received_at")
     search_fields = ("notification_key", "user__username", "user__email", "tags")
 
+
 class NotificationsParentGroup(ModelAdminGroup):
-    menu_label= "Parent Notifications"
+    menu_label = "Notifications"
     menu_icon = "bell"
     items = (
         NotificationTagAdmin,

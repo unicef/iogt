@@ -91,10 +91,9 @@ function setNotificationPref(choice) {
      }),
   }).then((res) => {
     if (res.ok) {
-        console.log('response', res)
-<!--      document.getElementById("notif-banner").style.display = "none";-->
+           showToast(`✅ Preference saved successfully.`, "success");
     }
-  });
+  }).catch(err =>showToast(`❌ error: Could not save preference!`, "error"))
 }
 
   window.onload = function () {

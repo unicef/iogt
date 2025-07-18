@@ -38,9 +38,6 @@ class UserNotificationView(TemplateView):
         context['notification_tags'] = NotificationTag.objects.all()
         context['available_languages'] = Locale.objects.all()
         context['user'] = self.request.user
-        print('tags', context['notification_tags'])
-        print('languages', context['selected_language_code'])
-        print('available_languages', context['available_languages'])
         return context
 
 
