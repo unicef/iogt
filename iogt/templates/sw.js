@@ -93,14 +93,16 @@ self.addEventListener('fetch', event => {
     // ✅ Handle GET Requests (Serve from Cache when Offline)
     if (request.method === 'GET') {
         const reqClone = request.clone();
-        event.respondWith(
-            fetch(request.clone(), { cache: 'no-store' })      // 1️⃣ Try the network first
+                event.respondWith(
+            fetch(reqClone, { cache: 'no-store' })      // 1️⃣ Try the network first
                 .then(networkResponse => {
                     // 2️⃣ Optionally save a copy for offline use
+                    const responseClone = networkResponse.clone(); // ✅ Clone early
+                    const cacheRequest = new Request(request.url, { method: 'GET' });
                     //    Only cache successful, basic (same‑origin) responses
-                    if (networkResponse.ok && networkResponse.type === 'basic') {
-                        caches.open(CACHE_NAME)
-                            .then(cache => cache.put(request, networkResponse.clone()))
+                    if (networkResponse.ok && networkResponse.type === 'basic' && request.method === 'GET') {
+                        caches.open('iogt')
+                            .then(cache => cache.put(cacheRequest, responseClone))
                             .catch(err => console.warn('❌ Cache put failed', err));
                     }
                     return networkResponse;                     // 3️⃣ Always return the live response
