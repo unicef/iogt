@@ -30,7 +30,7 @@ wagtail~=7.0
 wagtail-cache==3.0.0
 wagtailmedia==0.16
 wagtailmenus==4.0.4
-wagtailsvg @ https://github.com/sachin-mehta/wagtailsvg/archive/905663a5dd6fd9a0ccbe5d5f30080867dc9a8665.zip
+wagtailsvg @ https://github.com/sachin-mehta/wagtailsvg/archive/3d2ecc67d993faeffd3251e88ad2e38b3265c0e4.zip
 wagtail-transfer
 whitenoise
 xlsxwriter==3.2.5

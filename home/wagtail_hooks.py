@@ -127,8 +127,7 @@ def global_admin_js():
 
 
 @hooks.register('register_page_listing_buttons')
-def page_listing_buttons(page, page_perms, is_parent=False, next_url=None):
-    # Using more menu's "Sort menu order" button from wagtail
+def page_listing_buttons(page, is_parent=False, next_url=None, user=None, **kwargs):
     if is_parent:
         yield wagtailadmin_widgets.PageListingButton(
             _('Sort child pages'),
