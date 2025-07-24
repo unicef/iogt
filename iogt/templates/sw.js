@@ -85,6 +85,7 @@ self.addEventListener("notificationclick", function (event) {
   if (notificationData.notification_id) {
     fetch(`/notifications/mark-clicked/${notificationData.notification_id}/`, {
       method: "POST",
+      "X-CSRFToken": "{{ csrf_token }}",
       headers: {
         "Content-Type": "application/json",
       },
@@ -172,32 +173,29 @@ self.addEventListener("fetch", (event) => {
     );
     return;
   }
-
+  if (request.method === 'GET') {
   // ✅ Handle GET Requests (Serve from Cache when Offline)
-  event.respondWith(
-    fetch(request.clone(), { cache: "no-store" }) // 1️⃣ Try the network first
-      .then((networkResponse) => {
-        // 2️⃣ Optionally save a copy for offline use
-        //    Only cache successful, basic (same‑origin) responses
-        if (networkResponse.ok && networkResponse.type === "basic") {
-          caches
-            .open("iogt")
-            .then((cache) => cache.put(request, networkResponse.clone()))
-            .catch((err) => console.warn("❌ Cache put failed", err));
-        }
-        return networkResponse; // 3️⃣ Always return the live response
-      })
-      .catch(() => {
-        // 4️⃣ Network failed → offline fallback
-        return caches
-          .match(request) //    • Serve from cache if we have it
-          .then(
-            (cached) =>
-              cached || //    • …otherwise show a 503
-              new Response("Offline", { status: 503 })
-          );
-      })
-  );
+       event.respondWith(
+                fetch(request.clone(), { cache: 'no-store' })      // 1️⃣ Try the network first
+                    .then(networkResponse => {
+                        // 2️⃣ Optionally save a copy for offline use
+                        const responseClone = networkResponse.clone(); // ✅ Clone early
+                        const cacheRequest = new Request(request.url, { method: 'GET' });
+                        //    Only cache successful, basic (same‑origin) responses
+                        if (networkResponse.ok && networkResponse.type === 'basic' && request.method === 'GET') {
+                            caches.open('iogt')
+                                .then(cache => cache.put(cacheRequest, responseClone))
+                                .catch(err => console.warn('❌ Cache put failed', err));
+                        }
+                        return networkResponse;                     // 3️⃣ Always return the live response
+                    })
+                    .catch(() => {                                  // 4️⃣ Network failed → offline fallback
+                        return caches.match(request)                //    • Serve from cache if we have it
+                            .then(cached => cached ||            //    • …otherwise show a 503
+                                new Response('Offline', { status: 503 }));
+                    })
+            );
+  }
 
   // ✅ Handle GET Requests (Serve from Cache when Offline)
   // event.respondWith(

@@ -14,6 +14,3 @@ class NotificationModelAdmin(ModelAdmin):
     menu_order = 601
     create_view_class = CreateNotificationView
 
-# Register with Wagtail admin
-if settings.PUSH_NOTIFICATION:
-    modeladmin_register(NotificationModelAdmin)

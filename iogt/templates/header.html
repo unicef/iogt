@@ -98,32 +98,35 @@
 
         fetch(url).then(response => response.json()).then(data => { });
     }
-
-    function handleNotificationClick(event, element) {
-        if (element.classList.contains('clicked')) {
-            return;      // no fetch, no preventDefault
-        }
-        const notifId = element.getAttribute("data-id");
-        const notifUrl = element.getAttribute("href");
-        const clickUrlTemplate = "{% url 'user_notifications:mark_notification_clicked' 0 %}";
-        const clickUrl = clickUrlTemplate.replace("0", notifId);
-
-        if (notifUrl && notifUrl !== "#") {
-            event.preventDefault();
-
-            fetch(clickUrl, {
-                method: "POST",
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}',
-                },
-            }).then(() => {
-                window.location.href = notifUrl;
-            }).catch(err => {
-                console.warn("Error marking notification clicked:", err);
-                window.location.href = notifUrl;
-            });
-        }
+function handleNotificationClick(event, element) {
+    event.preventDefault();
+    const notifId = element.getAttribute("data-id");
+    const notifUrl = element.getAttribute("data-url");
+    if (!notifUrl || notifUrl === "#") {
+        console.warn("❌ Invalid or missing notification URL:", notifUrl);
+        return;
     }
+    const clickUrlTemplate = "{% url 'user_notifications:mark_notification_clicked' 0 %}";
+    const clickUrl = clickUrlTemplate.replace("0", notifId);
+    element.classList.add('clicked');
+    fetch(clickUrl, {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": getCookie("csrftoken"),
+        },
+    }).then(() => {
+        window.location.href = notifUrl;  // or window.open(notifUrl, "_blank");
+    }).catch((err) => {
+        console.error("Error marking as clicked:", err);
+        window.location.href = notifUrl;
+    });
+}
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
 
 
 </script>

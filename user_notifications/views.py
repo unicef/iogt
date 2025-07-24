@@ -14,7 +14,8 @@ from .models import NotificationMeta, NotificationPreference, NotificationTag
 @login_required
 def latest_notifications(request):
     notifications = Notification.objects.filter(recipient=request.user).order_by('-timestamp')[:5]
-    
+    for n in notifications:
+        print('Notification ID:', n.id)
     meta_map = {
         meta.notification_id: meta.is_clicked
         for meta in NotificationMeta.objects.filter(notification__in=notifications)

@@ -23,6 +23,9 @@ from home.translatable_strings import translatable_strings
 from translation_manager.models import TranslationEntry
 from wagtail.core.signals import page_published
 from django.dispatch import receiver
+from iogt.utils import NotifyAndPublishMenuItem, notify_and_publish_view
+from .models import Article
+from django.urls import path
 
 
 @hooks.register('after_publish_page')
@@ -238,3 +241,15 @@ def create_home_page_banner(sender, instance, **kwargs):
     parent = parent.get_parent().specific
     if parent:
         HomePageBanner.objects.get_or_create(source=parent, banner_page=instance)
+
+
+@hooks.register('register_admin_urls')
+def register_custom_form_pages_list_view():
+    return [
+      path("notify-and-publish/<int:page_id>/", notify_and_publish_view, name="notify_and_publish"),
+  ]
+
+
+@hooks.register('register_page_action_menu_item')
+def register_notify_and_publish_menu_item():
+    return NotifyAndPublishMenuItem(order=100, allowed_models=Article)  #

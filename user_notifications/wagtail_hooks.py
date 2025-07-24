@@ -1,7 +1,7 @@
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin, ModelAdminGroup, modeladmin_register
 )
-from .models import NotificationLog, NotificationPreference, NotificationTag
+from .models import NotificationLog, NotificationPreference, NotificationTag, UserNotificationTemplate
 from admin_notifications.wagtail_hooks import NotificationModelAdmin
 
 class NotificationTagAdmin(ModelAdmin):
@@ -14,7 +14,7 @@ class NotificationTagAdmin(ModelAdmin):
 class NotificationPreferenceAdmin(ModelAdmin):
     model = NotificationPreference
     menu_label = "Notification Preferences"
-    menu_icon = "bell"
+    menu_icon = "user"
 
     def get_content_tags(self, obj):
         return ", ".join([tag.name for tag in obj.content_tags.all()])
@@ -25,14 +25,6 @@ class NotificationPreferenceAdmin(ModelAdmin):
     list_filter = ('preferred_language', 'content_tags')
 
 
-
-
-# class NotificationsGroup(ModelAdminGroup):
-#     menu_label = "User Notifications"
-#     menu_icon = "mail"
-#     menu_order = 200
-#     items = (NotificationTagAdmin, NotificationPreferenceAdmin)
-
 class NotificationLogAdmin(ModelAdmin):
     model = NotificationLog
     menu_label = "Notification Logs"
@@ -42,6 +34,13 @@ class NotificationLogAdmin(ModelAdmin):
     search_fields = ("notification_key", "user__username", "user__email", "tags")
 
 
+class UserNotificationTemplateAdmin(ModelAdmin):
+    model = UserNotificationTemplate
+    menu_label = "User Notification Template"
+    menu_icon = "tag"
+    list_display = ("title", "message", "active", "updated_at")
+
+
 class NotificationsParentGroup(ModelAdminGroup):
     menu_label = "Notifications"
     menu_icon = "bell"
@@ -49,8 +48,11 @@ class NotificationsParentGroup(ModelAdminGroup):
         NotificationTagAdmin,
         NotificationPreferenceAdmin,
         NotificationModelAdmin,
-        NotificationLogAdmin
+        NotificationLogAdmin,
+        UserNotificationTemplateAdmin
     )
+
+
 
 # class NotificationPreferenceAdmin(ModelAdmin):
 #     model = NotificationPreference

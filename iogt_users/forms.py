@@ -53,7 +53,7 @@ class AccountSignupForm(SignupForm):
         # 🔁 Run this logic in background
         print('user', user)
         print("Sending task to Celery...")
-        send_app_notifications.delay(user.id, 'signup')
+        send_app_notifications.delay(user.id, notification_type='signup')
         return user
 
     def clean_username(self):

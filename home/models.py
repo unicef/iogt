@@ -15,8 +15,8 @@ from django.utils.deconstruct import deconstructible
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 from modelcluster.contrib.taggit import ClusterTaggableManager
+from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from iogt.settings.base import WAGTAIL_CONTENT_LANGUAGES
-from modelcluster.fields import ParentalKey
 from rest_framework import status
 from taggit.models import TaggedItemBase
 from wagtail.admin.panels import (
@@ -56,7 +56,7 @@ from home.utils import (
 )
 import iogt.iogt_globals as globals_
 from django.db.models import Avg, Count
-# from user_notifications.tasks import send_signup_notifications
+from user_notifications.models import NotificationTag
 User = get_user_model()
 logger = logging.getLogger(__name__)
 
@@ -482,7 +482,7 @@ class Article(AbstractArticle):
     # New fields for precomputed values
     average_rating = models.FloatField(default=0.0, null=True)
     number_of_reviews = models.PositiveIntegerField(default=0, null=True)
-
+    notification_tags = ParentalManyToManyField(NotificationTag, blank=True)
     content_panels = AbstractArticle.content_panels + [
         MultiFieldPanel([
             InlinePanel('recommended_articles',
@@ -492,7 +492,7 @@ class Article(AbstractArticle):
     ]
 
     promote_panels = AbstractArticle.promote_panels + [
-        MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
+        MultiFieldPanel([FieldPanel("tags"),  FieldPanel("notification_tags"),], heading='Metadata'),
     ]
 
     edit_handler_list = [

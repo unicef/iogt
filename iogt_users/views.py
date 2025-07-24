@@ -49,8 +49,6 @@ class UserDetailView(TemplateView):
         return {'user': self.request.user}
 
 
-
-
 @method_decorator(login_required, name='dispatch')
 class UserDetailEditView(UpdateView):
     model = User
