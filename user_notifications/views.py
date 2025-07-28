@@ -73,7 +73,7 @@ def unread_count(request):
 def save_notification_preference(request):
     if request.method == "POST" and request.user.is_authenticated:
         data = json.loads(request.body)
-        choice = data.get("choice")  # "yes" or "no"
+        choice = data.get("preference")  # "yes" or "no"
         language = data.get('language', 'en')
         tag_ids = data.get('tags', [])
 
