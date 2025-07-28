@@ -5,153 +5,181 @@
 
 
 {% block content %}
-{% if request.user.is_authenticated  %}
-    <h1>{% translate "Notification Preference" %}</h1>
-    <div class="notification-confirmation"><strong>{% translate "Would you like to enable notifications?" %}</strong>
-        <input type="radio" id="yes" name="fav_language" value="Yes"  {% if notification_preference.receive_notifications %} checked {%endif %}>
-          <label for="Yes">Yes</label><br>
-        <input type="radio" id="no" name="fav_language" onclick="unselectTopics()" value="No" {% if not notification_preference.receive_notifications %} checked {%endif %}>
-             <label for="No">No</label><br>
-          <button id="save" onclick="setNotificationPref()" >Save
-        </button>
-<!--  <label for="html">HTML</label><br>-->
-<!--        <button id="yes_button" onclick="setNotificationPref(true)" >Yes-->
-<!--        </button>-->
-<!--        <button id="no_button" onclick="setNotificationPref(false)">No</button>-->
-    </div>
-    <label for="language-select" style="display: block; margin-top: 10px;">{% translate "Preferred Language:" %}</label>
-    <select id="language-select" style="width: 100%; padding: 5px; margin-bottom: 10px;">
-        {% for locale in available_languages %}
-        <option value="{{ locale.language_code }}" {% if locale.language_code == selected_language_code %} selected
-                {% endif %}>{{ locale.get_display_name }}
-        </option>
-        {% endfor %}
-    </select>
+{% if request.user.is_authenticated %}
+<h1>{% translate "Notification Preference" %}</h1>
+<div class="notification-confirmation">
+  <span>{% translate "Do you want to receive notifications?" %}</span>
+  <div class="radio-group" id="notify-choice" style="display: flex; gap: 1rem; font-size: smaller;">
+    <label for="yes"><input type="radio" id="yes" name="fav_language" value="Yes" {% if notification_preference.receive_notifications %} checked {%endif %}>{% translate "Yes" %}</label><br>
+    <label for="no"><input type="radio" id="no" name="fav_language" value="No" {% if not notification_preference.receive_notifications %} checked {%endif %}>{% translate "No" %}</label><br>
+  </div>
+</div>
+<label for="language-select" style="display: block; margin-top: 15px; margin-bottom: 5px;">{% translate "Preferred Language:" %}</label>
+<div class="notification_language">
+<select id="language-select" class="dropdown-btn">
+  {% for locale in available_languages %}
+  <option value="{{ locale.language_code }}" {% if locale.language_code == selected_language_code %} selected {% endif %}>
+    {{ locale.get_display_name }}
+  </option>
+  {% endfor %}
+</select>
+</div>
 
-
-<div class="multiselect-dropdown">
-  <div class="dropdown-btn" onclick="toggleDropdown()">Select Notification Tags</div>
+<label for="language-select" style="display: block; margin-top: 15px; margin-bottom: 5px;">{% translate "What would you like to be notified about?" %}</label>
+<div class="multiselect-dropdown notification_language" style="font-size: smaller;">
+  <div class="dropdown-btn" id="select-notification-tags">{% translate "Select one or more topics" %}</div>
   <div class="dropdown-content" id="dropdown-checkboxes">
-    <label>
-      <input type="checkbox" id="select-all" onclick="toggleSelectAll(this)"> Select All
+    <input type="text" id="topicSearch" style=" font-size: smaller; width:-webkit-fill-available; margin:5px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" placeholder="Search topics..." onkeyup="filterTopics()" />
+    <label for="select-all" id="lbl-select-all">
+      <input type="checkbox" id="select-all"> {% translate "Select All" %}
     </label>
 
     {% for tag in notification_tags %}
-      <label>
-        <input type="checkbox" name="tag_ids" value="{{ tag.id }}" class="tag-checkbox"
-               {% if tag.id in selected_tag_ids %}checked{% endif %}>
-        {{ tag.name }}
-      </label>
+    <label>
+      <input type="checkbox" name="tag_ids" value="{{ tag.id }}" data-label="{{ tag.name }}" class="tag-checkbox" {% if tag.id in selected_tag_ids %}checked{% endif %}>
+      {{ tag.name }}
+    </label>
     {% endfor %}
   </div>
 </div>
-{% endif %}
-
-
-
-{% if request.user.is_authenticated  %}
-<!--<div id="notif-banner" style="-->
-<!--                    position: fixed;-->
-<!--                    bottom: 200px;-->
-<!--                    center: 20px;-->
-<!--                    background: #f9f9f9;-->
-<!--                    padding: 20px;-->
-<!--                    border: 1px solid #ccc;-->
-<!--                    border-radius: 10px;-->
-<!--                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);-->
-<!--                    max-width: 520px;-->
-<!--                    z-index: 1000;-->
-<!--                    font-family: sans-serif;-->
-<!--                    font-size: 14px;-->
-<!--                ">-->
-<!--</div>-->
+<div class="profile-form__btns">
+  <button class="cust-btn cust-btn--dark profile-form__btn" id="save"><span>{% translate "Save" %}</span>
+  </button>
+</div>
 
 {% endif %}
 
 
 <script>
-document.addEventListener("click", function (event) {
-  const dropdown = document.querySelector(".multiselect-dropdown");
-  const isDropdownClick = dropdown.contains(event.target);
 
-  const isRadioClick = event.target.matches('input[type="radio"]') ||
-                       event.target.closest('.radio-options');
+  function filterTopics() {
+    const input = document.getElementById('topicSearch');
+    const filter = input.value.toLowerCase();
+    const list = document.getElementById('dropdown-checkboxes');
+    const labels = list.getElementsByTagName('label');
 
-  if (!isDropdownClick && !isRadioClick) {
-    document.getElementById("dropdown-checkboxes").style.display = "none";
-  }
-});
+    let isFiltering = filter.trim() !== "";
 
+    for (let i = 0; i < labels.length; i++) {
+      const label = labels[i];
+      const isSelectAll = label.querySelector('#lbl-select-all') !== null;
 
-  function unselectTopics(){
-     document.querySelectorAll('.tag-checkbox').forEach(cb => cb.checked = false);
-      // Also uncheck the "Select All" checkbox if present
-      const selectAll = document.getElementById("select-all");
-      if (selectAll) {
-        selectAll.checked = false;
+      if (isSelectAll) {
+        // Always show, but uncheck if filtering
+        label.style.display = '';
+        if (isFiltering) {
+          document.getElementById('select-all').checked = false;
+        }
+      } else {
+        const txtValue = label.textContent || label.innerText;
+        label.style.display = txtValue.toLowerCase().includes(filter) ? '' : 'none';
       }
+    }
   }
 
-    function toggleDropdown() {
-        const content = document.getElementById("dropdown-checkboxes");
-        content.style.display = content.style.display === "block" ? "none" : "block";
-    }
+  function updateSelectedTopicLabel() {
+    const selectedTopics = Array.from(document.querySelectorAll('.tag-checkbox:checked'))
+      .map(cb => cb.dataset.label || cb.value); // Use dataset if label is separate from value
 
-  function toggleSelectAll(masterCheckbox) {
+    const labelContainer = document.getElementById('select-notification-tags');
+
+    if (selectedTopics.length === 0) {
+      labelContainer.textContent = "Select one or more topics";
+    } else if (selectedTopics.length === 1) {
+      labelContainer.textContent = selectedTopics[0];
+    } else {
+      labelContainer.textContent = `${selectedTopics[0]} + ${selectedTopics.length - 1} more`;
+    }
+  }
+
+
+  function unselectTopics() {
+    document.querySelectorAll('.tag-checkbox').forEach(cb => cb.checked = false);
+    // Also uncheck the "Select All" checkbox if present
+    const selectAll = document.getElementById("select-all");
+    if (selectAll) {
+      selectAll.checked = false;
+    }
+  }
+
+  function toggleDropdown() {
+    const content = document.getElementById("dropdown-checkboxes");
+    content.style.display = content.style.display === "block" ? "none" : "block";
+  }
+
+  function toggleSelectAll() {
+    const masterCheckbox = document.getElementById("select-all");
     const checkboxes = document.querySelectorAll('.tag-checkbox');
     checkboxes.forEach(cb => cb.checked = masterCheckbox.checked);
   }
- function setNotificationPref() {
+
+  function setNotificationPref() {
     const choice = document.querySelector('input[name="fav_language"]:checked');
-    console.log('choice', choice.value)
-    let preference  = (choice.value === 'Yes') ? true : false;
+    
+    let preference = (choice.value === 'Yes') ? true : false;
     const saveBtn = document.getElementById('save');
-    saveBtn.classList.remove('highlight-yes', 'highlight-no');
+    
     // Apply correct highlight
-     const checked = document.querySelectorAll('.tag-checkbox:checked');
-     const selectedTags = Array.from(document.querySelectorAll('.tag-checkbox:checked'))
-                          .map(cb => cb.value);
-     console.log('selected-tags', selectedTags)
+    const checked = document.querySelectorAll('.tag-checkbox:checked');
+    const selectedTags = Array.from(document.querySelectorAll('.tag-checkbox:checked'))
+      .map(cb => cb.value);
+    
+    let selectedLanguage = 'en';
     if (preference) {
+      const languageSelect = document.getElementById('language-select');
+      selectedLanguage = document.getElementById('language-select').value;
 
-        if(selectedTags.length==0){
-             showToast(`✅ Please selct atleast one topic`, "success");
-             return
+      if ("Notification" in window && Notification.permission !== "granted") {
+        Notification.requestPermission().then(permission => {
+          if (permission !== "granted") {
+            showToast("🔕 Web Push Notifications not enabled. You can still use the app without them.", "info");
+          }
+        });
+      }
+    }
+    else
+    {
+      document.getElementById('language-select').value = selectedLanguage;
+      unselectTopics();
+    }
+
+    fetch("{% url 'save_notification_preference' %}", {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": "{{ csrf_token }}",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        preference: preference,
+        language: selectedLanguage,
+        tags: selectedTags
+      }),
+    }).then((res) => {
+      if (res.ok) {
+        if ("Notification" in window && Notification.permission !== "granted") {
+          setTimeout(() => {
+            showToast("✅ Preferences saved successfully.", "success");
+          }, 3500);
         }
-         saveBtn.classList.add('highlight-yes');
-    } else {
-        saveBtn.classList.add('highlight-no');
-         //const tagSelect = document.getElementById('dropdown-checkboxes');
-        const languageSelect = document.getElementById('language-select');
-        languageSelect.value = 'en';
-    }
+        else {
+          showToast(`✅ Preference saved successfully.`, "success");
+        }
+      }
+    }).catch(err => showToast(`❌ error: Could not save preference!`, "error"))
+  }
 
-  // const selectedTags = Array.from(document.getElementById('tag-select').selectedOptions).map(o => o.value);
-   const language = document.getElementById('language-select').value;
-   console.log('language', language, selectedTags)
-  fetch("{% url 'save_notification_preference' %}", {
-    method: "POST",
-    headers: {
-      "X-CSRFToken": "{{ csrf_token }}",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ preference: preference,
-      language: language,
-      tags: selectedTags
-     }),
-  }).then((res) => {
-    if (res.ok) {
-           showToast(`✅ Preference saved successfully.`, "success");
-    }
-  }).catch(err =>showToast(`❌ error: Could not save preference!`, "error"))
-}
- // Listen for changes on individual checkboxes to uncheck "Select All" if needed
   document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('save').addEventListener('click', setNotificationPref);
+    document.getElementById('no').addEventListener('click', unselectTopics);
+    document.getElementById('select-notification-tags').addEventListener('click', toggleDropdown);
+    document.getElementById('select-all').addEventListener('click', toggleSelectAll);
+    updateSelectedTopicLabel();
     const tagCheckboxes = document.querySelectorAll('.tag-checkbox');
     const selectAllCheckbox = document.getElementById('select-all');
 
     tagCheckboxes.forEach(cb => {
       cb.addEventListener('change', function () {
+        updateSelectedTopicLabel();
         if (!this.checked) {
           // If any checkbox is unchecked, also uncheck "Select All"
           selectAllCheckbox.checked = false;
@@ -164,15 +192,17 @@ document.addEventListener("click", function (event) {
     });
   });
 
-  window.onload = function () {
-    const currentPref = {{ notification_preference.receive_notifications|yesno:"true,false" }};  // assuming context has this
-    console.log('currentPref', currentPref)
-    if (currentPref === true) {
-      document.getElementById('save').classList.add('highlight-yes');
-    } else if (currentPref === false) {
-      document.getElementById('save').classList.add('highlight-no');
+  document.addEventListener("click", function (event) {
+    const dropdown = document.querySelector(".multiselect-dropdown");
+    const isDropdownClick = dropdown.contains(event.target);
+
+    const isRadioClick = event.target.matches('input[type="radio"]') ||
+      event.target.closest('.radio-options');
+
+    if (!isDropdownClick && !isRadioClick) {
+      document.getElementById("dropdown-checkboxes").style.display = "none";
     }
-  };
+  });
 
 </script>
 {% endblock %}

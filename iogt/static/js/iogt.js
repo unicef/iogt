@@ -258,12 +258,21 @@ const setItem = (key, value) => {
 const registerPushNotification = (registration) => {
   if (
     !registration.showNotification ||
-//    Notification.permission === "denied" ||
     !("PushManager" in window)
   ) {
     return;
   }
-  subscribe(registration);
+
+  // Ask permission first if needed
+  if (Notification.permission === "default") {
+    Notification.requestPermission().then(permission => {
+      if (permission === "granted") {
+        subscribe(registration); // Now safe to subscribe
+      }
+    });
+  } else if (Notification.permission === "granted") {
+    subscribe(registration); // Already granted
+  }
 };
 
 const urlB64ToUint8Array = (base64String) => {

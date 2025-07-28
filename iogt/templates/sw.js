@@ -114,8 +114,6 @@ self.addEventListener("notificationclick", function (event) {
 self.addEventListener("fetch", (event) => {
   const { request } = event;
 
-  console.log("🔎 Fetch event triggered:", request.url, request.method);
-
   // ✅ Handle POST Requests (Save to IndexedDB if offline)
   if (request.method === "POST") {
     event.respondWith(

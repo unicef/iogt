@@ -23,7 +23,6 @@ class UserNotificationView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print('authenticated_user',  self.request.user.is_authenticated)
         if self.request.user.is_authenticated:
             notification_pref = NotificationPreference.objects.filter(user=self.request.user).first()
             context['notification_preference'] = notification_pref

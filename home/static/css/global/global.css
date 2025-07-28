@@ -1339,6 +1339,32 @@ body.rtl {
   margin-left: 12px;
 }
 
+.notification_language select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 100%;
+}
+
+.notification_language {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+}
+
+.notification_language::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  pointer-events: none;
+
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid #555;
+}
+
 .language__select select {
   -webkit-appearance: none;
   -moz-appearance: none;

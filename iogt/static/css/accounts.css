@@ -73,6 +73,7 @@ form input[type="checkbox"] {
 
 .profile-form__btn {
     margin-bottom: 8px;
+    margin-left: 0px;
 }
 
 .profile-form__btn:last-child {
