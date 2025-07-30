@@ -44,7 +44,8 @@ class CreateNotificationView(CreateView):
                             user=user,
                             notification_key=payload.get("head", "IoGT Notification"),
                             tags='',
-                            state="sent"
+                            state="sent",
+                            notification=notif_instance
                         )
                 except Exception as e:
                     # Optional: log failure for user if user or template not found
@@ -53,6 +54,7 @@ class CreateNotificationView(CreateView):
                         notification_key=payload.get("head", "IoGT Notification"),
                         tags='',
                         state="failed",
-                        error_message=f"Task failure: {str(e)}"
+                        error_message=f"Task failure: {str(e)}",
+                        notification=None
                     )
         return super().form_valid(form)

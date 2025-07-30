@@ -1,3 +1,4 @@
+{% load clean_html %}
 {% for n in notifications %}
 {% if n.data.url %}
 <a href="#"
@@ -6,28 +7,42 @@
     data-id="{{ n.id }}"
     onclick="handleNotificationClick(event, this)">
     <div class="notification-body">
-        <p class="notification-text notification-title mb-1">
+        <p class="notification-text notification-title">
             {{ n.verb }}
             {% if not n.is_clicked %}<span class="unread-dot"></span>{% endif %}
         </p>
-        <p class="notification-text mb-1">
-            {{ n.description | safe }}
-        </p>
-        <small style="color: #6c757d; font-size: 0.8rem;">{{ n.timestamp|timesince }} ago</small>
+        <small style="color: #6c757d; font-size: 0.75rem;">{{ n.timestamp|timesince }} ago</small>
     </div>
+    <p style="color: #333; font-size: 0.85rem; margin: 10px 0;">{{ n.description|strip_html }}</p>
+    {% if n.actor.notification_tags.all %}
+        <p style="font-size: 0.75rem; color: #555; margin: 0;">
+            <strong>Topic(s):</strong>
+            {% for tag in n.actor.notification_tags.all %}
+                {{ tag.name }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+    {% endif %}
 </a>
 {% else %}
 <div class="notification-item notification-item {% if n.unread %} unread {% else %} read {% endif %}"
     data-id="{{ n.id }}">
     <div class="notification-body">
-        <p class="notification-text notification-title mb-1">
+        <p class="notification-text notification-title">
             {{ n.verb }}
         </p>
-        <p class="notification-text mb-1">
-            {{ n.description | safe}}
-        </p>
-        <small style="color: #6c757d; font-size: 0.8rem;">{{ n.timestamp|timesince }} ago</small>
+        <small style="color: #6c757d; font-size: 0.75rem;">{{ n.timestamp|timesince }} ago</small>
     </div>
+    <p class="color: #333; font-size: 0.85rem; margin: 10px 0;">
+        {{ n.description|strip_html }}
+    </p>
+    {% if n.actor.notification_tags.all %}
+        <p style="font-size: 0.75rem; color: #555; margin: 0;">
+            <strong>Topic(s):</strong>
+            {% for tag in n.actor.notification_tags.all %}
+                {{ tag.name }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+    {% endif %}
 </div>
 {% endif %}
 {% empty %}

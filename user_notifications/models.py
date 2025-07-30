@@ -74,7 +74,7 @@ class NotificationLog(models.Model):
         ('sent', 'Sent'),
         ('failed', 'Failed'),
     ]
-
+    notification = models.OneToOneField(Notification, null=True, blank=True, on_delete=models.SET_NULL, related_name='logs')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     notification_key = models.CharField(max_length=255)  # e.g. template slug or key
     state = models.CharField(max_length=20, choices=STATE_CHOICES, default='sent')

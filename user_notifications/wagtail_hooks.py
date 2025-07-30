@@ -1,3 +1,4 @@
+from django.utils.html import format_html
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin, ModelAdminGroup, modeladmin_register
 )
@@ -31,7 +32,18 @@ class NotificationLogAdmin(ModelAdmin):
     menu_icon = "list-ul"  # Wagtail icon name
     menu_order = 200
     list_display = ("notification_key", "user", "state", "get_notification_url", "get_is_clicked", "tags", "received_at")
-    search_fields = ("notification_key", "user__username", "user__email", "tags", "get_notification_url")
+    search_fields = ("notification_key", "user__username", "user__email", "tags")
+    list_filter = ("state", "tags", "user")
+    ordering = ["-received_at"]
+    
+    def has_add_permission(self, request):
+        return False
+
+    def has_edit_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
     
     def get_is_clicked(self, obj):
         try:
@@ -43,11 +55,10 @@ class NotificationLogAdmin(ModelAdmin):
     get_is_clicked.short_description = 'Is Clicked'
 
     def get_notification_url(self, obj):
-        try:
-            url =  obj.notification.data["url"]
-            return url
-        except AttributeError:
-            return ""
+        url = obj.notification.data.get("url") if hasattr(obj.notification, "data") else ""
+        if url:
+            return format_html('<a href="{}" target="_blank">{}</a>', url, url)
+        return "-"
     get_notification_url.short_description = "Target URL"
 
 

@@ -133,7 +133,7 @@
       if ("Notification" in window && Notification.permission !== "granted") {
         Notification.requestPermission().then(permission => {
           if (permission !== "granted") {
-            showToast("🔕 Web Push Notifications not enabled. You can still use the app without them.", "info");
+            showToast("🔕 Web Push Notifications are off. You can enable them from your browser settings. You'll still receive in-app notifications.", "warning");
           }
         });
       }
@@ -157,9 +157,10 @@
       }),
     }).then((res) => {
       if (res.ok) {
-        if ("Notification" in window && Notification.permission !== "granted") {
+        //Add delay to show it as another toast will be showing up for permission
+        if (preference && "Notification" in window && Notification.permission !== "granted") {
           setTimeout(() => {
-            showToast("✅ Preferences saved successfully.", "success");
+            showToast("✅ Preference saved successfully.", "success");
           }, 3500);
         }
         else {
