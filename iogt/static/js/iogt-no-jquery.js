@@ -78,6 +78,7 @@ const init = () => {
     ".change-digital-pin",
     ".comments__form",
     ".logout-btn",
+    ".notification-pref-btn",
     ".progress-holder",
     ".report-comment",
     ".search-form-holder",

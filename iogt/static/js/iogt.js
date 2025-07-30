@@ -58,6 +58,7 @@ $(document).ready(() => {
   const changeDigitalPinBtn = $(".change-digital-pin");
   const loginCreateAccountBtns = $(".login-create-account-btn");
   const logoutBtn = $(".logout-btn");
+  const notificationPreferenceButton = $(".notification-pref-btn");
   const externalLinks = $('a[href*="/external-link/?next="]');
 
   questionnaireSubmitBtns.each((index, btn) => {
@@ -91,6 +92,7 @@ $(document).ready(() => {
     changeDigitalPinBtn.hide();
     loginCreateAccountBtns.hide();
     logoutBtn.hide();
+    notificationPreferenceButton.hide();
     externalLinks.each((index, link) => {
       const $link = $(link);
       if (!$link.data("offline-bound")) {
@@ -128,6 +130,7 @@ $(document).ready(() => {
     changeDigitalPinBtn.show();
     loginCreateAccountBtns.show();
     logoutBtn.show();
+    notificationPreferenceButton.show();
     externalLinks.show();
     externalLinks.each((index, link) => {
       $(link).off("click.offline");

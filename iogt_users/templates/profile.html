@@ -23,7 +23,7 @@
      {# Show notification banner only if preference is not yet set #}
     <div class="profile__btns">
         {% url 'notification_settings' as notify_url %}
-        {% primary_button title='Notification Preference' href=notify_url icon_path='icons/arrow_icon_left.svg' extra_classnames='logout-btn' %}
+        {% primary_button title='Notification Preference' href=notify_url icon_path='icons/bell-solid.svg' extra_classnames='notification-pref-btn' %}
         {% url 'account_change_password' as change_password_url %}
         {% primary_button title='Change Digital Pin' href=change_password_url icon_path='icons/lock.svg' extra_classnames='change-digital-pin' %}
 
