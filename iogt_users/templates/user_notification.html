@@ -111,6 +111,7 @@
     const masterCheckbox = document.getElementById("select-all");
     const checkboxes = document.querySelectorAll('.tag-checkbox');
     checkboxes.forEach(cb => cb.checked = masterCheckbox.checked);
+    updateSelectedTopicLabel();
   }
 
   function setNotificationPref() {

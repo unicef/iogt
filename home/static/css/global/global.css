@@ -2154,7 +2154,7 @@ body.rtl {
 }
 
 /* Close Button */
-.close-btn {
+.notification-close-btn {
   background: transparent;
   border: none;
   font-size: 36px;
@@ -2277,4 +2277,14 @@ div.notification-confirmation{
 	margin-bottom: 10px;
     display: flex;
     align-items: center;
+}
+
+
+.notification-callout-text {
+    background-color: #eaf7ff;
+    color: #0c5460;
+    font-size: 13px;
+    padding: 4px 8px;
+    margin-top: 5px;
+    border-radius: 4px;
 }

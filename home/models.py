@@ -56,7 +56,7 @@ from home.utils import (
 )
 import iogt.iogt_globals as globals_
 from django.db.models import Avg, Count
-from user_notifications.models import NotificationTag
+from user_notifications.models import NotificationTag, NotificationPreference
 User = get_user_model()
 logger = logging.getLogger(__name__)
 
@@ -126,6 +126,11 @@ class HomePage(Page, PageUtilsMixin, TitleIconMixin):
                 ):
                     banners.append(banner_specific)
         context['banners'] = banners
+        show_notification_nudge = False
+        if request.user and request.user.is_authenticated:
+            pref = NotificationPreference.objects.filter(user=request.user).first()
+            context["notification_preference"] = pref
+            context['user'] = request.user
         return context
     @property
     def offline_urls(self):

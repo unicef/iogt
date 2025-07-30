@@ -9,6 +9,12 @@
 
 {% block content %}
   <div class="home-page">
+    {% if user.is_authenticated and not notification_preference.receive_notifications %}
+      <div id="notification-bar" style="background: #fff3cd; padding: 12px; text-align: center; border-bottom: 1px solid #ffeeba;">
+          <span>🔔 This app wants your permission to enable notifications. </span>
+          <a href="{% url 'notification_settings' %}"  style="font-weight: bold; margin-left: 10px;">Enable Notifications</a>
+      </div>
+    {% endif %}
     {% include 'home/tags/banners_list.html' with banners=banners %}
     <div>
         {% if page.home_featured_content %}

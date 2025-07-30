@@ -46,7 +46,7 @@ def send_app_notifications(id, url=None, notification_type=None):
                         sender=sender,
                         url=url,
                         recipient=notification_preference.user,
-                        verb=template.title,
+                        verb=f"{sender.title} {template.title}",
                         description=template.message
                     )
                     NotificationLog.objects.create(
@@ -69,7 +69,7 @@ def send_app_notifications(id, url=None, notification_type=None):
                         send_user_notification(
                             user=notification_preference.user,
                             payload={
-                                "title": template.title,
+                                "title": f"{sender.title} {template.title}",
                                 "body": strip_tags(template.message),
                                 "url": url,
                                 "notification_id": notif_instance.id
