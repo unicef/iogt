@@ -8,12 +8,12 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('user_notifications', '0003_auto_20250728_1222'),
-        ('questionnaires', '0032_auto_20250526_0135'),
+        ('home', '0060_auto_20250703_0253'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='survey',
+            model_name='article',
             name='notification_tags',
             field=modelcluster.fields.ParentalManyToManyField(blank=True, to='user_notifications.NotificationTag'),
         ),

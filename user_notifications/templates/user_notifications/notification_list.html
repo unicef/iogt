@@ -18,15 +18,20 @@
         <small style="color: #6c757d; font-size: 0.75rem;">{{ n.timestamp|timesince }} ago</small>
     </div>
     <p style="color: #333; font-size: 0.85rem; margin: 10px 0;">{{ n.description|strip_html }}</p>
+    
     {% if n.actor.notification_tags.all %}
+      <p class="notification-name">
+        <strong>Name:</strong>
+        {{n.actor.title}}
+      </p> 
       <p style="font-size: 0.75rem; color: #555; margin: 0;">
-          <strong>Topic(s):</strong>
-          {% for tag in n.actor.notification_tags.all %}
-              {{ tag.name }}{% if not forloop.last %}, {% endif %}
-          {% endfor %}
+        <strong>Topic(s):</strong>
+        {% for tag in n.actor.notification_tags.all %}
+            {{ tag.name }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
       </p>
     {% endif %}
-</a>
+  </a>
   {% else %}
   <div class="notification-item notification-item {% if n.unread %} unread {% else %} read {% endif %}"
     data-id="{{ n.id }}">
@@ -38,11 +43,15 @@
     </div>
     <p style="color: #333; font-size: 0.85rem; margin: 10px 0;">{{ n.description|strip_html }}</p>
     {% if n.actor.notification_tags.all %}
+      <p class="notification-name">
+        <strong>Name:</strong>
+        {{n.actor.title}}
+      </p> 
       <p style="font-size: 0.75rem; color: #555; margin: 0;">
-          <strong>Topic(s):</strong>
-          {% for tag in n.actor.notification_tags.all %}
-              {{ tag.name }}{% if not forloop.last %}, {% endif %}
-          {% endfor %}
+        <strong>Topic(s):</strong>
+        {% for tag in n.actor.notification_tags.all %}
+            {{ tag.name }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
       </p>
     {% endif %}
 </div>

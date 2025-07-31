@@ -11,7 +11,7 @@
   <div class="home-page">
     {% if user.is_authenticated and not notification_preference.receive_notifications %}
       <div id="notification-bar" class="enable-notifications-nudge">
-          <span>🔔 IOGT wants your permission to <a href="{% url 'notification_settings' %}">enable notifications</a></span>
+          <span>🔔 Don’t miss out! <a href="{% url 'notification_settings' %}">Turn on notifications</a> to stay updated with the latest from IOGT."</a></span>
       </div>
     {% endif %}
     {% include 'home/tags/banners_list.html' with banners=banners %}

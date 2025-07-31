@@ -48,8 +48,15 @@ class NotifyAndPublishMenuItem(ActionMenuItem):
 @staff_member_required
 def notify_and_publish_view(request, page_id):
     page = Page.objects.get(id=page_id).specific
-    revision = page.save_revision(user=request.user)
-    revision.publish()
+    latest_revision = page.get_latest_revision_as_page()
+
+    if latest_revision:
+        # This gives you the latest draft version as a page instance
+        revision = latest_revision.save_revision(user=request.user)
+        revision.publish()
+    else:
+        revision = page.save_revision(user=request.user)
+        revision.publish()
     if isinstance(page, Survey):
         full_url = get_site_for_locale(page)
         send_app_notifications.delay(page.id, full_url, 'survey')

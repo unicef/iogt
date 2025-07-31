@@ -133,15 +133,10 @@
       if ("Notification" in window && Notification.permission !== "granted") {
         Notification.requestPermission().then(permission => {
           if (permission !== "granted") {
-            showToast("🔕 Web Push Notifications are off. You can enable them from your browser settings. You'll still receive in-app notifications.", "warning");
+            showToast("🔕 Web push notifications are disabled. You’ll still receive important updates within the app.");
           }
         });
       }
-    }
-    else
-    {
-      document.getElementById('language-select').value = selectedLanguage;
-      unselectTopics();
     }
 
     fetch("{% url 'save_notification_preference' %}", {
@@ -172,7 +167,6 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('save').addEventListener('click', setNotificationPref);
-    document.getElementById('no').addEventListener('click', unselectTopics);
     document.getElementById('select-notification-tags').addEventListener('click', toggleDropdown);
     document.getElementById('select-all').addEventListener('click', toggleSelectAll);
     updateSelectedTopicLabel();
