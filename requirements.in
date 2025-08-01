@@ -34,3 +34,5 @@ wagtailsvg @ https://github.com/sachin-mehta/wagtailsvg/archive/3d2ecc67d993faef
 wagtail-transfer
 whitenoise
 xlsxwriter==3.2.5
+django-notifications-hq @ https://github.com/django-notifications/django-notifications/archive/4c44bcea2504d9a3fcd26366b232a13732a08f2a.zip
+celery==5.5.3

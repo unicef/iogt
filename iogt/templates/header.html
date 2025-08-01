@@ -4,7 +4,7 @@
 {% get_language_info for LANGUAGE_CODE as lang %}
 {% get_available_languages as LANGUAGES %}
 {% get_language_info_list for LANGUAGES as languages %}
-
+{% load notifications_tags %}
 <header id="header" style="background: {{ settings.home.ThemeSettings.header_background_color }}">
     <div class="header-holder">
         <div class="header-content">
@@ -16,9 +16,19 @@
             <div class="language__select">
                 {% language_switcher page %}
             </div>
+            {% if request.user.is_authenticated %}
+            <div class="notification-holder">
+                <div class="notification-bell-wrapper" onclick="openNotificationsPanel()" style="cursor: pointer;">
+                    <div class="notification-bell" onclick="openNotificationsPanel()" id="notif-bell">
+                        <i class="fas fa-bell"></i>
+                        <span id="notif-count" class="notif-badge" style="display: none;">{{ request.user.notifications.unread.count }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
         </div>
         <div class="form-holder search-form-holder">
-            <a class="js-search-btn" href="{% url "search" %}">
+            <a class="js-search-btn" href="{% url 'search' %}">
                 {% render_icon icon_path='icons/search.svg' attrs="alt='Search' class='xs-home-header__search'" %}
             </a>
             <form class='search__form' action="{% url 'search' %}">
@@ -26,7 +36,8 @@
                     <span>
                         {% render_icon icon_path='icons/search.svg' width=18 height=18 stroke_color='#9A9A9A' %}
                     </span>
-                    <input type="text" name="query" placeholder="{% translate 'Search the site...' %}" pattern="\S+.*"/>
+                    <input type="text" name="query" placeholder="{% translate 'Search the site...' %}"
+                        pattern="\S+.*" />
                 </label>
             </form>
         </div>
@@ -34,12 +45,96 @@
             <div class="nav-bar__item">
                 {% url 'account_login' as login_url %}
                 {% if request.user.is_anonymous %}
-                    {% primary_button title="Log in / Create account" href=login_url icon_path='icons/login.svg' extra_classnames='login-create-account-btn' %}
+                {% primary_button title="Log in / Create account" href=login_url icon_path='icons/login.svg' extra_classnames='login-create-account-btn' %}
                 {% else %}
-                    {% url 'user_profile' as profile_url %}
+                {% url 'user_profile' as profile_url %}
                 {% primary_button title="Profile" href=profile_url icon_path='icons/profile.svg' %}
                 {% endif %}
             </div>
         </div>
     </div>
-</header>  
+</header>
+{% if user.is_authenticated %}
+<script>
+    function refreshUnreadCount() {
+        fetch("{% url 'user_notifications:unread_count' %}")
+            .then(res => res.json())
+            .then(data => {
+                const countEl = document.getElementById("notif-count");
+                const bell = document.getElementById("notif-bell");
+                if (data.unread_count > 0) {
+                    countEl.innerText = data.unread_count > 99 ? "99+" : data.unread_count;
+                    countEl.style.display = "inline-block";
+                    bell.classList.add("highlighted");
+                } else {
+                    countEl.style.display = "none";
+                    bell.classList.remove("highlighted");
+                }
+            })
+            .catch(err => console.warn("⚠️ Failed to fetch unread count", err));
+    }
+
+    // Poll every 15 seconds
+    setInterval(refreshUnreadCount, 15000);
+    document.addEventListener("DOMContentLoaded", refreshUnreadCount);
+
+    function openNotificationsPanel() {
+        document.querySelector('.notification-panel').style.display = 'block';
+        document.getElementById('notification-overlay').style.display = 'block';
+        fetch('{% url "user_notifications:latest_notifications" %}').then(
+            res => res.text()
+        ).then(html => {
+            document.getElementById('notification-list').innerHTML = html;
+            markNotificationsAsRead();
+        });
+    }
+
+    function closeNotificationsPanel() {
+        document.querySelector('.notification-panel').style.display = 'none';
+        document.getElementById('notification-overlay').style.display = 'none';
+    }
+
+    function markNotificationsAsRead() {
+        const ids = Array.from(document.querySelectorAll('.notification-item.unread')).map(el => el.dataset.id);
+        if (ids.length === 0) return;
+        const query = new URLSearchParams();
+        ids.forEach(id => query.append('ids[]', id));
+        const url = `{% url 'user_notifications:mark_selected_read' %}?${query.toString()}`;
+
+        fetch(url).then(response => response.json()).then(data => {
+            refreshUnreadCount();
+         });
+    }
+function handleNotificationClick(event, element) {
+    event.preventDefault();
+    const notifId = element.getAttribute("data-id");
+    const notifUrl = element.getAttribute("data-url");
+    if (!notifUrl || notifUrl === "#") {
+        console.warn("❌ Invalid or missing notification URL:", notifUrl);
+        return;
+    }
+    const clickUrlTemplate = "{% url 'user_notifications:mark_notification_clicked' 0 %}";
+    const clickUrl = clickUrlTemplate.replace("0", notifId);
+    element.classList.add('clicked');
+    fetch(clickUrl, {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+        },
+    }).then(() => {
+        window.location.href = notifUrl;  // or window.open(notifUrl, "_blank");
+    }).catch((err) => {
+        console.error("Error marking as clicked:", err);
+        window.location.href = notifUrl;
+    });
+}
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+
+</script>
+{% endif %}

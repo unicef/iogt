@@ -3,6 +3,7 @@ import os
 
 from django.conf import settings
 from django.contrib.admin.utils import flatten
+
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -14,8 +15,8 @@ from django.utils.deconstruct import deconstructible
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 from modelcluster.contrib.taggit import ClusterTaggableManager
+from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from iogt.settings.base import WAGTAIL_CONTENT_LANGUAGES
-from modelcluster.fields import ParentalKey
 from rest_framework import status
 from taggit.models import TaggedItemBase
 from wagtail.admin.panels import (
@@ -56,7 +57,7 @@ from home.utils import (
 )
 import iogt.iogt_globals as globals_
 from django.db.models import Avg, Count
-
+from user_notifications.models import NotificationTag, NotificationPreference
 User = get_user_model()
 logger = logging.getLogger(__name__)
 
@@ -126,8 +127,12 @@ class HomePage(Page, PageUtilsMixin, TitleIconMixin):
                 ):
                     banners.append(banner_specific)
         context['banners'] = banners
+        show_notification_nudge = False
+        if request.user and request.user.is_authenticated:
+            pref = NotificationPreference.objects.filter(user=request.user).first()
+            context["notification_preference"] = pref
+            context['user'] = request.user
         return context
-
     @property
     def offline_urls(self):
         return [self.url] + collect_urls_from_streamfield(self.home_featured_content)
@@ -483,7 +488,7 @@ class Article(AbstractArticle):
     # New fields for precomputed values
     average_rating = models.FloatField(default=0.0, null=True)
     number_of_reviews = models.PositiveIntegerField(default=0, null=True)
-
+    notification_tags = ParentalManyToManyField(NotificationTag, blank=True)
     content_panels = AbstractArticle.content_panels + [
         MultiFieldPanel([
             InlinePanel('recommended_articles',
@@ -493,7 +498,7 @@ class Article(AbstractArticle):
     ]
 
     promote_panels = AbstractArticle.promote_panels + [
-        MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
+        MultiFieldPanel([FieldPanel("tags"),  FieldPanel("notification_tags"),], heading='Metadata'),
     ]
 
     edit_handler_list = [
@@ -544,6 +549,16 @@ class Article(AbstractArticle):
         return self.number_of_reviews if self.number_of_reviews else 0
 
 
+    # def publish(self, *args, **kwargs):
+    #     was_published = super().publish(*args, **kwargs)
+    #     print('in-publish-fn', was_published)
+    #     # Trigger Celery notification task
+    #     send_signup_notifications.delay(self.id, "article")
+    #
+    #     return was_published
+
+
+
 class ArticleFeedback(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='feedbacks')
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
@@ -573,7 +588,6 @@ class OfflineContentIndexPage(AbstractArticle):
 class BannerIndexPage(Page):
     parent_page_types = ['home.HomePage']
     subpage_types = ['home.BannerPage']
-
 
 class BannerPage(Page, PageUtilsMixin):
     parent_page_types = ['home.BannerIndexPage']

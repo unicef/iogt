@@ -10,7 +10,7 @@ from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from wagtail import __version__
 from wagtail.admin import widgets as wagtailadmin_widgets
-from wagtail.admin.menu import MenuItem, SubmenuMenuItem
+from wagtail.admin.menu import MenuItem, SubmenuMenuItem, Menu
 from wagtail_modeladmin.options import ModelAdmin, modeladmin_register
 from wagtail import hooks
 from wagtail.models import Page, PageViewRestriction
@@ -22,7 +22,9 @@ from home.translatable_strings import translatable_strings
 from translation_manager.models import TranslationEntry
 from wagtail.signals import page_published
 from django.dispatch import receiver
-from wagtail.admin.menu import Menu
+from iogt.utils import NotifyAndPublishMenuItem, notify_and_publish_view
+from .models import Article
+from django.urls import path
 
 
 @hooks.register('after_publish_page')
@@ -261,3 +263,15 @@ def create_home_page_banner(sender, instance, **kwargs):
     parent = parent.get_parent().specific
     if parent:
         HomePageBanner.objects.get_or_create(source=parent, banner_page=instance)
+
+
+@hooks.register('register_admin_urls')
+def register_custom_form_pages_list_view():
+    return [
+      path("notify-and-publish/<int:page_id>/", notify_and_publish_view, name="notify_and_publish"),
+  ]
+
+
+@hooks.register('register_page_action_menu_item')
+def register_notify_and_publish_menu_item():
+    return NotifyAndPublishMenuItem(order=100, allowed_models=Article)  #
