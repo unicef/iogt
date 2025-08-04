@@ -8,9 +8,10 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
-
+from django.views.decorators.cache import never_cache
 from .models import NotificationMeta, NotificationPreference, NotificationTag
 
+@never_cache
 @login_required
 def latest_notifications(request):
     notifications = Notification.objects.filter(recipient=request.user).order_by('-timestamp')[:5]
@@ -26,6 +27,7 @@ def latest_notifications(request):
         'notifications': notifications
     })
 
+@never_cache
 @login_required
 def all_notifications(request):
     notifications = Notification.objects.filter(recipient=request.user).order_by('-timestamp')
@@ -39,12 +41,13 @@ def all_notifications(request):
 
     return render(request, 'user_notifications/notification_list.html', {'notifications': notifications})
 
+@never_cache
 @login_required
 def mark_all_read(request):
     Notification.objects.filter(recipient=request.user, unread=True).update(unread=False)
     return redirect('user_notifications:all')
 
-
+@never_cache
 @login_required
 def mark_selected_read(request):
     ids = request.GET.getlist('ids[]')
@@ -60,12 +63,13 @@ def toggle_read(request, pk):
     notif.save()
     return redirect('user_notifications:all')
 
+@never_cache
 @login_required
 def unread_count(request):
     count = Notification.objects.filter(recipient=request.user, unread=True).count()
     return JsonResponse({'unread_count': count})
 
-
+@never_cache
 @require_POST
 @login_required
 def save_notification_preference(request):
@@ -97,6 +101,7 @@ def save_notification_preference(request):
         return JsonResponse({'status': 'ok'})
     return JsonResponse({'error': 'unauthorized'}, status=403)
 
+@never_cache
 @require_POST
 @login_required
 def mark_notification_clicked(request, notification_id):

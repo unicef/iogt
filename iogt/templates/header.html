@@ -74,9 +74,10 @@
             .catch(err => console.warn("⚠️ Failed to fetch unread count", err));
     }
 
-    // Poll every 15 seconds
-    setInterval(refreshUnreadCount, 15000);
-    document.addEventListener("DOMContentLoaded", refreshUnreadCount);
+    document.addEventListener("DOMContentLoaded", function () {
+        refreshUnreadCount();                    // run it once when page loads
+        setInterval(refreshUnreadCount, 15000);  // then every 15 seconds
+    });
 
     function openNotificationsPanel() {
         document.querySelector('.notification-panel').style.display = 'block';

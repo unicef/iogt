@@ -2,19 +2,19 @@
 
 {% block fields %}
     {% if form.separate_username_field %}
-        {% include "wagtailadmin/shared/field_as_li.html" with field=form.username_field %}
+        {% include "wagtailadmin/shared/field.html" with field=form.username_field %}
     {% endif %}
-    {% include "wagtailadmin/shared/field_as_li.html" with field=form.email %}
+    {% include "wagtailadmin/shared/field.html" with field=form.email %}
     {% block extra_fields %}
-        {% include "wagtailadmin/shared/field_as_li.html" with field=form.display_name %}
-        {% include "wagtailadmin/shared/field_as_li.html" with field=form.first_name %}
-        {% include "wagtailadmin/shared/field_as_li.html" with field=form.last_name %}
-        {% include "wagtailadmin/shared/field_as_li.html" with field=form.terms_accepted %}
+        {% include "wagtailadmin/shared/field.html" with field=form.display_name %}
+        {% include "wagtailadmin/shared/field.html" with field=form.first_name %}
+        {% include "wagtailadmin/shared/field.html" with field=form.last_name %}
+        {% include "wagtailadmin/shared/field.html" with field=form.terms_accepted %}
     {% endblock extra_fields %}
     {% if form.password1 %}
-        {% include "wagtailadmin/shared/field_as_li.html" with field=form.password1 %}
+        {% include "wagtailadmin/shared/field.html" with field=form.password1 %}
     {% endif %}
     {% if form.password2 %}
-        {% include "wagtailadmin/shared/field_as_li.html" with field=form.password2 %}
+        {% include "wagtailadmin/shared/field.html" with field=form.password2 %}
     {% endif %}
 {% endblock fields %}
