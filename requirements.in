@@ -31,5 +31,5 @@ wagtailsvg==0.0.37
 # branch: iogt, tag: v0.8.5-iogt.1
 wagtail-transfer @ https://github.com/IDEMSInternational/wagtail-transfer/archive/52b57b364ebc9acddd412ee708f829b45763c9ab.zip
 whitenoise==5.2.*
-django-notifications-hq==1.8.3
+https://github.com/sachin-mehta/django-notifications/archive/3f0fc1d72388e048f0f1ef064d64cbbf80aa2d98.tar.gz#egg=django-notifications-hq
 celery==5.3.6

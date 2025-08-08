@@ -218,12 +218,6 @@ click-repl==0.3.0 \
     --hash=sha256:17849c23dba3d667247dc4defe1757fff98694e90fe37474f3feebb69ced26a9 \
     --hash=sha256:fb7e06deb8da8de86180a33a9da97ac316751c094c6899382da7feeeeb51b812
     # via celery
-colorama==0.4.6 \
-    --hash=sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44 \
-    --hash=sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6
-    # via
-    #   click
-    #   tqdm
 cryptography==42.0.8 \
     --hash=sha256:013629ae70b40af70c9a7a5db40abe5d9054e6f4380e50ce769947b73bf3caad \
     --hash=sha256:2346b911eb349ab547076f47f2e035fc8ff2c02380a7cbbf8d87114fa0f1c583 \
@@ -345,8 +339,8 @@ django-modelcluster==6.3 \
     --hash=sha256:0caed8a0e889f3abb92f144670878a466ef954ffa6c4c7b9c80e6426b720a49d \
     --hash=sha256:a8783d6565a0663f41cd6003ea361c3a5711e8a2a326160f1ec1eceb3e973d4f
     # via wagtail
-django-notifications-hq==1.8.3 \
-    --hash=sha256:0f4b216bb382b7c7c4eef273eb211e59c1c6a0ea38cba6077415ac031d330725
+django-notifications-hq @ https://github.com/sachin-mehta/django-notifications/archive/3f0fc1d72388e048f0f1ef064d64cbbf80aa2d98.tar.gz \
+    --hash=sha256:7684f672623c707b163237c53eefa331919e66a623b1c915aeaaaa6f9fbb5f65
     # via -r requirements.in
 django-permissionedforms==0.1 \
     --hash=sha256:4340bb20c4477fffb13b4cc5cccf9f1b1010b64f79956c291c72d2ad2ed243f8 \
@@ -822,7 +816,9 @@ swapper==1.4.0 \
 tablib[xls,xlsx]==3.6.1 \
     --hash=sha256:040685fde11e9237675f43e985edb94b63250a5e9236f89d561ce6fb1465b839 \
     --hash=sha256:c771d38ed1d74350a69873db43e0afb7f1cca0ed2915a7243094463eb6789207
-    # via wagtail
+    # via
+    #   tablib
+    #   wagtail
 telepath==0.3.1 \
     --hash=sha256:925c0609e0a8a6488ec4a55b19d485882cf72223b2b19fe2359a50fddd813c9c \
     --hash=sha256:c280aa8e77ad71ce80e96500a4e4d4a32f35b7e0b52e896bb5fde9a5bcf0699a
