@@ -20,7 +20,7 @@
             <div class="notification-holder">
                 <div class="notification-bell-wrapper" onclick="openNotificationsPanel()" style="cursor: pointer;">
                     <div class="notification-bell" onclick="openNotificationsPanel()" id="notif-bell">
-                        <i class="fas fa-bell"></i>
+                        <img src="{% static 'icons/bell-solid.svg' %}" alt="Notifications" width="29">
                         <span id="notif-count" class="notif-badge" style="display: none;">{{ request.user.notifications.unread.count }}</span>
                     </div>
                 </div>
