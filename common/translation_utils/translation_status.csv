@@ -1,5 +1,5 @@
 Text,context,tag,django,status,Replacement quality,Replacement strings (separated by |),Comment
-Canned Responses,BE,not needed,,not needed,,,For comment replies?
+Canned Responses,BE,translate,,not needed,,,For comment replies?
 Bad Token,,not needed,,not needed,,,Can occur during password reset?
 %(time_period)s ago,FE,not needed,,not needed,ok,Use ISO format/dates for locales that are not in django,"Internally used by django, available for https://github.com/django/django/tree/main/django/contrib/humanize/locale/"
 Home Page Banner,BE,not needed,,not needed,,,
@@ -238,7 +238,7 @@ See results,FE,translate,,unused,good,Search the site...,"(appears when no resul
 Your password is now changed.,FE,translate,,unused,good,Your PIN has been changed successfully.,
 Set Password,,not needed,,not needed,,Create 4 digit pin,
 BACK,FE,translate,,has partial translation,,,
-© The Internet of Good Things,FE,translate,,has partial translation,,,
+The Internet of Good Things,FE,translate,,has partial translation,,,
 This appears to be your first visit here. Our website is also available as a downloadable app.,FE,translate,,unused,,,
 Would you like to download it?,FE,translate,,unused,,,
 Download,FE,translate,,has partial translation,,,
@@ -716,3 +716,7 @@ Custom permissions,,,,needs translation,,,
 Submit,,translate,,has partial translation,,,
 Farsi,,not needed,,not needed,,,
 Burmese,,not needed,,not needed,,,
+Hausa,,not needed,,not needed,,,
+Yoruba,,not needed,,not needed,,,
+Igbo,,not needed,,not needed,,,
+Pidgin,,not needed,,not needed,,,
