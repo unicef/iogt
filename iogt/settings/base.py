@@ -299,6 +299,11 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('uz', _('Uzbek')),
     ('zu', _('Zulu')),
     ('xy', _('Testing')),
+    ('ha', _('Hausa')),
+    ('yo', _('Yoruba')),
+    ('ig', _('Igbo')),
+    ('pcm', _('Pidgin')),
+    
 ]
 
 EXTRA_LANG_INFO = {
@@ -397,6 +402,12 @@ EXTRA_LANG_INFO = {
         'code': 'xy',
         'name': 'Testing',
         'name_local': 'Testing',
+    },
+    'pcm': {
+        'bidi': False,
+        'code': 'pcm',
+        'name': 'Pidgin',
+        'name_local': 'Pidgin',
     },
 }
 
