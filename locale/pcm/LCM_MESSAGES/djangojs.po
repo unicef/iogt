@@ -14,14 +14,13 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "Sorry, there seems to be an error. Please try again soon."
-msgstr ""
-"Désolé, il semble qu'il y ait une erreur. Veuillez réessayer sous peu."
+msgstr "Sorry, e be like say error dey. Try again soon."
 
 msgid "You cannot submit when offline"
-msgstr ""
+msgstr "You no fit submit when you offline"
 
 msgid "Date must be in this (YYYY-MM-DD) format"
-msgstr ""
+msgstr "Date must follow dis (YYYY-MM-DD) format"
 
 msgid "Datetime must be in this YYYY-MM-DDTHH:SS format"
-msgstr ""
+msgstr "Datetime must follow dis YYYY-MM-DDTHH:SS format"

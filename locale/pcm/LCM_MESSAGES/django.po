@@ -14,361 +14,361 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "quizzes"
-msgstr "tests"
+msgstr "small-small test"
 
 msgid "Log in to participate"
-msgstr ""
+msgstr "Login make you fit join"
 
 msgid "Log in / Create account"
-msgstr ""
+msgstr "Login / Create account"
 
 msgid "© The Internet of Good Things"
-msgstr ""
+msgstr "© Di Internet wey get Beta Things"
 
 msgid "Profile"
-msgstr ""
+msgstr "Your profile"
 
 msgid "Chat"
-msgstr ""
+msgstr "Talk"
 
 msgid "More"
-msgstr ""
+msgstr "More"
 
 msgid "Log in"
-msgstr ""
+msgstr "Login"
 
 msgid "Back"
-msgstr ""
+msgstr "Go back"
 
 msgid "BACK"
-msgstr ""
+msgstr "GO BACK"
 
 msgid "Previous"
-msgstr ""
+msgstr "Before"
 
 msgid "Next"
-msgstr ""
+msgstr "Next"
 
 msgid "Comments"
-msgstr ""
+msgstr "Comment dem"
 
 msgid "Please log in or create your account"
-msgstr ""
+msgstr "Abeg login or create your account"
 
 msgid "Report"
-msgstr ""
+msgstr "Report am"
 
 msgid "Related Articles"
-msgstr ""
+msgstr "Articles wey relate"
 
 msgid "This comment has been reported."
-msgstr ""
+msgstr "Person don report this comment."
 
 msgid ""
 "It will be reviewed by the team and may be removed if it breaks our Platform"
 " Rules"
-msgstr ""
+msgstr "Di team go check am and fit remove am if e break our Platform Rules"
 
 msgid "articles"
-msgstr ""
+msgstr "articles"
 
 msgid "Search the site..."
-msgstr ""
+msgstr "Search for site…"
 
 msgid "Search results for:"
-msgstr ""
+msgstr "Search result for:"
 
 msgid "No search results were found for"
-msgstr ""
+msgstr "No search result for"
 
 msgid "Username"
-msgstr ""
+msgstr "Username"
 
 msgid "Create your account"
-msgstr ""
+msgstr "Create your account"
 
 msgid "Forgot PIN"
-msgstr ""
+msgstr "Forget your PIN"
 
 msgid "Cancel"
-msgstr ""
+msgstr "Cancel"
 
 msgid "Hey, %(username)s"
-msgstr ""
+msgstr "Hey, %(username)s"
 
 msgid "Change Digital Pin"
-msgstr ""
+msgstr "make you Change your digital PIN"
 
 msgid "Personal Details"
-msgstr ""
+msgstr "Your personal details"
 
 msgid "Save changes"
-msgstr ""
+msgstr "Save changes"
 
 msgid "Reset PIN"
-msgstr ""
+msgstr "Reset PIN"
 
 msgid "Your PIN has been changed successfully."
-msgstr ""
+msgstr "You don change your PIN well well."
 
 msgid "I accept the Terms and Conditions."
-msgstr ""
+msgstr "I gree to di Terms and Conditions."
 
 msgid "You have read %(read)s out of %(total)s"
-msgstr ""
+msgstr "You don read %(read)s from %(total)s"
 
 msgid "%(counter)s of %(total)s questions"
-msgstr ""
+msgstr "%(counter)s out of %(total)s questions"
 
 msgid "Select one"
-msgstr ""
+msgstr "Choose one"
 
 msgid "Optional"
-msgstr ""
+msgstr "If you wan do"
 
 msgid "No limit"
-msgstr ""
+msgstr "No limit"
 
 msgid "Submit"
-msgstr ""
+msgstr "Submit"
 
 msgid "Go to homepage"
-msgstr ""
+msgstr "Oya Go homepage"
 
 msgid "You have already completed this survey."
-msgstr ""
+msgstr "You don already finish dis survey."
 
 msgid "Check all that apply"
-msgstr ""
+msgstr "Tick all wey apply"
 
 msgid "Your results!"
-msgstr ""
+msgstr "Na your result be this!"
 
 msgid "Replay Quiz"
-msgstr ""
+msgstr "Play di quiz again"
 
 msgid "Incorrect"
-msgstr ""
+msgstr "No correct"
 
 msgid "Correct"
-msgstr ""
+msgstr "Correct"
 
 msgid "Your answer"
-msgstr ""
+msgstr "Your answer"
 
 msgid "Leave comment"
-msgstr ""
+msgstr "dey Leave comment"
 
 msgid "Reply"
-msgstr ""
+msgstr "Reply"
 
 msgid "Page not found"
-msgstr ""
+msgstr "Page no dey"
 
 msgid "Sorry, this page could not be found."
-msgstr ""
+msgstr "Sorry, we no fit find dis page."
 
 msgid "Internal server error"
-msgstr ""
+msgstr "Internal server error"
 
 msgid "1 result"
 msgid_plural "%(counter)s results"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 result"
+msgstr[1] "%(counter)s results"
 
 msgid "poll"
-msgstr ""
+msgstr "poll"
 
 msgid "survey"
-msgstr ""
+msgstr "survey"
 
 msgid "quiz"
-msgstr ""
+msgstr "quiz"
 
 msgid "This field is required."
-msgstr ""
+msgstr "You must fill dis space."
 
 msgid "Send"
-msgstr ""
+msgstr "Send"
 
 msgid "Remove this comment?"
-msgstr ""
+msgstr "Remove dis comment?"
 
 msgid "Remove"
-msgstr ""
+msgstr "Remove"
 
 msgid "This comment has been removed."
-msgstr ""
+msgstr "Dem don remove dis comment."
 
 msgid "moderator"
-msgstr ""
+msgstr "moderator"
 
 msgid "sections"
-msgstr ""
+msgstr "sections"
 
 msgid "Check if applies"
-msgstr ""
+msgstr "Check if e apply"
 
 msgid "New comments have been disabled for this page."
-msgstr ""
+msgstr "New comment no dey again for dis page."
 
 msgid "Correct answer"
-msgstr ""
+msgstr "Correct answer"
 
 msgid "Download"
-msgstr ""
+msgstr "Download"
 
 msgid ""
 "You are leaving the <b>Internet of Good Things</b> to visit an external "
 "website and standard data charges by your network provider might apply"
-msgstr ""
+msgstr "You dey comot from Internet of Good Things go another website, your network fit charge you data fee"
 
 msgid "Continue to external site"
-msgstr ""
+msgstr "Continue go di external site"
 
 msgid "4-digit PIN"
-msgstr ""
+msgstr "4-digit PIN"
 
 msgid "Old 4-digit PIN"
-msgstr ""
+msgstr "Old 4-digit PIN"
 
 msgid "New 4-digit PIN"
-msgstr ""
+msgstr "New 4-digit PIN"
 
 msgid "Confirm new 4-digit PIN"
-msgstr ""
+msgstr "Confirm new 4-digit PIN"
 
 msgid "Log out"
-msgstr ""
+msgstr "Log out"
 
 msgid "section"
-msgstr ""
+msgstr "section"
 
 msgid "article"
-msgstr ""
+msgstr "article"
 
 msgid "Remember me"
-msgstr ""
+msgstr "Remember me"
 
 msgid "You have signed out."
-msgstr ""
+msgstr "You don sign out."
 
 msgid ""
 "Enter a valid username. This value may contain only letters, numbers, and "
 "@/./+/-/_ characters."
-msgstr ""
+msgstr "Put correct username wey fit get only letter, number, and @/./+/-/_"
 
 msgid "You must type the same password each time."
-msgstr ""
+msgstr "You must type di same password every time."
 
 msgid "This password is too short. It must contain at least 4 characters."
-msgstr ""
+msgstr "This password too short, e must get at least 4 character."
 
 msgid "Please type your current password."
-msgstr ""
+msgstr "Abeg type your current password."
 
 msgid "Password successfully changed."
-msgstr ""
+msgstr "Password don change well well."
 
 msgid "Enter a valid date/time."
-msgstr ""
+msgstr "Put correct date/time."
 
 msgid "Enter a valid date."
-msgstr ""
+msgstr "Put correct date."
 
 msgid "Enter a valid URL."
-msgstr ""
+msgstr "Put correct website link."
 
 msgid "Enter a valid email address."
-msgstr ""
+msgstr "Put correct email."
 
 msgid "Enter a valid integer."
-msgstr ""
+msgstr "Put correct whole number."
 
 msgid "Ensure this value is greater than or equal to %(limit_value)s."
-msgstr ""
+msgstr "Make sure say dis value big pass or equal %(limit_value)s."
 
 msgid "Your comment"
-msgstr ""
+msgstr "Your comment"
 
 msgid "Are you sure you want to log out?"
-msgstr ""
+msgstr "You sure say you wan log out?"
 
 msgid "Your browser does not support video playback."
-msgstr ""
+msgstr "Your browser no fit play video."
 
 msgid "Your browser does not support audio playback."
-msgstr ""
+msgstr "Your browser no fit play audio."
 
 msgid "Don't display my username next to my comment"
-msgstr ""
+msgstr "No show my username near my comment"
 
 msgid "Anonymous"
-msgstr ""
+msgstr "Anonymous"
 
 msgid "Report this comment?"
-msgstr ""
+msgstr "Report dis comment?"
 
 msgid "Display name"
-msgstr ""
+msgstr "Display name"
 
 msgid "Reported by %(comment_report_count)s user"
 msgid_plural "Reported by %(comment_report_count)s users"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Reported by %(comment_report_count)s user"
+msgstr[1] "Reported by %(comment_report_count)s users"
 
 msgid ""
 "Sorry, %(page_title)s is not available in %(language)s. If you want to keep "
 "browsing in %(language)s you can click below to return to the homepage."
-msgstr ""
+msgstr "Sorry, %(page_title)s no dey for %(language)s. If you wan continue browse for %(language)s, click down go homepage."
 
 msgid "Username not available."
-msgstr ""
+msgstr "Username no dey."
 
 msgid "Display name not available."
-msgstr ""
+msgstr "Display name no dey."
 
 msgid "You have already completed this quiz."
-msgstr ""
+msgstr "You don already finish dis quiz."
 
 msgid "You have already completed this poll."
-msgstr ""
+msgstr "You don already finish dis poll."
 
 msgid ""
 "If you cannot view the above video, you can instead %(start_link)sdownload "
 "it%(end_link)s."
-msgstr ""
+msgstr "If you no fit watch di video wey dey up, you fit instead %(start_link)sdownload am%(end_link)s."
 
 msgid ""
 "If you cannot listen to the above audio, you can instead "
 "%(start_link)sdownload it%(end_link)s."
-msgstr ""
+msgstr "If you no fit listen di audio wey dey up, you fit instead %(start_link)sdownload am%(end_link)s."
 
 msgid "Please complete the questions marked as required to continue"
-msgstr ""
+msgstr "Abeg finish di question dem mark as required before you continue"
 
 msgid "Need internet access to visit external site."
-msgstr ""
+msgstr "You need internet to visit external site."
 
 msgid "Comment Moderation"
-msgstr ""
+msgstr "Comment Moderation"
 
 msgid "Filters"
-msgstr ""
+msgstr "Filters"
 
 msgid "Apply"
-msgstr ""
+msgstr "Apply"
 
 msgid "Actions"
-msgstr ""
+msgstr "Actions"
 
 msgid "Unsure"
-msgstr ""
+msgstr "No sure"
 
 msgid "No comment found."
-msgstr ""
+msgstr "No comment we see."
 
 msgid ""
 "The content you are trying to reach is not available. To see offline content"
 " click <a href=\"%(offline_content_index_page_url)s\">here</a>"
-msgstr ""
+msgstr "The content wey you dey try reach no dey. To see offline content click here"

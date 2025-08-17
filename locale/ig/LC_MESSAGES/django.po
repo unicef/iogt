@@ -14,361 +14,361 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "quizzes"
-msgstr "tests"
+msgstr "ajụjụ ọnụ nta"
 
 msgid "Log in to participate"
-msgstr ""
+msgstr "Banye ka ị sonyere"
 
 msgid "Log in / Create account"
-msgstr ""
+msgstr "Banye / Mepụta akaụntụ"
 
 msgid "© The Internet of Good Things"
-msgstr ""
+msgstr "© Ịntanet nke Ihe Ọma"
 
 msgid "Profile"
-msgstr ""
+msgstr "Profaịlụ"
 
 msgid "Chat"
-msgstr ""
+msgstr "Mkparịta ụka"
 
 msgid "More"
-msgstr ""
+msgstr "Ọzọ"
 
 msgid "Log in"
-msgstr ""
+msgstr "Banye"
 
 msgid "Back"
-msgstr ""
+msgstr "Laghachi"
 
 msgid "BACK"
-msgstr ""
+msgstr "LAGHACHI"
 
 msgid "Previous"
-msgstr ""
+msgstr "Gara aga"
 
 msgid "Next"
-msgstr ""
+msgstr "Na-abịa"
 
 msgid "Comments"
-msgstr ""
+msgstr "Okwu"
 
 msgid "Please log in or create your account"
-msgstr ""
+msgstr "Biko banye ma ọ bụ mepụta akaụntụ gị"
 
 msgid "Report"
-msgstr ""
+msgstr "Kọ akụkọ"
 
 msgid "Related Articles"
-msgstr ""
+msgstr "Isiokwu metụtara ya"
 
 msgid "This comment has been reported."
-msgstr ""
+msgstr "Egoziwo akụkọ gbasara okwu a."
 
 msgid ""
 "It will be reviewed by the team and may be removed if it breaks our Platform"
 " Rules"
-msgstr ""
+msgstr "Otu ga-enyocha ya ma wepu ya ma ọ bụrụ na ọ mebiri Iwu Ụlọọrụ anyị"
 
 msgid "articles"
-msgstr ""
+msgstr "isiokwu"
 
 msgid "Search the site..."
-msgstr ""
+msgstr "Chọọ na saịtị…"
 
 msgid "Search results for:"
-msgstr ""
+msgstr "Nsonaazụ ọchụchọ maka:"
 
 msgid "No search results were found for"
-msgstr ""
+msgstr "Enweghị nsonaazụ ọchụchọ achọtara maka"
 
 msgid "Username"
-msgstr ""
+msgstr "Aha njirimara"
 
 msgid "Create your account"
-msgstr ""
+msgstr "Mepụta akaụntụ gị"
 
 msgid "Forgot PIN"
-msgstr ""
+msgstr "Chefuru PIN"
 
 msgid "Cancel"
-msgstr ""
+msgstr "Kagbuo"
 
 msgid "Hey, %(username)s"
-msgstr ""
+msgstr "Ndewo, %(username)s"
 
 msgid "Change Digital Pin"
-msgstr ""
+msgstr "Gbanwee PIN dijitalụ"
 
 msgid "Personal Details"
-msgstr ""
+msgstr "Nkọwa onwe"
 
 msgid "Save changes"
-msgstr ""
+msgstr "Chekwaa mgbanwe"
 
 msgid "Reset PIN"
-msgstr ""
+msgstr "Tọgharịa PIN"
 
 msgid "Your PIN has been changed successfully."
-msgstr ""
+msgstr "Agbanweela PIN gị nke ọma."
 
 msgid "I accept the Terms and Conditions."
-msgstr ""
+msgstr "Anaghị m ekweta na Okwu na Ụkpụrụ."
 
 msgid "You have read %(read)s out of %(total)s"
-msgstr ""
+msgstr "Ị gụrụ %(read)s n’ime %(total)s"
 
 msgid "%(counter)s of %(total)s questions"
-msgstr ""
+msgstr "Ajụjụ %(counter)s n’ime %(total)s"
 
 msgid "Select one"
-msgstr ""
+msgstr "Họrọ otu"
 
 msgid "Optional"
-msgstr ""
+msgstr "Nhọrọ"
 
 msgid "No limit"
-msgstr ""
+msgstr "Enweghị oke"
 
 msgid "Submit"
-msgstr ""
+msgstr "Zipụ"
 
 msgid "Go to homepage"
-msgstr ""
+msgstr "Gaa na ibe isi"
 
 msgid "You have already completed this survey."
-msgstr ""
+msgstr "Ị emelarị nchọpụta a."
 
 msgid "Check all that apply"
-msgstr ""
+msgstr "Lelee ihe niile kwekọrọ"
 
 msgid "Your results!"
-msgstr ""
+msgstr "Nsonaazụ gị!"
 
 msgid "Replay Quiz"
-msgstr ""
+msgstr "Mee ajụjụ ọzọ"
 
 msgid "Incorrect"
-msgstr ""
+msgstr "Ezighi ezi"
 
 msgid "Correct"
-msgstr ""
+msgstr "Ziri ezi"
 
 msgid "Your answer"
-msgstr ""
+msgstr "Azịza gị"
 
 msgid "Leave comment"
-msgstr ""
+msgstr "Hapụ okwu"
 
 msgid "Reply"
-msgstr ""
+msgstr "Zaghachi"
 
 msgid "Page not found"
-msgstr ""
+msgstr "Echefuru ibe ahụ"
 
 msgid "Sorry, this page could not be found."
-msgstr ""
+msgstr "Ndo, enweghi ike ịchọta ibe a."
 
 msgid "Internal server error"
-msgstr ""
+msgstr "Njehie sava ime"
 
 msgid "1 result"
 msgid_plural "%(counter)s results"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Nsonaazụ 1"
+msgstr[1] "Nsonaazụ %(counter)s"
 
 msgid "poll"
-msgstr ""
+msgstr "votu"
 
 msgid "survey"
-msgstr ""
+msgstr "nchọpụta"
 
 msgid "quiz"
-msgstr ""
+msgstr "ajụjụ"
 
 msgid "This field is required."
-msgstr ""
+msgstr "A chọrọ ubi a."
 
 msgid "Send"
-msgstr ""
+msgstr "Zipụ"
 
 msgid "Remove this comment?"
-msgstr ""
+msgstr "Wepu okwu a?"
 
 msgid "Remove"
-msgstr ""
+msgstr "Wepu"
 
 msgid "This comment has been removed."
-msgstr ""
+msgstr "E wepụrụ okwu a."
 
 msgid "moderator"
-msgstr ""
+msgstr "onye nlekọta"
 
 msgid "sections"
-msgstr ""
+msgstr "ngalaba"
 
 msgid "Check if applies"
-msgstr ""
+msgstr "Lelee ma ọ dị mkpa"
 
 msgid "New comments have been disabled for this page."
-msgstr ""
+msgstr "E kwụsịrị ikwu okwu ọhụrụ n’ibe a."
 
 msgid "Correct answer"
-msgstr ""
+msgstr "Azịza ziri ezi"
 
 msgid "Download"
-msgstr ""
+msgstr "Budata"
 
 msgid ""
 "You are leaving the <b>Internet of Good Things</b> to visit an external "
 "website and standard data charges by your network provider might apply"
-msgstr ""
+msgstr "Ị na-apụ na Internet of Good Things iji gaa na weebụsaịtị ọzọ, ụgwọ data nwere ike ịbanye"
 
 msgid "Continue to external site"
-msgstr ""
+msgstr "Gaa n'ihu na weebụsaịtị ọzọ"
 
 msgid "4-digit PIN"
-msgstr ""
+msgstr "PIN mkpụrụ akwụkwọ 4"
 
 msgid "Old 4-digit PIN"
-msgstr ""
+msgstr "PIN mkpụrụ akwụkwọ 4 ochie"
 
 msgid "New 4-digit PIN"
-msgstr ""
+msgstr "PIN mkpụrụ akwụkwọ 4 ọhụrụ"
 
 msgid "Confirm new 4-digit PIN"
-msgstr ""
+msgstr "Kwenye PIN mkpụrụ akwụkwọ 4 ọhụrụ"
 
 msgid "Log out"
-msgstr ""
+msgstr "Pụọ"
 
 msgid "section"
-msgstr ""
+msgstr "ngalaba"
 
 msgid "article"
-msgstr ""
+msgstr "edemede"
 
 msgid "Remember me"
-msgstr ""
+msgstr "Cheta m"
 
 msgid "You have signed out."
-msgstr ""
+msgstr "Ị pụọla."
 
 msgid ""
 "Enter a valid username. This value may contain only letters, numbers, and "
 "@/./+/-/_ characters."
-msgstr ""
+msgstr "Tinye aha onye ọrụ ziri ezi. Nke a nwere ike inwe mkpụrụedemede, nọmba, na akara @/./+/-/_ naanị."
 
 msgid "You must type the same password each time."
-msgstr ""
+msgstr "Ị ga-ede otu paswọọdụ ahụ mgbe niile."
 
 msgid "This password is too short. It must contain at least 4 characters."
-msgstr ""
+msgstr "Paswọọdụ a dị mkpụmkpụ. Ọ ga-enwekarị mkpụrụedemede 4 ma ọ dịkarịa ala."
 
 msgid "Please type your current password."
-msgstr ""
+msgstr "Biko dee paswọọdụ gị ugbu a."
 
 msgid "Password successfully changed."
-msgstr ""
+msgstr "E gbanwere paswọọdụ nke ọma."
 
 msgid "Enter a valid date/time."
-msgstr ""
+msgstr "Tinye ụbọchị/oge ziri ezi."
 
 msgid "Enter a valid date."
-msgstr ""
+msgstr "Tinye ụbọchị ziri ezi."
 
 msgid "Enter a valid URL."
-msgstr ""
+msgstr "Tinye URL ziri ezi."
 
 msgid "Enter a valid email address."
-msgstr ""
+msgstr "Tinye adreesị email ziri ezi."
 
 msgid "Enter a valid integer."
-msgstr ""
+msgstr "Tinye nọmba zuru oke ziri ezi."
 
 msgid "Ensure this value is greater than or equal to %(limit_value)s."
-msgstr ""
+msgstr "Jide n'aka na uru a ka ukwuu ma ọ bụ hà na %(limit_value)s."
 
 msgid "Your comment"
-msgstr ""
+msgstr "Okwu gị"
 
 msgid "Are you sure you want to log out?"
-msgstr ""
+msgstr "Ị kwetara na ị chọrọ ịpụ?"
 
 msgid "Your browser does not support video playback."
-msgstr ""
+msgstr "Browser gị anaghị akwado igwu vidio."
 
 msgid "Your browser does not support audio playback."
-msgstr ""
+msgstr "Browser gị anaghị akwado igwu ụda."
 
 msgid "Don't display my username next to my comment"
-msgstr ""
+msgstr "Egbula aha m n'akụkụ okwu m"
 
 msgid "Anonymous"
-msgstr ""
+msgstr "Onye amaghị aha"
 
 msgid "Report this comment?"
-msgstr ""
+msgstr "Kpọọ akụkọ okwu a?"
 
 msgid "Display name"
-msgstr ""
+msgstr "Gosipụtara aha"
 
 msgid "Reported by %(comment_report_count)s user"
 msgid_plural "Reported by %(comment_report_count)s users"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "E kọrọ site n'aka onye ọrụ %(comment_report_count)s"
+msgstr[1] "E kọrọ site n'aka ndị ọrụ %(comment_report_count)s"
 
 msgid ""
 "Sorry, %(page_title)s is not available in %(language)s. If you want to keep "
 "browsing in %(language)s you can click below to return to the homepage."
-msgstr ""
+msgstr "Ndo, %(page_title)s adịghị na %(language)s. Ọ bụrụ na ịchọrọ ịga n'ihu na nchọgharị na %(language)s, pịa n'okpuru ka laghachi n'ibe isi."
 
 msgid "Username not available."
-msgstr ""
+msgstr "Aha onye ọrụ adịghị."
 
 msgid "Display name not available."
-msgstr ""
+msgstr "Aha ngosi adịghị."
 
 msgid "You have already completed this quiz."
-msgstr ""
+msgstr "Ị emelarị ajụjụ a."
 
 msgid "You have already completed this poll."
-msgstr ""
+msgstr "Ị emelarị votu a."
 
 msgid ""
 "If you cannot view the above video, you can instead %(start_link)sdownload "
 "it%(end_link)s."
-msgstr ""
+msgstr "Ọ bụrụ na ị gaghị ele vidio dị n’elu anya, ị nwere ike ibudata ya kama %(start_link)sbudata ya%(end_link)s."
 
 msgid ""
 "If you cannot listen to the above audio, you can instead "
 "%(start_link)sdownload it%(end_link)s."
-msgstr ""
+msgstr "Ọ bụrụ na ị gaghị ege ụda dị n’elu, ị nwere ike ibudata ya kama %(start_link)sbudata ya%(end_link)s."
 
 msgid "Please complete the questions marked as required to continue"
-msgstr ""
+msgstr "Biko mezue ajụjụ ndị e depụtara dị ka achọrọ ka ịga n’ihu"
 
 msgid "Need internet access to visit external site."
-msgstr ""
+msgstr "Ọ dị mkpa inwe njikọ ịntanet iji gaa na weebụsaịtị ọzọ."
 
 msgid "Comment Moderation"
-msgstr ""
+msgstr "Nlekọta Okwu"
 
 msgid "Filters"
-msgstr ""
+msgstr "Filtas"
 
 msgid "Apply"
-msgstr ""
+msgstr "Tinye"
 
 msgid "Actions"
-msgstr ""
+msgstr "Omume"
 
 msgid "Unsure"
-msgstr ""
+msgstr "Amaghị"
 
 msgid "No comment found."
-msgstr ""
+msgstr "Enweghị okwu e chọtara."
 
 msgid ""
 "The content you are trying to reach is not available. To see offline content"
 " click <a href=\"%(offline_content_index_page_url)s\">here</a>"
-msgstr ""
+msgstr "Ihe ị na-agbalị ịhụ adịghị. Iji hụ ọdịnaya na-adịghị n'ịntanetị, pịa ebe a"

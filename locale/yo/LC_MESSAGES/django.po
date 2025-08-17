@@ -14,363 +14,362 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "quizzes"
-msgstr "tests"
+msgstr "ìdánwò kéékèèké"
 
 msgid "Log in to participate"
-msgstr ""
+msgstr "Wọlé láti kópa"
 
 msgid "Log in / Create account"
-msgstr ""
+msgstr "Wọlé / Ṣẹ́dá àkọọlẹ́"
 
 msgid "© The Internet of Good Things"
-msgstr ""
+msgstr "© Ayélujára àwọn Nǹkan Tó Dáa"
 
 msgid "Profile"
-msgstr ""
+msgstr "Àkọsílẹ̀ ẹni"
 
 msgid "Chat"
-msgstr ""
+msgstr "Ìjíròrò"
 
 msgid "More"
-msgstr ""
+msgstr "Síi"
 
 msgid "Log in"
-msgstr ""
+msgstr "Wọlé"
 
 msgid "Back"
-msgstr ""
+msgstr "Padà"
 
 msgid "BACK"
-msgstr ""
+msgstr "PADÀ"
 
 msgid "Previous"
-msgstr ""
+msgstr "Tó kọjá"
 
 msgid "Next"
-msgstr ""
+msgstr "Tó ń bọ̀"
 
 msgid "Comments"
-msgstr ""
+msgstr "Àlàyé"
 
 msgid "Please log in or create your account"
-msgstr ""
+msgstr "Jọ̀wọ́ wọlé tàbí ṣẹ́dá àkọọlẹ́ rẹ"
 
 msgid "Report"
-msgstr ""
+msgstr "Ròyìn"
 
 msgid "Related Articles"
-msgstr ""
+msgstr "Àwọn àpilẹ̀kọ tó ní í ṣe pẹ̀lú"
 
 msgid "This comment has been reported."
-msgstr ""
+msgstr "Àlàyé yìí ti jẹ́ kó ròyìn."
 
 msgid ""
 "It will be reviewed by the team and may be removed if it breaks our Platform"
 " Rules"
-msgstr ""
-"Il sera examiné par l'équipe et peut être retiré s'il enfreint les règles de"
-" notre communauté."
+msgstr "Ẹgbẹ́ yóò ṣàyẹ̀wò ó, wọ́n lè yọ ọ́ kúrò bí ó bá bàjẹ́ Ilànà Pẹpẹ wa"
+
 
 msgid "articles"
-msgstr ""
+msgstr "àpilẹ̀kọ"
 
 msgid "Search the site..."
-msgstr ""
+msgstr "Wá nínú ààyè yìí…"
 
 msgid "Search results for:"
-msgstr ""
+msgstr "Àbájáde ìwádìí fún:"
 
 msgid "No search results were found for"
-msgstr ""
+msgstr "Kò sí àbájáde ìwádìí tó wà fún"
 
 msgid "Username"
-msgstr ""
+msgstr "Orúkọ olùmúlò"
 
 msgid "Create your account"
-msgstr ""
+msgstr "Ṣẹ́dá àkọọlẹ́ rẹ"
 
 msgid "Forgot PIN"
-msgstr ""
+msgstr "Gbàgbé Nọ́mbà PIN"
 
 msgid "Cancel"
-msgstr ""
+msgstr "Fagilé"
 
 msgid "Hey, %(username)s"
-msgstr ""
+msgstr "Bàwo, %(username)s"
 
 msgid "Change Digital Pin"
-msgstr ""
+msgstr "Ṣàtúnṣe Nọ́mbà PIN oní-nọ́mbà"
 
 msgid "Personal Details"
-msgstr ""
+msgstr "Àlàyé ẹni"
 
 msgid "Save changes"
-msgstr ""
+msgstr "Fipamọ́ àwọn àtúnṣe"
 
 msgid "Reset PIN"
-msgstr ""
+msgstr "Tún PIN ṣe"
 
 msgid "Your PIN has been changed successfully."
-msgstr ""
+msgstr "A ti yí Nọ́mbà PIN rẹ padà ní àṣeyọrí."
 
 msgid "I accept the Terms and Conditions."
-msgstr ""
+msgstr "Mo gba àwọn Ìpinnu àti Àwọn Ilànà."
 
 msgid "You have read %(read)s out of %(total)s"
-msgstr ""
+msgstr "O ti ka %(read)s lára %(total)s"
 
 msgid "%(counter)s of %(total)s questions"
-msgstr ""
+msgstr "Ìbéèrè %(counter)s lára %(total)s"
 
 msgid "Select one"
-msgstr ""
+msgstr "Yàn ọ̀kan"
 
 msgid "Optional"
-msgstr ""
+msgstr "Aṣayan"
 
 msgid "No limit"
-msgstr ""
+msgstr "Kò sí ìdíyelé"
 
 msgid "Submit"
-msgstr ""
+msgstr "Fọwọ́ sí"
 
 msgid "Go to homepage"
-msgstr ""
+msgstr "Lọ sí ojú-ìwé àkọ́kọ́"
 
 msgid "You have already completed this survey."
-msgstr ""
+msgstr "O ti parí ìdánilẹ́kọ yìí."
 
 msgid "Check all that apply"
-msgstr ""
+msgstr "Ṣàyẹ̀wò gbogbo tó yẹ"
 
 msgid "Your results!"
-msgstr ""
+msgstr "Àbájáde rẹ!"
 
 msgid "Replay Quiz"
-msgstr ""
+msgstr "Ṣe ìdánwò lẹ́ẹ̀kansi"
 
 msgid "Incorrect"
-msgstr ""
+msgstr "Kò tọ́"
 
 msgid "Correct"
-msgstr ""
+msgstr "Tọ́"
 
 msgid "Your answer"
-msgstr ""
+msgstr "Ìdáhùn rẹ"
 
 msgid "Leave comment"
-msgstr ""
+msgstr "Fi ọrọ̀ sílẹ̀"
 
 msgid "Reply"
-msgstr ""
+msgstr "Dáhùn"
 
 msgid "Page not found"
-msgstr ""
+msgstr "A kò rí ojú-ìwé náà"
 
 msgid "Sorry, this page could not be found."
-msgstr ""
+msgstr "Bínú, a kò rí ojú-ìwé yìí."
 
 msgid "Internal server error"
-msgstr ""
+msgstr "Àṣìṣe olupin inú"
 
 msgid "1 result"
 msgid_plural "%(counter)s results"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Àbájáde 1"
+msgstr[1] "Àbájáde %(counter)s"
 
 msgid "poll"
-msgstr ""
+msgstr "ìdìbọ"
 
 msgid "survey"
-msgstr ""
+msgstr "ìdánilẹ́kọ"
 
 msgid "quiz"
-msgstr ""
+msgstr "ìdánwò"
 
 msgid "This field is required."
-msgstr ""
+msgstr "Pápá yìí ṣe pàtàkì."
 
 msgid "Send"
-msgstr ""
+msgstr "Ránṣẹ́"
 
 msgid "Remove this comment?"
-msgstr ""
+msgstr "Yọ àsọyé yìí kúrò?"
 
 msgid "Remove"
-msgstr ""
+msgstr "Yọ"
 
 msgid "This comment has been removed."
-msgstr ""
+msgstr "A ti yọ àsọyé yìí kúrò."
 
 msgid "moderator"
-msgstr ""
+msgstr "amòfin"
 
 msgid "sections"
-msgstr ""
+msgstr "apá"
 
 msgid "Check if applies"
-msgstr ""
+msgstr "Ṣàyẹ̀wò bó bá yẹ"
 
 msgid "New comments have been disabled for this page."
-msgstr ""
+msgstr "Àwọn àsọyé tuntun ti di mọ́ fún ojú-ìwé yìí."
 
 msgid "Correct answer"
-msgstr ""
+msgstr "Ìdáhùn tó tọ́"
 
 msgid "Download"
-msgstr ""
+msgstr "Ṣe igbasilẹ"
 
 msgid ""
 "You are leaving the <b>Internet of Good Things</b> to visit an external "
 "website and standard data charges by your network provider might apply"
-msgstr ""
+msgstr "O ń fi Ayelujara ti Ohun Rere sílẹ̀ láti ṣàbẹ̀wò sí ojú-ìwé ita, àti pé ó ṣeé ṣe kí wọ́n gba owó ìfọwọ́sowọ́pọ̀ data"
 
 msgid "Continue to external site"
-msgstr ""
+msgstr "Tẹ̀síwájú sí ojú-ìwé ita"
 
 msgid "4-digit PIN"
-msgstr ""
+msgstr "PIN díjítì mẹ́rin"
 
 msgid "Old 4-digit PIN"
-msgstr ""
+msgstr "PIN díjítì mẹ́rin atijọ́"
 
 msgid "New 4-digit PIN"
-msgstr ""
+msgstr "PIN díjítì mẹ́rin tuntun"
 
 msgid "Confirm new 4-digit PIN"
-msgstr ""
+msgstr "Jẹ́rìí PIN díjítì mẹ́rin tuntun"
 
 msgid "Log out"
-msgstr ""
+msgstr "Jáde"
 
 msgid "section"
-msgstr ""
+msgstr "apá"
 
 msgid "article"
-msgstr ""
+msgstr "àpilẹ̀kọ"
 
 msgid "Remember me"
-msgstr ""
+msgstr "Rántí mi"
 
 msgid "You have signed out."
-msgstr ""
+msgstr "O ti jáde."
 
 msgid ""
 "Enter a valid username. This value may contain only letters, numbers, and "
 "@/./+/-/_ characters."
-msgstr ""
+msgstr "Tẹ orúkọ olumulo tó bófin mu. Èyí lè ní lẹ́tà, nọ́mbà, àti àmi @/./+/-/_ nìkan."
 
 msgid "You must type the same password each time."
-msgstr ""
+msgstr "O gbọ́dọ̀ kọ ọrọ aṣínà kan naa ní gbogbo ìgbà."
 
 msgid "This password is too short. It must contain at least 4 characters."
-msgstr ""
+msgstr "Ọrọ aṣínà yìí kéré jù. Ó gbọ́dọ̀ ní o kere jù lọ àmì mẹ́rin."
 
 msgid "Please type your current password."
-msgstr ""
+msgstr "Jọwọ kọ ọrọ aṣínà lọwọlọwọ rẹ."
 
 msgid "Password successfully changed."
-msgstr ""
+msgstr "Ọrọ aṣínà ti yípadà ní àṣeyọrí."
 
 msgid "Enter a valid date/time."
-msgstr ""
+msgstr "Tẹ ọjọ́/àkókò tó bófin mu."
 
 msgid "Enter a valid date."
-msgstr ""
+msgstr "Tẹ ọjọ́ tó bófin mu."
 
 msgid "Enter a valid URL."
-msgstr ""
+msgstr "Tẹ URL tó bófin mu."
 
 msgid "Enter a valid email address."
-msgstr ""
+msgstr "Tẹ ìmèl tó bófin mu."
 
 msgid "Enter a valid integer."
-msgstr ""
+msgstr "Tẹ nọ́mbà gígùn tó bófin mu."
 
 msgid "Ensure this value is greater than or equal to %(limit_value)s."
-msgstr ""
+msgstr "Rí i dájú pé iye yìí pọ̀ jù tàbí tó dogba pẹ̀lú %(limit_value)s."
 
 msgid "Your comment"
-msgstr ""
+msgstr "Àsọyé rẹ"
 
 msgid "Are you sure you want to log out?"
-msgstr ""
+msgstr "Ṣé o dájú pé o fẹ́ jáde?"
 
 msgid "Your browser does not support video playback."
-msgstr ""
+msgstr "Àwọ̀n aṣàwákiri rẹ kò ṣe àtìlẹ́yìn fíìmù."
 
 msgid "Your browser does not support audio playback."
-msgstr ""
+msgstr "Àwọ̀n aṣàwákiri rẹ kò ṣe àtìlẹ́yìn ohun."
 
 msgid "Don't display my username next to my comment"
-msgstr ""
+msgstr "Má ṣe fi orúkọ olumulo mi lẹ́gbẹ̀ẹ́ àsọyé mi"
 
 msgid "Anonymous"
-msgstr ""
+msgstr "Aláìmọ̀ orúkọ"
 
 msgid "Report this comment?"
-msgstr ""
+msgstr "Ṣe ìròyìn àsọyé yìí?"
 
 msgid "Display name"
-msgstr ""
+msgstr "Orúkọ tó hàn"
 
 msgid "Reported by %(comment_report_count)s user"
 msgid_plural "Reported by %(comment_report_count)s users"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "A ti jabo rẹ̀ láti ọdọ olumulo %(comment_report_count)s"
+msgstr[1] "A ti jabo rẹ̀ láti ọdọ àwọn olumulo %(comment_report_count)s"
 
 msgid ""
 "Sorry, %(page_title)s is not available in %(language)s. If you want to keep "
 "browsing in %(language)s you can click below to return to the homepage."
-msgstr ""
+msgstr "Bínú, %(page_title)s kò sí ní %(language)s. Tí o bá fẹ́ máa ṣàwárí lọ́wọ́lọ́wọ́ ní %(language)s o lè tẹ isalẹ láti padà sí ojú-ìwé àkọ́kọ́."
 
 msgid "Username not available."
-msgstr ""
+msgstr "Orúkọ olumulo kò sí."
 
 msgid "Display name not available."
-msgstr ""
+msgstr "Orúkọ tó hàn kò sí."
 
 msgid "You have already completed this quiz."
-msgstr ""
+msgstr "O ti parí ìdánwò yìí."
 
 msgid "You have already completed this poll."
-msgstr ""
+msgstr "O ti parí ìdìbọ yìí."
 
 msgid ""
 "If you cannot view the above video, you can instead %(start_link)sdownload "
 "it%(end_link)s."
-msgstr ""
+msgstr "Bí o kò bá lè wo fíìmù tó wà lókè, o lè dínkù rẹ̀ dípò náà %(start_link)sṣe igbasilẹ rẹ̀%(end_link)s."
 
 msgid ""
 "If you cannot listen to the above audio, you can instead "
 "%(start_link)sdownload it%(end_link)s."
-msgstr ""
+msgstr "Bí o kò bá lè gbọ́ ohun tó wà lókè, o lè dínkù rẹ̀ dípò náà %(start_link)sṣe igbasilẹ rẹ̀%(end_link)s."
 
 msgid "Please complete the questions marked as required to continue"
-msgstr ""
+msgstr "Jọwọ parí àwọn ìbéèrè tó fi hàn pé wọ́n ṣe pàtàkì kí o lè tẹ̀síwájú"
 
 msgid "Need internet access to visit external site."
-msgstr ""
+msgstr "O nílò ìbáṣepọ̀ Ayelujara láti ṣàbẹ̀wò sí ojú-ìwé ita."
 
 msgid "Comment Moderation"
-msgstr ""
+msgstr "Ìṣàkóso Àsọyé"
 
 msgid "Filters"
-msgstr ""
+msgstr "Fíltà"
 
 msgid "Apply"
-msgstr ""
+msgstr "Lo"
 
 msgid "Actions"
-msgstr ""
+msgstr "Ìṣe"
 
 msgid "Unsure"
-msgstr ""
+msgstr "A kò dájú"
 
 msgid "No comment found."
-msgstr ""
+msgstr "Kò sí àsọyé kankan."
 
 msgid ""
 "The content you are trying to reach is not available. To see offline content"
 " click <a href=\"%(offline_content_index_page_url)s\">here</a>"
-msgstr ""
+msgstr "Àkọsílẹ̀ tí o ń gbìyànjú láti rí kò sí. Láti rí àkọsílẹ̀ àìmọ̀ọ́fàìnì tẹ níbí"
