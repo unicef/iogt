@@ -1,3 +1,4 @@
 {% load home_tags %}
-
-{% render_image value %}
+{% if value %}
+    {% render_image value %}
+{% endif %}

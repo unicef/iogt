@@ -22,3 +22,93 @@
 .object > h2.title-wrapper {
     position: unset;
 }
+
+/* Stretch the collection dropdown to match text inputs */
+.w-field--collection_choice_field select, .w-w-field .w-field--commentable select {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Make index page collection filter match edit page fields */
+.listing-filter select,
+.c-dropdown select {
+    min-height: 40px;   /* adjust to match .w-field input */
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* Make collection dropdown take full width of its container */
+
+
+/* Keep label + input inline */
+
+
+/* Make select wider */
+/* Target only the collection filter dropdown on index page */
+/* Only target the collection filter on the images index page */
+#collection_chooser_collection_id-label {
+    margin-right: 20px; /* spacing */
+    white-space: nowrap; /* prevent label breaking */
+}
+.search-bar .fields .w-field__wrapper {
+    display:flex;
+
+    align-items: center;
+    gap: 8px;
+}
+
+
+#collection_chooser_collection_id {
+    width: 600px; /* adjust as needed */
+}
+
+/* Default state: greyish background */
+.w-field__input input, 
+.w-field__input select {
+    background-color: #f8f8f8 !important; /* greyish background */
+    border: 1px solid #b1b4b6 !important; /* grey border */
+    border-radius: 4px !important;
+    padding: 14px 15px !important;
+    font-size: 18px !important;
+    line-height: 1.4 !important;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+
+
+/* Hover state: white background */
+.w-field__input select#collection_chooser_collection_id:hover {
+    background-color: #fff !important; /* white on hover */
+}
+
+/* Focus state: yellow border + glow */
+#wrapper #collection_chooser_collection_id:focus,
+.w-field__input select#collection_chooser_collection_id:focus {
+    background-color: #fff !important; /* white when focused */
+    border-color: #ffbf47 !important;  /* yellow border */
+    box-shadow: 0 0 0 3px rgba(255, 191, 71, 0.5) !important;
+    outline: 0 !important;
+}
+
+
+.w-field__input select#id_adddocument_collection {
+    width: 100% !important;
+    max-width: none !important;
+    box-sizing: border-box;
+}
+
+
+/* Target only collection dropdowns */
+.w-field__input select[id="id_collection"] {
+    width: 100% !important;
+    min-width: 840px;
+    max-width: 880px;
+    background-color: #f8f8f8 !important;
+    border: 1px solid #b1b4b6 !important;
+    border-radius: 4px !important;
+    padding: 6px 10px !important;
+    font-size: 14px !important;
+}
+

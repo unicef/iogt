@@ -12,6 +12,7 @@ from wagtail import __version__
 from wagtail.admin import widgets as wagtailadmin_widgets
 from wagtail.admin.menu import MenuItem, SubmenuMenuItem, Menu
 from wagtail_modeladmin.options import ModelAdmin, modeladmin_register
+from wagtail.documents.models import Document
 from wagtail import hooks
 from wagtail.models import Page, PageViewRestriction
 from wagtailcache.cache import clear_cache
@@ -248,6 +249,18 @@ modeladmin_register(TranslationEntryAdmin)
 modeladmin_register(LocaleDetailAdmin)
 
 
+
+class DocumentAdmin(ModelAdmin):
+    model = Document
+    menu_label = "Documents"
+    menu_icon = "doc-full"
+    list_display = ("title", "collection", "created_at")
+    search_fields = ("title",)
+    list_filter = ("collection",)  # ensures collection dropdown in listing page
+
+modeladmin_register(DocumentAdmin)
+
+
 @hooks.register("insert_global_admin_css")
 def hide_add_article_button():
     """
@@ -275,3 +288,10 @@ def register_custom_form_pages_list_view():
 @hooks.register('register_page_action_menu_item')
 def register_notify_and_publish_menu_item():
     return NotifyAndPublishMenuItem(order=100, allowed_models=Article)  #
+
+
+
+
+
+
+

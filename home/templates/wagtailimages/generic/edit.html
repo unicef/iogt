@@ -1,0 +1,39 @@
+{# templates/wagtailadmin/generic/edit.html #}
+{% extends "wagtailadmin/base.html" %}
+{% load wagtailadmin_tags i18n %}
+
+{% block titletag %}{{ view.get_page_title }}{% endblock %}
+
+{% block content %}
+<div class="w-form">
+    <form action="{{ view.get_edit_url }}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <ul class="fields">
+            {# Title field #}
+         
+
+            {# File field (for image/document uploads) #}
+            {% if form.file %}
+                {% include "wagtailadmin/shared/field.html" with field=form.file %}
+            {% endif %}
+
+            {# Collection dropdown #}
+            {% if form.collection %}
+                {% include "wagtailadmin/shared/field.html" with field=form.collection %}
+            {% endif %}
+
+            {# Duration field (if your model defines it) #}
+            {% if form.duration %}
+                {% include "wagtailadmin/shared/field.html" with field=form.duration %}
+            {% endif %}
+        </ul>
+
+        <footer class="footer">
+            <button type="submit" class="button button-primary">
+                {% trans "Save" %}
+            </button>
+        </footer>
+    </form>
+</div>
+{% endblock %}

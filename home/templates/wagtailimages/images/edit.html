@@ -1,5 +1,6 @@
 {% extends "wagtailadmin/base.html" %}
 {% load wagtailimages_tags wagtailadmin_tags i18n l10n %}
+{% load home_tags %}
 {% block titletag %}{% blocktrans trimmed with title=image.title %}Editing image {{ title }}{% endblocktrans %}{% endblock %}
 {% block extra_css %}
     {{ block.super }}
@@ -7,9 +8,9 @@
     {{ form.media.css }}
 
     <!-- Focal point chooser -->
-    <link rel="stylesheet" href="{% versioned_static 'wagtailimages/css/vendor/jquery.Jcrop.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% versioned_static 'wagtailimages/css/focal-point-chooser.css' %}" type="text/css">
+   
 {% endblock %}
+
 
 {% block extra_js %}
     {{ block.super }}
@@ -26,9 +27,9 @@
     </script>
 
     <!-- Focal point chooser -->
-    <script src="{% versioned_static 'wagtailadmin/js/vendor/jquery.ba-throttle-debounce.min.js' %}"></script>
+    <!-- <script src="{% versioned_static 'wagtailadmin/js/vendor/jquery.ba-throttle-debounce.min.js' %}"></script>
     <script src="{% versioned_static 'wagtailimages/js/vendor/jquery.Jcrop.min.js' %}"></script>
-    <script src="{% versioned_static 'wagtailimages/js/focal-point-chooser.js' %}"></script>
+    <script src="{% versioned_static 'wagtailimages/js/focal-point-chooser.js' %}"></script> -->
 {% endblock %}
 
 {% block content %}
@@ -44,11 +45,19 @@
                 <ul class="fields">
                     {% for field in form %}
                         {% if field.name == 'file' %}
-                            {% include "wagtailimages/images/_file_field_as_li.html" with li_classes="label-above" %}
+                        {% include "wagtailadmin/shared/field.html" with field=field %}
+                       
                         {% elif field.is_hidden %}
                             {{ field }}
                         {% else %}
-                            {% include "wagtailadmin/shared/field.html" with li_classes="label-above" %}
+                        {% if field.name == "collection" %}
+                        <h3>Heading data</h3>
+                            <div class="w-field w-field--collection_choice_field w-field--select_with_disabled_options">
+                                {% include "wagtailadmin/shared/field.html" with field=field %}
+                            </div>
+                        {% else %}
+                            {% include "wagtailadmin/shared/field.html" with field=field %}
+                        {% endif %}
                             {% if field.name == 'title' %}
                             <p class='help' style="margin-top: -10px; margin-bottom: 15px;">
                                 Remember title also act as alt text, so include a brief description for screen readers.
@@ -62,6 +71,10 @@
                     {% if user_can_delete %}
                         <a href="{% url 'wagtailimages:delete' image.id %}{% if next %}?next={{ next|urlencode }}{% endif %}" class="button button-secondary no">{% trans "Delete image" %}</a>
                     {% endif %}
+                       <input type="submit" value="{% trans 'Delete Image' %}" class="button" />
+                {% if user_can_delete %}
+                    <a href="{% url 'wagtailimages:delete' image.id %}{% if next %}?next={{ next }}{% endif %}" class="button button-secondary no">{% trans "Delete image" %}</a>
+                {% endif %}
                 </div>
             </div>
 
@@ -113,13 +126,10 @@
             </div>
         </div>
 
-        <div class="row row-flush nice-padding sm:!w-hidden">
+        <!-- <div class="row row-flush nice-padding sm:!w-hidden">
             <div class="col5">
-                <input type="submit" value="{% trans 'Save' %}" class="button" />
-                {% if user_can_delete %}
-                    <a href="{% url 'wagtailimages:delete' image.id %}{% if next %}?next={{ next }}{% endif %}" class="button button-secondary no">{% trans "Delete image" %}</a>
-                {% endif %}
+             
             </div>
-        </div>
+        </div> -->
     </form>
 {% endblock %}

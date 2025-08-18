@@ -18,7 +18,8 @@
 </div>
     <div class="nice-padding">
         <div id="user-results" class="users">
-            {% include "wagtailusers/users/results.html" %}
+          {% include "wagtailadmin/generic/index_results.html" %}
+
         </div>
         {% trans "Select all users in listing" as select_all_text %}
         {% include 'wagtailadmin/bulk_actions/footer.html' with select_all_obj_text=select_all_text app_label=app_label model_name=model_name objects=users %}
