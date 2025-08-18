@@ -1,0 +1,374 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-11 10:35+0000\n"
+"PO-Revision-Date: 2021-07-11 10:35+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "quizzes"
+msgstr "small-small test"
+
+msgid "Log in to participate"
+msgstr "Login make you fit join"
+
+msgid "Log in / Create account"
+msgstr "Login / Create account"
+
+msgid "© The Internet of Good Things"
+msgstr "© Di Internet wey get Beta Things"
+
+msgid "Profile"
+msgstr "Your profile"
+
+msgid "Chat"
+msgstr "Talk"
+
+msgid "More"
+msgstr "More"
+
+msgid "Log in"
+msgstr "Login"
+
+msgid "Back"
+msgstr "Go back"
+
+msgid "BACK"
+msgstr "GO BACK"
+
+msgid "Previous"
+msgstr "Before"
+
+msgid "Next"
+msgstr "Next"
+
+msgid "Comments"
+msgstr "Comment dem"
+
+msgid "Please log in or create your account"
+msgstr "Abeg login or create your account"
+
+msgid "Report"
+msgstr "Report am"
+
+msgid "Related Articles"
+msgstr "Articles wey relate"
+
+msgid "This comment has been reported."
+msgstr "Person don report this comment."
+
+msgid ""
+"It will be reviewed by the team and may be removed if it breaks our Platform"
+" Rules"
+msgstr "Di team go check am and fit remove am if e break our Platform Rules"
+
+msgid "articles"
+msgstr "articles"
+
+msgid "Search the site..."
+msgstr "Search for site…"
+
+msgid "Search results for:"
+msgstr "Search result for:"
+
+msgid "No search results were found for"
+msgstr "No search result for"
+
+msgid "Username"
+msgstr "Username"
+
+msgid "Create your account"
+msgstr "Create your account"
+
+msgid "Forgot PIN"
+msgstr "Forget your PIN"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Hey, %(username)s"
+msgstr "Hey, %(username)s"
+
+msgid "Change Digital Pin"
+msgstr "make you Change your digital PIN"
+
+msgid "Personal Details"
+msgstr "Your personal details"
+
+msgid "Save changes"
+msgstr "Save changes"
+
+msgid "Reset PIN"
+msgstr "Reset PIN"
+
+msgid "Your PIN has been changed successfully."
+msgstr "You don change your PIN well well."
+
+msgid "I accept the Terms and Conditions."
+msgstr "I gree to di Terms and Conditions."
+
+msgid "You have read %(read)s out of %(total)s"
+msgstr "You don read %(read)s from %(total)s"
+
+msgid "%(counter)s of %(total)s questions"
+msgstr "%(counter)s out of %(total)s questions"
+
+msgid "Select one"
+msgstr "Choose one"
+
+msgid "Optional"
+msgstr "If you wan do"
+
+msgid "No limit"
+msgstr "No limit"
+
+msgid "Submit"
+msgstr "Submit"
+
+msgid "Go to homepage"
+msgstr "Oya Go homepage"
+
+msgid "You have already completed this survey."
+msgstr "You don already finish dis survey."
+
+msgid "Check all that apply"
+msgstr "Tick all wey apply"
+
+msgid "Your results!"
+msgstr "Na your result be this!"
+
+msgid "Replay Quiz"
+msgstr "Play di quiz again"
+
+msgid "Incorrect"
+msgstr "No correct"
+
+msgid "Correct"
+msgstr "Correct"
+
+msgid "Your answer"
+msgstr "Your answer"
+
+msgid "Leave comment"
+msgstr "dey Leave comment"
+
+msgid "Reply"
+msgstr "Reply"
+
+msgid "Page not found"
+msgstr "Page no dey"
+
+msgid "Sorry, this page could not be found."
+msgstr "Sorry, we no fit find dis page."
+
+msgid "Internal server error"
+msgstr "Internal server error"
+
+msgid "1 result"
+msgid_plural "%(counter)s results"
+msgstr[0] "1 result"
+msgstr[1] "%(counter)s results"
+
+msgid "poll"
+msgstr "poll"
+
+msgid "survey"
+msgstr "survey"
+
+msgid "quiz"
+msgstr "quiz"
+
+msgid "This field is required."
+msgstr "You must fill dis space."
+
+msgid "Send"
+msgstr "Send"
+
+msgid "Remove this comment?"
+msgstr "Remove dis comment?"
+
+msgid "Remove"
+msgstr "Remove"
+
+msgid "This comment has been removed."
+msgstr "Dem don remove dis comment."
+
+msgid "moderator"
+msgstr "moderator"
+
+msgid "sections"
+msgstr "sections"
+
+msgid "Check if applies"
+msgstr "Check if e apply"
+
+msgid "New comments have been disabled for this page."
+msgstr "New comment no dey again for dis page."
+
+msgid "Correct answer"
+msgstr "Correct answer"
+
+msgid "Download"
+msgstr "Download"
+
+msgid ""
+"You are leaving the <b>Internet of Good Things</b> to visit an external "
+"website and standard data charges by your network provider might apply"
+msgstr "You dey comot from Internet of Good Things go another website, your network fit charge you data fee"
+
+msgid "Continue to external site"
+msgstr "Continue go di external site"
+
+msgid "4-digit PIN"
+msgstr "4-digit PIN"
+
+msgid "Old 4-digit PIN"
+msgstr "Old 4-digit PIN"
+
+msgid "New 4-digit PIN"
+msgstr "New 4-digit PIN"
+
+msgid "Confirm new 4-digit PIN"
+msgstr "Confirm new 4-digit PIN"
+
+msgid "Log out"
+msgstr "Log out"
+
+msgid "section"
+msgstr "section"
+
+msgid "article"
+msgstr "article"
+
+msgid "Remember me"
+msgstr "Remember me"
+
+msgid "You have signed out."
+msgstr "You don sign out."
+
+msgid ""
+"Enter a valid username. This value may contain only letters, numbers, and "
+"@/./+/-/_ characters."
+msgstr "Put correct username wey fit get only letter, number, and @/./+/-/_"
+
+msgid "You must type the same password each time."
+msgstr "You must type di same password every time."
+
+msgid "This password is too short. It must contain at least 4 characters."
+msgstr "This password too short, e must get at least 4 character."
+
+msgid "Please type your current password."
+msgstr "Abeg type your current password."
+
+msgid "Password successfully changed."
+msgstr "Password don change well well."
+
+msgid "Enter a valid date/time."
+msgstr "Put correct date/time."
+
+msgid "Enter a valid date."
+msgstr "Put correct date."
+
+msgid "Enter a valid URL."
+msgstr "Put correct website link."
+
+msgid "Enter a valid email address."
+msgstr "Put correct email."
+
+msgid "Enter a valid integer."
+msgstr "Put correct whole number."
+
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr "Make sure say dis value big pass or equal %(limit_value)s."
+
+msgid "Your comment"
+msgstr "Your comment"
+
+msgid "Are you sure you want to log out?"
+msgstr "You sure say you wan log out?"
+
+msgid "Your browser does not support video playback."
+msgstr "Your browser no fit play video."
+
+msgid "Your browser does not support audio playback."
+msgstr "Your browser no fit play audio."
+
+msgid "Don't display my username next to my comment"
+msgstr "No show my username near my comment"
+
+msgid "Anonymous"
+msgstr "Anonymous"
+
+msgid "Report this comment?"
+msgstr "Report dis comment?"
+
+msgid "Display name"
+msgstr "Display name"
+
+msgid "Reported by %(comment_report_count)s user"
+msgid_plural "Reported by %(comment_report_count)s users"
+msgstr[0] "Reported by %(comment_report_count)s user"
+msgstr[1] "Reported by %(comment_report_count)s users"
+
+msgid ""
+"Sorry, %(page_title)s is not available in %(language)s. If you want to keep "
+"browsing in %(language)s you can click below to return to the homepage."
+msgstr "Sorry, %(page_title)s no dey for %(language)s. If you wan continue browse for %(language)s, click down go homepage."
+
+msgid "Username not available."
+msgstr "Username no dey."
+
+msgid "Display name not available."
+msgstr "Display name no dey."
+
+msgid "You have already completed this quiz."
+msgstr "You don already finish dis quiz."
+
+msgid "You have already completed this poll."
+msgstr "You don already finish dis poll."
+
+msgid ""
+"If you cannot view the above video, you can instead %(start_link)sdownload "
+"it%(end_link)s."
+msgstr "If you no fit watch di video wey dey up, you fit instead %(start_link)sdownload am%(end_link)s."
+
+msgid ""
+"If you cannot listen to the above audio, you can instead "
+"%(start_link)sdownload it%(end_link)s."
+msgstr "If you no fit listen di audio wey dey up, you fit instead %(start_link)sdownload am%(end_link)s."
+
+msgid "Please complete the questions marked as required to continue"
+msgstr "Abeg finish di question dem mark as required before you continue"
+
+msgid "Need internet access to visit external site."
+msgstr "You need internet to visit external site."
+
+msgid "Comment Moderation"
+msgstr "Comment Moderation"
+
+msgid "Filters"
+msgstr "Filters"
+
+msgid "Apply"
+msgstr "Apply"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Unsure"
+msgstr "No sure"
+
+msgid "No comment found."
+msgstr "No comment we see."
+
+msgid ""
+"The content you are trying to reach is not available. To see offline content"
+" click <a href=\"%(offline_content_index_page_url)s\">here</a>"
+msgstr "The content wey you dey try reach no dey. To see offline content click here"

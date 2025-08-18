@@ -1,0 +1,376 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-11 10:35+0000\n"
+"PO-Revision-Date: 2021-07-11 10:35+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "quizzes"
+msgstr "gasa"
+
+msgid "Log in to participate"
+msgstr "Shiga don ka halarta"
+
+msgid "Log in / Create account"
+msgstr "Shiga / Ƙirƙiri asusu"
+
+msgid "© The Internet of Good Things"
+msgstr "© Na'urorinIntanet"
+
+msgid "Profile"
+msgstr "Furofayil"
+
+msgid "Chat"
+msgstr "Hira"
+
+msgid "More"
+msgstr "Ƙari"
+
+msgid "Log in"
+msgstr "Shiga"
+
+msgid "Back"
+msgstr "Koma baya"
+
+msgid "BACK"
+msgstr "BAYA"
+
+msgid "Previous"
+msgstr "Na baya"
+
+msgid "Next"
+msgstr "Na gaba"
+
+msgid "Comments"
+msgstr "Sharhi"
+
+msgid "Please log in or create your account"
+msgstr "shiga ko ka ƙirƙiri asusunka"
+
+msgid "Report"
+msgstr "Kai ƙara"
+
+msgid "Related Articles"
+msgstr "Maƙaloli masu alaƙa"
+
+msgid "This comment has been reported."
+msgstr "An kai ƙarar wannan sharhin."
+
+msgid ""
+"It will be reviewed by the team and may be removed if it breaks our Platform"
+" Rules"
+msgstr "Ma'aikata za su duba, kuma ana iya cire shi idan ya karya Dokokin Dandalinmu"
+
+msgid "articles"
+msgstr "maƙalu"
+
+msgid "Search the site..."
+msgstr "Bincika shafin…"
+
+msgid "Search results for:"
+msgstr "Sakamakon bincike:"
+
+msgid "No search results were found for"
+msgstr "Ba a sami wani sakamakon bincike na...."
+
+msgid "Username"
+msgstr "Sunan mai amfani"
+
+msgid "Create your account"
+msgstr "Ƙirƙiri asusunka"
+
+msgid "Forgot PIN"
+msgstr "Ka manta PIN"
+
+msgid "Cancel"
+msgstr "Fasa"
+
+msgid "Hey, %(username)s"
+msgstr "kai, kaso cikin ɗari na (masu amfani)"
+
+msgid "Change Digital Pin"
+msgstr "Sauya lambobin PIN"
+
+msgid "Personal Details"
+msgstr "Bayanai na ƙashin kai"
+
+msgid "Save changes"
+msgstr "Adana Sauye-sauye"
+
+msgid "Reset PIN"
+msgstr "Sake saita PIN"
+
+msgid "Your PIN has been changed successfully."
+msgstr "An yi nasarar sauya lambar PIN ɗinka."
+
+msgid "I accept the Terms and Conditions."
+msgstr "Na yarda da Sharuɗɗa da Ka’idoji."
+
+msgid "You have read %(read)s out of %(total)s"
+msgstr "Ka karanta kaso (karatu)s daga cikin kaso (jimilla)s"
+
+msgid "%(counter)s of %(total)s questions"
+msgstr "kaso (adadi)s daga cikin kaso (jimilla)s cikin ɗari na tambayoyi"
+
+msgid "Select one"
+msgstr "Zaɓi ɗaya"
+
+msgid "Optional"
+msgstr "Na zaɓi"
+
+msgid "No limit"
+msgstr "Babu iyaka"
+
+msgid "Submit"
+msgstr "Miƙa"
+
+msgid "Go to homepage"
+msgstr "Je zuwa shafin farko"
+
+msgid "You have already completed this survey."
+msgstr "Ka riga ka kammala wannan binciken."
+
+msgid "Check all that apply"
+msgstr "Duba duk waɗanda suka dace"
+
+msgid "Your results!"
+msgstr "Sakamakonka!"
+
+msgid "Replay Quiz"
+msgstr "A sake maimaita gasa"
+
+msgid "Incorrect"
+msgstr "Ba daidai ba"
+
+msgid "Correct"
+msgstr "Daidai"
+
+msgid "Your answer"
+msgstr "Amsarka"
+
+msgid "Leave comment"
+msgstr "Bar sharhi"
+
+msgid "Reply"
+msgstr "Amsa"
+
+msgid "Page not found"
+msgstr "Ba a sami shafin ba"
+
+msgid "Sorry, this page could not be found."
+msgstr "Yi hakuri, ba a iya samun wannan shafi ba."
+
+msgid "Internal server error"
+msgstr "Kuskuren rumbun intanet"
+
+msgid "1 result"
+msgid_plural "%(counter)s results"
+msgstr[0] "Sakamako 1"
+msgstr[1] "kaso(adadi)s cikin ɗari na sakamako"
+
+msgid "poll"
+msgstr "zaɓe"
+
+msgid "survey"
+msgstr "bincike"
+
+msgid "quiz"
+msgstr "Gasa"
+
+msgid "This field is required."
+msgstr "Ana buƙatar cike wannan wurin."
+
+msgid "Send"
+msgstr "Aika"
+
+msgid "Remove this comment?"
+msgstr "Cire wannan sharhi?"
+
+msgid "Remove"
+msgstr "Cire"
+
+msgid "This comment has been removed."
+msgstr "An cire wannan sharhi."
+
+msgid "moderator"
+msgstr "mai kula"
+
+msgid "sections"
+msgstr "sassa"
+
+msgid "Check if applies"
+msgstr "A zaɓa idan ya dace"
+
+msgid "New comments have been disabled for this page."
+msgstr "An kashe yin sabon sharhi a wannan shafin."
+
+msgid "Correct answer"
+msgstr "Amsa daidai"
+
+msgid "Download"
+msgstr "Sauke"
+
+msgid ""
+"You are leaving the <b>Internet of Good Things</b> to visit an external "
+"website and standard data charges by your network provider might apply"
+msgstr "Kana fita daga <b>na'urorin intanet</b> za ka kai ziyara shafin waje kuma ta yiwu a sanya cajin data na mai samar maka da sabis"
+
+msgid "Continue to external site"
+msgstr "Ci gaba zuwa shafi na waje"
+
+msgid "4-digit PIN"
+msgstr "Lambar sirri ta PIN mai haruffa 4"
+
+msgid "Old 4-digit PIN"
+msgstr "Tsohuwar lambar sirri ta PIN mai haruffa 4"
+
+msgid "New 4-digit PIN"
+msgstr "Sabuwar lambar sirri ta PIN mai haruffa 4"
+
+msgid "Confirm new 4-digit PIN"
+msgstr "Tabbatar da sabuwar lambar sirri ta PIN mai haruffa 4"
+
+msgid "Log out"
+msgstr "Fita"
+
+msgid "section"
+msgstr "sashe"
+
+msgid "article"
+msgstr "maƙala"
+
+msgid "Remember me"
+msgstr "A tuna ni"
+
+msgid "You have signed out."
+msgstr "Ka fita."
+
+msgid ""
+"Enter a valid username. This value may contain only letters, numbers, and "
+"@/./+/-/_ characters."
+msgstr "Sanya ingantaccen sunan mai amfani. Wannan zai iya ƙunsar haruffa kawai da lambobi da alamomin @/./+/-_."
+
+msgid "You must type the same password each time."
+msgstr "Dole a koyaushe ka rubuta lambar sirri iri ɗaya"
+
+msgid "This password is too short. It must contain at least 4 characters."
+msgstr "Wannan lambar sirrin ta yi ƙanƙanta. Dole ta kai a ƙalla rubutu guda 4."
+
+msgid "Please type your current password."
+msgstr "rubuta lambar sirrinka na yanzu."
+
+msgid "Password successfully changed."
+msgstr "Anyi nasarar canza lambar sirri."
+
+msgid "Enter a valid date/time."
+msgstr "Shigar da sahihin kwanan wata/lokaci."
+
+msgid "Enter a valid date."
+msgstr "Shigar da sahihin kwanan wata."
+
+msgid "Enter a valid URL."
+msgstr "Shigar da sahihin adireshin yanar gizo."
+
+msgid "Enter a valid email address."
+msgstr "Shigar da sahihin adireshin imel."
+
+msgid "Enter a valid integer."
+msgstr "Shigar da lamba mai inganci."
+
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr "A tabbata wannan adadi ya haura ko ya yi daidai da kaso (iyakar adadi) cikin ɗari"
+
+msgid "Your comment"
+msgstr "Sharhinka"
+
+msgid "Are you sure you want to log out?"
+msgstr "Ka tabbata kana son fita?"
+
+msgid "Your browser does not support video playback."
+msgstr "Burauzarka ba ta goyon bayan kunna hoton bidiyo."
+
+msgid "Your browser does not support audio playback."
+msgstr "Burauzarka ba ta goyon bayan kunna sauti."
+
+msgid "Don't display my username next to my comment"
+msgstr "Kada a nuna sunan da nake amfani da shi kusa da sharhina"
+
+msgid "Anonymous"
+msgstr "A sakaya suna"
+
+msgid "Report this comment?"
+msgstr "A kai ƙarar wannan sharhi?"
+
+msgid "Display name"
+msgstr "Nuna suna"
+
+msgid "Reported by %(comment_report_count)s user"
+msgid_plural "Reported by %(comment_report_count)s users"
+msgstr[0] "Ƙara daga mai amfani kaso (adadin_ƙarar jawabi) cikin ɗari"
+msgstr[1] "Ƙara daga masu amfani kaso (adadin_ƙarar jawabi) cikin ɗari"
+
+msgid ""
+"Sorry, %(page_title)s is not available in %(language)s. If you want to keep "
+"browsing in %(language)s you can click below to return to the homepage."
+msgstr "A yi haƙuri babu (sunan shafi) a (harshe). Idan kana son ka ci gaba da shiga intanet da (harshe) za ka iya danna ƙasa don ka koma shafin farko."
+
+msgid "Username not available."
+msgstr "Babu sunan mai amfani."
+
+msgid "Display name not available."
+msgstr "Babu nuna suna."
+
+msgid "You have already completed this quiz."
+msgstr "Ka riga ka kammala wannan gasar."
+
+msgid "You have already completed this poll."
+msgstr "Ka riga ka kammala wannan zaɓe."
+
+msgid ""
+"If you cannot view the above video, you can instead %(start_link)sdownload "
+"it%(end_link)s."
+msgstr "Idan ba za ka iya kallon bidiyon da ke sama ba, a maimakon haka za ka iya sauke kaso (Mahaɗin_Farko) kaso (mahaɗin_ƙarshe)."
+
+msgid ""
+"If you cannot listen to the above audio, you can instead "
+"%(start_link)sdownload it%(end_link)s."
+msgstr "Idan ba za ka iya sauraron sautin da ke sama ba, a maimakon haka za ka iya sauke kaso (Mahaɗin_Farko) kaso (mahaɗin_ƙarshe)."
+
+msgid "Please complete the questions marked as required to continue"
+msgstr "Cike amsoshin da aka yi wa alamar wajibi don ci gaba"
+
+msgid "Need internet access to visit external site."
+msgstr "Kana buƙatar intanet kafin ka ziyarci shafin waje"
+
+msgid "Comment Moderation"
+msgstr "Kula da Sharhi"
+
+msgid "Filters"
+msgstr "Matatai"
+
+msgid "Apply"
+msgstr "Shigar"
+
+msgid "Actions"
+msgstr "Ayyuka"
+
+msgid "Unsure"
+msgstr "Ba tabbas ba"
+
+msgid "No comment found."
+msgstr "Ba a sami sharhi ba."
+
+msgid ""
+"The content you are trying to reach is not available. To see offline content "
+"click <a href=\"%(offline_content_index_page_url)s\">here</a>"
+msgstr ""
+"Babu bayanin da kake ƙoƙarin samu. Idan kana son ganin bayanin da ba ya kan intanet "
+"danna <a href=\"%(offline_content_index_page_url)s\">here</a>"
