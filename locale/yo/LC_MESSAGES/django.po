@@ -369,7 +369,6 @@ msgstr "A kò dájú"
 msgid "No comment found."
 msgstr "Kò sí àsọyé kankan."
 
-msgid ""
-"The content you are trying to reach is not available. To see offline content"
+msgid "The content you are trying to reach is not available. To see offline content"
 " click <a href=\"%(offline_content_index_page_url)s\">here</a>"
 msgstr "Àkọsílẹ̀ tí o ń gbìyànjú láti rí kò sí. Láti rí àkọsílẹ̀ àìmọ̀ọ́fàìnì tẹ níbí"

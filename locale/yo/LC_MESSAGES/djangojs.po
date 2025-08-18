@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "Sorry, there seems to be an error. Please try again soon."
-msgstr "Bínú, àṣìṣe kan wà. Jọwọ gbìyànjú lẹ́yìn ìgbà díẹ̀.""
+msgstr "Bínú, àṣìṣe kan wà. Jọwọ gbìyànjú lẹ́yìn ìgbà díẹ̀."
 
 msgid "You cannot submit when offline"
 msgstr "O kò lè fi ránṣẹ́ nígbà tí o kò sí lórí Ayelujara"

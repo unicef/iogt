@@ -369,7 +369,8 @@ msgid "No comment found."
 msgstr "Ba a sami sharhi ba."
 
 msgid ""
-"The content you are trying to reach is not available. To see offline content"
-" click <a href=\"%(offline_content_index_page_url)s\">here</a>"
-msgstr "Babu bayanin da kake ƙoƙarin samu. Idan kana son ganin bayanin da ba ya kan intanet danna <a href=\"%
-(offline_content_index_page_url)s\">here</a>"
+"The content you are trying to reach is not available. To see offline content "
+"click <a href=\"%(offline_content_index_page_url)s\">here</a>"
+msgstr ""
+"Babu bayanin da kake ƙoƙarin samu. Idan kana son ganin bayanin da ba ya kan intanet "
+"danna <a href=\"%(offline_content_index_page_url)s\">here</a>"

@@ -23,4 +23,4 @@ msgid "Date must be in this (YYYY-MM-DD) format"
 msgstr "Date must follow dis (YYYY-MM-DD) format"
 
 msgid "Datetime must be in this YYYY-MM-DDTHH:SS format"
-msgstr "Datetime must follow dis YYYY-MM-DDTHH:SS format"
+msgstr "Datetime must follow dis YYYY-MM-DDTHH:SS formatgi"
