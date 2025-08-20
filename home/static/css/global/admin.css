@@ -53,15 +53,28 @@
     white-space: nowrap; /* prevent label breaking */
 }
 .search-bar .fields .w-field__wrapper {
-    display:flex;
 
     align-items: center;
     gap: 8px;
 }
 
-
 #collection_chooser_collection_id {
-    width: 600px; /* adjust as needed */
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Medium screens (≥768px): limit to 600px */
+@media (min-width: 768px) {
+  #collection_chooser_collection_id {
+    max-width: 600px;
+  }
+}
+
+/* Large screens (≥1200px): a bit wider if needed */
+@media (min-width: 1200px) {
+  #collection_chooser_collection_id {
+    max-width: 800px;
+  }
 }
 
 /* Default state: greyish background */
@@ -103,12 +116,28 @@
 /* Target only collection dropdowns */
 .w-field__input select[id="id_collection"] {
     width: 100% !important;
-    min-width: 840px;
+    min-width: unset;
     max-width: 880px;
     background-color: #f8f8f8 !important;
     border: 1px solid #b1b4b6 !important;
     border-radius: 4px !important;
-    padding: 6px 10px !important;
-    font-size: 14px !important;
+    padding: 14px 15px !important;
+    font-size: 18px !important;
+    line-height: 1.4 !important;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .w-field__input select[id="id_collection"] {
+    width: 100% !important;
+      max-width: 600px;
+  }
+}
+
+/* Desktop and large screens (≥1200px) */
+@media (min-width: 1200px) {
+  .w-field__input select[id="id_collection"] {
+      min-width: 840px;
+      max-width: 880px;
+  }
 }
 

@@ -47,3 +47,7 @@ services:
       POSTGRES_USER: iogt
       POSTGRES_PASSWORD: iogt
       POSTGRES_DB: iogt
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+volumes:
+  postgres_data:
