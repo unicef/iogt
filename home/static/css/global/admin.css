@@ -79,7 +79,7 @@
 
 /* Default state: greyish background */
 .w-field__input input, 
-.w-field__input select {
+.w-field__input select[id="collection_chooser_collection_id"] {
     background-color: #f8f8f8 !important; /* greyish background */
     border: 1px solid #b1b4b6 !important; /* grey border */
     border-radius: 4px !important;
@@ -139,5 +139,75 @@
       min-width: 840px;
       max-width: 880px;
   }
+}
+
+.w-field {
+  display: block;        /* stack label + input vertically */
+  margin-bottom: 1rem;
+}
+
+.w-field__label {
+  display: block;        /* force label to occupy full line */
+  margin-bottom: 0.5rem;
+  max-width: 100%;
+}
+
+.w-field__input {
+  display: block;        /* ensure input behaves as block */
+  width: 100%;           /* full width inside parent */
+}
+.w-field__input select[id="id_language_code"] {
+  width: 100%;                 /* full width of input wrapper */
+  box-sizing: border-box;       /* include padding/border in width */
+  background-color: #fafafa;    /* consistent with Wagtail style */
+  border: 1px solid var(--w-color-border-field, #ccc);
+  border-radius: 4px;
+  padding: 0.5rem;
+}
+
+@media screen and (min-width: 50em) {
+  .w-field--choice_field {
+    box-sizing: border-box;
+    display: flex;             /* flex layout instead of float */
+    align-items: center;
+    gap: 1rem;                  /* spacing between label & field */
+  }
+
+  .w-field__label {
+    max-width: 16.6667%;
+  }
+
+  .w-field__input {
+    max-width: 100.3333%;
+  }
+
+  /* Force selects to behave like Wagtail 3 grey box */
+  .w-field__input select[id="id_language_code"] {
+    width: 100% !important;
+    background-color:  #fafafa; /* default grey */
+    border: 1px solid var(--w-color-border-field, #ccc);
+    border-radius: 4px;
+    padding: 0.5rem;
+  }
+}
+
+
+.w-panel__heading--label {
+  background: #fcf2f2;
+  padding: .9em 1em;       /* equal left/right padding */
+  box-sizing: border-box;
+  width: 100%;             /* span full container width */
+  display: block;          /* ensure it behaves as a block */
+  
+}
+
+.w-panel__toggle .w-panel__icon {
+  width: 1.5em;
+  height: 1.5em;
+  padding: 1.3em;                 /* space inside the colored box */
+  background-color: #F37E77;      /* box color */
+  border-radius: 4px;             /* rectangle with rounded edges */
+  color: #000;                    /* arrow color */
+  box-sizing: content-box;        /* so padding adds space */
 }
 
