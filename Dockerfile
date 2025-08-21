@@ -55,4 +55,4 @@ RUN pip install "gunicorn==20.0.4"
 COPY --chown=wagtail:wagtail . .
 RUN python manage.py collectstatic --noinput --clear
 RUN python manage.py compilemessages
-CMD ["gunicorn", "iogt.wsgi:application"]
+CMD ["/app/scripts/start.sh"]
