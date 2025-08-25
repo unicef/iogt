@@ -247,8 +247,8 @@ msgstr "section"
 msgid "article"
 msgstr "article"
 
-msgid "Remember me"
-msgstr "Remember me"
+msgid "Remember Me"
+msgstr "Remember Me"
 
 msgid "You have signed out."
 msgstr "You don sign out."

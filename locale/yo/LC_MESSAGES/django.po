@@ -248,7 +248,7 @@ msgstr "apá"
 msgid "article"
 msgstr "àpilẹ̀kọ"
 
-msgid "Remember me"
+msgid "Remember Me"
 msgstr "Rántí mi"
 
 msgid "You have signed out."

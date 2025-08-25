@@ -247,7 +247,7 @@ msgstr "sashe"
 msgid "article"
 msgstr "maƙala"
 
-msgid "Remember me"
+msgid "Remember Me"
 msgstr "A tuna ni"
 
 msgid "You have signed out."

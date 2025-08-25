@@ -247,7 +247,7 @@ msgstr "ngalaba"
 msgid "article"
 msgstr "edemede"
 
-msgid "Remember me"
+msgid "Remember Me"
 msgstr "Cheta m"
 
 msgid "You have signed out."
