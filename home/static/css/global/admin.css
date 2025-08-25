@@ -78,7 +78,7 @@
 }
 
 /* Default state: greyish background */
-.w-field__input input, 
+.w-field__input input:not(#id_q), 
 .w-field__input select[id="collection_chooser_collection_id"] {
     background-color: #f8f8f8 !important; /* greyish background */
     border: 1px solid #b1b4b6 !important; /* grey border */
@@ -129,14 +129,14 @@
 @media (min-width: 768px) and (max-width: 1199px) {
   .w-field__input select[id="id_collection"] {
     width: 100% !important;
-      max-width: 600px;
+      max-width: 750px;
   }
 }
 
 /* Desktop and large screens (≥1200px) */
 @media (min-width: 1200px) {
   .w-field__input select[id="id_collection"] {
-      min-width: 840px;
+      /* min-width: 840px; */
       max-width: 880px;
   }
 }
@@ -144,7 +144,7 @@
 .w-field {
   display: block;        /* stack label + input vertically */
   margin-bottom: 1rem;
-}
+} 
 
 .w-field__label {
   display: block;        /* force label to occupy full line */
@@ -173,9 +173,9 @@
     gap: 1rem;                  /* spacing between label & field */
   }
 
-  .w-field__label {
-    max-width: 16.6667%;
-  }
+  /* .w-field__label {
+    max-width: 16.6667%; */
+  /* } */
 
   .w-field__input {
     max-width: 100.3333%;
@@ -201,13 +201,6 @@
   
 }
 
-.w-panel__toggle .w-panel__icon {
-  width: 1.5em;
-  height: 1.5em;
-  padding: 1.3em;                 /* space inside the colored box */
-  background-color: #F37E77;      /* box color */
-  border-radius: 4px;             /* rectangle with rounded edges */
-  color: #000;                    /* arrow color */
-  box-sizing: content-box;        /* so padding adds space */
-}
+
+
 

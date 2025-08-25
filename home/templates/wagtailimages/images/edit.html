@@ -45,8 +45,12 @@
                 <ul class="fields">
                     {% for field in form %}
                         {% if field.name == 'file' %}
+                        {% if form.instance.pk and form.instance.file %}
+                           <a href="{{ form.instance.file.url }}" target="_blank">
+                                {{ form.instance.file.name }}
+                            </a>
+                        {% endif %}
                         {% include "wagtailadmin/shared/field.html" with field=field %}
-                       
                         {% elif field.is_hidden %}
                             {{ field }}
                         {% else %}
