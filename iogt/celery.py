@@ -1,7 +1,7 @@
 import os
 from celery import Celery
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'iogt.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'iogt.settings.base')
 
 app = Celery('iogt')
 
