@@ -19,21 +19,6 @@ if DEBUG and DEBUG_TOOLBAR_ENABLE:
     }
 
 INSTALLED_APPS += ("django_extensions",)
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': getenv('DB_NAME', 'postgres'),
-        'USER': getenv('DB_USER', 'postgres'),
-        'PASSWORD': getenv('DB_PASSWORD', 'iogt'),
-        'HOST': getenv('DB_HOST', 'database'),
-        'PORT': getenv('DB_PORT', '5432'),
-    }
-}
-CELERY_BROKER_URL = 'redis://redis:6379/0'
-CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-
 
 try:
     from .local import *

@@ -4,6 +4,7 @@ from wagtail.contrib.modeladmin.options import (
 )
 from .models import NotificationLog, NotificationPreference, NotificationTag, UserNotificationTemplate
 from admin_notifications.wagtail_hooks import NotificationModelAdmin
+from django.conf import settings
 
 class NotificationTagAdmin(ModelAdmin):
     model = NotificationTag
@@ -76,10 +77,11 @@ class NotificationsParentGroup(ModelAdminGroup):
     items = (
         NotificationTagAdmin,
         NotificationPreferenceAdmin,
-        NotificationModelAdmin,
         NotificationLogAdmin,
         UserNotificationTemplateAdmin
     )
+    if settings.PUSH_NOTIFICATION:
+        items += (NotificationModelAdmin,)
 
 
 

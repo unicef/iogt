@@ -12,6 +12,7 @@ services:
       DB_PORT: '5432'
       DB_USER: postgres
       DJANGO_SETTINGS_MODULE: iogt.settings.dev
+      PUSH_NOTIFICATION: enable
       DJANGO_RUN_PORT: 8000
     image: iogt:latest
 

@@ -23,9 +23,6 @@ def editor_js():
     return js_includes
 
 
-
-
-
 @hooks.register('register_admin_urls')
 def register_custom_form_pages_list_view():
     return [

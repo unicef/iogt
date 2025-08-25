@@ -548,9 +548,9 @@ SITE_VERSION = os.getenv('SITE_VERSION', 'unknown')
 HAS_MD5_HASH_REGEX = re.compile(r"\.[a-f0-9]{12}\..*$")
 
 WEBPUSH_SETTINGS = {
-    'VAPID_PUBLIC_KEY': 'BBRqGieSqpMGPqVBoV_t3iJ0Afg0qs82cSa2lF-dfcWG50KbpvoKvHmmNS39aMhyMz145lXc5ESczxSA2dCn9_w',
-    'VAPID_PRIVATE_KEY': 'uu9bxQU1VtR5be7mgg2gYzGtQkWb3Ncey_jFGg-_mAU',
-    'VAPID_ADMIN_EMAIL': 'ankit.chopra@nagarro.com',
+    'VAPID_PUBLIC_KEY': os.getenv('VAPID_PUBLIC_KEY'),
+    'VAPID_PRIVATE_KEY': os.getenv('VAPID_PRIVATE_KEY'),
+    'VAPID_ADMIN_EMAIL': os.getenv('VAPID_ADMIN_EMAIL'),
 }
 
 COMMENTS_COMMUNITY_MODERATION = os.getenv('COMMENTS_COMMUNITY_MODERATION') == 'enable'
@@ -565,7 +565,7 @@ SUPERSET_DATABASE_NAME = os.getenv('SUPERSET_DATABASE_NAME')
 SUPERSET_USERNAME = os.getenv('SUPERSET_USERNAME')
 SUPERSET_PASSWORD = os.getenv('SUPERSET_PASSWORD')
 
-PUSH_NOTIFICATION = os.getenv('PUSH_NOTIFICATION', 'enable') == 'enable'
+PUSH_NOTIFICATION = os.getenv('PUSH_NOTIFICATION', 'disable') == 'enable'
 JQUERY = os.getenv('JQUERY', 'enable') == 'enable'
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = int(os.getenv('DATA_UPLOAD_MAX_NUMBER_FIELDS', '1000'))

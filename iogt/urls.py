@@ -18,9 +18,6 @@ from home import views as pwa_views
 from wagtail_transfer import urls as wagtailtransfer_urls
 from admin_login import urls as admin_login_urls
 from admin_login.views import AzureADSignupView
-# from user_notifications.views import save_notification_preference
-
-
 from iogt.views import (
     TransitionPageView,
     SitemapAPIView,
@@ -61,8 +58,6 @@ urlpatterns = api_url_patterns + [
     *i18n_patterns(path('users/', include(users_urls), name='users_urls')),
     *i18n_patterns(path('accounts/', include('allauth.urls'), name='allauth-urls')),
     *i18n_patterns(path('comments/', include('django_comments_xtd.urls'))),
-    #*i18n_patterns(path('admin-login/', include('admin_login.urls'))),
-
     path(
         'sw.js',
         pwa_views.ServiceWorkerView.as_view(),

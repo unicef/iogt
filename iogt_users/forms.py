@@ -69,7 +69,6 @@ class AccountSignupForm(SignupForm):
         return display_name
 
 
-
 class ChangePasswordForm(BaseChangePasswordForm):
 
     def __init__(self, *args, **kwargs):
