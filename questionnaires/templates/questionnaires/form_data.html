@@ -45,12 +45,12 @@
                 <div class="left">
                     <div class="col header-title">
                         <h1>
-                          {% icon name="form" class_name="header-title-icon" %}
+                        {% icon name="form" classname="header-title-icon" %}
                           {% trans "Form Data" %}
                         </h1>
                     </div>
                     <div class="col search-bar">
-                        <ul class="fields row rowflush">
+                    <ul class="fields col">
                             {% for field in select_date_form %}
                                 {% include "wagtailadmin/shared/field.html" with field=field field_classes="field-small" li_classes="col4" %}
                             {% endfor %}
@@ -61,13 +61,14 @@
                     </div>
                 </div>
                 <div class="right">
-                    <div class="dropdown dropdown-button match-width">
-                        <a id="download-xlsx" href="{{ request.get_full_path }}&export=xlsx" class="button bicolor button--icon">{% icon name="download" wrapped=1 %}{% trans 'Download Form Data (XLSX)' %}</a>
-                        <div class="dropdown-toggle">{% icon name="arrow-down" %}</div>
-                        <ul>
-                            <li><a id="download-csv" class="button bicolor button--icon" href="{{ request.get_full_path }}&export=csv">{% icon name="download" wrapped=1 %}{% trans 'Download Form Data (CSV)' %}</a></li>
-                        </ul>
-                    </div>
+                {% dropdown toggle_icon="download" toggle_label="Download Form Data" %}
+                <a href="?export=xlsx&{{ request.GET.urlencode }}">
+                    {% icon name="download" %}{% translate "Download Form Data (XLSX)" %}
+                </a>
+                <a href="?export=csv&{{ request.GET.urlencode }}">
+                    {% icon name="download" %}{% translate "Download Form Data (CSV)" %}
+                </a>
+                {% enddropdown %}
                 </div>
             </div>
         </form>
