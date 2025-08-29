@@ -5,15 +5,8 @@ services:
       target: dev
       args:
         requirements: requirements.dev.txt
-    environment:
-      DB_HOST: db
-      DB_NAME: iogt
-      DB_PASSWORD: postgresiogt
-      DB_PORT: '5432'
-      DB_USER: postgres
-      DJANGO_SETTINGS_MODULE: iogt.settings.dev
-      PUSH_NOTIFICATION: enable
-      DJANGO_RUN_PORT: 8000
+    env_file:
+      - .env
     image: iogt:latest
 
     ports:
@@ -38,14 +31,8 @@ services:
     depends_on:
       - django
       - redis
-    environment:
-      CELERY_BROKER_URL: redis://redis:6379/0
-      DB_HOST: db
-      DB_NAME: iogt
-      DB_PASSWORD: postgresiogt
-      DB_PORT: '5432'
-      DB_USER: postgres
-      DJANGO_SETTINGS_MODULE: iogt.settings.dev
+    env_file:
+      - .env
     volumes:
       - ./:/app/
 
