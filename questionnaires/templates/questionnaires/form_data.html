@@ -37,41 +37,50 @@
 {% endblock %}
 {% block content %}
     <header class="nice-padding">
-        <form action="" method="get" novalidate>
-            {% if user_id %}
-                <input type="hidden" name="user_id" value="{{ user_id }}">
-            {% endif %}
-            <div class="row">
-                <div class="left">
-                    <div class="col header-title">
-                        <h1>
-                        {% icon name="form" classname="header-title-icon" %}
-                          {% trans "Form Data" %}
-                        </h1>
-                    </div>
-                    <div class="col search-bar">
-                    <ul class="fields col">
-                            {% for field in select_date_form %}
-                                {% include "wagtailadmin/shared/field.html" with field=field field_classes="field-small" li_classes="col4" %}
-                            {% endfor %}
-                            <li class="submit col2">
-                                <button name="action" value="filter" class="button button-filter">{% trans 'Filter' %}</button>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="right">
-                {% dropdown toggle_icon="download" toggle_label="Download Form Data" %}
-                <a href="?export=xlsx&{{ request.GET.urlencode }}">
-                    {% icon name="download" %}{% translate "Download Form Data (XLSX)" %}
-                </a>
-                <a href="?export=csv&{{ request.GET.urlencode }}">
-                    {% icon name="download" %}{% translate "Download Form Data (CSV)" %}
-                </a>
-                {% enddropdown %}
-                </div>
+<form action="" method="get" novalidate>
+    {% if user_id %}
+        <input type="hidden" name="user_id" value="{{ user_id }}">
+    {% endif %}
+
+    <div class="row row-flex">
+        <div class="left">
+            <div class="col header-title">
+                <h1>
+                    {% icon name="form" classname="header-title-icon" %}
+                    {% trans "Form Data" %}
+                </h1>
             </div>
-        </form>
+            <div class="col search-bar">
+                <ul class="fields fields-inline">
+                    <li class="field-small">
+                        {% include "wagtailadmin/shared/field.html" with field=select_date_form.date_from %}
+                    </li>
+                    <li class="field-small">
+                        {% include "wagtailadmin/shared/field.html" with field=select_date_form.date_to %}
+                    </li>
+                    <li class="submit">
+                        <button name="action" value="filter" class="button button-filter">
+                            {% trans 'Filter' %}
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="right">
+            {% dropdown toggle_icon="download" toggle_label="Download Form Data" %}
+            <a href="?export=xlsx&{{ request.GET.urlencode }}">
+                {% icon name="download" %}{% translate "Download Form Data (XLSX)" %}
+            </a>
+            <a href="?export=csv&{{ request.GET.urlencode }}">
+                {% icon name="download" %}{% translate "Download Form Data (CSV)" %}
+            </a>
+            {% enddropdown %}
+        </div>
+    </div>
+</form>
+
+
     </header>
     <div class="nice-padding">
         <div id="form-results" class="forms">

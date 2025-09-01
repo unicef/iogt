@@ -235,3 +235,53 @@ header svg {
   max-width: 1em;
 }
 
+
+.row-flex {
+    /* display: flex; */
+    justify-content: space-between;
+    align-items: center;
+}
+
+.row-flex .left {
+    /* display: flex; */
+    align-items: center;
+    gap: 1.5rem; /* spacing between title and search bar */
+}
+
+
+
+.fields-inline {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;   /* center-aligns button with inputs */
+}
+
+.fields-inline > li {
+    margin: 0;
+    flex: 0 0 auto;
+}
+
+.changelist-filter ul li a {
+    display: block;                /* full width */
+    padding: 8px 12px;
+    margin: 6px 0;
+    border: 1px solid #009688;     /* teal border */
+    border-radius: 4px;
+    background-color: #fff;        /* white by default */
+    text-decoration: none;
+    color: #009688;                /* teal text */
+    font-weight: 500;
+    box-sizing: border-box;
+}
+
+/* Hover effect */
+.changelist-filter ul li a:hover {
+    background-color: #e0f2f1;     /* light teal background */
+}
+
+/* Active / selected filter */
+.changelist-filter ul li.selected a {
+    background-color: #009688;     /* teal background */
+    color: #fff;                   /* white text */
+    font-weight: 600;
+}
