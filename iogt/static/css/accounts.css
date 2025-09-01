@@ -73,6 +73,7 @@ form input[type="checkbox"] {
 
 .profile-form__btn {
     margin-bottom: 8px;
+    margin-left: 0px;
 }
 
 .profile-form__btn:last-child {
@@ -95,3 +96,39 @@ form input[type="checkbox"] {
     font-weight: 500;
     line-height: 14px;
 }
+ .multiselect-dropdown {
+    position: relative;
+    width: 540px;
+    user-select: none;
+  }
+
+  .dropdown-btn {
+    padding: 10px;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    width: 100%;
+    border-radius: 0 0 5px 5px;
+  }
+
+  .dropdown-content label {
+    display: block;
+    padding: 8px 10px;
+    cursor: pointer;
+  }
+
+  .dropdown-content label:hover {
+    background-color: #f0f0f0;
+  }

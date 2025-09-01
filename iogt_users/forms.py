@@ -6,9 +6,13 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from wagtail.users.forms import UserEditForm as WagtailUserEditForm, \
     UserCreationForm as WagtailUserCreationForm
+from user_notifications.models import UserNotificationTemplate
+from user_notifications.tasks import send_app_notifications
 
 from .fields import IogtPasswordField
 from .models import User
+
+from notifications.signals import notify
 
 
 class AccountSignupForm(SignupForm):
@@ -43,6 +47,14 @@ class AccountSignupForm(SignupForm):
 
         if hasattr(self, "field_order"):
             set_form_field_order(self, self.field_order)
+
+    def save(self, request):
+        user = super().save(request)
+        # 🔁 Run this logic in background
+        print('user', user)
+        print("Sending task to Celery...")
+        send_app_notifications.delay(user.id, notification_type='signup')
+        return user
 
     def clean_username(self):
         username = self.cleaned_data.get('username')

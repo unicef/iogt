@@ -9,6 +9,10 @@
     clear: both
 }
 
+p.notification-enable {
+    font-size: 16px;
+    color: #EE4B2B;
+}
 .profile__icon {
     background-color: #0070e2;
     border-radius: 50%;
@@ -47,7 +51,8 @@
 }
 
 .profile-form__btn {
-    margin-bottom: 8px
+    margin-bottom: 8px;
+    margin-left: 0px;
 }
 
 .profile-form__btn:last-child {

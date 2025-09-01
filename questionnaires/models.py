@@ -12,6 +12,7 @@ from wagtail_localize.fields import TranslatableField
 from wagtailmarkdown.blocks import MarkdownBlock
 from wagtailsvg.edit_handlers import SvgChooserPanel
 from wagtailsvg.models import Svg
+from user_notifications.models import NotificationTag
 
 from home.blocks import (
     MediaBlock,
@@ -25,7 +26,7 @@ from home.utils import (
     collect_urls_from_streamfield,
     get_all_renditions_urls,
 )
-from modelcluster.fields import ParentalKey
+from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from wagtail.admin.panels import (FieldPanel, InlinePanel, MultiFieldPanel)
 from wagtail.contrib.forms.models import (AbstractForm, AbstractFormField,
                                           AbstractFormSubmission)
@@ -384,6 +385,7 @@ class SurveyFormField(AbstractFormField):
 class Survey(QuestionnairePage, AbstractForm):
     base_form_class = SurveyForm
     form_builder = CustomFormBuilder
+    notification_tags = ParentalManyToManyField(NotificationTag, blank=True)
 
     parent_page_types = [
         "home.HomePage", "home.Section", "home.Article", "questionnaires.SurveyIndexPage", 'home.FooterIndexPage',
@@ -443,7 +445,9 @@ class Survey(QuestionnairePage, AbstractForm):
         TranslatableField('survey_form_fields'),
         TranslatableField('thank_you_text')
     ]
-
+    promote_panels = Page.promote_panels + [
+        MultiFieldPanel([FieldPanel("notification_tags"), ], heading='Metadata'),
+    ]
     @cached_property
     def has_page_breaks(self):
         return any(

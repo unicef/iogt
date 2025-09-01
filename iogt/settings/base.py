@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'matomo',
     'messaging',
     'modelcluster',
+    'admin_notifications',
+    'user_notifications',
     'notifications',
     'questionnaires',
     'rest_framework',
@@ -129,7 +131,7 @@ TEMPLATES = [
                 'home.processors.commit_hash',
                 'home.processors.show_footers',
                 'messaging.processors.add_vapid_public_key',
-                'notifications.processors.push_notification',
+                'admin_notifications.processors.push_notification',
                 'home.processors.jquery',
             ],
         },
@@ -226,6 +228,9 @@ WAGTAILADMIN_BASE_URL = os.getenv('BASE_URL', '')
 
 SITE_ID = 1
 
+#Notifications
+DJANGO_NOTIFICATIONS_CONFIG = { 'USE_JSONFIELD': True}
+
 # Comments
 COMMENTS_APP = 'django_comments_xtd'
 COMMENTS_XTD_MAX_THREAD_LEVEL = 1
@@ -299,6 +304,11 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('uz', _('Uzbek')),
     ('zu', _('Zulu')),
     ('xy', _('Testing')),
+    ('ha', _('Hausa')),
+    ('yo', _('Yoruba')),
+    ('ig', _('Igbo')),
+    ('pcm', _('Pidgin')),
+    
 ]
 
 EXTRA_LANG_INFO = {
@@ -397,6 +407,24 @@ EXTRA_LANG_INFO = {
         'code': 'xy',
         'name': 'Testing',
         'name_local': 'Testing',
+    },
+    'ha': {
+        'bidi': False,
+        'code': 'ha',
+        'name': 'Hausa',
+        'name_local': 'Hausa',
+    },
+    'yo': {
+        'bidi': False,
+        'code': 'yo',
+        'name': 'Yoruba',
+        'name_local': 'Yoruba',
+    },
+    'pcm': {
+        'bidi': False,
+        'code': 'pcm',
+        'name': 'Pidgin',
+        'name_local': 'Pidgin',
     },
 }
 
@@ -605,6 +633,11 @@ SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
+
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
 
 # Enforce HTTPS and HSTS
 # SECURE_SSL_REDIRECT = True

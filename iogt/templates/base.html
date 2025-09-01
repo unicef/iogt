@@ -5,26 +5,26 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <meta name="vapid-key" content="{{ vapid_public_key }}">
     <title>
         {% block title %}
-            {% if page.seo_title %}
-                {{ page.seo_title }}
-            {% else %}
-                {{ page.title }}
-            {% endif %}
+        {% if page.seo_title %}
+        {{ page.seo_title }}
+        {% else %}
+        {{ page.title }}
+        {% endif %}
         {% endblock %}
         {% block title_suffix %}
-            {% with page.get_site.site_name as site_name %}
-                {% if site_name %}- {{ site_name }}{% endif %}
-            {% endwith %}
+        {% with page.get_site.site_name as site_name %}
+        {% if site_name %}- {{ site_name }}{% endif %}
+        {% endwith %}
         {% endblock %}
     </title>
     {% image settings.home.SiteSettings.favicon width-60 as favicon_img %}
-    <link rel="shortcut icon" type="image/jpg" href="{{ favicon_img.url }}"/>
-    <meta name="description" content="{% firstof page.search_description site_name %}"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="shortcut icon" type="image/jpg" href="{{ favicon_img.url }}" />
+    <meta name="description" content="{% firstof page.search_description site_name %}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#493174">
     {% social_meta_tags %}
 
@@ -44,15 +44,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     {% block extra_css %}
-        {# Override this in templates to add extra stylesheets #}
+    {# Override this in templates to add extra stylesheets #}
     {% endblock %}
     {% matomo_tracking_tags %}
     {% matomo_tag_manager settings.home.SiteSettings.mtm_container_id %}
 </head>
 
 {% get_current_language_bidi as LANGUAGE_BIDI %}
+
 <body class="{% if LANGUAGE_BIDI %}rtl{% endif %} {% block body_class %}{% endblock %}">
-{% wagtailuserbar %}
+    {% wagtailuserbar %}
 
 <main id="app">
     <div id="external-link-overlay">
@@ -83,9 +84,9 @@
                 <div class="other-links">
                     {% if show_footers %}
                         {% render_footer %}
-                    {% endif %}
-                </div>
-                {% with page_=page %}
+                        {% endif %}
+                    </div>
+                    {% with page_=page %}
                     <div class="content">
                         <div class="content-container">
                             {% include "messages.html" %}
@@ -94,59 +95,70 @@
                         </div>
                     </div>
                     {% include "footer.html" with page=page_ %}
-                {% endwith %}
-            </div>
-        </div>
-    </div>
-</main>
+                    {% endwith %}
+                </div>
 
-{# Global javascript #}
-<script>
-    var serviceWorkerURL = '{% url "sw.js" %}';
-    {% if request.user.is_authenticated %}
+            </div>
+
+            <!-- Notification overlay -->
+            <div class="notification-overlay" id="notification-overlay"></div>
+
+            <!-- Notification panel -->
+            <div class="notification-panel">
+                <div class="notification-header">
+                    <h3>Notifications</h3>
+                    <button class="notification-close-btn" onclick="closeNotificationsPanel()">×</button>
+                </div>
+                <div class="notification-list" id="notification-list">
+                </div>
+                <div class="notification-footer">
+                    <a href="{% url 'user_notifications:all' %}">See all notifications</a>
+                </div>
+            </div>
+
+
+    </main>
+
+    {# Global javascript #}
+    <script>
+        var serviceWorkerURL = '{% url "sw.js" %}';
+        {% if request.user.is_authenticated %}
         var isAuthenticated = true;
-    {% else %}
+        {% else %}
         var isAuthenticated = false;
-    {% endif %}
-    {% if push_notification %}
+        {% endif %}
+        {% if push_notification %}
         var pushNotification = true;
-    {% else %}
+        {% else %}
         var pushNotification = false;
-    {% endif %}
-</script>
-<script src="{% url 'javascript-catalog' %}"></script>
-{% if jquery %}
+        {% endif %}
+    </script>
+    <script src="{% url 'javascript-catalog' %}"></script>
+    {% if jquery %}
     <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
     <script src="{% static 'js/iogt.js' %}"></script>
-{% else %}
+    {% else %}
     <script src="{% static 'js/iogt-no-jquery.js' %}"></script>
-{% endif %}
-<script src="{% static 'js/idb.js' %}"></script>
-<script src="{% static 'js/sw-init.js' %}"></script>
-<noscript>
-    <style type="text/css">
-        #hideOnNonJSDevice, .hideOnNonJSDevice {
-            display: none;
-        }
+    {% endif %}
+    <script src="{% static 'js/idb.js' %}"></script>
+    <script src="{% static 'js/sw-init.js' %}"></script>
+    <noscript>
+        <style type="text/css">
+            #hideOnNonJSDevice,
+            .hideOnNonJSDevice {
+                display: none;
+            }
 
-        .showOnNonJSDevice {
-            display: block !important;
-        }
+            .showOnNonJSDevice {
+                display: block !important;
+            }
 
-        <
-        /
-        script >
-        < noscript >
-        < style type
-
-        =
-        "text/css"
-        >
-        .cache-banner {
-            display: none;
-        }
-    </style>
-</noscript>
-{% block extra_js %}{% endblock %}
+            .cache-banner {
+                display: none;
+            }
+        </style>
+    </noscript>
+    {% block extra_js %}{% endblock %}
 </body>
+
 </html>
