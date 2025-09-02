@@ -22,8 +22,6 @@ msgstr "Qatnasıw ushın kirin’"
 msgid "Log in / Create account"
 msgstr "Kiriw / Akkaunt jaratıw"
 
-msgid "© The Internet of Good Things"
-msgstr "© The Internet of Good Things"
 
 msgid "Profile"
 msgstr "Profil"
