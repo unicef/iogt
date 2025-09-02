@@ -140,31 +140,6 @@ def page_listing_buttons(page, is_parent=False, next_url=None, user=None, **kwar
         )
 
 
-# @hooks.register("register_admin_menu_item")
-# def about():
-#     items = [
-#         MenuItem(
-#             label=f"IoGT {settings.SITE_VERSION}",
-#             url=f"http://github.com/unicef/iogt/releases/tag/{settings.SITE_VERSION}",
-#         ),
-#         MenuItem(
-#             label=f"Wagtail {__version__}",
-#             url=f"http://github.com/wagtail/wagtail/releases/tag/v{__version__}"
-#         )
-#     ]
-
-#     # NOTE:
-#     # Removed `from wagtail_modeladmin.menus import SubMenu` as `SubMenu` is no longer available in the latest wagtail-modeladmin.
-#     # Used a direct list of MenuItems in SubmenuMenuItem instead.
-#     # This preserves the "About" submenu with IoGT and Wagtail version links.
-#     # If future updates break this, consider defining a lightweight `SubMenu` wrapper or refactor to top-level items.
-#     return SubmenuMenuItem(
-#         label="About",
-#         menu=items,
-#         icon_name="info-circle",
-#         order=999999,
-#     )
-
 @hooks.register("register_admin_menu_item")
 def about():
     items = [

@@ -83,6 +83,7 @@ INSTALLED_APPS = [
     'wagtail_localize',
     'wagtail_localize.locales',
     'wagtail_transfer',
+    'wagtailcache',
     'wagtailmarkdown',
     'wagtailmedia',
     'wagtailmenus',
@@ -90,10 +91,7 @@ INSTALLED_APPS = [
     'webpush',
     'admin_login',
     'email_service',
-    'wagtailcache'
 ]
-#'wagtail-modeladmin',
-#'wagtail_localize',
 
 # The order of middleware is very important. Take care when modifying this list.
 MIDDLEWARE = [
@@ -115,9 +113,9 @@ MIDDLEWARE = [
     # 'admin_login.middleware.CustomAdminLoginRequiredMiddleware',
     'wagtailcache.cache.FetchFromCacheMiddleware',
     # 'wagtail.contrib.statcache.middleware.StatCacheMiddleware',
-    'django.middleware.cache.UpdateCacheMiddleware',  # Must be first
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
-    "allauth.account.middleware.AccountMiddleware",  # 👈 Add this here
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 # Prevent Wagtail's built in menu from showing in Admin > Settings

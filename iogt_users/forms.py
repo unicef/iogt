@@ -109,7 +109,6 @@ class WagtailAdminUserCreateForm(WagtailUserCreationForm):
     class Meta(WagtailUserCreationForm.Meta):
         model = User
         fields = WagtailUserCreationForm.Meta.fields | {'first_name', 'last_name', 'username', 'display_name', 'terms_accepted', 'groups'}
-        # fields = ('first_name', 'last_name', 'username', 'display_name', 'terms_accepted', 'groups')
 
 
 class WagtailAdminUserEditForm(WagtailUserEditForm):

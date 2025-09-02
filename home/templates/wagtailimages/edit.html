@@ -7,10 +7,6 @@
 
     {{ form.media.css }}
 
-    <!-- Focal point chooser -->
-     <!-- <link rel="stylesheet" href="{% versioned_static 'wagtailimages/css/vendor/jquery.Jcrop.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% versioned_static 'wagtailimages/css/focal-point-chooser.css' %}" type="text/css"> -->
-   
 {% endblock %}
 
 
@@ -27,11 +23,6 @@
             });
         });
     </script>
-
-    <!-- Focal point chooser -->
-    <!-- <script src="{% versioned_static 'wagtailadmin/js/vendor/jquery.ba-throttle-debounce.min.js' %}"></script>
-    <script src="{% versioned_static 'wagtailimages/js/vendor/jquery.Jcrop.min.js' %}"></script>
-    <script src="{% versioned_static 'wagtailimages/js/focal-point-chooser.js' %}"></script> -->
 {% endblock %}
 
 {% block content %}
@@ -113,14 +104,10 @@
                             <dd>{{ original_image.width }}x{{ original_image.height }}</dd>
                             <dt>{% trans "Filesize" %}</dt>
                             <dd>{% if filesize %}{{ filesize|filesizeformat }}{% else %}{% trans "File not found" %}{% endif %}</dd>
-
-                            {% usage_count_enabled as uc_enabled %}
-                            {% if uc_enabled %}
-                                <dt>{% trans "Usage" %}</dt>
-                                <dd>
-                                    <a href="{{ image.usage_url }}">{% blocktrans trimmed count usage_count=image.get_usage.count %}Used {{ usage_count }} time{% plural %}Used {{ usage_count }} times{% endblocktrans %}</a>
-                                </dd>
-                            {% endif %}
+                            <dt>{% trans "Usage" %}</dt>
+                            <dd>
+                                <a href="{{ image.usage_url }}">{% blocktrans trimmed count usage_count=image.get_usage.count %}Used {{ usage_count }} time{% plural %}Used {{ usage_count }} times{% endblocktrans %}</a>
+                            </dd>
                         </dl>
                     </div>
                 </div>

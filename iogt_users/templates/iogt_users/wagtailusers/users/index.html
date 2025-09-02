@@ -24,48 +24,6 @@
         {% trans "Select all users in listing" as select_all_text %}
         {% include 'wagtailadmin/bulk_actions/footer.html' with select_all_obj_text=select_all_text app_label=app_label model_name=model_name objects=users %}
     </div>
-
-<!--    <header class=" hasform">-->
-<!--        <div class="row">-->
-<!--            <div class="left">-->
-<!--                <div class="col">-->
-<!--                    <h1><svg class="icon icon-user icon" aria-hidden="true"><use href="#icon-user"></use></svg>-->
-<!--                        Users-->
-<!--                    </h1>-->
-<!--                </div>-->
-<!--                <form class="col search-form" action="/admin/users/" method="get" novalidate="" role="search">-->
-<!--                    <ul class="fields">-->
-<!--                        <li class="required">-->
-<!--                        <div class="field char_field text_input field-small iconfield" data-contentpath="q">-->
-<!--                            <label for="id_q">Search term:</label>-->
-<!--                            <div class="field-content">-->
-<!--                                <div class="input">-->
-<!--                                    <svg class="icon icon-search icon" aria-hidden="true"><use href="#icon-search"></use></svg>-->
-<!--                                    <input type="text" name="q" placeholder="Search users" required="" id="id_q">-->
-<!--                                    <span></span>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        </li>-->
-<!--                        <li class="visuallyhidden"><input disabled="" type="submit" aria-hidden="true"></li>-->
-<!--                        <li class="submit visuallyhidden"><input type="submit" value="Search" class="button"></li>-->
-<!--                    </ul>-->
-<!--                </form>-->
-<!--            </div>-->
-<!--            <div class="right">-->
-<!--                <div class="actionbutton action-buttons">-->
-<!--                    <button id="invite-admin-button" class="button button&#45;&#45;icon" style="margin-left: 10px;">-->
-<!--                        {% icon name="plus" wrapped=1 %} Invite Admin User-->
-<!--                    </button>-->
-<!--                        <a href="/admin/users/add/" class="button bicolor button&#45;&#45;icon">-->
-<!--                            <span class="icon-wrapper"><svg class="icon icon-plus icon" aria-hidden="true"><use href="#icon-plus"></use></svg></span>-->
-<!--                            Add a user-->
-<!--                        </a>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </header>-->
-
     <div id="invite-admin-modal" class="modal">
         <div class="modal-content">
             <div>

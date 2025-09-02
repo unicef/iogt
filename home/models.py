@@ -25,7 +25,6 @@ from wagtail.admin.panels import (
     ObjectList,
     TabbedInterface,
 )
-# from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.models import BaseSiteSetting as BaseSetting
 from wagtail.contrib.settings.registry import register_setting
 from wagtail import blocks
@@ -363,7 +362,7 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
             ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
             ('markdown', MarkdownBlock(icon='code')),
             ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
-            ('image', ImageChooserBlock()),
+            ('image', ImageChooserBlock(template='blocks/image.html')),
             ('list', blocks.ListBlock(MarkdownBlock(icon='code'))),
             ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
             ('page_button', PageButtonBlock()),
@@ -375,7 +374,6 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
             ('download', DownloadButtonBlock()),
         ],
         use_json_field=True,
-        blank=True
     )
     show_in_menus_default = True
 
