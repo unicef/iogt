@@ -5,8 +5,6 @@
 
 # Python and others
 *.pyc
-*.pyo
-*.db
 *.swp
 .DS_Store
 .python-version

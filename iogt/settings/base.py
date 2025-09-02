@@ -318,6 +318,11 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('uz', _('Uzbek')),
     ('zu', _('Zulu')),
     ('xy', _('Testing')),
+    ('ha', _('Hausa')),
+    ('yo', _('Yoruba')),
+    ('ig', _('Igbo')),
+    ('pcm', _('Pidgin')),
+    
 ]
 
 EXTRA_LANG_INFO = {
@@ -416,6 +421,24 @@ EXTRA_LANG_INFO = {
         'code': 'xy',
         'name': 'Testing',
         'name_local': 'Testing',
+    },
+    'ha': {
+        'bidi': False,
+        'code': 'ha',
+        'name': 'Hausa',
+        'name_local': 'Hausa',
+    },
+    'yo': {
+        'bidi': False,
+        'code': 'yo',
+        'name': 'Yoruba',
+        'name_local': 'Yoruba',
+    },
+    'pcm': {
+        'bidi': False,
+        'code': 'pcm',
+        'name': 'Pidgin',
+        'name_local': 'Pidgin',
     },
 }
 
@@ -539,9 +562,9 @@ SITE_VERSION = os.getenv('SITE_VERSION', 'unknown')
 HAS_MD5_HASH_REGEX = re.compile(r"\.[a-f0-9]{12}\..*$")
 
 WEBPUSH_SETTINGS = {
-    'VAPID_PUBLIC_KEY': 'BBRqGieSqpMGPqVBoV_t3iJ0Afg0qs82cSa2lF-dfcWG50KbpvoKvHmmNS39aMhyMz145lXc5ESczxSA2dCn9_w',
-    'VAPID_PRIVATE_KEY': 'uu9bxQU1VtR5be7mgg2gYzGtQkWb3Ncey_jFGg-_mAU',
-    'VAPID_ADMIN_EMAIL': 'ankit.chopra@nagarro.com',
+    'VAPID_PUBLIC_KEY': os.getenv('VAPID_PUBLIC_KEY'),
+    'VAPID_PRIVATE_KEY': os.getenv('VAPID_PRIVATE_KEY'),
+    'VAPID_ADMIN_EMAIL': os.getenv('VAPID_ADMIN_EMAIL'),
 }
 
 COMMENTS_COMMUNITY_MODERATION = os.getenv('COMMENTS_COMMUNITY_MODERATION') == 'enable'
@@ -556,7 +579,7 @@ SUPERSET_DATABASE_NAME = os.getenv('SUPERSET_DATABASE_NAME')
 SUPERSET_USERNAME = os.getenv('SUPERSET_USERNAME')
 SUPERSET_PASSWORD = os.getenv('SUPERSET_PASSWORD')
 
-PUSH_NOTIFICATION = os.getenv('PUSH_NOTIFICATION', 'enable') == 'enable'
+PUSH_NOTIFICATION = os.getenv('PUSH_NOTIFICATION', 'disable') == 'enable'
 JQUERY = os.getenv('JQUERY', 'enable') == 'enable'
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = int(os.getenv('DATA_UPLOAD_MAX_NUMBER_FIELDS', '1000'))
@@ -624,6 +647,11 @@ SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
+
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
 
 # Enforce HTTPS and HSTS
 # SECURE_SSL_REDIRECT = True

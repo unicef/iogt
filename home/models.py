@@ -3,7 +3,6 @@ import os
 
 from django.conf import settings
 from django.contrib.admin.utils import flatten
-
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -548,16 +547,6 @@ class Article(AbstractArticle):
 
     def compute_number_of_reviews(self):
         return self.number_of_reviews if self.number_of_reviews else 0
-
-
-    # def publish(self, *args, **kwargs):
-    #     was_published = super().publish(*args, **kwargs)
-    #     print('in-publish-fn', was_published)
-    #     # Trigger Celery notification task
-    #     send_signup_notifications.delay(self.id, "article")
-    #
-    #     return was_published
-
 
 
 class ArticleFeedback(models.Model):

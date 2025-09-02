@@ -5,15 +5,8 @@ services:
       target: dev
       args:
         requirements: requirements.dev.txt
-    environment:
-      DJANGO_SETTINGS_MODULE: iogt.settings.dev
-      DB_HOST: db
-      DB_NAME: iogt
-      DB_PASSWORD: iogt
-      DB_PORT: '5432'
-      DB_USER: iogt
-    depends_on:
-      - db
+    env_file:
+      - .env
     image: iogt:latest
     ports:
       - "8000:8000"
@@ -29,14 +22,8 @@ services:
     depends_on:
       - django
       - redis
-    environment:
-      CELERY_BROKER_URL: redis://redis:6379/0
-      DB_HOST: db
-      DB_NAME: iogt
-      DB_PASSWORD: iogt
-      DB_PORT: '5432'
-      DB_USER: iogt
-      DJANGO_SETTINGS_MODULE: iogt.settings.dev
+    env_file:
+      - .env
     volumes:
       - ./:/app/
   redis:
