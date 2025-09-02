@@ -68,14 +68,16 @@
         </div>
 
         <div class="right">
-            {% dropdown toggle_icon="download" toggle_label="Download Form Data" %}
-            <a href="?export=xlsx&{{ request.GET.urlencode }}">
-                {% icon name="download" %}{% translate "Download Form Data (XLSX)" %}
-            </a>
-            <a href="?export=csv&{{ request.GET.urlencode }}">
-                {% icon name="download" %}{% translate "Download Form Data (CSV)" %}
-            </a>
-            {% enddropdown %}
+            <div class="dropdown-container">
+                {% dropdown toggle_icon="download" toggle_label="Download Form Data" %}
+                <a href="?export=xlsx&{{ request.GET.urlencode }}">
+                    {% icon name="download" %}{% translate "Download Form Data (XLSX)" %}
+                </a>
+                <a href="?export=csv&{{ request.GET.urlencode }}">
+                    {% icon name="download" %}{% translate "Download Form Data (CSV)" %}
+                </a>
+                {% enddropdown %}
+            </div>
         </div>
     </div>
 </form>

@@ -31,7 +31,7 @@
                 </div>
 
                 {% block header_extra %}
-                    <div class="right">
+                    <div class="right" style="display: flex;">
                         {% if user_can_create %}
                             <div class="actionbutton" style="display:inline-block">
                                 {% include 'modeladmin/includes/button.html' with button=view.button_helper.add_button %}
@@ -45,14 +45,16 @@
                         </div>
 
                         {% if view.list_export %}
-                            {% dropdown toggle_icon="download" toggle_label="Download Users" %}
-                                <a href="?export=xlsx&{{ request.GET.urlencode }}">
-                                    {% icon name="download" %}{% translate "Download Users (XLSX)" %}
-                                </a>
-                                <a href="?export=csv&{{ request.GET.urlencode }}">
-                                    {% icon name="download" %}{% translate "Download Users (CSV)" %}
-                                </a>
-                            {% enddropdown %}
+                            <div class="dropdown-container">
+                                {% dropdown toggle_icon="download" toggle_label="Download Users" %}
+                                    <a href="?export=xlsx&{{ request.GET.urlencode }}">
+                                        {% icon name="download" %}{% translate "Download Users (XLSX)" %}
+                                    </a>
+                                    <a href="?export=csv&{{ request.GET.urlencode }}">
+                                        {% icon name="download" %}{% translate "Download Users (CSV)" %}
+                                    </a>
+                                {% enddropdown %}
+                            </div>
                         {% endif %}
                     </div>
                 {% endblock %}
