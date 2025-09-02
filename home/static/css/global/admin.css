@@ -267,6 +267,6 @@ header svg {
   margin-right: 1.5rem;
 }
 
-.w-dropdown__toggle {
+.dropdown-container .w-dropdown__toggle {
   color: white;
 }

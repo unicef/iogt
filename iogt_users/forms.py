@@ -121,5 +121,4 @@ class WagtailAdminUserEditForm(WagtailUserEditForm):
 
     class Meta(WagtailUserEditForm.Meta):
         model = User
-        fields = WagtailUserEditForm.Meta.fields | {"groups", "display_name", "terms_accepted", "first_name"}
-    delete_view_enabled = True
+        fields = WagtailUserEditForm.Meta.fields | {'first_name', 'last_name', 'username', 'display_name', 'terms_accepted', 'groups'}
