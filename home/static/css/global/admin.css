@@ -23,34 +23,24 @@
     position: unset;
 }
 
-/* Stretch the collection dropdown to match text inputs */
 .w-field--collection_choice_field select, .w-w-field .w-field--commentable select {
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
 }
 
-/* Make index page collection filter match edit page fields */
 .listing-filter select,
 .c-dropdown select {
-    min-height: 40px;   /* adjust to match .w-field input */
+    min-height: 40px;
     padding: 6px 10px;
     border-radius: 6px;
     font-size: 14px;
 }
 
-/* Make collection dropdown take full width of its container */
 
-
-/* Keep label + input inline */
-
-
-/* Make select wider */
-/* Target only the collection filter dropdown on index page */
-/* Only target the collection filter on the images index page */
 #collection_chooser_collection_id-label {
-    margin-right: 20px; /* spacing */
-    white-space: nowrap; /* prevent label breaking */
+    margin-right: 20px;
+    white-space: nowrap;
 }
 .search-bar .fields .w-field__wrapper {
 
@@ -63,14 +53,14 @@
     max-width: 100%;
 }
 
-/* Medium screens (≥768px): limit to 600px */
+
 @media (min-width: 768px) {
   #collection_chooser_collection_id {
     max-width: 600px;
   }
 }
 
-/* Large screens (≥1200px): a bit wider if needed */
+
 @media (min-width: 1200px) {
   #collection_chooser_collection_id {
     max-width: 800px;
@@ -80,8 +70,8 @@
 /* Default state: greyish background */
 .w-field__input input:not(#id_q), 
 .w-field__input select[id="collection_chooser_collection_id"] {
-    background-color: #f8f8f8 !important; /* greyish background */
-    border: 1px solid #b1b4b6 !important; /* grey border */
+    background-color: #f8f8f8 !important;
+    border: 1px solid #b1b4b6 !important;
     border-radius: 4px !important;
     padding: 14px 15px !important;
     font-size: 18px !important;
@@ -91,16 +81,16 @@
 
 
 
-/* Hover state: white background */
+
 .w-field__input select#collection_chooser_collection_id:hover {
     background-color: #fff !important; /* white on hover */
 }
 
-/* Focus state: yellow border + glow */
+
 #wrapper #collection_chooser_collection_id:focus,
 .w-field__input select#collection_chooser_collection_id:focus {
-    background-color: #fff !important; /* white when focused */
-    border-color: #ffbf47 !important;  /* yellow border */
+    background-color: #fff !important; 
+    border-color: #ffbf47 !important;
     box-shadow: 0 0 0 3px rgba(255, 191, 71, 0.5) !important;
     outline: 0 !important;
 }
@@ -113,7 +103,7 @@
 }
 
 
-/* Target only collection dropdowns */
+
 .w-field__input select[id="id_collection"] {
     width: 100% !important;
     min-width: unset;
@@ -133,7 +123,7 @@
   }
 }
 
-/* Desktop and large screens (≥1200px) */
+
 @media (min-width: 1200px) {
   .w-field__input select[id="id_collection"] {
       /* min-width: 840px; */
@@ -142,24 +132,24 @@
 }
 
 .w-field {
-  display: block;        /* stack label + input vertically */
-  margin-bottom: 1rem;
+  display: block;     
+  /* margin-bottom: 1rem; */
 } 
 
 .w-field__label {
-  display: block;        /* force label to occupy full line */
+  display: block;       
   margin-bottom: 0.5rem;
   max-width: 100%;
 }
 
 .w-field__input {
-  display: block;        /* ensure input behaves as block */
-  width: 100%;           /* full width inside parent */
+  display: block;       
+  width: 100%;         
 }
 .w-field__input select[id="id_language_code"] {
-  width: 100%;                 /* full width of input wrapper */
-  box-sizing: border-box;       /* include padding/border in width */
-  background-color: #fafafa;    /* consistent with Wagtail style */
+  width: 100%;              
+  box-sizing: border-box;     
+  background-color: #fafafa; 
   border: 1px solid var(--w-color-border-field, #ccc);
   border-radius: 4px;
   padding: 0.5rem;
@@ -168,38 +158,26 @@
 @media screen and (min-width: 50em) {
   .w-field--choice_field {
     box-sizing: border-box;
-    display: flex;             /* flex layout instead of float */
+    display: flex;            
     align-items: center;
-    gap: 1rem;                  /* spacing between label & field */
+    gap: 1rem;                 
   }
 
-  /* .w-field__label {
-    max-width: 16.6667%; */
-  /* } */
 
   .w-field__input {
     max-width: 100.3333%;
   }
 
-  /* Force selects to behave like Wagtail 3 grey box */
+ 
   .w-field__input select[id="id_language_code"] {
     width: 100% !important;
-    background-color:  #fafafa; /* default grey */
+    background-color:  #fafafa; 
     border: 1px solid var(--w-color-border-field, #ccc);
     border-radius: 4px;
     padding: 0.5rem;
   }
 }
 
-
-.w-panel__heading--label {
-  background: #fcf2f2;
-  padding: .9em 1em;       /* equal left/right padding */
-  box-sizing: border-box;
-  width: 100%;             /* span full container width */
-  display: block;          /* ensure it behaves as a block */
-  
-}
 
 header .left:first-child {
     float: left;
@@ -243,17 +221,15 @@ header svg {
 }
 
 .row-flex .left {
-    /* display: flex; */
     align-items: center;
-    gap: 1.5rem; /* spacing between title and search bar */
+    gap: 1.5rem; 
 }
-
 
 
 .fields-inline {
     display: flex;
     gap: 0.75rem;
-    align-items: center;   /* center-aligns button with inputs */
+    align-items: center;
 }
 
 .fields-inline > li {
@@ -262,26 +238,29 @@ header svg {
 }
 
 .changelist-filter ul li a {
-    display: block;                /* full width */
+    display: block;               
     padding: 8px 12px;
     margin: 6px 0;
-    border: 1px solid #009688;     /* teal border */
-    border-radius: 4px;
-    background-color: #fff;        /* white by default */
+    border: 1px solid hsl(180.4761904762, 100%, 24.7058823529%);     
+    border-radius: 3px;
+    background-color: #fff;      
     text-decoration: none;
-    color: #009688;                /* teal text */
-    font-weight: 500;
+    color: hsl(180.4761904762, 100%, 24.7058823529%);         
+    font-size: .9em;
+    font-weight: 400;
+    line-height: 1.2em;
     box-sizing: border-box;
+    font-size:12.24px
 }
 
-/* Hover effect */
 .changelist-filter ul li a:hover {
-    background-color: #e0f2f1;     /* light teal background */
+    background-color: #e0f2f1;  
 }
 
-/* Active / selected filter */
+
+
 .changelist-filter ul li.selected a {
-    background-color: #009688;     /* teal background */
-    color: #fff;                   /* white text */
-    font-weight: 600;
+    background-color: hsl(180.4761904762, 100%, 24.7058823529%) !important;
+    border-color: hsl(180.4761904762, 100%, 24.7058823529%) !important;
+    color: #fff !important;
 }

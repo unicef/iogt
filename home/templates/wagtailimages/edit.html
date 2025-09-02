@@ -8,6 +8,8 @@
     {{ form.media.css }}
 
     <!-- Focal point chooser -->
+     <!-- <link rel="stylesheet" href="{% versioned_static 'wagtailimages/css/vendor/jquery.Jcrop.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% versioned_static 'wagtailimages/css/focal-point-chooser.css' %}" type="text/css"> -->
    
 {% endblock %}
 
@@ -55,7 +57,6 @@
                             {{ field }}
                         {% else %}
                         {% if field.name == "collection" %}
-                        <h3>Heading data</h3>
                             <div class="w-field w-field--collection_choice_field w-field--select_with_disabled_options">
                                 {% include "wagtailadmin/shared/field.html" with field=field %}
                             </div>
@@ -72,13 +73,9 @@
                 </ul>
                 <div class="w-hidden sm:w-block">
                     <input type="submit" value="{% trans 'Save' %}" class="button" />
-                    {% if user_can_delete %}
+                      {% if user_can_delete %}
                         <a href="{% url 'wagtailimages:delete' image.id %}{% if next %}?next={{ next|urlencode }}{% endif %}" class="button button-secondary no">{% trans "Delete image" %}</a>
-                    {% endif %}
-                       <input type="submit" value="{% trans 'Delete Image' %}" class="button" />
-                {% if user_can_delete %}
-                    <a href="{% url 'wagtailimages:delete' image.id %}{% if next %}?next={{ next }}{% endif %}" class="button button-secondary no">{% trans "Delete image" %}</a>
-                {% endif %}
+                       {% endif %}
                 </div>
             </div>
 

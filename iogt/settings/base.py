@@ -90,13 +90,14 @@ INSTALLED_APPS = [
     'webpush',
     'admin_login',
     'email_service',
+    'wagtailcache'
 ]
 #'wagtail-modeladmin',
 #'wagtail_localize',
 
 # The order of middleware is very important. Take care when modifying this list.
 MIDDLEWARE = [
-    #'wagtailcache.cache.UpdateCacheMiddleware',
+    'wagtailcache.cache.UpdateCacheMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -112,7 +113,7 @@ MIDDLEWARE = [
     'external_links.middleware.RewriteExternalLinksMiddleware',
     'iogt.middleware.GlobalDataMiddleware',
     # 'admin_login.middleware.CustomAdminLoginRequiredMiddleware',
-    #'wagtailcache.cache.FetchFromCacheMiddleware',
+    'wagtailcache.cache.FetchFromCacheMiddleware',
     # 'wagtail.contrib.statcache.middleware.StatCacheMiddleware',
     'django.middleware.cache.UpdateCacheMiddleware',  # Must be first
     'django.middleware.cache.FetchFromCacheMiddleware',

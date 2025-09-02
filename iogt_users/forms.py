@@ -107,6 +107,10 @@ class WagtailAdminUserCreateForm(WagtailUserCreationForm):
         if User.objects.filter(display_name__iexact=display_name):
             raise ValidationError(_('Display name not available.'))
         return display_name
+    class Meta(WagtailUserCreationForm.Meta):
+        model = User
+        fields = WagtailUserCreationForm.Meta.fields | {'first_name', 'last_name', 'username', 'display_name', 'terms_accepted', 'groups'}
+        # fields = ('first_name', 'last_name', 'username', 'display_name', 'terms_accepted', 'groups')
 
 
 class WagtailAdminUserEditForm(WagtailUserEditForm):
@@ -116,3 +120,8 @@ class WagtailAdminUserEditForm(WagtailUserEditForm):
     last_name = forms.CharField(required=False, label='Last Name')
 
     terms_accepted = forms.BooleanField(label=_('I accept the Terms and Conditions.'))
+
+    class Meta(WagtailUserEditForm.Meta):
+        model = User
+        fields = WagtailUserEditForm.Meta.fields | {"groups", "display_name", "terms_accepted", "first_name"}
+    delete_view_enabled = True
