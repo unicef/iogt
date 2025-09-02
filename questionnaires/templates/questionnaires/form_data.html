@@ -2,89 +2,102 @@
 {% load i18n wagtailadmin_tags %}
 {% block titletag %}{% trans "Form Data" %}{% endblock %}
 {% block extra_js %}
-    {{ block.super }}
+{{ block.super }}
 
-    <script>
-        $.fn.datetimepicker.defaults.i18n.wagtail_custom_locale = {
-            months: wagtailConfig.STRINGS.MONTHS,
-            dayOfWeek: wagtailConfig.STRINGS.WEEKDAYS,
-            dayOfWeekShort: wagtailConfig.STRINGS.WEEKDAYS_SHORT,
-        }
-        $.datetimepicker.setLocale('wagtail_custom_locale');
+<script>
+    $.fn.datetimepicker.defaults.i18n.wagtail_custom_locale = {
+        months: wagtailConfig.STRINGS.MONTHS,
+        dayOfWeek: wagtailConfig.STRINGS.WEEKDAYS,
+        dayOfWeekShort: wagtailConfig.STRINGS.WEEKDAYS_SHORT,
+    }
+    $.datetimepicker.setLocale('wagtail_custom_locale');
 
-        $(function() {
-            $('#id_date_from').datetimepicker({
-                timepicker: false,
-                format: 'Y-m-d',
-            });
-            $('#id_date_to').datetimepicker({
-                timepicker: false,
-                format: 'Y-m-d',
-            });
-            $('#download-xlsx,#download-csv').click(e => {
-                let pageIds = []
-                $(':checked').each((index, box) => {
-                    pageIds.push(box.id);
-                });
-                if (pageIds.length > 0) {
-                    const downloadBtn = $(e.target);
-                    const href = downloadBtn.attr('href');
-                    downloadBtn.attr('href', href + `&page_ids=${pageIds.join(',')}`);
-                }
-            });
+    $(function () {
+        $('#id_date_from').datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d',
         });
-    </script>
+        $('#id_date_to').datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d',
+        });
+        $('#download-xlsx,#download-csv').click(e => {
+            let pageIds = []
+            $(':checked').each((index, box) => {
+                pageIds.push(box.id);
+            });
+            if (pageIds.length > 0) {
+                const downloadBtn = $(e.target);
+                const href = downloadBtn.attr('href');
+                downloadBtn.attr('href', href + `&page_ids=${pageIds.join(',')}`);
+            }
+        });
+    });
+</script>
 {% endblock %}
 {% block content %}
-    <header class="nice-padding">
-<form action="" method="get" novalidate>
-    {% if user_id %}
+<style>
+    .search-bar {
+        display: flex;
+        align-items: center;
+    }
+
+    .search-bar .fields .w-field__wrapper {
+        align-items: center;
+        gap: 8px;
+    }
+</style>
+<header class="nice-padding">
+    <form action="" method="get" novalidate>
+        {% if user_id %}
         <input type="hidden" name="user_id" value="{{ user_id }}">
-    {% endif %}
+        {% endif %}
 
-    <div class="row row-flex">
-        <div class="left">
-            <div class="col header-title">
-                <h1>
-                    {% icon name="form" classname="header-title-icon" %}
-                    {% trans "Form Data" %}
-                </h1>
+        <div class="row row-flex">
+            <div class="left">
+                <div class="col header-title">
+                    <h1>
+                        {% icon name="form" classname="header-title-icon" %}
+                        {% trans "Form Data" %}
+                    </h1>
+                </div>
+                <div class="col search-bar">
+                    <ul class="fields fields-inline">
+                        <li class="field-small">
+                            {% include "wagtailadmin/shared/field.html" with field=select_date_form.date_from %}
+                        </li>
+                        <li class="field-small">
+                            {% include "wagtailadmin/shared/field.html" with field=select_date_form.date_to %}
+                        </li>
+                        <li class="submit">
+                            <button name="action" value="filter" class="button button-filter">
+                                {% trans 'Filter' %}
+                            </button>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div class="col search-bar">
-                <ul class="fields fields-inline">
-                    <li class="field-small">
-                        {% include "wagtailadmin/shared/field.html" with field=select_date_form.date_from %}
-                    </li>
-                    <li class="field-small">
-                        {% include "wagtailadmin/shared/field.html" with field=select_date_form.date_to %}
-                    </li>
-                    <li class="submit">
-                        <button name="action" value="filter" class="button button-filter">
-                            {% trans 'Filter' %}
-                        </button>
-                    </li>
-                </ul>
+
+            <div class="right">
+                <div class="dropdown-container">
+                    {% dropdown toggle_icon="download" toggle_label="Download Form Data" %}
+                    <a href="?export=xlsx&{{ request.GET.urlencode }}">
+                        {% icon name="download" %}{% translate "Download Form Data (XLSX)" %}
+                    </a>
+                    <a href="?export=csv&{{ request.GET.urlencode }}">
+                        {% icon name="download" %}{% translate "Download Form Data (CSV)" %}
+                    </a>
+                    {% enddropdown %}
+                </div>
             </div>
         </div>
+    </form>
 
-        <div class="right">
-            {% dropdown toggle_icon="download" toggle_label="Download Form Data" %}
-            <a href="?export=xlsx&{{ request.GET.urlencode }}">
-                {% icon name="download" %}{% translate "Download Form Data (XLSX)" %}
-            </a>
-            <a href="?export=csv&{{ request.GET.urlencode }}">
-                {% icon name="download" %}{% translate "Download Form Data (CSV)" %}
-            </a>
-            {% enddropdown %}
-        </div>
+
+</header>
+<div class="nice-padding">
+    <div id="form-results" class="forms">
+        {% include "questionnaires/results_forms.html" %}
     </div>
-</form>
-
-
-    </header>
-    <div class="nice-padding">
-        <div id="form-results" class="forms">
-            {% include "questionnaires/results_forms.html" %}
-        </div>
-    </div>
+</div>
 {% endblock %}
