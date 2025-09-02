@@ -31,7 +31,7 @@
                 </div>
 
                 {% block header_extra %}
-                    <div class="right" style="display: flex;">
+                    <div class="right" style="display: flex; margin-top: 1rem;">
                         {% if user_can_create %}
                             <div class="actionbutton" style="display:inline-block">
                                 {% include 'modeladmin/includes/button.html' with button=view.button_helper.add_button %}
