@@ -525,7 +525,7 @@ if CACHE:
             "CACHE_LOCATION must be set if CACHE is set to 'enable'")
     CACHE_BACKEND = os.getenv(
         'CACHE_BACKEND',
-        'wagtailcache.compat_backends.django_redis.RedisCache')
+        'django_redis.cache.RedisCache')
     DJANGO_REDIS_IGNORE_EXCEPTIONS = True
     SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
     WAGTAIL_CACHE = True
