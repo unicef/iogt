@@ -50,8 +50,6 @@ class NotificationLogAdmin(ModelAdmin):
     ordering = ["-received_at"]
     permission_helper_class = NotificationLogPermissionHelper
     
-    create_view_class = None
-    
     def get_is_clicked(self, obj):
         try:
             return obj.notification.meta.is_clicked
