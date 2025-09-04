@@ -59,6 +59,13 @@ class User(AbstractUser):
     def get_display_name(self):
         return self.display_name or self.username
 
+    def notification_opt_in(self):
+        try:
+            pref = self.notificationpreference
+            return True if pref.receive_notifications else False
+        except Exception:
+            return False  # no preference set
+
     class Meta:
         ordering = ('id',)
 
