@@ -519,7 +519,7 @@ SIMPLE_JWT = {
 
 CACHE = os.getenv('CACHE', '') == 'enable'
 if CACHE:
-    CACHE_LOCATION = os.getenv('CACHE_LOCATION')
+    CACHE_LOCATION = 'redis://redis:6379/0' #os.getenv('CACHE_LOCATION')
     if not CACHE_LOCATION:
         raise ImproperlyConfigured(
             "CACHE_LOCATION must be set if CACHE is set to 'enable'")
