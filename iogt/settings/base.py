@@ -518,15 +518,14 @@ SIMPLE_JWT = {
 }
 
 CACHE = os.getenv('CACHE', 'enable') == 'enable'
-if True:
-    CACHE_LOCATION = 'redis://redis:6379/0' #os.getenv('CACHE_LOCATION')
+if CACHE:
+    CACHE_LOCATION = os.getenv('CACHE_LOCATION', 'redis://redis:6379/0')
     if not CACHE_LOCATION:
         raise ImproperlyConfigured(
             "CACHE_LOCATION must be set if CACHE is set to 'enable'")
-    CACHE_BACKEND = 'django_redis.cache.RedisCache'
-    # CACHE_BACKEND = os.getenv(
-    #     'CACHE_BACKEND',
-    #     'django_redis.cache.RedisCache')
+    CACHE_BACKEND = os.getenv(
+        'CACHE_BACKEND',
+        'django_redis.cache.RedisCache')
     DJANGO_REDIS_IGNORE_EXCEPTIONS = True
     SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
     WAGTAIL_CACHE = True
