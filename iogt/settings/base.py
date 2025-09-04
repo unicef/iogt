@@ -517,8 +517,8 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=365),
 }
 
-CACHE = 'enable' #os.getenv('CACHE', '') == 'enable'
-if CACHE:
+CACHE = os.getenv('CACHE', 'enable') == 'enable'
+if True:
     CACHE_LOCATION = 'redis://redis:6379/0' #os.getenv('CACHE_LOCATION')
     if not CACHE_LOCATION:
         raise ImproperlyConfigured(
