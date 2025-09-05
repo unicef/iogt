@@ -517,15 +517,15 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=365),
 }
 
-CACHE = os.getenv('CACHE', '') == 'enable'
+CACHE = os.getenv('CACHE', 'enable') == 'enable'
 if CACHE:
-    CACHE_LOCATION = os.getenv('CACHE_LOCATION')
+    CACHE_LOCATION = os.getenv('CACHE_LOCATION', 'redis://redis:6379/0')
     if not CACHE_LOCATION:
         raise ImproperlyConfigured(
             "CACHE_LOCATION must be set if CACHE is set to 'enable'")
     CACHE_BACKEND = os.getenv(
         'CACHE_BACKEND',
-        'wagtailcache.compat_backends.django_redis.RedisCache')
+        'django_redis.cache.RedisCache')
     DJANGO_REDIS_IGNORE_EXCEPTIONS = True
     SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
     WAGTAIL_CACHE = True
@@ -652,6 +652,8 @@ CELERY_BROKER_URL = 'redis://redis:6379/0'
 CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
+
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
 
 # Enforce HTTPS and HSTS
 # SECURE_SSL_REDIRECT = True
