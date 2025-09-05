@@ -68,17 +68,13 @@ def notify_and_publish_view(request, page_id):
     
     elif isinstance(page, Section):
         full_url = get_site_for_locale(page)
-        print('full-url', full_url)
         send_app_notifications.delay(page.id, full_url, 'section')
         messages.success(request, f"Section '{page.title}' published and notified.")
-        print('sent')
-
     else:
         messages.error(request, "Not a valid Survey or Article page.")
     return redirect('wagtailadmin_explore', page.get_parent().id)
 
     # modeladmin_url = AdminURLHelper(type(page))
-    # print('modeladmin_url', modeladmin_url)
     # return redirect(modeladmin_url.index_url)
 
 

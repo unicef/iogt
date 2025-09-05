@@ -269,13 +269,11 @@ def register_notify_and_publish_menu_item():
     return NotifyAndPublishMenuItem(order=100, allowed_models=Section)  #
 
 
-
 @hooks.register("register_context_modifier")
 def enable_url_generator(context, request):
     # only apply on image edit views
     if request.resolver_match and request.resolver_match.url_name == "wagtailimages_edit":
         context["url_generator_enabled"] = True
-
 
 
 @hooks.register('register_page_listing_more_buttons')
