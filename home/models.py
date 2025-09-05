@@ -218,7 +218,7 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         blank=True,
         use_json_field=True,
     )
-
+    notification_tags = ParentalManyToManyField(NotificationTag, blank=True)
     tags = ClusterTaggableManager(through='SectionTaggedItem', blank=True)
     show_progress_bar = models.BooleanField(default=False)
     larger_image_for_top_page_in_list_as_in_v1 = models.BooleanField(default=False)
@@ -226,7 +226,7 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     show_in_menus_default = True
 
     promote_panels = Page.promote_panels + [
-        MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
+        MultiFieldPanel([FieldPanel("tags"), FieldPanel("notification_tags"),], heading='Metadata'),
     ]
 
     content_panels = Page.content_panels + [

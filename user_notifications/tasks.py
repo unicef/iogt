@@ -12,7 +12,7 @@ User = get_user_model()
 
 @shared_task
 def send_app_notifications(id, url=None, notification_type=None):
-    from home.models import Article
+    from home.models import Article, Section
     from questionnaires.models import Survey
     try:
         template = UserNotificationTemplate.objects.filter(active=True, type=notification_type).latest("updated_at")
@@ -41,7 +41,8 @@ def send_app_notifications(id, url=None, notification_type=None):
         sender = Article.objects.get(id=id)
     elif notification_type == 'survey':
         sender = Survey.objects.get(id=id)
-
+    elif notification_type == 'section':
+        sender = Section.objects.get(id=id)
     if notification_type != 'signup':
         article_or_survey_tags_id = list(sender.notification_tags.values_list('id', flat=True))
         for notification_preference in NotificationPreference.objects.filter(

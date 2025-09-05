@@ -5,7 +5,7 @@ from wagtail.admin.action_menu import ActionMenuItem
 from django.urls import path, reverse
 from django.utils.html import format_html_join, format_html
 from questionnaires.models import Survey
-from home.models import Article
+from home.models import Article, Section
 from wagtail.models import Site, Page
 from wagtail.admin import messages
 from user_notifications.tasks import send_app_notifications
@@ -65,12 +65,21 @@ def notify_and_publish_view(request, page_id):
         full_url = get_site_for_locale(page)
         send_app_notifications.delay(page.id, full_url, 'article')
         messages.success(request, f"Article '{page.title}' published and notified.")
+    
+    elif isinstance(page, Section):
+        full_url = get_site_for_locale(page)
+        print('full-url', full_url)
+        send_app_notifications.delay(page.id, full_url, 'section')
+        messages.success(request, f"Section '{page.title}' published and notified.")
+        print('sent')
 
     else:
         messages.error(request, "Not a valid Survey or Article page.")
+    return redirect('wagtailadmin_explore', page.get_parent().id)
 
-    modeladmin_url = AdminURLHelper(type(page))
-    return redirect(modeladmin_url.index_url)
+    # modeladmin_url = AdminURLHelper(type(page))
+    # print('modeladmin_url', modeladmin_url)
+    # return redirect(modeladmin_url.index_url)
 
 
 def get_site_for_locale(instance):
