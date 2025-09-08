@@ -9,7 +9,7 @@ from home.models import Article, Section
 from wagtail.models import Site, Page
 from wagtail.admin import messages
 from user_notifications.tasks import send_app_notifications
-from wagtail_modeladmin.helpers import AdminURLHelper
+# from wagtail_modeladmin.helpers import AdminURLHelper
 
 
 def has_md5_hash(name):
