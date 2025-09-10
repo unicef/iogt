@@ -29,5 +29,5 @@ wagtailmedia~=0.12.0
 wagtailmenus==3.1.3
 wagtailsvg==0.0.37
 # branch: iogt, tag: v0.8.5-iogt.1
-wagtail-transfer @ https://github.com/IDEMSInternational/wagtail-transfer/archive/52b57b364ebc9acddd412ee708f829b45763c9ab.zip
+wagtail-transfer @ https://github.com/sachin-mehta/wagtail-transfer/archive/d2791ec65d19755abe822d0397db1247e07c7239.zip
 whitenoise==5.2.*
