@@ -4,6 +4,10 @@ from django.templatetags.static import static
 
 from wagtail import hooks
 from wagtail.models import Locale
+# myapp/wagtail_hooks.py
+from wagtail_transfer.field_adapters import ForeignKeyAdapter
+
+old_get_dependencies = ForeignKeyAdapter.get_dependencies
 
 from questionnaires.views import FormPagesListView, FormDataPerUserView, generate_dashboard
 
@@ -28,3 +32,18 @@ def register_custom_form_pages_list_view():
       path('form-data/', FormDataPerUserView.as_view(), name='form_data_per_user'),
       path('generate-dashboard/<int:pk>/', generate_dashboard, name='generate_dashboard'),
   ]
+
+
+
+
+
+
+
+def safe_get_dependencies(self, value):
+    if not value:
+        return set()
+    if isinstance(value, int):
+        return {(self.related_base_model, value, False)}
+    return old_get_dependencies(self, value)
+
+ForeignKeyAdapter.get_dependencies = safe_get_dependencies
