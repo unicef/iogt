@@ -473,24 +473,14 @@ WAGTAILTRANSFER_NO_FOLLOW_MODELS = [
     'contenttypes.contenttype',
     'wagtailcore.page',
 ]
+WAGTAILTRANSFER_SECRET_KEY = os.getenv('WAGTAILTRANSFER_SECRET_KEY')
 WAGTAILTRANSFER_SHOW_ERROR_FOR_REFERENCED_PAGES = True
-# settings.py
-
 WAGTAILTRANSFER_SOURCES = {
-    'staging': {
-        'BASE_URL': 'http://localhost:8000/wagtail-transfer/',
-        'SECRET_KEY': '7cd5de8229be75e1e0c2af8abc2ada7e',
-    },
-    'production': {
-       'BASE_URL': 'https://www.example.com/wagtail-transfer/',
-     'SECRET_KEY': 'a36476ffc6af34dc935570d97369eca0',
-  },
+   os.getenv('WAGTAILTRANSFER_SOURCE_NAME', 'default'): {
+      'BASE_URL': os.getenv('WAGTAILTRANSFER_SOURCE_BASE_URL'),
+      'SECRET_KEY': os.getenv('WAGTAILTRANSFER_SOURCE_SECRET_KEY'),
+   },
 }
-
-WAGTAILTRANSFER_SECRET_KEY = '7cd5de8229be75e1e0c2af8abc2ada7e'
-# WAGTAILTRANSFER_SECRET_KEY = os.getenv('WAGTAILTRANSFER_SECRET_KEY', '7cd5de8229be75e1e0c2af8abc2ada7e')
-
-print('WAGTAILTRANSFER_SOURCES', WAGTAILTRANSFER_SOURCES)
 WAGTAILTRANSFER_UPDATE_RELATED_MODELS = ['wagtailimages.image', 'wagtailsvg.svg',]
 
 REST_FRAMEWORK = {
@@ -638,7 +628,7 @@ SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8000']
+
 # Enforce HTTPS and HSTS
 # SECURE_SSL_REDIRECT = True
 # SECURE_HSTS_SECONDS = 31536000
@@ -647,6 +637,7 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost:8000']
 
 # Ensure Django trusts the proxy (if applicable)
 # SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -667,4 +658,3 @@ LOGGING = {
         },
     },
 }
-
