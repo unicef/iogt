@@ -3,7 +3,21 @@ from .forms import WagtailAdminUserCreateForm, WagtailAdminUserEditForm
 from wagtail.users.views.users import IndexView as WagtailIndexView
 from django.utils.functional import cached_property
 
-from wagtail.admin.ui.tables import BooleanColumn
+from wagtail.admin.ui.tables import Column, BooleanColumn
+
+
+class ContentTagsColumn(Column):
+    def __init__(self, name="content_tags", **kwargs):
+        super().__init__(name, label=kwargs.get("label", "Prferences"), **kwargs)
+
+    def get_value(self, obj):
+        pref = getattr(obj, "notificationpreference", None)
+        if pref:
+            tags = ", ".join(tag.name for tag in pref.content_tags.all())
+            return tags or "—"
+        return "—"
+
+
 
 class CustomUserIndexView(WagtailIndexView):
 
@@ -14,7 +28,8 @@ class CustomUserIndexView(WagtailIndexView):
             BooleanColumn(
                 "notification_opt_in",  # internal column name
                 label="Notifications Opt-In",
-            )
+            ),
+            ContentTagsColumn(),
         ]
     
 class UserViewSet(WagtailUserViewSet):

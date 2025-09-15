@@ -287,5 +287,5 @@ def page_listing_more_buttons(page, user, next_url=None):
                 'Notify & Publish',
                 url,
                 priority=40,
-                attrs={'icon': 'mail'}
+                icon_name='mail'
             )
