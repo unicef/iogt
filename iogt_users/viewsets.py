@@ -8,7 +8,7 @@ from wagtail.admin.ui.tables import Column, BooleanColumn
 
 class ContentTagsColumn(Column):
     def __init__(self, name="content_tags", **kwargs):
-        super().__init__(name, label=kwargs.get("label", "Prferences"), **kwargs)
+        super().__init__(name, label=kwargs.get("label", "Preferences"), **kwargs)
 
     def get_value(self, obj):
         pref = getattr(obj, "notificationpreference", None)
