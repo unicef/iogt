@@ -1577,6 +1577,7 @@ wagtail==7.0 \
     --hash=sha256:7c267ead43da3aa9469f233b111624aa1a508a5840f1ddda72d104957fdb3426
     # via
     #   -r requirements.in
+    #   wagtail-autocomplete
     #   wagtail-cache
     #   wagtail-localize
     #   wagtail-markdown
@@ -1584,6 +1585,10 @@ wagtail==7.0 \
     #   wagtail-transfer
     #   wagtailmedia
     #   wagtailmenus
+wagtail-autocomplete==0.12.0 \
+    --hash=sha256:17be82c7e2ab2714b01a2a3edbf29f56ba37ad72f2bebcded560c5ead9b482df \
+    --hash=sha256:d1cd315475e8c776c85a75ba5eb76ceb2eb680c18334e7e9424040d7faa9b538
+    # via -r requirements.in
 wagtail-cache==3.0.0 \
     --hash=sha256:2bbb8d1bc5c4c9d7755113c0c8b91b3ec8a0c90bd560ef62aab99698961114fa \
     --hash=sha256:a12b9f7dbd41b560b7fa77be08a6c7ab292536e37296dc910275b99c198ddd1e

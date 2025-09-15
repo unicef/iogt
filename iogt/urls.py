@@ -26,7 +26,7 @@ from iogt.views import (
     OfflineContentNotFoundPageView,
     CustomLogoutView,
 )
-
+from wagtailautocomplete.urls.admin import urlpatterns as autocomplete_admin_urls
 
 api_url_patterns = [
     path('api/v1/questionnaires/', include('questionnaires.api.v1.urls')),
@@ -50,6 +50,7 @@ urlpatterns = api_url_patterns + [
     path('django-admin/', admin.site.urls),
     path('admin/logout/', CustomLogoutView.as_view(), name='admin_logout'),
     path('admin/login/', AzureADSignupView.as_view(), name='azure_signup_view'),  # Override Wagtail admin login
+    re_path(r'^admin/autocomplete/', include(autocomplete_admin_urls)),
     path('admin/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),
     path('admin-login/', include(admin_login_urls), name='admin_login_urls'),

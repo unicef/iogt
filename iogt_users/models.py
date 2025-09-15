@@ -22,7 +22,12 @@ class User(AbstractUser):
     has_viewed_registration_survey = models.BooleanField(default=False)
     
     interactive_uuid = models.CharField(max_length=255, null=True, blank=True)
+    
+    autocomplete_search_field = 'username'
 
+    def autocomplete_label(self):
+        return self.username
+    
     @property
     def is_rapidpro_bot_user(self):
         return self.groups.filter(name=settings.RAPIDPRO_BOT_GROUP_NAME).exists()

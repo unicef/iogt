@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'search',
     'taggit',
     'translation_manager',
+    'wagtailautocomplete',
     'wagtail',
     'wagtail.admin',
     'wagtail.contrib.forms',

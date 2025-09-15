@@ -6,6 +6,7 @@ from wagtail.fields import RichTextField
 from iogt.settings.base import AUTH_USER_MODEL
 from django.contrib.auth import get_user_model
 from notifications.models import Notification
+from wagtailautocomplete.edit_handlers import AutocompletePanel
 
 
 class UserNotificationTemplate(models.Model):
@@ -45,6 +46,11 @@ class UserNotificationTemplate(models.Model):
 class NotificationTag(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(unique=True)
+    
+    autocomplete_search_field = 'name'
+
+    def autocomplete_label(self):
+        return self.name
 
     def __str__(self):
         return self.name
@@ -61,6 +67,13 @@ class NotificationPreference(models.Model):
     receive_notifications = models.BooleanField(null=True, blank=True)  # NULL = not chosen yet
     preferred_language = models.CharField(max_length=5, choices=LANGUAGE_CHOICES, default='en')
     content_tags = models.ManyToManyField(NotificationTag, blank=True)
+    
+    panels = [
+        AutocompletePanel('user', target_model='iogt_users.User'),
+        FieldPanel("receive_notifications"),
+        FieldPanel("preferred_language"),
+        AutocompletePanel('content_tags', target_model='user_notifications.NotificationTag'),
+    ]
 
     def __str__(self):
         return f"{self.user.username}'s Notification Preferences"
