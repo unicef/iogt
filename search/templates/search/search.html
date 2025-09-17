@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load static wagtailcore_tags %}
 {% load home_tags %}
+{% load wagtailsearchpromotions_tags %}
 
 {% block body_class %}template-searchresults{% endblock %}
 
@@ -11,95 +12,114 @@
 
 {% block title %}{% translate "Search results for:" %} {{ search_query }}{% endblock %}
 
+
 {% block content %}
     <div class="search-container">
-    {% if search_query %}
-        <h2>{% translate "Search results for:" %} "{{ search_query }}"</h2>
-    {% endif %}
-    <div class="search-results js-search-result search__results">
-        {% if search_groups %}
-            {% for group, results in search_groups.items %}
-            <div class="search-results__header">
-                <div class="container search-results__header-container">
-                    <p class="title search-results__title">{{ group | title }} |
-                    {% blocktranslate trimmed count counter=results.search_results_count %} 1 result
-                    {% plural %} {{ counter }} results
-                    {% endblocktranslate %}</p>
-                    <!--  <button class="search-results__text search-results__view">All {{ value.search_results_count }} result</button> -->
+          {% if search_query %}
+            <h2>{% translate "Search results for:" %} "{{ search_query }}"</h2>
+         {% endif %}
+        {% get_search_promotions search_query as promoted_results %}
+            {% if promoted_results %}
+                <div class="promoted-results">
+                    <h2>{% translate "Promoted results" %}</h2>
+                    <ul>
+                        {% for promotion in promoted_results %}
+                            {% if promotion.page %}
+                                <li><a href="{% pageurl promotion.page %}">{{ promotion.page.title }}</a></li>
+                            {% else %}
+                                <li><a href="{{ promotion.external_link_url }}">{{ promotion.external_link_text }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
                 </div>
-            </div>
-                {% include 'search/tags/search_result_cards.html' with results=results.search_results %}
-
-            <div class="page-controls-container">
-                <div class="container">
-                    <div class="pagination search-results__pagination">
-                        {% if results.search_results.has_previous %}
-                            <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ results.search_results.previous_page_number }}"
-                               class="pagination__arrow pagination__arrow-prev">
-                                <svg viewBox="0 0 8 14" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M7 13L1 7.0005L7 1"
-                                          stroke="#303030" stroke-width="1.5"
-                                          stroke-linecap="round"
-                                          stroke-linejoin="round"/>
-                                </svg>
-                            </a>
-                        {% endif %}
-                        {% if results.search_results.has_next %}
-                            <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ results.search_results.next_page_number }}"
-                               class="pagination__arrow pagination__arrow-next">
-                                <svg viewBox="0 0 8 14" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M7 13L1 7.0005L7 1"
-                                          stroke="#303030" stroke-width="1.5"
-                                          stroke-linecap="round"
-                                          stroke-linejoin="round"/>
-                                </svg>
-                            </a>
-                        {% endif %}
+            {% endif %}
+        <div class="search-results js-search-result search__results">
+            {% if search_groups %}
+                {% for group, results in search_groups.items %}
+                <div class="search-results__header">
+                    <div class="container search-results__header-container">
+                        <p class="title search-results__title">{{ group | title }} |
+                        {% blocktranslate trimmed count counter=results.search_results_count %} 1 result
+                        {% plural %} {{ counter }} results
+                        {% endblocktranslate %}</p>
+                        <!--  <button class="search-results__text search-results__view">All {{ value.search_results_count }} result</button> -->
                     </div>
                 </div>
-            </div>
-            {% endfor %}
-        {% elif search_query %}
-            <div class="search-not-found">
-                <div class="container search-not-found__container">
-                    <p class="title search-not-found__title">{% translate "No search results were found for" %} {{ search_query }}</p>
-                    {# <div class="text search-not-found__text"> #}
-                    {#    <p>{% translate "It seems we can’t find any results based on your search." %}</p> #}
-                    {# </div> #}
+                    {% include 'search/tags/search_result_cards.html' with results=results.search_results %}
+
+                <div class="page-controls-container">
+                    <div class="container">
+                        <div class="pagination search-results__pagination">
+                            {% if results.search_results.has_previous %}
+                                <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ results.search_results.previous_page_number }}"
+                                class="pagination__arrow pagination__arrow-prev">
+                                    <svg viewBox="0 0 8 14" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7 13L1 7.0005L7 1"
+                                            stroke="#303030" stroke-width="1.5"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"/>
+                                    </svg>
+                                </a>
+                            {% endif %}
+                            {% if results.search_results.has_next %}
+                                <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ results.search_results.next_page_number }}"
+                                class="pagination__arrow pagination__arrow-next">
+                                    <svg viewBox="0 0 8 14" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7 13L1 7.0005L7 1"
+                                            stroke="#303030" stroke-width="1.5"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"/>
+                                    </svg>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
-            </div>
-        {% else %}
-            <div class="search-page">
-                <div class="container search-page__container">
-                    <form class="footer__search search-page-form"
-                          action="{% url 'search' %}">
-                        <label class="cust-input cust-input--icon profile-form__input">
-                            <span class="cust-input__icon">
-                                <svg width="16" height="16" viewBox="0 0 16 16"
-                                     fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M7.33333 12.6667C10.2789 12.6667 12.6667 10.2789 12.6667 7.33333C12.6667 4.38781 10.2789 2 7.33333 2C4.38781 2 2 4.38781 2 7.33333C2 10.2789 4.38781 12.6667 7.33333 12.6667Z"
-                                          stroke="currentcolor" stroke-width="1.5"
-                                          stroke-linecap="round"
-                                          stroke-linejoin="round"/>
-                                    <path d="M13.9996 14L11.0996 11.1"
-                                          stroke="currentcolor" stroke-width="1.5"
-                                          stroke-linecap="round"
-                                          stroke-linejoin="round"/>
-                                </svg>
-                            </span>
-                                <input type="text" name="query"
-                                       placeholder="" pattern="\S+.*"/>
-                        </label>
-                        <button type="submit"
-                                class="cust-btn cust-btn--dark polls-widget__submit">
-                            <span>{% translate "Search the site..." %}</span>
-                        </button>
-                    </form>
+                {% endfor %}
+            {% elif search_query %}
+                <div class="search-not-found">
+                    <div class="container search-not-found__container">
+                        {% if not promoted_results %}
+                            <p class="title search-not-found__title">{% translate "No search results were found for" %} {{ search_query }}</p>
+                        {% endif %}
+                            {# <div class="text search-not-found__text"> #}
+                        {#    <p>{% translate "It seems we can’t find any results based on your search." %}</p> #}
+                        {# </div> #}
+                    </div>
                 </div>
-            </div>
-        {% endif %}
+            {% else %}
+                <div class="search-page">
+                    <div class="container search-page__container">
+                        <form class="footer__search search-page-form"
+                            action="{% url 'search' %}">
+                            <label class="cust-input cust-input--icon profile-form__input">
+                                <span class="cust-input__icon">
+                                    <svg width="16" height="16" viewBox="0 0 16 16"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7.33333 12.6667C10.2789 12.6667 12.6667 10.2789 12.6667 7.33333C12.6667 4.38781 10.2789 2 7.33333 2C4.38781 2 2 4.38781 2 7.33333C2 10.2789 4.38781 12.6667 7.33333 12.6667Z"
+                                            stroke="currentcolor" stroke-width="1.5"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"/>
+                                        <path d="M13.9996 14L11.0996 11.1"
+                                            stroke="currentcolor" stroke-width="1.5"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
+                                    <input type="text" name="query"
+                                        placeholder="" pattern="\S+.*"/>
+                            </label>
+                            <button type="submit"
+                                    class="cust-btn cust-btn--dark polls-widget__submit">
+                                <span>{% translate "Search the site..." %}</span>
+                            </button>
+                        
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
     </div>
 </div>
 {% endblock %}

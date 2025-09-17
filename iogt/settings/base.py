@@ -88,6 +88,7 @@ INSTALLED_APPS = [
     'wagtailmenus',
     'wagtailsvg',
     'webpush',
+    'wagtail.contrib.search_promotions',
     'admin_login',
     'email_service',
     'wagtailcache'
