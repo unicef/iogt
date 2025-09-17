@@ -14,6 +14,7 @@ class UserNotificationTemplate(models.Model):
         ("signup", "User Signup"),
         ("article", "Article Published"),
         ("survey", "Survey Published"),
+        ("section", "Section Published"),
         # add more types as needed
     ]
 
