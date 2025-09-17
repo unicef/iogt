@@ -4,6 +4,8 @@ from wagtail_modeladmin.options import (
 )
 from .models import NotificationLog, NotificationPreference, NotificationTag, UserNotificationTemplate
 from admin_notifications.wagtail_hooks import NotificationModelAdmin
+from django.conf import settings
+from wagtail_modeladmin.helpers.permission import PermissionHelper
 
 class NotificationTagAdmin(ModelAdmin):
     model = NotificationTag
@@ -26,6 +28,17 @@ class NotificationPreferenceAdmin(ModelAdmin):
     list_filter = ('preferred_language', 'content_tags')
 
 
+class NotificationLogPermissionHelper(PermissionHelper):
+    def user_can_list(self, user):
+        return True  
+    def user_can_create(self, user):
+        return False
+    def user_can_edit_obj(self, user, obj):
+        return False
+    def user_can_delete_obj(self, user, obj):
+        return False
+
+
 class NotificationLogAdmin(ModelAdmin):
     model = NotificationLog
     menu_label = "Notification Logs"
@@ -35,15 +48,7 @@ class NotificationLogAdmin(ModelAdmin):
     search_fields = ("notification_key", "user__username", "user__email", "tags")
     list_filter = ("state", "tags", "user")
     ordering = ["-received_at"]
-    
-    def has_add_permission(self, request):
-        return False
-
-    def has_edit_permission(self, request, obj=None):
-        return False
-
-    def has_delete_permission(self, request, obj=None):
-        return False
+    permission_helper_class = NotificationLogPermissionHelper
     
     def get_is_clicked(self, obj):
         try:
@@ -76,10 +81,11 @@ class NotificationsParentGroup(ModelAdminGroup):
     items = (
         NotificationTagAdmin,
         NotificationPreferenceAdmin,
-        NotificationModelAdmin,
         NotificationLogAdmin,
         UserNotificationTemplateAdmin
     )
+    if settings.PUSH_NOTIFICATION:
+        items += (NotificationModelAdmin,)
 
 
 

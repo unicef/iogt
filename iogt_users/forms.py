@@ -67,7 +67,6 @@ class AccountSignupForm(SignupForm):
         return display_name
 
 
-
 class ChangePasswordForm(BaseChangePasswordForm):
 
     def __init__(self, *args, **kwargs):
@@ -110,7 +109,6 @@ class WagtailAdminUserCreateForm(WagtailUserCreationForm):
     class Meta(WagtailUserCreationForm.Meta):
         model = User
         fields = WagtailUserCreationForm.Meta.fields | {'first_name', 'last_name', 'username', 'display_name', 'terms_accepted', 'groups'}
-        # fields = ('first_name', 'last_name', 'username', 'display_name', 'terms_accepted', 'groups')
 
 
 class WagtailAdminUserEditForm(WagtailUserEditForm):
@@ -123,5 +121,4 @@ class WagtailAdminUserEditForm(WagtailUserEditForm):
 
     class Meta(WagtailUserEditForm.Meta):
         model = User
-        fields = WagtailUserEditForm.Meta.fields | {"groups", "display_name", "terms_accepted", "first_name"}
-    delete_view_enabled = True
+        fields = WagtailUserEditForm.Meta.fields | {'first_name', 'last_name', 'username', 'display_name', 'terms_accepted', 'groups'}

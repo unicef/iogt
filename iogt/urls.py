@@ -18,9 +18,6 @@ from home import views as pwa_views
 from wagtail_transfer import urls as wagtailtransfer_urls
 from admin_login import urls as admin_login_urls
 from admin_login.views import AzureADSignupView
-# from user_notifications.views import save_notification_preference
-
-
 from iogt.views import (
     TransitionPageView,
     SitemapAPIView,
@@ -29,7 +26,7 @@ from iogt.views import (
     OfflineContentNotFoundPageView,
     CustomLogoutView,
 )
-
+from wagtailautocomplete.urls.admin import urlpatterns as autocomplete_admin_urls
 
 api_url_patterns = [
     path('api/v1/questionnaires/', include('questionnaires.api.v1.urls')),
@@ -53,6 +50,7 @@ urlpatterns = api_url_patterns + [
     path('django-admin/', admin.site.urls),
     path('admin/logout/', CustomLogoutView.as_view(), name='admin_logout'),
     path('admin/login/', AzureADSignupView.as_view(), name='azure_signup_view'),  # Override Wagtail admin login
+    re_path(r'^admin/autocomplete/', include(autocomplete_admin_urls)),
     path('admin/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),
     path('admin-login/', include(admin_login_urls), name='admin_login_urls'),
@@ -61,8 +59,6 @@ urlpatterns = api_url_patterns + [
     *i18n_patterns(path('users/', include(users_urls), name='users_urls')),
     *i18n_patterns(path('accounts/', include('allauth.urls'), name='allauth-urls')),
     *i18n_patterns(path('comments/', include('django_comments_xtd.urls'))),
-    #*i18n_patterns(path('admin-login/', include('admin_login.urls'))),
-
     path(
         'sw.js',
         pwa_views.ServiceWorkerView.as_view(),

@@ -1,33 +1,32 @@
 importScripts("../../static/js/workbox/workbox-v6.1.5/workbox-sw.js");
 importScripts("../../static/js/idb.js"); // Import IndexedDB helper
 const PRECACHE_ASSETS = [
-  "/", // your home page
-  "/static/js/iogt.js",
-  "/static/js/iogt-no-jquery.js",
-  "/static/js/idb.js",
+    '/',  // your home page
+    '/static/js/iogt.js',
+    '/static/js/iogt-no-jquery.js',
+    '/static/js/idb.js',
 ];
 
 // ✅ Install Service Worker
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches
-      .open("iogt")
-      .then(async (cache) => {
-        for (const asset of PRECACHE_ASSETS) {
-          try {
-            const response = await fetch(asset, { method: "GET" });
-            if (response.ok) {
-              await cache.put(asset, response.clone());
-            } else {
-              console.warn(`⚠️ Skipped (not OK): ${asset}`);
+self.addEventListener('install', event => {
+    console.log("🛠 Service Worker Installing...");
+    event.waitUntil(
+        caches.open('iogt').then(async cache => {
+            for (const asset of PRECACHE_ASSETS) {
+                try {
+                    const response = await fetch(asset, { method: 'GET' });
+                    if (response.ok) {
+                        await cache.put(asset, response.clone());
+                        console.log(`✅ Cached: ${asset}`);
+                    } else {
+                        console.warn(`⚠️ Skipped (not OK): ${asset}`);
+                    }
+                } catch (err) {
+                    console.warn(`⚠️ Skipped (fetch failed): ${asset}`, err);
+                }
             }
-          } catch (err) {
-            console.warn(`⚠️ Skipped (fetch failed): ${asset}`, err);
-          }
-        }
-      })
-      .then(() => self.skipWaiting())
-  );
+        }).then(() => self.skipWaiting())
+    );
 });
 
 self.addEventListener("push", function (event) {
@@ -125,11 +124,10 @@ self.addEventListener("fetch", (event) => {
               );
           }
 
-          // ✅ Dynamically use referrer or fallback to home page
-          const redirectUrl = request.referrer || "/";
+                    // ✅ Dynamically use referrer or fallback to home page
+                    const redirectUrl = request.referrer || '/';
 
-          return new Response(
-            `
+                    return new Response(`
                         <!DOCTYPE html>
                         <html>
                             <head>
@@ -145,48 +143,69 @@ self.addEventListener("fetch", (event) => {
                                 <button onclick="window.location.href='${redirectUrl}'">Back to Survey</button>
                             </body>
                         </html>
-                    `,
-            {
-              headers: { "Content-Type": "text/html" },
-            }
-          );
-        } catch (err) {
-          console.error("❌ Failed to save request:", err);
-          return new Response(
-            JSON.stringify({ success: false, error: err.message }),
-            {
-              headers: { "Content-Type": "application/json" },
-            }
-          );
-        }
-      })
-    );
-    return;
-  }
-  if (request.method === 'GET') {
+                    `, {
+                        headers: { "Content-Type": "text/html" }
+                    });
+                } catch (err) {
+                    console.error("❌ Failed to save request:", err);
+                    return new Response(JSON.stringify({ success: false, error: err.message }), {
+                        headers: { "Content-Type": "application/json" }
+                    });
+                }
+            })
+        );
+        return;
+    }
+
     // ✅ Handle GET Requests (Serve from Cache when Offline)
-    event.respondWith(
-      fetch(request, { cache: 'no-store' })      // 1️⃣ Try the network first
-        .then(networkResponse => {
-          // 2️⃣ Optionally save a copy for offline use
-          const responseClone = networkResponse.clone(); // ✅ Clone early
-          const cacheRequest = new Request(request.url, { method: 'GET' });
-          //    Only cache successful, basic (same‑origin) responses
-          if (networkResponse.ok && networkResponse.type === 'basic' && request.method === 'GET') {
-              caches.open('iogt')
-                  .then(cache => cache.put(cacheRequest, responseClone))
-                  .catch(err => console.warn('❌ Cache put failed', err));
-          }
-          return networkResponse;                     // 3️⃣ Always return the live response
-        })
-        .catch(() => {                                  // 4️⃣ Network failed → offline fallback
-            return caches.match(request)                //    • Serve from cache if we have it
-            .then(cached => cached ||            //    • …otherwise show a 503
-              new Response('Offline', { status: 503 })
-            );
-          })
-    );
-  }
+    if (request.method === 'GET') {
+        const reqClone = request.clone();
+                event.respondWith(
+            fetch(reqClone, { cache: 'no-store' })      // 1️⃣ Try the network first
+                .then(networkResponse => {
+                    // 2️⃣ Optionally save a copy for offline use
+                    const responseClone = networkResponse.clone(); // ✅ Clone early
+                    const cacheRequest = new Request(request.url, { method: 'GET' });
+                    //    Only cache successful, basic (same‑origin) responses
+                    if (networkResponse.ok && networkResponse.type === 'basic' && request.method === 'GET') {
+                        caches.open('iogt')
+                            .then(cache => cache.put(cacheRequest, responseClone))
+                            .catch(err => console.warn('❌ Cache put failed', err));
+                    }
+                    return networkResponse;                     // 3️⃣ Always return the live response
+                })
+                .catch(() => {                                  // 4️⃣ Network failed → offline fallback
+                    return caches.match(request)                //    • Serve from cache if we have it
+                        .then(cached => cached ||            //    • …otherwise show a 503
+                            new Response('Offline', { status: 503 }));
+                })
+        );
+        
+        //Commented - Changed order to check if online -> send request to server -> save in cache -> but if offline -> then check cache
+        // event.respondWith(
+        //     caches.match(request).then(cachedResponse => {
+        //         if (cachedResponse) {
+        //             console.log("✅ Serving from cache:", request.url);
+        //             return cachedResponse;
+        //         }
+
+        //         return fetch(request)
+        //             .then(networkResponse => {
+        //                 return caches.open('iogt').then(cache => {
+        //                     cache.put(reqClone, networkResponse.clone());
+        //                     return networkResponse;
+        //                 });
+        //             })
+        //             .catch(err => {
+        //                 console.error("❌ Network fetch failed:", request.url, err);
+        //                 return new Response('Offline - No cached content available', {
+        //                     status: 503,
+        //                     headers: { 'Content-Type': 'text/plain' }
+        //                 });
+        //             });
+        //     })
+        // );
+    }
 });
 
 // ✅ Background Sync for Form Submissions
@@ -200,12 +219,14 @@ self.addEventListener("sync", (event) => {
 async function syncRequests() {
   const requests = await getAllRequests();
   for (const req of requests) {
-    const fetchOptions = {
-      method: req.method,
-      headers: req.headers,
-      body: req.body,
-      credentials: "include", // Important for authentication
-    };
+    console.log("📤 Syncing request:", req);
+
+        const fetchOptions = {
+            method: req.method,
+            headers: req.headers,
+            body: req.body,
+            credentials: 'include'  // Important for authentication
+        };
 
     try {
       const response = await fetch(req.url, fetchOptions);

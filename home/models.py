@@ -3,7 +3,6 @@ import os
 
 from django.conf import settings
 from django.contrib.admin.utils import flatten
-
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -26,7 +25,6 @@ from wagtail.admin.panels import (
     ObjectList,
     TabbedInterface,
 )
-# from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.models import BaseSiteSetting as BaseSetting
 from wagtail.contrib.settings.registry import register_setting
 from wagtail import blocks
@@ -220,7 +218,7 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         blank=True,
         use_json_field=True,
     )
-
+    notification_tags = ParentalManyToManyField(NotificationTag, blank=True)
     tags = ClusterTaggableManager(through='SectionTaggedItem', blank=True)
     show_progress_bar = models.BooleanField(default=False)
     larger_image_for_top_page_in_list_as_in_v1 = models.BooleanField(default=False)
@@ -228,7 +226,7 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     show_in_menus_default = True
 
     promote_panels = Page.promote_panels + [
-        MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
+        MultiFieldPanel([FieldPanel("tags"), FieldPanel("notification_tags"),], heading='Metadata'),
     ]
 
     content_panels = Page.content_panels + [
@@ -364,7 +362,7 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
             ('paragraph', blocks.RichTextBlock(features=settings.WAGTAIL_RICH_TEXT_FIELD_FEATURES)),
             ('markdown', MarkdownBlock(icon='code')),
             ('paragraph_v1_legacy', RawHTMLBlock(icon='code')),
-            ('image', ImageChooserBlock()),
+            ('image', ImageChooserBlock(template='blocks/image.html')),
             ('list', blocks.ListBlock(MarkdownBlock(icon='code'))),
             ('numbered_list', NumberedListBlock(MarkdownBlock(icon='code'))),
             ('page_button', PageButtonBlock()),
@@ -376,7 +374,6 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
             ('download', DownloadButtonBlock()),
         ],
         use_json_field=True,
-        blank=True
     )
     show_in_menus_default = True
 
@@ -548,16 +545,6 @@ class Article(AbstractArticle):
 
     def compute_number_of_reviews(self):
         return self.number_of_reviews if self.number_of_reviews else 0
-
-
-    # def publish(self, *args, **kwargs):
-    #     was_published = super().publish(*args, **kwargs)
-    #     print('in-publish-fn', was_published)
-    #     # Trigger Celery notification task
-    #     send_signup_notifications.delay(self.id, "article")
-    #
-    #     return was_published
-
 
 
 class ArticleFeedback(models.Model):

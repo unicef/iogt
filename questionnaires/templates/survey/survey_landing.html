@@ -11,6 +11,22 @@
     <div class="container">
         <h1 class="title">{{ page.title }}</h1>
         <div class="survey-page__description">{{ page.thank_you_text }}</div>
+        {% if page.is_registration_survey %}
+            <div class="notification-preference-on-registration-survey">
+                <span>🔔 Let's set your <a href="{% url 'notification_settings' %}">Notification Preferences</a>
+                    now."</a></span>
+            </div>
+        {% endif %}
         {% include 'questionnaires/tags/poll_survey_buttons.html' %}
     </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            {% if page.is_registration_survey %}
+                window.location.href = "{% url 'notification_settings' %}";
+            {% endif %}
+        });
+</script>
 {% endblock %}

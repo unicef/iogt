@@ -10,6 +10,45 @@
         {% include "wagtailadmin/shared/field.html" with field=form.first_name %}
         {% include "wagtailadmin/shared/field.html" with field=form.last_name %}
         {% include "wagtailadmin/shared/field.html" with field=form.terms_accepted %}
+        <div class="w-field__wrapper " data-field-wrapper="">
+            <span class="w-field__label">
+                Notification Preference
+            </span>
+            <div class="w-field" data-field="">
+            {% if user.notificationpreference %}
+            <div style="display: flex; flex-direction: column;">
+                
+                    <div><b>Opted in: </b>
+                    {% if user.notificationpreference.receive_notifications %}
+                        Yes
+                    {% else %}
+                        No
+                    {% endif %}
+                    </div>
+                    <div>
+                    <b>Language: </b> {{ user.notificationpreference.get_preferred_language_display }}
+                    </div>
+                    {% if user.notificationpreference.content_tags.exists %}
+                    <div>
+                        <b>Tags: </b>
+                        {{ user.notificationpreference.content_tags.all|join:", " }}
+                    </div>
+                    {% endif %}
+                    <div>
+                        <a href="{% url 'user_notifications_notificationpreference_modeladmin_edit' user.notificationpreference.id %}">
+                            Edit
+                        </a>
+                    </div>
+            </div>
+            {% else %}
+                No preferences found.<br>
+                <a href="{% url 'user_notifications_notificationpreference_modeladmin_create' %}?user={{ user.id }}">
+                    Add.
+                </a>
+            {% endif %}
+                
+            </div>
+        </div>
     {% endblock extra_fields %}
     {% if form.password1 %}
         {% include "wagtailadmin/shared/field.html" with field=form.password1 %}
@@ -20,5 +59,4 @@
     {% if form.is_active %}
         {% include "wagtailadmin/shared/field.html" with field=form.is_active %}
     {% endif %}
-
 {% endblock fields %}

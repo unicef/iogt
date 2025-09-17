@@ -171,13 +171,3 @@ def social_meta_tags(context):
         context['site_name'] = page.get_site().site_name
 
     return context
-
-
-@register.simple_tag
-def usage_count_enabled():
-    """
-    Returns True or False depending on your business logic.
-    This will be callable as {% usage_count_enabled %} in templates.
-    """
-    # Example logic — replace with your actual condition
-    return True

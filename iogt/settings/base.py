@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'search',
     'taggit',
     'translation_manager',
+    'wagtailautocomplete',
     'wagtail',
     'wagtail.admin',
     'wagtail.contrib.forms',
@@ -79,10 +80,12 @@ INSTALLED_APPS = [
     'wagtail.search',
     'wagtail.sites',
     'wagtail.snippets',
-    'wagtail.users',
+    "iogt.apps.CustomUsersAppConfig",
+    # 'wagtail.users',
     'wagtail_localize',
     'wagtail_localize.locales',
     'wagtail_transfer',
+    'wagtailcache',
     'wagtailmarkdown',
     'wagtailmedia',
     'wagtailmenus',
@@ -91,10 +94,7 @@ INSTALLED_APPS = [
     'wagtail.contrib.search_promotions',
     'admin_login',
     'email_service',
-    'wagtailcache'
 ]
-#'wagtail-modeladmin',
-#'wagtail_localize',
 
 # The order of middleware is very important. Take care when modifying this list.
 MIDDLEWARE = [
@@ -104,6 +104,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -116,9 +117,9 @@ MIDDLEWARE = [
     # 'admin_login.middleware.CustomAdminLoginRequiredMiddleware',
     'wagtailcache.cache.FetchFromCacheMiddleware',
     # 'wagtail.contrib.statcache.middleware.StatCacheMiddleware',
-    'django.middleware.cache.UpdateCacheMiddleware',  # Must be first
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
-    "allauth.account.middleware.AccountMiddleware",  # 👈 Add this here
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 # Prevent Wagtail's built in menu from showing in Admin > Settings
@@ -319,6 +320,11 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ('uz', _('Uzbek')),
     ('zu', _('Zulu')),
     ('xy', _('Testing')),
+    ('ha', _('Hausa')),
+    ('yo', _('Yoruba')),
+    ('ig', _('Igbo')),
+    ('pcm', _('Pidgin')),
+    
 ]
 
 EXTRA_LANG_INFO = {
@@ -418,6 +424,24 @@ EXTRA_LANG_INFO = {
         'name': 'Testing',
         'name_local': 'Testing',
     },
+    'ha': {
+        'bidi': False,
+        'code': 'ha',
+        'name': 'Hausa',
+        'name_local': 'Hausa',
+    },
+    'yo': {
+        'bidi': False,
+        'code': 'yo',
+        'name': 'Yoruba',
+        'name_local': 'Yoruba',
+    },
+    'pcm': {
+        'bidi': False,
+        'code': 'pcm',
+        'name': 'Pidgin',
+        'name_local': 'Pidgin',
+    },
 }
 
 django.conf.locale.LANG_INFO.update(EXTRA_LANG_INFO)
@@ -495,15 +519,15 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=365),
 }
 
-CACHE = os.getenv('CACHE', '') == 'enable'
+CACHE = os.getenv('CACHE', 'enable') == 'enable'
 if CACHE:
-    CACHE_LOCATION = os.getenv('CACHE_LOCATION')
+    CACHE_LOCATION = os.getenv('CACHE_LOCATION', 'redis://redis:6379/0')
     if not CACHE_LOCATION:
         raise ImproperlyConfigured(
             "CACHE_LOCATION must be set if CACHE is set to 'enable'")
     CACHE_BACKEND = os.getenv(
         'CACHE_BACKEND',
-        'wagtailcache.compat_backends.django_redis.RedisCache')
+        'django_redis.cache.RedisCache')
     DJANGO_REDIS_IGNORE_EXCEPTIONS = True
     SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
     WAGTAIL_CACHE = True
@@ -540,9 +564,9 @@ SITE_VERSION = os.getenv('SITE_VERSION', 'unknown')
 HAS_MD5_HASH_REGEX = re.compile(r"\.[a-f0-9]{12}\..*$")
 
 WEBPUSH_SETTINGS = {
-    'VAPID_PUBLIC_KEY': 'BBRqGieSqpMGPqVBoV_t3iJ0Afg0qs82cSa2lF-dfcWG50KbpvoKvHmmNS39aMhyMz145lXc5ESczxSA2dCn9_w',
-    'VAPID_PRIVATE_KEY': 'uu9bxQU1VtR5be7mgg2gYzGtQkWb3Ncey_jFGg-_mAU',
-    'VAPID_ADMIN_EMAIL': 'ankit.chopra@nagarro.com',
+    'VAPID_PUBLIC_KEY': os.getenv('VAPID_PUBLIC_KEY'),
+    'VAPID_PRIVATE_KEY': os.getenv('VAPID_PRIVATE_KEY'),
+    'VAPID_ADMIN_EMAIL': os.getenv('VAPID_ADMIN_EMAIL'),
 }
 
 COMMENTS_COMMUNITY_MODERATION = os.getenv('COMMENTS_COMMUNITY_MODERATION') == 'enable'
@@ -557,7 +581,7 @@ SUPERSET_DATABASE_NAME = os.getenv('SUPERSET_DATABASE_NAME')
 SUPERSET_USERNAME = os.getenv('SUPERSET_USERNAME')
 SUPERSET_PASSWORD = os.getenv('SUPERSET_PASSWORD')
 
-PUSH_NOTIFICATION = os.getenv('PUSH_NOTIFICATION', 'enable') == 'enable'
+PUSH_NOTIFICATION = os.getenv('PUSH_NOTIFICATION', 'disable') == 'enable'
 JQUERY = os.getenv('JQUERY', 'enable') == 'enable'
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = int(os.getenv('DATA_UPLOAD_MAX_NUMBER_FIELDS', '1000'))
@@ -625,6 +649,13 @@ SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
+
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
 
 # Enforce HTTPS and HSTS
 # SECURE_SSL_REDIRECT = True

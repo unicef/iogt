@@ -16,5 +16,3 @@ class SectionPageForm(WagtailAdminPageForm):
                     f'Disable "Show Progress Bar" on "{progress_bar_enabled_ancestor_title}" section first.')
 
         return cleaned_data
-
-

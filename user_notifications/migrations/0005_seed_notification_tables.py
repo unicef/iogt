@@ -29,6 +29,11 @@ def seed_notification_tables(apps, schema_editor):
         title='We Value Your Feedback!',
         message='Take a quick survey to share your thoughts.'
     )
+    section_template, _ = UserNotificationTemplate.objects.get_or_create(
+        type='section',
+        title='We Value Your Feedback!',
+        message='Tap here to see what this section is all about'
+    )
 
     signup_template, _ = UserNotificationTemplate.objects.get_or_create(
         type='signup',
@@ -43,6 +48,7 @@ class Migration(migrations.Migration):
     dependencies = [
         migrations.swappable_dependency(settings.NOTIFICATIONS_NOTIFICATION_MODEL),
         ('user_notifications', '0004_notificationlog_notification'),
+        ('iogt_users', '0006_user_interactive_uuid'),
     ]
 
     operations = [

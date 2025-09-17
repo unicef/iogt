@@ -5,7 +5,7 @@ from django.contrib.admin import SimpleListFilter
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.templatetags.static import static
-from django.urls import resolve
+from django.urls import resolve, reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from wagtail import __version__
@@ -140,31 +140,6 @@ def page_listing_buttons(page, is_parent=False, next_url=None, user=None, **kwar
         )
 
 
-# @hooks.register("register_admin_menu_item")
-# def about():
-#     items = [
-#         MenuItem(
-#             label=f"IoGT {settings.SITE_VERSION}",
-#             url=f"http://github.com/unicef/iogt/releases/tag/{settings.SITE_VERSION}",
-#         ),
-#         MenuItem(
-#             label=f"Wagtail {__version__}",
-#             url=f"http://github.com/wagtail/wagtail/releases/tag/v{__version__}"
-#         )
-#     ]
-
-#     # NOTE:
-#     # Removed `from wagtail_modeladmin.menus import SubMenu` as `SubMenu` is no longer available in the latest wagtail-modeladmin.
-#     # Used a direct list of MenuItems in SubmenuMenuItem instead.
-#     # This preserves the "About" submenu with IoGT and Wagtail version links.
-#     # If future updates break this, consider defining a lightweight `SubMenu` wrapper or refactor to top-level items.
-#     return SubmenuMenuItem(
-#         label="About",
-#         menu=items,
-#         icon_name="info-circle",
-#         order=999999,
-#     )
-
 @hooks.register("register_admin_menu_item")
 def about():
     items = [
@@ -289,8 +264,28 @@ def register_custom_form_pages_list_view():
 def register_notify_and_publish_menu_item():
     return NotifyAndPublishMenuItem(order=100, allowed_models=Article)  #
 
+@hooks.register('register_page_action_menu_item')
+def register_notify_and_publish_menu_item():
+    return NotifyAndPublishMenuItem(order=100, allowed_models=Section)  #
+
+
 @hooks.register("register_context_modifier")
 def enable_url_generator(context, request):
     # only apply on image edit views
     if request.resolver_match and request.resolver_match.url_name == "wagtailimages_edit":
         context["url_generator_enabled"] = True
+
+
+@hooks.register('register_page_listing_more_buttons')
+def page_listing_more_buttons(page, user, next_url=None):
+    page_perms = page.permissions_for_user(user)
+    url = reverse('notify_and_publish', args=[page.id]) 
+    print('classname', page.specific_class.__name__)
+    if page_perms.can_publish():
+        if page.specific_class.__name__=='Article' or page.specific_class.__name__=='Survey' or page.specific_class.__name__=='Section':
+            yield wagtailadmin_widgets.Button(
+                'Notify & Publish',
+                url,
+                priority=40,
+                icon_name='mail'
+            )

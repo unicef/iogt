@@ -463,6 +463,14 @@ class Survey(QuestionnairePage, AbstractForm):
 
     def get_submission_class(self):
         return UserSubmission
+    
+    def is_registration_survey(self):
+        from home.models import SiteSettings
+        site_settings = SiteSettings.get_for_default_site()
+        if site_settings.registration_survey and site_settings.registration_survey.localized.pk == self.pk:
+            return True
+        else:
+            return False
 
     def process_form_submission(self, form):
         from home.models import SiteSettings

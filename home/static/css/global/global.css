@@ -1336,7 +1336,7 @@ body.rtl {
 .notification-holder {
   display: flex;
   align-items: center;
-  margin-left: 12px;
+  margin-left: 5px;
 }
 
 .notification-bell-wrapper {
@@ -1347,11 +1347,11 @@ body.rtl {
 .notification-bell {
     font-size: 1.5rem;
     transition: color 0.3s ease;
-    color: #FDD256;
+    display: flex;
 }
 
-.notification-bell.highlighted {
-    color: #007bff !important; /* blue glow */
+#notif-bell.highlighted {
+    fill: #007bff !important; /* blue glow */
 }
 
 .notif-badge {
@@ -2339,6 +2339,21 @@ div.notification-confirmation{
     font-size: large;
 }
 
+.notification-preference-on-registration-survey {
+    background-color: #fff8e1;
+    color: black;
+    border-left: 5px solid goldenrod;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    padding: 15px 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    font-family: "Segoe UI", sans-serif;
+    animation: slideIn 0.5s ease-out;
+    margin-top: 15px;
+    font-size: large;
+}
+
 .notification-toast a {
     color: #007bff;
     text-decoration: underline;
@@ -2363,4 +2378,3 @@ div.notification-confirmation{
   margin: 0; 
   margin-bottom: 5px;
 }
-

@@ -267,6 +267,16 @@ header svg {
   margin-right: 1.5rem;
 }
 
-.w-dropdown__toggle {
+.dropdown-container .w-dropdown__toggle {
   color: white;
+}
+
+.c-wagtailautocomplete__suggestions__item--active, .c-wagtailautocomplete__selection {
+  background-color: rgb(0, 125, 126) !important;
+  color: white !important; 
+}
+
+svg.c-wagtailautocomplete__search-icon {
+  height: 30px !important;
+  width: 30px !important;
 }
