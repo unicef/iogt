@@ -62,7 +62,6 @@
 
 .w-field__input input:not(#id_q),
 .w-field__input select[id="collection_chooser_collection_id"] {
-  background-color: #f8f8f8 !important;
   border: 1px solid #b1b4b6 !important;
   border-radius: 4px !important;
   transition: background-color 0.2s ease, border-color 0.2s ease;
@@ -280,3 +279,10 @@ svg.c-wagtailautocomplete__search-icon {
   height: 30px !important;
   width: 30px !important;
 }
+input,
+textarea,
+select {
+  background-color: #fff;
+  color: #000;
+}
+
