@@ -529,7 +529,7 @@ if CACHE:
         'CACHE_BACKEND',
         'django_redis.cache.RedisCache')
     DJANGO_REDIS_IGNORE_EXCEPTIONS = True
-    SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+    SESSION_ENGINE = 'django.contrib.sessions.backends.db'
     WAGTAIL_CACHE = True
     WAGTAIL_CACHE_BACKEND = 'pagecache'
     CACHE_TIMEOUT = int(os.getenv('CACHE_TIMEOUT', '300'))
