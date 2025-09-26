@@ -526,7 +526,7 @@ if CACHE:
         'CACHE_BACKEND',
         'django_redis.cache.RedisCache')
     DJANGO_REDIS_IGNORE_EXCEPTIONS = True
-    SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+    SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
     WAGTAIL_CACHE = True
     WAGTAIL_CACHE_BACKEND = 'pagecache'
     CACHE_TIMEOUT = int(os.getenv('CACHE_TIMEOUT', '300'))
@@ -644,9 +644,6 @@ MAILJET_FROM_NAME = os.getenv('MAILJET_FROM_NAME')
 # Secure session and CSRF cookies
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
-SESSION_CACHE_ALIAS = "default" 
-SESSION_COOKIE_NAME = "iogt_sessionid"
-SESSION_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
 
