@@ -116,9 +116,6 @@ MIDDLEWARE = [
     'iogt.middleware.GlobalDataMiddleware',
     # 'admin_login.middleware.CustomAdminLoginRequiredMiddleware',
     'wagtailcache.cache.FetchFromCacheMiddleware',
-    # 'wagtail.contrib.statcache.middleware.StatCacheMiddleware',
-    'django.middleware.cache.UpdateCacheMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
     "allauth.account.middleware.AccountMiddleware",
 ]
 
