@@ -14,12 +14,13 @@ from django_extensions.db.models import TimeStampedModel
 from rest_framework import status
 from django.core.exceptions import ValidationError
 from wagtail.images.models import Image
+from wagtail.snippets.models import register_snippet
 
 from .querysets import ThreadQuerySet
 
 logger = logging.getLogger(__name__)
 
-
+@register_snippet
 class ChatbotChannel(models.Model):
     display_name = models.CharField(
         max_length=80, help_text=_('Name for the bot that the user will see when interacting with it'))

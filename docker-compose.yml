@@ -5,10 +5,43 @@ services:
       target: dev
       args:
         requirements: requirements.dev.txt
-    environment:
-      DJANGO_SETTINGS_MODULE: iogt.settings.dev
+    env_file:
+      - .env
     image: iogt:latest
+
     ports:
       - "8000:8000"
+    depends_on:
+      - db
     volumes:
       - ./:/app/
+#  db:
+#    image: postgres:14-alpine
+#    environment:
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: postgresiogt
+#      POSTGRES_DB: iogt
+  celery:
+    build:
+      context: ./
+      target: dev
+      args:
+        requirements: requirements.dev.txt
+    command: celery -A iogt worker -l info
+    depends_on:
+      - django
+      - redis
+    env_file:
+      - .env
+    volumes:
+      - ./:/app/
+
+  redis:
+    image: redis:7
+
+  db:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgresiogt
+      POSTGRES_DB: iogt

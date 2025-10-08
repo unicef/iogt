@@ -1,5 +1,5 @@
 from django.urls import reverse
-from wagtail.contrib.modeladmin.helpers import ButtonHelper
+from wagtail_modeladmin.helpers import ButtonHelper
 
 
 class XtdCommentAdminButtonHelper(ButtonHelper):

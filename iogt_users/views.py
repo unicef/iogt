@@ -10,10 +10,34 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views import View
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
+from wagtail.models import Locale
 
 from iogt import settings
 
 from email_service.mailjet_email_sender import send_email_via_mailjet
+from user_notifications.models import NotificationPreference, NotificationTag
+
+
+class UserNotificationView(TemplateView):
+    template_name = 'user_notification.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            notification_pref = NotificationPreference.objects.filter(user=self.request.user).first()
+            context['notification_preference'] = notification_pref
+            context['selected_tag_ids'] = list(
+                notification_pref.content_tags.values_list('id', flat=True)
+            ) if notification_pref else []
+            context['selected_language_code'] = (
+                notification_pref.preferred_language
+                if notification_pref and notification_pref.preferred_language else 'en')
+        else:
+            context['notification_preference'] = None
+        context['notification_tags'] = NotificationTag.objects.all()
+        context['available_languages'] = Locale.objects.all()
+        context['user'] = self.request.user
+        return context
 
 
 @method_decorator(login_required, name='dispatch')

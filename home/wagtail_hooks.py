@@ -5,14 +5,14 @@ from django.contrib.admin import SimpleListFilter
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.templatetags.static import static
-from django.urls import resolve
+from django.urls import resolve, reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from wagtail import __version__
 from wagtail.admin import widgets as wagtailadmin_widgets
-from wagtail.admin.menu import MenuItem, SubmenuMenuItem
-from wagtail.contrib.modeladmin.menus import SubMenu
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
+from wagtail.admin.menu import MenuItem, SubmenuMenuItem, Menu
+from wagtail_modeladmin.options import ModelAdmin, modeladmin_register
+from wagtail.documents.models import Document
 from wagtail import hooks
 from wagtail.models import Page, PageViewRestriction
 from wagtailcache.cache import clear_cache
@@ -21,8 +21,11 @@ from home.models import (BannerIndexPage, FooterIndexPage, LocaleDetail,
                          Section, SectionIndexPage, BannerPage, HomePageBanner, HomePage)
 from home.translatable_strings import translatable_strings
 from translation_manager.models import TranslationEntry
-from wagtail.core.signals import page_published
+from wagtail.signals import page_published
 from django.dispatch import receiver
+from iogt.utils import NotifyAndPublishMenuItem, notify_and_publish_view
+from .models import Article
+from django.urls import path
 
 
 @hooks.register('after_publish_page')
@@ -127,8 +130,7 @@ def global_admin_js():
 
 
 @hooks.register('register_page_listing_buttons')
-def page_listing_buttons(page, page_perms, is_parent=False, next_url=None):
-    # Using more menu's "Sort menu order" button from wagtail
+def page_listing_buttons(page, is_parent=False, next_url=None, user=None, **kwargs):
     if is_parent:
         yield wagtailadmin_widgets.PageListingButton(
             _('Sort child pages'),
@@ -150,10 +152,9 @@ def about():
             url=f"http://github.com/wagtail/wagtail/releases/tag/v{__version__}"
         )
     ]
-
     return SubmenuMenuItem(
         label="About",
-        menu=SubMenu(items),
+        menu=Menu(register_hook_name=None, items=items),
         icon_name="info-circle",
         order=999999,
     )
@@ -223,6 +224,18 @@ modeladmin_register(TranslationEntryAdmin)
 modeladmin_register(LocaleDetailAdmin)
 
 
+
+class DocumentAdmin(ModelAdmin):
+    model = Document
+    menu_label = "Documents"
+    menu_icon = "doc-full"
+    list_display = ("title", "collection", "created_at")
+    search_fields = ("title",)
+    list_filter = ("collection",)  # ensures collection dropdown in listing page
+
+modeladmin_register(DocumentAdmin)
+
+
 @hooks.register("insert_global_admin_css")
 def hide_add_article_button():
     """
@@ -238,3 +251,41 @@ def create_home_page_banner(sender, instance, **kwargs):
     parent = parent.get_parent().specific
     if parent:
         HomePageBanner.objects.get_or_create(source=parent, banner_page=instance)
+
+
+@hooks.register('register_admin_urls')
+def register_custom_form_pages_list_view():
+    return [
+      path("notify-and-publish/<int:page_id>/", notify_and_publish_view, name="notify_and_publish"),
+  ]
+
+
+@hooks.register('register_page_action_menu_item')
+def register_notify_and_publish_menu_item():
+    return NotifyAndPublishMenuItem(order=100, allowed_models=Article)  #
+
+@hooks.register('register_page_action_menu_item')
+def register_notify_and_publish_menu_item():
+    return NotifyAndPublishMenuItem(order=100, allowed_models=Section)  #
+
+
+@hooks.register("register_context_modifier")
+def enable_url_generator(context, request):
+    # only apply on image edit views
+    if request.resolver_match and request.resolver_match.url_name == "wagtailimages_edit":
+        context["url_generator_enabled"] = True
+
+
+@hooks.register('register_page_listing_more_buttons')
+def page_listing_more_buttons(page, user, next_url=None):
+    page_perms = page.permissions_for_user(user)
+    url = reverse('notify_and_publish', args=[page.id]) 
+    print('classname', page.specific_class.__name__)
+    if page_perms.can_publish():
+        if page.specific_class.__name__=='Article' or page.specific_class.__name__=='Survey' or page.specific_class.__name__=='Section':
+            yield wagtailadmin_widgets.Button(
+                'Notify & Publish',
+                url,
+                priority=40,
+                icon_name='mail'
+            )
