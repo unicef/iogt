@@ -1971,8 +1971,8 @@ wagtail-modeladmin==2.2.0 \
     --hash=sha256:41e12f9a79f8c1595fce73bd6b51007422f258089564f9df8e09a82246a8e133 \
     --hash=sha256:60ea08b128761b5b6a1cbfe3c8ab828fba13e41ff3d7563a0b8c62c8fe36c4ce
     # via -r requirements.txt
-wagtail-transfer @ https://github.com/Ankit-lab809/wagtail-transfer/archive/05fff57d6b48afc34173da9a05a914126397d2a8.zip \
-    --hash=sha256:1afe0ad841344da1c268b4008a4f385e4f1861eb8302c5c5abfeabf6b9a2aa8c
+wagtail-transfer @ https://github.com/unicef/iogt-wagtailtransfer/archive/05fff57d6b48afc34173da9a05a914126397d2a8.zip \
+    --hash=sha256:8a7052523301c8c1e4261aece5ef77c29774bb0ad4b945af4d615bc4be614a80
     # via -r requirements.txt
 wagtailmedia==0.16.0 \
     --hash=sha256:1f757984240822a7ddfe3eda8e58243f31a3c29935ce8014499e7e664923d4c9 \
@@ -1982,8 +1982,8 @@ wagtailmenus==4.0.4 \
     --hash=sha256:afcaf9a08897dad831561a70293280c1eac67a5052507e79e8c0366f209730b4 \
     --hash=sha256:f5646431ce89e7df1b69e782e12a46796a2be4d7036d2f2af63178f156dd605d
     # via -r requirements.txt
-wagtailsvg @ https://github.com/sachin-mehta/wagtailsvg/archive/3d2ecc67d993faeffd3251e88ad2e38b3265c0e4.zip \
-    --hash=sha256:21b736639aeebeab3633df1b7e5f2e0d4633f685840a8c5b65994ca004c024e6
+wagtailsvg @ https://github.com/unicef/iogt-wagtailsvg/archive/3d2ecc67d993faeffd3251e88ad2e38b3265c0e4.zip \
+    --hash=sha256:2f87dbe6f9b12b0ec95c40805aaffcefdbd937923d8cf0a8aa9f37f221a92486
     # via -r requirements.txt
 wcwidth==0.2.13 \
     --hash=sha256:3da69048e4540d84af32131829ff948f1e022c1c6bdb8d6102117aac784f6859 \
