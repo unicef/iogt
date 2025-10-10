@@ -15,11 +15,19 @@ from iogt.settings.profanity_settings import (  # noqa: F401
     PROFANITIES_LIST
 )
 
+# Monkey patch for deprecated ugettext_lazy used in third-party packages
+import django.utils.translation
+from django.utils.translation import gettext_lazy
+
+# Patch only if missing (for Django 4+ compatibility with old packages)
+if not hasattr(django.utils.translation, 'ugettext_lazy'):
+    django.utils.translation.ugettext_lazy = gettext_lazy
+
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 INSTALLED_APPS = [
-     'allauth',
+    'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'comments',
@@ -49,6 +57,8 @@ INSTALLED_APPS = [
     'matomo',
     'messaging',
     'modelcluster',
+    'admin_notifications',
+    'user_notifications',
     'notifications',
     'questionnaires',
     'rest_framework',
@@ -57,10 +67,11 @@ INSTALLED_APPS = [
     'search',
     'taggit',
     'translation_manager',
+    'wagtailautocomplete',
     'wagtail',
     'wagtail.admin',
     'wagtail.contrib.forms',
-    'wagtail.contrib.modeladmin',
+    'wagtail_modeladmin',
     'wagtail.contrib.redirects',
     'wagtail.contrib.settings',
     'wagtail.documents',
@@ -69,7 +80,8 @@ INSTALLED_APPS = [
     'wagtail.search',
     'wagtail.sites',
     'wagtail.snippets',
-    'wagtail.users',
+    "iogt.apps.CustomUsersAppConfig",
+    # 'wagtail.users',
     'wagtail_localize',
     'wagtail_localize.locales',
     'wagtail_transfer',
@@ -79,6 +91,7 @@ INSTALLED_APPS = [
     'wagtailmenus',
     'wagtailsvg',
     'webpush',
+    'wagtail.contrib.search_promotions',
     'admin_login',
     'email_service',
 ]
@@ -91,6 +104,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -102,6 +116,7 @@ MIDDLEWARE = [
     'iogt.middleware.GlobalDataMiddleware',
     # 'admin_login.middleware.CustomAdminLoginRequiredMiddleware',
     'wagtailcache.cache.FetchFromCacheMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 # Prevent Wagtail's built in menu from showing in Admin > Settings
@@ -129,7 +144,7 @@ TEMPLATES = [
                 'home.processors.commit_hash',
                 'home.processors.show_footers',
                 'messaging.processors.add_vapid_public_key',
-                'notifications.processors.push_notification',
+                'admin_notifications.processors.push_notification',
                 'home.processors.jquery',
             ],
         },
@@ -225,6 +240,9 @@ WAGTAIL_USER_CUSTOM_FIELDS = [
 WAGTAILADMIN_BASE_URL = os.getenv('BASE_URL', '')
 
 SITE_ID = 1
+
+#Notifications
+DJANGO_NOTIFICATIONS_CONFIG = { 'USE_JSONFIELD': True}
 
 # Comments
 COMMENTS_APP = 'django_comments_xtd'
@@ -506,7 +524,7 @@ if CACHE:
             "CACHE_LOCATION must be set if CACHE is set to 'enable'")
     CACHE_BACKEND = os.getenv(
         'CACHE_BACKEND',
-        'wagtailcache.compat_backends.django_redis.RedisCache')
+        'django_redis.cache.RedisCache')
     DJANGO_REDIS_IGNORE_EXCEPTIONS = True
     SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
     WAGTAIL_CACHE = True
@@ -629,6 +647,12 @@ SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
 
+CELERY_BROKER_URL = os.getenv('CACHE_LOCATION')
+CELERY_RESULT_BACKEND = os.getenv('CACHE_LOCATION')
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
 # Enforce HTTPS and HSTS
 # SECURE_SSL_REDIRECT = True
 # SECURE_HSTS_SECONDS = 31536000

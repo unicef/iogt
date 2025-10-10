@@ -1,12 +1,11 @@
 from django import forms
 from wagtail import blocks
+from wagtail.snippets.blocks import SnippetChooserBlock
 
-from .models import ChatbotChannel
 
-
-class ChatBotChannelChooserBlock(blocks.ChooserBlock):
-    target_model = ChatbotChannel
-    widget = forms.Select
+class ChatBotChannelChooserBlock(SnippetChooserBlock):
+    def __init__(self, **kwargs):
+        super().__init__(target_model='messaging.ChatbotChannel', **kwargs)
 
 
 class ChatBotButtonBlock(blocks.StructBlock):

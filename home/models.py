@@ -14,8 +14,8 @@ from django.utils.deconstruct import deconstructible
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 from modelcluster.contrib.taggit import ClusterTaggableManager
+from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from iogt.settings.base import WAGTAIL_CONTENT_LANGUAGES
-from modelcluster.fields import ParentalKey
 from rest_framework import status
 from taggit.models import TaggedItemBase
 from wagtail.admin.panels import (
@@ -25,7 +25,7 @@ from wagtail.admin.panels import (
     ObjectList,
     TabbedInterface,
 )
-from wagtail.contrib.settings.models import BaseSetting
+from wagtail.contrib.settings.models import BaseSiteSetting as BaseSetting
 from wagtail.contrib.settings.registry import register_setting
 from wagtail import blocks
 from wagtail.fields import StreamField
@@ -55,7 +55,7 @@ from home.utils import (
 )
 import iogt.iogt_globals as globals_
 from django.db.models import Avg, Count
-
+from user_notifications.models import NotificationTag, NotificationPreference
 User = get_user_model()
 logger = logging.getLogger(__name__)
 
@@ -125,8 +125,12 @@ class HomePage(Page, PageUtilsMixin, TitleIconMixin):
                 ):
                     banners.append(banner_specific)
         context['banners'] = banners
+        show_notification_nudge = False
+        if request.user and request.user.is_authenticated:
+            pref = NotificationPreference.objects.filter(user=request.user).first()
+            context["notification_preference"] = pref
+            context['user'] = request.user
         return context
-
     @property
     def offline_urls(self):
         return [self.url] + collect_urls_from_streamfield(self.home_featured_content)
@@ -214,7 +218,7 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         blank=True,
         use_json_field=True,
     )
-
+    notification_tags = ParentalManyToManyField(NotificationTag, blank=True)
     tags = ClusterTaggableManager(through='SectionTaggedItem', blank=True)
     show_progress_bar = models.BooleanField(default=False)
     larger_image_for_top_page_in_list_as_in_v1 = models.BooleanField(default=False)
@@ -222,7 +226,7 @@ class Section(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
     show_in_menus_default = True
 
     promote_panels = Page.promote_panels + [
-        MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
+        MultiFieldPanel([FieldPanel("tags"), FieldPanel("notification_tags"),], heading='Metadata'),
     ]
 
     content_panels = Page.content_panels + [
@@ -482,7 +486,7 @@ class Article(AbstractArticle):
     # New fields for precomputed values
     average_rating = models.FloatField(default=0.0, null=True)
     number_of_reviews = models.PositiveIntegerField(default=0, null=True)
-
+    notification_tags = ParentalManyToManyField(NotificationTag, blank=True)
     content_panels = AbstractArticle.content_panels + [
         MultiFieldPanel([
             InlinePanel('recommended_articles',
@@ -492,7 +496,7 @@ class Article(AbstractArticle):
     ]
 
     promote_panels = AbstractArticle.promote_panels + [
-        MultiFieldPanel([FieldPanel("tags"), ], heading='Metadata'),
+        MultiFieldPanel([FieldPanel("tags"),  FieldPanel("notification_tags"),], heading='Metadata'),
     ]
 
     edit_handler_list = [
@@ -572,7 +576,6 @@ class OfflineContentIndexPage(AbstractArticle):
 class BannerIndexPage(Page):
     parent_page_types = ['home.HomePage']
     subpage_types = ['home.BannerPage']
-
 
 class BannerPage(Page, PageUtilsMixin):
     parent_page_types = ['home.BannerIndexPage']

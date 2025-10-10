@@ -11,7 +11,8 @@ RUN apt-get update --yes --quiet \
     libpq5 \
  && pip install --upgrade pip \
  && pip install pip-tools \
- && rm -rf /var/lib/apt/lists/*
+ && rm -rf /var/lib/apt/lists/* \
+ && apt-get install -y git
 WORKDIR /opt
 RUN python -m venv venv
 ENV PATH="/opt/venv/bin:$PATH"

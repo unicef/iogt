@@ -9,13 +9,11 @@ function openDB() {
         request.onupgradeneeded = event => {
             const db = event.target.result;
             if (!db.objectStoreNames.contains(STORE_NAME)) {
-                console.log("🔧 Creating object store:", STORE_NAME);
                 db.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
             }
         };
 
         request.onsuccess = event => {
-            console.log("✅ IndexedDB Opened Successfully");
             resolve(event.target.result);
         };
 
@@ -28,8 +26,6 @@ function openDB() {
 
 // ✅ Properly save request with correct body handling
 async function saveRequest(request) {
-    console.log("💾 Saving request to IndexedDB:", request.url);
-
     const db = await openDB();
     const clonedRequest = request.clone();
 
@@ -72,12 +68,10 @@ async function saveRequest(request) {
         const addRequest = store.add(requestData);
 
         addRequest.onsuccess = () => {
-            console.log("✅ Request stored in IndexedDB!", requestData);
             resolve();
         };
 
         addRequest.onerror = (event) => {
-            console.error("❌ Error saving request:", event.target.error);
             reject(event.target.error);
         };
     });
@@ -85,7 +79,6 @@ async function saveRequest(request) {
 
 // ✅ Retrieve all stored requests
 async function getAllRequests() {
-    console.log("📂 Retrieving all stored requests...");
 
     const db = await openDB();
 
@@ -95,12 +88,10 @@ async function getAllRequests() {
         const req = store.getAll();
 
         req.onsuccess = () => {
-            console.log("📦 Stored Requests:", req.result);
             resolve(req.result);
         };
 
         req.onerror = () => {
-            console.error("❌ Error retrieving requests:", req.error);
             reject(req.error);
         };
     });
@@ -108,8 +99,6 @@ async function getAllRequests() {
 
 // ✅ Delete request after successful sync
 async function deleteRequest(id) {
-    console.log("🗑️ Deleting request with ID:", id);
-
     const db = await openDB();
 
     return new Promise((resolve, reject) => {
@@ -118,12 +107,10 @@ async function deleteRequest(id) {
         const req = store.delete(id);
 
         req.onsuccess = () => {
-            console.log("✅ Successfully deleted request from IndexedDB!");
             resolve();
         };
 
         req.onerror = (event) => {
-            console.error("❌ Error deleting request:", event.target.error);
             reject(event.target.error);
         };
     });

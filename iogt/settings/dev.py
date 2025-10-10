@@ -1,4 +1,5 @@
 from .base import *
+from os import getenv
 
 WAGTAILADMIN_BASE_URL = 'http://localhost:8000'
 DEBUG = True
@@ -6,6 +7,17 @@ DEBUG_TOOLBAR_ENABLE = False
 SECRET_KEY = '!#secret_key_for_development_only#!'
 ALLOWED_HOSTS = ['*']
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': getenv('DB_NAME'),
+        'USER': getenv('DB_USER'),
+        'PASSWORD': getenv('DB_PASSWORD'),
+        'HOST': getenv('DB_HOST'),
+        'PORT': getenv('DB_PORT'),
+    }
+}
 
 if DEBUG and DEBUG_TOOLBAR_ENABLE:
     INSTALLED_APPS += ("debug_toolbar",)

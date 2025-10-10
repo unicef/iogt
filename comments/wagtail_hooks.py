@@ -4,8 +4,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from django.utils.html import format_html
 from django_comments_xtd.models import XtdComment
-from wagtail.contrib.modeladmin.options import ModelAdminGroup, ModelAdmin, modeladmin_register
-from wagtail.contrib.modeladmin.helpers.permission import PermissionHelper
+from wagtail_modeladmin.options import ModelAdminGroup, ModelAdmin, modeladmin_register
+from wagtail_modeladmin.helpers.permission import PermissionHelper
 
 from .button_helpers import XtdCommentAdminButtonHelper
 from .filters import FlaggedFilter, ModerationFilter, PublishedFilter
