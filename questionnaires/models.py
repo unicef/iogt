@@ -13,6 +13,7 @@ from wagtailmarkdown.blocks import MarkdownBlock
 from wagtailsvg.edit_handlers import SvgChooserPanel
 from wagtailsvg.models import Svg
 from user_notifications.models import NotificationTag
+from django.db.models import Avg
 
 from home.blocks import (
     MediaBlock,
@@ -929,10 +930,23 @@ class Quiz(QuestionnairePage, AbstractForm):
                 'total': total,
                 'total_correct': total_correct,
             }
-
+            from iogt_users.models import QuizAttempt
+            user = request.user
+            if user.is_authenticated:
+                score_percentage = (total_correct / total) * 100 if total else 0
+                attempt_number = QuizAttempt.objects.filter(user=user, quiz=self).count() + 1
+                QuizAttempt.objects.create(
+                    user=user,
+                    quiz=self,
+                    score=score_percentage,
+                    attempt_number=attempt_number,
+                    completed_at=timezone.now(),
+                )
+                avg_score = QuizAttempt.objects.filter(user=user, quiz=self).aggregate(Avg('score'))['score__avg'] or 0
+                context['average_score'] = avg_score
+                context['attempt_number'] = attempt_number
             if self.multi_step:
                 form_helper.remove_session_data()
-
         return context
 
     class Meta:

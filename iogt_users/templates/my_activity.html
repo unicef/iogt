@@ -1,0 +1,41 @@
+{% extends 'account/base.html' %}
+{% load i18n static image_tags generic_components %}
+
+{% block title %}{% translate "My Notification" %}{% endblock %}
+
+{% block content %}
+<h2>My Activity</h2>
+
+<div style="margin-bottom: 20px; padding: 10px; background-color: #f9f9f9; border-radius: 6px; width: 150%;">
+    <h4>Account Information</h4>
+    <p><strong>Date Registered:</strong> {{ date_joined|date:"M d, Y" }}</p>
+    <p><strong>Last Login:</strong> {{ last_login|date:"M d, Y H:i" }}</p>
+</div>
+
+<table style="width: 150%; border-collapse: collapse;">
+    <thead>
+        <tr style="background-color: #f2f2f2;">
+            <th style="text-align: left; padding: 10px; border: 1px solid #ddd;">Activity</th>
+            <th style="text-align: left; padding: 10px; border: 1px solid #ddd;">Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">Pages Visited</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ pages_visited }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">Unique Pages</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ unique_pages }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">Total Visits</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ visits }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">Last Visit</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ last_visit|date:"M d, Y H:i" }}</td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}

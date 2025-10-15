@@ -1,22 +1,45 @@
+import logging
+import os, shutil
 from http.client import HTTPResponse
-
+from django.apps import apps
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db.models import Max, Avg
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import UpdateView, TemplateView
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views import View
+from django.views.generic import TemplateView
 from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
-from wagtail.models import Locale
+from django.utils import timezone
+from django.contrib.auth import logout
+from django.contrib.auth.models import User
+
+from .models import DeletedUserLog, PageVisit, QuizAttempt
+from django.contrib.auth import get_user_model
+from wagtail.models import Page
+from wagtail.documents import get_document_model
+from wagtail.images import get_image_model
+
+from wagtailsvg.models import Svg
+from wagtailmedia.models import Media
+
+
+
+User = get_user_model()
 
 from iogt import settings
 
 from email_service.mailjet_email_sender import send_email_via_mailjet
 from user_notifications.models import NotificationPreference, NotificationTag
 
+
+logger = logging.getLogger(__name__)
 
 class UserNotificationView(TemplateView):
     template_name = 'user_notification.html'
@@ -46,12 +69,12 @@ class UserDetailView(TemplateView):
 
     def get_context_data(self, **kwargs):
         return {'user': self.request.user}
-
+    
 
 @method_decorator(login_required, name='dispatch')
 class UserDetailEditView(UpdateView):
     model = User
-    fields = ('first_name', 'last_name', 'email')
+    fields = ('first_name', 'last_name', 'username', 'date_of_birth', 'gender','location' )
     template_name = 'profile_edit.html'
 
     def get_success_url(self):
@@ -136,3 +159,94 @@ class InviteAdminUserView(View):
 
             # If email is sent successfully
         return JsonResponse({'success': True, 'message': 'Invitation sent successfully!'})
+    
+
+
+class MyActivityView(TemplateView):
+    template_name = "my_activity.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        visits = PageVisit.objects.filter(user=user)
+        context.update({
+            "pages_visited": visits.count(),
+            "unique_pages": visits.values("page_slug").distinct().count(),
+            "visits": visits.count(),
+            "last_visit": visits.first().timestamp if visits.exists() else None,
+            "date_joined": user.date_joined,
+            "last_login": user.last_login,
+        })
+        return context
+
+
+
+@method_decorator(login_required, name='dispatch')
+class DeleteAccountView(View):
+    """Handles full account deletion including all related Wagtail data."""
+
+    def post(self, request, *args, **kwargs):
+        """Handle confirmed deletion."""
+        from django.conf import settings
+        user = request.user
+        logger.info(
+            f"User deletion requested by user_id={user.id}, email={user.email}, at {timezone.now()}"
+        )
+        from iogt_users.models import DeletedUserLog  # adjust import to your actual model path
+        DeletedUserLog.objects.create(
+            user_id=user.id,
+            reason="User requested account deletion"
+        )
+        self.delete_user_data(user)
+        logout(request)
+        user.delete()
+        messages.success(request, "Your account and all related data have been deleted successfully.")
+        return redirect(reverse(settings.LOGIN_URL))
+
+    def delete_user_data(self, user):
+        """Delete all Wagtail-related and media data for a user."""
+        Page.objects.filter(owner=user).delete()
+        Document = get_document_model()
+        Image = get_image_model()
+        Document.objects.filter(uploaded_by_user=user).delete()
+        Image.objects.filter(uploaded_by_user=user).delete()
+        # Svg.objects.filter(uploaded_by_user=user).delete()
+        Media.objects.filter(uploaded_by_user=user).delete()
+        for model in apps.get_models():
+            for field in model._meta.get_fields():
+                if field.is_relation and field.remote_field and field.remote_field.model == User:
+                    model.objects.filter(**{field.name: user}).delete()
+
+        from django.conf import settings
+        user_media_dir = os.path.join(settings.MEDIA_ROOT, f"users/{user.id}")
+        if os.path.exists(user_media_dir):
+            shutil.rmtree(user_media_dir, ignore_errors=True)
+        for folder in ["images", "documents", "svg"]:
+            path = os.path.join(settings.MEDIA_ROOT, folder, str(user.id))
+            if os.path.exists(path):
+                shutil.rmtree(path, ignore_errors=True)
+
+
+class QuizResultView(LoginRequiredMixin, TemplateView):
+    template_name = 'quiz_result.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        latest_attempts = (
+            QuizAttempt.objects.filter(user=user)
+            .values('quiz')
+            .annotate(latest_attempt=Max('completed_at'))
+        )
+        quiz_results = QuizAttempt.objects.filter(
+            user=user,
+            completed_at__in=[item['latest_attempt'] for item in latest_attempts]
+        ).select_related('quiz')
+        avg_scores = (
+            QuizAttempt.objects.filter(user=user)
+            .values('quiz')
+            .annotate(avg_score=Avg('score'))
+        )
+        avg_score_map = {item['quiz']: item['avg_score'] for item in avg_scores}
+        for attempt in quiz_results:
+            attempt.avg_score = avg_score_map.get(attempt.quiz.id, 0)
+        context['quiz_results'] = quiz_results
+        return context

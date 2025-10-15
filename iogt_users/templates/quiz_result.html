@@ -1,0 +1,39 @@
+<h2 style="text-align: center;">My Quiz Results</h2>
+{% if quiz_results %}
+<table class="quiz-results-table" style="border-collapse: collapse; width: 100%; border: 1px solid #ccc;">
+    <thead style="background-color: #f5f5f5;">
+        <tr>
+            <th style="padding: 8px; border: 1px solid #ccc; text-align: left;">Quiz Title</th>
+            <th style="padding: 8px; border: 1px solid #ccc; text-align: center;">Latest Score</th>
+                        <th style="padding: 8px; border: 1px solid #ccc; text-align: center;">Avg Score</th>
+            <th style="padding: 8px; border: 1px solid #ccc; text-align: center;">Attempt</th>
+            <th style="padding: 8px; border: 1px solid #ccc; text-align: center;">Date & Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for result in quiz_results %}
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ccc;">
+                <a href="{{ result.quiz.url }}" style="text-decoration: none; color: #007BFF;">
+                    {{ result.quiz.title }}
+                </a>
+            </td>
+             <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">
+                {{ result.score }}%
+            </td>
+            <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">
+                {{ result.avg_score|floatformat:2  }}%
+            </td>
+            <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">
+                {{ result.attempt_number }}
+            </td>
+            <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">
+                {{ result.completed_at|date:"d M Y, H:i" }}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>You haven’t completed any quizzes yet.</p>
+{% endif %}

@@ -4,9 +4,10 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken 
 
 
 class User(AbstractUser):
@@ -22,12 +23,14 @@ class User(AbstractUser):
     has_viewed_registration_survey = models.BooleanField(default=False)
     
     interactive_uuid = models.CharField(max_length=255, null=True, blank=True)
-    
-    autocomplete_search_field = 'username'
+    date_of_birth = models.DateField(null=True, blank=True)
+    gender = models.CharField(
+        max_length=10,
+        choices=[("male", "Male"), ("female", "Female"), ("other", "Other")],
+        null=True, blank=True
+    )
+    location = models.CharField(max_length=255, null=True, blank=True)
 
-    def autocomplete_label(self):
-        return self.username
-    
     @property
     def is_rapidpro_bot_user(self):
         return self.groups.filter(name=settings.RAPIDPRO_BOT_GROUP_NAME).exists()
@@ -64,13 +67,6 @@ class User(AbstractUser):
     def get_display_name(self):
         return self.display_name or self.username
 
-    def notification_opt_in(self):
-        try:
-            pref = self.notificationpreference
-            return True if pref.receive_notifications else False
-        except Exception:
-            return False  # no preference set
-
     class Meta:
         ordering = ('id',)
 
@@ -86,3 +82,39 @@ class Profile(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
+
+
+class PageVisit(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="page_visits")
+    page_slug = models.CharField(max_length=500)  # URL path
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-timestamp"]
+
+    def __str__(self):
+        return f"{self.user.username} visited {self.page_slug} at {self.timestamp}"
+    
+
+class DeletedUserLog(models.Model):
+    user_id = models.IntegerField(help_text="Internal user ID (non-identifiable)")
+    deletion_time = models.DateTimeField(default=timezone.now)
+    reason = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"User ID {self.user_id} deleted at {self.deletion_time}"
+    
+
+class QuizAttempt(models.Model):
+    from questionnaires.models import Quiz
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    score = models.FloatField()
+    attempt_number = models.PositiveIntegerField(default=1)
+    completed_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ["-completed_at"]  # latest first
+
+    def __str__(self):
+        return f"{self.user.username} - {self.quiz.title} (Attempt {self.attempt_number})"

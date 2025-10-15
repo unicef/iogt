@@ -112,6 +112,7 @@ MIDDLEWARE = [
     "iogt.middleware.AdminLocaleMiddleware",
     'iogt.middleware.CustomRedirectMiddleware',
     'iogt_users.middlewares.RegistrationSurveyRedirectMiddleware',
+    'iogt_users.middlewares.TrackFrontendPageVisitsMiddleware',
     'external_links.middleware.RewriteExternalLinksMiddleware',
     'iogt.middleware.GlobalDataMiddleware',
     # 'admin_login.middleware.CustomAdminLoginRequiredMiddleware',
@@ -516,9 +517,9 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=365),
 }
 
-CACHE = os.getenv('CACHE', 'enable') == 'enable'
+CACHE = os.getenv('CACHE', '') == 'enable'
 if CACHE:
-    CACHE_LOCATION = os.getenv('CACHE_LOCATION', 'redis://redis:6379/0')
+    CACHE_LOCATION = os.getenv('CACHE_LOCATION')
     if not CACHE_LOCATION:
         raise ImproperlyConfigured(
             "CACHE_LOCATION must be set if CACHE is set to 'enable'")
@@ -647,8 +648,8 @@ SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
 
-CELERY_BROKER_URL = 'redis://redis:6379/0'
-CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+CELERY_BROKER_URL = os.getenv('CACHE_LOCATION')
+CELERY_RESULT_BACKEND = os.getenv('CACHE_LOCATION')
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 

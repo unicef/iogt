@@ -2378,3 +2378,10 @@ div.notification-confirmation{
   margin: 0; 
   margin-bottom: 5px;
 }
+
+.delete-button {
+    width: auto;
+    padding: 10px 20px;
+    max-width: 200px;
+    display: inline-block;
+}
