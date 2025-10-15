@@ -31,9 +31,8 @@ wagtail==7.0
 wagtail-cache==3.0.0
 wagtailmedia==0.16
 wagtailmenus==4.0.4
-wagtailsvg @ https://github.com/sachin-mehta/wagtailsvg/archive/3d2ecc67d993faeffd3251e88ad2e38b3265c0e4.zip
-wagtail-transfer @ https://github.com/Ankit-lab809/wagtail-transfer/archive/05fff57d6b48afc34173da9a05a914126397d2a8.zip
-
+wagtailsvg @ https://github.com/unicef/iogt-wagtailsvg/archive/3d2ecc67d993faeffd3251e88ad2e38b3265c0e4.zip
+wagtail-transfer @ https://github.com/unicef/iogt-wagtailtransfer/archive/05fff57d6b48afc34173da9a05a914126397d2a8.zip
 whitenoise==6.9.0
 xlsxwriter==3.2.5
 django-notifications-hq @ https://github.com/django-notifications/django-notifications/archive/4c44bcea2504d9a3fcd26366b232a13732a08f2a.zip

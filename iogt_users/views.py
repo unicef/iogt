@@ -19,6 +19,7 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
+from django import forms
 
 from .models import DeletedUserLog, PageVisit, QuizAttempt
 from django.contrib.auth import get_user_model
@@ -76,6 +77,14 @@ class UserDetailEditView(UpdateView):
     model = User
     fields = ('first_name', 'last_name', 'username', 'date_of_birth', 'gender','location' )
     template_name = 'profile_edit.html'
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['date_of_birth'].widget = forms.DateInput(attrs={
+            'type': 'date',
+            'class': 'form-control'
+        })
+        return form
 
     def get_success_url(self):
         return reverse('user_profile_edit')

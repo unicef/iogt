@@ -11,11 +11,11 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': getenv('DB_NAME', 'postgres'),
-        'USER': getenv('DB_USER', 'postgres'),
-        'PASSWORD': getenv('DB_PASSWORD', 'iogt'),
-        'HOST': getenv('DB_HOST', 'database'),
-        'PORT': getenv('DB_PORT', '5432'),
+        'NAME': getenv('DB_NAME'),
+        'USER': getenv('DB_USER'),
+        'PASSWORD': getenv('DB_PASSWORD'),
+        'HOST': getenv('DB_HOST'),
+        'PORT': getenv('DB_PORT'),
     }
 }
 
