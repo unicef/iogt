@@ -1,4 +1,5 @@
 from interactive.shortcode import Shortcode
+from django.templatetags.static import static
 
 
 class ShortCodeService:
@@ -55,16 +56,17 @@ class ShortCodeService:
         return content
 
     def navbar_callback(self, attrs, content=None):
+        house_icon_url = static('icons/house.svg')
         button_group = ""
         for x, y in attrs.items():
             button = """<button type="submit" name="text" value="{0}">
                 <div>
-                    <i class="fa fa-house"></i>
+                    <img style="filter: brightness(0) invert(1);"  src="{2}" alt="House" />
                     <span>{1}</span>
                 </div>
             </button>"""
 
-            button_group += button.format(y, x.capitalize())
+            button_group += button.format(y, x.capitalize(), house_icon_url)
 
         return f'<section class="interactive_navigation">{button_group}</section>'
 
