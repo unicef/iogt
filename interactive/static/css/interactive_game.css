@@ -200,7 +200,11 @@
      filter: grayscale(100%) brightness(300%);
      margin: auto;
  }
- 
+
+ .interactive-game .interactive_navigation button img.icon-invert {
+    filter: brightness(0) invert(1);
+ }
+
  /**
   * description :- hints page
   * created_at:- 17/04/2024 14:44:59

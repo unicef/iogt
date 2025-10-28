@@ -61,7 +61,7 @@ class ShortCodeService:
         for x, y in attrs.items():
             button = """<button type="submit" name="text" value="{0}">
                 <div>
-                    <img style="filter: brightness(0) invert(1);"  src="{2}" alt="House" />
+                    <img class="icon-invert" src="{2}" alt="House icon" />
                     <span>{1}</span>
                 </div>
             </button>"""

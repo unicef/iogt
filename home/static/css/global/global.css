@@ -2378,16 +2378,3 @@ div.notification-confirmation{
   margin: 0; 
   margin-bottom: 5px;
 }
-
-.share-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 12px 16px;
-    font-size: 14px;
-}
-
-.share-button img {
-    width: 20px;
-    height: 20px;
-}
