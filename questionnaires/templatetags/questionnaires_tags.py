@@ -110,6 +110,12 @@ def render_questionnaire_form(context, page, background_color=None, font_color=N
         'background_color': background_color,
         'questionnaire': page,
     })
+    if request.method == 'POST':
+        form = page.get_form(request.POST, page=page, user=request.user)
+        if form.is_valid():
+            context.update(page.get_context(request))  # This includes result & feedback
+    else:
+        form = page.get_form(page=page, user=request.user)
 
     multiple_submission_filter = (
         Q(session_key=request.session.session_key) if request.user.is_anonymous else Q(user__pk=request.user.pk)

@@ -12,6 +12,8 @@ from wagtail_localize.fields import TranslatableField
 from wagtailmarkdown.blocks import MarkdownBlock
 from wagtailsvg.edit_handlers import SvgChooserPanel
 from wagtailsvg.models import Svg
+from wagtail.models import Orderable
+from wagtail.models import ClusterableModel
 from user_notifications.models import NotificationTag
 from django.db.models import Avg
 
@@ -704,7 +706,7 @@ class Poll(QuestionnairePage, AbstractForm):
         return self.submit_button_text
 
 
-class QuizFormField(AbstractFormField):
+class QuizFormField(AbstractFormField, ClusterableModel):
     page = ParentalKey("Quiz", on_delete=models.CASCADE, related_name="quiz_form_fields")
     clean_name = models.TextField(
         verbose_name=_('name'),
@@ -768,6 +770,7 @@ class QuizFormField(AbstractFormField):
         FieldPanel('feedback'),
         FieldPanel('admin_label'),
         FieldPanel('page_break'),
+        InlinePanel('quiz_choices', label='Choices with feedback'),
     ]
 
     @property
@@ -908,6 +911,7 @@ class Quiz(QuestionnairePage, AbstractForm):
 
                 if type(answer) != list:
                     answer = [str(answer)]
+                    
 
                 if field.field_type in ['radio', 'dropdown']:
                     is_correct = set(answer).issubset(set(correct_answer))
@@ -917,13 +921,23 @@ class Quiz(QuestionnairePage, AbstractForm):
                 if is_correct:
                     total_correct += 1
                 total += 1
+                selected_feedbacks = []
+                for selected_value in answer:
+                    choice_feedback = field.quiz_choices.filter(choice_text=selected_value).first()
+                    if choice_feedback.feedback:
+                        selected_feedbacks.append(choice_feedback.feedback)
+                if selected_feedbacks:
+                    feedback_text = selected_feedbacks
+                elif field.feedback:
+                    feedback_text = [field.feedback]
+                else:
+                    feedback_text = []
                 fields_info[field.clean_name] = {
-                    'feedback': field.feedback,
+                    'feedback': feedback_text,
                     'correct_answer': field.correct_answer,
                     'correct_answer_list': correct_answer,
                     'is_correct': is_correct,
                 }
-
             context['form'] = form
             context['fields_info'] = fields_info
             context['result'] = {
@@ -952,6 +966,32 @@ class Quiz(QuestionnairePage, AbstractForm):
     class Meta:
         verbose_name = _("quiz")
         verbose_name_plural = _("quizzes")
+
+class QuizChoice(Orderable):
+    question = ParentalKey(
+        'QuizFormField',
+        related_name='quiz_choices',
+        on_delete=models.CASCADE
+    )
+    choice_text = models.CharField(
+        max_length=255,
+        verbose_name='Choice Text',
+        help_text='The option text that users will see'
+    )
+    feedback = models.TextField(
+        verbose_name='Feedback',
+        blank=True,
+        null=True,
+        help_text='Feedback specific to this choice (optional).'
+    )
+    panels = [
+        FieldPanel('choice_text'),
+        # FieldPanel('is_correct'),
+        FieldPanel('feedback'),
+    ]
+    def __str__(self):
+        return f"{self.choice_text} "
+
 
 
 class PollIndexPage(Page):
