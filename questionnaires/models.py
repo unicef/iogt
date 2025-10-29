@@ -911,7 +911,7 @@ class Quiz(QuestionnairePage, AbstractForm):
 
                 if type(answer) != list:
                     answer = [str(answer)]
-                    
+
 
                 if field.field_type in ['radio', 'dropdown']:
                     is_correct = set(answer).issubset(set(correct_answer))
@@ -986,7 +986,6 @@ class QuizChoice(Orderable):
     )
     panels = [
         FieldPanel('choice_text'),
-        # FieldPanel('is_correct'),
         FieldPanel('feedback'),
     ]
     def __str__(self):
