@@ -661,3 +661,10 @@ CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
 
 # Ensure Django trusts the proxy (if applicable)
 # SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+MATOMO_CANONICAL_DIMENSION_ID = 1
+
+PWA_APP_NAME = "IOGT"
+PWA_APP_SHORT_NAME = "IOGT"
+PWA_THEME_COLOR = "#493174"
+PWA_BG_COLOR = "#ffffff"
