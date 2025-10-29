@@ -924,7 +924,7 @@ class Quiz(QuestionnairePage, AbstractForm):
                 selected_feedbacks = []
                 for selected_value in answer:
                     choice_feedback = field.quiz_choices.filter(choice_text=selected_value).first()
-                    if choice_feedback.feedback:
+                    if choice_feedback  and choice_feedback.feedback:
                         selected_feedbacks.append(choice_feedback.feedback)
                 if selected_feedbacks:
                     feedback_text = selected_feedbacks
@@ -976,13 +976,15 @@ class QuizChoice(Orderable):
     choice_text = models.CharField(
         max_length=255,
         verbose_name='Choice Text',
-        help_text='The option text that users will see'
+        blank=True,
+        null=True,
+        help_text='The option text that users will see',
     )
     feedback = models.TextField(
         verbose_name='Feedback',
         blank=True,
         null=True,
-        help_text='Feedback specific to this choice (optional).'
+        help_text='Feedback specific to this choice (optional).',
     )
     panels = [
         FieldPanel('choice_text'),
