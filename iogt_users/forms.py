@@ -61,18 +61,12 @@ class AccountSignupForm(SignupForm):
         self.fields["location"].widget =  forms.TextInput(attrs={
             "placeholder": _("Enter a location")
         })
-        self.fields["gender"].widget = forms.Select(
-            choices=self.fields["gender"].choices,
-            attrs={
-                "class": "form-control w-100",   # Bootstrap full width
-            }
-        )
-
         if hasattr(self, "field_order"):
             set_form_field_order(self, self.field_order)
 
     def save(self, request):
         user = super().save(request)
+        send_app_notifications.delay(user.id, notification_type='signup')
         user.date_of_birth = self.cleaned_data["date_of_birth"]
         user.gender = self.cleaned_data["gender"]
         user.location = self.cleaned_data["location"]

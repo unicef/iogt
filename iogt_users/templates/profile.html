@@ -23,7 +23,7 @@
         {% url 'notification_settings' as notify_url %}
         {% primary_button title='Notification Preference' href=notify_url icon_path='icons/bell-solid.svg' extra_classnames='notification-pref-btn' %}
         {% url 'quiz_results' as quiz_result %}
-            {% primary_button title='My Quiz Results' href=quiz_result icon_path='icons/quiz-answer-banner.svg' extra_classnames='notification-pref-btn' %}
+            {% primary_button title='My Quiz Results' href=quiz_result icon_path='icons/quiz.svg' extra_classnames='notification-pref-btn' %}
         {% url 'my_activity' as activity_url %}
             {% primary_button title='My Activity' href=activity_url icon_path='icons/chat.svg' extra_classnames='notification-pref-btn' %}
         {% url 'user_profile_edit' as profile_edit %}
