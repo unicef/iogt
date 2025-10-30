@@ -2388,8 +2388,17 @@ div.notification-confirmation{
   display: inline-block !important;
   width: auto !important;
 }
+
+.activity-container {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    width: 100%;
+}
+
 .activity-table {
-    width: 150%;
+    width: 100%;
     border-collapse: collapse;
     border: 1px solid #ddd !important;
 }

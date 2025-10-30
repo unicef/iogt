@@ -134,5 +134,8 @@ form input[type="checkbox"] {
   }
 
  .edit-profile input{
-        font-size: 14px; /* Only font-size changes */
-    }
+    font-size: 16px;
+    letter-spacing: .01em;
+    line-height: 22px;
+    padding: 12px 12px 12px 16px
+}

@@ -28,9 +28,8 @@
             {% primary_button title='My Activity' href=activity_url icon_path='icons/chat.svg' extra_classnames='notification-pref-btn' %}
         {% url 'user_profile_edit' as profile_edit %}
             {% primary_button title='Edit Profile' href=profile_edit icon_path='icons/profile.svg' extra_classnames='notification-pref-btn' %}
-        <div data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
-            {% url 'delete_account' as delete_account %}
-            {% primary_button title='Delete Account' href='#' icon_path='icons/profile.svg' extra_classnames='notification-pref-btn' %}
+        <div id="deleteAccountBtn">
+          {% primary_button title='Delete Account' href='#' icon_path='icons/profile.svg' extra_classnames='notification-pref-btn' %}
         </div>
             {% url 'account_change_password' as change_password_url %}
         {% primary_button title='Change Digital Pin' href=change_password_url icon_path='icons/lock.svg' extra_classnames='change-digital-pin' %}
@@ -40,32 +39,58 @@
 
 {% endblock %}
 
-{% block extra_js %}
-    {{ block.super }}
-    <div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form method="post" action="{% url 'delete_account' %}">
-                    {% csrf_token %}
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteAccountModalLabel">Confirm Account Deletion</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-            <div class="modal-body">
-                <p class="mb-0">
-                    This will permanently delete your <strong>profile</strong>, <strong>quiz results</strong>, and all related data.
-                </p>
-                <p class="mt-2 text-danger fw-semibold">
-                    ⚠️ This action cannot be undone.
-                </p>
-            </div>
-            <div class="modal-footer d-flex justify-content-end gap-2">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-danger">Yes, Delete My Account</button>
-            </div>
 
-                </form>
-            </div>
-        </div>
+{% block extra_js %}
+  {{ block.super }}
+  <div id="deleteModal" class="modal">
+  <div class="modal-content">
+    <h3>Confirm Delete</h3>
+    <p>Are you sure you want to delete your account?</p>
+    <div class="modal-actions">
+      <button id="confirmDelete" class="confirm-btn btn btn-danger">Yes, Delete</button>
+      <button id="cancelDelete" class="cancel-btn btn btn-secondary">Cancel</button>
     </div>
+  </div>
+  </div>
+  <script>
+    $(function () {
+      $("#deleteAccountBtn a").click(function (e) {
+        e.preventDefault();
+        $("#deleteModal").fadeIn(200);
+      });
+      $("#cancelDelete").click(function () {
+        $("#deleteModal").fadeOut(200);
+      });
+      $("#confirmDelete").click(function () {
+        $("#deleteModal").fadeOut(200);
+          $.ajax({
+              url: "{% url 'delete_account' %}",
+              type: "POST",
+              data: {
+                  csrfmiddlewaretoken: '{{ csrf_token }}'
+              },
+              success: function(response) {
+                  console.log('response', response);
+                  if (response.success) {
+                      showToast("✅ Account deleted successfully.", "success");
+                      setTimeout(() => {
+                          window.location.replace("{% url 'account_login' %}");rofile_E
+                      }, 2000);
+                  } else {
+                      showToast("⚠️ Something went wrong while deleting the account.", "error");
+                  }
+              },
+              error: function(xhr, status, error) {
+                  console.error("AJAX error:", error);
+                  showToast("❌ Error: Unable to delete account. Please try again.", "error");
+              }
+          });
+      });
+      $(window).on("click", function (e) {
+        if ($(e.target).is("#deleteModal")) {
+          $("#deleteModal").fadeOut(200);
+        }
+      });
+    });
+  </script>
 {% endblock %}

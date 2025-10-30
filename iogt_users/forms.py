@@ -32,7 +32,7 @@ class AccountSignupForm(SignupForm):
         required=True,
     )
     location = forms.CharField(
-        required=False,  # optional field
+        required=False,
         max_length=255
     )
     terms_accepted = forms.BooleanField(label=_('I accept the Terms and Conditions.'))

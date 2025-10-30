@@ -23,7 +23,7 @@ from django import forms
 
 from .models import DeletedUserLog, PageVisit, QuizAttempt
 from django.contrib.auth import get_user_model
-from wagtail.models import Page
+from wagtail.models import Locale, Page
 from wagtail.documents import get_document_model
 from wagtail.images import get_image_model
 
@@ -85,6 +85,25 @@ class UserDetailEditView(UpdateView):
             'class': 'form-control'
         })
         return form
+    
+    def form_valid(self, form):
+        self.object = form.save()
+        if self.request.headers.get("x-requested-with") == "XMLHttpRequest":
+            if form.has_changed():
+                return JsonResponse({"success": True, "message": "✅ Profile updated successfully!"})
+            else:
+                return JsonResponse({"success": False, "message": "ℹ️ No changes made."})
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        if self.request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse({
+                "success": False,
+                "message": "❌ Invalid data submitted.",
+                "errors": form.errors
+            }, status=400)
+
+        return super().form_invalid(form)
 
     def get_success_url(self):
         return reverse('user_profile_edit')
@@ -196,20 +215,23 @@ class DeleteAccountView(View):
     def post(self, request, *args, **kwargs):
         """Handle confirmed deletion."""
         from django.conf import settings
-        user = request.user
-        logger.info(
-            f"User deletion requested by user_id={user.id}, email={user.email}, at {timezone.now()}"
-        )
-        from iogt_users.models import DeletedUserLog  # adjust import to your actual model path
-        DeletedUserLog.objects.create(
-            user_id=user.id,
-            reason="User requested account deletion"
-        )
-        self.delete_user_data(user)
-        logout(request)
-        user.delete()
-        messages.success(request, "Your account and all related data have been deleted successfully.")
-        return redirect(reverse(settings.LOGIN_URL))
+        try:
+            user = request.user
+            logger.info(
+                f"User deletion requested by user_id={user.id}, email={user.email}, at {timezone.now()}"
+            )
+            from iogt_users.models import DeletedUserLog  # adjust import to your actual model path
+            DeletedUserLog.objects.create(
+                user_id=user.id,
+                reason="User requested account deletion"
+            )
+            self.delete_user_data(user)
+            logout(request)
+            user.delete()
+            return JsonResponse({"success": True})
+        except Exception as e:
+            logger.error(f"Error deleting account for user_id={user.id}: {e}", exc_info=True)
+            return JsonResponse({"success": False}, status=500)
 
     def delete_user_data(self, user):
         """Delete all Wagtail-related and media data for a user."""
