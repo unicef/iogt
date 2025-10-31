@@ -36,10 +36,7 @@
         {% url 'account_logout' as logout_url %}
         {% primary_button title='Log out' href=logout_url icon_path='icons/arrow_icon_left.svg' extra_classnames='logout-btn' %}
     </div>
-
 {% endblock %}
-
-
 {% block extra_js %}
   {{ block.super }}
   <div id="deleteModal" class="modal">
@@ -63,28 +60,26 @@
       });
       $("#confirmDelete").click(function () {
         $("#deleteModal").fadeOut(200);
-          $.ajax({
-              url: "{% url 'delete_account' %}",
-              type: "POST",
-              data: {
-                  csrfmiddlewaretoken: '{{ csrf_token }}'
-              },
-              success: function(response) {
-                  console.log('response', response);
-                  if (response.success) {
-                      showToast("✅ Account deleted successfully.", "success");
-                      setTimeout(() => {
-                          window.location.replace("{% url 'account_login' %}");rofile_E
-                      }, 2000);
-                  } else {
-                      showToast("⚠️ Something went wrong while deleting the account.", "error");
-                  }
-              },
-              error: function(xhr, status, error) {
-                  console.error("AJAX error:", error);
-                  showToast("❌ Error: Unable to delete account. Please try again.", "error");
-              }
-          });
+        $.ajax({
+          url: "{% url 'delete_account' %}",
+          type: "POST",
+          data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+          },
+          success: function (response) {
+            if (response.success) {
+              showToast("✅ Account deleted successfully.", "success");
+              setTimeout(() => {
+                window.location.replace("{% url 'account_login' %}");
+              }, 2000);
+            } else {
+              showToast("⚠️ Something went wrong while deleting the account.", "error");
+            }
+          },
+          error: function (xhr, status, error) {
+            showToast("❌ Error: Unable to delete account. Please try again.", "error");
+          }
+        });
       });
       $(window).on("click", function (e) {
         if ($(e.target).is("#deleteModal")) {
@@ -93,4 +88,4 @@
       });
     });
   </script>
-{% endblock %}
+  {% endblock %}

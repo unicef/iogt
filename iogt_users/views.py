@@ -20,27 +20,19 @@ from django.utils import timezone
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django import forms
-
 from .models import DeletedUserLog, PageVisit, QuizAttempt
 from django.contrib.auth import get_user_model
 from wagtail.models import Locale, Page
 from wagtail.documents import get_document_model
 from wagtail.images import get_image_model
-
 from wagtailsvg.models import Svg
 from wagtailmedia.models import Media
-
-
-
-User = get_user_model()
-
 from iogt import settings
-
 from email_service.mailjet_email_sender import send_email_via_mailjet
 from user_notifications.models import NotificationPreference, NotificationTag
 
-
 logger = logging.getLogger(__name__)
+User = get_user_model()
 
 class UserNotificationView(TemplateView):
     template_name = 'user_notification.html'
@@ -186,9 +178,9 @@ class InviteAdminUserView(View):
                                 status=500)
 
             # If email is sent successfully
+
         return JsonResponse({'success': True, 'message': 'Invitation sent successfully!'})
     
-
 
 class MyActivityView(TemplateView):
     template_name = "my_activity.html"
@@ -205,7 +197,6 @@ class MyActivityView(TemplateView):
             "last_login": user.last_login,
         })
         return context
-
 
 
 @method_decorator(login_required, name='dispatch')
