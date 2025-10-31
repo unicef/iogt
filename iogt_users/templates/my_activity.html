@@ -1,41 +1,37 @@
 {% extends 'account/base.html' %}
 {% load i18n static image_tags generic_components %}
-
 {% block title %}{% translate "My Notification" %}{% endblock %}
-
 {% block content %}
-<h2>My Activity</h2>
-
-<div class="activity-container">
-    <h4>Account Information</h4>
-    <p><strong>Date Registered:</strong> {{ date_joined|date:"M d, Y" }}</p>
-    <p><strong>Last Login:</strong> {{ last_login|date:"M d, Y H:i" }}</p>
-</div>
-
-<table class="activity-table">
-    <thead>
-        <tr style="background-color: #f2f2f2;">
-            <th>Activity</th>
-            <th>Details</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Pages Visited</td>
-            <td>{{ pages_visited }}</td>
-        </tr>
-        <tr>
-            <td>Unique Pages</td>
-            <td>{{ unique_pages }}</td>
-        </tr>
-        <tr>
-            <td>Total Visits</td>
-            <td>{{ visits }}</td>
-        </tr>
-        <tr>
-            <td>Last Visit</td>
-            <td>{{ last_visit|date:"M d, Y H:i" }}</td>
-        </tr>
-    </tbody>
-</table>
+    <h2>My Activity</h2>
+    <div class="activity-container">
+        <h4>Account Information</h4>
+        <p><strong>Date Registered:</strong> {{ date_joined|date:"M d, Y" }}</p>
+        <p><strong>Last Login:</strong> {{ last_login|date:"M d, Y H:i" }}</p>
+    </div>
+    <table class="activity-table">
+        <thead>
+            <tr style="background-color: #f2f2f2;">
+                <th>Activity</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Pages Visited</td>
+                <td>{{ pages_visited }}</td>
+            </tr>
+            <tr>
+                <td>Unique Pages</td>
+                <td>{{ unique_pages }}</td>
+            </tr>
+            <tr>
+                <td>Total Visits</td>
+                <td>{{ visits }}</td>
+            </tr>
+            <tr>
+                <td>Last Visit</td>
+                <td>{{ last_visit|date:"M d, Y H:i" }}</td>
+            </tr>
+        </tbody>
+    </table>
 {% endblock %}

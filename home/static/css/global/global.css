@@ -2378,10 +2378,11 @@ div.notification-confirmation{
   margin: 0; 
   margin-bottom: 5px;
 }
+
 .btn-danger {
-  padding: 6px 14px;       /* reduces height and width */
-  font-size: 0.9rem;       /* slightly smaller text */
-  line-height: 1.2;        /* tighter vertical spacing */
+  padding: 6px 14px;
+  font-size: 0.9rem;
+  line-height: 1.2;
 }
 
 .btn-danger {

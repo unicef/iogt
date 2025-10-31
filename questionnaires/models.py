@@ -912,7 +912,6 @@ class Quiz(QuestionnairePage, AbstractForm):
                 if type(answer) != list:
                     answer = [str(answer)]
 
-
                 if field.field_type in ['radio', 'dropdown']:
                     is_correct = set(answer).issubset(set(correct_answer))
                 else:
@@ -947,7 +946,7 @@ class Quiz(QuestionnairePage, AbstractForm):
             from iogt_users.models import QuizAttempt
             user = request.user
             if user.is_authenticated:
-                score_percentage = (total_correct / total) * 100 if total else 0
+                score_percentage = round((total_correct / total) * 100, 2) if total else 0
                 attempt_number = QuizAttempt.objects.filter(user=user, quiz=self).count() + 1
                 QuizAttempt.objects.create(
                     user=user,
@@ -992,7 +991,6 @@ class QuizChoice(Orderable):
     ]
     def __str__(self):
         return f"{self.choice_text} "
-
 
 
 class PollIndexPage(Page):

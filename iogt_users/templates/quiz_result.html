@@ -1,37 +1,35 @@
 {% extends 'base.html' %}
 {% load i18n %}
-
 {% block content %}
-<h2 class="quiz-results-title">{% trans "My Quiz Results" %}</h2>
-
-{% if quiz_results %}
-<table class="quiz-results-table">
-    <thead>
-        <tr>
-            <th>{% trans "Quiz Title" %}</th>
-            <th>{% trans "Latest Score" %}</th>
-            <th>{% trans "Avg Score" %}</th>
-            <th>{% trans "Attempt" %}</th>
-            <th>{% trans "Date & Time" %}</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for result in quiz_results %}
-        <tr>
-            <td>
-                <a href="{{ result.quiz.url }}" class="quiz-link">
-                    {{ result.quiz.title }}
-                </a>
-            </td>
-            <td class="center-text">{{ result.score }}%</td>
-            <td class="center-text">{{ result.avg_score|floatformat:2 }}%</td>
-            <td class="center-text">{{ result.attempt_number }}</td>
-            <td class="center-text">{{ result.completed_at|date:"d M Y, H:i" }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% else %}
-<p class="no-quiz-text">{% trans "You haven’t completed any quizzes yet." %}</p>
-{% endif %}
+    <h2 class="quiz-results-title">{% trans "My Quiz Results" %}</h2>
+    {% if quiz_results %}
+    <table class="quiz-results-table">
+        <thead>
+            <tr>
+                <th>{% trans "Quiz Title" %}</th>
+                <th>{% trans "Latest Score" %}</th>
+                <th>{% trans "Avg Score" %}</th>
+                <th>{% trans "Attempt" %}</th>
+                <th>{% trans "Date & Time" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in quiz_results %}
+            <tr>
+                <td>
+                    <a href="{{ result.quiz.url }}" class="quiz-link">
+                        {{ result.quiz.title }}
+                    </a>
+                </td>
+                <td class="center-text">{{ result.score }}%</td>
+                <td class="center-text">{{ result.avg_score|floatformat:2 }}%</td>
+                <td class="center-text">{{ result.attempt_number }}</td>
+                <td class="center-text">{{ result.completed_at|date:"d M Y, H:i" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="no-quiz-text">{% trans "You haven’t completed any quizzes yet." %}</p>
+    {% endif %}
 {% endblock %}

@@ -1,6 +1,7 @@
 import logging
 import os, shutil
 from http.client import HTTPResponse
+
 from django.apps import apps
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -16,18 +17,19 @@ from django.views.generic import TemplateView
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
+from wagtail.models import Locale, Page
 from django.utils import timezone
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django import forms
 from .models import DeletedUserLog, PageVisit, QuizAttempt
 from django.contrib.auth import get_user_model
-from wagtail.models import Locale, Page
 from wagtail.documents import get_document_model
 from wagtail.images import get_image_model
 from wagtailsvg.models import Svg
 from wagtailmedia.models import Media
 from iogt import settings
+
 from email_service.mailjet_email_sender import send_email_via_mailjet
 from user_notifications.models import NotificationPreference, NotificationTag
 
