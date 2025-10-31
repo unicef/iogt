@@ -10,7 +10,7 @@
     {% if user.is_authenticated or request.is_preview or questionnaire.allow_anonymous_submissions %}
         {% if form %}
             {{ questionnaire.description }}
-            <form action="{% get_action_url questionnaire questionnaire fields_step request form %}" method="POST">
+            <form  method="POST">
                 {% csrf_token %}
                 <div class="{{ questionnaire.get_type }}-page__content">
                     {% for field in form %}
@@ -33,6 +33,29 @@
                 <div class="{{ questionnaire.get_type }}-page__btns">
                     {% render_submit_button questionnaire fields_step %}
                 </div>
+                {% if result %}
+                    <div class="quiz-feedback">
+                        {% include 'questionnaires/tags/quiz_buttons.html' %}
+                        <h2>Your Result</h2>
+                        <p>You got {{ result.total_correct }} out of {{ result.total }} correct!</p>
+                        {% if average_score %}
+                            <p>Average Score: {{ average_score|floatformat:2 }}%</p>
+                        {% endif %}
+                        {% for field_name, info in fields_info.items %}
+                            <div class="feedback-item">
+                                <strong>{{ field_name|title }}</strong>:
+                                {% if info.is_correct %}
+                                    ✅ Correct
+                                {% else %}
+                                    ❌ Incorrect. 
+                                {% endif %}
+                                {% for fb in info.feedback %}
+                                <p>{{ fb }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </form>
         {% else %}
             {% include 'questionnaires/tags/already_completed.html' with page=questionnaire %}

@@ -5,13 +5,44 @@
 
 {% block allauth_content %}
     <h1 class="title profile__title">{% translate "Personal Details" %}</h1>
-    <form method="post" class="edit-profile">
+    <form method="post" class="edit-profile" id="profile_form">
         {% csrf_token %}
         {{ form.as_p }}
         <div class="profile-form__btns">
-            <button type="submit"
+            <button id="submit-btn" type="submit"
                     class="cust-btn cust-btn--dark profile-form__btn"><span>{% translate "Save changes" %}</span>
             </button>
         </div>
     </form>
+{% endblock %}
+{% block extra_js %}
+<script>
+    document.getElementById("profile_form").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+        fetch("{% url 'user_profile_edit' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": form.querySelector("[name=csrfmiddlewaretoken]").value,
+                "X-Requested-With": "XMLHttpRequest",
+            },
+            body: formData,
+        })
+        .then(async res => {
+            const result = await res.json().catch(() => null);
+            if (!result) throw new Error("Response was not JSON");
+
+            if (result.success) {
+                showToast(result.message, "success");
+            } else {
+                showToast(result.message || "⚠️ No changes made.", "info");
+            }
+        })
+        .catch(err => {
+            console.error("Error:", err);
+            showToast("❌ Something went wrong while saving!", "error");
+        });
+    });
+</script>
 {% endblock %}
