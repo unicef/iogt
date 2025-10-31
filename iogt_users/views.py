@@ -3,7 +3,6 @@ import os, shutil
 from http.client import HTTPResponse
 
 from django.apps import apps
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Max, Avg
@@ -13,20 +12,15 @@ from django.views.generic import UpdateView, TemplateView
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views import View
-from django.views.generic import TemplateView
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from wagtail.models import Locale, Page
 from django.utils import timezone
 from django.contrib.auth import logout
-from django.contrib.auth.models import User
 from django import forms
 from .models import DeletedUserLog, PageVisit, QuizAttempt
-from django.contrib.auth import get_user_model
 from wagtail.documents import get_document_model
 from wagtail.images import get_image_model
-from wagtailsvg.models import Svg
 from wagtailmedia.models import Media
 from iogt import settings
 
@@ -183,7 +177,7 @@ class InviteAdminUserView(View):
 
         return JsonResponse({'success': True, 'message': 'Invitation sent successfully!'})
     
-
+@method_decorator(login_required, name='dispatch')
 class MyActivityView(TemplateView):
     template_name = "my_activity.html"
     def get_context_data(self, **kwargs):
@@ -233,7 +227,6 @@ class DeleteAccountView(View):
         Image = get_image_model()
         Document.objects.filter(uploaded_by_user=user).delete()
         Image.objects.filter(uploaded_by_user=user).delete()
-        # Svg.objects.filter(uploaded_by_user=user).delete()
         Media.objects.filter(uploaded_by_user=user).delete()
         for model in apps.get_models():
             for field in model._meta.get_fields():
@@ -249,8 +242,8 @@ class DeleteAccountView(View):
             if os.path.exists(path):
                 shutil.rmtree(path, ignore_errors=True)
 
-
-class QuizResultView(LoginRequiredMixin, TemplateView):
+@method_decorator(login_required, name='dispatch')
+class QuizResultView(TemplateView):
     template_name = 'quiz_result.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

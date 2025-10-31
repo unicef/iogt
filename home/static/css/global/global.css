@@ -2379,13 +2379,13 @@ div.notification-confirmation{
   margin-bottom: 5px;
 }
 
-.btn-danger {
+.confirm-btn {
   padding: 6px 14px;
   font-size: 0.9rem;
   line-height: 1.2;
 }
 
-.btn-danger {
+.confirm-btn {
   display: inline-block !important;
   width: auto !important;
 }

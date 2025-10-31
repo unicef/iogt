@@ -12,8 +12,7 @@ from wagtail_localize.fields import TranslatableField
 from wagtailmarkdown.blocks import MarkdownBlock
 from wagtailsvg.edit_handlers import SvgChooserPanel
 from wagtailsvg.models import Svg
-from wagtail.models import Orderable
-from wagtail.models import ClusterableModel
+from wagtail.models import Orderable, ClusterableModel
 from user_notifications.models import NotificationTag
 from django.db.models import Avg
 
