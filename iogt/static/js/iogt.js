@@ -387,7 +387,6 @@ document.addEventListener("DOMContentLoaded", function () {
         showToast("❌ Error: Unable to delete account. Please try again.", "error");
       });
   });
-
   window.addEventListener("click", (e) => {
     if (e.target === modal) modal.style.display = "none";
   });
