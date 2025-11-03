@@ -40,52 +40,18 @@
 {% block extra_js %}
   {{ block.super }}
   <div id="deleteModal" class="modal">
-  <div class="modal-content">
-    <h3>Confirm Delete</h3>
-    <p>Are you sure you want to delete your account?</p>
-    <div class="modal-actions">
-      <button id="confirmDelete" class="confirm-btn btn btn-danger">Yes, Delete</button>
-      <button id="cancelDelete" class="cancel-btn btn btn-secondary">Cancel</button>
+    <div class="modal-content">
+      <h3>Confirm Delete</h3>
+      <p>Are you sure you want to delete your account?</p>
+      <div class="modal-actions">
+        <button id="confirmDelete" class="confirm-btn btn btn-danger">Yes, Delete</button>
+        <button id="cancelDelete" class="cancel-btn btn btn-secondary">Cancel</button>
+      </div>
     </div>
   </div>
-  </div>
   <script>
-    $(function () {
-      $("#deleteAccountBtn a").click(function (e) {
-        e.preventDefault();
-        $("#deleteModal").fadeIn(200);
-      });
-      $("#cancelDelete").click(function () {
-        $("#deleteModal").fadeOut(200);
-      });
-      $("#confirmDelete").click(function () {
-        $("#deleteModal").fadeOut(200);
-        $.ajax({
-          url: "{% url 'delete_account' %}",
-          type: "POST",
-          data: {
-            csrfmiddlewaretoken: '{{ csrf_token }}'
-          },
-          success: function (response) {
-            if (response.success) {
-              showToast("✅ Account deleted successfully.", "success");
-              setTimeout(() => {
-                window.location.replace("{% url 'account_login' %}");
-              }, 2000);
-            } else {
-              showToast("⚠️ Something went wrong while deleting the account.", "error");
-            }
-          },
-          error: function (xhr, status, error) {
-            showToast("❌ Error: Unable to delete account. Please try again.", "error");
-          }
-        });
-      });
-      $(window).on("click", function (e) {
-        if ($(e.target).is("#deleteModal")) {
-          $("#deleteModal").fadeOut(200);
-        }
-      });
-    });
+    const deleteAccountUrl = "{% url 'delete_account' %}";
+    const accountLoginUrl = "{% url 'account_login' %}";
+    const csrfToken = "{{ csrf_token }}";
   </script>
   {% endblock %}

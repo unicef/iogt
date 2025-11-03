@@ -17,30 +17,44 @@
 {% endblock %}
 {% block extra_js %}
 <script>
-    document.getElementById("profile_form").addEventListener("submit", function(e) {
-        e.preventDefault();
-        const form = e.target;
-        const formData = new FormData(form);
-        fetch("{% url 'user_profile_edit' %}", {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": form.querySelector("[name=csrfmiddlewaretoken]").value,
-                "X-Requested-With": "XMLHttpRequest",
-            },
-            body: formData,
-        })
-        .then(async res => {
-            const result = await res.json().catch(() => null);
-            if (!result) throw new Error("Response was not JSON");
-
-            if (result.success) {
-                showToast(result.message, "success");
-            } else {
-                showToast(result.message || "⚠️ No changes made.", "info");
-            }
-        })
-        .catch(err => {
-            showToast("❌ Something went wrong while saving!", "error");
+    document.addEventListener("DOMContentLoaded", function() {
+        const form = document.getElementById("profile_form");
+        const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+        const initialData = new FormData(form);
+        const initialEntries = Array.from(initialData.entries());
+        function isFormChanged() {
+            const currentData = new FormData(form);
+            const currentEntries = Array.from(currentData.entries());
+            return JSON.stringify(currentEntries) !== JSON.stringify(initialEntries);
+        }
+        submitBtn.disabled = true;
+        form.addEventListener("input", () => {
+            submitBtn.disabled = !isFormChanged();
+        });
+        form.addEventListener("submit", function(e) {
+            e.preventDefault();
+            const formData = new FormData(form);
+            fetch("{% url 'user_profile_edit' %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": form.querySelector("[name=csrfmiddlewaretoken]").value,
+                    "X-Requested-With": "XMLHttpRequest",
+                },
+                body: formData,
+            })
+            .then(async res => {
+                const result = await res.json().catch(() => null);
+                if (!result) throw new Error("Response was not JSON");
+                if (result.success) {
+                    showToast(result.message, "success");
+                    submitBtn.disabled = true;
+                } else {
+                    showToast(result.message || "⚠️ No changes made.", "info");
+                }
+            })
+            .catch(err => {
+                showToast("❌ Something went wrong while saving!", "error");
+            });
         });
     });
 </script>

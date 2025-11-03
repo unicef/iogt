@@ -1,5 +1,4 @@
 import logging
-import os, shutil
 from http.client import HTTPResponse
 
 from django.apps import apps
@@ -14,14 +13,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views import View
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
-from wagtail.models import Locale, Page
+from wagtail.models import Locale
 from django.utils import timezone
 from django.contrib.auth import logout
 from django import forms
 from .models import DeletedUserLog, PageVisit, QuizAttempt
-from wagtail.documents import get_document_model
-from wagtail.images import get_image_model
-from wagtailmedia.models import Media
 from iogt import settings
 
 from email_service.mailjet_email_sender import send_email_via_mailjet
@@ -199,7 +195,7 @@ class MyActivityView(TemplateView):
 class DeleteAccountView(View):
     """Handles full account deletion including all related Wagtail data."""
 
-    def post(self, request, *args, **kwargs):
+    def delete(self, request, *args, **kwargs):
         """Handle confirmed deletion."""
         from django.conf import settings
         try:
@@ -212,7 +208,6 @@ class DeleteAccountView(View):
                 user_id=user.id,
                 reason="User requested account deletion"
             )
-            self.delete_user_data(user)
             logout(request)
             user.delete()
             return JsonResponse({"success": True})
@@ -220,27 +215,6 @@ class DeleteAccountView(View):
             logger.error(f"Error deleting account for user_id={user.id}: {e}", exc_info=True)
             return JsonResponse({"success": False}, status=500)
 
-    def delete_user_data(self, user):
-        """Delete all Wagtail-related and media data for a user."""
-        Page.objects.filter(owner=user).delete()
-        Document = get_document_model()
-        Image = get_image_model()
-        Document.objects.filter(uploaded_by_user=user).delete()
-        Image.objects.filter(uploaded_by_user=user).delete()
-        Media.objects.filter(uploaded_by_user=user).delete()
-        for model in apps.get_models():
-            for field in model._meta.get_fields():
-                if field.is_relation and field.remote_field and field.remote_field.model == User:
-                    model.objects.filter(**{field.name: user}).delete()
-
-        from django.conf import settings
-        user_media_dir = os.path.join(settings.MEDIA_ROOT, f"users/{user.id}")
-        if os.path.exists(user_media_dir):
-            shutil.rmtree(user_media_dir, ignore_errors=True)
-        for folder in ["images", "documents", "svg"]:
-            path = os.path.join(settings.MEDIA_ROOT, folder, str(user.id))
-            if os.path.exists(path):
-                shutil.rmtree(path, ignore_errors=True)
 
 @method_decorator(login_required, name='dispatch')
 class QuizResultView(TemplateView):
