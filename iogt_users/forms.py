@@ -23,11 +23,25 @@ class AccountSignupForm(SignupForm):
         ),
         required=False,
     )
+    date_of_birth = forms.DateField(
+        required=True,
+        widget=forms.DateInput(attrs={"type": "date"})
+    )
+    gender = forms.ChoiceField(
+        choices=[("male", "Male"), ("female", "Female"), ("other", "Other")],
+        required=True,
+    )
+    location = forms.CharField(
+        required=False,
+        max_length=255
+    )
     terms_accepted = forms.BooleanField(label=_('I accept the Terms and Conditions.'))
-
     field_order = [
         "username",
         "display_name",
+        "date_of_birth",
+        "gender",
+        "location",
         "password1",
         "password2",
         "terms_accepted",
@@ -44,14 +58,19 @@ class AccountSignupForm(SignupForm):
         self.fields["username"].widget = forms.TextInput(attrs={
             "placeholder": _("Choose a username that you will use to login to IoGT")
         })
-
+        self.fields["location"].widget =  forms.TextInput(attrs={
+            "placeholder": _("Enter a location")
+        })
         if hasattr(self, "field_order"):
             set_form_field_order(self, self.field_order)
 
     def save(self, request):
         user = super().save(request)
-        # 🔁 Run this logic in background
         send_app_notifications.delay(user.id, notification_type='signup')
+        user.date_of_birth = self.cleaned_data["date_of_birth"]
+        user.gender = self.cleaned_data["gender"]
+        user.location = self.cleaned_data["location"]
+        user.save()
         return user
 
     def clean_username(self):

@@ -3,6 +3,8 @@ from django.shortcuts import redirect
 from django.urls import resolve, Resolver404, translate_url
 from django.utils import translation
 from django.utils.translation import gettext as _
+from django.utils.timezone import now
+from .models import PageVisit
 
 from home.models import SiteSettings
 
@@ -65,3 +67,40 @@ class RegistrationSurveyRedirectMiddleware:
             return redirect(registration_survey.localized.url)
 
         return self.get_response(request)
+    
+    
+class TrackFrontendPageVisitsMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        if request.user.is_authenticated:
+            path = request.path
+            if request.method != "GET":
+                return response
+            excluded_paths = [
+                "/admin",
+                "/static",
+                "/media",
+                "/api",
+                "/my-activity",
+                "/users/profile/my-activity"
+            ]
+            if "my-activity" in path or path.startswith("/admin") or path.startswith("/static") or path.startswith("/media") or path.startswith("/api"):
+                return response
+            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                return response
+            accept_header = request.headers.get("Accept", "")
+            if "text/html" not in accept_header:
+                return response
+            last_visit = PageVisit.objects.filter(user=request.user, page_slug=path)\
+                                          .order_by("-timestamp").first()
+            if not last_visit or (now() - last_visit.timestamp).total_seconds() > 10:
+                PageVisit.objects.create(
+                    user=request.user,
+                    page_slug=path,
+                    timestamp=now()
+                )
+        return response
+
