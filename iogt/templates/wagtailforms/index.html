@@ -1,39 +1,31 @@
 {% extends "wagtailadmin/generic/index.html" %}
-{% load i18n wagtailadmin_tags wagtailcore_tags %}
-
+{% load i18n wagtailadmin_tags wagtailcore_tags static %}
 {% block content %}
     {% trans "Forms" as page_title %}
-    {# Use a simple header without complex styling #}
-    <div style="padding: 1.5em 1em 0.5em 1em; border-bottom: 1px solid #ddd;">
-        <h1 style="font-size: 1.5em; font-weight: bold; margin: 0;">{% trans "Forms" %}</h1>
+    <div class="page-header">
+        <h1>{% trans "Forms" %}</h1>
     </div>
-
-    <div style="padding: 1em;">
+    <div class="page-content">
         {% if form_pages %}
-            <table class="listing full-width" style="table-layout: fixed; width: 100%;">
+            <table class="listing full-width">
                 <thead>
                     <tr>
-                        {# Headers with explicit width (as percentages) #}
-                        <th style="width: 25%;">{% trans "Title" %}</th>
-                        <th style="width: 15%;">{% trans "Parent" %}</th>
-                        <th style="width: 15%;">{% trans "Origin" %}</th>  {# <--- NEW HEADER #}
-                        <th style="width: 10%;">{% trans "Status" %}</th>
-                        <th style="width: 35%;">{% trans "Action" %}</th>
+                        <th>{% trans "Title" %}</th>
+                        <th>{% trans "Parent" %}</th>
+                        <th>{% trans "Origin" %}</th>
+                        <th>{% trans "Status" %}</th>
+                        <th>{% trans "Action" %}</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for fp in form_pages %}
                         <tr>
-                            
-                            {# Title Column #}
-                            <td style="width: 25%;">
+                            <td>
                                 <a href="{% url 'wagtailforms:list_submissions' fp.id %}">
                                     {{ fp.title }}
                                 </a>
                             </td>
-
-                            {# Parent Column #}
-                            <td style="width: 15%;">
+                            <td>
                                 {% if fp.get_parent %}
                                     <a href="{% url 'wagtailadmin_pages:edit' fp.get_parent.id %}">
                                         {{ fp.get_parent.title }}
@@ -42,21 +34,21 @@
                                     —
                                 {% endif %}
                             </td>
-                            
-                            {# Origin Column (The 'fp.origin_link' is the correct property for this) #}
-                          <td class="type"> <small><a href="{% url 'wagtailadmin_pages:edit' fp.id %}" class="nolink">{{ fp.content_type.name |capfirst }} ({{ fp.content_type.app_label }}.{{ fp.content_type.model }})</a></small> </td>
-
-                            {# Status Column #}
-                            <td style="width: 10%;">
+                            <td>
+                                <small>
+                                    <a href="{% url 'wagtailadmin_pages:edit' fp.id %}" class="nolink">
+                                        {{ fp.content_type.name|capfirst }} ({{ fp.content_type.app_label }}.{{ fp.content_type.model }})
+                                    </a>
+                                </small>
+                            </td>
+                            <td>
                                 {% if fp.live %}
                                     <span class="status-tag status-tag--live">{% trans "LIVE" %}</span>
                                 {% else %}
                                     <span class="status-tag">{% trans "Draft" %}</span>
                                 {% endif %}
                             </td>
-
-                            {# Action Column #}
-                            <td style="width: 35%;">
+                            <td>
                                 <a href="{% url 'generate_dashboard' fp.id %}" class="button">
                                     {% trans "Generate Dashboard" %}
                                 </a>
@@ -65,10 +57,8 @@
                     {% endfor %}
                 </tbody>
             </table>
-            
         {% else %}
-            {# Empty State #}
-            <div style="padding: 1em;">
+            <div class="no-forms">
                 <p>{% trans "No forms found." %}</p>
             </div>
         {% endif %}
