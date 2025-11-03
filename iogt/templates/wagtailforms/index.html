@@ -1,14 +1,10 @@
 {% extends "wagtailadmin/generic/index.html" %}
 {% load i18n wagtailadmin_tags wagtailcore_tags static %}
-
-
 {% block content %}
     {% trans "Forms" as page_title %}
-
     <div class="page-header">
         <h1>{% trans "Forms" %}</h1>
     </div>
-
     <div class="page-content">
         {% if form_pages %}
             <table class="listing full-width">
@@ -38,7 +34,7 @@
                                     —
                                 {% endif %}
                             </td>
-                            <td class="type">
+                            <td>
                                 <small>
                                     <a href="{% url 'wagtailadmin_pages:edit' fp.id %}" class="nolink">
                                         {{ fp.content_type.name|capfirst }} ({{ fp.content_type.app_label }}.{{ fp.content_type.model }})
