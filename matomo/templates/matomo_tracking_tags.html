@@ -18,7 +18,25 @@
 
         _paq.push(['setDocumentTitle', document.title]);
         _paq.push(['setCustomUrl', window.location.href]);
+        _paq.push(['setDocumentTitle', 'All_Lang: ' + document.title]);
         _paq.push(['trackPageView']);
+        (function() {
+            // avoid re-tracking on already all_lang pages
+            if (!window.location.pathname.startsWith('/all_lang/')) {
+                const parts = window.location.pathname.split('/');
+                if (parts.length > 1) {
+                    const langRegex = /^([a-z]{2,3})([-_][a-z]{2})?$/i;
+                    if (langRegex.test(parts[1])) {
+                        parts[1] = 'all_lang';
+                    }
+                }
+                const allLangUrl = window.location.origin + parts.join('/') + window.location.search + window.location.hash;
+                _paq.push(['setCustomUrl', allLangUrl]);
+                _paq.push(['setDocumentTitle', 'All_Lang: ' + document.title]);
+                _paq.push(['trackPageView']);
+            }
+        })();
+
         _paq.push(['enableLinkTracking']);
 
          {% if user_id %}
