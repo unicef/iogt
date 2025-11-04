@@ -26,6 +26,7 @@ from iogt.views import (
     OfflineContentNotFoundPageView,
     CustomLogoutView,
 )
+from iogt import pwa_views
 from wagtailautocomplete.urls.admin import urlpatterns as autocomplete_admin_urls
 
 api_url_patterns = [
@@ -81,6 +82,8 @@ urlpatterns = api_url_patterns + [
     path('webpush/subscribe/', save_info, name='save_webpush_info'),
     path('inbox/notifications/', include('notifications.urls', namespace='notifications')),
     path('notifications/', include('user_notifications.urls')),
+    path("manifest.webmanifest", pwa_views.manifest, name="manifest"),
+    path("sw.js", pwa_views.service_worker, name="sw.js"),
 ]
 
 if settings.DEBUG:

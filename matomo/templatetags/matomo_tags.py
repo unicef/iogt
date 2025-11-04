@@ -7,6 +7,9 @@ from django import template
 from django.conf import settings
 import random
 
+import re
+from urllib.parse import urlparse
+
 VISITOR_ID_KEY = "vid"
 register = template.Library()
 
@@ -57,6 +60,12 @@ def matomo_tracking_tags(context):
 
     if user_id:
         dict_params["uid"] = user_id
+        
+    # --- NEW: attach the same custom dimension for pixel hits ---
+    dim_id = getattr(settings, "MATOMO_CANONICAL_DIMENSION_ID", None)
+    if dim_id:
+        all_lang_url = canonical_all_lang_url(full_url)
+        dict_params[f"dimension{dim_id}"] = all_lang_url
 
     context.update(
         {
@@ -156,3 +165,19 @@ def get_page_title(request):
     if hasattr(request, 'page') and request.page:
         return request.page.title
     return "Untitled Page"
+
+
+LANG_RE = re.compile(r'^([a-z]{2,3})([-_][a-z]{2})?$', re.IGNORECASE)
+
+def canonicalize_path(path: str) -> str:
+    parts = path.split('/')
+    if len(parts) > 1 and LANG_RE.match(parts[1]) and parts[1].lower() != 'all_lang':
+        parts[1] = 'all_lang'
+        return '/'.join(parts)
+    return path
+
+def canonical_all_lang_url(full_url: str) -> str:
+    parsed = urlparse(full_url)
+    new_path = canonicalize_path(parsed.path)
+    # keep query/fragment
+    return f"{parsed.scheme}://{parsed.netloc}{new_path}{('?' + parsed.query) if parsed.query else ''}{('#' + parsed.fragment) if parsed.fragment else ''}"

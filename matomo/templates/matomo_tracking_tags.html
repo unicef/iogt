@@ -9,12 +9,41 @@
         .join('');
 }
 </script>
+<script>
+    function canonicalizePathname(pathname) {
+        // Split and check first segment after "/"
+        const parts = pathname.split('/');
+        if (parts.length > 1) {
+            const seg = parts[1];
+
+            // Match lang codes: en, fr, prs, en-US, pt_BR, etc.
+            const langLike = /^([a-z]{2,3})([-_][a-z]{2})?$/i;
+
+            if (langLike.test(seg) && seg.toLowerCase() !== 'all_lang') {
+                parts[1] = 'all_lang';
+                return parts.join('/');
+            }
+        }
+        return pathname;
+    }
+</script>
 {% if tracking_enabled %}
     <script>
         var _paq = window._paq = window._paq || [];
         /* Tracker methods like "setCustomDimension" should be called before "trackPageView" */
         var randValue = Math.floor(Math.random() * 1000000000);  // Random value for cache prevention
         var apivParam = '&apiv=1&rand=' + randValue;
+
+        // Build canonical "All_Lang" URL (same origin, normalized path)
+        (function(){
+            var origin = window.location.origin || (window.location.protocol + '//' + window.location.host);
+            var canonicalPath = canonicalizePathname(window.location.pathname);
+            var allLangUrl = origin + canonicalPath + window.location.search + window.location.hash;
+
+            // IMPORTANT: set the Action-scoped custom dimension BEFORE trackPageView
+            // (Use the same ID you created in Matomo)
+            _paq.push(['setCustomDimension', {{ settings.MATOMO_CANONICAL_DIMENSION_ID|default:1 }}, allLangUrl]);
+        })();
 
         _paq.push(['setDocumentTitle', document.title]);
         _paq.push(['setCustomUrl', window.location.href]);
