@@ -907,7 +907,6 @@ class Quiz(QuestionnairePage, AbstractForm):
             form_data = dict(form.data)
             for field in self.get_form_fields():
                 correct_answer = field.correct_answer.split('|')
-                
                 if field.field_type == 'checkbox':
                     answer = 'true' if form_data.get(field.clean_name) else 'false'
                 else:
@@ -950,7 +949,7 @@ class Quiz(QuestionnairePage, AbstractForm):
             }
             user = request.user
             if user.is_authenticated:
-                score_percentage = (total_correct / total) * 100 if total else 0
+                score_percentage = round((total_correct / total) * 100, 2) if total else 0
                 attempt_number = QuizAttempt.objects.filter(user=user, quiz=self).count() + 1
                 if request.method == 'POST':
                     QuizAttempt.objects.create(

@@ -28,9 +28,9 @@
             {% primary_button title='My Activity' href=activity_url icon_path='icons/chat.svg' extra_classnames='notification-pref-btn' %}
         {% url 'user_profile_edit' as profile_edit %}
             {% primary_button title='Edit Profile' href=profile_edit icon_path='icons/profile.svg' extra_classnames='notification-pref-btn' %}
-        <!-- <div id="deleteAccountBtn">
+        <div id="deleteAccountBtn">
           {% primary_button title='Delete Account' href='#' icon_path='icons/profile.svg' extra_classnames='notification-pref-btn' %}
-        </div> -->
+        </div>
             {% url 'account_change_password' as change_password_url %}
         {% primary_button title='Change Digital Pin' href=change_password_url icon_path='icons/lock.svg' extra_classnames='change-digital-pin' %}
         {% url 'account_logout' as logout_url %}
