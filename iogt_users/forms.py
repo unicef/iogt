@@ -13,6 +13,7 @@ from .fields import IogtPasswordField
 from .models import User
 
 from notifications.signals import notify
+from datetime import datetime
 
 
 class AccountSignupForm(SignupForm):
@@ -23,13 +24,12 @@ class AccountSignupForm(SignupForm):
         ),
         required=False,
     )
-    date_of_birth = forms.DateField(
-        required=True,
-        widget=forms.DateInput(attrs={"type": "date"})
-    )
+    year = forms.ChoiceField(
+            choices=[(year, year) for year in range(1950, datetime.now().year)],
+            label="Year"
+        )
     gender = forms.ChoiceField(
-        choices=[("male", "Male"), ("female", "Female"), ("other", "Other")],
-        required=True,
+        choices=[("male", "Male"), ("female", "Female"), ("other", "Other")]
     )
     location = forms.CharField(
         required=False,
@@ -39,7 +39,7 @@ class AccountSignupForm(SignupForm):
     field_order = [
         "username",
         "display_name",
-        "date_of_birth",
+        "year",
         "gender",
         "location",
         "password1",
@@ -59,15 +59,17 @@ class AccountSignupForm(SignupForm):
             "placeholder": _("Choose a username that you will use to login to IoGT")
         })
         self.fields["location"].widget =  forms.TextInput(attrs={
-            "placeholder": _("Enter a location")
+            "placeholder": _("Current location")
         })
+        self.fields['year'].initial = datetime.now().year
+
         if hasattr(self, "field_order"):
             set_form_field_order(self, self.field_order)
 
     def save(self, request):
         user = super().save(request)
         send_app_notifications.delay(user.id, notification_type='signup')
-        user.date_of_birth = self.cleaned_data["date_of_birth"]
+        user.year = self.cleaned_data["year"]
         user.gender = self.cleaned_data["gender"]
         user.location = self.cleaned_data["location"]
         user.save()

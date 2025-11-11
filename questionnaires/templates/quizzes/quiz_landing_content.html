@@ -1,20 +1,12 @@
-{% extends "base.html" %}
 {% load static wagtailcore_tags wagtailimages_tags questionnaires_tags i18n %}
-
-{% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/quiz.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/questionnaire.css' %}">
-{% endblock %}
-
-{% block content %}
-    <div class="quiz-page">
+<div class="quiz-page">
         <div class="container">
             <div class="quiz-page__banner quiz-answer-banner">
                 <h1 class="title">{{ page.title }}</h1>
                 <div class="quiz-answer-banner__content">
                     <p class="quiz-answer-banner__counter">{{ result|get_item:'total_correct' }}
                         / {{ result|get_item:'total' }}</p>
-                    <p class="quiz-answer-banner__result-text">{% translate "Your results!" %}</p>
+                    <p class="quiz-answer-banner__result-text">{% translate "Your results data!" %}</p>
                 </div>
                 {% include 'questionnaires/tags/quiz_buttons.html' %}
                 {% if page.thank_you_text %}
@@ -46,7 +38,12 @@
                                        tabindex="0">
                                     <div class="cust-check__title">
                                         <span class="cust-check__check"></span>
-                                        <span>{{ field.value }}</span>
+                                        <span>
+                                            {% for val in fields_info|get_item:field.name|get_item:'selected_answer' %}
+                                                {{ val }}
+                                            {% endfor %}
+                                        </span>
+
                                     </div>
                                     {% if not fields_info|get_item:field.name|get_item:'is_correct' %}
                                         <div class="quest-item__header">
@@ -66,7 +63,7 @@
                             {% if field|length > 1 %}
                                 {% for field_option in field %}
                                     <div class="quest-item__content" tabindex="0">
-                                        {% get_answer_options field field_option fields_info as answer_options %}
+                                        {% get_feedback_options field field_option fields_info as answer_options %}
                                         <label class="cust-check cust-check--2 quest-item__input {{ answer_options.class }}"
                                                tabindex="0">
                                             <div class="cust-check__title">
@@ -112,4 +109,3 @@
             </div>
         </div>
     </div>
-{% endblock %}

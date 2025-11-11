@@ -14,6 +14,7 @@
             </button>
         </div>
     </form>
+    {% include "generic_components/back_button.html" %}
 {% endblock %}
 {% block extra_js %}
 <script>
@@ -48,6 +49,9 @@
                 if (result.success) {
                     showToast(result.message, "success");
                     submitBtn.disabled = true;
+                    setTimeout(() => {
+                        window.location.href = '/'; // redirect to home page
+                    }, 1500);
                 } else {
                     showToast(result.message || "⚠️ No changes made.", "info");
                 }
