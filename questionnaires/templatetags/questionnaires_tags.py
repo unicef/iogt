@@ -143,8 +143,6 @@ def render_questionnaire_form(context, page, background_color=None, font_color=N
 
 @register.filter
 def get_item(dictionary, key):
-    print('dictionary', dictionary)
-    print('key', key)
     return dictionary.get(key)
 
 
@@ -197,7 +195,6 @@ def get_answer_options(field, field_option, fields_info):
 @register.simple_tag
 def get_feedback_options(field, field_option, fields_info):
     label = field_option.choice_label
-    print('label', label)
     correct_answers = fields_info.get(field.name, {}).get('correct_answer_list', [])
     selected_answer = fields_info.get(field.name, {}).get('selected_answer', [])
     is_selected =  label in selected_answer
