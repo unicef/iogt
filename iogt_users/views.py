@@ -17,6 +17,7 @@ from wagtail.models import Locale
 from django.utils import timezone
 from django.contrib.auth import logout
 from django import forms
+from datetime import datetime
 from .models import DeletedUserLog, PageVisit, QuizAttempt
 from iogt import settings
 
@@ -59,15 +60,13 @@ class UserDetailView(TemplateView):
 @method_decorator(login_required, name='dispatch')
 class UserDetailEditView(UpdateView):
     model = User
-    fields = ('first_name', 'last_name', 'username', 'date_of_birth', 'gender','location' )
+    fields = ('username', 'year', 'gender','location' )
     template_name = 'profile_edit.html'
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        form.fields['date_of_birth'].widget = forms.DateInput(attrs={
-            'type': 'date',
-            'class': 'form-control'
-        })
+        year_choices = [(year, year) for year in range(1950, datetime.now().year)]
+        form.fields['year'] = forms.ChoiceField(choices=year_choices, required=False)
         return form
     
     def form_valid(self, form):

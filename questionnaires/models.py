@@ -883,26 +883,30 @@ class Quiz(QuestionnairePage, AbstractForm):
         context = super().get_context(request, *args, **kwargs)
         context.update({'back_url': request.GET.get('back_url')})
         context.update({'form_length': request.GET.get('form_length')})
-
+        from iogt_users.models import QuizAttempt
         form_helper = FormHelper(pk=self.pk, request=request)
         if self.multi_step:
             form_data = form_helper.get_full_form_data()
         else:
-            form_data = request.POST
-        if request.method == 'POST' and form_data:
+            if request.GET.get('view') == 'answers' and request.user.is_authenticated:
+                user = request.user
+                last_attempt = QuizAttempt.objects.filter(user=user, quiz=self).order_by('-completed_at').first()
+                if last_attempt:
+                    form_data = last_attempt.submitted_answers or {}
+            else:
+                form_data = request.POST
+        
+        if form_data:
             form = self.get_form(
-                form_data,
+                data=form_data,
                 page=self, user=request.user
             )
-
             fields_info = {}
-
             total = 0
             total_correct = 0
             form_data = dict(form.data)
             for field in self.get_form_fields():
                 correct_answer = field.correct_answer.split('|')
-
                 if field.field_type == 'checkbox':
                     answer = 'true' if form_data.get(field.clean_name) else 'false'
                 else:
@@ -935,6 +939,7 @@ class Quiz(QuestionnairePage, AbstractForm):
                     'correct_answer': field.correct_answer,
                     'correct_answer_list': correct_answer,
                     'is_correct': is_correct,
+                    'selected_answer': answer
                 }
             context['form'] = form
             context['fields_info'] = fields_info
@@ -942,18 +947,19 @@ class Quiz(QuestionnairePage, AbstractForm):
                 'total': total,
                 'total_correct': total_correct,
             }
-            from iogt_users.models import QuizAttempt
             user = request.user
             if user.is_authenticated:
                 score_percentage = round((total_correct / total) * 100, 2) if total else 0
                 attempt_number = QuizAttempt.objects.filter(user=user, quiz=self).count() + 1
-                QuizAttempt.objects.create(
-                    user=user,
-                    quiz=self,
-                    score=score_percentage,
-                    attempt_number=attempt_number,
-                    completed_at=timezone.now(),
-                )
+                if request.method == 'POST':
+                    QuizAttempt.objects.create(
+                        user=user,
+                        quiz=self,
+                        score=score_percentage,
+                        attempt_number=attempt_number,
+                        completed_at=timezone.now(),
+                        submitted_answers=form_data
+                    )
                 avg_score = QuizAttempt.objects.filter(user=user, quiz=self).aggregate(Avg('score'))['score__avg'] or 0
                 context['average_score'] = avg_score
                 context['attempt_number'] = attempt_number
@@ -1037,4 +1043,3 @@ class RegistrationSurvey(models.Model):
 
     def __str__(self):
         return f"{self.age_category} - {self.gender} ({self.count})"
-

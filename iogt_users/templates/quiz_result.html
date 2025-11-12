@@ -16,14 +16,16 @@
         <tbody>
             {% for result in quiz_results %}
             <tr>
-                <td>
-                    <a href="{{ result.quiz.url }}" class="quiz-link">
+                <td class="center-text">
+                    <a href="{{ result.quiz.url }}">
                         {{ result.quiz.title }}
                     </a>
                 </td>
                 <td class="center-text">{{ result.score }}%</td>
                 <td class="center-text">{{ result.avg_score|floatformat:2 }}%</td>
-                <td class="center-text">{{ result.attempt_number }}</td>
+                <td>
+                   <a href="{{ result.quiz.url }}?view=answers">{{ result.attempt_number }}</a>
+                </td>
                 <td class="center-text">{{ result.completed_at|date:"d M Y, H:i" }}</td>
             </tr>
             {% endfor %}
@@ -32,4 +34,5 @@
     {% else %}
     <p class="no-quiz-text">{% trans "You haven’t completed any quizzes yet." %}</p>
     {% endif %}
+    {% include "generic_components/back_button.html" %}
 {% endblock %}

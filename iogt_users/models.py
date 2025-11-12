@@ -23,8 +23,8 @@ class User(AbstractUser):
     has_viewed_registration_survey = models.BooleanField(default=False)
     
     interactive_uuid = models.CharField(max_length=255, null=True, blank=True)
-    date_of_birth = models.DateField(null=True, blank=True)
-    gender = models.CharField(
+    year = models.IntegerField(null=True, blank=True)
+    gender = models.CharField(  
         max_length=10,
         choices=[("male", "Male"), ("female", "Female"), ("other", "Other")],
         null=True, blank=True
@@ -125,6 +125,7 @@ class QuizAttempt(models.Model):
     score = models.FloatField()
     attempt_number = models.PositiveIntegerField(default=1)
     completed_at = models.DateTimeField(default=timezone.now)
+    submitted_answers = models.JSONField(default=dict, blank=True)
 
     class Meta:
         ordering = ["-completed_at"]  # latest first

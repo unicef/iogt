@@ -190,3 +190,34 @@ def get_answer_options(field, field_option, fields_info):
         }
 
     return rv
+
+
+@register.simple_tag
+def get_feedback_options(field, field_option, fields_info):
+    label = field_option.choice_label
+    correct_answers = fields_info.get(field.name, {}).get('correct_answer_list', [])
+    selected_answer = fields_info.get(field.name, {}).get('selected_answer', [])
+    is_selected =  label in selected_answer
+    rv = ''
+    if is_selected and label in correct_answers:
+        rv = {
+            'class': 'success',
+            'aria_label': 'Checkbox with tick, indicating correct and selected',
+        }
+    elif is_selected and label not in correct_answers:
+        rv = {
+            'class': 'error',
+            'aria_label': 'Checkbox with X, indicating incorrect and selected',
+        }
+    elif not is_selected and label in correct_answers:
+        rv = {
+            'class': 'clear-tick',
+            'aria_label': 'Checkbox with tick, indicating correct but not selected',
+        }
+    elif not is_selected and label not in correct_answers:
+        rv = {
+            'class': 'clear-cross',
+            'aria_label': 'Checkbox with X, indicating incorrect and not selected',
+        }
+
+    return rv
