@@ -22,7 +22,7 @@ class UserFieldsMixin(forms.Form):
         required=False
     )
     year = forms.TypedChoiceField(
-        choices=[('', 'Select Year')] + [(y, y) for y in range(1950, datetime.now().year)],
+        choices=[('', 'Select Year')] + [(y, y) for y in range(1950, datetime.now().year + 1)],
         coerce=int,
         empty_value=None,
         required=False
@@ -40,16 +40,6 @@ class AccountSignupForm(UserFieldsMixin, SignupForm):
         widget=forms.TextInput(
             attrs={"placeholder": _("Choose a display name that will be shown publicly if you post to the IoGT site, for example next to comments you post"),}
         ),
-        required=False,
-    )
-    year = forms.TypedChoiceField(
-            choices=[('', 'Select Year')] + [(year, year) for year in range(1950, datetime.now().year + 1)],
-            coerce=int,
-            empty_value=None,
-            required=False,
-        )
-    gender = forms.ChoiceField(
-        choices= [('', 'Select Gender'),("male", "Male"), ("female", "Female"), ("other", "Other")],
         required=False,
     )
     location = forms.CharField(
