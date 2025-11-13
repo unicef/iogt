@@ -16,7 +16,25 @@ from notifications.signals import notify
 from datetime import datetime
 
 
-class AccountSignupForm(SignupForm):
+class UserFieldsMixin(forms.Form):
+    gender = forms.ChoiceField(
+        choices=[('', 'Select Gender'), ('male', 'Male'), ('female', 'Female'), ('other', 'Other')],
+        required=False
+    )
+    year = forms.TypedChoiceField(
+        choices=[('', 'Select Year')] + [(y, y) for y in range(1950, datetime.now().year)],
+        coerce=int,
+        empty_value=None,
+        required=False
+    )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if 'location' in self.fields:
+            self.fields['location'].widget = forms.TextInput(attrs={
+                "placeholder": _("Current location")
+            })
+
+class AccountSignupForm(UserFieldsMixin, SignupForm):
     display_name = forms.CharField(
         label=_("Display name"),
         widget=forms.TextInput(
@@ -24,12 +42,15 @@ class AccountSignupForm(SignupForm):
         ),
         required=False,
     )
-    year = forms.ChoiceField(
-            choices=[(year, year) for year in range(1950, datetime.now().year)],
-            label="Year"
+    year = forms.TypedChoiceField(
+            choices=[('', 'Select Year')] + [(year, year) for year in range(1950, datetime.now().year + 1)],
+            coerce=int,
+            empty_value=None,
+            required=False,
         )
     gender = forms.ChoiceField(
-        choices=[("male", "Male"), ("female", "Female"), ("other", "Other")]
+        choices= [('', 'Select Gender'),("male", "Male"), ("female", "Female"), ("other", "Other")],
+        required=False,
     )
     location = forms.CharField(
         required=False,
@@ -58,10 +79,6 @@ class AccountSignupForm(SignupForm):
         self.fields["username"].widget = forms.TextInput(attrs={
             "placeholder": _("Choose a username that you will use to login to IoGT")
         })
-        self.fields["location"].widget =  forms.TextInput(attrs={
-            "placeholder": _("Current location")
-        })
-        self.fields['year'].initial = datetime.now().year
 
         if hasattr(self, "field_order"):
             set_form_field_order(self, self.field_order)

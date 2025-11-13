@@ -951,6 +951,7 @@ class Quiz(QuestionnairePage, AbstractForm):
             if user.is_authenticated:
                 score_percentage = round((total_correct / total) * 100, 2) if total else 0
                 attempt_number = QuizAttempt.objects.filter(user=user, quiz=self).count() + 1
+                form_data.pop('csrfmiddlewaretoken', None)
                 if request.method == 'POST':
                     QuizAttempt.objects.create(
                         user=user,

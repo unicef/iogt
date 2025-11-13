@@ -132,10 +132,3 @@ form input[type="checkbox"] {
   .dropdown-content label:hover {
     background-color: #f0f0f0;
   }
-
- .edit-profile input{
-    font-size: 16px;
-    letter-spacing: .01em;
-    line-height: 22px;
-    padding: 12px 12px 12px 16px
-}

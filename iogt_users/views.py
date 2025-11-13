@@ -20,6 +20,7 @@ from django import forms
 from datetime import datetime
 from .models import DeletedUserLog, PageVisit, QuizAttempt
 from iogt import settings
+from iogt_users.forms import UserFieldsMixin
 
 from email_service.mailjet_email_sender import send_email_via_mailjet
 from user_notifications.models import NotificationPreference, NotificationTag
@@ -57,17 +58,16 @@ class UserDetailView(TemplateView):
         return {'user': self.request.user}
     
 
+class UserEditForm(UserFieldsMixin, forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'year', 'gender', 'location']
+
+
 @method_decorator(login_required, name='dispatch')
 class UserDetailEditView(UpdateView):
-    model = User
-    fields = ('username', 'year', 'gender','location' )
     template_name = 'profile_edit.html'
-
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        year_choices = [(year, year) for year in range(1950, datetime.now().year)]
-        form.fields['year'] = forms.ChoiceField(choices=year_choices, required=False)
-        return form
+    form_class = UserEditForm
     
     def form_valid(self, form):
         self.object = form.save()
