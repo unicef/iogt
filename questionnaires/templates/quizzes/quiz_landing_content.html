@@ -40,13 +40,11 @@
                                         <span class="cust-check__check"></span>
                                         {% if request.GET.view == "answers" %}
                                             <span>
-                                                <p> ANswer path</p>
                                                 {% for val in fields_info|get_item:field.name|get_item:'selected_answer' %}
                                                     {{ val }}
                                                 {% endfor %}
                                             </span>
                                         {% else %}
-                                        <p>Attempted quiz </p>
                                             <span>{{ field.value }}</span>
                                         {% endif %}
                                     </div>
@@ -69,10 +67,8 @@
                                 {% for field_option in field %}
                                     <div class="quest-item__content" tabindex="0">
                                         {% if request.GET.view == "answers" %}
-                                        <p>Answer path </p>
                                             {% get_feedback_options field field_option fields_info as answer_options %}
                                         {% else %}
-                                        <p>Attempted quiz </p>
                                             {% get_answer_options field field_option fields_info as answer_options %}
                                         {% endif %}
                                         <label class="cust-check cust-check--2 quest-item__input {{ answer_options.class }}"
