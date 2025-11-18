@@ -155,12 +155,15 @@
         //Add delay to show it as another toast will be showing up for permission
         if (preference && "Notification" in window && Notification.permission !== "granted") {
           setTimeout(() => {
-            showToast("✅ Preference saved successfully.", "success");
+            showToast("✅ Preference saved successfully. Redirecting to Home page.", "success");
           }, 3500);
         }
         else {
-          showToast(`✅ Preference saved successfully.`, "success");
+          showToast(`✅ Preference saved successfully. Redirecting to Home page.`, "success");
         }
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 5000);
       }
     }).catch(err => showToast(`❌ error: Could not save preference!`, "error"))
   }

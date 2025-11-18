@@ -27,12 +27,13 @@ class UserFieldsMixin(forms.Form):
         empty_value=None,
         required=False
     )
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if 'location' in self.fields:
-            self.fields['location'].widget = forms.TextInput(attrs={
-                "placeholder": _("Current location")
-            })
+    location = forms.CharField(
+        required=False,
+        max_length=255,
+        widget=forms.TextInput(attrs={
+            "placeholder": _("Current Location")
+        })
+    )
 
 class AccountSignupForm(UserFieldsMixin, SignupForm):
     display_name = forms.CharField(
@@ -41,10 +42,6 @@ class AccountSignupForm(UserFieldsMixin, SignupForm):
             attrs={"placeholder": _("Choose a display name that will be shown publicly if you post to the IoGT site, for example next to comments you post"),}
         ),
         required=False,
-    )
-    location = forms.CharField(
-        required=False,
-        max_length=255
     )
     terms_accepted = forms.BooleanField(label=_('I accept the Terms and Conditions.'))
     field_order = [
