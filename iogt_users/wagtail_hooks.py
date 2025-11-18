@@ -7,8 +7,10 @@ from django.urls import reverse
 from django.utils import timezone
 from wagtail_modeladmin.helpers import ButtonHelper
 from wagtail_modeladmin.options import ModelAdmin, modeladmin_register
+from wagtail_modeladmin.helpers.permission import PermissionHelper
 
 from home.models import SiteSettings
+from .models import DeletedUserLog
 from iogt_users.filters import GroupsFilter
 from questionnaires.models import UserSubmission
 
@@ -75,6 +77,22 @@ class UsersExportAdmin(ModelAdmin):
                 to_attr='user_submissions'
             )
         )
+    
 
+class DeletedLogsPermissionHelper(PermissionHelper):
+    def user_can_create(self, user):
+        return False
+    def user_can_delete_obj(self, user, obj):
+        return False
+
+
+class DeletedUserLogAdmin(ModelAdmin):
+    model = DeletedUserLog
+    menu_label = "Deleted Users"
+    menu_icon = "user"
+    list_display = ("user_id", "deletion_time", "reason")
+    search_fields = ("user_id",)
+    permission_helper_class = DeletedLogsPermissionHelper
 
 modeladmin_register(UsersExportAdmin)
+modeladmin_register(DeletedUserLogAdmin)

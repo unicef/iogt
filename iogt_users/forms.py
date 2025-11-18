@@ -13,9 +13,28 @@ from .fields import IogtPasswordField
 from .models import User
 
 from notifications.signals import notify
+from datetime import datetime
 
 
-class AccountSignupForm(SignupForm):
+class UserFieldsMixin(forms.Form):
+    gender = forms.ChoiceField(
+        choices=[('', 'Select Gender'), ('male', 'Male'), ('female', 'Female'), ('other', 'Other')],
+        required=False
+    )
+    year = forms.TypedChoiceField(
+        choices=[('', 'Select Year')] + [(y, y) for y in range(1950, datetime.now().year + 1)],
+        coerce=int,
+        empty_value=None,
+        required=False
+    )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if 'location' in self.fields:
+            self.fields['location'].widget = forms.TextInput(attrs={
+                "placeholder": _("Current location")
+            })
+
+class AccountSignupForm(UserFieldsMixin, SignupForm):
     display_name = forms.CharField(
         label=_("Display name"),
         widget=forms.TextInput(
@@ -23,11 +42,17 @@ class AccountSignupForm(SignupForm):
         ),
         required=False,
     )
+    location = forms.CharField(
+        required=False,
+        max_length=255
+    )
     terms_accepted = forms.BooleanField(label=_('I accept the Terms and Conditions.'))
-
     field_order = [
         "username",
         "display_name",
+        "year",
+        "gender",
+        "location",
         "password1",
         "password2",
         "terms_accepted",
@@ -50,8 +75,11 @@ class AccountSignupForm(SignupForm):
 
     def save(self, request):
         user = super().save(request)
-        # 🔁 Run this logic in background
         send_app_notifications.delay(user.id, notification_type='signup')
+        user.year = self.cleaned_data["year"]
+        user.gender = self.cleaned_data["gender"]
+        user.location = self.cleaned_data["location"]
+        user.save()
         return user
 
     def clean_username(self):

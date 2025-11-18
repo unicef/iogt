@@ -110,6 +110,12 @@ def render_questionnaire_form(context, page, background_color=None, font_color=N
         'background_color': background_color,
         'questionnaire': page,
     })
+    if request.method == 'POST':
+        form = page.get_form(request.POST, page=page, user=request.user)
+        if form.is_valid():
+            context.update(page.get_context(request))  # This includes result & feedback
+    else:
+        form = page.get_form(page=page, user=request.user)
 
     multiple_submission_filter = (
         Q(session_key=request.session.session_key) if request.user.is_anonymous else Q(user__pk=request.user.pk)
@@ -161,6 +167,37 @@ def get_answer_options(field, field_option, fields_info):
     label = field_option.choice_label
     correct_answers = fields_info.get(field.name, {}).get('correct_answer_list', [])
     is_selected = field_option.data.get('selected', False)
+    rv = ''
+    if is_selected and label in correct_answers:
+        rv = {
+            'class': 'success',
+            'aria_label': 'Checkbox with tick, indicating correct and selected',
+        }
+    elif is_selected and label not in correct_answers:
+        rv = {
+            'class': 'error',
+            'aria_label': 'Checkbox with X, indicating incorrect and selected',
+        }
+    elif not is_selected and label in correct_answers:
+        rv = {
+            'class': 'clear-tick',
+            'aria_label': 'Checkbox with tick, indicating correct but not selected',
+        }
+    elif not is_selected and label not in correct_answers:
+        rv = {
+            'class': 'clear-cross',
+            'aria_label': 'Checkbox with X, indicating incorrect and not selected',
+        }
+
+    return rv
+
+
+@register.simple_tag
+def get_feedback_options(field, field_option, fields_info):
+    label = field_option.choice_label
+    correct_answers = fields_info.get(field.name, {}).get('correct_answer_list', [])
+    selected_answer = fields_info.get(field.name, {}).get('selected_answer', [])
+    is_selected =  label in selected_answer
     rv = ''
     if is_selected and label in correct_answers:
         rv = {

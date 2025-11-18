@@ -351,3 +351,41 @@ const unSubscribePushNotifications = () => {
 };
 
 ready(init);
+
+document.addEventListener("DOMContentLoaded", function () {
+  const modal = document.getElementById("deleteModal");
+  const confirmBtn = document.getElementById("confirmDelete");
+  const cancelBtn = document.getElementById("cancelDelete");
+  const deleteBtn = document.querySelector("#deleteAccountBtn a");
+  deleteBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    modal.style.display = "block";
+  });
+  cancelBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+  confirmBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+    fetch(deleteAccountUrl, {
+      method: "Delete",
+      headers: { "X-CSRFToken": csrfToken },
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        if (response.success) {
+          showToast("✅ Account deleted successfully.", "success");
+          setTimeout(() => {
+            window.location.replace(accountLoginUrl);
+          }, 2000);
+        } else {
+          showToast("⚠️ Something went wrong while deleting the account.", "error");
+        }
+      })
+      .catch(() => {
+        showToast("❌ Error: Unable to delete account. Please try again.", "error");
+      });
+  });
+  window.addEventListener("click", (e) => {
+    if (e.target === modal) modal.style.display = "none";
+  });
+});
