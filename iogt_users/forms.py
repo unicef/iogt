@@ -45,8 +45,6 @@ class AccountSignupForm(UserFieldsMixin, SignupForm):
         ),
         required=False,
     )
-
-
     terms_accepted = forms.BooleanField(label=_('I accept the Terms and Conditions.'))
     field_order = [
         "username",
