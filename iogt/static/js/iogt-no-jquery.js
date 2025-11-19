@@ -388,4 +388,15 @@ document.addEventListener("DOMContentLoaded", function () {
   window.addEventListener("click", (e) => {
     if (e.target === modal) modal.style.display = "none";
   });
+  document.querySelectorAll(".label-option").forEach(function (el) {
+    function updateColor() {
+        if (el.value === "") {
+            el.classList.add("placeholder");
+        } else {
+            el.classList.remove("placeholder");
+        }
+    }
+    updateColor();
+    el.addEventListener("change", updateColor);
+  });
 });

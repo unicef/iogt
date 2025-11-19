@@ -19,19 +19,21 @@ from datetime import datetime
 class UserFieldsMixin(forms.Form):
     gender = forms.ChoiceField(
         choices=[('', 'Select Gender'), ('male', 'Male'), ('female', 'Female'), ('other', 'Other')],
-        required=False
+        required=False,
+        widget=forms.Select(attrs={'class': 'label-option'})
     )
     year = forms.TypedChoiceField(
-        choices=[('', 'Select Year')] + [(y, y) for y in range(1950, datetime.now().year + 1)],
+        choices=[('', 'Select Year of Birth')] + [(y, y) for y in range(1950, datetime.now().year + 1)],
         coerce=int,
         empty_value=None,
-        required=False
+        required=False,
+        widget=forms.Select(attrs={'class': 'label-option'})
     )
     location = forms.CharField(
         required=False,
         max_length=255,
         widget=forms.TextInput(attrs={
-            "placeholder": _("Current Location")
+            "placeholder": _("Current Location"),
         })
     )
 
@@ -43,6 +45,8 @@ class AccountSignupForm(UserFieldsMixin, SignupForm):
         ),
         required=False,
     )
+
+
     terms_accepted = forms.BooleanField(label=_('I accept the Terms and Conditions.'))
     field_order = [
         "username",
