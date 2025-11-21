@@ -20,6 +20,8 @@
     // 1) Normal language-specific tracking (keeps your current per-language rows)
     _paq.push(['setCustomUrl', window.location.href]);
     _paq.push(['setDocumentTitle', document.title]);
+    // add page group ID:
+    _paq.push(['setCustomDimension', 1, '{{ page.translation_key }}']);
     _paq.push(['trackPageView']);
 
     // 2) All_Lang tracking based purely on translation_key (NO URL parsing)
