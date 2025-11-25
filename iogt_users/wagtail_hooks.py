@@ -9,6 +9,7 @@ from wagtail_modeladmin.helpers import ButtonHelper
 from wagtail_modeladmin.options import ModelAdmin, modeladmin_register
 
 from home.models import SiteSettings
+from .models import DeletedUserLog
 from iogt_users.filters import GroupsFilter
 from questionnaires.models import UserSubmission
 
@@ -77,4 +78,12 @@ class UsersExportAdmin(ModelAdmin):
         )
 
 
+class DeletedUserLogAdmin(ModelAdmin):
+    model = DeletedUserLog
+    menu_label = "Deleted Users"
+    menu_icon = "user"
+    list_display = ("user_id", "deletion_time", "reason")
+    search_fields = ("user_id",)
+
 modeladmin_register(UsersExportAdmin)
+modeladmin_register(DeletedUserLogAdmin)
