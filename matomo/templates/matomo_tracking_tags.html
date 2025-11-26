@@ -1,56 +1,95 @@
-{% load track %}
-
+<!-- Matomo -->
+<script>
+ async function hashEmail(email) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(email);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(hashBuffer))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+}
+</script>
 {% if tracking_enabled %}
-  {% matomo_all_lang_vars page as mvars %}
+    <script>
+        var _paq = window._paq = window._paq || [];
+        /* Tracker methods like "setCustomDimension" should be called before "trackPageView" */
+        var randValue = Math.floor(Math.random() * 1000000000);  // Random value for cache prevention
+        var apivParam = '&apiv=1&rand=' + randValue;
 
-  <script>
-    async function hashEmail(email) { /* ... unchanged ... */ }
-  </script>
+        _paq.push(['setDocumentTitle', document.title]);
+        _paq.push(['setCustomUrl', window.location.href]);
+        // → Custom Dimension included in normal hit
+        _paq.push(['setCustomDimension', 1, '{{ page.translation_key|default_if_none:"" }}']);
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
 
-  <script>
-    var _paq = window._paq = window._paq || [];
+        // ========== ALL_LANG VIRTUAL PAGEVIEW (SUM ROW) ==========
+        (function() {
+            try {
+                var path = window.location.pathname;
+                if (!path || path === '/') return;
 
-    // (A) Normal per-language tracking
-    _paq.push(['setCustomUrl', window.location.href]);
-    _paq.push(['setDocumentTitle', document.title]);
-    _paq.push(['setCustomDimension', 1, '{{ page.translation_key|default_if_none:"" }}']);
-    _paq.push(['trackPageView']);
+                var parts = path.split('/');
+                if (parts.length < 3) return;
 
-    // (B) All_Lang synthetic hit — only if we have a translation_key
-    {% if mvars.available %}
-    (function() {
-      var allLangUrl   = "{{ mvars.url|escapejs }}";      // /all_lang/<translation_key>/
-      var allLangTitle = "All_Lang: {{ mvars.title|escapejs }}";
-      var pageGroupId  = "{{ mvars.key|escapejs }}";      // translation_key
+                // Skip if already an all_lang URL
+                if (parts[1].toLowerCase() === 'all_lang') return;
 
-      _paq.push(['setCustomUrl', allLangUrl]);
-      _paq.push(['setDocumentTitle', allLangTitle]);
-      _paq.push(['setCustomDimension', 1, pageGroupId]);
-      _paq.push(['trackPageView']);
-    })();
-    {% endif %}
+                // Detect language code
+                var langRegex = /^[a-z]{2,3}(?:[-_][a-z]{2})?$/i;
+                if (!langRegex.test(parts[1])) return;
 
-    _paq.push(['enableLinkTracking']);
+                // Replace with all_lang
+                parts[1] = 'all_lang';
+                var allLangPath = parts.join('/');
+                var allLangUrl = allLangPath + window.location.search + window.location.hash;
 
-    {% if user_id %}
-      hashEmail("{{ user_id|escapejs }}").then(function(hashedEmail) {
-        if (window._paq) { _paq.push(['setUserId', hashedEmail]); }
-      });
-    {% endif %}
+                // → Custom Dimension included in All_Lang hit also
+                _paq.push([
+                    'setCustomDimension',
+                    1,
+                    '{{ page.translation_key|default_if_none:"" }}'
+                ]);
 
-    (function() {
-      var u = "{{ matomo_server_url }}";
-      _paq.push(['setTrackerUrl', u + 'matomo.php']);
-      _paq.push(['setSiteId', '{{ matomo_site_id }}']);
-      var d=document,g=d.createElement('script'),s=d.getElementsByTagName('script')[0];
-      g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-    })();
-  </script>
+                _paq.push(['setCustomUrl', allLangUrl]);
+                _paq.push(['setDocumentTitle', 'All_Lang: ' + document.title]);
+                _paq.push(['trackPageView']);
+            } catch (e) {
+                console.warn("All_Lang virtual hit error:", e);
+            }
+        })();
 
-  <noscript>
-    <img src="{{ matomo_image_tracker_url }}" style="border:0" alt="" />
-    {% if matomo_additional_image_tracker_url %}
-      <img src="{{ matomo_additional_image_tracker_url }}" style="border:0" alt="" />
-    {% endif %}
-  </noscript>
+         {% if user_id %}
+            hashEmail("{{ user_id|escapejs }}").then(hashedEmail => {
+                console.log(hashedEmail);
+                if (window._paq) {
+                _paq.push(['setUserId', hashedEmail]);
+                } else {
+                console.error('Matomo _paq not initialized');
+                }
+            });
+         {% endif %}
+
+        (function() {
+            var u = "{{ matomo_server_url }}";
+<!--            var u = "https://unisitetracker.unicef.io/";-->
+
+            _paq.push(['setTrackerUrl', u + 'matomo.php']);
+            _paq.push(['setSiteId', '{{ matomo_site_id }}']);
+
+            var randValue = Math.floor(Math.random() * 1000000000);  // Random value for cache prevention
+
+            var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+            g.async = true; 
+            g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+        })();
+    </script>
+
+    <noscript>
+        <img src="{{ matomo_image_tracker_url }}" style="border:0" alt="" />
+        {% if matomo_additional_image_tracker_url %}
+        <img src="{{ matomo_additional_image_tracker_url }}" style="border:0" alt="" />
+        {% endif %}
+    </noscript>
 {% endif %}
+<!-- End Matomo Code -->
