@@ -1,105 +1,145 @@
-from django.shortcuts import render
-from django.shortcuts import redirect, render
-from django.contrib.auth import authenticate, login, get_user_model
-from django.views.generic import TemplateView
-from django.http import HttpResponseBadRequest
-from django.core.exceptions import ValidationError
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
+from django.shortcuts import redirect
+from django.contrib.auth import login, get_user_model
 from django.views import View
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
-from django.core.exceptions import PermissionDenied
-
+from django.core.exceptions import ValidationError, PermissionDenied
+from django.http import JsonResponse
+from urllib.parse import urlencode, quote, unquote
+import json
+import base64
+import hmac
+import hashlib
 from admin_login.azure_backend import AzureADSignupService, get_azure_auth_details
 
 User = get_user_model()
-# Create your views here.
 
+def _b64url(data: bytes) -> str:
+    return base64.urlsafe_encode64(data).decode().rstrip("=")
 
+def _b64url_decode(s: str) -> bytes:
+    pad = "=" * ((4 - len(s) % 4) % 4)
+    return base64.urlsafe_b64decode(s + pad)
 
 class AzureADSignupView(View):
+    """
+    Forces Wagtail admin logins through Azure AD B2C.
+    Uses `state` to preserve ?next= across the round-trip.
+    """
     template_name = 'signup.html'
 
+    # Optional: simple HMAC to avoid tampering with state in transit.
+    STATE_SECRET = b'change-me-in-settings-or-env'  # set from settings.SECRET_KEY ideally
+
     def get(self, request, *args, **kwargs):
-        """
-        Render the signup form or redirect to Azure AD B2C for authorization.
-        """
-        # Check if we have an authorization code (callback)
+        # If already authenticated, go straight to admin
         if request.user.is_authenticated:
-            return redirect('/admin/')  # Replace with the appropriate URL for logged-in users
+            return redirect('/admin/')
 
         code = request.GET.get('code')
-        next_url = request.GET.get('next', '/admin/')
+        state = request.GET.get('state')
 
         if code:
-            # Handle the callback and complete signup
+            # === Callback phase ===
+            next_url = '/admin/'
+            if state:
+                try:
+                    next_url = self._parse_state(state)
+                except Exception:
+                    # If state invalid, fall back safely
+                    next_url = '/admin/'
+
             signup_service = AzureADSignupService()
             try:
                 user_info = signup_service.handle_signup_callback(request)
                 user = self._save_user_info(user_info)
                 self._login_user(request, user)
+
+                # Mark this session as B2C for your middleware
+                request.session['auth_via'] = 'b2c'
+
                 return redirect(next_url)
             except ValidationError as e:
                 return JsonResponse({"error": str(e)}, status=400)
 
-        # Redirect to Azure AD B2C for user signup
-        azure_signup_url = self._get_azure_signup_url()
+        # === Initial phase ===
+        next_url = request.GET.get('next', '/admin/')
+        azure_signup_url = self._get_azure_signup_url(next_url)
         return redirect(azure_signup_url)
 
-
     def post(self, request, *args, **kwargs):
-        """
-        Handle user input, prepare for redirect to Azure AD B2C for signup.
-        """
-        # Here, you could collect user info and generate a redirect to Azure AD B2C.
         return self.get(request, *args, **kwargs)
 
-
-    def _get_azure_signup_url(self):
+    def _get_azure_signup_url(self, next_url: str) -> str:
         """
-        Generate the URL for Azure AD B2C authorization.
+        Generate the Azure AD B2C authorize URL and include a signed `state`
+        carrying the next URL so we can round-trip it back.
         """
-        tenant_id = get_azure_auth_details()['tenant_id']
-        client_id = get_azure_auth_details()['client_id']
-        redirect_uri = get_azure_auth_details()['redirect_uri']
-        policy = get_azure_auth_details()['policy']
+        auth = get_azure_auth_details()
+        tenant = auth['tenant_id']          # e.g. 'contoso' (without .onmicrosoft.com)
+        client_id = auth['client_id']
+        redirect_uri = auth['redirect_uri'] # MUST match the one in Azure portal exactly
+        policy = auth['policy']             # e.g. 'B2C_1_signupsignin'
 
-        authority = f"https://{tenant_id}.b2clogin.com/{tenant_id}.onmicrosoft.com/v2.0"
+        # Recommended B2C format with policy segment in the path:
+        # https://{tenant}.b2clogin.com/{tenant}.onmicrosoft.com/{policy}/oauth2/v2.0/authorize
+        base = f"https://{tenant}.b2clogin.com/{tenant}.onmicrosoft.com/{policy}/oauth2/v2.0/authorize"
 
-        # Construct the URL for Azure AD B2C login/signup
-        signup_url = f"{authority}/oauth2/v2.0/authorize?p={policy}&client_id={client_id}&response_type=code&redirect_uri={redirect_uri}&scope=openid+profile+email"
-        return signup_url
+        # Build signed state containing next_url
+        state = self._make_state({'next': next_url})
+
+        params = {
+            'client_id': client_id,
+            'response_type': 'code',
+            'redirect_uri': redirect_uri,
+            'response_mode': 'query',
+            'scope': 'openid profile email',
+            'state': state,
+        }
+        return f"{base}?{urlencode(params)}"
+
+    # --- state helpers (simple HMAC-protected blob) ---
+    def _make_state(self, payload: dict) -> str:
+        blob = json.dumps(payload, separators=(',', ':')).encode()
+        mac = hmac.new(self.STATE_SECRET, blob, hashlib.sha256).digest()
+        return _b64url(mac + blob)
+
+    def _parse_state(self, state: str) -> str:
+        raw = _b64url_decode(state)
+        mac, blob = raw[:32], raw[32:]
+        calc = hmac.new(self.STATE_SECRET, blob, hashlib.sha256).digest()
+        if not hmac.compare_digest(mac, calc):
+            raise ValueError("bad state")
+        data = json.loads(blob.decode())
+        nxt = data.get('next') or '/admin/'
+        # Very light safety: do not allow absolute external redirects
+        if nxt.startswith('http://') or nxt.startswith('https://'):
+            return '/admin/'
+        return nxt
 
     def _save_user_info(self, user_info):
-        """
-        Save the user information in the database.
-        """
-        email = user_info.get('emails', [])[0]
-        name = user_info.get('name')
+        email = (user_info.get('emails') or [None])[0]
         given_name = user_info.get('given_name')
+        if not email:
+            raise ValidationError("Email not found in B2C claims")
 
+        # Only allow pre-existing superusers or a whitelisted check
         if not User.objects.filter(email=email, is_active=True, is_superuser=True).exists():
             raise PermissionDenied("Access Denied: You are not allowed to sign up.")
-        # Check if the user already exists
-        user, created = User.objects.get_or_create(
+
+        user, _created = User.objects.get_or_create(
             email=email,
             defaults={
                 'username': email,
-                'first_name': given_name,
-                'is_staff': True,  # Make the user an admin
-                'is_superuser': True,  # Grant superuser permissions
+                'first_name': given_name or '',
+                'is_staff': True,
+                'is_superuser': True,
             },
         )
-
-        user.is_superuser = True
+        # Ensure flags (in case user existed)
         user.is_staff = True
+        user.is_superuser = True
         user.save()
         return user
 
     def _login_user(self, request, user):
-        """
-        Log the user in.
-        """
         user.backend = "django.contrib.auth.backends.ModelBackend"
         login(request, user)

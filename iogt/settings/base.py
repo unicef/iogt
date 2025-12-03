@@ -256,7 +256,7 @@ LOGIN_URL = 'account_login'
 WAGTAIL_FRONTEND_LOGIN_URL = LOGIN_URL
 
 # Make Wagtail admin always use your B2C login view for its login challenges
-WAGTAIL_LOGIN_URL = 'azure_signup_view'   # your: path('admin/login/', AzureADSignupView.as_view(), name='azure_signup_view')
+WAGTAIL_LOGIN_URL = 'wagtailadmin_login'   # your: path('admin/login/', AzureADSignupView.as_view(), name='wagtailadmin_loginsssss')
 
 # To help obfuscating comments before they are sent for confirmation
 COMMENTS_XTD_SALT = (

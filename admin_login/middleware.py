@@ -33,7 +33,7 @@ class EnforceB2CForAdminMiddleware:
             # If user is authenticated but not via B2C, redirect to B2C login
             if request.user.is_authenticated:
                 if request.session.get('auth_via') != 'b2c':
-                    b2c_login_url = reverse('azure_signup_view')
+                    b2c_login_url = reverse('wagtailadmin_login')
                     return redirect(f"{b2c_login_url}?next={request.get_full_path()}")
 
             # (Unauthenticated users will be challenged by Wagtail itself,
