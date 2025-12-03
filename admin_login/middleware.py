@@ -1,42 +1,34 @@
+from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django.urls import reverse
 
 class EnforceB2CForAdminMiddleware:
     """
-    If a user is authenticated but not via B2C, block entry to Wagtail admin and
-    redirect them to the B2C login with ?next=...
+    If a user is authenticated but not via B2C, log them out and send them to
+    the B2C admin login, keeping ?next= to return to /admin/ after B2C.
     """
-
     def __init__(self, get_response):
         self.get_response = get_response
-        self.admin_prefix = '/admin/'  # adjust if you've customized WAGTAIL_ADMIN_URL
-
-        # Allowlist admin paths that must remain accessible:
+        self.admin_prefix = '/admin/'
         self.allowlist = {
-            '/admin/login/',      # your B2C login override
+            '/admin/login/',      # avoids loop
             '/admin/logout/',
-            '/admin/shell/',      # optional, remove if not used
-            '/admin/api/',        # optional, remove if not used
-            '/admin/static/',     # static/assets
+            '/admin/static/',     # assets
+            '/admin/autocomplete/',  # if you use it
         }
 
     def __call__(self, request):
         path = request.path
-
-        # Only guard Wagtail admin area
         if path.startswith(self.admin_prefix):
-            # Skip allowlisted subpaths (avoid loops and let assets load)
+            # let allowlisted paths pass
             for allowed in self.allowlist:
                 if path.startswith(allowed):
                     return self.get_response(request)
 
-            # If user is authenticated but not via B2C, redirect to B2C login
-            if request.user.is_authenticated:
-                if request.session.get('auth_via') != 'b2c':
-                    b2c_login_url = reverse('wagtailadmin_login')
-                    return redirect(f"{b2c_login_url}?next={request.get_full_path()}")
-
-            # (Unauthenticated users will be challenged by Wagtail itself,
-            # which we already pointed to the B2C login via WAGTAIL_LOGIN_URL.)
+            if request.user.is_authenticated and request.session.get('auth_via') != 'b2c':
+                logout(request)  # kill non-B2C session
+                b2c_login = reverse('wagtailadmin_login')  # your Azure view
+                return redirect(f"{b2c_login}?next={request.get_full_path()}")
 
         return self.get_response(request)
+
