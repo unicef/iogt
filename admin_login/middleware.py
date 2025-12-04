@@ -14,7 +14,16 @@ class EnforceB2CForAdminMiddleware:
             '/admin/login/',      # avoids loop
             '/admin/logout/',
             '/admin/static/',     # assets
-            '/admin/autocomplete/',  # if you use it
+            '/admin/autocomplete/',
+            '/admin/pages/',
+            '/admin/images/',
+            '/admin/media/',
+            '/admin/documents/',
+            '/admin/wagtailsvg/',
+            '/admin/media/',
+            '/admin/media/',
+            '/admin/media/',
+            '/admin/media/',
         }
 
     def __call__(self, request):
@@ -25,10 +34,9 @@ class EnforceB2CForAdminMiddleware:
                 if path.startswith(allowed):
                     return self.get_response(request)
 
-            if request.user.is_authenticated and request.session.get('auth_via') != 'b2c':
-                logout(request)  # kill non-B2C session
-                b2c_login = reverse('wagtailadmin_login')  # your Azure view
-                return redirect(f"{b2c_login}?next={request.get_full_path()}")
+            if request.user.is_authenticated and request.session.get('auth_via') not in ('b2c',):
+                logout(request)
+                return redirect(reverse('wagtailadmin_login'))
 
         return self.get_response(request)
 
