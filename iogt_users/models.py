@@ -23,13 +23,6 @@ class User(AbstractUser):
     has_viewed_registration_survey = models.BooleanField(default=False)
     
     interactive_uuid = models.CharField(max_length=255, null=True, blank=True)
-    year = models.IntegerField(null=True, blank=True)
-    gender = models.CharField(  
-        max_length=10,
-        choices=[("male", "Male"), ("female", "Female"), ("other", "Other")],
-        null=True, blank=True
-    )
-    location = models.CharField(max_length=255, null=True, blank=True)
 
     
     autocomplete_search_field = 'username'

@@ -14,30 +14,9 @@ from .models import User
 
 from notifications.signals import notify
 from datetime import datetime
+from questionnaires.models import UserSubmission
 
-
-class UserFieldsMixin(forms.Form):
-    gender = forms.ChoiceField(
-        choices=[('', 'Select Gender'), ('male', 'Male'), ('female', 'Female'), ('other', 'Other')],
-        required=False,
-        widget=forms.Select(attrs={'class': 'label-option'})
-    )
-    year = forms.TypedChoiceField(
-        choices=[('', 'Select Year of Birth')] + [(y, y) for y in range(1950, datetime.now().year + 1)],
-        coerce=int,
-        empty_value=None,
-        required=False,
-        widget=forms.Select(attrs={'class': 'label-option'})
-    )
-    location = forms.CharField(
-        required=False,
-        max_length=255,
-        widget=forms.TextInput(attrs={
-            "placeholder": _("Current Location"),
-        })
-    )
-
-class AccountSignupForm(UserFieldsMixin, SignupForm):
+class AccountSignupForm(SignupForm):
     display_name = forms.CharField(
         label=_("Display name"),
         widget=forms.TextInput(
@@ -49,9 +28,6 @@ class AccountSignupForm(UserFieldsMixin, SignupForm):
     field_order = [
         "username",
         "display_name",
-        "year",
-        "gender",
-        "location",
         "password1",
         "password2",
         "terms_accepted",
@@ -75,9 +51,6 @@ class AccountSignupForm(UserFieldsMixin, SignupForm):
     def save(self, request):
         user = super().save(request)
         send_app_notifications.delay(user.id, notification_type='signup')
-        user.year = self.cleaned_data["year"]
-        user.gender = self.cleaned_data["gender"]
-        user.location = self.cleaned_data["location"]
         user.save()
         return user
 

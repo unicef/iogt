@@ -17,13 +17,14 @@ from wagtail.models import Locale
 from django.utils import timezone
 from django.contrib.auth import logout
 from django import forms
+from django.db import transaction
 from datetime import datetime
 from .models import DeletedUserLog, PageVisit, QuizAttempt
 from iogt import settings
-from iogt_users.forms import UserFieldsMixin
-
 from email_service.mailjet_email_sender import send_email_via_mailjet
 from user_notifications.models import NotificationPreference, NotificationTag
+from questionnaires.models import UserSubmission
+
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -58,26 +59,65 @@ class UserDetailView(TemplateView):
         return {'user': self.request.user}
     
 
-class UserEditForm(UserFieldsMixin, forms.ModelForm):
+class UserEditForm(forms.ModelForm):
+    gender = forms.CharField(required=False)
+    date_of_birth = forms.DateField(required=False, widget=forms.DateInput(attrs={"type": "date"}))
+    location = forms.CharField(required=False)
     class Meta:
         model = User
-        fields = ['username', 'year', 'gender', 'location']
+        fields = ("username", "gender", "date_of_birth", "location")
 
 
 @method_decorator(login_required, name='dispatch')
 class UserDetailEditView(UpdateView):
-    template_name = 'profile_edit.html'
     form_class = UserEditForm
+    template_name = 'profile_edit.html'
+    model = User
+    def get_initial(self):
+        """
+        Pre-fill the form with gender, dob, and location from the user's latest survey submission.
+        """
+        initial = super().get_initial()
+        latest = (
+            UserSubmission.objects
+            .filter(user_id=self.request.user.id)
+            .order_by('-submit_time')
+            .first()
+        )
+        if latest:
+            data = getattr(latest, 'get_data', lambda: latest.form_data)()
+            initial.update({
+                'gender': data.get('gender'),           
+                'date_of_birth': data.get('date_of_birth'),
+                'location': data.get('location'),
+            })
+        return initial
+    
     
     def form_valid(self, form):
-        self.object = form.save()
-        if self.request.headers.get("x-requested-with") == "XMLHttpRequest":
-            if form.has_changed():
-                return JsonResponse({"success": True, "message": "✅ Profile updated successfully!"})
-            else:
-                return JsonResponse({"success": False, "message": "ℹ️ No changes made."})
-        return super().form_valid(form)
+            with transaction.atomic():
+                user = form.save()
+                latest = (
+                    UserSubmission.objects
+                    .filter(user_id=user.id)
+                    .order_by('-submit_time')
+                    .first()
+                )
+                if latest:
+                    form_data = dict(latest.form_data or {})
+                    form_data["gender"] = form.cleaned_data.get("gender")
+                    form_data["date_of_birth"] = form.cleaned_data.get("date_of_birth")  # Date object OK; JSONField will serialize
+                    form_data["location"] = form.cleaned_data.get("location")
+                    latest.form_data = form_data
+                    latest.save(update_fields=["form_data"])
 
+            if self.request.headers.get("x-requested-with") == "XMLHttpRequest":
+                if form.has_changed():
+                    return JsonResponse({"success": True, "message": "✅ Profile updated successfully!"})
+                else:
+                    return JsonResponse({"success": False, "message": "ℹ️ No changes made."})
+            return super().form_valid(form)
+    
     def form_invalid(self, form):
         if self.request.headers.get("x-requested-with") == "XMLHttpRequest":
             return JsonResponse({
