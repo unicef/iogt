@@ -20,10 +20,10 @@ class EnforceB2CForAdminMiddleware:
             '/admin/media/',
             '/admin/documents/',
             '/admin/wagtailsvg/',
-            '/admin/media/',
-            '/admin/media/',
-            '/admin/media/',
-            '/admin/media/',
+            '/admin/snippets/',
+            '/admin/translation_manager/',
+            '/admin/forms/',
+            '/admin/iogt_users/',
         }
 
     def __call__(self, request):
