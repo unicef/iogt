@@ -2455,3 +2455,8 @@ div.notification-confirmation{
     color: #666;
     font-style: italic;
 }
+
+span#id_username_helptext {
+    font-size: x-small;
+    color: grey;
+}

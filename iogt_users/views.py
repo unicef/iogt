@@ -13,12 +13,13 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views import View
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
-from wagtail.models import Locale
+from wagtail.models import Locale, Site
 from django.utils import timezone
 from django.contrib.auth import logout
 from django import forms
 from django.db import transaction
 from datetime import datetime
+from home.models import SiteSettings
 from .models import DeletedUserLog, PageVisit, QuizAttempt
 from iogt import settings
 from email_service.mailjet_email_sender import send_email_via_mailjet
@@ -68,19 +69,30 @@ class UserEditForm(forms.ModelForm):
         fields = ("username", "gender", "date_of_birth", "location")
 
 
+class RegistrationSurveyMixin:
+    def get_registration_survey_page_id(self) -> int | None:
+        site_settings = SiteSettings.for_request(self.request)
+        reg_page = getattr(site_settings, "registration_survey", None)
+        if not reg_page:
+            return None
+        return getattr(reg_page, "localized", reg_page).pk
+
+
 @method_decorator(login_required, name='dispatch')
-class UserDetailEditView(UpdateView):
+class UserDetailEditView(RegistrationSurveyMixin, UpdateView):
     form_class = UserEditForm
     template_name = 'profile_edit.html'
     model = User
+    
     def get_initial(self):
         """
         Pre-fill the form with gender, dob, and location from the user's latest survey submission.
         """
         initial = super().get_initial()
+        reg_survey_id = self.get_registration_survey_page_id()
         latest = (
             UserSubmission.objects
-            .filter(user_id=self.request.user.id)
+            .filter(page__pk=reg_survey_id, user_id=self.request.user.id)
             .order_by('-submit_time')
             .first()
         )

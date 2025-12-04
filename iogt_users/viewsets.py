@@ -5,7 +5,7 @@ from django.utils.functional import cached_property
 from django.db.models import DateField, OuterRef, Subquery
 from django.db.models.fields.json import KeyTextTransform
 from django.db.models.functions import Cast
-
+from .views import RegistrationSurveyMixin
 from wagtail.admin.ui.tables import Column, BooleanColumn
 from questionnaires.models import UserSubmission
 
@@ -42,27 +42,28 @@ class LocationColumn(Column):
         return getattr(obj, "location_from_submission", None) or "—"
 
 
-class CustomUserIndexView(WagtailIndexView):
+class CustomUserIndexView(RegistrationSurveyMixin, WagtailIndexView):
     def get_queryset(self):
         qs = super().get_queryset().order_by("id")
+        reg_survey_id = self.get_registration_survey_page_id()
         latest_qs = (
             UserSubmission.objects
-            .filter(user_id=OuterRef("pk"))
+            .filter(page__pk=reg_survey_id, user_id=OuterRef("pk"))
             .order_by("-submit_time")
         )
-        gender_sq = latest_qs.annotate(
+        gender_qs = latest_qs.annotate(
             _gender=KeyTextTransform("gender", "form_data")
         ).values("_gender")[:1]
-        dob_sq = latest_qs.annotate(
+        dob_qs = latest_qs.annotate(
             _dob=KeyTextTransform("date_of_birth", "form_data")
         ).values("_dob")[:1]
-        location_sq = latest_qs.annotate(
+        location_qs = latest_qs.annotate(
             _loc=KeyTextTransform("location", "form_data")
         ).values("_loc")[:1]
         return qs.annotate(
-            gender_from_submission=Subquery(gender_sq),
-            dob_from_submission=Cast(Subquery(dob_sq), output_field=DateField()),
-            location_from_submission=Subquery(location_sq),
+            gender_from_submission=Subquery(gender_qs),
+            dob_from_submission=Cast(Subquery(dob_qs), output_field=DateField()),
+            location_from_submission=Subquery(location_qs),
         )
 
     @cached_property
