@@ -14,7 +14,6 @@ from .models import User
 
 from notifications.signals import notify
 from datetime import datetime
-from questionnaires.models import UserSubmission
 
 class AccountSignupForm(SignupForm):
     display_name = forms.CharField(
