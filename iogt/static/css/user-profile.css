@@ -95,5 +95,15 @@ p.notification-enable {
   cursor: pointer;
 }
 
-.confirm-btn { background: #e74c3c; color: #fff; }
+.confirm-btn {
+  width: auto !important;
+  background: #e74c3c; color: #fff; 
+}
+
+.confirm-btn:hover {
+    background-color: darkred;
+}
+
 .cancel-btn { background: #ccc; }
+
+.cancel-btn:hover { background: darkgray; }

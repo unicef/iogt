@@ -109,19 +109,30 @@ class UserDetailEditView(RegistrationSurveyMixin, UpdateView):
     def form_valid(self, form):
             with transaction.atomic():
                 user = form.save()
+                reg_survey_id = self.get_registration_survey_page_id()
                 latest = (
                     UserSubmission.objects
-                    .filter(user_id=user.id)
+                    .filter(page__pk=reg_survey_id, user_id=self.request.user.id)
                     .order_by('-submit_time')
                     .first()
                 )
+                updated_data = {
+                    "gender": form.cleaned_data.get("gender"),
+                    "date_of_birth": form.cleaned_data.get("date_of_birth"),
+                    "location": form.cleaned_data.get("location"),
+                }
                 if latest:
                     form_data = dict(latest.form_data or {})
-                    form_data["gender"] = form.cleaned_data.get("gender")
-                    form_data["date_of_birth"] = form.cleaned_data.get("date_of_birth")  # Date object OK; JSONField will serialize
-                    form_data["location"] = form.cleaned_data.get("location")
+                    form_data.update(updated_data)
                     latest.form_data = form_data
                     latest.save(update_fields=["form_data"])
+                else:
+                    UserSubmission.objects.create(
+                        page_id=reg_survey_id,
+                        user=self.request.user,
+                        form_data=updated_data,
+                        submit_time=timezone.now(),
+                    )
 
             if self.request.headers.get("x-requested-with") == "XMLHttpRequest":
                 if form.has_changed():

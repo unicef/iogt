@@ -3,7 +3,9 @@ from allauth.utils import set_form_field_order
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from questionnaires.models import UserSubmission
 from wagtail.users.forms import UserEditForm as WagtailUserEditForm, \
     UserCreationForm as WagtailUserCreationForm
 from user_notifications.models import UserNotificationTemplate
@@ -50,7 +52,6 @@ class AccountSignupForm(SignupForm):
     def save(self, request):
         user = super().save(request)
         send_app_notifications.delay(user.id, notification_type='signup')
-        user.save()
         return user
 
     def clean_username(self):
@@ -115,8 +116,44 @@ class WagtailAdminUserEditForm(WagtailUserEditForm):
     display_name = forms.CharField(required=False, label='Display Name')
     first_name = forms.CharField(required=False, label='First Name')
     last_name = forms.CharField(required=False, label='Last Name')
+    
+    gender_edit = forms.CharField(required=False, label="Gender")
+    date_of_birth_edit = forms.DateField(required=False, label="Date of Birth")
+    location_edit = forms.CharField(required=False, label="Location")
 
     terms_accepted = forms.BooleanField(label=_('I accept the Terms and Conditions.'))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        user = self.instance
+        submission = None
+        # PRE-FILL from latest UserSubmission
+        submission  = UserSubmission.objects.filter(
+            user_id=user.id,
+            page__slug="registration-survey"
+        ).order_by("-submit_time").first()
+        if submission:
+            data = submission.form_data or {}
+            self.fields["gender_edit"].initial = data.get("gender")
+            self.fields["date_of_birth_edit"].initial = data.get("date_of_birth")
+            self.fields["location_edit"].initial = data.get("location")
+    
+    def save(self, commit=True):
+        user = super().save(commit)
+        submission  = UserSubmission.objects.filter(
+            user_id=user.id,
+            page__slug="registration-survey"
+        ).order_by("-submit_time").first()
+        if submission:
+            data = submission.form_data.copy()
+            data["gender"] = self.cleaned_data["gender_edit"]
+            data["date_of_birth"] = self.cleaned_data["date_of_birth_edit"]
+            data["location"] = self.cleaned_data["location_edit"]
+            submission.form_data = data
+            submission.save()
+
+        return user
 
     class Meta(WagtailUserEditForm.Meta):
         model = User

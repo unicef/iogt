@@ -42,15 +42,13 @@ class LocationColumn(Column):
         return getattr(obj, "location_from_submission", None) or "—"
 
 
-class CustomUserIndexView(RegistrationSurveyMixin, WagtailIndexView):
+class CustomUserIndexView(WagtailIndexView):
     def get_queryset(self):
         qs = super().get_queryset().order_by("id")
-        reg_survey_id = self.get_registration_survey_page_id()
-        latest_qs = (
-            UserSubmission.objects
-            .filter(page__pk=reg_survey_id, user_id=OuterRef("pk"))
-            .order_by("-submit_time")
-        )
+        latest_qs  = UserSubmission.objects.filter(
+            user_id=OuterRef("pk"),
+            page__slug="registration-survey"
+        ).order_by("-submit_time")
         gender_qs = latest_qs.annotate(
             _gender=KeyTextTransform("gender", "form_data")
         ).values("_gender")[:1]
@@ -70,7 +68,7 @@ class CustomUserIndexView(RegistrationSurveyMixin, WagtailIndexView):
     def columns(self):
         return super().columns + [
             BooleanColumn("notification_opt_in", label="Notifications Opt-In"),
-            ContentTagsColumn(),
+            # ContentTagsColumn(),
             GenderColumn(),
             DOBColumn(),
             LocationColumn(),

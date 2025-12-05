@@ -10,6 +10,14 @@
         {% include "wagtailadmin/shared/field.html" with field=form.first_name %}
         {% include "wagtailadmin/shared/field.html" with field=form.last_name %}
         {% include "wagtailadmin/shared/field.html" with field=form.terms_accepted %}
+
+        {# ---------- NEW FIELDS FROM USER SUBMISSION ---------- #}
+    <h3 class="w-mt-6 w-mb-2">Profile Info (from Registration Survey)</h3>
+
+    {% include "wagtailadmin/shared/field.html" with field=form.gender_edit %}
+    {% include "wagtailadmin/shared/field.html" with field=form.date_of_birth_edit %}
+    {% include "wagtailadmin/shared/field.html" with field=form.location_edit %}
+    
         <div class="w-field__wrapper " data-field-wrapper="">
             <span class="w-field__label">
                 Notification Preference
@@ -17,28 +25,27 @@
             <div class="w-field" data-field="">
             {% if user.notificationpreference %}
             <div style="display: flex; flex-direction: column;">
-                
-                    <div><b>Opted in: </b>
-                    {% if user.notificationpreference.receive_notifications %}
-                        Yes
-                    {% else %}
-                        No
-                    {% endif %}
-                    </div>
-                    <div>
-                    <b>Language: </b> {{ user.notificationpreference.get_preferred_language_display }}
-                    </div>
-                    {% if user.notificationpreference.content_tags.exists %}
-                    <div>
-                        <b>Tags: </b>
-                        {{ user.notificationpreference.content_tags.all|join:", " }}
-                    </div>
-                    {% endif %}
-                    <div>
-                        <a href="{% url 'user_notifications_notificationpreference_modeladmin_edit' user.notificationpreference.id %}">
-                            Edit
-                        </a>
-                    </div>
+                <div><b>Opted in: </b>
+                {% if user.notificationpreference.receive_notifications %}
+                    Yes
+                {% else %}
+                    No
+                {% endif %}
+                </div>
+                <div>
+                <b>Language: </b> {{ user.notificationpreference.get_preferred_language_display }}
+                </div>
+                {% if user.notificationpreference.content_tags.exists %}
+                <div>
+                    <b>Tags: </b>
+                    {{ user.notificationpreference.content_tags.all|join:", " }}
+                </div>
+                {% endif %}
+                <div>
+                    <a href="{% url 'user_notifications_notificationpreference_modeladmin_edit' user.notificationpreference.id %}">
+                        Edit
+                    </a>
+                </div>
             </div>
             {% else %}
                 No preferences found.<br>
