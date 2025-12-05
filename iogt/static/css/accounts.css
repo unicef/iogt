@@ -132,3 +132,7 @@ form input[type="checkbox"] {
   .dropdown-content label:hover {
     background-color: #f0f0f0;
   }
+
+.label-option.placeholder {
+    color: #757575;
+}

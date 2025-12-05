@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static i18n home_tags questionnaires_tags wagtailcore_tags %}
+{% load static wagtailcore_tags wagtailimages_tags questionnaires_tags i18n home_tags %}
 {% get_current_language as LANGUAGE_CODE %}
 
 {% block extra_css %}
@@ -8,6 +8,9 @@
 {% endblock %}
 
 {% block content %}
+{% if request.GET.view == "answers" %}
+  {% include "quizzes/quiz_landing_content.html" %}
+{% else %}
     <div class="quiz-page">
         <div class="container">
             <h1 class="title quiz-page__title">{{ page.title }}</h1>
@@ -48,4 +51,5 @@
             {% include 'questionnaires/tags/go_to_homepage.html' %}
         </div>
     </div>
+{% endif %}
 {% endblock content %}
