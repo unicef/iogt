@@ -41,6 +41,53 @@ const registerSW = async () => {
 
 registerSW();
 
+// Flip "Download available" -> "✓ Available offline" if the target is cached
+(async function markCachedSections() {
+  if (!('caches' in window)) return;
+
+  const badges = Array.from(document.querySelectorAll('.offline-badge[data-mode="download"]'));
+  if (!badges.length) return;
+
+  function absURL(urlStr) {
+    const u = new URL(urlStr, window.location.origin);
+    u.hash = '';
+    return u.toString();
+  }
+
+  async function isPageCached(urlStr) {
+    const cache = await caches.open('iogt');
+    const res = await cache.match(absURL(urlStr));
+    if (!res) return false;
+    const ct = res.headers.get('Content-Type') || '';
+    return ct.includes('text/html');
+  }
+
+  async function refresh() {
+    await Promise.all(badges.map(async (badge) => {
+      const url = badge.getAttribute('data-url');
+      const cached = await isPageCached(url);
+      if (cached) {
+        badge.classList.add('is-cached');
+        badge.textContent = '✓ Available offline';
+      } else {
+        badge.classList.remove('is-cached');
+        badge.textContent = '⬇ Download available';
+      }
+    }));
+  }
+
+  await refresh();
+  window.addEventListener('online', refresh);
+  window.addEventListener('offline', refresh);
+  navigator.serviceWorker?.addEventListener?.('message', (e) => {
+    if (e.data?.type === 'WARM_CACHE_DONE') refresh();
+  });
+})();
+
+
+
+
+
 function getItem (key, defaultValue = null) {
     try {
         return JSON.parse(localStorage.getItem(key)) ?? defaultValue;
