@@ -18,8 +18,46 @@
 
         _paq.push(['setDocumentTitle', document.title]);
         _paq.push(['setCustomUrl', window.location.href]);
+        // → Custom Dimension included in normal hit
+        _paq.push(['setCustomDimension', 1, '{{ page.translation_key|default_if_none:"" }}']);
         _paq.push(['trackPageView']);
         _paq.push(['enableLinkTracking']);
+
+        // ========== ALL_LANG VIRTUAL PAGEVIEW (SUM ROW) ==========
+        (function() {
+            try {
+                var path = window.location.pathname;
+                if (!path || path === '/') return;
+
+                var parts = path.split('/');
+                if (parts.length < 3) return;
+
+                // Skip if already an all_lang URL
+                if (parts[1].toLowerCase() === 'all_lang') return;
+
+                // Detect language code
+                var langRegex = /^[a-z]{2,3}(?:[-_][a-z]{2})?$/i;
+                if (!langRegex.test(parts[1])) return;
+
+                // Replace with all_lang
+                parts[1] = 'all_lang';
+                var allLangPath = parts.join('/');
+                var allLangUrl = allLangPath + window.location.search + window.location.hash;
+
+                // → Custom Dimension included in All_Lang hit also
+                _paq.push([
+                    'setCustomDimension',
+                    1,
+                    '{{ page.translation_key|default_if_none:"" }}'
+                ]);
+
+                _paq.push(['setCustomUrl', allLangUrl]);
+                _paq.push(['setDocumentTitle', 'All_Lang: ' + document.title]);
+                _paq.push(['trackPageView']);
+            } catch (e) {
+                console.warn("All_Lang virtual hit error:", e);
+            }
+        })();
 
          {% if user_id %}
             hashEmail("{{ user_id|escapejs }}").then(hashedEmail => {
