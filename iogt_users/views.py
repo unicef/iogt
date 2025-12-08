@@ -90,26 +90,28 @@ class UserDetailEditView(RegistrationSurveyMixin, UpdateView):
         """
         initial = super().get_initial()
         reg_survey_id = self.get_registration_survey_page_id()
-        latest = (
-            UserSubmission.objects
-            .filter(page__pk=reg_survey_id, user_id=self.request.user.id)
-            .order_by('-submit_time')
-            .first()
-        )
-        if latest:
-            data = getattr(latest, 'get_data', lambda: latest.form_data)()
-            initial.update({
-                'gender': data.get('gender'),           
-                'date_of_birth': data.get('date_of_birth'),
-                'location': data.get('location'),
-            })
-        return initial
+        if isinstance(reg_survey_id, int):
+            latest = (
+                UserSubmission.objects
+                .filter(page__pk=reg_survey_id, user_id=self.request.user.id)
+                .order_by('-submit_time')
+                .first()
+            )
+            if latest:
+                data = getattr(latest, 'get_data', lambda: latest.form_data)()
+                initial.update({
+                    'gender': data.get('gender'),           
+                    'date_of_birth': data.get('date_of_birth'),
+                    'location': data.get('location'),
+                })
+            return initial
     
     
     def form_valid(self, form):
-            with transaction.atomic():
-                user = form.save()
-                reg_survey_id = self.get_registration_survey_page_id()
+        with transaction.atomic():
+            user = form.save()
+            reg_survey_id = self.get_registration_survey_page_id()
+            if isinstance(reg_survey_id, int):
                 latest = (
                     UserSubmission.objects
                     .filter(page__pk=reg_survey_id, user_id=self.request.user.id)
@@ -134,12 +136,12 @@ class UserDetailEditView(RegistrationSurveyMixin, UpdateView):
                         submit_time=timezone.now(),
                     )
 
-            if self.request.headers.get("x-requested-with") == "XMLHttpRequest":
-                if form.has_changed():
-                    return JsonResponse({"success": True, "message": "✅ Profile updated successfully!"})
-                else:
-                    return JsonResponse({"success": False, "message": "ℹ️ No changes made."})
-            return super().form_valid(form)
+        if self.request.headers.get("x-requested-with") == "XMLHttpRequest":
+            if form.has_changed():
+                return JsonResponse({"success": True, "message": "✅ Profile updated successfully!"})
+            else:
+                return JsonResponse({"success": False, "message": "ℹ️ No changes made."})
+        return super().form_valid(form)
     
     def form_invalid(self, form):
         if self.request.headers.get("x-requested-with") == "XMLHttpRequest":

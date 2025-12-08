@@ -97,6 +97,9 @@ p.notification-enable {
 
 .confirm-btn {
   width: auto !important;
+  display: inline-block !important;
+  font-size: 0.9rem;
+  line-height: 1.2;
   background: #e74c3c; color: #fff; 
 }
 
