@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% block content %}
+    {% url 'user_profile' as profile_url %}
+    {% include "back_button.html" with back_url=profile_url %}
     <h2 class="quiz-results-title">{% trans "My Quiz Results" %}</h2>
     {% if quiz_results %}
     <table class="quiz-results-table">
@@ -34,5 +36,4 @@
     {% else %}
     <p class="no-quiz-text">{% trans "You haven’t completed any quizzes yet." %}</p>
     {% endif %}
-    {% include "generic_components/back_button.html" %}
 {% endblock %}

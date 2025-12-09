@@ -1,7 +1,10 @@
 {% extends 'account/base.html' %}
 {% load i18n static image_tags generic_components %}
 {% block title %}{% translate "My Notification" %}{% endblock %}
+
 {% block content %}
+    {% url 'user_profile' as profile_url %}
+    {% include "back_button.html" with back_url=profile_url %}
     <h2>My Activity</h2>
     <div class="activity-container">
         <h4>Account Information</h4>
@@ -34,5 +37,5 @@
             </tr>
         </tbody>
     </table>
-    {% include "generic_components/back_button.html" %}
+    
 {% endblock %}

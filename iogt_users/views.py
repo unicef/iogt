@@ -13,17 +13,19 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views import View
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
-from wagtail.models import Locale
+from wagtail.models import Locale, Site
 from django.utils import timezone
 from django.contrib.auth import logout
 from django import forms
+from django.db import transaction
 from datetime import datetime
+from home.models import SiteSettings
 from .models import DeletedUserLog, PageVisit, QuizAttempt
 from iogt import settings
-from iogt_users.forms import UserFieldsMixin
-
 from email_service.mailjet_email_sender import send_email_via_mailjet
 from user_notifications.models import NotificationPreference, NotificationTag
+from questionnaires.models import UserSubmission
+
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -58,26 +60,89 @@ class UserDetailView(TemplateView):
         return {'user': self.request.user}
     
 
-class UserEditForm(UserFieldsMixin, forms.ModelForm):
+class UserEditForm(forms.ModelForm):
+    gender = forms.CharField(required=False)
+    date_of_birth = forms.DateField(required=False, widget=forms.DateInput(attrs={"type": "date"}))
+    location = forms.CharField(required=False)
     class Meta:
         model = User
-        fields = ['username', 'year', 'gender', 'location']
+        fields = ("username", "gender", "date_of_birth", "location")
+
+
+class RegistrationSurveyMixin:
+    def get_registration_survey_page_id(self) -> int | None:
+        site_settings = SiteSettings.for_request(self.request)
+        reg_page = getattr(site_settings, "registration_survey", None)
+        if not reg_page:
+            return None
+        return getattr(reg_page, "localized", reg_page).pk
 
 
 @method_decorator(login_required, name='dispatch')
-class UserDetailEditView(UpdateView):
-    template_name = 'profile_edit.html'
+class UserDetailEditView(RegistrationSurveyMixin, UpdateView):
     form_class = UserEditForm
+    template_name = 'profile_edit.html'
+    model = User
+    
+    def get_initial(self):
+        """
+        Pre-fill the form with gender, dob, and location from the user's latest survey submission.
+        """
+        initial = super().get_initial()
+        reg_survey_id = self.get_registration_survey_page_id()
+        if isinstance(reg_survey_id, int):
+            latest = (
+                UserSubmission.objects
+                .filter(page__pk=reg_survey_id, user_id=self.request.user.id)
+                .order_by('-submit_time')
+                .first()
+            )
+            if latest:
+                data = getattr(latest, 'get_data', lambda: latest.form_data)()
+                initial.update({
+                    'gender': data.get('gender'),           
+                    'date_of_birth': data.get('date_of_birth'),
+                    'location': data.get('location'),
+                })
+            return initial
+    
     
     def form_valid(self, form):
-        self.object = form.save()
+        with transaction.atomic():
+            user = form.save()
+            reg_survey_id = self.get_registration_survey_page_id()
+            if isinstance(reg_survey_id, int):
+                latest = (
+                    UserSubmission.objects
+                    .filter(page__pk=reg_survey_id, user_id=self.request.user.id)
+                    .order_by('-submit_time')
+                    .first()
+                )
+                updated_data = {
+                    "gender": form.cleaned_data.get("gender"),
+                    "date_of_birth": form.cleaned_data.get("date_of_birth"),
+                    "location": form.cleaned_data.get("location"),
+                }
+                if latest:
+                    form_data = dict(latest.form_data or {})
+                    form_data.update(updated_data)
+                    latest.form_data = form_data
+                    latest.save(update_fields=["form_data"])
+                else:
+                    UserSubmission.objects.create(
+                        page_id=reg_survey_id,
+                        user=self.request.user,
+                        form_data=updated_data,
+                        submit_time=timezone.now(),
+                    )
+
         if self.request.headers.get("x-requested-with") == "XMLHttpRequest":
             if form.has_changed():
                 return JsonResponse({"success": True, "message": "✅ Profile updated successfully!"})
             else:
                 return JsonResponse({"success": False, "message": "ℹ️ No changes made."})
         return super().form_valid(form)
-
+    
     def form_invalid(self, form):
         if self.request.headers.get("x-requested-with") == "XMLHttpRequest":
             return JsonResponse({

@@ -2379,17 +2379,6 @@ div.notification-confirmation{
   margin-bottom: 5px;
 }
 
-.confirm-btn {
-  padding: 6px 14px;
-  font-size: 0.9rem;
-  line-height: 1.2;
-}
-
-.confirm-btn {
-  display: inline-block !important;
-  width: auto !important;
-}
-
 .activity-container {
     margin-bottom: 20px;
     padding: 10px;
@@ -2454,4 +2443,9 @@ div.notification-confirmation{
     text-align: center;
     color: #666;
     font-style: italic;
+}
+
+span#id_username_helptext {
+    font-size: x-small;
+    color: grey;
 }
