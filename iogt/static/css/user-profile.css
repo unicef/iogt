@@ -107,6 +107,11 @@ p.notification-enable {
     background-color: darkred;
 }
 
-.cancel-btn { background: #ccc; }
+.cancel-btn {
+    background: #ccc;
+    display: inline-block !important;
+    font-size: 0.9rem;
+    line-height: 1.2;
+}
 
 .cancel-btn:hover { background: darkgray; }
