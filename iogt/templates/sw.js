@@ -7,6 +7,39 @@ const PRECACHE_ASSETS = [
     '/static/js/idb.js',
 ];
 
+const OFFLINE_HTML = `
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <title>Offline</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <style>
+        body {
+          font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 100vh;
+          padding: 16px;
+          text-align: center;
+          background: #ffffff;
+          color: #333;
+        }
+        .box {
+          max-width: 480px;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="box">
+        <p>This content will be available when you are online. Please right click and press back to go back.</p>
+      </div>
+    </body>
+  </html>
+`;
+
+
 // ✅ Install Service Worker
 self.addEventListener('install', event => {
     console.log("🛠 Service Worker Installing...");
@@ -174,11 +207,25 @@ self.addEventListener("fetch", (event) => {
                     }
                     return networkResponse;                     // 3️⃣ Always return the live response
                 })
-                .catch(() => {                                  // 4️⃣ Network failed → offline fallback
+                .catch(() => { // 4️⃣ Network failed → offline fallback
+                return caches.match(request).then(cached => {
+                    if (cached) return cached;
+
+                    if (request.mode === 'navigate' || request.destination === 'document') {
+                        return new Response(OFFLINE_HTML, {
+                            status: 503,
+                            headers: { 'Content-Type': 'text/html; charset=utf-8' },
+                        });
+                    }
+
+                    return new Response('', { status: 503 });
+                });
+            })
+                {% comment %} .catch(() => {                                  // 4️⃣ Network failed → offline fallback
                     return caches.match(request)                //    • Serve from cache if we have it
                         .then(cached => cached ||            //    • …otherwise show a 503
                             new Response('Offline', { status: 503 }));
-                })
+                }) {% endcomment %}
         );
         
         //Commented - Changed order to check if online -> send request to server -> save in cache -> but if offline -> then check cache

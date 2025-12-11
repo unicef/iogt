@@ -8,6 +8,7 @@ from home.models import Article, ArticleFeedback, FeedbackSettings
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.sessions.models import Session
 from django.core.paginator import Paginator
+from django.conf import settings
 
 from .models import ManifestSettings
 
@@ -19,40 +20,106 @@ class ServiceWorkerView(TemplateView):
 
 
 def get_manifest(request):
-    language = translation.get_language()
-    manifest = get_object_or_404(ManifestSettings, language=language)
-    response = {
-        "name": manifest.name,
-        "short_name": manifest.short_name,
-        "scope": manifest.scope,
-        "background_color": manifest.background_color,
-        "theme_color": manifest.theme_color,
-        "description": manifest.description,
-        "lang": manifest.language,
-        "start_url": manifest.start_url,
-        "display": manifest.display,
-        "icons": [
-            {
-                "src": f"{manifest.icon_96_96.file.url}",
-                "type": f"image/{manifest.icon_96_96.file.name.split('.')[-1]}",
-                "sizes": f"{manifest.icon_96_96.height}x{manifest.icon_96_96.width}",
-            },
-            {
-                "src": f"{manifest.icon_512_512.file.url}",
-                "type": f"image/{manifest.icon_512_512.file.name.split('.')[-1]}",
-                "sizes": f"{manifest.icon_512_512.height}x{manifest.icon_512_512.width}",
-            },
-            {
-                "src": f"{manifest.icon_192_192.file.url}",
-                "type": f"image/{manifest.icon_192_192.file.name.split('.')[-1]}",
-                "sizes": f"{manifest.icon_192_192.height}x{manifest.icon_192_192.width}",
-                "purpose": "any maskable",
-            },
-        ],
-    }
+    language = translation.get_language() or settings.LANGUAGE_CODE
 
-    http_response = JsonResponse(response)
-    http_response['Content-Disposition'] = 'attachment; filename="manifest.json"'
+    qs = ManifestSettings.objects
+
+    # Try: current language → default LANGUAGE_CODE → any row
+    manifest = (
+        qs.filter(language=language).first()
+        or qs.filter(language=settings.LANGUAGE_CODE).first()
+        or qs.first()
+    )
+
+    if manifest is None:
+        # Last-resort minimal manifest so it never 404s
+        response = {
+            "name": "Internet of Good Things",
+            "short_name": "IoGT",
+            "start_url": "/",
+            "display": "standalone",
+            "background_color": "#ffffff",
+            "theme_color": "#493174",
+            "icons": [
+                {
+                    "src": "/static/pwa/icons/icon-192x192.png",
+                    "sizes": "192x192",
+                    "type": "image/png"
+                },
+            ],
+            "screenshots": [
+                {
+                    "src": "/static/pwa/screenshots/home-wide.png",
+                    "sizes": "1280x720",
+                    "type": "image/png",
+                    "form_factor": "wide"
+                },
+                {
+                    "src": "/static/pwa/screenshots/home-narrow.png",
+                    "sizes": "540x720",
+                    "type": "image/png",
+                    "form_factor": "narrow"
+                }
+            ],
+        }
+        print("1"*40)
+    else:
+        response = {
+            "name": manifest.name,
+            "short_name": manifest.short_name,
+            "scope": manifest.scope,
+            "background_color": manifest.background_color,
+            "theme_color": manifest.theme_color,
+            "description": manifest.description,
+            "lang": manifest.language,
+            "start_url": manifest.start_url,
+            "display": manifest.display,
+            "icons": [
+                {
+                    "src": "/static/pwa/icons/icon-192x192.png",
+                    "sizes": "192x192",
+                    "type": "image/png"
+                },
+                {
+                    "src": manifest.icon_96_96.file.url,
+                    "type": f"image/{manifest.icon_96_96.file.name.split('.')[-1]}",
+                    "sizes": f"{manifest.icon_96_96.width}x{manifest.icon_96_96.height}",
+                },
+                {
+                    "src": manifest.icon_512_512.file.url,
+                    "type": f"image/{manifest.icon_512_512.file.name.split('.')[-1]}",
+                    "sizes": f"{manifest.icon_512_512.width}x{manifest.icon_512_512.height}",
+                },
+                {
+                    "src": manifest.icon_192_192.file.url,
+                    "type": f"image/{manifest.icon_192_192.file.name.split('.')[-1]}",
+                    "sizes": f"{manifest.icon_192_192.width}x{manifest.icon_192_192.height}",
+                    "purpose": "any maskable",
+                },
+            ],
+            "screenshots": [
+                {
+                    "src": "/static/pwa/screenshots/home-wide.png",
+                    "sizes": "1280x720",
+                    "type": "image/png",
+                    "form_factor": "wide"
+                },
+                {
+                    "src": "/static/pwa/screenshots/home-narrow.png",
+                    "sizes": "540x720",
+                    "type": "image/png",
+                    "form_factor": "narrow"
+                }
+            ],
+        }
+        print("2"*40)
+
+    http_response = JsonResponse(
+        response,
+        content_type="application/manifest+json",
+    )
+    http_response["Cache-Control"] = "max-age=600, public"
+
     return http_response
 
 

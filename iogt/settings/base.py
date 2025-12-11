@@ -118,6 +118,7 @@ MIDDLEWARE = [
     # 'admin_login.middleware.CustomAdminLoginRequiredMiddleware',
     'wagtailcache.cache.FetchFromCacheMiddleware',
     "allauth.account.middleware.AccountMiddleware",
+    'admin_login.middleware.EnforceB2CForAdminMiddleware',
 ]
 
 # Prevent Wagtail's built in menu from showing in Admin > Settings
@@ -254,6 +255,9 @@ LOGIN_REDIRECT_URL = "user_profile"
 ACCOUNT_LOGOUT_REDIRECT_URL = "logout_redirect"
 LOGIN_URL = 'account_login'
 WAGTAIL_FRONTEND_LOGIN_URL = LOGIN_URL
+
+# Make Wagtail admin always use your B2C login view for its login challenges
+WAGTAIL_LOGIN_URL = 'wagtailadmin_login'   # your: path('admin/login/', AzureADSignupView.as_view(), name='wagtailadmin_loginsssss')
 
 # To help obfuscating comments before they are sent for confirmation
 COMMENTS_XTD_SALT = (
@@ -662,3 +666,11 @@ CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
 
 # Ensure Django trusts the proxy (if applicable)
 # SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# Optional: Content Security Policy (tune for your Matomo + push + CDN)
+CSP_DEFAULT_SRC = ("'self'", )
+CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "'unsafe-eval'", "cdn.jsdelivr.net", "unpkg.com") # adjust
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", "fonts.googleapis.com")
+CSP_IMG_SRC = ("'self'", "data:", "blob:", "your-cdn.example", "matomo.example")
+CSP_CONNECT_SRC = ("'self'", "matomo.example", "pushservice.example")
+CSP_WORKER_SRC = ("'self'")
