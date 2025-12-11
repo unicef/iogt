@@ -49,7 +49,7 @@ schema_view = get_schema_view(
 urlpatterns = api_url_patterns + [
     path('django-admin/', admin.site.urls),
     path('admin/logout/', CustomLogoutView.as_view(), name='admin_logout'),
-    path('admin/login/', AzureADSignupView.as_view(), name='azure_signup_view'),  # Override Wagtail admin login
+    path('admin/login/', AzureADSignupView.as_view(), name='wagtailadmin_login'),  # Override Wagtail admin login
     re_path(r'^admin/autocomplete/', include(autocomplete_admin_urls)),
     path('admin/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),

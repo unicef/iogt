@@ -25,12 +25,18 @@ class AzureADSignupView(View):
         """
         Render the signup form or redirect to Azure AD B2C for authorization.
         """
-        # Check if we have an authorization code (callback)
-        if request.user.is_authenticated:
-            return redirect('/admin/')  # Replace with the appropriate URL for logged-in users
 
         code = request.GET.get('code')
-        next_url = request.GET.get('next', '/admin/')
+        
+        # If user is already authenticated:
+        if request.user.is_authenticated:
+            if request.session.get('auth_via') == 'b2c':
+                return redirect('/admin/')  # ok, already B2C
+            # Not B2C (or missing) -> logout and hit /admin/ to trigger Wagtail->B2C
+            from django.contrib.auth import logout
+            logout(request)
+            return redirect('/admin/')
+
 
         if code:
             # Handle the callback and complete signup
@@ -39,7 +45,8 @@ class AzureADSignupView(View):
                 user_info = signup_service.handle_signup_callback(request)
                 user = self._save_user_info(user_info)
                 self._login_user(request, user)
-                return redirect(next_url)
+                request.session['auth_via'] = 'b2c'   # <-- tag session
+                return redirect('/admin/')
             except ValidationError as e:
                 return JsonResponse({"error": str(e)}, status=400)
 
