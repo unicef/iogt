@@ -447,7 +447,7 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
 
     @property
     def top_level_section(self):
-        return self.get_ancestors().filter(depth=4).first().specific
+        return self.get_ancestors().last().specific if self.get_ancestors() else None
 
     @property
     def offline_urls(self):
