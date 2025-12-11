@@ -2772,3 +2772,18 @@
           font-size: 14px;
       }
   }
+
+.offline-badge{
+  display:inline-block;           /* stays below title inline */
+  margin:4px 0 8px 0;
+  padding:4px 8px;
+  font-size:.75rem;
+  border-radius:4px;
+  font-weight:500;
+  background:#f0f4ff;             /* default: “Download available” */
+  color:#1f3fb6;
+}
+.offline-badge.is-cached{
+  background:#e6f7e9;             /* when already cached: “Available offline” */
+  color:#1a7f37;
+}

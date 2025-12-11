@@ -661,3 +661,11 @@ CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
 
 # Ensure Django trusts the proxy (if applicable)
 # SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# Optional: Content Security Policy (tune for your Matomo + push + CDN)
+CSP_DEFAULT_SRC = ("'self'", )
+CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "'unsafe-eval'", "cdn.jsdelivr.net", "unpkg.com") # adjust
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", "fonts.googleapis.com")
+CSP_IMG_SRC = ("'self'", "data:", "blob:", "your-cdn.example", "matomo.example")
+CSP_CONNECT_SRC = ("'self'", "matomo.example", "pushservice.example")
+CSP_WORKER_SRC = ("'self'")
