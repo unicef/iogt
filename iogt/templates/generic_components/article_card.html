@@ -1,4 +1,4 @@
-{% load home_tags %}
+{% load home_tags offline_tags %}
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% if article %}
@@ -14,6 +14,13 @@
                 <p class="article-title">{{ article.title }}</p>
                 {% if article.index_page_description %}
                     <p class="sm-paragraph">{{ article.index_page_description }}</p>
+                {% endif %}
+
+                {# Show ONLY if this section supports offline download #}
+                {% if article|is_downloadable %}
+                    <span class="offline-badge" data-url="{% pageurl article %}" data-mode="download">
+                    ⬇ Download available
+                    </span>
                 {% endif %}
             </div>
          {% if article.lead_image %}

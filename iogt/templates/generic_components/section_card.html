@@ -1,9 +1,18 @@
-{% load static wagtailcore_tags wagtailimages_tags sass_tags image_tags home_tags %}
+{% load static wagtailcore_tags wagtailimages_tags sass_tags image_tags home_tags offline_tags %}
 
 <div class="section-card">
     <a href="{% pageurl section %}" class='sub-section {% if is_first_content %}first-content{% endif %}'
        style="color:{{ font_color }}; background:{{ background_color }};">
-        <div class="section-header"><p class="section-title">{{ section.title }}</p></div>
+        <div class="section-header">
+            <p class="section-title">{{ section.title }}</p>
+
+            {# Show ONLY if this section supports offline download #}
+            {% if section|is_downloadable %}
+                <span class="offline-badge" data-url="{% pageurl section %}" data-mode="download">
+                ⬇ Download available
+                </span>
+            {% endif %}
+        </div>
         {% if section.lead_image %}
             <div class="img-holder {% render_is_complete section %}">
                 {% if is_first_content %}

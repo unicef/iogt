@@ -1,4 +1,4 @@
-{% load static wagtailcore_tags wagtailimages_tags questionnaires_tags i18n %}
+{% load static wagtailcore_tags wagtailimages_tags questionnaires_tags i18n offline_tags %}
 
 <div class="questionnaire-components">
     <div class='questionnaire-components__component'>
@@ -7,6 +7,13 @@
                 <p>{% translate questionnaire.get_type|upper %}</p>
                 <p>{{ questionnaire.title }}</p>
                 {% include 'questionnaires/tags/index_page_description_lines.html' with questionnaire=questionnaire %}
+                
+                {# Show ONLY if this section supports offline download #}
+                {% if questionnaire|is_downloadable %}
+                    <span class="offline-badge" data-url="{% pageurl questionnaire %}" data-mode="download">
+                    ⬇ Download available
+                    </span>
+                {% endif %}
             </div>
             {% include 'home/tags/angle_bracket.html' %}
         </a>
