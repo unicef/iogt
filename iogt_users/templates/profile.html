@@ -22,10 +22,90 @@
     <div class="profile__btns">
         {% url 'notification_settings' as notify_url %}
         {% primary_button title='Notification Preference' href=notify_url icon_path='icons/bell-solid.svg' extra_classnames='notification-pref-btn' %}
-        {% url 'account_change_password' as change_password_url %}
+        {% url 'quiz_results' as quiz_result %}
+            {% primary_button title='My Quiz Results' href=quiz_result icon_path='icons/quiz.svg' extra_classnames='notification-pref-btn' %}
+        {% url 'my_activity' as activity_url %}
+            {% primary_button title='My Activity' href=activity_url icon_path='icons/chat.svg' extra_classnames='notification-pref-btn' %}
+        {% url 'user_profile_edit' as profile_edit %}
+            {% primary_button title='Edit Profile' href=profile_edit icon_path='icons/profile.svg' extra_classnames='notification-pref-btn' %}
+        <div id="deleteAccountBtn">
+          {% primary_button title='Delete Account' href='#' icon_path='icons/profile.svg' extra_classnames='notification-pref-btn' %}
+        </div>
+            {% url 'account_change_password' as change_password_url %}
         {% primary_button title='Change Digital Pin' href=change_password_url icon_path='icons/lock.svg' extra_classnames='change-digital-pin' %}
         {% url 'account_logout' as logout_url %}
         {% primary_button title='Log out' href=logout_url icon_path='icons/arrow_icon_left.svg' extra_classnames='logout-btn' %}
     </div>
-
 {% endblock %}
+{% block extra_js %}
+  {{ block.super }}
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <h3>Confirm Delete</h3>
+      <p>Are you sure you want to delete your account?</p>
+      <div class="modal-actions">
+        <button id="confirmDelete" class="confirm-btn btn btn-danger">Yes, Delete</button>
+        <button id="cancelDelete" class="cancel-btn btn btn-secondary">Cancel</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    const deleteAccountUrl = "{% url 'delete_account' %}";
+    const accountLoginUrl = "{% url 'account_login' %}";
+    const csrfToken = "{{ csrf_token }}";
+    document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("deleteModal");
+    const confirmBtn = document.getElementById("confirmDelete");
+    const cancelBtn = document.getElementById("cancelDelete");
+    const deleteBtn = document.querySelector("#deleteAccountBtn a");
+    if (deleteBtn) {
+      deleteBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        modal.style.display = "block";
+      });
+    }
+    if (cancelBtn){
+      cancelBtn.addEventListener("click", () => {
+        modal.style.display = "none";
+      });
+    }
+    if (confirmBtn){
+      confirmBtn.addEventListener("click", () => {
+        modal.style.display = "none";
+        fetch(deleteAccountUrl, {
+          method: "Delete",
+          headers: { "X-CSRFToken": csrfToken },
+        })
+          .then((res) => res.json())
+          .then((response) => {
+            if (response.success) {
+              showToast("✅ Account deleted successfully.", "success");
+              setTimeout(() => {
+                window.location.replace(accountLoginUrl);
+              }, 2000);
+            } else {
+              showToast("⚠️ Something went wrong while deleting the account.", "error");
+            }
+          })
+          .catch(() => {
+            showToast("❌ Error: Unable to delete account. Please try again.", "error");
+          });
+      });
+    }
+    window.addEventListener("click", (e) => {
+      if (e.target === modal) modal.style.display = "none";
+    });
+    document.querySelectorAll(".label-option").forEach(function (el) {
+      function updateColor() {
+          if (el.value === "") {
+              el.classList.add("placeholder");
+          } else {
+              el.classList.remove("placeholder");
+          }
+      }
+      updateColor();
+      el.addEventListener("change", updateColor);
+    });
+  });
+  </script>
+  {% endblock %}

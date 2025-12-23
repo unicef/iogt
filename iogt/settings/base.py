@@ -112,6 +112,7 @@ MIDDLEWARE = [
     "iogt.middleware.AdminLocaleMiddleware",
     'iogt.middleware.CustomRedirectMiddleware',
     'iogt_users.middlewares.RegistrationSurveyRedirectMiddleware',
+    'iogt_users.middlewares.TrackFrontendPageVisitsMiddleware',
     'external_links.middleware.RewriteExternalLinksMiddleware',
     'iogt.middleware.GlobalDataMiddleware',
     # 'admin_login.middleware.CustomAdminLoginRequiredMiddleware',

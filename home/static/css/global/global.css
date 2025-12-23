@@ -2378,3 +2378,74 @@ div.notification-confirmation{
   margin: 0; 
   margin-bottom: 5px;
 }
+
+.activity-container {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    width: 100%;
+}
+
+.activity-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd !important;
+}
+
+.activity-table th,
+.activity-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.activity-table thead {
+    background-color: #f2f2f2;
+}
+
+.quiz-results-title {
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+.quiz-results-table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #ccc;
+}
+
+.quiz-results-table th,
+.quiz-results-table td {
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+
+.quiz-results-table thead {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.quiz-link {
+    text-decoration: none;
+    color: #007BFF;
+}
+
+.quiz-link:hover {
+    text-decoration: underline;
+}
+
+.no-quiz-text {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+}
+
+span#id_username_helptext {
+    font-size: x-small;
+    color: grey;
+}

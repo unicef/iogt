@@ -1,10 +1,9 @@
 {% extends 'account/base.html' %}
 {% load i18n static image_tags generic_components %}
-
 {% block title %}{% translate "Notification Preference" %}{% endblock %}
-
-
 {% block content %}
+{% url 'user_profile' as profile_url %}
+{% include "back_button.html" with back_url=profile_url %}
 {% if request.user.is_authenticated %}
 <h1>{% translate "Notification Preference" %}</h1>
 <div class="notification-confirmation">
@@ -46,7 +45,6 @@
   <button class="cust-btn cust-btn--dark profile-form__btn" id="save"><span>{% translate "Save" %}</span>
   </button>
 </div>
-
 {% endif %}
 
 
@@ -155,12 +153,15 @@
         //Add delay to show it as another toast will be showing up for permission
         if (preference && "Notification" in window && Notification.permission !== "granted") {
           setTimeout(() => {
-            showToast("✅ Preference saved successfully.", "success");
+            showToast("✅ Preference saved successfully. Redirecting to Home page.", "success");
           }, 3500);
         }
         else {
-          showToast(`✅ Preference saved successfully.`, "success");
+          showToast(`✅ Preference saved successfully. Redirecting to Home page.`, "success");
         }
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 5000);
       }
     }).catch(err => showToast(`❌ error: Could not save preference!`, "error"))
   }
