@@ -1,3 +1,4 @@
+import logging
 import json
 
 from django.contrib.auth import get_user_model
@@ -13,6 +14,7 @@ from ..chat import ChatManager
 from ..models import Thread
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 
 class RapidProWebhook(APIView):
@@ -20,6 +22,7 @@ class RapidProWebhook(APIView):
 
     def post(self, request):
         serializer = RapidProMessageSerializer(data=request.data)
+        logger.info(f"RapidProWebhook - request.data={request.data}")
         serializer.is_valid(raise_exception=True)
 
         rapidpro_message_id = serializer.validated_data['uuid']
