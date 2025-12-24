@@ -19,19 +19,18 @@ class ChatManager:
             raise Exception('No thread found.')
         self.thread = thread
 
-    def _record_message_in_database(self, sender, rapidpro_message_id, text, quick_replies, is_chatbot_message):
+    def _record_message_in_database(self, sender, rapidpro_message_id, text, quick_replies, is_chatbot_message, rapidpro_message_uuid):
         # Messages sent from User to RapidPro server don't have rapidpro_message_id
-        from_rapidpro_server = bool(rapidpro_message_id)
-
+        from_rapidpro_server = bool(rapidpro_message_uuid)
         if from_rapidpro_server:
-            message, created = Message.objects.get_or_create(rapidpro_message_id=rapidpro_message_id, defaults={
+            message, created = Message.objects.get_or_create(rapidpro_message_uuid=rapidpro_message_uuid, defaults={
                 'sender': sender,
                 'text': text,
                 'quick_replies': quick_replies,
                 'thread': self.thread,
                 "is_chatbot_message": is_chatbot_message,
+                "rapidpro_message_id": rapidpro_message_id,
             })
-
             if not created:
                 # If the message already exists, we concatenate the newly received
                 # messages with the existing message. An assumption here is that
@@ -54,8 +53,7 @@ class ChatManager:
         else:
             Message.objects.create(
                 rapidpro_message_id=rapidpro_message_id, sender=sender, text=text, thread=self.thread,
-                quick_replies=quick_replies)
-
+                quick_replies=quick_replies, rapidpro_message_uuid=rapidpro_message_uuid)
         self.thread.last_message_at = timezone.now()
         self.thread.save(update_fields=['last_message_at'])
 
@@ -79,7 +77,7 @@ class ChatManager:
                 cleaned_message = f'{message}{cleaned_message}'
         return cleaned_message, attachments
 
-    def record_reply(self, text, sender, rapidpro_message_id=None, quick_replies=None, mark_unread=True, is_chatbot_message=False):
+    def record_reply(self, text, sender, rapidpro_message_id=None, quick_replies=None, mark_unread=True, is_chatbot_message=False, rapidpro_message_uuid=None):
         if quick_replies is None:
             quick_replies = []
         if sender.is_rapidpro_bot_user and not rapidpro_message_id:
@@ -87,7 +85,7 @@ class ChatManager:
             client.send_reply(text)
 
         self._record_message_in_database(
-            sender=sender, rapidpro_message_id=rapidpro_message_id, text=text, quick_replies=quick_replies, is_chatbot_message=is_chatbot_message)
+            sender=sender, rapidpro_message_id=rapidpro_message_id, rapidpro_message_uuid=rapidpro_message_uuid, text=text, quick_replies=quick_replies, is_chatbot_message=is_chatbot_message)
 
         if mark_unread:
             self.thread.mark_unread(sender)

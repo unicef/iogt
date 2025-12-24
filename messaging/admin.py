@@ -36,6 +36,7 @@ class MessageAdmin(admin.ModelAdmin):
         'text',
         'thread',
         'sender',
+        'rapidpro_message_uuid',
     )
     list_filter = ('sent_at',)
     inlines = (AttachmentInlineAdmin,)

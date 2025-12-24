@@ -103,6 +103,7 @@ class Message(models.Model):
     is_chatbot_message = models.BooleanField(default=False)
 
     attachments = models.ManyToManyField('Attachment', blank=True)
+    rapidpro_message_uuid = models.UUIDField(null=True, blank=True)
 
     def _parse_attachments(self):
         message_parts = self.text.split('\n')
