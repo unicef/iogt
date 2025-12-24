@@ -22,7 +22,7 @@ class RapidProWebhook(APIView):
         serializer = RapidProMessageSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        rapidpro_message_id = serializer.validated_data['id']
+        rapidpro_message_id = serializer.validated_data['uuid']
         thread_uuid = serializer.validated_data['to']
         text = serializer.validated_data['text']
         quick_replies = serializer.validated_data['quick_replies']
