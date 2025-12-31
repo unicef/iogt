@@ -29,7 +29,7 @@ You can now set up a channel in RapidPro, and add this channel to IoGT so you ca
     6. **Max length**: 6400 (see notes: [1](#note-1), [2](#note-2))
     7. **Authorization Header Value**: Enter the _Chatbot Authentiation Header_ from the IoGT admin panel _Chatbot_ > _Chatbot Channels_, mentioned earlier (include the word 'Bearer' as well as the code)
     8. **Send URL**: `https://[URL of the IoGT site]/messaging/api/rapidpro-webhook/` where `[URL of the IoGT site]` is the URL of your IoGT site, e.g. `rw.goodinternet.org`.
-    9. **Request Body**: `{"id":{{id}}, "text":{{text}}, "to":{{to}}, "to_no_plus":{{to_no_plus}}, "from":{{from}}, "from_no_plus":{{from_no_plus}}, "channel":{{channel}}, "quick_replies":{{quick_replies}}}` (TODO: Check whether we can omit the `to_no_plus` and `from_no_plus`)
+    9. **Request Body**: `{"uuid":{{uuid}}, "text":{{text}}, "to":{{to}}, "to_no_plus":{{to_no_plus}}, "from":{{from}}, "from_no_plus":{{from_no_plus}}, "channel":{{channel}}, "quick_replies":{{quick_replies}}}` (TODO: Check whether we can omit the `to_no_plus` and `from_no_plus`)
     10. **MT Response check**: ok
 5. Click _Submit_
 6. You will land on the _External API Configuration_ page
