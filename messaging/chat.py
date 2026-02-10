@@ -80,7 +80,8 @@ class ChatManager:
     def record_reply(self, text, sender, rapidpro_message_id=None, quick_replies=None, mark_unread=True, is_chatbot_message=False, rapidpro_message_uuid=None):
         if quick_replies is None:
             quick_replies = []
-        if sender.is_rapidpro_bot_user and not rapidpro_message_id:
+        # if sender.is_rapidpro_bot_user and not rapidpro_message_id:
+        if not rapidpro_message_id:
             client = RapidProClient(self.thread)
             client.send_reply(text)
 
