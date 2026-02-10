@@ -19,7 +19,7 @@ class ChatManager:
             raise Exception('No thread found.')
         self.thread = thread
 
-    def _record_message_in_database(self, sender, rapidpro_message_id, text, quick_replies, is_chatbot_message, rapidpro_message_uuid):
+    def _record_message_in_database(self, sender, rapidpro_message_id, text, quick_replies, rapidpro_message_uuid):
         # Messages sent from User to RapidPro server don't have rapidpro_message_id
         from_rapidpro_server = bool(rapidpro_message_uuid)
         if from_rapidpro_server:
@@ -28,7 +28,6 @@ class ChatManager:
                 'text': text,
                 'quick_replies': quick_replies,
                 'thread': self.thread,
-                "is_chatbot_message": is_chatbot_message,
                 "rapidpro_message_id": rapidpro_message_id,
             })
             if not created:
@@ -77,15 +76,15 @@ class ChatManager:
                 cleaned_message = f'{message}{cleaned_message}'
         return cleaned_message, attachments
 
-    def record_reply(self, text, sender, rapidpro_message_id=None, quick_replies=None, mark_unread=True, is_chatbot_message=False, rapidpro_message_uuid=None):
+    def record_reply(self, text, sender, rapidpro_message_id=None, quick_replies=None, mark_unread=True, rapidpro_message_uuid=None):
         if quick_replies is None:
             quick_replies = []
-        if sender.is_rapidpro_bot_user and not rapidpro_message_id:
-            client = RapidProClient(self.thread)
-            client.send_reply(text)
+        # if not sender.is_rapidpro_bot_user:
+        client = RapidProClient(self.thread)
+        client.send_reply(text)
 
         self._record_message_in_database(
-            sender=sender, rapidpro_message_id=rapidpro_message_id, rapidpro_message_uuid=rapidpro_message_uuid, text=text, quick_replies=quick_replies, is_chatbot_message=is_chatbot_message)
+            sender=sender, rapidpro_message_id=rapidpro_message_id, rapidpro_message_uuid=rapidpro_message_uuid, text=text, quick_replies=quick_replies)
 
         if mark_unread:
             self.thread.mark_unread(sender)
