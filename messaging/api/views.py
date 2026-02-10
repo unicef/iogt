@@ -41,7 +41,7 @@ class RapidProWebhook(APIView):
         chat_manager = ChatManager(thread)
         chat_manager.record_reply(
             sender=request.user, text=text, quick_replies=quick_replies,
-            rapidpro_message_id=rapidpro_message_id, is_chatbot_message=True,
+            rapidpro_message_id=rapidpro_message_id,
             rapidpro_message_uuid=rapidpro_message_uuid
         )
 
