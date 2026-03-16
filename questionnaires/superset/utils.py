@@ -32,16 +32,16 @@ CHART_TYPE_MAP = {
 }
 
 CALCULATED_COLUMN_EXPRESSION_MAP = {
-    'checkbox': "((form_data::json)->'{}')::text",
-    'checkboxes': "trim(both '\"' from json_array_elements((form_data::json)->'{}')::TEXT)",
-    'dropdown': "trim(both '\"' from ((form_data::json)->'{}')::text)",
-    'email': "trim(both '\"' from ((form_data::json)->'{}')::text)",
-    'singleline': "((form_data::json)->'{}')::text",
-    'multiline': "((form_data::json)->'{}')::text",
+    'checkbox': "unistr(((form_data::json)->'{}')::text)",
+    'checkboxes': "unistr(trim(both '\"' from json_array_elements((form_data::json)->'{}')::text))",
+    'dropdown': "unistr(trim(both '\"' from ((form_data::json)->'{}')::text))",
+    'email': "unistr(trim(both '\"' from ((form_data::json)->'{}')::text))",
+    'singleline': "unistr(((form_data::json)->'{}')::text)",
+    'multiline': "unistr(((form_data::json)->'{}')::text)",
     'number': "(form_data::json->>'{}')::DECIMAL",
     'positivenumber': "(form_data::json->>'{}')::DECIMAL",
-    'radio': "trim(both '\"' from ((form_data::json)->'{}')::text)",
-    'url': "trim(both '\"' from ((form_data::json)->'{}')::text)",
+    'radio': "unistr(trim(both '\"' from ((form_data::json)->'{}')::text))",
+    'url': "unistr(trim(both '\"' from ((form_data::json)->'{}')::text))",
 }
 
 
