@@ -54,6 +54,7 @@ from home.utils import (
     get_all_renditions_urls,
 )
 import iogt.iogt_globals as globals_
+from django.db.models import Avg, Count
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -432,8 +433,25 @@ class AbstractArticle(Page, PageUtilsMixin, CommentableMixin, TitleIconMixin):
         verbose_name_plural = _("articles")
 
 
+@register_setting
+class FeedbackSettings(BaseSetting):
+    """Global setting to enable or disable feedback submission for all articles."""
+    enable_feedback = models.BooleanField(default=True, verbose_name="Enable Feedback")
+
+    panels = [
+        FieldPanel("enable_feedback"),
+    ]
+
+    class Meta:
+        verbose_name = "Rating Settings"
+
+
 class Article(AbstractArticle):
     tags = ClusterTaggableManager(through='ArticleTaggedItem', blank=True)
+
+    # New fields for precomputed values
+    average_rating = models.FloatField(default=0.0, null=True)
+    number_of_reviews = models.PositiveIntegerField(default=0, null=True)
 
     content_panels = AbstractArticle.content_panels + [
         MultiFieldPanel([
@@ -463,6 +481,12 @@ class Article(AbstractArticle):
             for recommended_article in self.recommended_articles.all() if recommended_article.article.live
         ]
 
+        # Fetch feedback setting correctly
+        feedback_settings = FeedbackSettings.for_request(request)
+        context["feedback_enabled"] = feedback_settings.enable_feedback
+
+        # Get the latest 5 feedbacks
+        context["feedbacks"] = self.feedbacks.order_by('-created_at')[:3]
         return context
 
     def serve(self, request):
@@ -470,6 +494,35 @@ class Article(AbstractArticle):
         if response.status_code == status.HTTP_200_OK:
             User.record_article_read(request=request, article=self)
         return response
+    
+    def update_feedback_metrics(self):
+        """
+        Updates the average rating and number of reviews for this article.
+        """
+        feedback_stats = self.feedbacks.aggregate(
+            avg_rating=Avg("rating"), review_count=Count("id")
+        )
+        self.average_rating = feedback_stats["avg_rating"] or 0.0
+        self.number_of_reviews = feedback_stats["review_count"] or 0
+        self.save(update_fields=["average_rating", "number_of_reviews"])
+
+    def compute_average_rating(self):
+        return self.average_rating if self.average_rating else 0
+
+    def compute_number_of_reviews(self):
+        return self.number_of_reviews if self.number_of_reviews else 0
+
+
+class ArticleFeedback(models.Model):
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='feedbacks')
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
+    session_id = models.CharField(max_length=255, null=True, blank=True)
+    rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)])
+    feedback = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('article', 'user')
 
 
 class MiscellaneousIndexPage(Page):

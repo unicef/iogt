@@ -1,0 +1,4 @@
+/* Hide the "Add Article" button in the Wagtail admin */
+a[href*="/admin/home/article/create/"] {
+    display: none !important;
+}

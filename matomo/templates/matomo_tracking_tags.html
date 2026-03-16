@@ -1,20 +1,52 @@
 <!-- Matomo -->
+<script>
+ async function hashEmail(email) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(email);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(hashBuffer))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+}
+</script>
 {% if tracking_enabled %}
-    <script type="text/javascript">
-      var _paq = window._paq = window._paq || [];
-      _paq.push(['trackPageView']);
-      _paq.push(['enableLinkTracking']);
-      (function() {
-        var u="{{ matomo_server_url }}";
-        _paq.push(['setTrackerUrl', u+'matomo.php']);
-        _paq.push(['setSiteId', '{{ matomo_site_id }}']);
-        {% if matomo_additional_site_id %}
-        _paq.push(['addTracker', u+'matomo.php', '{{ matomo_additional_site_id }}']);
-        {% endif %}
-        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-        g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-      })();
+    <script>
+        var _paq = window._paq = window._paq || [];
+        /* Tracker methods like "setCustomDimension" should be called before "trackPageView" */
+        var randValue = Math.floor(Math.random() * 1000000000);  // Random value for cache prevention
+        var apivParam = '&apiv=1&rand=' + randValue;
+
+        _paq.push(['setDocumentTitle', document.title]);
+        _paq.push(['setCustomUrl', window.location.href]);
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+
+         {% if user_id %}
+            hashEmail("{{ user_id|escapejs }}").then(hashedEmail => {
+                console.log(hashedEmail);
+                if (window._paq) {
+                _paq.push(['setUserId', hashedEmail]);
+                } else {
+                console.error('Matomo _paq not initialized');
+                }
+            });
+         {% endif %}
+
+        (function() {
+            var u = "{{ matomo_server_url }}";
+<!--            var u = "https://unisitetracker.unicef.io/";-->
+
+            _paq.push(['setTrackerUrl', u + 'matomo.php']);
+            _paq.push(['setSiteId', '{{ matomo_site_id }}']);
+
+            var randValue = Math.floor(Math.random() * 1000000000);  // Random value for cache prevention
+
+            var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+            g.async = true; 
+            g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+        })();
     </script>
+
     <noscript>
         <img src="{{ matomo_image_tracker_url }}" style="border:0" alt="" />
         {% if matomo_additional_image_tracker_url %}

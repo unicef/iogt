@@ -1,3 +1,5 @@
+import time
+
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
@@ -66,7 +68,8 @@ class ThreadDetailView(View):
 
             chat_manager = ChatManager(thread)
             chat_manager.record_reply(text=text, sender=request.user, mark_unread=False)
-
+            time.sleep(1)
+            
             return redirect(reverse('messaging:thread', kwargs={'thread_id': thread.pk}))
         else:
             return render(request, 'messaging/thread_detail.html', context=self.get_context(thread))

@@ -7,15 +7,14 @@
 
 <header id="header" style="background: {{ settings.home.ThemeSettings.header_background_color }}">
     <div class="header-holder">
-        <div class="btn-holder">
-            <div class="nav-bar__item">
-                {% url 'account_login' as login_url %}
-                {% if request.user.is_anonymous %}
-                    {% primary_button title="Log in / Create account" href=login_url icon_path='icons/login.svg' extra_classnames='login-create-account-btn' %}
-                {% else %}
-                    {% url 'user_profile' as profile_url %}
-                {% primary_button title="Profile" href=profile_url icon_path='icons/profile.svg' %}
-                {% endif %}
+        <div class="header-content">
+            <div class="logo-holder">
+                <a href="{% translated_home_page_url LANGUAGE_CODE %}">
+                    {% image settings.home.SiteSettings.logo width-120 class='xs-image' %}
+                </a>
+            </div>
+            <div class="language__select">
+                {% language_switcher page %}
             </div>
         </div>
         <div class="form-holder search-form-holder">
@@ -31,14 +30,15 @@
                 </label>
             </form>
         </div>
-        <div class="header-content">
-            <div class="logo-holder">
-                <a href="{% translated_home_page_url LANGUAGE_CODE %}">
-                    {% image settings.home.SiteSettings.logo width-120 class='xs-image' %}
-                </a>
-            </div>
-            <div class="language__select">
-                {% language_switcher page %}
+        <div class="btn-holder">
+            <div class="nav-bar__item">
+                {% url 'account_login' as login_url %}
+                {% if request.user.is_anonymous %}
+                    {% primary_button title="Log in / Create account" href=login_url icon_path='icons/login.svg' extra_classnames='login-create-account-btn' %}
+                {% else %}
+                    {% url 'user_profile' as profile_url %}
+                {% primary_button title="Profile" href=profile_url icon_path='icons/profile.svg' %}
+                {% endif %}
             </div>
         </div>
     </div>

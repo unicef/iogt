@@ -92,13 +92,49 @@ const init = (event) => {
 };
 
 const download = pageId => {
+    console.log("Starting download for page:", pageId);
+
     fetch(`/page-tree/${pageId}/`)
-        .then(resp => resp.json())
+        .then(resp => {
+            if (!resp.ok) {
+                throw new Error(`Failed to fetch URLs for caching. Status: ${resp.status}`);
+            }
+            return resp.json();
+        })
         .then(urls => {
-            caches.open('iogt')
-                .then(cache => {
-                    cache.addAll(urls);
-                });
+            if (!Array.isArray(urls) || urls.length === 0) {
+                throw new Error("No URLs received for caching.");
+            }
+
+            return caches.open('iogt').then(cache => {
+                console.log("URLs to cache:", urls);
+
+                return Promise.all(urls.map(url =>
+                    fetch(url, { method: 'HEAD' }) // Check if URL exists
+                        .then(response => {
+                            if (response.ok) {
+                                return cache.add(url).catch(error => {
+                                    if (error.name === 'QuotaExceededError') {
+                                        alert("⚠️ Your storage limit has been reached! Please free up space.");
+                                        throw new Error("Storage full! Cannot cache more content.");
+                                    }
+                                    throw error; // Rethrow other errors
+                                });
+                            } else {
+                                console.warn(`Skipping invalid URL: ${url} (Status: ${response.status})`);
+                            }
+                        })
+                        .catch(err => console.warn(`Skipping ${url} due to error:`, err))
+                ));
+            });
+        })
+        .then(() => {
+            console.log("✅ Content cached successfully!");
+            alert("✅ Content is now available offline!");
+        })
+        .catch(error => {
+            console.error("❌ Download error:", error);
+            alert("⚠️ Download failed. Please try again.");
         });
 };
 

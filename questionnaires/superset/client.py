@@ -47,7 +47,6 @@ class SupersetClient:
 
     def _api_caller(self, request):
         request = self.session.prepare_request(request)
-        print("Sending Request:")
         print(f"URL: {request.url}")
         print(f"Method: {request.method}")
         print(f"Headers: {request.headers}")

@@ -206,3 +206,11 @@ class LocaleDetailAdmin(ModelAdmin):
 
 modeladmin_register(TranslationEntryAdmin)
 modeladmin_register(LocaleDetailAdmin)
+
+
+@hooks.register("insert_global_admin_css")
+def hide_add_article_button():
+    """
+    Inject custom CSS to hide the "Add Article" button in the Wagtail admin.
+    """
+    return format_html('<link rel="stylesheet" href="/static/css/custom_admin.css">')
