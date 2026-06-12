@@ -1,11 +1,9 @@
 from django.contrib import admin
-from wagtail_modeladmin.options import ModelAdmin, modeladmin_register
-from django.db.models import Avg, Count
-from django.utils.html import format_html
 from django.urls import reverse
-from django.utils.translation import get_language_info
+from django.utils.html import format_html
+from wagtail_modeladmin.options import ModelAdmin, modeladmin_register
 
-from home.models import ManifestSettings, SVGToPNGMap, Article, ArticleFeedback
+from home.models import ManifestSettings, SVGToPNGMap, Article
 
 
 class ManifestSettingsAdmin(ModelAdmin):
@@ -34,8 +32,7 @@ class ArticleAdmin(ModelAdmin):
     ordering = ("-average_rating", "-number_of_reviews")  # Sort by rating & reviews in descending order
     def get_locale(self, obj):
         if obj.locale:
-            info = get_language_info(obj.locale.language_code)
-            return info["name_local"]
+            return obj.locale.get_display_name()
         return "-"
     get_locale.short_description = "Locale"
     get_locale.admin_order_field = "locale"
