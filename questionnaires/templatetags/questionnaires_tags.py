@@ -110,10 +110,19 @@ def render_questionnaire_form(context, page, background_color=None, font_color=N
         'background_color': background_color,
         'questionnaire': page,
     })
-    if request.method == 'POST':
+    is_submitted_form = request.method == 'POST' and str(page.id) == request.POST.get('questionnaire_id')
+    form_successfully_submitted = False
+
+    if is_submitted_form:
         form = page.get_form(request.POST, page=page, user=request.user)
+        if not request.session.session_key:
+            request.session.save()
+        form.session_key = request.session.session_key
+        
         if form.is_valid():
+            page.process_form_submission(form)
             context.update(page.get_context(request))  # This includes result & feedback
+            form_successfully_submitted = True
     else:
         form = page.get_form(page=page, user=request.user)
 
@@ -126,16 +135,16 @@ def render_questionnaire_form(context, page, background_color=None, font_color=N
                                                            page=page).exists()
     )
     anonymous_user_submission_check = request.user.is_anonymous and not page.allow_anonymous_submissions
-    if multiple_submission_check or anonymous_user_submission_check:
+    
+    if not form_successfully_submitted and (multiple_submission_check or anonymous_user_submission_check):
         context.update({
             'form': None,
         })
         return context
 
-    form = form_class(page=page, user=context['request'].user)
-
     context.update({
         'form': form,
+        'form_successfully_submitted': form_successfully_submitted,
     })
 
     return context
