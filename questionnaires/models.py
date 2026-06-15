@@ -247,12 +247,12 @@ class QuestionnairePage(Page, PageUtilsMixin, TitleIconMixin):
         return render(request, self.template, context)
 
     def process_form_submission(self, form):
-        user = form.user
+        user = getattr(form, 'user', None)
         self.get_submission_class().objects.create(
             form_data=form.cleaned_data,
             page=self,
-            user=None if user.is_anonymous else user,
-            session_key=self.session.session_key,
+            user=None if (user and user.is_anonymous) else user,
+            session_key=getattr(form, 'session_key', None),
         )
 
     # Required by Wagtail Forms
