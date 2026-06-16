@@ -81,8 +81,8 @@ def get_action_url(page, self, fields_step, request, form):
 def render_questionnaire_form(context, page, background_color=None, font_color=None):
     theme_settings = globals_.theme_settings
 
-    font_color = font_color or theme_settings.section_listing_questionnaire_font_color
-    background_color = background_color or theme_settings.section_listing_questionnaire_background_color
+    font_color = font_color or (theme_settings.section_listing_questionnaire_font_color if theme_settings else '#444')
+    background_color = background_color or (theme_settings.section_listing_questionnaire_background_color if theme_settings else '#f0f0f0')
 
     request = context['request']
 
@@ -124,7 +124,33 @@ def render_questionnaire_form(context, page, background_color=None, font_color=N
             context.update(page.get_context(request))  # This includes result & feedback
             form_successfully_submitted = True
     else:
-        form = page.get_form(page=page, user=request.user)
+        from questionnaires.models import Quiz
+        multiple_submission_filter = (
+            Q(session_key=request.session.session_key) if request.user.is_anonymous else Q(user__pk=request.user.pk)
+        )
+        if isinstance(page, Quiz):
+            from iogt_users.models import QuizAttempt
+            if request.user.is_authenticated:
+                has_submitted = (
+                    QuizAttempt.objects.filter(user=request.user, quiz=page).exists()
+                    and page.get_submission_class().objects.filter(multiple_submission_filter, page=page).exists()
+                )
+            else:
+                has_submitted = (
+                    bool(request.session.session_key)
+                    and page.get_submission_class().objects.filter(multiple_submission_filter, page=page).exists()
+                )
+        else:
+            has_submitted = (
+                (request.session.session_key or request.user.is_authenticated)
+                and page.get_submission_class().objects.filter(multiple_submission_filter, page=page).exists()
+            )
+        if isinstance(page, Quiz) and has_submitted:
+            context.update(page.get_context(request))
+            form = context.get('form')
+            form_successfully_submitted = True
+        else:
+            form = page.get_form(page=page, user=request.user)
 
     multiple_submission_filter = (
         Q(session_key=request.session.session_key) if request.user.is_anonymous else Q(user__pk=request.user.pk)

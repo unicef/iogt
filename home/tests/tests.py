@@ -168,3 +168,116 @@ class ImageResizeTest(TestCase):
 
 def parse_html(html: str) -> BeautifulSoup:
     return BeautifulSoup(html, 'lxml')
+
+
+from questionnaires.templatetags.questionnaires_tags import render_questionnaire_form
+from questionnaires.factories import QuizFactory, QuizFormFieldFactory
+from iogt_users.factories import UserFactory
+from django.contrib.sessions.middleware import SessionMiddleware
+
+class EmbeddedQuizRefreshTests(TestCase):
+    def setUp(self):
+        Site.objects.all().delete()
+        self.site = SiteFactory(site_name='IoGT', port=8000, is_default_site=True)
+        self.home_page = HomePageFactory(parent=self.site.root_page)
+        self.article = ArticleFactory(parent=self.home_page)
+        self.quiz = QuizFactory(parent=self.home_page, allow_multiple_submissions=True)
+        self.field = QuizFormFieldFactory(
+            page=self.quiz,
+            required=True,
+            choices="A|B",
+            default_value="",
+            correct_answer="A",
+            field_type="radio",
+            label="is_lead_dangerous",
+            clean_name="is_lead_dangerous",
+        )
+        from questionnaires.models import Quiz
+        self.quiz = Quiz.objects.get(id=self.quiz.id)
+        self.user = UserFactory()
+
+    def _get_request(self, method='GET', path=None, user=None, post_data=None):
+        from django.test import RequestFactory
+        factory = RequestFactory()
+        url = path or self.article.url
+        if method == 'POST':
+            request = factory.post(url, data=post_data or {})
+        else:
+            request = factory.get(url)
+        request.user = user or self.user
+        
+        # Add session support
+        middleware = SessionMiddleware(lambda req: None)
+        middleware.process_request(request)
+        request.session.save()
+        return request
+
+    def test_embedded_quiz_not_submitted(self):
+        request = self._get_request()
+        context = {'request': request}
+        res_context = render_questionnaire_form(context, self.quiz)
+        
+        self.assertIsNotNone(res_context.get('form'))
+        self.assertFalse(res_context.get('form_successfully_submitted'))
+        self.assertNotIn('result', res_context)
+
+    def test_embedded_quiz_submitted_and_refreshed(self):
+        # 1. First, submit the quiz via POST to create UserSubmission / QuizAttempt
+        post_data = {
+            'questionnaire_id': str(self.quiz.id),
+            self.field.clean_name: 'A',
+        }
+        request_post = self._get_request(method='POST', post_data=post_data)
+        context_post = {'request': request_post}
+        res_context_post = render_questionnaire_form(context_post, self.quiz)
+        
+        if not res_context_post.get('form_successfully_submitted'):
+            print("FORM ERRORS:", res_context_post['form'].errors)
+            print("FIELD CLEAN NAME IS:", self.field.clean_name)
+            print("FIELDS ON QUIZ:", [(f.label, f.clean_name) for f in self.quiz.get_form_fields()])
+        self.assertTrue(res_context_post.get('form_successfully_submitted'))
+        self.assertIn('result', res_context_post)
+        self.assertEqual(res_context_post['result']['total_correct'], 1)
+        
+        # 2. Now perform a GET request (refresh the page) to the Article URL
+        request_get = self._get_request(method='GET')
+        context_get = {'request': request_get}
+        res_context_get = render_questionnaire_form(context_get, self.quiz)
+        
+        # 3. Assert that results/feedback and filled form are returned
+        self.assertTrue(res_context_get.get('form_successfully_submitted'))
+        self.assertIn('result', res_context_get)
+        self.assertEqual(res_context_get['result']['total_correct'], 1)
+        self.assertEqual(res_context_get['form'].data.getlist(self.field.clean_name), ['A'])
+
+    def test_embedded_quiz_submitted_and_refreshed_anonymous(self):
+        from django.contrib.auth.models import AnonymousUser
+        anonymous_user = AnonymousUser()
+
+        # 1. First, submit the quiz via POST
+        post_data = {
+            'questionnaire_id': str(self.quiz.id),
+            self.field.clean_name: 'A',
+        }
+        request_post = self._get_request(method='POST', post_data=post_data, user=anonymous_user)
+        session_key = request_post.session.session_key
+
+        context_post = {'request': request_post}
+        res_context_post = render_questionnaire_form(context_post, self.quiz)
+
+        self.assertTrue(res_context_post.get('form_successfully_submitted'))
+        self.assertIn('result', res_context_post)
+        self.assertEqual(res_context_post['result']['total_correct'], 1)
+
+        # 2. Now perform a GET request (refresh the page) with the same session key
+        request_get = self._get_request(method='GET', user=anonymous_user)
+        request_get.session._session_key = session_key
+
+        context_get = {'request': request_get}
+        res_context_get = render_questionnaire_form(context_get, self.quiz)
+
+        # 3. Assert that results/feedback and filled form are returned
+        self.assertTrue(res_context_get.get('form_successfully_submitted'))
+        self.assertIn('result', res_context_get)
+        self.assertEqual(res_context_get['result']['total_correct'], 1)
+        self.assertEqual(res_context_get['form'].data.getlist(self.field.clean_name), ['A'])

@@ -885,7 +885,8 @@ class Quiz(QuestionnairePage, AbstractForm):
         context.update({'form_length': request.GET.get('form_length')})
         from iogt_users.models import QuizAttempt
         form_helper = FormHelper(pk=self.pk, request=request)
-        if self.multi_step:
+        is_embedded_submission = request.method == 'POST' and request.POST.get('questionnaire_id') == str(self.pk)
+        if self.multi_step and not is_embedded_submission:
             form_data = form_helper.get_full_form_data()
         else:
             if request.GET.get('view') == 'answers' and request.user.is_authenticated:
@@ -893,10 +894,32 @@ class Quiz(QuestionnairePage, AbstractForm):
                 last_attempt = QuizAttempt.objects.filter(user=user, quiz=self).order_by('-completed_at').first()
                 if last_attempt:
                     form_data = last_attempt.submitted_answers or {}
+            elif request.method == 'GET' and self.get_url(request) and request.path.rstrip('/') != self.get_url(request).rstrip('/'):
+                if request.user.is_authenticated:
+                    last_attempt = QuizAttempt.objects.filter(user=request.user, quiz=self).order_by('-completed_at').first()
+                    form_data = last_attempt.submitted_answers if last_attempt else {}
+                elif request.session.session_key:
+                    multiple_submission_filter = Q(session_key=request.session.session_key)
+                    last_submission = self.get_submission_class().objects.filter(
+                        multiple_submission_filter, page=self
+                    ).order_by('-submit_time').first()
+                    form_data = last_submission.get_data() if last_submission else {}
+                else:
+                    form_data = request.POST
             else:
                 form_data = request.POST
         
         if form_data:
+            from django.http import QueryDict
+            if not isinstance(form_data, QueryDict):
+                qdict = QueryDict('', mutable=True)
+                for key, val in form_data.items():
+                    if isinstance(val, list):
+                        qdict.setlist(key, val)
+                    else:
+                        qdict[key] = val
+                form_data = qdict
+
             form = self.get_form(
                 data=form_data,
                 page=self, user=request.user
@@ -996,7 +1019,18 @@ class QuizChoice(Orderable):
         FieldPanel('feedback'),
     ]
     def __str__(self):
-        return f"{self.choice_text} "
+                return self.choice_text
+
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
+
+@receiver(post_delete, sender=UserSubmission)
+def delete_quiz_attempt_on_submission_delete(sender, instance, **kwargs):
+    from iogt_users.models import QuizAttempt
+    from questionnaires.models import Quiz
+    page_specific = instance.page.specific
+    if instance.user and isinstance(page_specific, Quiz):
+        QuizAttempt.objects.filter(user=instance.user, quiz=page_specific).delete()
 
 
 class PollIndexPage(Page):
