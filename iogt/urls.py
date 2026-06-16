@@ -26,9 +26,11 @@ from iogt.views import (
     OfflineContentNotFoundPageView,
     CustomLogoutView,
 )
+from iogt.csrf_api import csrf_token_api
 from wagtailautocomplete.urls.admin import urlpatterns as autocomplete_admin_urls
 
 api_url_patterns = [
+    path('api/csrf/', csrf_token_api, name='api_csrf'),
     path('api/v1/questionnaires/', include('questionnaires.api.v1.urls')),
     path('api/interactive/', include('interactive.api.urls')),
     # path("notifications/save-preference/", save_notification_preference, name="save_notification_preference"),

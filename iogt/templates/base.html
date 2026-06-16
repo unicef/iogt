@@ -158,6 +158,21 @@
         </style>
     </noscript>
     {% block extra_js %}{% endblock %}
+    <!-- CSRF Token Auto-Updater -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Only fetch if there's a form or an element needing CSRF
+            if (document.querySelector('input[name="csrfmiddlewaretoken"]')) {
+                fetch('/api/csrf/').then(r => r.json()).then(data => {
+                    const token = data.csrfToken;
+                    document.querySelectorAll('input[name="csrfmiddlewaretoken"]').forEach(el => {
+                        el.value = token;
+                    });
+                    window.csrfToken = token; // Global fallback
+                }).catch(e => console.error("CSRF fetch failed", e));
+            }
+        });
+    </script>
 </body>
 
 </html>
