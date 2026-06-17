@@ -46,7 +46,6 @@
                         {% endif %}
                         {% for field_name, info in fields_info.items %}
                             <div class="feedback-item">
-                                <strong>{{ field_name|title }}</strong>:
                                 {% if info.is_correct %}
                                     ✅ Correct
                                 {% else %}
