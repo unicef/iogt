@@ -1,9 +1,9 @@
 {% load wagtailcore_tags i18n %}
 
 <div>
-    <video preload="metadata" width="320" height="240" controls playsinline webkit-playsinline>
+    <video preload="none" width="320" height="240" controls>
         {% for source in value.sources %}
-            <source src="{{ source.src }}"{% if source.type and source.type != "application/octet-stream" %} type="{{ source.type }}"{% endif %}>
+            <source src="{{ source.src }}" type="{{ source.type }}">
         {% endfor %}
         {% translate "Your browser does not support video playback." %}
     </video>

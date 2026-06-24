@@ -29,7 +29,7 @@ class Command(BaseCommand):
         user.groups.add(group)
 
         if created:
-            user.set_password(User.objects.make_random_password())
+            user.set_password(str(uuid4()))  # make_random_password() removed in Django 5
             user.save(update_fields=['password'])
             action = "created"
         else:

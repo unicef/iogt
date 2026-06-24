@@ -8,19 +8,13 @@ services:
     env_file:
       - .env
     image: iogt:latest
-
     ports:
       - "8000:8000"
     depends_on:
       - db
     volumes:
       - ./:/app/
-#  db:
-#    image: postgres:14-alpine
-#    environment:
-#      POSTGRES_USER: postgres
-#      POSTGRES_PASSWORD: postgresiogt
-#      POSTGRES_DB: iogt
+
   celery:
     build:
       context: ./
@@ -45,3 +39,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgresiogt
       POSTGRES_DB: iogt
+    volumes:
+      - iogt_postgres_data:/var/lib/postgresql/data   # <-- persists the database
+
+volumes:
+  iogt_postgres_data:

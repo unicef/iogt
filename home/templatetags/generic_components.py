@@ -15,8 +15,8 @@ def primary_button(title, extra_classnames='', href=None, icon_path=None, icon=N
                    background_color=None):
     theme_settings = globals_.theme_settings
 
-    font_color = font_color or (theme_settings.primary_button_font_color if theme_settings else '#444')
-    background_color = background_color or (theme_settings.primary_button_background_color if theme_settings else '#f0f0f0')
+    font_color = font_color or theme_settings.primary_button_font_color
+    background_color = background_color or theme_settings.primary_button_background_color
 
     return {
         'title': title,
@@ -33,8 +33,8 @@ def primary_button(title, extra_classnames='', href=None, icon_path=None, icon=N
 def render_article_card(context, page, is_first_content=False, display_section_title=False, background_color=None, font_color=None):
     theme_settings = globals_.theme_settings
 
-    font_color = font_color or (theme_settings.article_card_font_color if theme_settings else '#444')
-    background_color = background_color or (theme_settings.article_card_background_color if theme_settings else '#ffffff')
+    font_color = font_color or theme_settings.article_card_font_color
+    background_color = background_color or theme_settings.article_card_background_color
 
     context.update({
         'article': page,
@@ -50,8 +50,8 @@ def render_article_card(context, page, is_first_content=False, display_section_t
 def render_section_card(context, page, is_first_content=False, background_color=None, font_color=None):
     theme_settings = globals_.theme_settings
 
-    font_color = font_color or (theme_settings.section_card_font_color if theme_settings else '#444')
-    background_color = background_color or (theme_settings.section_card_background_color if theme_settings else '#ffffff')
+    font_color = font_color or theme_settings.section_card_font_color
+    background_color = background_color or theme_settings.section_card_background_color
 
     context.update({
         'section': page,
@@ -66,8 +66,8 @@ def render_section_card(context, page, is_first_content=False, background_color=
 def render_questionnaire_card(context, page, background_color=None, font_color=None):
     theme_settings = globals_.theme_settings
 
-    font_color = font_color or (theme_settings.section_listing_questionnaire_font_color if theme_settings else '#444')
-    background_color = background_color or (theme_settings.section_listing_questionnaire_background_color if theme_settings else '#f0f0f0')
+    font_color = font_color or theme_settings.section_listing_questionnaire_font_color
+    background_color = background_color or theme_settings.section_listing_questionnaire_background_color
 
     context.update({
         'questionnaire': page,
@@ -91,6 +91,5 @@ def render_interactive_card(context, page=None, background_color=None, font_colo
 @register.simple_tag
 def language_picker_style():
     theme_settings = globals_.theme_settings
-    font_color = theme_settings.language_picker_font_color if theme_settings else '#303030'
-    bg_color = theme_settings.language_picker_background_color if theme_settings else '#FDD256'
-    return f"color:{font_color};background-color:{bg_color}"
+    return f"color:{theme_settings.language_picker_font_color};background-color:" \
+           f"{theme_settings.language_picker_background_color}"

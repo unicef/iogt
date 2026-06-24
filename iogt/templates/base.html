@@ -1,9 +1,10 @@
 {% load static wagtailuserbar offline_tags home_tags sass_tags wagtailsettings_tags menu_tags generic_components i18n wagtailimages_tags matomo_tags %}
 {% get_settings %}
+{% get_current_language as A11Y_LANGUAGE_CODE %}
 
 <!--  Commit Hash: {{commit_hash}} -->
 <!DOCTYPE html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="{{ A11Y_LANGUAGE_CODE|default:'en' }}">
 <head>
     <meta charset="utf-8" />
     <meta name="vapid-key" content="{{ vapid_public_key }}">
@@ -41,6 +42,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/navbar/navbar.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/global/global.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/iogt.css' %}">
+    {# Accessibility panel styles #}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/accessibility.css' %}?v=10">
 
     {% block extra_css %}
     {# Override this in templates to add extra stylesheets #}
@@ -158,21 +161,8 @@
         </style>
     </noscript>
     {% block extra_js %}{% endblock %}
-    <!-- CSRF Token Auto-Updater -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Only fetch if there's a form or an element needing CSRF
-            if (document.querySelector('input[name="csrfmiddlewaretoken"]')) {
-                fetch('/api/csrf/').then(r => r.json()).then(data => {
-                    const token = data.csrfToken;
-                    document.querySelectorAll('input[name="csrfmiddlewaretoken"]').forEach(el => {
-                        el.value = token;
-                    });
-                    window.csrfToken = token; // Global fallback
-                }).catch(e => console.error("CSRF fetch failed", e));
-            }
-        });
-    </script>
+    {# Accessibility panel – loaded last so it overlays everything #}
+    <script src="{% static 'js/accessibility.js' %}?v=10"></script>
 </body>
 
 </html>

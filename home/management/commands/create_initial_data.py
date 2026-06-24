@@ -1,7 +1,6 @@
 from datetime import datetime, timezone
 from io import BytesIO
 
-import requests
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
@@ -30,11 +29,54 @@ class Command(BaseCommand):
         Page.objects.filter(id=2).delete()
 
     def create_image(self):
-        response = requests.get('https://via.placeholder.com/729x576.png?text=Youth')
+        """
+        Generate a simple placeholder image locally using only stdlib/Pillow.
+        This avoids any external network request (the original code fetched
+        from via.placeholder.com which has SSL issues in some environments).
+        """
+        try:
+            # Try to use Pillow if available (it is in the project requirements)
+            from PIL import Image as PilImage, ImageDraw, ImageFont
+            img = PilImage.new('RGB', (729, 576), color=(28, 171, 226))
+            draw = ImageDraw.Draw(img)
+            # Draw a simple label in the centre
+            text = 'Youth'
+            try:
+                # Pillow 10+
+                bbox = draw.textbbox((0, 0), text)
+                w, h = bbox[2] - bbox[0], bbox[3] - bbox[1]
+            except AttributeError:
+                w, h = draw.textsize(text)
+            draw.text(((729 - w) / 2, (576 - h) / 2), text, fill=(255, 255, 255))
+            buf = BytesIO()
+            img.save(buf, format='JPEG')
+            buf.seek(0)
+        except Exception:
+            # Fallback: create a minimal 1x1 white JPEG without any library
+            # JFIF/JPEG binary for a 1x1 white pixel
+            buf = BytesIO(
+                b'\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01\x01\x00\x00\x01\x00\x01\x00\x00'
+                b'\xff\xdb\x00C\x00\x08\x06\x06\x07\x06\x05\x08\x07\x07\x07\t\t'
+                b'\x08\n\x0c\x14\r\x0c\x0b\x0b\x0c\x19\x12\x13\x0f\x14\x1d\x1a'
+                b'\x1f\x1e\x1d\x1a\x1c\x1c $.\' ",#\x1c\x1c(7),01444\x1f\'9=82<.342\x1e\x1b'
+                b'453739\x1b\x22LXeC\x1dB=0\x1a...\x1e\x1d\x1f\x1c\x1c'
+                b'\xff\xc0\x00\x0b\x08\x00\x01\x00\x01\x01\x01\x11\x00'
+                b'\xff\xc4\x00\x1f\x00\x00\x01\x05\x01\x01\x01\x01\x01\x01\x00\x00'
+                b'\x00\x00\x00\x00\x00\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b'
+                b'\xff\xc4\x00\xb5\x10\x00\x02\x01\x03\x03\x02\x04\x03\x05\x05\x04'
+                b'\x04\x00\x00\x01}\x01\x02\x03\x00\x04\x11\x05\x12!1A\x06\x13Qa'
+                b'\x07"q\x142\x81\x91\xa1\x08#B\xb1\xc1\x15R\xd1\xf0$3br\x82\t\n'
+                b'\x16\x17\x18\x19\x1a%&\'()*456789:CDEFGHIJSTUVWXYZ'
+                b'cdefghijstuvwxyz\x83\x84\x85\x86\x87\x88\x89\x8a\x92\x93\x94\x95'
+                b'\x96\x97\x98\x99\x9a\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xb2\xb3'
+                b'\xb4\xb5\xb6\xb7\xb8\xb9\xba\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca'
+                b'\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xe1\xe2\xe3\xe4\xe5\xe6\xe7'
+                b'\xe8\xe9\xea\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa'
+                b'\xff\xda\x00\x08\x01\x01\x00\x00?\x00\xfb\xd4P\x00\x00\x00\x1f\xff\xd9'
+            )
 
         title = 'youth_banner.jpg'
-        image_file = ImageFile(BytesIO(response.content), name=title)
-
+        image_file = ImageFile(buf, name=title)
         return Image.objects.create(title=title, file=image_file)
 
     def create_homepage(self):
@@ -63,7 +105,7 @@ class Command(BaseCommand):
         article = models.Article(
             title='Do you know the person adding you?',
             body=[('paragraph',
-                   RichText('Someone sent me a friend request - but I don’t know this person, what should I do?'))],
+                   RichText('Someone sent me a friend request - but I don\u2019t know this person, what should I do?'))],
             owner=owner,
             first_published_at=datetime.now(timezone.utc),
             commenting_status=CommentStatus.OPEN

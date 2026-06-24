@@ -1,0 +1,941 @@
+/* ============================================================
+   IOGT Uzbekistan – Accessibility Styles  v3
+   File: iogt/static/css/accessibility.css
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   0. SELF-CONTAINMENT RESET
+   The host site has a global rule:
+       button { ... } and button:hover/:active/:focus { background:#303030 }
+   which bleeds into our panel buttons (turning them black on focus).
+   We neutralise ALL inherited button styling on our own elements here.
+   ---------------------------------------------------------- */
+
+#a11y-toggle-btn,
+#a11y-panel button {
+  margin: 0;
+  width: auto;
+  line-height: normal;
+  font-weight: 400;
+  text-align: left;
+  transition: none;
+}
+
+#a11y-panel button:hover,
+#a11y-panel button:active,
+#a11y-panel button:focus,
+#a11y-toggle-btn:hover,
+#a11y-toggle-btn:active,
+#a11y-toggle-btn:focus {
+  color: inherit;            /* cancel the site's white-on-dark */
+}
+
+#a11y-toggle-btn:hover,
+#a11y-toggle-btn:active,
+#a11y-toggle-btn:focus {
+  background: #6254a8 !important;   /* keep brand purple, never #303030 */
+}
+
+/* The site forces background:#303030 on button:hover/active/focus.
+   Re-assert our own backgrounds with high specificity + !important. */
+#a11y-panel .a11y-toggle-row:hover,
+#a11y-panel .a11y-toggle-row:focus,
+#a11y-panel .a11y-toggle-row:active {
+  background: #ede9f8 !important;
+  color: #50448f !important;
+}
+
+#a11y-panel .a11y-step-btn:hover,
+#a11y-panel .a11y-step-btn:focus,
+#a11y-panel .a11y-step-btn:active {
+  background: #ede9f8 !important;
+  color: #50448f !important;
+}
+
+#a11y-panel .a11y-panel__reset:hover,
+#a11y-panel .a11y-panel__reset:focus,
+#a11y-panel .a11y-panel__reset:active,
+#a11y-panel .a11y-panel__close:hover,
+#a11y-panel .a11y-panel__close:focus,
+#a11y-panel .a11y-panel__close:active {
+  background: rgba(255,255,255,0.32) !important;
+  color: #fff !important;
+}
+
+
+/* ----------------------------------------------------------
+   1. FLOATING TRIGGER BUTTON  – bottom-LEFT corner
+   ---------------------------------------------------------- */
+
+#a11y-toggle-btn {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 10000;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #50448f;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(80, 68, 143, 0.45);
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+#a11y-toggle-btn:hover,
+#a11y-toggle-btn:focus-visible {
+  background: #6254a8;
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(80, 68, 143, 0.55);
+}
+
+#a11y-toggle-btn svg {
+  width: 26px;
+  height: 26px;
+  fill: #fff !important;
+  pointer-events: none;
+}
+
+/* ----------------------------------------------------------
+   2. BACKDROP
+   ---------------------------------------------------------- */
+
+#a11y-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 10, 40, 0.12);
+  z-index: 10001;
+}
+
+#a11y-backdrop.a11y-open {
+  display: block;
+}
+
+/* ----------------------------------------------------------
+   3. MODAL PANEL  – compact, centred, not full-height
+   ---------------------------------------------------------- */
+
+#a11y-panel {
+  position: fixed;
+  bottom: 88px;          /* sit above the trigger button */
+  left: 16px;
+  width: 300px;
+  max-height: calc(100vh - 110px);
+  background: #fff;
+  z-index: 10002;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  box-shadow:
+    0 8px 32px rgba(80, 68, 143, 0.22),
+    0 2px 8px  rgba(0, 0, 0, 0.12);
+  /* hidden state */
+  opacity: 0;
+  transform: translateY(12px) scale(0.97);
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  overflow: hidden;
+}
+
+#a11y-panel.a11y-open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* ----------------------------------------------------------
+   4. PANEL HEADER
+   ---------------------------------------------------------- */
+
+.a11y-panel__header {
+  display: flex;
+  align-items: center;
+  padding: 14px 14px 12px 16px;
+  background: linear-gradient(135deg, #50448f 0%, #6b5cb8 100%);
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+.a11y-panel__header-icon {
+  width: 28px;
+  height: 28px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.a11y-panel__header-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: #fff;
+}
+
+.a11y-panel__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  flex: 1;
+  letter-spacing: 0.02em;
+}
+
+.a11y-panel__reset {
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 6px;
+  font-size: 11px;
+  color: #fff;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.a11y-panel__reset:hover {
+  background: rgba(255,255,255,0.28);
+}
+
+.a11y-panel__close {
+  background: rgba(255,255,255,0.18);
+  border: none;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  color: #fff;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.a11y-panel__close:hover,
+.a11y-panel__close:focus-visible {
+  background: rgba(255,255,255,0.32);
+  outline: none;
+}
+
+/* ----------------------------------------------------------
+   5. PANEL BODY – scrollable
+   ---------------------------------------------------------- */
+
+.a11y-panel__body {
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  /* Custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: #d0c8f0 transparent;
+}
+
+.a11y-panel__body::-webkit-scrollbar { width: 4px; }
+.a11y-panel__body::-webkit-scrollbar-track { background: transparent; }
+.a11y-panel__body::-webkit-scrollbar-thumb { background: #d0c8f0; border-radius: 4px; }
+
+/* Section label */
+.a11y-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9b8ec4;
+  padding: 6px 8px 2px;
+  margin: 0;
+}
+
+/* ----------------------------------------------------------
+   6. STEPPER ROWS  (Text Size, Spacing, Line Height)
+   ---------------------------------------------------------- */
+
+.a11y-stepper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: #f8f7fd;
+  border-radius: 10px;
+  border: 1px solid #ece8f8;
+}
+
+.a11y-stepper__icon {
+  width: 30px;
+  height: 30px;
+  background: #ede9f8;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #50448f;
+}
+
+.a11y-stepper__icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.a11y-stepper__label {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.2;
+}
+
+.a11y-stepper__label small {
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  color: #9b8ec4;
+  margin-top: 1px;
+}
+
+.a11y-step-btn {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  max-width: 32px !important;
+  border-radius: 8px !important;
+  border: 1.5px solid #d0c8f0 !important;
+  background: #fff !important;
+  font-size: 20px !important;
+  line-height: 1 !important;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  color: #50448f !important;
+  font-weight: 700 !important;
+  transition: background 0.15s, border-color 0.15s;
+  padding: 0 !important;
+  margin: 0 0 0 4px !important;
+}
+
+.a11y-step-btn:hover {
+  background: #ede9f8 !important;
+  border-color: #50448f !important;
+}
+
+.a11y-step-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ----------------------------------------------------------
+   7. TOGGLE BUTTONS
+   ---------------------------------------------------------- */
+
+.a11y-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: #f8f7fd;
+  border-radius: 10px;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.a11y-toggle-row:hover {
+  background: #ede9f8;
+  border-color: #d0c8f0;
+}
+
+.a11y-toggle-row.a11y-active {
+  background: #ede9f8;
+  border-color: #50448f;
+}
+
+.a11y-toggle-row__icon {
+  width: 30px;
+  height: 30px;
+  background: #ede9f8;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #50448f;
+  transition: background 0.15s;
+}
+
+.a11y-toggle-row.a11y-active .a11y-toggle-row__icon {
+  background: #50448f;
+  color: #fff;
+}
+
+.a11y-toggle-row__icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.a11y-toggle-row__label {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+}
+
+.a11y-toggle-row.a11y-active .a11y-toggle-row__label {
+  color: #50448f;
+  font-weight: 600;
+}
+
+/* pill indicator */
+.a11y-toggle-row__pill {
+  width: 32px;
+  height: 18px;
+  background: #d0c8f0;
+  border-radius: 9px;
+  position: relative;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.a11y-toggle-row__pill::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.a11y-toggle-row.a11y-active .a11y-toggle-row__pill {
+  background: #50448f;
+}
+
+.a11y-toggle-row.a11y-active .a11y-toggle-row__pill::after {
+  transform: translateX(14px);
+}
+
+/* ----------------------------------------------------------
+   8. TEXT SIZE  – use CSS variable so ALL text scales
+      including elements with hardcoded px font sizes
+   ---------------------------------------------------------- */
+
+:root {
+  --a11y-font-scale: 1;
+}
+
+/*
+  We target every text-bearing element explicitly because
+  the site uses hardcoded px values in many places.
+  Using "font-size: calc(original * var(--a11y-font-scale))"
+  is not possible without knowing originals, so instead we
+  override with em-based scaling on <html> and force
+  all px-defined sizes to scale via zoom-like transform on
+  the root font size.
+*/
+
+/* Text scaling is handled entirely via body { zoom } in accessibility.js
+   so that hardcoded px font-sizes in the site CSS also scale correctly.
+   No font-size overrides needed here. */
+
+/* ----------------------------------------------------------
+   9. LETTER / WORD SPACING
+   ---------------------------------------------------------- */
+
+body.a11y-spacing-wide p,
+body.a11y-spacing-wide li,
+body.a11y-spacing-wide span,
+body.a11y-spacing-wide a,
+body.a11y-spacing-wide h1,
+body.a11y-spacing-wide h2,
+body.a11y-spacing-wide h3,
+body.a11y-spacing-wide h4,
+body.a11y-spacing-wide label,
+body.a11y-spacing-wide td,
+body.a11y-spacing-wide th {
+  letter-spacing: 0.08em !important;
+  word-spacing: 0.12em !important;
+}
+
+body.a11y-spacing-wider p,
+body.a11y-spacing-wider li,
+body.a11y-spacing-wider span,
+body.a11y-spacing-wider a,
+body.a11y-spacing-wider h1,
+body.a11y-spacing-wider h2,
+body.a11y-spacing-wider h3,
+body.a11y-spacing-wider h4,
+body.a11y-spacing-wider label,
+body.a11y-spacing-wider td,
+body.a11y-spacing-wider th {
+  letter-spacing: 0.14em !important;
+  word-spacing: 0.2em !important;
+}
+
+/* ----------------------------------------------------------
+   10. INVERT COLOURS
+   ---------------------------------------------------------- */
+
+body.a11y-invert {
+  filter: invert(1) hue-rotate(180deg) !important;
+}
+
+body.a11y-invert img,
+body.a11y-invert video,
+body.a11y-invert svg image,
+body.a11y-invert canvas {
+  filter: invert(1) hue-rotate(180deg) !important;
+}
+
+/* keep the a11y panel itself readable */
+body.a11y-invert #a11y-panel,
+body.a11y-invert #a11y-toggle-btn {
+  filter: invert(1) hue-rotate(180deg) !important;
+}
+
+/* ----------------------------------------------------------
+   11. GREY HUES
+   ---------------------------------------------------------- */
+
+body.a11y-greyscale {
+  filter: grayscale(100%) !important;
+}
+
+body.a11y-greyscale #a11y-panel,
+body.a11y-greyscale #a11y-toggle-btn {
+  filter: none !important;
+}
+
+/* ----------------------------------------------------------
+   12. UNDERLINE LINKS
+   ---------------------------------------------------------- */
+
+body.a11y-underline-links a,
+body.a11y-underline-links [role="link"] {
+  text-decoration: underline !important;
+  text-underline-offset: 3px !important;
+  text-decoration-thickness: 2px !important;
+}
+
+/* ----------------------------------------------------------
+   13. BIG CURSOR
+   ---------------------------------------------------------- */
+
+body.a11y-big-cursor,
+body.a11y-big-cursor * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M6 2 L6 36 L14 28 L20 42 L26 40 L20 26 L31 26 Z' fill='%2350448f' stroke='white' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 6 2, auto !important;
+}
+
+/* ----------------------------------------------------------
+   14. READING GUIDE
+   ---------------------------------------------------------- */
+
+#a11y-reading-guide {
+  display: none;
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 32px;
+  background: rgba(80, 68, 143, 0.12);
+  border-top: 2px solid rgba(80, 68, 143, 0.4);
+  border-bottom: 2px solid rgba(80, 68, 143, 0.4);
+  pointer-events: none;
+  z-index: 9998;
+}
+
+html.a11y-reading-guide-on #a11y-reading-guide,
+body.a11y-reading-guide-on #a11y-reading-guide {
+  display: block;
+}
+
+/* ----------------------------------------------------------
+   15. HIGH CONTRAST
+   ---------------------------------------------------------- */
+
+body.a11y-high-contrast {
+  background: #0a0a0a !important;
+  color: #f0f0f0 !important;
+}
+
+body.a11y-high-contrast *:not(#a11y-panel):not(#a11y-panel *):not(#a11y-toggle-btn) {
+  background-color: transparent !important;
+  color: inherit !important;
+}
+
+body.a11y-high-contrast p,
+body.a11y-high-contrast li,
+body.a11y-high-contrast span,
+body.a11y-high-contrast div,
+body.a11y-high-contrast td,
+body.a11y-high-contrast th {
+  color: #f0f0f0 !important;
+}
+
+body.a11y-high-contrast h1,
+body.a11y-high-contrast h2,
+body.a11y-high-contrast h3,
+body.a11y-high-contrast h4,
+body.a11y-high-contrast h5 {
+  color: #fff !important;
+}
+
+body.a11y-high-contrast a {
+  color: #ffe44d !important;
+}
+
+body.a11y-high-contrast a:hover {
+  color: #ffcc00 !important;
+}
+
+body.a11y-high-contrast button:not(#a11y-panel button),
+body.a11y-high-contrast .btn {
+  background: #222 !important;
+  color: #fff !important;
+  border: 2px solid #fff !important;
+}
+
+body.a11y-high-contrast header,
+body.a11y-high-contrast nav,
+body.a11y-high-contrast footer {
+  background: #111 !important;
+  border-bottom: 1px solid #444 !important;
+}
+
+body.a11y-high-contrast input,
+body.a11y-high-contrast select,
+body.a11y-high-contrast textarea {
+  background: #111 !important;
+  color: #fff !important;
+  border: 2px solid #aaa !important;
+}
+
+/* ----------------------------------------------------------
+   16. FOCUS HIGHLIGHT
+   ---------------------------------------------------------- */
+
+body.a11y-focus-highlight a:focus,
+body.a11y-focus-highlight button:focus,
+body.a11y-focus-highlight input:focus,
+body.a11y-focus-highlight select:focus,
+body.a11y-focus-highlight textarea:focus,
+body.a11y-focus-highlight [tabindex]:focus,
+body.a11y-focus-highlight [role="button"]:focus,
+body.a11y-focus-highlight [role="link"]:focus,
+body.a11y-focus-highlight a:focus-visible,
+body.a11y-focus-highlight button:focus-visible {
+  outline: 4px solid #ff6b35 !important;
+  outline-offset: 2px !important;
+  background-color: #fff3b0 !important;   /* bright yellow highlight */
+  color: #1a1a1a !important;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 8px rgba(255,107,53,0.55) !important;
+  border-radius: 3px !important;
+}
+
+/* ----------------------------------------------------------
+   17. DYSLEXIA FONT
+   ---------------------------------------------------------- */
+
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('../fonts/opendyslexic/OpenDyslexic-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('../fonts/opendyslexic/OpenDyslexic-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+body.a11y-dyslexia-font,
+body.a11y-dyslexia-font *:not(.a11y-panel__title):not(.a11y-section-label) {
+  font-family: 'OpenDyslexic', 'Comic Sans MS', 'Arial', sans-serif !important;
+}
+
+/* ----------------------------------------------------------
+   18. LINE HEIGHT
+   ---------------------------------------------------------- */
+
+body.a11y-line-height-tall p,
+body.a11y-line-height-tall li,
+body.a11y-line-height-tall span,
+body.a11y-line-height-tall h1,
+body.a11y-line-height-tall h2,
+body.a11y-line-height-tall h3,
+body.a11y-line-height-tall h4 {
+  line-height: 1.9 !important;
+}
+
+body.a11y-line-height-xtall p,
+body.a11y-line-height-xtall li,
+body.a11y-line-height-xtall span,
+body.a11y-line-height-xtall h1,
+body.a11y-line-height-xtall h2,
+body.a11y-line-height-xtall h3,
+body.a11y-line-height-xtall h4 {
+  line-height: 2.4 !important;
+}
+
+/* ----------------------------------------------------------
+   19. Reduced motion
+   ---------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  #a11y-panel,
+  #a11y-toggle-btn,
+  .a11y-toggle-row__pill::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ============================================================
+   v3 ADDITIONS
+   ============================================================ */
+
+/* ---- Quick profiles grid ---- */
+.a11y-profiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 2px 0 4px;
+}
+
+.a11y-profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 10px;
+  background: #f8f7fd;
+  border: 1.5px solid #ece8f8;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: #50448f;
+  text-align: left;
+  transition: background .15s, border-color .15s;
+  line-height: 1.2;
+}
+
+.a11y-profile:hover {
+  background: #ede9f8 !important;
+  border-color: #50448f;
+  color: #50448f !important;
+}
+
+.a11y-profile.a11y-active {
+  background: #50448f !important;
+  border-color: #50448f;
+  color: #fff !important;
+}
+
+.a11y-profile__icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #50448f;
+}
+.a11y-profile__icon svg { width: 18px; height: 18px; display: block; }
+.a11y-profile.a11y-active .a11y-profile__icon { color: #fff; }
+
+/* ---- Low / High saturation ---- */
+body.a11y-low-saturation  { filter: saturate(0.45) !important; }
+body.a11y-high-saturation { filter: saturate(2)    !important; }
+
+/* keep panel/button normal even when body filtered */
+html.a11y-reading-mask-on #a11y-panel,
+html.a11y-reading-mask-on #a11y-toggle-btn { filter: none !important; }
+
+/* ---- Legible font ---- */
+body.a11y-legible-font,
+body.a11y-legible-font *:not(.a11y-panel__title):not(.a11y-section-label):not(.a11y-profile) {
+  font-family: 'Verdana', 'Tahoma', 'Arial', sans-serif !important;
+}
+
+/* ---- Highlight links ---- */
+body.a11y-highlight-links a,
+body.a11y-highlight-links [role="link"] {
+  background: #fff3b0 !important;
+  color: #1a1a1a !important;
+  box-shadow: 0 0 0 2px #ffd000 !important;
+  border-radius: 2px !important;
+  text-decoration: underline !important;
+}
+
+/* ---- Highlight headings ---- */
+body.a11y-highlight-headings h1,
+body.a11y-highlight-headings h2,
+body.a11y-highlight-headings h3,
+body.a11y-highlight-headings h4,
+body.a11y-highlight-headings h5,
+body.a11y-highlight-headings h6 {
+  outline: 2px dashed #50448f !important;
+  outline-offset: 3px !important;
+  background: rgba(80, 68, 143, 0.07) !important;
+  border-radius: 3px;
+}
+
+/* ---- Highlight on hover ---- */
+body.a11y-highlight-hover a:hover,
+body.a11y-highlight-hover button:hover,
+body.a11y-highlight-hover p:hover,
+body.a11y-highlight-hover li:hover,
+body.a11y-highlight-hover img:hover,
+body.a11y-highlight-hover h1:hover,
+body.a11y-highlight-hover h2:hover,
+body.a11y-highlight-hover h3:hover {
+  outline: 3px solid #50448f !important;
+  outline-offset: 2px !important;
+  background: rgba(80, 68, 143, 0.08) !important;
+}
+
+/* ---- Hide images ---- */
+body.a11y-hide-images img,
+body.a11y-hide-images picture,
+body.a11y-hide-images svg:not(#a11y-panel svg):not(#a11y-toggle-btn svg),
+body.a11y-hide-images video,
+body.a11y-hide-images [style*="background-image"] {
+  visibility: hidden !important;
+}
+/* keep accessibility UI icons visible */
+#a11y-panel svg, #a11y-toggle-btn svg { visibility: visible !important; }
+
+/* ---- Stop animations (also freezes GIFs via the overlay trick is not
+   possible in pure CSS; this stops CSS animations, transitions, and
+   smooth scrolling, and respects videos/autoplay by pausing transitions) ---- */
+body.a11y-stop-animations *,
+body.a11y-stop-animations *::before,
+body.a11y-stop-animations *::after {
+  animation-duration: 0s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0s !important;
+  scroll-behavior: auto !important;
+}
+
+/* ---- Reading mask (two dimming panes; clear strip follows mouse) ---- */
+#a11y-reading-mask {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9997;
+  pointer-events: none;
+}
+#a11y-mask-top,
+#a11y-mask-bottom {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.55);
+}
+#a11y-mask-top    { top: 0; height: 0; }
+#a11y-mask-bottom { top: 0; bottom: 0; }
+html.a11y-reading-mask-on #a11y-reading-mask { display: block; }
+
+/* ============================================================
+   MOBILE — bottom sheet layout (<= 480px)
+   On small screens the floating panel becomes a full-width sheet
+   pinned to the bottom, with the header always visible and the
+   options area scrolling. This fixes the header being pushed off
+   screen on phones.
+   ============================================================ */
+
+@media (max-width: 480px) {
+
+  #a11y-panel {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    width: 100%;
+    max-width: 100%;
+    max-height: 85vh;
+    max-height: 85dvh;            /* respects mobile browser toolbars */
+    border-radius: 18px 18px 0 0;
+    /* hidden state: slide down out of view */
+    opacity: 1;
+    transform: translateY(100%);
+    transition: transform 0.28s ease;
+  }
+
+  #a11y-panel.a11y-open {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Sticky header so it never scrolls away */
+  .a11y-panel__header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding: 14px 12px 12px 14px;
+  }
+
+  /* A little grab-handle hint at the very top of the sheet */
+  #a11y-panel::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.5);
+    z-index: 3;
+  }
+
+  /* Slightly tighter option rows so more fits without scrolling */
+  .a11y-toggle-row,
+  .a11y-stepper {
+    padding: 9px 10px;
+  }
+
+  .a11y-panel__body {
+    padding: 8px 8px 16px;
+  }
+
+  /* Floating button a touch smaller and out of the thumb zone edge */
+  #a11y-toggle-btn {
+    bottom: 16px;
+    left: 16px;
+    width: 46px;
+    height: 46px;
+  }
+
+  /* Darker backdrop on mobile so the sheet reads as modal */
+  #a11y-backdrop {
+    background: rgba(20, 10, 40, 0.45);
+  }
+}
+
+/* Extra-short screens: allow the sheet to use more height */
+@media (max-width: 480px) and (max-height: 560px) {
+  #a11y-panel {
+    max-height: 92vh;
+    max-height: 92dvh;
+  }
+}

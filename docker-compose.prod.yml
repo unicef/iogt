@@ -1,0 +1,48 @@
+services:
+  django:
+    build:
+      context: ./
+      target: prod
+      args:
+        requirements: requirements.txt
+    image: iogt:prod
+    # Bind gunicorn to all interfaces inside the container, 4 workers.
+    command: gunicorn iogt.wsgi:application --bind 0.0.0.0:8000 --workers 4 --timeout 120
+    env_file:
+      - .env.prod
+    # Only expose to localhost — Nginx on the host proxies to this.
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      - db
+      - redis
+    restart: unless-stopped
+
+  celery:
+    image: iogt:prod
+    command: celery -A iogt worker -l info
+    env_file:
+      - .env.prod
+    depends_on:
+      - django
+      - redis
+    restart: unless-stopped
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
+
+  db:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    env_file:
+      - .env.prod
+    volumes:
+      - iogt_postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  iogt_postgres_data:
