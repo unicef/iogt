@@ -1,0 +1,143 @@
+{% load static %}
+{% load sbc_tags %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+<!DOCTYPE html>
+<html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'sbc/styles/main.css' %}">
+    <link rel="stylesheet" href="{% static 'sbc/styles/alliance.css' %}">
+    <script src="{% static 'sbc/scripts/main.js' %}" defer></script>
+    <title>SBC - {{ page.title }}</title>
+</head>
+<body>
+    {% sbc_header %}
+
+    <!-- Head -->
+    <main class="sbc-alliance-head">
+        <div class="sbc-alliance-head__content">
+            <h1 class="sbc-alliance-head__title">{{ page.alliance_title }}</h1>
+            <div class="sbc-alliance-head__description">{{ page.alliance_description|richtext }}</div>
+        </div>
+    </main>
+
+    <hr class="sbc-hr">
+
+    <!-- Purpose -->
+    <section class="sbc-alliance-purpose">
+        <div class="sbc-alliance-purpose__content">
+            <div class="sbc-alliance-purpose__head">
+                <h2 class="sbc-alliance-purpose__title">{{ page.alliance_purpose_title }}</h2>
+                <div class="sbc-alliance-purpose__description">{{ page.alliance_purpose_description|richtext }}</div>
+            </div>
+            {% if page.alliance_purpose_image %}
+                {% image page.alliance_purpose_image width-800 as purpose_img %}
+                <img class="sbc-alliance-purpose__image" src="{{ purpose_img.url }}" />
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- The image is the separator between previous and next section. Without it, we need a real separator -->
+    {% if not page.alliance_purpose_image %}
+        <hr class="sbc-hr">
+    {% endif %}
+
+    <!-- Work Lines -->
+    <section class="sbc-alliance-lines">
+        <div class="sbc-alliance-lines__content">
+            <h3 class="sbc-alliance-lines__title">{{ page.alliance_lines_title }}</h3>
+            {% if page.alliance_lines_list %}
+                <div class="sbc-alliance-lines__list">
+                    {% for block in page.alliance_lines_list %}
+                        <div class="sbc-alliance-line">
+                            <p class="sbc-alliance-line__number">{{ forloop.counter }}</p>
+                            <div class="sbc-alliance-line__info">
+                                <p class="sbc-alliance-line__title">{{ block.value.title }}</h3>
+                                <div class="sbc-alliance-line__description">{{ block.value.description }}</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="sbc-empty">Nada que mostrar aun</div>
+            {% endif %}
+        </div>
+    </section>
+
+    <hr class="sbc-hr">
+
+    <!-- Achievements -->
+    <section class="sbc-alliance-achievements">
+        <div class="sbc-alliance-achievements__content">
+            <h4 class="sbc-alliance-achievements__title">{{ page.alliance_achievements_title }}</h4>
+            {% if page.alliance_achievements_list %}
+                <div class="sbc-alliance-achievements__list">
+                    {% for block in page.alliance_achievements_list %}
+                        <div class="sbc-alliance-achievement">
+                            {{ block.value.description }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="sbc-empty">Nada que mostrar aun</div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Timeline -->
+    <section class="sbc-alliance-timeline">
+        <div class="sbc-alliance-timeline__content">
+            <div class="sbc-alliance-timeline__head">
+                <h5 class="sbc-alliance-timeline__title">{{ page.alliance_timeline_title }}</h5>
+                <div class="sbc-alliance-timeline__description">{{ page.alliance_timeline_description|richtext }}</div>
+            </div>
+            {% if page.alliance_timeline_list %}
+                <div class="sbc-alliance-timeline__list">
+                    {% for block in page.alliance_timeline_list %}
+                        <div class="sbc-alliance-event">
+                            <div class="sbc-alliance-event__line"></div>
+                            <div class="sbc-alliance-event__info">
+                                <p class="sbc-alliance-event__year">{{ block.value.year }}</p>
+                                <div class="sbc-alliance-event__head">
+                                    <p class="sbc-alliance-event__title">{{ block.value.title }}</p>
+                                    <p class="sbc-alliance-event__subtitle">{{ block.value.subtitle }}</p>
+                                </div>
+                                <div class="sbc-alliance-event__description">{{ block.value.description }}</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="sbc-empty">Nada que mostrar aun</div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    {% if page.alliance_gallery_list %}
+        <section class="sbc-alliance-gallery">
+            <div class="sbc-alliance-gallery__content">
+                <div class="sbc-alliance-gallery__head">
+                    <h2 class="sbc-alliance-gallery__title">{{ page.alliance_gallery_title }}</h2>
+                    <div class="sbc-alliance-gallery__description">{{ page.alliance_gallery_description|richtext }}</div>
+                </div>
+                {% if page.alliance_gallery_list %}
+                    <div class="sbc-alliance-gallery__list">
+                        {% for block in page.alliance_gallery_list %}
+                            {% image block.value width-800 as src_image %}
+                            <img class="sbc-alliance-gallery-item" src="{{ src_image.url }}" />
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="sbc-empty">Nada que mostrar aun</div>
+                {% endif %}
+            </div>
+        </section>
+    {% endif %}
+
+    {% sbc_footer %}
+</body>

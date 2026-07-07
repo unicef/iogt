@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'health_check.db',
     'health_check.storage',
     'home',
+    'sbc',
     'interactive',
     'iogt_content_migration',
     'iogt_users',

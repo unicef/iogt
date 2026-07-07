@@ -1,0 +1,148 @@
+{% load static %}
+{% load sbc_tags %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+<!DOCTYPE html>
+<html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'sbc/styles/main.css' %}">
+    <link rel="stylesheet" href="{% static 'sbc/styles/network.css' %}">
+    <script src="{% static 'sbc/scripts/main.js' %}" defer></script>
+    <title>SBC - {{ page.title }}</title>
+</head>
+<body>
+    {% sbc_header %}
+
+    <!-- Head -->
+    <main class="sbc-network-head">
+        <div class="sbc-network-head__content">
+            {% if page.network_image %}
+                {% image page.network_image width-800 as network_img %}
+                <img class="sbc-network-head__image" src="{{ network_img }}" />
+            {% endif %}
+            <h1 class="sbc-network-head__title">{{ page.network_title }}</h1>
+            <div class="sbc-network-head__description">{{ page.network_description|richtext }}</div>
+        </div>
+    </main>
+
+    <!-- Strategies -->
+    <section class="sbc-network-strategies">
+        <div class="sbc-network-strategies__content">
+            <div class="sbc-network-strategies__head">
+                <h3 class="sbc-network-strategies__title">{{ page.network_strategies_title }}</h3>
+                <div class="sbc-network-strategies__description">{{ page.network_strategies_description|richtext }}</div>
+            </div>
+            {% if page.network_strategies_list %}
+                <div class="sbc-network-strategies__list">
+                    {% for block in page.network_strategies_list %}
+                        <div class="sbc-network-strategy">
+                            <p class="sbc-network-strategy__number">{{ forloop.counter }}</p>
+                            <div class="sbc-network-strategy__info">
+                                <p class="sbc-network-strategy__title">{{ block.value.title }}</h3>
+                                <div class="sbc-network-strategy__description">{{ block.value.description }}</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="sbc-empty">Nada que mostrar aun</div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Focus -->
+    <section class="sbc-network-focus">
+        <div class="sbc-network-focus__content">
+            <h4 class="sbc-network-focus__title">{{ page.network_focus_title }}</h4>
+            <div class="sbc-network-focus__body">{{ page.network_focus_body|richtext }}</div>
+            <div class="sbc-network-focus__download">
+                <div class="sbc-network-focus__download-description">{{ page.network_focus_download_description|richtext }}</div>
+                <a
+                    class="sbc-network-focus__download-link"
+                    href="{% firstof page.network_focus_download_file.url page.network_focus_download_link '#' %}"
+                >
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 18.6667L8.16663 12.8334L9.79996 11.1417L12.8333 14.1751V4.66675H15.1666V14.1751L18.2 11.1417L19.8333 12.8334L14 18.6667ZM6.99996 23.3334C6.35829 23.3334 5.80918 23.1051 5.35263 22.6486C4.89607 22.192 4.6674 21.6425 4.66663 21.0001V17.5001H6.99996V21.0001H21V17.5001H23.3333V21.0001C23.3333 21.6417 23.105 22.1912 22.6485 22.6486C22.1919 23.1059 21.6424 23.3342 21 23.3334H6.99996Z" fill="black"/>
+                    </svg>
+                    Download
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Universities -->
+    <section class="sbc-network-universities">
+        <p class="sbc-network-universities__title">{{ page.network_universities_title }}</p>
+        {% if page.network_universities_list %}
+            <div class="sbc-network-universities__track">
+                <div class="sbc-network-universities__list" style="
+                    --velocity: {{ page.network_universities_list|length }}s;
+                    --count: {{ page.network_universities_list|length }}
+                ">
+                    <!-- Duplicated list for infinite scroll effect -->
+                    {% for block in page.network_universities_list %}
+                        {% image block.value.logo width-400 as logo_img %}
+                        <a class="sbc-network-university" href="{% firstof block.value.link '#' %}">
+                            <img src="{{ logo_img.url }}" />
+                        </a>
+                    {% endfor %}
+                    {% for block in page.network_universities_list %}
+                        {% image block.value.logo width-400 as logo_img %}
+                        <a class="sbc-network-university" href="{% firstof block.value.link '#' %}">
+                            <img src="{{ logo_img.url }}" />
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        {% if page.network_universities_map %}
+            {{ page.network_universities_map|safe }}
+        {% endif %}
+    </section>
+
+    <!-- Team Unicef -->
+    <section class="sbc-network-team blue">
+        <p class="sbc-network-team__title">{{ page.network_team_unicef_title }}</p>
+        {% if page.network_team_unicef_list %}
+            <div class="sbc-network-team__list">
+                {% for block in page.network_team_unicef_list %}
+                    <div class="sbc-network-team-member">
+                        <p class="sbc-network-team-member__title">{{ block.value.title }}</h3>
+                        <p class="sbc-network-team-member__subtitle">{{ block.value.subtitle }}</p>
+                        <div class="sbc-network-team-member__description">{{ block.value.description|richtext }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="sbc-empty">Nada que mostrar aun</div>
+        {% endif %}
+    </section>
+
+    <!-- Team Uninorte -->
+    <section class="sbc-network-team red">
+        <p class="sbc-network-team__title">{{ page.network_team_uninorte_title }}</p>
+        {% if page.network_team_uninorte_list %}
+            <div class="sbc-network-team__list">
+                {% for block in page.network_team_uninorte_list %}
+                    <div class="sbc-network-team-member">
+                        <p class="sbc-network-team-member__title">{{ block.value.title }}</h3>
+                        {% if block.value.subtitle %}
+                            <p class="sbc-network-team-member__subtitle">{{ block.value.subtitle }}</p>
+                        {% endif %}
+                        {% if block.value.description %}
+                            <div class="sbc-network-team-member__description">{{ block.value.description|richtext }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="sbc-empty">Nada que mostrar aun</div>
+        {% endif %}
+    </section>
+
+    {% sbc_footer %}
+</body>

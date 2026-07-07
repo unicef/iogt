@@ -1,0 +1,53 @@
+{% load static %}
+{% load wagtailimages_tags %}
+
+<footer class="sbc-footer">
+    <div class="sbc-footer__content">
+        <div class="sbc-footer__links">
+            {% for block in footer.links %}
+                <a class="sbc-footer-link" href="{{ block.value.url.url }}">{{ block.value.label }}</a>
+            {% endfor %}
+        </div>
+        <div class="sbc-footer__logos">
+            <div class="sbc-footer-logo">
+                {% if footer.unicef_logo %}
+                    {% image footer.unicef_logo height-80 as logo_img %}
+                    <img class="sbc-footer-logo__logo" src="{{ logo_img.url }}" />
+                {% else %}
+                    <img class="sbc-footer-logo__logo" src="{% static 'sbc/images/unicef-white.png' %}" />
+                {% endif %}
+                <div class="sbc-footer-logo__info">
+                    <a class="sbc-footer-logo__link" href="{{ footer.unicef_link | default:"https://www.unicef.org" }}">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15.8333 10.8333V15.8333C15.8333 16.2754 15.6577 16.6993 15.3452 17.0118C15.0326 17.3244 14.6087 17.5 14.1667 17.5H4.16667C3.72464 17.5 3.30072 17.3244 2.98816 17.0118C2.67559 16.6993 2.5 16.2754 2.5 15.8333V5.83333C2.5 5.39131 2.67559 4.96738 2.98816 4.65482C3.30072 4.34226 3.72464 4.16667 4.16667 4.16667H9.16667V5.83333H4.16667V15.8333H14.1667V10.8333H15.8333ZM10.8333 2.5V4.16667H14.655L8.16083 10.6608L9.33917 11.8392L15.8333 5.345V9.16667H17.5V2.5H10.8333Z" fill="white"/>
+                        </svg>
+                        {{ footer.unicef_link | default:"www.unicef.org" }}
+                    </a>
+                    <p class="sbc-footer-logo__address">
+                        {{ footer.unicef_address | default:"Calle 72 # 10-71 Piso 11 Bogotá D.C, Colombia" }}
+                    </p>
+                </div>
+            </div>
+            <div class="sbc-footer-logo">
+                {% if footer.university_logo %}
+                    {% image footer.university_logo height-80 as logo_img %}
+                    <img class="sbc-footer-logo__logo" src="{{ logo_img.url }}" />
+                {% else %}
+                    <img class="sbc-footer-logo__logo" src="{% static 'sbc/images/uninorte-white.png' %}" />
+                {% endif %}
+                <div class="sbc-footer-logo__info">
+                    <a class="sbc-footer-logo__link" href="{{ footer.university_link | default:"https://www.uninorte.edu.co" }}">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15.8333 10.8333V15.8333C15.8333 16.2754 15.6577 16.6993 15.3452 17.0118C15.0326 17.3244 14.6087 17.5 14.1667 17.5H4.16667C3.72464 17.5 3.30072 17.3244 2.98816 17.0118C2.67559 16.6993 2.5 16.2754 2.5 15.8333V5.83333C2.5 5.39131 2.67559 4.96738 2.98816 4.65482C3.30072 4.34226 3.72464 4.16667 4.16667 4.16667H9.16667V5.83333H4.16667V15.8333H14.1667V10.8333H15.8333ZM10.8333 2.5V4.16667H14.655L8.16083 10.6608L9.33917 11.8392L15.8333 5.345V9.16667H17.5V2.5H10.8333Z" fill="white"/>
+                        </svg>
+                        {{ footer.university_link | default:"www.uninorte.edu.co" }}
+                    </a>
+                    <p class="sbc-footer-logo__address">
+                        {{ footer.university_address | default:"Km. 5 vía Puerto Colombia Área Metropolitana de Barranquilla Colombia" }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="sbc-footer__copy">© {% now "Y" %} | All Rights Reserved</p>
+</footer>

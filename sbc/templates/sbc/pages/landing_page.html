@@ -1,0 +1,83 @@
+{% load static %}
+{% load sbc_tags %}
+{% load wagtailimages_tags %}
+
+<!DOCTYPE html>
+<html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'sbc/styles/main.css' %}">
+    <link rel="stylesheet" href="{% static 'sbc/styles/landing.css' %}">
+    <script src="{% static 'sbc/scripts/main.js' %}" defer></script>
+    <title>SBC - {{ page.title }}</title>
+</head>
+<body>
+    {% sbc_header %}
+
+    <!-- Hero -->
+    <main class="sbc-landing-hero">
+        {% if page.hero_bk_image %}
+            {% image page.hero_bk_image height-1000 as bk_img %}
+            <img class="sbc-landing-hero__bk" src="{{ bk_img.url }}" />
+        {% endif %}
+        <div class="sbc-landing-hero__overlay"></div>
+        <div class="sbc-landing-hero__content">
+            <h1 class="sbc-landing-hero__title">{{ page.hero_title }}</h1>
+            <p class="sbc-landing-hero__description">{{ page.hero_description }}</p>
+            {% if page.hero_cta_link %}
+                <a class="sbc-landing-hero__cta" href="{{ page.hero_cta_link.url }}">{{ page.hero_cta_label }}</a>
+            {% endif %}
+        </div>
+    </main>
+
+    <!-- About -->
+    <section class="sbc-landing-about">
+        <div class="sbc-landing-about__content">
+            <h2 class="sbc-landing-about__title">{{ page.about_title }}</h2>
+            <p class="sbc-landing-about__description">{{ page.about_description_1 }}</p>
+            {% if page.about_image %}
+                {% image page.about_image width-800 as about_image %}
+                <img class="sbc-landing-about__image" src="{{ about_image.url }}" />
+            {% endif %}
+            <p class="sbc-landing-about__description">{{ page.about_description_2 }}</p>
+        </div>
+    </section>
+
+    <!-- Resources -->
+    <section class="sbc-landing-resources">
+        <div class="sbc-landing-resources__content">
+            <h3 class="sbc-landing-resources__title">{{ page.resources_title }}</h3>
+            <div class="sbc-landing-resources__list">
+                {% for block in page.resources_list %}
+                    <a class="sbc-resource-card"
+                        href="{% firstof block.value.file.url block.value.link '#' %}"
+                        target="_blank"
+                    >
+                        {% if block.value.thumbnail %}
+                            {% image block.value.thumbnail width-400 as bk_img %}
+                            <img class="sbc-resource-card__image" src="{{ bk_img.url }}" />
+                        {% endif %}
+                        <p class="sbc-resource-card__date">{{ block.value.date }}</h3>
+                        <div class="sbc-resource-card__body">
+                            <p class="sbc-resource-card__title">{{ block.value.title }}</h3>
+                            {% if block.value.author %}
+                                <p class="sbc-resource-card__author">{{ block.value.author }}</p>
+                            {% endif %}
+                        </div>
+                    </a>
+                {% empty %}
+                    <div class="sbc-empty">Nada que mostrar aun</div>
+                {% endfor %}
+            </div>
+            {% if page.resources_list|length > 0 %}
+                <a class="sbc-landing-resources__cta" href="{{ page.resources_cta_link.url }}">
+                    {{ page.resources_cta_label }}
+                </a>
+            {% endif %}
+        </div>
+    </section>
+
+    {% sbc_footer %}
+</body>

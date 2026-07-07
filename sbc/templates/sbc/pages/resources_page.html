@@ -1,0 +1,109 @@
+{% load static %}
+{% load sbc_tags %}
+{% load wagtailimages_tags %}
+
+<!DOCTYPE html>
+<html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'sbc/styles/main.css' %}">
+    <link rel="stylesheet" href="{% static 'sbc/styles/resources.css' %}">
+    <script src="{% static 'sbc/scripts/main.js' %}" defer></script>
+    <title>SBC - {{ page.title }}</title>
+</head>
+<body>
+    {% sbc_header %}
+
+    <!-- Resources -->
+    <main class="sbc-resources">
+        <div class="sbc-resources__content">
+            <div class="sbc-resources__head">
+                <h1 class="sbc-resources__title">{{ page.resources_title }}</h1>
+                <p class="sbc-resources__description">{{ page.resources_description }}</p>
+            </div>
+            <div class="sbc-resources__order">
+                <span>Ordenar por</span>
+                <button onclick="filter({ order: 'date' })" class="sbc-resources__order-item {% if order == 'date' %}active{% endif %}">Más recientes</button>
+                <button onclick="filter({ order: 'name' })" class="sbc-resources__order-item {% if order == 'name' %}active{% endif %}">Nombre (A-Z)</button>
+            </div>
+            <div class="sbc-resources__list">
+                <!-- List of resources -->
+                {% for block in resources %}
+                    <a class="sbc-resource-card"
+                        href="{% firstof block.file.url block.link '#' %}"
+                        target="_blank"
+                    >
+                        {% if block.thumbnail %}
+                            {% image block.thumbnail width-400 as bk_img %}
+                            <img class="sbc-resource-card__image" src="{{ bk_img.url }}" />
+                        {% endif %}
+                        <p class="sbc-resource-card__date">{{ block.date }}</p>
+                        <div class="sbc-resource-card__body">
+                            <p class="sbc-resource-card__title">{{ block.title }}</h3>
+                            {% if block.author %}
+                                <p class="sbc-resource-card__author">{{ block.author }}</p>
+                            {% endif %}
+                        </div>
+                    </a>
+                {% empty %}
+                    <div class="sbc-empty">Nada que mostrar aun</div>
+                {% endfor %}
+                {% if page.resources_list|length > 0 %}
+                    <a class="sbc-resources__cta" href="{{ page.resources_cta_link.url }}">
+                        {{ page.resources_cta_label }}
+                    </a>
+                {% endif %}
+            </div>
+            <!-- Navigation -->
+            <nav class="sbc-resources-pagination">
+                {% if resources.has_previous %}
+                    <button class="sbc-resources-pagination__arrow" onclick="filter(data = { page: {{ resources.previous_page_number }} })">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <rect width="24" height="24" fill="white"></rect>
+                                <path d="M14.5 17L9.5 12L14.5 7" stroke-width="1.25" stroke="rgba(var(--color-dark), 1)" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </g>
+                        </svg>
+                    </button>
+                {% endif %}
+
+                <span class="sbc-resources-pagination__count">{{ resources.number }} - {{ resources.paginator.num_pages }}</span>
+
+                {% if resources.has_next %}
+                    <button class="sbc-resources-pagination__arrow" onclick="filter(data = { page: {{ resources.next_page_number }} })">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <rect width="24" height="24" fill="white"></rect>
+                                <path d="M9.5 7L14.5 12L9.5 17" stroke-width="1.25" stroke="rgba(var(--color-dark), 1)" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </g>
+                        </svg>
+                    </button>
+                {% endif %}
+            </nav>
+        </div>
+    </main>
+
+    <script>
+        /** @param { page: number, order: string } data */
+        function filter(data) {
+            const params = new URLSearchParams(window.location.search);
+
+            const page = data.page ?? params.get("page") ?? "1";
+            const order = data.order ?? params.get("order") ?? "date";
+
+            console.log(page, order);
+            params.set('page', page);
+            params.set('order', order);
+
+            window.location.href = window.location.pathname + '?' + params.toString();
+        }
+    </script>
+
+    {% sbc_footer %}
+</body>

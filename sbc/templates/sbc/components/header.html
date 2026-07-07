@@ -1,0 +1,42 @@
+{% load static %}
+{% load wagtailimages_tags %}
+
+<header class="sbc-header">
+    <div class="sbc-header__content">
+        <div class="sbc-header__left">
+            {% if header.logo %}
+                {% image header.logo height-120 as logo_img %}
+                <img class="sbc-header__logo" src="{{ logo_img.url }}" />
+            {% else %}
+                <img class="sbc-header__logo" src="{% static 'sbc/images/logo.png' %}" />
+            {% endif %}
+        </div>
+        <nav class="sbc-header__nav">
+            {% for block in header.links %}
+                <a class="sbc-header__nav-link" href="{{ block.value.url.url }}">{{ block.value.label }}</a>
+            {% endfor %}
+        </nav>
+        <button class="sbc-header__menu" id="sbc-mobile-menu-opener">
+            <svg name="closed" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 34.54V32.54H40V34.54H8ZM8 25V23H40V25H8ZM8 15.46V13.46H40V15.46H8Z" fill="rgba(var(--color-dark), 1)"/>
+            </svg>
+            <svg name="opened" viewBox="-4.8 -4.8 33.60 33.60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                    <path d="M20.7457 3.32851C20.3552 2.93798 19.722 2.93798 19.3315 3.32851L12.0371 10.6229L4.74275 3.32851C4.35223 2.93798 3.71906 2.93798 3.32854 3.32851C2.93801 3.71903 2.93801 4.3522 3.32854 4.74272L10.6229 12.0371L3.32856 19.3314C2.93803 19.722 2.93803 20.3551 3.32856 20.7457C3.71908 21.1362 4.35225 21.1362 4.74277 20.7457L12.0371 13.4513L19.3315 20.7457C19.722 21.1362 20.3552 21.1362 20.7457 20.7457C21.1362 20.3551 21.1362 19.722 20.7457 19.3315L13.4513 12.0371L20.7457 4.74272C21.1362 4.3522 21.1362 3.71903 20.7457 3.32851Z" fill="rgba(var(--color-dark), 1)"></path>
+                </g>
+            </svg>
+        </button>
+    </div>
+</header>
+
+<!-- Menu mobile -->
+<section class="sbc-mobile-menu" id="sbc-mobile-menu">
+    <div class="sbc-mobile-menu__overlay" id="sbc-mobile-menu-overlay"></div>
+    <div class="sbc-mobile-menu__content">
+        {% for block in header.links %}
+            <a class="sbc-mobile-menu-link" href="{{ block.value.url.url }}">{{ block.value.label }}</a>
+        {% endfor %}
+    </div>
+</section>
