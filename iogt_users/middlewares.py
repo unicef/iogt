@@ -4,8 +4,9 @@ from django.urls import resolve, Resolver404, translate_url
 from django.utils import translation
 from django.utils.translation import gettext as _
 from django.utils.timezone import now
-from .models import PageVisit
+from wagtail.models import Site
 
+from .models import PageVisit
 from home.models import SiteSettings
 
 
@@ -23,7 +24,12 @@ class RegistrationSurveyRedirectMiddleware:
             return self.get_response(request)
 
         request_path = request.path_info
-        registration_survey = SiteSettings.for_request(request).registration_survey
+        site = Site.find_for_request(request)
+        if site is not None:
+            registration_survey = SiteSettings.for_site(site).registration_survey
+        else:
+            registration_survey = None
+
         if registration_survey:
             registration_survey = registration_survey.localized
             is_registration_survey_url = request_path == registration_survey.url
@@ -67,8 +73,8 @@ class RegistrationSurveyRedirectMiddleware:
             return redirect(registration_survey.localized.url)
 
         return self.get_response(request)
-    
-    
+
+
 class TrackFrontendPageVisitsMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response

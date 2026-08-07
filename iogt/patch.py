@@ -11,11 +11,15 @@ def _translate_node_render(self, context):
     lookup = (self.filter_expression.var.literal or 
                 self.filter_expression.var._resolve_lookup(context))
 
-    try:
-        translation_entry = cache.get(f'{globals_.locale.language_code}_translation_map')[
-            (lookup, globals_.locale.language_code)]
-    except (KeyError, TypeError):
-        translation_entry = None
+    translation_entry = None
+
+    if globals_.locale:
+        try:
+            translation_entry = (
+                    cache.get(f"{globals_.locale.language_code}_translation_map") or {}
+            ).get((lookup, globals_.locale.language_code))
+        except Exception:
+            translation_entry = None
 
     if translation_entry and translation_entry.translation:
         return translation_entry.translation
@@ -70,12 +74,15 @@ def _translate_block_node_render(self, context, nested=False):
         else:
             result = translation.gettext(singular)
     default_value = context.template.engine.string_if_invalid
+    translation_entry = None
 
-    try:
-        translation_entry = cache.get(f'{globals_.locale.language_code}_translation_map')[
-            (singular, globals_.locale.language_code)]
-    except (KeyError, TypeError):
-        translation_entry = None
+    if globals_.locale:
+        try:
+            translation_entry = (
+                    cache.get(f"{globals_.locale.language_code}_translation_map") or {}
+            ).get((singular, globals_.locale.language_code))
+        except Exception:
+            translation_entry = None
 
     if translation_entry and translation_entry.translation:
         result = translation_entry.translation
