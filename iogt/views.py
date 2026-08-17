@@ -184,8 +184,13 @@ class CustomLogoutView(View):
     This view handles user logout from both Django and Azure AD B2C.
     After logging out the user from Django, it also logs out from Azure AD B2C.
     """
-
     def get(self, request, *args, **kwargs):
+        return self.handle_logout(request)
+       
+    def post(self, request, *args, **kwargs):
+        return self.handle_logout(request)
+    
+    def handle_logout(self, request):
         """
         Log the user out of Django and redirect them to Azure AD B2C's logout page.
         """
