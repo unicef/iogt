@@ -587,7 +587,7 @@ SUPERSET_PASSWORD = os.getenv('SUPERSET_PASSWORD')
 PUSH_NOTIFICATION = os.getenv('PUSH_NOTIFICATION', 'disable') == 'enable'
 JQUERY = os.getenv('JQUERY', 'enable') == 'enable'
 
-DATA_UPLOAD_MAX_NUMBER_FIELDS = int(os.getenv('DATA_UPLOAD_MAX_NUMBER_FIELDS', '1000'))
+DATA_UPLOAD_MAX_NUMBER_FIELDS = int(os.getenv('DATA_UPLOAD_MAX_NUMBER_FIELDS', '5000'))
 
 # Matomo tracking server and site information
 MATOMO_ADDITIONAL_SITE_ID = int(os.getenv('MATOMO_ADDITIONAL_SITE_ID', '0'))
