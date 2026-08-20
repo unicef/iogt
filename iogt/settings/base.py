@@ -486,7 +486,10 @@ WAGTAILMARKDOWN = {
 
 TRANSLATIONS_PROJECT_BASE_DIR = BASE_DIR
 
+WAGTAILTRANSFER_CHOOSER_API_PROXY_TIMEOUT=120
+
 WAGTAILTRANSFER_LOOKUP_FIELDS = {
+    'auth.permission': ['codename'],
     'contenttypes.contenttype': ['app_label', 'model'],
     'iogt_users.user': ['username'],
     'taggit.tag': ['slug'],
