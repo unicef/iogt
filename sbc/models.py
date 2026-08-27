@@ -298,7 +298,7 @@ class SBCResourcesPage(Page):
         elif order == 'date':
             all_resources = SBCResource.objects.all().order_by('-date')
 
-        paginator = Paginator(all_resources, 2)
+        paginator = Paginator(all_resources, 9)
         page_number = request.GET.get('page')
 
         try:
@@ -413,7 +413,7 @@ class SBCAlliancePage(Page):
             FieldPanel('alliance_gallery_title', heading="Title"),
             FieldPanel('alliance_gallery_description', heading="Description"),
             FieldPanel('alliance_gallery_list', heading="Gallery List"),
-        ], heading='Timeline')
+        ], heading='Gallery')
     ]
 
 
