@@ -1617,8 +1617,8 @@ wagtail-modeladmin==2.2.0 \
     --hash=sha256:41e12f9a79f8c1595fce73bd6b51007422f258089564f9df8e09a82246a8e133 \
     --hash=sha256:60ea08b128761b5b6a1cbfe3c8ab828fba13e41ff3d7563a0b8c62c8fe36c4ce
     # via -r requirements.in
-wagtail-transfer @ https://github.com/unicef/iogt-wagtailtransfer/archive/05fff57d6b48afc34173da9a05a914126397d2a8.zip \
-    --hash=sha256:8a7052523301c8c1e4261aece5ef77c29774bb0ad4b945af4d615bc4be614a80
+wagtail-transfer @ https://github.com/unicef/iogt-wagtailtransfer/archive/783d6b707ad270f8f6727a4271fd887996d13c7b.zip \
+    --hash=sha256:d7c7f6bb790a1b483e56e5f782479e7314c7d177b59fd3aec805ecf3aacd60fb
     # via -r requirements.in
 wagtailmedia==0.16.0 \
     --hash=sha256:1f757984240822a7ddfe3eda8e58243f31a3c29935ce8014499e7e664923d4c9 \
