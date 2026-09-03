@@ -36,7 +36,7 @@ class InteractiveChannel(models.Model):
 
 
 class Message(models.Model):
-    rapidpro_message_id = models.BigIntegerField(primary_key=True)
+    rapidpro_message_id = models.CharField(primary_key=True, max_length=50)
     text = models.TextField()
     quick_replies = models.JSONField(null=True, blank=True)
     to = models.CharField(max_length=255)
