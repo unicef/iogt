@@ -6,6 +6,7 @@ import requests
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.shortcuts import redirect, render
+from django.utils.cache import add_never_cache_headers
 from django.utils.translation import gettext_lazy as _
 from wagtail.admin.panels import FieldPanel
 from wagtail.models import Page
@@ -95,7 +96,9 @@ class InteractivePage(Page, PageUtilsMixin, TitleIconMixin):
         if not context["db_data"]:
             return redirect("/")
 
-        return render(request, self.template, context)
+        response = render(request, self.template, context)
+        add_never_cache_headers(response);
+        return response
 
     def get_user_identifier(self, request):
         if not request.session.session_key:
