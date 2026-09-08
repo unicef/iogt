@@ -7,6 +7,12 @@ const PRECACHE_ASSETS = [
     '/static/js/idb.js',
 ];
 
+// Bypass the service worker for configured paths or patterns.
+// Add paths here to exclude them from SW handling (prefix match supported).
+const SW_EXCLUDE_PATHS = [
+  '/cranky-uncle-game',
+];
+
 const OFFLINE_HTML = `
   <!DOCTYPE html>
   <html lang="en">
@@ -138,6 +144,34 @@ self.addEventListener("notificationclick", function (event) {
 // ✅ Handle Fetch Requests
 self.addEventListener("fetch", (event) => {
   const { request } = event;
+
+  function isExcluded(req) {
+    try {
+      const url = new URL(req.url);
+      // Only apply exclusions to same-origin requests
+      if (url.origin !== self.location.origin) return false;
+      const path = url.pathname;
+      for (const p of SW_EXCLUDE_PATHS) {
+        if (p.endsWith('*')) {
+          const prefix = p.slice(0, -1);
+          if (path.startsWith(prefix)) return true;
+        } else {
+          if (path === p || path.startsWith(p + '/')) return true;
+          // Also allow the exclusion fragment to appear anywhere in the path
+          // e.g. "/en/.../cranky-uncle-game/..." should match "/cranky-uncle-game"
+          if (path.indexOf(p) !== -1) return true;
+        }
+      }
+    } catch (e) {
+      return false;
+    }
+    return false;
+  }
+
+  if (isExcluded(request)) {
+    // Let these requests go to network directly and skip SW caching/handling.
+    return event.respondWith(fetch(request));
+  }
 
   // ✅ Handle POST Requests (Save to IndexedDB if offline)
   if (request.method === "POST") {
