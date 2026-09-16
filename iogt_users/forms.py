@@ -45,7 +45,8 @@ class AccountSignupForm(SignupForm):
         self.fields["username"].widget = forms.TextInput(attrs={
             "placeholder": _("Choose a username that you will use to login to IoGT"),
             "data-i18n": _("Choose a username to log in to IoGT"),
-            "data-gaurav": _("Create your account")
+            "data-gaurav": _("Create your account"),
+            "data-gaurav-2": _("Hello! I am Gaurav."),
         })
 
         if hasattr(self, "field_order"):
