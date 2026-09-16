@@ -26,7 +26,7 @@ def make_pos_run():
     for row in status_data:
         if row[3] == 'js':
             js_phrases.add(row[0])
-        if row[2] == 'translate' and row[4] != 'unused':
+        if row[2] not in ['remove', 'not needed'] and row[4] != 'unused':
             used_phrases.add(row[0])
 
     processed_phrases = set()
@@ -97,7 +97,7 @@ def make_pos_run():
         phrase = row[0]
         if i == 0:
             continue
-        if row[2] == 'translate' and row[4] != 'unused':
+        if row[2] not in ['remove', 'not needed'] and row[4] != 'unused':
             if phrase not in processed_phrases:
                 assert not row[4].startswith('has translation')
                 translation_list = translations
