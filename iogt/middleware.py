@@ -118,7 +118,8 @@ class GlobalDataMiddleware:
             map = {}
             for translation_entry in TranslationEntry.objects.filter(language=language_code):
                 map.update({
-                    (translation_entry.original, language_code): translation_entry
+                    (translation_entry.original, language_code): translation_entry,
+                    (translation_entry.original.strip().lower(), language_code): translation_entry,
                 })
             cache.set(f'{language_code}_translation_map', map)
 
