@@ -43,7 +43,8 @@ class AccountSignupForm(SignupForm):
             self.fields["password2"] = IogtPasswordField(label=_("Repeat your 4-digital PIN or longer password"), autocomplete="new-password")
 
         self.fields["username"].widget = forms.TextInput(attrs={
-            "placeholder": _("Choose a username that you will use to login to IoGT")
+            "placeholder": _("Choose a username that you will use to login to IoGT"),
+            "data-i18n": _("Choose a username to log in to IoGT")
         })
 
         if hasattr(self, "field_order"):
