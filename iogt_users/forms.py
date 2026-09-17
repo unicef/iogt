@@ -21,7 +21,7 @@ class AccountSignupForm(SignupForm):
     display_name = forms.CharField(
         label=_("Display name"),
         widget=forms.TextInput(
-            attrs={"placeholder": _("Choose a display name that will be shown publicly if you post to the IoGT site, for example next to comments you post"),}
+            attrs={"placeholder": _("Choose a display name to be shown publicly"),}
         ),
         required=False,
     )
@@ -37,13 +37,13 @@ class AccountSignupForm(SignupForm):
     def __init__(self, *args, **kwargs):
         super(AccountSignupForm, self).__init__(*args, **kwargs)
         self.fields.pop('email')
-        self.fields["password1"] = IogtPasswordField(label=_("Choose a 4-digit PIN or a longer password that you will use to login to IoGT"), autocomplete="new-password")
+        self.fields["password1"] = IogtPasswordField(label=_("Choose 4-digit PIN or password"), autocomplete="new-password")
 
         if 'password2' in self.fields:
-            self.fields["password2"] = IogtPasswordField(label=_("Repeat your 4-digital PIN or longer password"), autocomplete="new-password")
+            self.fields["password2"] = IogtPasswordField(label=_("Repeat 4-digital PIN or password"), autocomplete="new-password")
 
         self.fields["username"].widget = forms.TextInput(attrs={
-            "placeholder": _("Choose a username that you will use to login to IoGT")
+            "placeholder": _("Choose a username to log in to IoGT")
         })
 
         if hasattr(self, "field_order"):

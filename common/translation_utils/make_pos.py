@@ -23,11 +23,16 @@ def make_pos_run():
     status_data = list(csv.reader(sheet0))
     js_phrases = set()
     used_phrases = set()
+    used_phrases_map = {}
     for row in status_data:
         if row[3] == 'js':
             js_phrases.add(row[0])
-        if row[2] == 'translate' and row[4] != 'unused':
+            js_phrases.add(row[0].strip().lower())
+        if row[2] not in ['remove', 'not needed'] and row[4] != 'unused':
             used_phrases.add(row[0])
+            norm = row[0].strip().lower()
+            if norm not in used_phrases_map:
+                used_phrases_map[norm] = row[0]
 
     processed_phrases = set()
 
@@ -56,11 +61,21 @@ def make_pos_run():
                 translation.path = "locale/{}/LC_MESSAGES/".format(phrase)
 
         phrase_eng = row[3]
-        if phrase_eng not in used_phrases:
+        canonical_phrase = None
+        if phrase_eng in used_phrases:
+            canonical_phrase = phrase_eng
+        else:
+            norm = phrase_eng.strip().lower()
+            if norm in used_phrases_map:
+                candidate = used_phrases_map[norm]
+                if candidate not in processed_phrases:
+                    canonical_phrase = candidate
+
+        if not canonical_phrase or canonical_phrase in processed_phrases:
             continue
 
         translation_list = translations
-        if phrase_eng in js_phrases:
+        if canonical_phrase in js_phrases or phrase_eng in js_phrases:
             translation_list = translationsjs
 
         for translation, phrase in zip(translation_list, row[4:]):
@@ -68,26 +83,26 @@ def make_pos_run():
                 continue
             if row[0] == '':
                 entry = polib.POEntry(
-                    msgid=phrase_eng,
+                    msgid=canonical_phrase,
                     msgstr=phrase,
                 )
                 translation.pofile.append(entry)
-                processed_phrases.add(phrase_eng)
+                processed_phrases.add(canonical_phrase)
             if row[0] == 'sg':
                 translation.sg_buffer = phrase
-                translation.sg_buffer_eng = phrase_eng
+                translation.sg_buffer_eng = canonical_phrase
             if row[0] == 'pl':
                 if not hasattr(translation, "sg_buffer"):
                     print("Warning: Row {} has no matching singular.".format(i))
                     continue
                 entry = polib.POEntry(
                     msgid=translation.sg_buffer_eng,
-                    msgid_plural=phrase_eng,
+                    msgid_plural=canonical_phrase,
                     msgstr_plural={0: translation.sg_buffer, 1: phrase}
                 )
                 translation.pofile.append(entry)
                 processed_phrases.add(translation.sg_buffer_eng)
-                processed_phrases.add(phrase_eng)
+                processed_phrases.add(canonical_phrase)
 
     sheet.close()
 
@@ -97,7 +112,7 @@ def make_pos_run():
         phrase = row[0]
         if i == 0:
             continue
-        if row[2] == 'translate' and row[4] != 'unused':
+        if row[2] not in ['remove', 'not needed'] and row[4] != 'unused':
             if phrase not in processed_phrases:
                 assert not row[4].startswith('has translation')
                 translation_list = translations
