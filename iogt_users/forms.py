@@ -28,7 +28,12 @@ class AccountSignupForm(SignupForm):
         ),
         required=False,
     )
-    terms_accepted = forms.BooleanField(label=_('I accept the Terms and Conditions.'))
+    terms_accepted = forms.BooleanField(
+        label=_('I accept the Terms and Conditions.'),
+        widget=forms.CheckboxInput(attrs={
+            'id': 'signup-checkbox',
+        })
+    )
     field_order = [
         "username",
         "display_name",

@@ -147,3 +147,11 @@ form input[type="checkbox"] {
     padding: 8px 12px;
     width: 100%
 }
+
+label[for='signup-checkbox'] {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 14px;
+    margin-right: 10px;
+}
