@@ -374,3 +374,15 @@ msgid ""
 "The content you are trying to reach is not available. To see offline content"
 " click <a href=\"%(offline_content_index_page_url)s\">here</a>"
 msgstr ""
+
+msgid "Choose a username to log in to IoGT"
+msgstr "Hitamo izina ry'umukoresha kugira ngo winjire muri IoGT."
+
+msgid "Choose a display name to be shown publicly"
+msgstr "Hitamo izina ryerekanywa ku mugaragaro."
+
+msgid "Choose 4-digit PIN or password"
+msgstr "Hitamo PIN y'imibare 4 cyangwa ijambo ry'ibanga."
+
+msgid "Repeat 4-digital PIN or password"
+msgstr "Ongera PIN y'imibare 4 cyangwa ijambo ry'ibanga."

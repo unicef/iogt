@@ -372,3 +372,15 @@ msgid ""
 "The content you are trying to reach is not available. To see offline content"
 " click <a href=\"%(offline_content_index_page_url)s\">here</a>"
 msgstr "The content wey you dey try reach no dey. To see offline content click here"
+
+msgid "Choose a username to log in to IoGT"
+msgstr "Choose username to log in to IoGT."
+
+msgid "Choose a display name to be shown publicly"
+msgstr "Choose display name wey go show for public."
+
+msgid "Choose 4-digit PIN or password"
+msgstr "Choose 4-digit PIN or password."
+
+msgid "Repeat 4-digital PIN or password"
+msgstr "Repeat 4-digit PIN or password."
