@@ -372,3 +372,15 @@ msgstr "Kò sí àsọyé kankan."
 msgid "The content you are trying to reach is not available. To see offline content"
 " click <a href=\"%(offline_content_index_page_url)s\">here</a>"
 msgstr "Àkọsílẹ̀ tí o ń gbìyànjú láti rí kò sí. Láti rí àkọsílẹ̀ àìmọ̀ọ́fàìnì tẹ níbí"
+
+msgid "Choose a username to log in to IoGT"
+msgstr "Yan orukọ olumulo lati wọ inu IoGT."
+
+msgid "Choose a display name to be shown publicly"
+msgstr "Yan orukọ ifihan lati fihan gbangba."
+
+msgid "Choose 4-digit PIN or password"
+msgstr "Yan PIN oni nọmba 4 tabi ọrọ igbaniwọle."
+
+msgid "Repeat 4-digital PIN or password"
+msgstr "Tun PIN oni nọmba 4 tabi ọrọ igbaniwọle ṣe."
