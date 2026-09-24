@@ -90,7 +90,6 @@ class AccountLoginForm(LoginForm):
     def __init__(self, *args, **kwargs):
         super(AccountLoginForm, self).__init__(*args, **kwargs)
 
-        # Username
         self.fields["login"].widget = forms.TextInput(
             attrs={
                 "placeholder": _("Username"),
@@ -99,7 +98,6 @@ class AccountLoginForm(LoginForm):
             }
         )
 
-        # Password
         self.fields["password"] = IogtPasswordField(
             label=_("Password"),
             autocomplete="current-password",
@@ -111,7 +109,6 @@ class AccountLoginForm(LoginForm):
             )
         )
 
-        # Remember me
         if "remember" in self.fields:
             self.fields["remember"].widget = forms.CheckboxInput(
                 attrs={
