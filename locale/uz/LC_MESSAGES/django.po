@@ -374,3 +374,15 @@ msgid ""
 "The content you are trying to reach is not available. To see offline content"
 " click <a href=\"%(offline_content_index_page_url)s\">here</a>"
 msgstr ""
+
+msgid "Choose a username to log in to IoGT"
+msgstr "IoGT ga kirish uchun foydalanuvchi nomini tanlang."
+
+msgid "Choose a display name to be shown publicly"
+msgstr "ជ្រើសរើសឈ្មោះបង្ហាញដើម្បីបង្ហាញជាសាធារណៈ។"
+
+msgid "Choose 4-digit PIN or password"
+msgstr "4 xonali PIN yoki parolni tanlang."
+
+msgid "Repeat 4-digital PIN or password"
+msgstr "4 xonali PIN yoki parolni takrorlang."
