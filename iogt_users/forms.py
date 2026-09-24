@@ -102,9 +102,8 @@ class AccountLoginForm(LoginForm):
             label=_("Password"),
             autocomplete="current-password",
             css_class="signup-input",
-            help_text =  format_html_lazy(
+            help_text=format_html_lazy(
                 '<a href="{}" class="forgot-password">Forgot password?</a>',
-                reverse_lazy("account_reset_password"),
                 reverse_lazy("account_reset_password"),
             )
         )
