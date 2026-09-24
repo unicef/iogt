@@ -148,10 +148,25 @@ form input[type="checkbox"] {
     width: 100%
 }
 
-label[for='signup-checkbox'] {
+label[for='signup-checkbox'],
+label[for='login-checkbox'] {
     display: inline-block;
     font-size: 12px;
     font-weight: 500;
     line-height: 14px;
     margin-right: 10px;
 }
+
+.forgot-password {
+    display: inline-block;
+    margin-top: 6px;
+    color: -webkit-link;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 14px;
+    text-decoration: underline;
+
+}
+
+
