@@ -33,7 +33,7 @@ LOGGING = {
     },
 }
 
-SITE_VERSION = '4.0.20'
+SITE_VERSION = '4.0.24-rc.3'
 
 try:
     from .local import *
