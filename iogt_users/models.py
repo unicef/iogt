@@ -75,6 +75,12 @@ class User(AbstractUser):
 
     class Meta:
         ordering = ('id',)
+        constraints = [
+            models.UniqueConstraint(
+                fields=['is_superuser', 'is_staff', 'email'],
+                name='iogt_users_user_unique_role_email',
+            ),
+        ]
 
 
 class Profile(models.Model):
