@@ -6,6 +6,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
 from django.db.models.signals import post_save
+from django.db.models import Q
 from django.dispatch import receiver
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -77,7 +78,8 @@ class User(AbstractUser):
         ordering = ('id',)
         constraints = [
             models.UniqueConstraint(
-                fields=['is_superuser', 'is_staff', 'email'],
+                fields=['is_staff', 'email'],
+                condition=Q(email__isnull=False) & ~Q(email=''),
                 name='iogt_users_user_unique_role_email',
             ),
         ]
