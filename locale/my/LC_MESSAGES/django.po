@@ -383,13 +383,13 @@ msgstr ""
 " <a href=\"%(offline_content_index_page_url)s\">ဒီမှာ</a> ကိုနှိပ်ပါ"
 
 msgid "Choose a username to log in to IoGT"
-msgstr "IoGT သို့ ဝင်ရောက်ရန် အသုံးပြုသူအမည်ကို ရွေးချယ်ပါ။"
+msgstr "IoGT သို့ ဝင်ရောက်ရန် အသုံးပြုသူအမည်ကို ရွေးပါ။"
 
 msgid "Choose a display name to be shown publicly"
-msgstr "အများမြင်နိုင်ရန် ပြသမည့်အမည်ကို ရွေးချယ်ပါ။"
+msgstr "Herkese açık olarak gösterilecek bir ekran adı seçin."
 
 msgid "Choose 4-digit PIN or password"
-msgstr "ဂဏန်း ၄ လုံးပါ PIN သို့မဟုတ် စကားဝှက်ကို ရွေးချယ်ပါ။"
+msgstr "ဂဏန်း 4 လုံးပါသော PIN သို့မဟုတ် စကားဝှက်ကို ရွေးပါ။"
 
 msgid "Repeat 4-digital PIN or password"
-msgstr "ဂဏန်း ၄ လုံးပါ PIN သို့မဟုတ် စကားဝှက်ကို ထပ်မံထည့်သွင်းပါ။"
+msgstr "ဂဏန်း 4 လုံးပါသော PIN သို့မဟုတ် စကားဝှက်ကို ထပ်ထည့်ပါ။"

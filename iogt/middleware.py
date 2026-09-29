@@ -114,11 +114,13 @@ class GlobalDataMiddleware:
                     (svg_to_png_map.svg_path, svg_to_png_map.fill_color, svg_to_png_map.stroke_color): svg_to_png_map,
                 })
             cache.set('svg_to_png_map', map)
-        if not cache.get(f'{language_code}_translation_map'):
+            translation_cache_key = f'{language_code}_translation_map'
+        if cache.get(translation_cache_key) is None:
             map = {}
             for translation_entry in TranslationEntry.objects.filter(language=language_code):
                 map.update({
-                    (translation_entry.original, language_code): translation_entry
+                    (translation_entry.original, language_code): translation_entry,
+                    (translation_entry.original.strip().lower(), language_code): translation_entry,
                 })
             cache.set(f'{language_code}_translation_map', map)
 
