@@ -16,7 +16,7 @@ class User(AbstractUser):
     last_name = models.CharField('last name', max_length=150, null=True,
                                  blank=True)
     display_name = models.CharField('display name', max_length=255, null=True, blank=True)
-    email = models.EmailField('email address', null=True, blank=True)
+    email = models.EmailField('email address', null=True, blank=True, db_index=True)
     terms_accepted = models.BooleanField(default=False)
 
     has_filled_registration_survey = models.BooleanField(default=False)

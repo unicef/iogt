@@ -66,7 +66,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ("auth", "0012_alter_user_first_name_max_length"),
         ("home", "0061_article_notification_tags_section_notification_tags_and_more"),
-        ("iogt_users", "0011_remove_user_gender_remove_user_location_and_more"),
+        ("iogt_users", "0012_alter_user_email"),
     ]
 
     operations = [
