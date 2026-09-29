@@ -34,7 +34,7 @@ api_url_patterns = [
     path('api/v1/questionnaires/', include('questionnaires.api.v1.urls')),
     path('api/interactive/', include('interactive.api.urls')),
     # path("notifications/save-preference/", save_notification_preference, name="save_notification_preference"),
-    
+
 ]
 
 schema_view = get_schema_view(
@@ -51,7 +51,10 @@ schema_view = get_schema_view(
 urlpatterns = api_url_patterns + [
     path('django-admin/', admin.site.urls),
     path('admin/logout/', CustomLogoutView.as_view(), name='admin_logout'),
-    path('admin/login/', AzureADSignupView.as_view(), name='wagtailadmin_login'),  # Override Wagtail admin login
+    # Override Wagtail admin login with Azure B2C only when Azure is configured (production).
+    # In local dev (no AZURE_AD_TENANT_ID), Wagtail's built-in login page is used instead.
+    *([path('admin/login/', AzureADSignupView.as_view(), name='wagtailadmin_login')]
+      if settings.AZURE_AD_TENANT_ID else []),
     re_path(r'^admin/autocomplete/', include(autocomplete_admin_urls)),
     path('admin/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),
@@ -68,7 +71,8 @@ urlpatterns = api_url_patterns + [
     ),
     *i18n_patterns(path("external-link/", TransitionPageView.as_view(), name="external-link")),
     *i18n_patterns(path("translation-not-found/", TranslationNotFoundPage.as_view(), name="translation-not-found")),
-    *i18n_patterns(path("offline-content-not-found/", OfflineContentNotFoundPageView.as_view(), name="offline_content_not_found")),
+    *i18n_patterns(
+        path("offline-content-not-found/", OfflineContentNotFoundPageView.as_view(), name="offline_content_not_found")),
 
     path('messaging/', include('messaging.urls'), name='messaging-urls'),
     path('home/', include('home.urls'), name='home-urls'),
