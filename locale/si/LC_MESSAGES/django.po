@@ -354,6 +354,24 @@ msgid ""
 "%(start_link)sdownload it%(end_link)s."
 msgstr "ඔබට ඉහත ශ්‍රව්‍යයට සවන් දීමට නොහැකි නම්, ඔබට එය බාගත කළ හැකිය"
 
+msgid "Choose a username to log in to IoGT"
+msgstr "IoGT වෙත පිවිසීමට පරිශීලක නාමයක් තෝරන්න."
+
+msgid "Choose a display name to be shown publicly"
+msgstr "Pilih nama tampilan yang akan ditampilkan secara publik."
+
+msgid "Choose 4-digit PIN or password"
+msgstr "ඉලක්කම් 4 ක PIN අංකයක් හෝ මුරපදයක් තෝරන්න."
+
+msgid "Repeat 4-digital PIN or password"
+msgstr "ඉලක්කම් 4 ක PIN අංකය හෝ මුරපදය නැවත ඇතුළත් කරන්න।"
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
 msgid "Please complete the questions marked as required to continue"
 msgstr ""
 
@@ -383,14 +401,154 @@ msgid ""
 " click <a href=\"%(offline_content_index_page_url)s\">here</a>"
 msgstr ""
 
-msgid "Choose a username to log in to IoGT"
-msgstr "IoGT වෙත පිවිසීමට පරිශීලක නාමයක් තෝරන්න."
+msgid "Sort child pages"
+msgstr ""
 
-msgid "Choose a display name to be shown publicly"
-msgstr "ප්‍රසිද්ධියේ පෙන්වීමට නමක් තෝරන්න."
+msgid "Change ordering of child pages of '%(title)s'"
+msgstr ""
 
-msgid "Choose 4-digit PIN or password"
-msgstr "ඉලක්කම් 4 ක PIN අංකයක් හෝ මුරපදයක් තෝරන්න."
+msgid "Custom permissions"
+msgstr ""
 
-msgid "Repeat 4-digital PIN or password"
-msgstr "ඉලක්කම් 4 ක PIN අංකය හෝ මුරපදය නැවත ඇතුළත් කරන්න."
+msgid "The comment has been {self.action_verb} successfully!"
+msgstr ""
+
+msgid "Matomo Tag Manager container ID"
+msgstr ""
+
+msgid ""
+"Currently this feature only works on devices using JavaScript (e.g. basic "
+"feature phones are not supported), and does not work with MNO zero-rating or"
+" Meta Free Basics."
+msgstr ""
+
+msgid "Article Feedback %(title)s"
+msgstr ""
+
+msgid "Editing"
+msgstr ""
+
+msgid "Editing image %(title)s"
+msgstr ""
+
+msgid "Delete image"
+msgstr ""
+
+msgid "URL Generator"
+msgstr ""
+
+msgid "Focal point"
+msgstr ""
+
+msgid "(optional)"
+msgstr ""
+
+msgid ""
+"To define this image's most important region, drag a box over the image "
+"above."
+msgstr ""
+
+msgid "Current focal point shown"
+msgstr ""
+
+msgid "Remove focal area"
+msgstr ""
+
+msgid "Max dimensions"
+msgstr ""
+
+msgid "Filesize"
+msgstr ""
+
+msgid "File not found"
+msgstr ""
+
+msgid "Usage"
+msgstr ""
+
+msgid "Used %(usage_count)s time"
+msgstr ""
+
+msgid "Used %(usage_count)s times"
+msgstr ""
+
+msgid ""
+"Name for the interactive bot that the user will seen when interacting with "
+"it"
+msgstr ""
+
+msgid ""
+"To set up a interactive bot channel on your RapidPro server and get a "
+"request URL, follow the steps outline in the Section \"Setting up a Chatbot "
+"channel\" here: "
+"https://github.com/unicef/iogt/blob/develop/messaging/README.md"
+msgstr ""
+
+msgid "Forms"
+msgstr ""
+
+msgid "Action"
+msgstr ""
+
+msgid "LIVE"
+msgstr ""
+
+msgid "No forms found."
+msgstr ""
+
+msgid "Users"
+msgstr ""
+
+msgid "Select all users in listing"
+msgstr ""
+
+msgid "Download Users (XLSX)"
+msgstr ""
+
+msgid "Download Users (CSV)"
+msgstr ""
+
+msgid "My Notification"
+msgstr ""
+
+msgid "My Quiz Results"
+msgstr ""
+
+msgid "Quiz Title"
+msgstr ""
+
+msgid "Latest Score"
+msgstr ""
+
+msgid "Avg Score"
+msgstr ""
+
+msgid "Attempt"
+msgstr ""
+
+msgid "Date & Time"
+msgstr ""
+
+msgid "You haven’t completed any quizzes yet."
+msgstr ""
+
+msgid "Notification Preference"
+msgstr ""
+
+msgid "Do you want to receive notifications?"
+msgstr ""
+
+msgid "Preferred Language:"
+msgstr ""
+
+msgid "What would you like to be notified about?"
+msgstr ""
+
+msgid "Select one or more topics"
+msgstr ""
+
+msgid "Select All"
+msgstr ""
+
+msgid "Promoted results"
+msgstr ""

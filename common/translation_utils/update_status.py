@@ -17,8 +17,8 @@ class Translation:
 
 def lookup_status(msg, translations, replacement_strings=[]):
     status = 'needs translation'
-    if msg in translations:
-        tr = translations[msg]
+    tr = translations.get(msg) or translations.get(msg.strip().lower())
+    if tr:
         if tr.is_complete():
             status = 'has translation'
         else:
@@ -26,8 +26,8 @@ def lookup_status(msg, translations, replacement_strings=[]):
     else:
         for replacement_string in replacement_strings:
             if replacement_string:
-                if replacement_string in translations:
-                    tr = translations[replacement_string]
+                tr = translations.get(replacement_string) or translations.get(replacement_string.strip().lower())
+                if tr:
                     status = 'TODO'
                 else:
                     print(f'Warning: Replacement string "{replacement_string}" for message "{msg}" not in translations.')
@@ -68,7 +68,14 @@ def update_status_run():
     logged_phrases = {status_sheet[i][0] : i for i in range(1, len(status_sheet))}
 
     sheet2 = open("common/translation_utils/translations.csv", newline='')
-    translations = {r[3] : Translation(r) for r in list(csv.reader(sheet2)) if Translation.is_phrase(r)}
+    translations = {}
+    for r in list(csv.reader(sheet2)):
+        if Translation.is_phrase(r):
+            tr = Translation(r)
+            translations[r[3]] = tr
+            norm = r[3].strip().lower()
+            if norm not in translations:
+                translations[norm] = tr
     po_msgs = set()
 
     # process those rows that are in the PO file
