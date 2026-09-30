@@ -80,19 +80,11 @@ class IogtTranslationManager(translation_manager.manager.Manager):
 
 
 def update_po_from_translation_entry(entry):
-    # print("=== PO UPDATE START ===")
-    # print("original:", repr(entry.original))
-    # print("language:", entry.language)
-    # print("domain:", repr(entry.domain))
-    # print("locale_path from DB:", repr(entry.locale_path))
-    # print("BASE_DIR:", settings.BASE_DIR)
     if not entry.locale_path:
         return
     locale_dir = entry.locale_path
-
     if not os.path.isabs(locale_dir):
         locale_dir = os.path.join(settings.BASE_DIR, locale_dir)
-
     pofile = os.path.join(
         locale_dir,
         entry.language,
@@ -100,41 +92,27 @@ def update_po_from_translation_entry(entry):
         f"{entry.domain}.po",
     )
 
-
     if not os.path.isfile(pofile):
         return
-
     try:
         po = polib.pofile(pofile)
         po_entry = po.find(entry.original)
-
         if po_entry is None:
-
             po_entry = polib.POEntry(
                 msgid=entry.original,
                 msgstr=entry.translation or "",
             )
-
             po.append(po_entry)
-
         else:
-
             po_entry.msgstr = entry.translation or ""
 
         po.save(pofile)
-
-
         mo_path = os.path.splitext(pofile)[0] + ".mo"
-
         po.save_as_mofile(mo_path)
-
         from django.utils.translation import trans_real
-
         trans_real._translations = {}
-
         # Clear custom translation cache
         cache.delete(f"{entry.language}_translation_map")
-
 
     except Exception as e:
         raise

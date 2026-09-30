@@ -1,11 +1,12 @@
-import os
-
-from django.core.management import call_command
 from django.core.management.base import BaseCommand
-
-from common.translation_utils.make_pos import make_pos_run
-from common.translation_utils.make_testing_po import make_testing_po_run
+from django.core.management import call_command
 from common.translation_utils.update_status import update_status_run
+from common.translation_utils.make_testing_po import make_testing_po_run
+from common.translation_utils.make_pos import make_pos_run
+import polib
+import csv
+import copy
+import os
 
 
 #This management function runs a series of functions related to the translation process, for detailed information see common/translation_utils/README
