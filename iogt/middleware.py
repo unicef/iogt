@@ -114,7 +114,7 @@ class GlobalDataMiddleware:
                     (svg_to_png_map.svg_path, svg_to_png_map.fill_color, svg_to_png_map.stroke_color): svg_to_png_map,
                 })
             cache.set('svg_to_png_map', map)
-            translation_cache_key = f'{language_code}_translation_map'
+        translation_cache_key = f'{language_code}_translation_map'
         if cache.get(translation_cache_key) is None:
             map = {}
             for translation_entry in TranslationEntry.objects.filter(language=language_code):
