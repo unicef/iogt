@@ -1,10 +1,13 @@
-from allauth.account.forms import SignupForm, ChangePasswordForm as BaseChangePasswordForm
+from allauth.account.forms import SignupForm, LoginForm, ChangePasswordForm as BaseChangePasswordForm
 from allauth.utils import set_form_field_order
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django.urls import reverse_lazy
+from django.utils.functional import lazy
+from django.utils.html import format_html
 from questionnaires.models import UserSubmission
 from wagtail.users.forms import UserEditForm as WagtailUserEditForm, \
     UserCreationForm as WagtailUserCreationForm
@@ -16,6 +19,8 @@ from .models import User
 
 from notifications.signals import notify
 from datetime import datetime
+
+format_html_lazy = lazy(format_html, str)
 
 class AccountSignupForm(SignupForm):
     display_name = forms.CharField(
@@ -74,6 +79,46 @@ class AccountSignupForm(SignupForm):
         if User.objects.filter(display_name__iexact=display_name):
             raise ValidationError(_('Display name not available.'))
         return display_name
+
+class AccountLoginForm(LoginForm):
+    field_order = [
+        "login",
+        "password",
+        "remember",
+    ]
+
+    def __init__(self, *args, **kwargs):
+        super(AccountLoginForm, self).__init__(*args, **kwargs)
+
+        self.fields["login"].widget = forms.TextInput(
+            attrs={
+                "placeholder": _("Username"),
+                "class": "signup-input",
+                "autocomplete": "username",
+            }
+        )
+
+        self.fields["password"] = IogtPasswordField(
+            label=_("Password"),
+            autocomplete="current-password",
+            css_class="signup-input",
+            help_text=format_html_lazy(
+                '<a href="{}" class="forgot-password">{}</a>',
+                reverse_lazy("account_reset_password"),
+                _("Forgot your password?")
+            )
+        )
+
+        if "remember" in self.fields:
+            self.fields["remember"].widget = forms.CheckboxInput(
+                attrs={
+                    "id": "login-checkbox",
+                    "class": "login-checkbox",
+                }
+            )
+
+        if hasattr(self, "field_order"):
+            set_form_field_order(self, self.field_order)
 
 
 class ChangePasswordForm(BaseChangePasswordForm):
