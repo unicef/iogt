@@ -873,7 +873,7 @@ msgid "I accept the terms & conditions"
 msgstr "([unused]-I accept the terms & conditions)"
 
 msgid "4-digit PIN"
-msgstr "([has-partial-translation]-4-digit PIN)"
+msgstr "([unused]-4-digit PIN)"
 
 msgid "Enter Your Name"
 msgstr "([unused]-Enter Your Name)"
@@ -1024,10 +1024,10 @@ msgstr ""
 "all set!)"
 
 msgid "Yes"
-msgstr "([unused]-Yes)"
+msgstr "([needs-translation]-Yes)"
 
 msgid "No"
-msgstr "([unused]-No)"
+msgstr "([needs-translation]-No)"
 
 msgid ""
 "Skip to end of survey with in-between required questions isn't allowed."
@@ -1163,7 +1163,7 @@ msgid "Related articles"
 msgstr "([unused]-Related articles)"
 
 msgid "The comment has been {verb} successfully!"
-msgstr "([not-needed]-The comment has been {verb} successfully!)"
+msgstr "([unused]-The comment has been {verb} successfully!)"
 
 msgid ""
 "This text appears when it is possible for the user to install the app on "
@@ -1318,7 +1318,7 @@ msgid "Insert link"
 msgstr "([not-needed]-Insert link)"
 
 msgid "Pages awaiting moderation"
-msgstr "([not-needed]-Pages awaiting moderation)"
+msgstr "([unused]-Pages awaiting moderation)"
 
 msgid "Title"
 msgstr "([not-needed]-Title)"
@@ -1327,16 +1327,16 @@ msgid "Parent"
 msgstr "([not-needed]-Parent)"
 
 msgid "Type"
-msgstr "([not-needed]-Type)"
+msgstr "([unused]-Type)"
 
 msgid "Edited"
-msgstr "([not-needed]-Edited)"
+msgstr "([unused]-Edited)"
 
 msgid "Edit this page"
-msgstr "([not-needed]-Edit this page)"
+msgstr "([unused]-Edit this page)"
 
 msgid "Preview this page"
-msgstr "([not-needed]-Preview this page)"
+msgstr "([unused]-Preview this page)"
 
 msgid "Approve"
 msgstr "([not-needed]-Approve)"
@@ -1345,28 +1345,28 @@ msgid "Reject"
 msgstr "([not-needed]-Reject)"
 
 msgid "Edit"
-msgstr "([not-needed]-Edit)"
+msgstr "([unused]-Edit)"
 
 msgid "Preview"
-msgstr "([not-needed]-Preview)"
+msgstr "([unused]-Preview)"
 
 msgid "%(time_period)s"
-msgstr "([not-needed]-%(time_period)s)"
+msgstr "([unused]-%(time_period)s)"
 
 msgid "Your most recent edits"
-msgstr "([not-needed]-Your most recent edits)"
+msgstr "([unused]-Your most recent edits)"
 
 msgid "Last Edited"
-msgstr "([not-needed]-Last Edited)"
+msgstr "([unused]-Last Edited)"
 
 msgid "Draft"
 msgstr "([not-needed]-Draft)"
 
 msgid "Live"
-msgstr "([not-needed]-Live)"
+msgstr "([unused]-Live)"
 
 msgid "Add redirect"
-msgstr "([not-needed]-Add redirect)"
+msgstr "([unused]-Add redirect)"
 
 msgid "Save"
 msgstr "([not-needed]-Save)"
@@ -1751,3 +1751,182 @@ msgstr "([not-needed]-Farsi)"
 
 msgid "Burmese"
 msgstr "([not-needed]-Burmese)"
+
+msgid "Hausa"
+msgstr "([not-needed]-Hausa)"
+
+msgid "Yoruba"
+msgstr "([not-needed]-Yoruba)"
+
+msgid "Igbo"
+msgstr "([not-needed]-Igbo)"
+
+msgid "Pidgin"
+msgstr "([not-needed]-Pidgin)"
+
+msgid "The comment has been {self.action_verb} successfully!"
+msgstr ""
+"([needs-translation]-The comment has been {self.action_verb} successfully!)"
+
+msgid "Matomo Tag Manager container ID"
+msgstr "([needs-translation]-Matomo Tag Manager container ID)"
+
+msgid ""
+"Currently this feature only works on devices using JavaScript (e.g. basic "
+"feature phones are not supported), and does not work with MNO zero-rating or"
+" Meta Free Basics."
+msgstr ""
+"([needs-translation]-Currently this feature only works on devices using "
+"JavaScript (e.g. basic feature phones are not supported), and does not work "
+"with MNO zero-rating or Meta Free Basics.)"
+
+msgid "Article Feedback %(title)s"
+msgstr "([needs-translation]-Article Feedback %(title)s)"
+
+msgid "Editing"
+msgstr "([needs-translation]-Editing)"
+
+msgid "Editing image %(title)s"
+msgstr "([needs-translation]-Editing image %(title)s)"
+
+msgid "Delete image"
+msgstr "([needs-translation]-Delete image)"
+
+msgid "URL Generator"
+msgstr "([needs-translation]-URL Generator)"
+
+msgid "Focal point"
+msgstr "([needs-translation]-Focal point)"
+
+msgid "(optional)"
+msgstr "([needs-translation]-(optional))"
+
+msgid ""
+"To define this image's most important region, drag a box over the image "
+"above."
+msgstr ""
+"([needs-translation]-To define this image's most important region, drag a "
+"box over the image above.)"
+
+msgid "Current focal point shown"
+msgstr "([needs-translation]-Current focal point shown)"
+
+msgid "Remove focal area"
+msgstr "([needs-translation]-Remove focal area)"
+
+msgid "Max dimensions"
+msgstr "([needs-translation]-Max dimensions)"
+
+msgid "Filesize"
+msgstr "([needs-translation]-Filesize)"
+
+msgid "File not found"
+msgstr "([needs-translation]-File not found)"
+
+msgid "Usage"
+msgstr "([needs-translation]-Usage)"
+
+msgid "Used %(usage_count)s time"
+msgstr "([needs-translation]-Used %(usage_count)s time)"
+
+msgid "Used %(usage_count)s times"
+msgstr "([needs-translation]-Used %(usage_count)s times)"
+
+msgid ""
+"Name for the interactive bot that the user will seen when interacting with "
+"it"
+msgstr ""
+"([needs-translation]-Name for the interactive bot that the user will seen "
+"when interacting with it)"
+
+msgid ""
+"To set up a interactive bot channel on your RapidPro server and get a "
+"request URL, follow the steps outline in the Section \"Setting up a Chatbot "
+"channel\" here: "
+"https://github.com/unicef/iogt/blob/develop/messaging/README.md"
+msgstr ""
+"([needs-translation]-To set up a interactive bot channel on your RapidPro "
+"server and get a request URL, follow the steps outline in the Section "
+"\"Setting up a Chatbot channel\" here: "
+"https://github.com/unicef/iogt/blob/develop/messaging/README.md)"
+
+msgid "Forms"
+msgstr "([needs-translation]-Forms)"
+
+msgid "Action"
+msgstr "([needs-translation]-Action)"
+
+msgid "LIVE"
+msgstr "([needs-translation]-LIVE)"
+
+msgid "No forms found."
+msgstr "([needs-translation]-No forms found.)"
+
+msgid "Choose a display name to be shown publicly"
+msgstr "([has-translation]-Choose a display name to be shown publicly)"
+
+msgid "Choose 4-digit PIN or password"
+msgstr "([has-partial-translation]-Choose 4-digit PIN or password)"
+
+msgid "Repeat 4-digital PIN or password"
+msgstr "([has-partial-translation]-Repeat 4-digital PIN or password)"
+
+msgid "Choose a username to log in to IoGT"
+msgstr "([has-partial-translation]-Choose a username to log in to IoGT)"
+
+msgid "Users"
+msgstr "([needs-translation]-Users)"
+
+msgid "Select all users in listing"
+msgstr "([needs-translation]-Select all users in listing)"
+
+msgid "Download Users (XLSX)"
+msgstr "([needs-translation]-Download Users (XLSX))"
+
+msgid "Download Users (CSV)"
+msgstr "([needs-translation]-Download Users (CSV))"
+
+msgid "My Notification"
+msgstr "([needs-translation]-My Notification)"
+
+msgid "My Quiz Results"
+msgstr "([needs-translation]-My Quiz Results)"
+
+msgid "Quiz Title"
+msgstr "([needs-translation]-Quiz Title)"
+
+msgid "Latest Score"
+msgstr "([needs-translation]-Latest Score)"
+
+msgid "Avg Score"
+msgstr "([needs-translation]-Avg Score)"
+
+msgid "Attempt"
+msgstr "([needs-translation]-Attempt)"
+
+msgid "Date & Time"
+msgstr "([needs-translation]-Date & Time)"
+
+msgid "You haven’t completed any quizzes yet."
+msgstr "([needs-translation]-You haven’t completed any quizzes yet.)"
+
+msgid "Notification Preference"
+msgstr "([needs-translation]-Notification Preference)"
+
+msgid "Do you want to receive notifications?"
+msgstr "([needs-translation]-Do you want to receive notifications?)"
+
+msgid "Preferred Language:"
+msgstr "([needs-translation]-Preferred Language:)"
+
+msgid "What would you like to be notified about?"
+msgstr "([needs-translation]-What would you like to be notified about?)"
+
+msgid "Select one or more topics"
+msgstr "([needs-translation]-Select one or more topics)"
+
+msgid "Select All"
+msgstr "([needs-translation]-Select All)"
+
+msgid "Promoted results"
+msgstr "([needs-translation]-Promoted results)"

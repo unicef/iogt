@@ -26,6 +26,9 @@ from django.dispatch import receiver
 from iogt.utils import NotifyAndPublishMenuItem, notify_and_publish_view
 from .models import Article
 from django.urls import path
+from django.core.cache import cache
+from django.db.models.signals import post_save, post_delete
+from .translation_manager.manager import update_po_from_translation_entry
 
 
 @hooks.register('after_publish_page')
@@ -39,6 +42,17 @@ def clear_cache_on_publish(request, page):
 def clear_cache_on_unpublish_or_delete(request, page):
     clear_cache(page.url)
 
+@receiver(post_save, sender=TranslationEntry)
+def sync_translation_entry(sender, instance, **kwargs):
+    update_po_from_translation_entry(instance)
+    clear_cache()
+    cache.delete(f'{instance.language}_translation_map')
+
+
+@receiver(post_delete, sender=TranslationEntry)
+def clear_translation_cache_on_delete(sender, instance, **kwargs):
+    clear_cache()
+    cache.delete(f'{instance.language}_translation_map')
 
 @hooks.register('before_serve_page', order=-1)
 def check_group(page, request, serve_args, serve_kwargs):
