@@ -248,7 +248,7 @@ You are leaving the <b>Internet of Good Things</b> to visit an external website 
 Continue to external site,FE,translate,,has partial translation,,,
 Go back to previous page,FE,translate,,unused,good,Back,
 I accept the terms & conditions,FE,translate,,unused,good,I accept the Terms and Conditions.,
-4-digit PIN,FE,translate,,has partial translation,,,"Create 4 digit pin|v1 has: 4-digit PIN (missing: mg, ru, zu, ti, tg, uz, kaa)"
+4-digit PIN,FE,translate,,unused,,,"Create 4 digit pin|v1 has: 4-digit PIN (missing: mg, ru, zu, ti, tg, uz, kaa)"
 Enter Your Name,,remove,,unused,,,relic?
 Old 4-digit PIN,FE,translate,,has partial translation,,,Old Password
 New 4-digit PIN,FE,translate,,has partial translation,,,Create 4 digit pin|New PIN

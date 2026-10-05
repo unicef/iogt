@@ -14,164 +14,162 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "quizzes"
-msgstr "Fanontaniana"
+msgstr ""
 
 msgid "Log in to participate"
-msgstr "Midira raha handray anjara"
+msgstr ""
 
 msgid "Log in / Create account"
-msgstr "Miditra / Manokatra kaonty"
+msgstr ""
 
 msgid "© The Internet of Good Things"
-msgstr "© The Internet of Good Things"
+msgstr ""
 
 msgid "Profile"
-msgstr "Mombamomba"
+msgstr ""
 
 msgid "Chat"
-msgstr "Hiresaka"
+msgstr ""
 
 msgid "More"
-msgstr "Bebe kokoa"
+msgstr ""
 
 msgid "Log in"
-msgstr "Miditra"
+msgstr ""
 
 msgid "Back"
-msgstr "Miverina"
+msgstr ""
 
 msgid "BACK"
-msgstr "MIVERINA"
+msgstr ""
 
 msgid "Previous"
-msgstr "Teo aloha"
+msgstr ""
 
 msgid "Next"
-msgstr "Manaraka"
+msgstr ""
 
 msgid "Comments"
-msgstr "Fanehoan-kevitra"
+msgstr ""
 
 msgid "Please log in or create your account"
-msgstr "Midira na manokafa kaonty azafady"
+msgstr ""
 
 msgid "Report"
-msgstr "Hitatitra"
+msgstr ""
 
 msgid "Related Articles"
-msgstr "Lahatsoratra mifandraika"
+msgstr ""
 
 msgid "This comment has been reported."
-msgstr "Lasa ny tatitra mikasika ity fanehoan-kevitra ity."
+msgstr ""
 
 msgid ""
 "It will be reviewed by the team and may be removed if it breaks our Platform"
 " Rules"
 msgstr ""
-"Hodinihin’ny ekipa izany ary ho fafana raha hita fa tsy manaraka ny "
-"fitsipika"
 
 msgid "articles"
-msgstr "Lahatsoratra"
+msgstr ""
 
 msgid "Search the site..."
-msgstr "Karohana ao amin’ny tranokala..."
+msgstr ""
 
 msgid "Search results for:"
-msgstr "Vokatry ny fikarohana ny :"
+msgstr ""
 
 msgid "No search results were found for"
-msgstr "Tsy nisy vokatra ny fikarohana"
+msgstr ""
 
 msgid "Username"
-msgstr "Soloanarana"
+msgstr ""
 
 msgid "Create your account"
-msgstr "Manokatra kaonty"
+msgstr ""
 
 msgid "Forgot PIN"
-msgstr "Adinoko ny PIN"
+msgstr ""
 
 msgid "Cancel"
-msgstr "Foanana"
+msgstr ""
 
 msgid "Hey, %(username)s"
-msgstr "Salama, %(username)s"
+msgstr ""
 
 msgid "Change Digital Pin"
-msgstr "Manova ny PIN"
+msgstr ""
 
 msgid "Personal Details"
-msgstr "Antsipiriany manokana"
+msgstr ""
 
 msgid "Save changes"
-msgstr "Raketina ny fiovana"
+msgstr ""
 
 msgid "Reset PIN"
-msgstr "Manova PIN"
+msgstr ""
 
 msgid "Your PIN has been changed successfully."
-msgstr "Voaova soa aman-tsara ny PIN."
+msgstr ""
 
 msgid "I accept the Terms and Conditions."
-msgstr "Ekeko ny fepetra."
+msgstr ""
 
 msgid "You have read %(read)s out of %(total)s"
-msgstr "%(read)s amin’ny %(total)s no novakianao"
+msgstr ""
 
 msgid "%(counter)s of %(total)s questions"
-msgstr "Fanontaniana %(counter)s amin’ny %(total)s"
+msgstr ""
 
 msgid "Select one"
-msgstr "Mifidiana iray"
+msgstr ""
 
 msgid "Optional"
-msgstr "Tsy voatery"
+msgstr ""
 
 msgid "No limit"
-msgstr "Tsy misy fetra"
+msgstr ""
 
 msgid "Submit"
-msgstr "Alefa"
+msgstr ""
 
 msgid "Go to homepage"
-msgstr "Miverina any amin’ny pejy fandraisana"
+msgstr ""
 
 msgid "You have already completed this survey."
-msgstr "Efa nanao ity fanadihadiana ity ianao."
+msgstr ""
 
 msgid "Check all that apply"
-msgstr "Fidio izay rehetra marina"
+msgstr ""
 
 msgid "Your results!"
-msgstr "Ny valiny !"
+msgstr ""
 
 msgid "Replay Quiz"
-msgstr "Averina indray ny fanotaniana"
+msgstr ""
 
 msgid "Incorrect"
-msgstr "Diso"
+msgstr ""
 
 msgid "Correct"
-msgstr "Marina"
+msgstr ""
 
 msgid "Your answer"
-msgstr "Ny vali-teninao"
+msgstr ""
 
 msgid "Leave comment"
-msgstr "Haneho hevitra"
+msgstr ""
 
 msgid "Reply"
-msgstr "Hamaly"
+msgstr ""
 
 msgid "Page not found"
-msgstr "Tsy misy ity pejy ity"
+msgstr ""
 
 msgid "Sorry, this page could not be found."
-msgstr "Azafady, tsy hita ny pejy tadiavinao."
+msgstr ""
 
 msgid "Internal server error"
-msgstr "Olana amin’ny servera anatiny"
+msgstr ""
 
 msgid "1 result"
 msgid_plural "%(counter)s results"
@@ -344,16 +342,16 @@ msgid ""
 msgstr ""
 
 msgid "Choose a username to log in to IoGT"
-msgstr "Misafidy solomaso hidirana ao amin'ny IoGT."
+msgstr ""
 
 msgid "Choose a display name to be shown publicly"
-msgstr "Misafidy solomaso asehika ho an'ny rehetra."
+msgstr "Choose display name wey go show for public."
 
 msgid "Choose 4-digit PIN or password"
-msgstr "Misafidy PIN misy isa 4 na teny miafina."
+msgstr ""
 
 msgid "Repeat 4-digital PIN or password"
-msgstr "Avereno ny PIN misy isa 4 na teny miafina."
+msgstr ""
 
 msgid "Yes"
 msgstr ""

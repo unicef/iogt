@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "quizzes"
-msgstr "පැන විසඳුම්"
+msgstr ""
 
 msgid "Log in to participate"
 msgstr "සහභාගී වීමට ඇතුල් වන්න"
@@ -72,7 +72,7 @@ msgstr ""
 " කරනු ඇත"
 
 msgid "articles"
-msgstr "ලිපි"
+msgstr ""
 
 msgid "Search the site..."
 msgstr "වෙබ් අඩවියේ සොයන්න…"
@@ -229,9 +229,6 @@ msgstr ""
 
 msgid "Continue to external site"
 msgstr "බාහිර වෙබ් අඩවියට පිවිසෙන්න"
-
-msgid "4-digit PIN"
-msgstr "ඉලක්කම් හතරේ කේතය"
 
 msgid "Old 4-digit PIN"
 msgstr "ඉලක්කම් හතරේ පැරණි කේතය"

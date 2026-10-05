@@ -229,9 +229,6 @@ msgstr ""
 msgid "Continue to external site"
 msgstr "Перейти на сторонний веб-сайт"
 
-msgid "4-digit PIN"
-msgstr "4-значный PIN-код"
-
 msgid "Old 4-digit PIN"
 msgstr "Старый 4-значный PIN-код"
 

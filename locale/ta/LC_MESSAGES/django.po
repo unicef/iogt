@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "quizzes"
-msgstr "புதிர்கள்"
+msgstr ""
 
 msgid "Log in to participate"
 msgstr "பங்கேற்க உற்புகு"
@@ -72,7 +72,7 @@ msgstr ""
 "அது நீக்கப்படும்."
 
 msgid "articles"
-msgstr "கட்டுரைகள் / விதிமுறைகள் / உட்பிரிவுகள்"
+msgstr ""
 
 msgid "Search the site..."
 msgstr "வலைத்தளத்தில் தேடவும்"
@@ -230,9 +230,6 @@ msgstr ""
 
 msgid "Continue to external site"
 msgstr "வெளிப்புற தளத்திற்கு தொடரவும்"
-
-msgid "4-digit PIN"
-msgstr "4 – இலக்க (டிஜிடல்) குறியீடு"
 
 msgid "Old 4-digit PIN"
 msgstr "பழைய 4 இலக்க (டிஜிடல்) குறியீடு"

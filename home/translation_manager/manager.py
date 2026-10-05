@@ -111,9 +111,19 @@ def update_po_from_translation_entry(entry):
         po.save_as_mofile(mo_path)
         from django.utils.translation import trans_real
         trans_real._translations = {}
-        # Clear custom translation cache
+        # Your custom translation map:
         cache.delete(f"{entry.language}_translation_map")
 
-    except Exception as e:
+        # All Gunicorn workers:
+        try:
+            cache.incr("translation_catalog_version")
+        except ValueError:
+            cache.set(
+                "translation_catalog_version",
+                1,
+                timeout=None,
+            )
+
+    except Exception:
         raise
 

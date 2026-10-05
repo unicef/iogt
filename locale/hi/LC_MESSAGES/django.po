@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "quizzes"
-msgstr "क्विज"
+msgstr ""
 
 msgid "Log in to participate"
 msgstr "भाग लेने के लिए लॉग इन करें"
@@ -72,7 +72,7 @@ msgstr ""
 "पालन नहीं करती तो इसे हटाया जा सकता है"
 
 msgid "articles"
-msgstr "आर्टिकल"
+msgstr ""
 
 msgid "Search the site..."
 msgstr "साइट खोजें…"
@@ -229,9 +229,6 @@ msgstr ""
 
 msgid "Continue to external site"
 msgstr "बाहरी साइट पर जारी रखें"
-
-msgid "4-digit PIN"
-msgstr "4 अंकों वाला पिन"
 
 msgid "Old 4-digit PIN"
 msgstr "4 अंकों वाला पुराना पिन"

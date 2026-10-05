@@ -226,9 +226,6 @@ msgstr ""
 msgid "Continue to external site"
 msgstr ""
 
-msgid "4-digit PIN"
-msgstr ""
-
 msgid "Old 4-digit PIN"
 msgstr ""
 

@@ -91,10 +91,23 @@ class CustomRedirectMiddleware(RedirectMiddleware):
 class GlobalDataMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
+        self.translation_cache_version = None
 
     def __call__(self, request):
         if request.path_info == "/health-check/":
             return self.get_response(request)
+
+        # Detect translation changes made by another worker.
+        translation_cache_version = cache.get(
+            "translation_catalog_version",
+            0,
+        )
+
+        if self.translation_cache_version != translation_cache_version:
+            from django.utils.translation import trans_real
+
+            trans_real._translations = {}
+            self.translation_cache_version = translation_cache_version
 
         site = Site.find_for_request(request)
         if site is None:

@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "quizzes"
-msgstr "امتحان"
+msgstr ""
 
 msgid "Log in to participate"
 msgstr "د ګډون لپاره ننوتل"
@@ -72,7 +72,7 @@ msgstr ""
 "ممکن لیرې شي"
 
 msgid "articles"
-msgstr "مقالې"
+msgstr ""
 
 msgid "Search the site..."
 msgstr "سایټ وپلټئ…"
@@ -230,9 +230,6 @@ msgstr ""
 
 msgid "Continue to external site"
 msgstr "بهرني وېب سایټ ته د وتلو ادامه"
-
-msgid "4-digit PIN"
-msgstr "4 رقمي پېن کوډ"
 
 msgid "Old 4-digit PIN"
 msgstr "پخوانی 4 رقمي پېن کوډ"

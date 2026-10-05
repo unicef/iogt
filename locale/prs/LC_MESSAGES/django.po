@@ -230,9 +230,6 @@ msgstr ""
 msgid "Continue to external site"
 msgstr "ادامه به ویب سایت بیرونی"
 
-msgid "4-digit PIN"
-msgstr "پین کود  (PIN) چهار رقمی"
-
 msgid "Old 4-digit PIN"
 msgstr "پین کود چهارقمی قدیمی"
 

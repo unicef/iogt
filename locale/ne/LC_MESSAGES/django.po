@@ -230,9 +230,6 @@ msgstr ""
 msgid "Continue to external site"
 msgstr "बाहिरी साइटमा जारी राख्नुहोस्"
 
-msgid "4-digit PIN"
-msgstr "४- अंकको पिन"
-
 msgid "Old 4-digit PIN"
 msgstr "पुरानो ४-अंक"
 

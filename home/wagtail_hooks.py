@@ -46,7 +46,6 @@ def clear_cache_on_unpublish_or_delete(request, page):
 def sync_translation_entry(sender, instance, **kwargs):
     update_po_from_translation_entry(instance)
     clear_cache()
-    cache.delete(f'{instance.language}_translation_map')
 
 
 @receiver(post_delete, sender=TranslationEntry)
