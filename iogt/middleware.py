@@ -91,10 +91,23 @@ class CustomRedirectMiddleware(RedirectMiddleware):
 class GlobalDataMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
+        self.translation_cache_version = None
 
     def __call__(self, request):
         if request.path_info == "/health-check/":
             return self.get_response(request)
+
+        # Detect translation changes made by another worker.
+        translation_cache_version = cache.get(
+            "translation_catalog_version",
+            0,
+        )
+
+        if self.translation_cache_version != translation_cache_version:
+            from django.utils.translation import trans_real
+
+            trans_real._translations = {}
+            self.translation_cache_version = translation_cache_version
 
         site = Site.find_for_request(request)
         if site is None:
@@ -114,11 +127,13 @@ class GlobalDataMiddleware:
                     (svg_to_png_map.svg_path, svg_to_png_map.fill_color, svg_to_png_map.stroke_color): svg_to_png_map,
                 })
             cache.set('svg_to_png_map', map)
-        if not cache.get(f'{language_code}_translation_map'):
+        translation_cache_key = f'{language_code}_translation_map'
+        if cache.get(translation_cache_key) is None:
             map = {}
             for translation_entry in TranslationEntry.objects.filter(language=language_code):
                 map.update({
-                    (translation_entry.original, language_code): translation_entry
+                    (translation_entry.original, language_code): translation_entry,
+                    (translation_entry.original.strip().lower(), language_code): translation_entry,
                 })
             cache.set(f'{language_code}_translation_map', map)
 

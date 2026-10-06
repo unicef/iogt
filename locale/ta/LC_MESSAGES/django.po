@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "quizzes"
-msgstr "புதிர்கள்"
+msgstr ""
 
 msgid "Log in to participate"
 msgstr "பங்கேற்க உற்புகு"
@@ -72,7 +72,7 @@ msgstr ""
 "அது நீக்கப்படும்."
 
 msgid "articles"
-msgstr "கட்டுரைகள் / விதிமுறைகள் / உட்பிரிவுகள்"
+msgstr ""
 
 msgid "Search the site..."
 msgstr "வலைத்தளத்தில் தேடவும்"
@@ -231,9 +231,6 @@ msgstr ""
 msgid "Continue to external site"
 msgstr "வெளிப்புற தளத்திற்கு தொடரவும்"
 
-msgid "4-digit PIN"
-msgstr "4 – இலக்க (டிஜிடல்) குறியீடு"
-
 msgid "Old 4-digit PIN"
 msgstr "பழைய 4 இலக்க (டிஜிடல்) குறியீடு"
 
@@ -363,6 +360,25 @@ msgstr ""
 "மேலுள்ள ஓடியோவுக்கு செவிமடுக்க முடியாதெனின், அதற்குப் பதிலாக, %(start_link) "
 "அதை பதிவிறக்கம் செய்ய முடியும். %(end_link)s.. "
 
+msgid "Choose a username to log in to IoGT"
+msgstr "IoGT-ல் உள்நுழைவதற்கான பயனர்பெயரைத் தேர்ந்தெடுக்கவும்."
+
+msgid "Choose a display name to be shown publicly"
+msgstr ""
+"საჯაროდ გამოსაჩენი სახელი აირჩიეთ (if applicable/or Sinhala equivalent)"
+
+msgid "Choose 4-digit PIN or password"
+msgstr "4 இலக்க PIN அல்லது கடவுச்சொல்லைத் தேர்ந்தெடுக்கவும்।"
+
+msgid "Repeat 4-digital PIN or password"
+msgstr "4 இலக்க PIN அல்லது கடவுச்சொல்லை மீண்டும் உள்ளிடவும்।"
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
 msgid "Please complete the questions marked as required to continue"
 msgstr ""
 
@@ -392,14 +408,154 @@ msgid ""
 " click <a href=\"%(offline_content_index_page_url)s\">here</a>"
 msgstr ""
 
-msgid "Choose a username to log in to IoGT"
-msgstr "IoGT-ல் உள்நுழைவதற்கான பயனர்பெயரைத் தேர்ந்தெடுக்கவும்."
+msgid "Sort child pages"
+msgstr ""
 
-msgid "Choose a display name to be shown publicly"
-msgstr "பொதுவெளியில் காட்டப்படும் பெயரைத் தேர்ந்தெடுக்கவும்."
+msgid "Change ordering of child pages of '%(title)s'"
+msgstr ""
 
-msgid "Choose 4-digit PIN or password"
-msgstr "4 இலக்க PIN அல்லது கடவுச்சொல்லைத் தேர்ந்தெடுக்கவும்."
+msgid "Custom permissions"
+msgstr ""
 
-msgid "Repeat 4-digital PIN or password"
-msgstr "4 இலக்க PIN அல்லது கடவுச்சொல்லை மீண்டும் உள்ளிடவும்."
+msgid "The comment has been {self.action_verb} successfully!"
+msgstr ""
+
+msgid "Matomo Tag Manager container ID"
+msgstr ""
+
+msgid ""
+"Currently this feature only works on devices using JavaScript (e.g. basic "
+"feature phones are not supported), and does not work with MNO zero-rating or"
+" Meta Free Basics."
+msgstr ""
+
+msgid "Article Feedback %(title)s"
+msgstr ""
+
+msgid "Editing"
+msgstr ""
+
+msgid "Editing image %(title)s"
+msgstr ""
+
+msgid "Delete image"
+msgstr ""
+
+msgid "URL Generator"
+msgstr ""
+
+msgid "Focal point"
+msgstr ""
+
+msgid "(optional)"
+msgstr ""
+
+msgid ""
+"To define this image's most important region, drag a box over the image "
+"above."
+msgstr ""
+
+msgid "Current focal point shown"
+msgstr ""
+
+msgid "Remove focal area"
+msgstr ""
+
+msgid "Max dimensions"
+msgstr ""
+
+msgid "Filesize"
+msgstr ""
+
+msgid "File not found"
+msgstr ""
+
+msgid "Usage"
+msgstr ""
+
+msgid "Used %(usage_count)s time"
+msgstr ""
+
+msgid "Used %(usage_count)s times"
+msgstr ""
+
+msgid ""
+"Name for the interactive bot that the user will seen when interacting with "
+"it"
+msgstr ""
+
+msgid ""
+"To set up a interactive bot channel on your RapidPro server and get a "
+"request URL, follow the steps outline in the Section \"Setting up a Chatbot "
+"channel\" here: "
+"https://github.com/unicef/iogt/blob/develop/messaging/README.md"
+msgstr ""
+
+msgid "Forms"
+msgstr ""
+
+msgid "Action"
+msgstr ""
+
+msgid "LIVE"
+msgstr ""
+
+msgid "No forms found."
+msgstr ""
+
+msgid "Users"
+msgstr ""
+
+msgid "Select all users in listing"
+msgstr ""
+
+msgid "Download Users (XLSX)"
+msgstr ""
+
+msgid "Download Users (CSV)"
+msgstr ""
+
+msgid "My Notification"
+msgstr ""
+
+msgid "My Quiz Results"
+msgstr ""
+
+msgid "Quiz Title"
+msgstr ""
+
+msgid "Latest Score"
+msgstr ""
+
+msgid "Avg Score"
+msgstr ""
+
+msgid "Attempt"
+msgstr ""
+
+msgid "Date & Time"
+msgstr ""
+
+msgid "You haven’t completed any quizzes yet."
+msgstr ""
+
+msgid "Notification Preference"
+msgstr ""
+
+msgid "Do you want to receive notifications?"
+msgstr ""
+
+msgid "Preferred Language:"
+msgstr ""
+
+msgid "What would you like to be notified about?"
+msgstr ""
+
+msgid "Select one or more topics"
+msgstr ""
+
+msgid "Select All"
+msgstr ""
+
+msgid "Promoted results"
+msgstr ""
