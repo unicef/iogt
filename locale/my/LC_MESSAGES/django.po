@@ -381,3 +381,15 @@ msgid ""
 msgstr ""
 "သင်ရောက်ရှိရန်ကြိုးစားနေသည့် အကြောင်းအရာကို မရနိုင်ပါ။ အော့ဖ်လိုင်းအကြောင်းအရာကို ကြည့်ရှုရန်"
 " <a href=\"%(offline_content_index_page_url)s\">ဒီမှာ</a> ကိုနှိပ်ပါ"
+
+msgid "Choose a username to log in to IoGT"
+msgstr "IoGT သို့ ဝင်ရောက်ရန် အသုံးပြုသူအမည်ကို ရွေးချယ်ပါ။"
+
+msgid "Choose a display name to be shown publicly"
+msgstr "အများမြင်နိုင်ရန် ပြသမည့်အမည်ကို ရွေးချယ်ပါ။"
+
+msgid "Choose 4-digit PIN or password"
+msgstr "ဂဏန်း ၄ လုံးပါ PIN သို့မဟုတ် စကားဝှက်ကို ရွေးချယ်ပါ။"
+
+msgid "Repeat 4-digital PIN or password"
+msgstr "ဂဏန်း ၄ လုံးပါ PIN သို့မဟုတ် စကားဝှက်ကို ထပ်မံထည့်သွင်းပါ။"
