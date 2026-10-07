@@ -375,3 +375,15 @@ msgid ""
 "The content you are trying to reach is not available. To see offline content"
 " click <a href=\"%(offline_content_index_page_url)s\">here</a>"
 msgstr ""
+
+msgid "Choose a username to log in to IoGT"
+msgstr "Барои ворид шудан ба IoGT номи корбариро интихоб кунед."
+
+msgid "Choose a display name to be shown publicly"
+msgstr "Барои намоиши оммавӣ номи намоиширо интихоб кунед."
+
+msgid "Choose 4-digit PIN or password"
+msgstr "PIN-и 4-рақама ё паролро интихоб кунед."
+
+msgid "Repeat 4-digital PIN or password"
+msgstr "PIN-и 4-рақама ё паролро такрор кунед."

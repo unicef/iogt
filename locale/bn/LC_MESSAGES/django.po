@@ -386,3 +386,15 @@ msgid ""
 "The content you are trying to reach is not available. To see offline content"
 " click <a href=\"%(offline_content_index_page_url)s\">here</a>"
 msgstr ""
+
+msgid "Choose a username to log in to IoGT"
+msgstr "IoGT-তে লগ ইন করতে একটি ইউজারনেম বেছে নিন।"
+
+msgid "Choose a display name to be shown publicly"
+msgstr "সর্বসাধারণের জন্য প্রদর্শিত একটি ডিসপ্লে নাম বেছে নিন।"
+
+msgid "Choose 4-digit PIN or password"
+msgstr "৪ অঙ্কের PIN বা পাসওয়ার্ড বেছে নিন।"
+
+msgid "Repeat 4-digital PIN or password"
+msgstr "৪ অঙ্কের PIN বা পাসওয়ার্ড আবার লিখুন।"

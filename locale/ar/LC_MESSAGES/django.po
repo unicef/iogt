@@ -374,3 +374,15 @@ msgid ""
 "The content you are trying to reach is not available. To see offline content"
 " click <a href=\"%(offline_content_index_page_url)s\">here</a>"
 msgstr ""
+
+msgid "Choose a username to log in to IoGT"
+msgstr "اختر اسم مستخدم لتسجيل الدخول إلى IoGT."
+
+msgid "Choose a display name to be shown publicly"
+msgstr "اختر اسم عرض ليظهر علناً."
+
+msgid "Choose 4-digit PIN or password"
+msgstr "اختر رمز رقمي مكون من 4 أرقام أو كلمة مرور."
+
+msgid "Repeat 4-digital PIN or password"
+msgstr "أعد إدخال رمز PIN المكون من 4 أرقام أو كلمة المرور."

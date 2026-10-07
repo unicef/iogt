@@ -382,3 +382,15 @@ msgid ""
 "The content you are trying to reach is not available. To see offline content"
 " click <a href=\"%(offline_content_index_page_url)s\">here</a>"
 msgstr ""
+
+msgid "Choose a username to log in to IoGT"
+msgstr "IoGT වෙත පිවිසීමට පරිශීලක නාමයක් තෝරන්න."
+
+msgid "Choose a display name to be shown publicly"
+msgstr "ප්‍රසිද්ධියේ පෙන්වීමට නමක් තෝරන්න."
+
+msgid "Choose 4-digit PIN or password"
+msgstr "ඉලක්කම් 4 ක PIN අංකයක් හෝ මුරපදයක් තෝරන්න."
+
+msgid "Repeat 4-digital PIN or password"
+msgstr "ඉලක්කම් 4 ක PIN අංකය හෝ මුරපදය නැවත ඇතුළත් කරන්න."
