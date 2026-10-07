@@ -374,3 +374,15 @@ msgid ""
 msgstr ""
 "Babu bayanin da kake ƙoƙarin samu. Idan kana son ganin bayanin da ba ya kan intanet "
 "danna <a href=\"%(offline_content_index_page_url)s\">here</a>"
+
+msgid "Choose a username to log in to IoGT"
+msgstr "Zaɓi sunan mai amfani don shiga IoGT."
+
+msgid "Choose a display name to be shown publicly"
+msgstr "Zaɓi sunan nuni da za a nuna a bainar jama'a."
+
+msgid "Choose 4-digit PIN or password"
+msgstr "Zaɓi PIN mai lamba 4 ko kalmar sirri."
+
+msgid "Repeat 4-digital PIN or password"
+msgstr "Maimaita PIN mai lamba 4 ko kalmar sirri."

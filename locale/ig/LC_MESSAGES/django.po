@@ -372,3 +372,15 @@ msgid ""
 "The content you are trying to reach is not available. To see offline content"
 " click <a href=\"%(offline_content_index_page_url)s\">here</a>"
 msgstr "Ihe ị na-agbalị ịhụ adịghị. Iji hụ ọdịnaya na-adịghị n'ịntanetị, pịa ebe a"
+
+msgid "Choose a username to log in to IoGT"
+msgstr "Họrọ aha njirimara iji banye na IoGT."
+
+msgid "Choose a display name to be shown publicly"
+msgstr "Họrọ aha ngosi a ga-egosipụta n'ihu ọha."
+
+msgid "Choose 4-digit PIN or password"
+msgstr "Họrọ PIN nwere nọmba anọ ma ọ bụ paswọọdụ."
+
+msgid "Repeat 4-digital PIN or password"
+msgstr "Kweghachi PIN nwere nọmba anọ ma ọ bụ paswọọdụ."
