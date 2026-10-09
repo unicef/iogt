@@ -214,7 +214,6 @@ SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Control the forms that django-allauth uses
 ACCOUNT_FORMS = {
-    "login": "allauth.account.forms.LoginForm",
     "add_email": "allauth.account.forms.AddEmailForm",
     "change_password": "iogt_users.forms.ChangePasswordForm",
     "set_password": "allauth.account.forms.SetPasswordForm",
@@ -223,6 +222,8 @@ ACCOUNT_FORMS = {
     "disconnect": "allauth.socialaccount.forms.DisconnectForm",
     # Use our custom signup form
     "signup": "iogt_users.forms.AccountSignupForm",
+    # Use our custom login form
+    "login": "iogt_users.forms.AccountLoginForm"
 }
 
 # Wagtail settings
@@ -503,6 +504,10 @@ WAGTAILTRANSFER_SOURCES = {
    os.getenv('WAGTAILTRANSFER_SOURCE_NAME', 'default'): {
       'BASE_URL': os.getenv('WAGTAILTRANSFER_SOURCE_BASE_URL'),
       'SECRET_KEY': os.getenv('WAGTAILTRANSFER_SOURCE_SECRET_KEY'),
+   },
+   os.getenv('WAGTAILTRANSFER_SOURCE_NAME_2', 'default_2'): {
+      'BASE_URL': os.getenv('WAGTAILTRANSFER_SOURCE_BASE_URL_2'),
+      'SECRET_KEY': os.getenv('WAGTAILTRANSFER_SOURCE_SECRET_KEY_2'),
    },
 }
 WAGTAILTRANSFER_UPDATE_RELATED_MODELS = ['wagtailimages.image', 'wagtailsvg.svg',]
