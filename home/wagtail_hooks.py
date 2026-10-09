@@ -5,8 +5,8 @@ from django.contrib.admin import SimpleListFilter
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.templatetags.static import static
-from django.urls import resolve, reverse
-from django.utils.html import format_html
+from django.urls import resolve, path, reverse
+from django.utils.html import format_html, mark_safe, json_script
 from django.utils.translation import gettext_lazy as _
 from wagtail import __version__
 from wagtail.admin import widgets as wagtailadmin_widgets
@@ -16,6 +16,11 @@ from wagtail.documents.models import Document
 from wagtail import hooks
 from wagtail.models import Page, PageViewRestriction
 from wagtailcache.cache import clear_cache
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.views.decorators.cache import never_cache
+from django.views.decorators.http import require_GET
+
 
 from home.models import (BannerIndexPage, FooterIndexPage, LocaleDetail,
                          Section, SectionIndexPage, BannerPage, HomePageBanner, HomePage)
@@ -289,3 +294,34 @@ def page_listing_more_buttons(page, user, next_url=None):
                 priority=40,
                 icon_name='mail'
             )
+
+@require_GET
+@never_cache
+def page_public_url(request):
+    if not request.user.has_perm("wagtailadmin.access_admin"):
+        raise PermissionDenied
+
+    try:
+        page_id = int(request.GET.get("page_id", ""))
+    except ValueError:
+        return JsonResponse({"error": "Invalid page id"}, status=400)
+
+    page = get_object_or_404(Page, pk=page_id).specific
+    if not page.permissions_for_user(request.user).can_edit():
+        raise PermissionDenied
+
+    url = page.get_full_url(request) if page.live else None
+    if not url:
+        return JsonResponse({"url": None, "message": "Not published"})
+    return JsonResponse({"url": url})
+
+
+@hooks.register("register_admin_urls")
+def register_copy_page_url():
+    return [path("copy-page-url/", page_public_url, name="wagtail_copy_page_url")]
+
+@hooks.register("insert_editor_js")
+def copy_url_button_js():
+    config = json_script(reverse("wagtail_copy_page_url"), "copy-page-url-config")
+    script_tag = format_html('<script src="{}"></script>', static("/js/copy_page_url.js"))
+    return mark_safe(config + script_tag)
