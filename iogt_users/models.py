@@ -6,6 +6,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
 from django.db.models.signals import post_save
+from django.db.models import Q
 from django.dispatch import receiver
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -16,7 +17,7 @@ class User(AbstractUser):
     last_name = models.CharField('last name', max_length=150, null=True,
                                  blank=True)
     display_name = models.CharField('display name', max_length=255, null=True, blank=True)
-    email = models.EmailField('email address', null=True, blank=True)
+    email = models.EmailField('email address', null=True, blank=True, db_index=True)
     terms_accepted = models.BooleanField(default=False)
 
     has_filled_registration_survey = models.BooleanField(default=False)
@@ -75,6 +76,13 @@ class User(AbstractUser):
 
     class Meta:
         ordering = ('id',)
+        constraints = [
+            models.UniqueConstraint(
+                fields=['is_staff', 'email'],
+                condition=Q(email__isnull=False) & ~Q(email=''),
+                name='iogt_users_user_unique_role_email',
+            ),
+        ]
 
 
 class Profile(models.Model):
