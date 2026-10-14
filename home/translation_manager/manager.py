@@ -10,6 +10,7 @@ from translation_manager.utils import (
 )
 from django.conf import settings
 from django.core.cache import cache
+import uuid
 
 
 class IogtTranslationManager(translation_manager.manager.Manager):
@@ -79,12 +80,35 @@ class IogtTranslationManager(translation_manager.manager.Manager):
         cache.delete(f'{language}_translation_map')
 
 
+def publish_translation_version(language):
+    """
+    Publish a new translation version to the shared cache.
+    All application pods must use the same Redis cache.
+    """
+    if not language:
+        return
+
+    cache.delete(f'{language}_translation_map')
+
+    version_key = f'translation_version:{language}'
+    cache.set(version_key, str(uuid.uuid4()), timeout=None)
+
+
 def update_po_from_translation_entry(entry):
+    """
+    Update the locale PO/MO files for this entry.
+
+    The caller should invoke this function after the database transaction
+    commits. The caller is responsible for publishing the shared version
+    even if no matching PO file exists.
+    """
     if not entry.locale_path:
         return
+
     locale_dir = entry.locale_path
     if not os.path.isabs(locale_dir):
         locale_dir = os.path.join(settings.BASE_DIR, locale_dir)
+
     pofile = os.path.join(
         locale_dir,
         entry.language,
@@ -94,26 +118,22 @@ def update_po_from_translation_entry(entry):
 
     if not os.path.isfile(pofile):
         return
-    try:
-        po = polib.pofile(pofile)
-        po_entry = po.find(entry.original)
-        if po_entry is None:
-            po_entry = polib.POEntry(
-                msgid=entry.original,
-                msgstr=entry.translation or "",
-            )
-            po.append(po_entry)
-        else:
-            po_entry.msgstr = entry.translation or ""
+    po = polib.pofile(pofile)
+    po_entry = po.find(entry.original)
+    if po_entry is None:
+        po_entry = polib.POEntry(
+            msgid=entry.original,
+            msgstr=entry.translation or "",
+        )
+        po.append(po_entry)
+    else:
+        po_entry.msgstr = entry.translation or ""
 
-        po.save(pofile)
-        mo_path = os.path.splitext(pofile)[0] + ".mo"
-        po.save_as_mofile(mo_path)
-        from django.utils.translation import trans_real
-        trans_real._translations = {}
-        # Clear custom translation cache
-        cache.delete(f"{entry.language}_translation_map")
+    po.save(pofile)
+    mo_path = os.path.splitext(pofile)[0] + ".mo"
+    po.save_as_mofile(mo_path)
+    from django.utils.translation import trans_real
+    trans_real._translations = {}
 
-    except Exception as e:
-        raise
-
+    # Publish the shared version after updating the files.
+    publish_translation_version(entry.language)

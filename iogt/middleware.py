@@ -16,6 +16,31 @@ from wagtail.models import Locale, Site
 from home.models import SiteSettings, V1PageURLToV2PageMap, ThemeSettings, SVGToPNGMap
 import iogt.iogt_globals as globals_
 
+# Stores the last translation version observed by each Python process.
+_seen_translation_versions = {}
+
+def refresh_translation_catalog_if_needed(language_code):
+    """
+    Refresh the local Django gettext catalog when the shared
+    translation version changes.
+    """
+    if not language_code:
+        return
+
+    version_key = f'translation_version:{language_code}'
+    current_version = cache.get(version_key)
+
+    if current_version is None:
+        return
+
+    previous_version = _seen_translation_versions.get(language_code)
+
+    if current_version != previous_version:
+        from django.utils.translation import trans_real
+
+        trans_real._translations = {}
+        _seen_translation_versions[language_code] = current_version
+
 
 class LocaleMiddleware(DjangoLocaleMiddleware):
     def _get_language_from_request(self, request, check_path=False):
@@ -102,6 +127,7 @@ class GlobalDataMiddleware:
 
         locale = Locale.get_active()
         language_code = locale.language_code if locale else settings.LANGUAGE_CODE
+        refresh_translation_catalog_if_needed(language_code)
 
         globals_.site = site
         globals_.site_settings = SiteSettings.for_request(request)

@@ -34,6 +34,11 @@ from django.urls import path
 from django.core.cache import cache
 from django.db.models.signals import post_save, post_delete
 from .translation_manager.manager import update_po_from_translation_entry
+from django.db import transaction
+from .translation_manager.manager import (
+    update_po_from_translation_entry,
+    publish_translation_version,
+)
 
 
 @hooks.register('after_publish_page')
@@ -49,7 +54,20 @@ def clear_cache_on_unpublish_or_delete(request, page):
 
 @receiver(post_save, sender=TranslationEntry)
 def sync_translation_entry(sender, instance, **kwargs):
-    update_po_from_translation_entry(instance)
+    """
+    Update PO/MO files after the database transaction commits,
+    then publish a version so every pod can refresh its catalog.
+    """
+    def sync_translation():
+        try:
+            update_po_from_translation_entry(instance)
+        finally:
+            # Publish even when the PO file is missing, so the custom
+            # translation map can be refreshed from the database.
+            publish_translation_version(instance.language)
+            clear_cache()
+
+    transaction.on_commit(sync_translation)
 
 
 @receiver(post_delete, sender=TranslationEntry)
