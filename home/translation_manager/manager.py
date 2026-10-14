@@ -91,7 +91,16 @@ def publish_translation_version(language):
     cache.delete(f'{language}_translation_map')
 
     version_key = f'translation_version:{language}'
+    new_version = str(uuid.uuid4())
     cache.set(version_key, str(uuid.uuid4()), timeout=None)
+    print(
+        f"[DEBUG VERSION PUBLISH] "
+        f"Pod={os.environ.get('HOSTNAME')} | "
+        f"Language={language} | "
+        f"Published={new_version} | "
+        f"ReadBack={cache.get(version_key)}",
+        flush=True,
+    )
 
 
 def update_po_from_translation_entry(entry):

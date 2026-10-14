@@ -346,7 +346,7 @@ msgstr ""
 msgid "Choose a username to log in to IoGT"
 msgstr ""
 "Choisissez un nom d'utilisateur que vous utiliserez pour vous connecter à "
-"IoGTR."
+"IoGTPL."
 
 msgid "Choose a display name to be shown publicly"
 msgstr "Choisissez un nom d'affichage qui apparaîtra publiquement."

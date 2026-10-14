@@ -15,6 +15,7 @@ from wagtail.models import Locale, Site
 
 from home.models import SiteSettings, V1PageURLToV2PageMap, ThemeSettings, SVGToPNGMap
 import iogt.iogt_globals as globals_
+import os
 
 # Stores the last translation version observed by each Python process.
 _seen_translation_versions = {}
@@ -30,6 +31,15 @@ def refresh_translation_catalog_if_needed(language_code):
     version_key = f'translation_version:{language_code}'
     current_version = cache.get(version_key)
 
+    print(
+        f"[DEBUG VERSION CHECK] "
+        f"Pod={os.environ.get('HOSTNAME')} | "
+        f"Language={language_code} | "
+        f"Current={current_version} | "
+        f"Previous={_seen_translation_versions.get(language_code)}",
+        flush=True,
+    )
+
     if current_version is None:
         return
 
@@ -39,6 +49,13 @@ def refresh_translation_catalog_if_needed(language_code):
         from django.utils.translation import trans_real
 
         trans_real._translations = {}
+        print(
+            f"[DEBUG CATALOG REFRESHED] "
+            f"Pod={os.environ.get('HOSTNAME')} | "
+            f"Language={language_code} | "
+            f"Version={current_version}",
+            flush=True,
+        )
         _seen_translation_versions[language_code] = current_version
 
 
