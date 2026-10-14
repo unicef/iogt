@@ -229,9 +229,6 @@ msgstr ""
 msgid "Continue to external site"
 msgstr ""
 
-msgid "4-digit PIN"
-msgstr ""
-
 msgid "Old 4-digit PIN"
 msgstr ""
 
@@ -544,4 +541,10 @@ msgid "Select All"
 msgstr ""
 
 msgid "Promoted results"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Forgot your password?"
 msgstr ""

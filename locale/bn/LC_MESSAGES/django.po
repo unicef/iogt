@@ -231,9 +231,6 @@ msgstr ""
 msgid "Continue to external site"
 msgstr "বাহ্যিক সাইটে ঢুকছি"
 
-msgid "4-digit PIN"
-msgstr "চার সংখ্যার পিন"
-
 msgid "Old 4-digit PIN"
 msgstr "পুরনো চার সংখ্যার পিন"
 
@@ -555,4 +552,10 @@ msgid "Select All"
 msgstr ""
 
 msgid "Promoted results"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Forgot your password?"
 msgstr ""

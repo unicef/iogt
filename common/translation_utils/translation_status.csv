@@ -248,7 +248,7 @@ You are leaving the <b>Internet of Good Things</b> to visit an external website 
 Continue to external site,FE,translate,,has partial translation,,,
 Go back to previous page,FE,translate,,unused,good,Back,
 I accept the terms & conditions,FE,translate,,unused,good,I accept the Terms and Conditions.,
-4-digit PIN,FE,translate,,has partial translation,,,"Create 4 digit pin|v1 has: 4-digit PIN (missing: mg, ru, zu, ti, tg, uz, kaa)"
+4-digit PIN,FE,translate,,unused,,,"Create 4 digit pin|v1 has: 4-digit PIN (missing: mg, ru, zu, ti, tg, uz, kaa)"
 Enter Your Name,,remove,,unused,,,relic?
 Old 4-digit PIN,FE,translate,,has partial translation,,,Old Password
 New 4-digit PIN,FE,translate,,has partial translation,,,Create 4 digit pin|New PIN
@@ -746,9 +746,9 @@ Action,,,,needs translation,,,
 LIVE,,,,needs translation,,,
 No forms found.,,,,needs translation,,,
 Choose a display name to be shown publicly,,,,has translation,,,
-Choose 4-digit PIN or password,,,,has partial translation,,,
-Repeat 4-digital PIN or password,,,,has partial translation,,,
-Choose a username to log in to IoGT,,,,has partial translation,,,
+Choose 4-digit PIN or password,,,,has translation,,,
+Repeat 4-digital PIN or password,,,,has translation,,,
+Choose a username to log in to IoGT,,,,has translation,,,
 Users,,,,needs translation,,,
 Select all users in listing,,,,needs translation,,,
 Download Users (XLSX),,,,needs translation,,,
@@ -768,3 +768,5 @@ What would you like to be notified about?,,,,needs translation,,,
 Select one or more topics,,,,needs translation,,,
 Select All,,,,needs translation,,,
 Promoted results,,,,needs translation,,,
+Password,,,,needs translation,,,
+Forgot your password?,,,,needs translation,,,

@@ -1866,13 +1866,13 @@ msgid "Choose a display name to be shown publicly"
 msgstr "([has-translation]-Choose a display name to be shown publicly)"
 
 msgid "Choose 4-digit PIN or password"
-msgstr "([has-partial-translation]-Choose 4-digit PIN or password)"
+msgstr "([has-translation]-Choose 4-digit PIN or password)"
 
 msgid "Repeat 4-digital PIN or password"
-msgstr "([has-partial-translation]-Repeat 4-digital PIN or password)"
+msgstr "([has-translation]-Repeat 4-digital PIN or password)"
 
 msgid "Choose a username to log in to IoGT"
-msgstr "([has-partial-translation]-Choose a username to log in to IoGT)"
+msgstr "([has-translation]-Choose a username to log in to IoGT)"
 
 msgid "Users"
 msgstr "([needs-translation]-Users)"
@@ -1930,3 +1930,9 @@ msgstr "([needs-translation]-Select All)"
 
 msgid "Promoted results"
 msgstr "([needs-translation]-Promoted results)"
+
+msgid "Password"
+msgstr "([needs-translation]-Password)"
+
+msgid "Forgot your password?"
+msgstr "([needs-translation]-Forgot your password?)"

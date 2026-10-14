@@ -22,8 +22,8 @@ def _translate_node_render(self, context):
         except Exception:
             translation_entry = None
 
-    if translation_entry and translation_entry.translation:
-        return translation_entry.translation
+    if translation_entry:
+        return translation_entry
 
     self.filter_expression.var.translate = not self.noop
     if self.message_context:
@@ -86,8 +86,8 @@ def _translate_block_node_render(self, context, nested=False):
         except Exception:
             translation_entry = None
 
-    if translation_entry and translation_entry.translation:
-        result = translation_entry.translation
+    if translation_entry:
+        result = translation_entry
 
     def render_value(key):
         if key in context:

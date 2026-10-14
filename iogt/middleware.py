@@ -114,15 +114,24 @@ class GlobalDataMiddleware:
                     (svg_to_png_map.svg_path, svg_to_png_map.fill_color, svg_to_png_map.stroke_color): svg_to_png_map,
                 })
             cache.set('svg_to_png_map', map)
+        
         translation_cache_key = f'{language_code}_translation_map'
         if cache.get(translation_cache_key) is None:
-            map = {}
-            for translation_entry in TranslationEntry.objects.filter(language=language_code):
-                map.update({
-                    (translation_entry.original, language_code): translation_entry,
-                    (translation_entry.original.strip().lower(), language_code): translation_entry,
+            translation_map = {}
+            for translation_entry in TranslationEntry.objects.filter(
+                language=language_code
+            ).only('original', 'translation'):
+                translated_text = translation_entry.translation or ''
+
+                translation_map.update({
+                    (translation_entry.original, language_code): translated_text,
+                    (
+                        translation_entry.original.strip().lower(),
+                        language_code,
+                    ): translated_text,
                 })
-            cache.set(f'{language_code}_translation_map', map)
+
+            cache.set(translation_cache_key, translation_map)
 
         response = self.get_response(request)
 

@@ -51,7 +51,6 @@ translatable_strings = [
     'Log in / Create account',
     'You are leaving the <b>Internet of Good Things</b> to visit an external website and standard data charges by your network provider might apply',
     'Continue to external site',
-    '4-digit PIN',
     'Old 4-digit PIN',
     'New 4-digit PIN',
     'Confirm new 4-digit PIN',
@@ -166,5 +165,7 @@ translatable_strings = [
     'What would you like to be notified about?',
     'Select one or more topics',
     'Select All',
-    'Promoted results'
+    'Promoted results',
+    'Password',
+    'Forgot your password?'
 ]
