@@ -92,7 +92,7 @@ def publish_translation_version(language):
 
     version_key = f'translation_version:{language}'
     new_version = str(uuid.uuid4())
-    cache.set(version_key, str(uuid.uuid4()), timeout=None)
+    cache.set(version_key, new_version, timeout=None)
     print(
         f"[DEBUG VERSION PUBLISH] "
         f"Pod={os.environ.get('HOSTNAME')} | "
@@ -143,6 +143,4 @@ def update_po_from_translation_entry(entry):
     po.save_as_mofile(mo_path)
     from django.utils.translation import trans_real
     trans_real._translations = {}
-
-    # Publish the shared version after updating the files.
-    publish_translation_version(entry.language)
+    
