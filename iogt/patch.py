@@ -15,9 +15,10 @@ def _translate_node_render(self, context):
 
     if globals_.locale:
         try:
-            translation_entry = (
-                    cache.get(f"{globals_.locale.language_code}_translation_map") or {}
-            ).get((lookup, globals_.locale.language_code))
+            trans_map = cache.get(f"{globals_.locale.language_code}_translation_map") or {}
+            translation_entry = trans_map.get((lookup, globals_.locale.language_code))
+            if not translation_entry and isinstance(lookup, str):
+                translation_entry = trans_map.get((lookup.strip().lower(), globals_.locale.language_code))
         except Exception:
             translation_entry = None
 
@@ -78,9 +79,10 @@ def _translate_block_node_render(self, context, nested=False):
 
     if globals_.locale:
         try:
-            translation_entry = (
-                    cache.get(f"{globals_.locale.language_code}_translation_map") or {}
-            ).get((singular, globals_.locale.language_code))
+            trans_map = cache.get(f"{globals_.locale.language_code}_translation_map") or {}
+            translation_entry = trans_map.get((singular, globals_.locale.language_code))
+            if not translation_entry and isinstance(singular, str):
+                translation_entry = trans_map.get((singular.strip().lower(), globals_.locale.language_code))
         except Exception:
             translation_entry = None
 
