@@ -13,6 +13,8 @@ from translation_manager.models import TranslationEntry
 from wagtail.contrib.redirects.middleware import RedirectMiddleware
 from wagtail.models import Locale, Site
 
+from home.translation_manager.utils import check_translations
+
 from home.models import SiteSettings, V1PageURLToV2PageMap, ThemeSettings, SVGToPNGMap
 import iogt.iogt_globals as globals_
 
@@ -114,6 +116,9 @@ class GlobalDataMiddleware:
                     (svg_to_png_map.svg_path, svg_to_png_map.fill_color, svg_to_png_map.stroke_color): svg_to_png_map,
                 })
             cache.set('svg_to_png_map', map)
+        
+        check_translations()
+        
         if not cache.get(f'{language_code}_translation_map'):
             map = {}
             for translation_entry in TranslationEntry.objects.filter(language=language_code):
