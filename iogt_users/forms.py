@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django.utils.safestring import mark_safe
 from django.urls import reverse_lazy
 from django.utils.functional import lazy
 from django.utils.html import format_html
@@ -33,12 +34,16 @@ class AccountSignupForm(SignupForm):
         ),
         required=False,
     )
+
     terms_accepted = forms.BooleanField(
-        label=_('I accept the Terms and Conditions.'),
+        label=mark_safe(
+            _('I accept the <a href="/footers/terms-and-conditions/">Terms and Conditions</a>.')
+        ),
         widget=forms.CheckboxInput(attrs={
             'id': 'signup-checkbox',
         })
     )
+
     field_order = [
         "username",
         "display_name",
