@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
+from wagtail.contrib.redirects.models import Redirect
 from django.urls import reverse_lazy
 from django.utils.functional import lazy
 from django.utils.html import format_html
@@ -34,14 +35,33 @@ class AccountSignupForm(SignupForm):
         ),
         required=False,
     )
+    
+    def terms_label():
+        old_path = "/footers/terms-and-conditions"
+
+        redirect = Redirect.objects.filter(
+            old_path__iexact=old_path
+        ).select_related("redirect_page").first()
+
+        if redirect and redirect.redirect_page_id:
+            target_page = redirect.redirect_page
+            if target_page.live:
+                target_url = target_page.url_path
+                if target_url:
+                    return format_html_lazy(
+                        '{} <a href="{}">{}</a>.',
+                        _('I accept the'),
+                        target_url.removeprefix("/home"),
+                        _('Terms and Conditions.'),
+                    )
+        return _('I accept the Terms and Conditions.')
 
     terms_accepted = forms.BooleanField(
-        label=mark_safe(
-            _('I accept the <a href="/footers/terms-and-conditions/">Terms and Conditions</a>.')
-        ),
+        label=terms_label(),
+        required=True,
         widget=forms.CheckboxInput(attrs={
-            'id': 'signup-checkbox',
-        })
+            "id": "signup-checkbox",
+        }),
     )
 
     field_order = [
