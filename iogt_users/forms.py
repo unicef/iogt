@@ -36,7 +36,7 @@ class AccountSignupForm(SignupForm):
         required=False,
     )
     
-    def terms_label():
+    def get_terms_label(self):
         old_path = "/footers/terms-and-conditions"
 
         redirect = Redirect.objects.filter(
@@ -57,10 +57,10 @@ class AccountSignupForm(SignupForm):
         return _('I accept the Terms and Conditions.')
 
     terms_accepted = forms.BooleanField(
-        label=terms_label(),
+        label=_("I accept the Terms and Conditions."),
         required=True,
         widget=forms.CheckboxInput(attrs={
-            "id": "signup-checkbox",
+            'id': 'signup-checkbox',
         }),
     )
 
@@ -76,7 +76,7 @@ class AccountSignupForm(SignupForm):
         super(AccountSignupForm, self).__init__(*args, **kwargs)
         self.fields.pop('email')
         self.fields["password1"] = IogtPasswordField(label=_("Choose 4-digit PIN or password"), autocomplete="new-password", css_class="signup-input")
-
+        self.fields["terms_accepted"].label = self.get_terms_label()
         if 'password2' in self.fields:
             self.fields["password2"] = IogtPasswordField(label=_("Repeat 4-digital PIN or password"), autocomplete="new-password", css_class="signup-input")
 
