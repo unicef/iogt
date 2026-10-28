@@ -49,10 +49,9 @@ class AccountSignupForm(SignupForm):
                 target_url = target_page.url_path
                 if target_url:
                     return format_html_lazy(
-                        '{} <a href="{}">{}</a>.',
-                        _('I accept the'),
+                        '<a href="{}">{}</a>',
                         target_url.removeprefix("/home"),
-                        _('Terms and Conditions'),
+                        _('I accept the Terms and Conditions.'),
                     )
         return _('I accept the Terms and Conditions.')
 
