@@ -52,7 +52,7 @@ class AccountSignupForm(SignupForm):
                         '{} <a href="{}">{}</a>.',
                         _('I accept the'),
                         target_url.removeprefix("/home"),
-                        _('Terms and Conditions.'),
+                        _('Terms and Conditions'),
                     )
         return _('I accept the Terms and Conditions.')
 
