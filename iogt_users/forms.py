@@ -39,8 +39,8 @@ class AccountSignupForm(SignupForm):
     )
     
     def get_terms_label(self):
-        old_path = "/footers/terms-and-conditions"
         language = get_language()
+        old_path = "/{}/footers/terms-and-conditions".format(language)
 
         redirect = Redirect.objects.filter(
             old_path__iexact=old_path
