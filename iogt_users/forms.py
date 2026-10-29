@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django.utils.translation import get_language
 from django.utils.safestring import mark_safe
 from wagtail.contrib.redirects.models import Redirect
 from django.urls import reverse_lazy
@@ -21,6 +22,7 @@ from .models import User
 
 from notifications.signals import notify
 from datetime import datetime
+import re
 
 format_html_lazy = lazy(format_html, str)
 
@@ -38,6 +40,7 @@ class AccountSignupForm(SignupForm):
     
     def get_terms_label(self):
         old_path = "/footers/terms-and-conditions"
+        language = get_language()
 
         redirect = Redirect.objects.filter(
             old_path__iexact=old_path
@@ -46,17 +49,23 @@ class AccountSignupForm(SignupForm):
         if redirect and redirect.redirect_page_id:
             target_page = redirect.redirect_page
             if target_page.live:
-                target_url = target_page.url_path
+                target_url = re.sub(
+                    r'^/[^/]+/',
+                    f'/{language}/',
+                    target_page.url_path,
+                    count=1,
+                )
                 if target_url:
                     return format_html_lazy(
                         '<a href="{}">{}</a>',
-                        target_url.removeprefix("/home"),
-                        _('I accept the Terms and Conditions.'),
+                        target_url,
+                        _('I accept the Terms and Conditions.')
                     )
         return _('I accept the Terms and Conditions.')
 
     terms_accepted = forms.BooleanField(
         label=_("I accept the Terms and Conditions."),
+        label_suffix = "",
         required=True,
         widget=forms.CheckboxInput(attrs={
             'id': 'signup-checkbox',
