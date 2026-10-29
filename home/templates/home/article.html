@@ -312,6 +312,66 @@
             background-color: #289463;
         }
 
+        /* Image download icon */
+        .image-download-wrapper {
+            position: relative;
+            display: inline;
+            max-width: none;
+            line-height: inherit;
+        }
+
+        .image-download-wrapper > img {
+            max-width: 100%;
+        }
+
+        .image-download-btn {
+            position: absolute;
+            right: 8px;
+            bottom: 8px;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            padding: 5px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            cursor: pointer;
+            line-height: normal;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+        }
+
+        .image-download-wrapper:hover .image-download-btn,
+        .image-download-wrapper:focus-within .image-download-btn {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .image-download-btn:hover {
+            background: #000;
+            opacity: 1;
+        }
+
+        .image-download-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        @media print {
+            .image-download-btn {
+                display: none !important;
+            }
+        }
     </style>
     <style>
         /* Review Section */
@@ -552,6 +612,74 @@
                 popup.style.display = "none";
             }
         });
+        <!--  download Image -->
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".article img").forEach(function (img) {
+                if (
+                    !img.src ||
+                    img.closest(".image-download-wrapper") ||
+                    img.closest("button") ||
+                    img.closest("a")
+                ) {
+                    return;
+                }
 
+                const wrapper = document.createElement("span");
+                wrapper.className = "image-download-wrapper";
+
+                img.parentNode.insertBefore(wrapper, img);
+                wrapper.appendChild(img);
+
+                const downloadButton = document.createElement("button");
+                downloadButton.type = "button";
+                downloadButton.className = "image-download-btn";
+                downloadButton.title = "Download image";
+                downloadButton.setAttribute("aria-label", "Download image");
+
+                downloadButton.innerHTML = `
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <path d="m7 10 5 5 5-5"></path>
+                        <path d="M12 15V3"></path>
+                    </svg>
+                `;
+
+                downloadButton.addEventListener("click", async function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    const imageUrl = img.currentSrc || img.src;
+
+                    try {
+                        const response = await fetch(imageUrl);
+
+                        if (!response.ok) {
+                            throw new Error("Image download failed");
+                        }
+
+                        const blob = await response.blob();
+                        const objectUrl = URL.createObjectURL(blob);
+                        const link = document.createElement("a");
+
+                        link.href = objectUrl;
+                        link.download =
+                            decodeURIComponent(imageUrl.split("/").pop().split("?")[0]) ||
+                            "image";
+
+                        document.body.appendChild(link);
+                        link.click();
+                        link.remove();
+
+                        setTimeout(function () {
+                            URL.revokeObjectURL(objectUrl);
+                        }, 1000);
+                    } catch (error) {
+                        window.open(imageUrl, "_blank", "noopener,noreferrer");
+                    }
+                });
+
+                wrapper.appendChild(downloadButton);
+            });
+        });
     </script>
 {% endblock content %}
