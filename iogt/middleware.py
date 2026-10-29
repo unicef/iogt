@@ -13,6 +13,8 @@ from translation_manager.models import TranslationEntry
 from wagtail.contrib.redirects.middleware import RedirectMiddleware
 from wagtail.models import Locale, Site
 
+from home.translation_manager.utils import check_translations
+
 from home.models import SiteSettings, V1PageURLToV2PageMap, ThemeSettings, SVGToPNGMap
 import iogt.iogt_globals as globals_
 
@@ -93,9 +95,16 @@ class GlobalDataMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        site = Site.objects.filter(is_default_site=True).first()
+        if request.path_info == "/health-check/":
+            return self.get_response(request)
+
+        site = Site.find_for_request(request)
+        if site is None:
+            site = Site.objects.filter(is_default_site=True).first()
+
         locale = Locale.get_active()
-        language_code = locale.language_code
+        language_code = locale.language_code if locale else settings.LANGUAGE_CODE
+
         globals_.site = site
         globals_.site_settings = SiteSettings.for_request(request)
         globals_.theme_settings = ThemeSettings.for_site(site)
@@ -107,6 +116,9 @@ class GlobalDataMiddleware:
                     (svg_to_png_map.svg_path, svg_to_png_map.fill_color, svg_to_png_map.stroke_color): svg_to_png_map,
                 })
             cache.set('svg_to_png_map', map)
+        
+        check_translations()
+        
         if not cache.get(f'{language_code}_translation_map'):
             map = {}
             for translation_entry in TranslationEntry.objects.filter(language=language_code):
