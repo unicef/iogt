@@ -1,4 +1,5 @@
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import json
 import os
 import re
 from datetime import timedelta
@@ -500,16 +501,8 @@ WAGTAILTRANSFER_NO_FOLLOW_MODELS = [
 ]
 WAGTAILTRANSFER_SECRET_KEY = os.getenv('WAGTAILTRANSFER_SECRET_KEY')
 WAGTAILTRANSFER_SHOW_ERROR_FOR_REFERENCED_PAGES = True
-WAGTAILTRANSFER_SOURCES = {
-   os.getenv('WAGTAILTRANSFER_SOURCE_NAME', 'default'): {
-      'BASE_URL': os.getenv('WAGTAILTRANSFER_SOURCE_BASE_URL'),
-      'SECRET_KEY': os.getenv('WAGTAILTRANSFER_SOURCE_SECRET_KEY'),
-   },
-   os.getenv('WAGTAILTRANSFER_SOURCE_NAME_2', 'default_2'): {
-      'BASE_URL': os.getenv('WAGTAILTRANSFER_SOURCE_BASE_URL_2'),
-      'SECRET_KEY': os.getenv('WAGTAILTRANSFER_SOURCE_SECRET_KEY_2'),
-   },
-}
+WAGTAILTRANSFER_SOURCES = json.loads(os.environ.get("WAGTAILTRANSFER_SOURCES_JSON") or "{}")
+
 WAGTAILTRANSFER_UPDATE_RELATED_MODELS = ['wagtailimages.image', 'wagtailsvg.svg',]
 
 REST_FRAMEWORK = {

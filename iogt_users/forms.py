@@ -5,6 +5,9 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django.utils.translation import get_language
+from django.utils.safestring import mark_safe
+from wagtail.contrib.redirects.models import Redirect
 from django.urls import reverse_lazy
 from django.utils.functional import lazy
 from django.utils.html import format_html
@@ -19,6 +22,7 @@ from .models import User
 
 from notifications.signals import notify
 from datetime import datetime
+import re
 
 format_html_lazy = lazy(format_html, str)
 
@@ -33,12 +37,41 @@ class AccountSignupForm(SignupForm):
         ),
         required=False,
     )
+    
+    def get_terms_label(self):
+        language = get_language()
+        old_path = "/{}/footers/terms-and-conditions".format(language)
+
+        redirect = Redirect.objects.filter(
+            old_path__iexact=old_path
+        ).select_related("redirect_page").first()
+
+        if redirect and redirect.redirect_page_id:
+            target_page = redirect.redirect_page
+            if target_page.live:
+                target_url = re.sub(
+                    r'^/[^/]+/',
+                    f'/{language}/',
+                    target_page.url_path,
+                    count=1,
+                )
+                if target_url:
+                    return format_html_lazy(
+                        '<a href="{}">{}</a>',
+                        target_url,
+                        _('I accept the Terms and Conditions.')
+                    )
+        return _('I accept the Terms and Conditions.')
+
     terms_accepted = forms.BooleanField(
-        label=_('I accept the Terms and Conditions.'),
+        label=_("I accept the Terms and Conditions."),
+        label_suffix = "",
+        required=True,
         widget=forms.CheckboxInput(attrs={
             'id': 'signup-checkbox',
-        })
+        }),
     )
+
     field_order = [
         "username",
         "display_name",
@@ -51,7 +84,7 @@ class AccountSignupForm(SignupForm):
         super(AccountSignupForm, self).__init__(*args, **kwargs)
         self.fields.pop('email')
         self.fields["password1"] = IogtPasswordField(label=_("Choose 4-digit PIN or password"), autocomplete="new-password", css_class="signup-input")
-
+        self.fields["terms_accepted"].label = self.get_terms_label()
         if 'password2' in self.fields:
             self.fields["password2"] = IogtPasswordField(label=_("Repeat 4-digital PIN or password"), autocomplete="new-password", css_class="signup-input")
 
