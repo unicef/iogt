@@ -20,6 +20,8 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_GET
+from django.db import transaction
+
 
 from home.models import (BannerIndexPage, FooterIndexPage, LocaleDetail,
                          Section, SectionIndexPage, BannerPage, HomePageBanner, HomePage)
@@ -31,6 +33,10 @@ from iogt.utils import NotifyAndPublishMenuItem, notify_and_publish_view
 from .models import Article
 from django.urls import path
 
+import time
+from django.core.cache import cache
+from django.db.models.signals import post_save, post_delete
+from home.translation_manager.utils import publish_translation_version
 
 @hooks.register('after_publish_page')
 def clear_cache_on_publish(request, page):
@@ -324,3 +330,8 @@ def copy_url_button_js():
     config = json_script(reverse("wagtail_copy_page_url"), "copy-page-url-config")
     script_tag = format_html('<script src="{}"></script>', static("/js/copy_page_url.js"))
     return mark_safe(config + script_tag)
+
+@receiver(post_save, sender=TranslationEntry)
+@receiver(post_delete, sender=TranslationEntry)
+def invalidate_translation_cache(sender, instance, **kwargs):
+    transaction.on_commit(lambda: (publish_translation_version(), clear_cache()))
