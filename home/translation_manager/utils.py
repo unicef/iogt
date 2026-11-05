@@ -47,8 +47,13 @@ def sync_all_po_files():
             po.save(path)
             po.save_as_mofile(os.path.splitext(path)[0] + ".mo")
 
+    from django.utils import translation
     from django.utils.translation import trans_real
-    trans_real._translations = {}
+
+    current_language = translation.get_language()
+    trans_real._translations.clear()
+    if current_language:
+        translation.activate(current_language)
 
 
 def check_translations():
