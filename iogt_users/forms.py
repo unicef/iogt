@@ -31,13 +31,12 @@ class AccountSignupForm(SignupForm):
         label=_("Display name"),
         widget=forms.TextInput(
             attrs={
-                "placeholder": _("Choose a display name to be shown publicly"),
                 "class": "signup-input",
             }
         ),
         required=False,
     )
-    
+
     def get_terms_label(self):
         language = get_language()
         old_path = "/{}/footers/terms-and-conditions".format(language)
@@ -64,8 +63,8 @@ class AccountSignupForm(SignupForm):
         return _('I accept the Terms and Conditions.')
 
     terms_accepted = forms.BooleanField(
-        label=_("I accept the Terms and Conditions."),
-        label_suffix = "",
+        label="",
+        label_suffix="",
         required=True,
         widget=forms.CheckboxInput(attrs={
             'id': 'signup-checkbox',
@@ -83,13 +82,23 @@ class AccountSignupForm(SignupForm):
     def __init__(self, *args, **kwargs):
         super(AccountSignupForm, self).__init__(*args, **kwargs)
         self.fields.pop('email')
-        self.fields["password1"] = IogtPasswordField(label=_("Choose 4-digit PIN or password"), autocomplete="new-password", css_class="signup-input")
-        self.fields["terms_accepted"].label = self.get_terms_label()
+
+        self.fields["password1"] = IogtPasswordField(
+            label="",
+            autocomplete="new-password",
+            css_class="signup-input"
+        )
+
+        self.fields["terms_accepted"].label = ""
+
         if 'password2' in self.fields:
-            self.fields["password2"] = IogtPasswordField(label=_("Repeat 4-digital PIN or password"), autocomplete="new-password", css_class="signup-input")
+            self.fields["password2"] = IogtPasswordField(
+                label="",
+                autocomplete="new-password",
+                css_class="signup-input"
+            )
 
         self.fields["username"].widget = forms.TextInput(attrs={
-            "placeholder": _("Choose a username to log in to IoGT"),
             "class": "signup-input"
         })
 
@@ -203,7 +212,7 @@ class WagtailAdminUserEditForm(WagtailUserEditForm):
     display_name = forms.CharField(required=False, label='Display Name')
     first_name = forms.CharField(required=False, label='First Name')
     last_name = forms.CharField(required=False, label='Last Name')
-    
+
     gender_edit = forms.CharField(required=False, label="Gender")
     date_of_birth_edit = forms.DateField(required=False, label="Date of Birth")
     location_edit = forms.CharField(required=False, label="Location")

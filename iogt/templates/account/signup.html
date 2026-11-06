@@ -10,7 +10,24 @@
           action="{% url 'account_signup' %}">
         {% csrf_token %}
         <div class="profile-form__inputs">
-            {{ form.as_p }}
+            {{ form.non_field_errors }}
+
+            {% for field in form %}
+                {% if field.name == "terms_accepted" %}
+                    <p>
+                        {{ field }}
+                        <label for="{{ field.id_for_label }}">
+                            {% translate "I accept the terms and condition" %}
+                        </label>
+                        {{ field.errors }}
+                    </p>
+                {% else %}
+                    <p>
+                        {{ field }}
+                        {{ field.errors }}
+                    </p>
+                {% endif %}
+            {% endfor %}
         </div>
         {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}"
@@ -25,5 +42,24 @@
                class="cust-btn profile-form__btn"><span>{% translate "Log in" %}</span></a>
         </div>
     </form>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const placeholders = {
+                "id_display_name": "{% translate 'Choose a display name to be shown publicly' %}",
+                "id_password1": "{% translate 'Choose 4-digit PIN or password' %}",
+                "id_password2": "{% translate 'Repeat 4-digital PIN or password' %}",
+                "id_username": "{% translate 'Choose a username to log in to IoGT' %}"
+            };
+
+            Object.entries(placeholders).forEach(([id, placeholder]) => {
+                const field = document.getElementById(id);
+
+                if (field) {
+                    field.setAttribute("placeholder", placeholder);
+                }
+            });
+        });
+    </script>
 
 {% endblock %}
