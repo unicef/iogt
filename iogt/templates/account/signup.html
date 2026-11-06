@@ -17,7 +17,7 @@
                     <p>
                         {{ field }}
                         <label for="{{ field.id_for_label }}">
-                            {% translate "I accept the terms and condition" %}
+                            {{ form.get_terms_label }}
                         </label>
                         {{ field.errors }}
                     </p>
