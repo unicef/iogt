@@ -134,14 +134,13 @@ class AccountLoginForm(LoginForm):
 
         self.fields["login"].widget = forms.TextInput(
             attrs={
-                "placeholder": _("Username"),
                 "class": "signup-input",
                 "autocomplete": "username",
             }
         )
 
         self.fields["password"] = IogtPasswordField(
-            label=_("Password"),
+            label="",
             autocomplete="current-password",
             css_class="signup-input",
             help_text=format_html_lazy(
