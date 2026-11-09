@@ -89,7 +89,7 @@ class AccountSignupForm(SignupForm):
             css_class="signup-input"
         )
 
-        self.fields["terms_accepted"].label = ""
+        self.fields["terms_accepted"].label = self.get_terms_label()
 
         if 'password2' in self.fields:
             self.fields["password2"] = IogtPasswordField(

@@ -44,6 +44,15 @@
                         {{ field.errors }}
                     </p>
 
+                {% elif field.name == "remember" %}
+                    <p>
+                        <label for="{{ field.id_for_label }}">
+                            {{ field.label }}
+                        </label>
+                        {{ field }}
+                        {{ field.errors }}
+                    </p>
+
                 {% else %}
                     <p>
                         {{ field }}

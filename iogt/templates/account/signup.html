@@ -15,10 +15,10 @@
             {% for field in form %}
                 {% if field.name == "terms_accepted" %}
                     <p>
-                        {{ field }}
                         <label for="{{ field.id_for_label }}">
-                            {{ form.get_terms_label }}
+                            {{ field.label }}
                         </label>
+                        {{ field }}
                         {{ field.errors }}
                     </p>
                 {% else %}
