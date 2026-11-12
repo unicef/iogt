@@ -21,6 +21,60 @@
                         {{ field }}
                         {{ field.errors }}
                     </p>
+
+                {% elif field.name == "display_name" %}
+                    <p>
+                        <input
+                            type="text"
+                            name="{{ field.html_name }}"
+                            id="{{ field.id_for_label }}"
+                            placeholder="{% translate 'Choose a display name to be shown publicly' %}"
+                            class="signup-input"
+                            value="{{ field.value|default_if_none:'' }}"
+                        />
+                        {{ field.errors }}
+                    </p>
+
+                {% elif field.name == "password1" %}
+                    <p>
+                        <input
+                            type="password"
+                            name="{{ field.html_name }}"
+                            id="{{ field.id_for_label }}"
+                            placeholder="{% translate 'Choose 4-digit PIN or password' %}"
+                            class="signup-input"
+                            autocomplete="new-password"
+                        />
+                        {{ field.errors }}
+                    </p>
+
+                {% elif field.name == "password2" %}
+                    <p>
+                        <input
+                            type="password"
+                            name="{{ field.html_name }}"
+                            id="{{ field.id_for_label }}"
+                            placeholder="{% translate 'Repeat 4-digital PIN or password' %}"
+                            class="signup-input"
+                            autocomplete="new-password"
+                        />
+                        {{ field.errors }}
+                    </p>
+
+                {% elif field.name == "username" %}
+                    <p>
+                        <input
+                            type="text"
+                            name="{{ field.html_name }}"
+                            id="{{ field.id_for_label }}"
+                            placeholder="{% translate 'Choose a username to log in to IoGT' %}"
+                            class="signup-input"
+                            autocomplete="username"
+                            value="{{ field.value|default_if_none:'' }}"
+                        />
+                        {{ field.errors }}
+                    </p>
+
                 {% else %}
                     <p>
                         {{ field }}
@@ -43,23 +97,5 @@
         </div>
     </form>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const placeholders = {
-                "id_display_name": "{% translate 'Choose a display name to be shown publicly' %}",
-                "id_password1": "{% translate 'Choose 4-digit PIN or password' %}",
-                "id_password2": "{% translate 'Repeat 4-digital PIN or password' %}",
-                "id_username": "{% translate 'Choose a username to log in to IoGT' %}"
-            };
-
-            Object.entries(placeholders).forEach(([id, placeholder]) => {
-                const field = document.getElementById(id);
-
-                if (field) {
-                    field.setAttribute("placeholder", placeholder);
-                }
-            });
-        });
-    </script>
 
 {% endblock %}
