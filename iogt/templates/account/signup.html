@@ -10,7 +10,78 @@
           action="{% url 'account_signup' %}">
         {% csrf_token %}
         <div class="profile-form__inputs">
-            {{ form.as_p }}
+            {{ form.non_field_errors }}
+
+            {% for field in form %}
+                {% if field.name == "terms_accepted" %}
+                    <p>
+                        <label for="{{ field.id_for_label }}">
+                            {{ field.label }}
+                        </label>
+                        {{ field }}
+                        {{ field.errors }}
+                    </p>
+
+                {% elif field.name == "display_name" %}
+                    <p>
+                        <input
+                            type="text"
+                            name="{{ field.html_name }}"
+                            id="{{ field.id_for_label }}"
+                            placeholder="{% translate 'Choose a display name to be shown publicly' %}"
+                            class="signup-input"
+                            value="{{ field.value|default_if_none:'' }}"
+                        />
+                        {{ field.errors }}
+                    </p>
+
+                {% elif field.name == "password1" %}
+                    <p>
+                        <input
+                            type="password"
+                            name="{{ field.html_name }}"
+                            id="{{ field.id_for_label }}"
+                            placeholder="{% translate 'Choose 4-digit PIN or password' %}"
+                            class="signup-input"
+                            autocomplete="new-password"
+                        />
+                        {{ field.errors }}
+                    </p>
+
+                {% elif field.name == "password2" %}
+                    <p>
+                        <input
+                            type="password"
+                            name="{{ field.html_name }}"
+                            id="{{ field.id_for_label }}"
+                            placeholder="{% translate 'Repeat 4-digital PIN or password' %}"
+                            class="signup-input"
+                            autocomplete="new-password"
+                        />
+                        {{ field.errors }}
+                    </p>
+
+                {% elif field.name == "username" %}
+                    <p>
+                        <input
+                            type="text"
+                            name="{{ field.html_name }}"
+                            id="{{ field.id_for_label }}"
+                            placeholder="{% translate 'Choose a username to log in to IoGT' %}"
+                            class="signup-input"
+                            autocomplete="username"
+                            value="{{ field.value|default_if_none:'' }}"
+                        />
+                        {{ field.errors }}
+                    </p>
+
+                {% else %}
+                    <p>
+                        {{ field }}
+                        {{ field.errors }}
+                    </p>
+                {% endif %}
+            {% endfor %}
         </div>
         {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}"
@@ -25,5 +96,6 @@
                class="cust-btn profile-form__btn"><span>{% translate "Log in" %}</span></a>
         </div>
     </form>
+
 
 {% endblock %}
