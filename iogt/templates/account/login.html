@@ -14,7 +14,53 @@
     <form class="login" method="POST" action="{% url 'account_login' %}?next={{ request.GET.next }}">
         {% csrf_token %}
         <div class="profile-form__inputs">
-            {{ form.as_p }}
+
+            {% for field in form %}
+                {% if field.name == "login" %}
+                    <p>
+                        <input
+                            type="text"
+                            name="{{ field.html_name }}"
+                            id="{{ field.id_for_label }}"
+                            placeholder="{% translate 'Username' %}"
+                            class="signup-input"
+                            autocomplete="username"
+                            value="{{ field.value|default_if_none:'' }}"
+                        />
+                        {{ field.errors }}
+                    </p>
+
+                {% elif field.name == "password" %}
+                    <p>
+                        <input
+                            type="password"
+                            name="{{ field.html_name }}"
+                            id="{{ field.id_for_label }}"
+                            placeholder="{% translate 'Password' %}"
+                            class="signup-input"
+                            autocomplete="current-password"
+                        />
+                        {{ field.help_text }}
+                        {{ field.errors }}
+                    </p>
+
+                {% elif field.name == "remember" %}
+                    <p>
+                        <label for="{{ field.id_for_label }}">
+                            {{ field.label }}
+                        </label>
+                        {{ field }}
+                        {{ field.errors }}
+                    </p>
+
+                {% else %}
+                    <p>
+                        {{ field }}
+                        {{ field.errors }}
+                    </p>
+                {% endif %}
+            {% endfor %}
+
         </div>
         <div class="profile-form__btns">
             <button type="submit"
